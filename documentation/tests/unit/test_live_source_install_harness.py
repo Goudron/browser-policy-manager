@@ -28,9 +28,7 @@ def test_run_identity_and_container_names_are_bounded_and_attempt_specific() -> 
     assert harness.container_name(config, "ubuntu-26-04", "m11-03-self-test", 1) == (
         "bpm091-ubuntu-26-04-m11-03-self-test-a01"
     )
-    assert harness.container_name(config, "ubuntu-26-04", "m11-03-self-test", 2).endswith(
-        "-a02"
-    )
+    assert harness.container_name(config, "ubuntu-26-04", "m11-03-self-test", 2).endswith("-a02")
     with pytest.raises(harness.HarnessError, match="run-id"):
         harness.validate_run_identity("INVALID", 1)
     with pytest.raises(harness.HarnessError, match="attempt"):
@@ -60,9 +58,7 @@ def test_plan_extracts_each_dita_stage_and_command_in_source_order(profile: dict
 def test_plan_substitutes_only_the_approved_ref_assignment() -> None:
     plan = harness.build_plan(_config(), "ubuntu-26-04", bpm_ref="feature/bpm-0.9.1")
     changed = [
-        command
-        for command in plan["commands"]
-        if command["documented"] != command["effective"]
+        command for command in plan["commands"] if command["documented"] != command["effective"]
     ]
 
     assert changed == [
@@ -100,7 +96,7 @@ def test_rendered_script_records_adapter_documented_runtime_and_shutdown_events(
     assert "adapter-wait-ready" in script
     assert "seq 1 300" in script
     assert 'kill -0 "$runtime_pid"' in script
-    assert 'test \"$ready\" -eq 1' in script
+    assert 'test "$ready" -eq 1' in script
     assert "&& exit 0" not in script
     assert script.count("adapter-second-terminal") == 1
     assert script.index("adapter-second-terminal") < script.index(
@@ -112,7 +108,7 @@ def test_rendered_script_records_adapter_documented_runtime_and_shutdown_events(
     assert "then exit 1" not in script
     assert "else exit 0" not in script
     assert "adapter-complete" in script
-    assert 'completed\"' in script
+    assert 'completed"' in script
     assert '"exit_code"' in script
     assert "command-output" in script
     assert "docker rm" not in script

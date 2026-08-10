@@ -4,7 +4,7 @@
   <title>设置数据交换文档文档格式</title>
   <shortdesc>在审查、验证或移交之前格式化当前 JSON 文档。</shortdesc>
   <taskbody>
-    <prereq><p>在编辑器中使用 JSON 文档打开 JSON 编辑器。</p></prereq>
+    <prereq><p>在编辑器中使用 JSON 文档打开 <uicontrol>JSON 编辑器</uicontrol>。</p></prereq>
     <context><p>格式仅更改空格和缩进。它应该在不改变政策含义的情况下使审查变得更容易。</p></context>
     <steps>
       <step><cmd>选择 JSON 格式操作。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>

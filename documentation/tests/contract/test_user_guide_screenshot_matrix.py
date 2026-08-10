@@ -62,7 +62,9 @@ def _png_chunks(path: Path) -> list[str]:
         chunk_crc_end = chunk_data_end + 4
         assert chunk_crc_end <= len(data), path
         expected_crc = struct.unpack(">I", data[chunk_data_end:chunk_crc_end])[0]
-        actual_crc = zlib.crc32(chunk_type_bytes + data[chunk_data_start:chunk_data_end]) & 0xFFFFFFFF
+        actual_crc = (
+            zlib.crc32(chunk_type_bytes + data[chunk_data_start:chunk_data_end]) & 0xFFFFFFFF
+        )
         assert actual_crc == expected_crc, path
         chunk_type = chunk_type_bytes.decode("ascii")
         chunks.append(chunk_type)
@@ -163,7 +165,9 @@ def test_user_guide_screenshot_capture_states_are_frozen_and_diagnostic() -> Non
     assert contract["profile_fixture_source"] == (
         "documentation/fixtures/profile-states/profile-states-0.9.0.json"
     )
-    assert contract["runtime"]["seed_mode"] == "recreate from synthetic fixtures for every capture run"
+    assert (
+        contract["runtime"]["seed_mode"] == "recreate from synthetic fixtures for every capture run"
+    )
     assert contract["runtime"]["network"] == "localhost only"
     assert {
         "production databases",
@@ -306,9 +310,7 @@ def test_user_guide_screenshots_are_integrated_into_localized_topics() -> None:
         expected_key = f"screenshot.{scenario_id}"
         expected_fig_id = f"screenshot-{scenario_id}"
 
-        keys_root = ET.parse(
-            DOCUMENTATION_ROOT / f"src/dita/{locale}/maps/keys.ditamap"
-        ).getroot()
+        keys_root = ET.parse(DOCUMENTATION_ROOT / f"src/dita/{locale}/maps/keys.ditamap").getroot()
         keydefs = [
             keydef
             for keydef in keys_root.findall("keydef")
@@ -325,7 +327,9 @@ def test_user_guide_screenshots_are_integrated_into_localized_topics() -> None:
             DOCUMENTATION_ROOT / f"src/dita/{locale}/user/{topic_id}.dita"
         ).getroot()
         figures = [
-            figure for figure in topic_root.findall(".//fig") if figure.attrib.get("id") == expected_fig_id
+            figure
+            for figure in topic_root.findall(".//fig")
+            if figure.attrib.get("id") == expected_fig_id
         ]
         assert len(figures) == 1, row["id"]
         title = _xml_text(figures[0].find("title"))

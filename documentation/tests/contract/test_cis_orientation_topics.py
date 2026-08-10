@@ -118,9 +118,14 @@ def test_cis_orientation_topics_exist_in_every_locale_with_stable_metadata() -> 
             assert len(root.findall("./related-links/link")) >= 4
 
             if topic_kind == "concept":
-                section_ids = {section.attrib["id"] for section in root.findall("./conbody/section")}
+                section_ids = {
+                    section.attrib["id"] for section in root.findall("./conbody/section")
+                }
                 assert section_ids == topic_contract["sections"]
-                assert all("".join(section.itertext()).strip() for section in root.findall("./conbody/section"))
+                assert all(
+                    "".join(section.itertext()).strip()
+                    for section in root.findall("./conbody/section")
+                )
             else:
                 steps = root.findall("./taskbody/steps/step")
                 assert len(steps) == 6
@@ -139,15 +144,14 @@ def test_cis_orientation_topics_are_keyed_and_reachable_from_cis_guide_maps() ->
             for keydef in keys.findall("keydef")
             if keydef.attrib["keys"] in CIS_GUIDE_KEYREFS
         }
-        assert keydefs == {
-            f"topic.{topic_id}": f"../cis/{topic_id}.dita"
-            for topic_id in TOPICS
-        }
+        assert keydefs == {f"topic.{topic_id}": f"../cis/{topic_id}.dita" for topic_id in TOPICS}
 
         guide = ET.fromstring(
             (DITA_ROOT / locale / "maps/cis-settings-guide.ditamap").read_text(encoding="utf-8")
         )
-        assert [topicref.attrib["keyref"] for topicref in guide.findall("topicref")] == CIS_GUIDE_KEYREFS
+        assert [
+            topicref.attrib["keyref"] for topicref in guide.findall("topicref")
+        ] == CIS_GUIDE_KEYREFS
 
 
 def test_english_cis_orientation_covers_selection_scope_and_benchmark_facts() -> None:
@@ -228,7 +232,7 @@ def test_english_cis_orientation_covers_selection_scope_and_benchmark_facts() ->
         "owner",
         "cis-workflow-level-1-esr-fixture",
         "cis-workflow-level-2-release-fixture",
-            "External verification",
+        "External verification",
         "cis-l1.esr-140.13",
         "cis-l2.release-153",
         "basic_corporate",
@@ -281,9 +285,7 @@ def test_cis_workflows_are_backed_by_deterministic_fixtures() -> None:
 
     assert fixture["backlog_item"] == "BPM090-M6-07"
     assert fixture["target_bpm_version"] == "0.9.0"
-    english_catalog = json.loads(
-        (REPOSITORY_ROOT / "app/i18n/en.json").read_text(encoding="utf-8")
-    )
+    english_catalog = json.loads((REPOSITORY_ROOT / "app/i18n/en.json").read_text(encoding="utf-8"))
     expected_surfaces = [
         english_catalog["profiles.nav_library"],
         english_catalog["profiles.editor_chrome_title"],
@@ -311,11 +313,15 @@ def test_cis_workflows_are_backed_by_deterministic_fixtures() -> None:
             "local deployment requirement",
         ],
         "required_user_surfaces": expected_surfaces,
-        "verification_boundary": "BPM validates schema/export/source attribution; runtime verification is external.",
+        "verification_boundary": (
+            "BPM validates schema/export/source attribution; runtime verification is external."
+        ),
     }
     assert workflows["cis-workflow-level-2-release-fixture"]["level"] == 2
     assert workflows["cis-workflow-level-2-release-fixture"]["schema_channel"] == "release-153"
-    assert workflows["cis-workflow-level-2-release-fixture"]["expected_mapped_recommendations"] == 53
+    assert (
+        workflows["cis-workflow-level-2-release-fixture"]["expected_mapped_recommendations"] == 53
+    )
 
     for workflow in fixture["workflows"]:
         assert workflow["workflow_id"] in workflow_text

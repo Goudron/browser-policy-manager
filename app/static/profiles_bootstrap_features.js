@@ -1,4 +1,3 @@
-(() => {
     function initFeatureModules({
         documentRef = document,
         elements = {},
@@ -7,6 +6,7 @@
         utils = {},
         data = {},
         core = {},
+        components = {},
     }) {
         const {
             escapeHtml,
@@ -24,6 +24,14 @@
             normalizePreferenceName,
         } = utils;
         const { fromEditorValue, toEditorValue } = data;
+        const {
+            createPreferences,
+            createSearchEngines,
+            createNetwork,
+            createPreferenceRows,
+            createPreferenceState,
+            createPreferenceViews,
+        } = components;
         const {
             t,
             setStatus,
@@ -99,7 +107,7 @@
             wizardNetworkEnterpriseFineTuningPanelEl,
         } = elements;
 
-        const preferences = window.BPMProfilesPreferences.create({
+        const preferences = createPreferences({
             documentRef,
             wizardPreferenceSections,
             wizardKnownPreferences,
@@ -122,9 +130,14 @@
                 getEditor,
                 setCurrentRaw,
             },
+            components: {
+                createPreferenceRows,
+                createPreferenceState,
+                createPreferenceViews,
+            },
         });
 
-        const searchEngines = window.BPMProfilesSearchEngines.create({
+        const searchEngines = createSearchEngines({
             documentRef,
             elements: {
                 addButtonEl: wizardSearchEngineAddButtonEl,
@@ -144,7 +157,7 @@
             },
         });
 
-        const network = window.BPMProfilesNetwork.create({
+        const network = createNetwork({
             documentRef,
             elements: {
                 wizardHomepageUrlEl,
@@ -246,7 +259,6 @@
         };
     }
 
-    window.BPMProfilesBootstrapFeatures = {
+    export {
         initFeatureModules,
     };
-})();

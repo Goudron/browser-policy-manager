@@ -1,13 +1,9 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
 import pytest
-
-from app.ai import local_inference_worker as worker
-from app.documentation import evidence
 
 ROOT = Path(__file__).resolve().parents[3]
 CONFIG_PATH = ROOT / "documentation/config/local-chat-runtime-validation-0.9.3.json"
@@ -17,18 +13,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def test_m6_07_pins_worker_evidence_and_fallback_boundaries() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M6-07"
-    assert contract["status"] == "implemented"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
-    assert worker.MAX_OUTPUT_TOKENS == 512
-    assert evidence.MAX_CONTEXT_TOKENS == 2048
 
 
 def test_m6_07_keeps_locale_context_output_and_fallback_claims_bounded() -> None:

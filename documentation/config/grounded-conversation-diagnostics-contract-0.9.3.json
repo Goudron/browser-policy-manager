@@ -34,7 +34,7 @@
     "conversation_content": false
   },
   "verification": {
-    "runtime": "tests/test_conversation_diagnostics_093.py",
+    "runtime": "tests/integration/ai/incubation/test_conversation_diagnostics.py",
     "contract": "documentation/tests/contract/test_grounded_conversation_diagnostics_contract_0_9_3.py",
     "architecture": "docs/architecture/grounded-conversation-diagnostics-0.9.3.md"
   }

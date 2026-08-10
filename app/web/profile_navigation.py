@@ -89,7 +89,7 @@ def resolve_settings_shell_focus_step(
         if any(item.get("id") == policy_id for item in items if isinstance(item, dict)):
             try:
                 return int(step_key)
-            except (TypeError, ValueError):
+            except TypeError, ValueError:
                 return None
     return None
 

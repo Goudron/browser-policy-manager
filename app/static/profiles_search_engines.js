@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         elements = {},
@@ -419,5 +418,4 @@
         };
     }
 
-    window.BPMProfilesSearchEngines = { create };
-})();
+    export { create };

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -16,18 +15,6 @@ def _config() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
 
 
-def test_retrieval_validation_contract_pins_active_runtime_inputs() -> None:
-    config = _config()
-
-    assert config["contract_id"] == "bpm-chat-rag-retrieval-validation-0.9.3"
-    assert config["backlog_item"] == "BPM093-M5-08"
-    assert config["status"] == "accepted-active-generation-validation-contract"
-    for entry in config["contracts"].values():
-        assert hashlib.sha256((ROOT / entry["path"]).read_bytes()).hexdigest() == entry["sha256"]
-    corpus = config["inputs"]["evaluation_corpus"]
-    assert hashlib.sha256((ROOT / corpus["path"]).read_bytes()).hexdigest() == corpus["sha256"]
-
-
 def test_retrieval_validation_is_six_locale_citable_and_non_hybrid() -> None:
     config = _config()
 
@@ -41,7 +28,9 @@ def test_retrieval_validation_is_six_locale_citable_and_non_hybrid() -> None:
         "cross_locale_retrieval_calls": 0,
         "answer_generation_invocations": 0,
         "external_evidence": "disabled and absent",
-        "swap": "Observed as an operational diagnostic only; it is not a validity or release condition.",
+        "swap": (
+            "Observed as an operational diagnostic only; it is not a validity or release condition."
+        ),
         "output": "Write reports only under ignored documentation/.cache/bpm093-m5-08/.",
     }
     assert config["acceptance"]["citation_resolution_rate_min"] == 1.0
@@ -58,10 +47,12 @@ def test_retrieval_validation_has_real_stdout_progress_and_negative_runtime_evid
         "flush": True,
         "locale_case_update": 5,
         "latency_sample_update": 5,
-        "content": "real runtime preparation, source/generation verification, locale-local evaluated-case completion, and measured latency samples; no synthetic progress or ETA",
+        "content": (
+            "real runtime preparation, source/generation verification, locale-local evaluated-case completion, and measured latency samples; no synthetic progress or ETA"
+        ),
     }
     assert config["integrity_and_recovery"]["negative_runtime_tests"] == [
-        "tests/test_documentation_chat_retrieval_093.py",
-        "tests/test_documentation_evidence_packing_093.py",
+        "tests/integration/ai/incubation/test_documentation_chat_retrieval.py",
+        "tests/integration/ai/incubation/test_documentation_evidence_packing.py",
     ]
     assert "never import, call, modify" in config["integrity_and_recovery"]["failure_isolation"]

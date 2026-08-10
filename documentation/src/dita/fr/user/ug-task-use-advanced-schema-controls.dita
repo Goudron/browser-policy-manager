@@ -2,15 +2,15 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-advanced-schema-controls" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Utiliser les contrôles de schéma avancés</title>
-  <shortdesc>Accédez aux contrôles avancés du shell de schéma et des préférences à partir de Tous les paramètres sans traiter Éditeur guidé comme un éditeur complet.</shortdesc>
+  <shortdesc>Accédez aux contrôles avancés du shell de schéma et des préférences à partir de <uicontrol>Tous les paramètres</uicontrol> sans traiter <uicontrol>Éditeur guidé</uicontrol> comme un éditeur complet.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Tous les paramètres dans Catalogue.</p></prereq>
-    <context><p>Les contrôles avancés restent délibérés. Tous les paramètres est le sur-ensemble pour les politiques et préférences basées sur un schéma qui ne sont pas des contrôles guidés de première classe.</p></context>
+    <prereq><p>Ouvrez <uicontrol>Tous les paramètres</uicontrol> dans <uicontrol>Catalogue</uicontrol>.</p></prereq>
+    <context><p>Les contrôles avancés restent délibérés. <uicontrol>Tous les paramètres</uicontrol> est le sur-ensemble pour les politiques et préférences basées sur un schéma qui ne sont pas des contrôles guidés de première classe.</p></context>
     <steps>
-      <step><cmd>Basculez vers Catalogue et ouvrez le schéma avancé ou la divulgation des préférences.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Vérifiez si le contrôle est couvert par le guidage, uniquement par tous les paramètres, brut, obsolète ou dépendant du schéma.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Modifiez uniquement le contrôle avancé nécessaire à l'objectif du profil.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Validez et enregistrez avant de revenir à Éditeur guidé, JSON ou à la bibliothèque.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
+      <step><cmd>Basculez vers <uicontrol>Catalogue</uicontrol> et ouvrez le schéma avancé ou la divulgation des préférences.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Vérifiez si le contrôle est couvert par le guidage, uniquement par tous les paramètres, brut, obsolète ou dépendant du schéma.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Modifiez uniquement le contrôle avancé nécessaire à l'objectif du profil.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Validez et enregistrez avant de revenir à <uicontrol>Éditeur guidé</uicontrol>, JSON ou à la bibliothèque.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Le paramètre avancé est atteint et modifié délibérément sans éditeurs par défaut en double.</p></result>
     <postreq><p>Récupération : si le contrôle n'est pas pris en charge dans le schéma sélectionné, laissez-le inchangé et documentez les limites du schéma.</p></postreq>

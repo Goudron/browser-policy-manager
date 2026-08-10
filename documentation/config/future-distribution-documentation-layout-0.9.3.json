@@ -2,10 +2,12 @@
   "schema_version": 1,
   "contract_id": "bpm-future-distribution-documentation-layout-0.9.3",
   "backlog_item": "BPM093-M14-07",
-  "target_bpm_version": "0.9.3",
+  "target_bpm_version": "0.9.4",
   "status": "implemented-and-delivered",
   "delivery_root": "distributions/documentation",
   "release_directory": "{bpm_version}",
+  "tracked_release_versions": ["0.9.3"],
+  "handoff_target_version": "0.9.4",
   "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
   "guides": [
     {
@@ -49,5 +51,5 @@
     "html-site",
     "unrelated-archives"
   ],
-  "current_release_boundary": "BPM093-M14-07 defines the delivery layout. BPM093-M14-08 generates the PDFs and BPM093-M14-09 atomically promotes the verified release directory."
+  "current_release_boundary": "BPM093-M14-07 defines the delivery layout. BPM093-M14-08 generates the PDFs and BPM093-M14-09 atomically promotes the verified release directory. The tracked tree retains only released source-controlled delivery history; the current handoff target is generated, verified and intentionally ignored."
 }

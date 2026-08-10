@@ -1,4 +1,3 @@
-(() => {
     function createHeadlessEditorAdapter(initialValue = "{}") {
         let value = String(initialValue ?? "");
         let language = "json";
@@ -145,10 +144,9 @@
         });
     }
 
-    window.BPMProfilesJsonEditorRuntime = {
+    export {
         createHeadlessEditorAdapter,
         ensureMonacoThemes,
         getMonacoThemeName,
         setEditorModelLanguage,
     };
-})();

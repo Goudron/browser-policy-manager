@@ -7,11 +7,11 @@
     <prereq><p>La biblioteca está abierta y las filas del perfil han terminado de cargarse.</p></prereq>
     <context><p>La búsqueda limita la vista de biblioteca actual. Funciona junto con controles de esquema, ciclo de vida, validación y clasificación.</p></context>
     <steps>
-      <step><cmd>Coloque el cursor en el campo de búsqueda de Biblioteca.</cmd><info><p>Resultado esperado: la lista de filas actual permanece visible mientras escribe.</p></info></step>
+      <step><cmd>Coloque el cursor en el campo de búsqueda de <uicontrol>Biblioteca</uicontrol>.</cmd><info><p>Resultado esperado: la lista de filas actual permanece visible mientras escribe.</p></info></step>
       <step><cmd>Introduzca una parte distintiva del nombre del perfil.</cmd><info><p>El recuento filtrado se actualiza para coincidir con las filas aún visibles.</p></info></step>
-      <step><cmd>Confirme la identidad de la fila antes de elegir una acción.</cmd><info><note type="warning">La búsqueda no guarda ni cambia perfiles. Solo cambia lo que muestra la Biblioteca.</note></info></step>
+      <step><cmd>Confirme la identidad de la fila antes de elegir una acción.</cmd><info><note type="warning">La búsqueda no guarda ni cambia perfiles. Solo cambia lo que muestra la <uicontrol>Biblioteca</uicontrol>.</note></info></step>
     </steps>
-    <result><p>La Biblioteca muestra solo filas que coinciden con el texto de búsqueda y cualquier filtro activo.</p></result>
+    <result><p>La <uicontrol>Biblioteca</uicontrol> muestra solo filas que coinciden con el texto de búsqueda y cualquier filtro activo.</p></result>
     <postreq><p>Recuperación: borre el texto de búsqueda si falta el perfil esperado, luego actualice si la fila aún no aparece.</p></postreq>
   </taskbody>
   <related-links>

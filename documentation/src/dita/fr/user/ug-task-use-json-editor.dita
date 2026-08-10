@@ -4,8 +4,8 @@
   <title>Utiliser l’« Éditeur JSON »</title>
   <shortdesc>Ouvrez le profil complet en tant que document Firefox policies.json pour une révision exacte ou une modification brute.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez un profil enregistré. Éditeur JSON fonctionne sur un profil enregistré et représente le profil comme un document limite Firefox.</p></prereq>
-    <context><p>Éditeur JSON est la surface brute du document. Utilisez-le lorsque Éditeur guidé ou Tous les paramètres est de niveau trop élevé pour un examen exact, des contrôles de migration, un dépannage ou des valeurs brutes.</p>
+    <prereq><p>Ouvrez un profil enregistré. <uicontrol>Éditeur JSON</uicontrol> fonctionne sur un profil enregistré et représente le profil comme un document limite Firefox.</p></prereq>
+    <context><p><uicontrol>Éditeur JSON</uicontrol> est la surface brute du document. Utilisez-le lorsque <uicontrol>Éditeur guidé</uicontrol> ou <uicontrol>Tous les paramètres</uicontrol> est de niveau trop élevé pour un examen exact, des contrôles de migration, un dépannage ou des valeurs brutes.</p>
       <fig id="screenshot-json-editor">
         <title>Éditeur JSON dans le thème sombre</title>
         <image keyref="screenshot.json-editor" placement="break" scalefit="yes" align="center">
@@ -15,12 +15,12 @@
     </context>
     <steps>
       <step><cmd>Ouvrez le profil enregistré depuis la bibliothèque ou un autre éditeur.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Passez à Éditeur JSON.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Passez à <uicontrol>Éditeur JSON</uicontrol>.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Confirmez que l'éditeur affiche un objet de stratégie de niveau supérieur et que l'action de téléchargement est disponible.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Utilisez Éditeur JSON uniquement lorsqu'un contrôle exact des documents bruts est nécessaire.</cmd><info><note type="warning">L'enregistrement du JSON brut peut modifier le profil canonique BPM. Validez la syntaxe et les valeurs de stratégie avant d’enregistrer.</note></info></step>
+      <step><cmd>Utilisez <uicontrol>Éditeur JSON</uicontrol> uniquement lorsqu'un contrôle exact des documents bruts est nécessaire.</cmd><info><note type="warning">L'enregistrement du JSON brut peut modifier le profil canonique BPM. Validez la syntaxe et les valeurs de stratégie avant d’enregistrer.</note></info></step>
     </steps>
     <result><p>Le profil actuel est visible en tant que contenu modifiable Firefox policies.json.</p></result>
-    <postreq><p>Récupération : si l'itinéraire ne peut pas s'ouvrir, enregistrez d'abord le profil ou revenez à Tous les paramètres pour une édition visuelle.</p></postreq>
+    <postreq><p>Récupération : si l'itinéraire ne peut pas s'ouvrir, enregistrez d'abord le profil ou revenez à <uicontrol>Tous les paramètres</uicontrol> pour une édition visuelle.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-when-to-use-json-editor"/>

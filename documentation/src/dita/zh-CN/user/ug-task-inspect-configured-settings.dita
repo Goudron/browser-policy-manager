@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-inspect-configured-settings" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>检查配置的设置</title>
-  <shortdesc>使用 已配置 了解配置文件当前按域、类别和来源应用的内容。</shortdesc>
+  <shortdesc>使用 <uicontrol>已配置</uicontrol> 了解配置文件当前按域、类别和来源应用的内容。</shortdesc>
   <taskbody>
-    <prereq><p>打开 所有设置 中保存的配置文件。</p></prereq>
-    <context><p>已配置 关注配置文件中已有的值，而不是每一个可能的策略。域摘要可帮助您解释活动配置。</p></context>
+    <prereq><p>打开 <uicontrol>所有设置</uicontrol> 中保存的配置文件。</p></prereq>
+    <context><p><uicontrol>已配置</uicontrol> 关注配置文件中已有的值，而不是每一个可能的策略。域摘要可帮助您解释活动配置。</p></context>
     <steps>
-      <step><cmd>切换到 已配置。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>按域或类别查看配置的摘要卡。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>打开一个类别以检查其中应用的设置。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>切换到 <uicontrol>已配置</uicontrol>。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>按域或类别查看配置的摘要卡。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>打开一个类别以检查其中应用的设置。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>如果您需要分离基线、CIS、手动、导入或原始值，请使用源过滤器。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
-    <result><p>您可以描述配置文件应用的活动策略和托管首选项值。</p></result>
-    <postreq><p>恢复：如果某个值丢失，请切换到 目录 或清除源过滤器，然后再确定该值不存在。</p></postreq>
+    <result><p>您可以描述配置文件应用的活动策略和<uicontrol>托管首选项</uicontrol>值。</p></result>
+    <postreq><p>恢复：如果某个值丢失，请切换到 <uicontrol>目录</uicontrol> 或清除源过滤器，然后再确定该值不存在。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-filter-settings-by-source"/>

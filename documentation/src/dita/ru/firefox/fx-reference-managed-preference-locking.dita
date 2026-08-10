@@ -2,9 +2,9 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="fx-reference-managed-preference-locking" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
   <title>Блокировка управляемых предпочтений</title>
-  <shortdesc>Управляемые параметры экспортируются через политику Firefox <codeph>Preferences</codeph> и требуют явного значения, типа и проверки статуса.</shortdesc>
+  <shortdesc><uicontrol>Управляемые параметры</uicontrol> экспортируются через политику Firefox <codeph>Preferences</codeph> и требуют явного значения, типа и проверки статуса.</shortdesc>
   <refbody>
-    <section id="a-container-policy"><title>Контейнерная политика</title><p>Firefox хранит Управляемые параметры под именем <codeph>Preferences</codeph>. BPM документирует известные предпочтения отдельно, но экспортирует их как записи в эту политику контейнера.</p></section>
+    <section id="a-container-policy"><title>Контейнерная политика</title><p>Firefox хранит <uicontrol>Управляемые параметры</uicontrol> под именем <codeph>Preferences</codeph>. BPM документирует известные предпочтения отдельно, но экспортирует их как записи в эту политику контейнера.</p></section>
     <section id="a-status-values"><title>Значения состояния</title><p><codeph>locked</codeph> предотвращает изменение пользователя, если Firefox поддерживает это предпочтение. <codeph>default</codeph>, <codeph>user</codeph> и <codeph>clear</codeph> имеют разные значения во время выполнения и не должны использоваться как синонимы.</p></section>
     <section id="a-type-values"><title>Значения типов</title><p>Установите для <codeph>Type</codeph> значение <codeph>boolean</codeph>, <codeph>number</codeph> или <codeph>string</codeph>, когда BPM требуется точная форма значения. Тип <codeph>Value</codeph> должен соответствовать объявленному типу.</p></section>
     <section id="a-source-conflicts"><title>Конфликты источников</title><p>Предпочтение может исходить из предустановки, слоя CIS, импорта, редактирования вручную или необработанного резервного варианта. Прежде чем блокировать, просмотрите источник, поскольку заблокированная настройка может сильнее превзойти ожидания пользователя, чем разблокированная политика по умолчанию.</p></section>

@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-browse-settings-catalog" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>浏览设置目录</title>
-  <shortdesc>使用 目录 浏览所选架构的每个支持的策略和已知的托管首选项。</shortdesc>
+  <shortdesc>使用 <uicontrol>目录</uicontrol> 浏览所选架构的每个支持的策略和已知的<uicontrol>托管首选项</uicontrol>。</shortdesc>
   <taskbody>
-    <prereq><p>打开 所有设置 中保存的配置文件。</p></prereq>
-    <context><p>目录 是完整的视觉库存。它包括已配置和可用的设置，同时在故意披露的背后保留高级控制。</p></context>
+    <prereq><p>打开 <uicontrol>所有设置</uicontrol> 中保存的配置文件。</p></prereq>
+    <context><p><uicontrol>目录</uicontrol> 是完整的视觉<uicontrol>库</uicontrol>存。它包括已配置和可用的设置，同时在故意披露的背后保留高级控制。</p></context>
     <steps>
-      <step><cmd>切换到 目录。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>浏览类别以获取支持的政策和已知的 托管首选项。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>使用类别卡或搜索来缩小库存范围。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>切换到 <uicontrol>目录</uicontrol>。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>浏览类别以获取支持的政策和已知的 <uicontrol>托管首选项</uicontrol>。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>使用类别卡或搜索来缩小<uicontrol>库</uicontrol>存范围。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>在应用、编辑或重置值之前选择设置。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>您无需先使用原始 JSON 即可找到支持的策略和已知首选项。</p></result>
-    <postreq><p>恢复：如果目录很大，请使用搜索、过滤器或有界列表控件，而不是盲目滚动。</p></postreq>
+    <postreq><p>恢复：如果<uicontrol>目录</uicontrol>很大，请使用搜索、过滤器或有界列表控件，而不是盲目滚动。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-all-settings"/>

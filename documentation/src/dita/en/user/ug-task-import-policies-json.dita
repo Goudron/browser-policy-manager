@@ -7,26 +7,22 @@
     <prereq><p>You have a Firefox Enterprise JSON document with a top-level <codeph>policies</codeph> object and a unique BPM profile name for the import.</p></prereq>
     <context><p>Import crosses a product boundary: Firefox <filepath>policies.json</filepath> is the boundary document, while the created BPM profile stores normalized flags, source attribution, schema channel, validation state, and profile metadata.</p></context>
     <steps>
-      <step><cmd>In the Library, choose the Firefox policies import action and select the JSON file.</cmd><info><p>Expected result: BPM reads the document and prepares an import request.</p></info></step>
+      <step><cmd>In the <uicontrol>Library</uicontrol>, choose the Firefox policies import action and select the JSON file.</cmd><info><p>Expected result: BPM reads the document and prepares an import request.</p></info></step>
       <step><cmd>Enter a unique profile name and choose the target Firefox schema channel, such as Release or ESR.</cmd><info><p>The schema channel controls validation and which policies are supported, deprecated, unknown, or raw-preserved after import.</p></info></step>
-      <step><cmd>Confirm the import and wait for the Library status.</cmd><info><p>Expected result: BPM creates a saved profile and returns it to the Library or editor workflow.</p><note type="warning">Do not treat the imported file as BPM's internal model. Re-export if you need a fresh Firefox boundary document after BPM normalization.</note></info></step>
+      <step><cmd>Confirm the import and wait for the <uicontrol>Library</uicontrol> status.</cmd><info><p>Expected result: BPM creates a saved profile and returns it to the <uicontrol>Library</uicontrol> or editor workflow.</p><note type="warning">Do not treat the imported file as BPM's internal model. Re-export if you need a fresh Firefox boundary document after BPM normalization.</note></info></step>
     </steps>
     <result><p>The imported Firefox document becomes a BPM profile with a profile ID, revision, schema channel, and validation state.</p></result>
-    <example id="a-import-api-examples">
-      <title>JSON and multipart API-adjacent import shapes</title>
-      <p>API integrations send the same boundary document inside <codeph>document</codeph>:</p>
+    <example id="a-import-policies-document">
+      <title>Full Firefox policies.json document</title>
+      <p>The file selected for import is a complete Firefox document, not BPM profile metadata or an internal flags fragment:</p>
       <codeblock outputclass="language-json">{
-  "name": "Example imported Firefox profile",
-  "channel": "firefox-release",
-  "document": {
-    "policies": {
-      "DisableTelemetry": true
-    }
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
   }
 }</codeblock>
-      <p>Multipart import sends the file plus fields such as <codeph>name</codeph>, <codeph>description</codeph>, <codeph>channel</codeph>, and JSON-string <codeph>compliance</codeph>. The current runtime also accepts a <codeph>document</codeph> field, while the published OpenAPI schema names <codeph>file</codeph> as the documented file field.</p>
     </example>
-    <postreq><p>Recovery: if import fails with malformed JSON, duplicate name, unsupported content type, schema mismatch, unknown policy, or validation errors, keep the original file unchanged, read the Library status, correct the input or name, and retry once from a clean Library state.</p></postreq>
+    <postreq><p>Recovery: if import fails with malformed JSON, duplicate name, unsupported content type, schema mismatch, unknown policy, or validation errors, keep the original file unchanged, read the <uicontrol>Library</uicontrol> status, correct the input or name, and retry once from a clean <uicontrol>Library</uicontrol> state.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

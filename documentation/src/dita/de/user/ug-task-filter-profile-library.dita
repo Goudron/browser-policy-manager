@@ -4,15 +4,15 @@
   <title>Die Bibliothek filtern</title>
   <shortdesc>Kombinieren Sie Schema-, Lebenszyklus- und Validierungsfilter, um die gespeicherte Profilliste zu fokussieren.</shortdesc>
   <taskbody>
-    <prereq><p>Die Bibliothek ist geöffnet und Sie wissen, welchen Profilstatus Sie überprüfen müssen.</p></prereq>
+    <prereq><p>Die <uicontrol>Bibliothek</uicontrol> ist geöffnet und Sie wissen, welchen Profilstatus Sie überprüfen müssen.</p></prereq>
     <context><p>Filter sind Ansichtssteuerelemente. Sie ändern weder den Profilinhalt noch den Validierungsstatus noch den Lebenszyklusstatus.</p></context>
     <steps>
       <step><cmd>Wählen Sie einen Firefox-Schemakanalfilter, wenn Sie Release, ESR oder alle Profile benötigen.</cmd><info><p>Erwartetes Ergebnis: Die gefilterte Anzahl spiegelt nur Zeilen für den ausgewählten Kanal wider.</p></info></step>
       <step><cmd>Wählen Sie einen Lebenszyklusfilter, um aktive, archivierte oder alle Profile anzuzeigen.</cmd><info><p>Verwenden Sie „Archiviert“, wenn Sie die Wiederherstellung oder dauerhafte Löschung eines beibehaltenen Profils vorbereiten.</p></info></step>
       <step><cmd>Wählen Sie einen Validierungsfilter, um bestandene, fehlgeschlagene oder noch nicht validierte Profile anzuzeigen.</cmd><info><note type="warning">Ein Validierungsfilter führt keine Validierung durch. Es wird nur der zuletzt gespeicherte Validierungsstatus angezeigt.</note></info></step>
-      <step><cmd>Setzen Sie die Filter auf alle Status zurück, wenn Sie die vollständige Bibliotheksansicht benötigen.</cmd><info><p>Durch dieses Zurücksetzen wird nur die sichtbare Liste geändert, nicht die gespeicherten Profildaten.</p></info></step>
+      <step><cmd>Setzen Sie die Filter auf alle Status zurück, wenn Sie die vollständige <uicontrol>Bibliothek</uicontrol>sansicht benötigen.</cmd><info><p>Durch dieses Zurücksetzen wird nur die sichtbare Liste geändert, nicht die gespeicherten Profildaten.</p></info></step>
     </steps>
-    <result><p>Die Bibliothek zeigt die Profilteilmenge an, die dem ausgewählten Schema, Lebenszyklus, der Validierung und den Suchkriterien entspricht.</p></result>
+    <result><p>Die <uicontrol>Bibliothek</uicontrol> zeigt die Profilteilmenge an, die dem ausgewählten Schema, Lebenszyklus, der Validierung und den Suchkriterien entspricht.</p></result>
     <postreq><p>Wiederherstellung: Wenn ein Profil zu fehlen scheint, setzen Sie Filter und Suche zurück, bevor Sie es als fehlend behandeln.</p></postreq>
   </taskbody>
   <related-links>

@@ -2,16 +2,16 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-find-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Find a profile by name</title>
-  <shortdesc>Use Library search to narrow saved profiles by name before opening, duplicating, or changing lifecycle state.</shortdesc>
+  <shortdesc>Use <uicontrol>Library</uicontrol> search to narrow saved profiles by name before opening, duplicating, or changing lifecycle state.</shortdesc>
   <taskbody>
-    <prereq><p>The Library is open and profile rows have finished loading.</p></prereq>
-    <context><p>Search narrows the current Library view. It works together with schema, lifecycle, validation, and sort controls.</p></context>
+    <prereq><p>The <uicontrol>Library</uicontrol> is open and profile rows have finished loading.</p></prereq>
+    <context><p>Search narrows the current <uicontrol>Library</uicontrol> view. It works together with schema, lifecycle, validation, and sort controls.</p></context>
     <steps>
-      <step><cmd>Place the cursor in the Library search field.</cmd><info><p>Expected result: the current row list remains visible while you type.</p></info></step>
+      <step><cmd>Place the cursor in the <uicontrol>Library</uicontrol> search field.</cmd><info><p>Expected result: the current row list remains visible while you type.</p></info></step>
       <step><cmd>Enter a distinctive part of the profile name.</cmd><info><p>The filtered count updates to match the rows still visible.</p></info></step>
-      <step><cmd>Confirm the row identity before choosing an action.</cmd><info><note type="warning">Search does not save or change profiles. It only changes what the Library shows.</note></info></step>
+      <step><cmd>Confirm the row identity before choosing an action.</cmd><info><note type="warning">Search does not save or change profiles. It only changes what the <uicontrol>Library</uicontrol> shows.</note></info></step>
     </steps>
-    <result><p>The Library shows only rows that match the search text and any active filters.</p></result>
+    <result><p>The <uicontrol>Library</uicontrol> shows only rows that match the search text and any active filters.</p></result>
     <postreq><p>Recovery: clear the search text if the expected profile is missing, then refresh if the row still does not appear.</p></postreq>
   </taskbody>
   <related-links>

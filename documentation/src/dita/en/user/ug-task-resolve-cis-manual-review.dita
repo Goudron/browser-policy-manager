@@ -4,12 +4,12 @@
   <title>Resolve CIS manual-review items</title>
   <shortdesc>Find CIS recommendations requiring manual review and decide whether to configure, document, or leave them for external verification.</shortdesc>
   <taskbody>
-    <prereq><p>Open All settings Review mode for a profile that includes a CIS layer or CIS-derived source metadata.</p></prereq>
-    <context><p>Some CIS recommendations cannot be fully automated by BPM. Review mode surfaces those items so the user can make an explicit decision without claiming certification.</p></context>
+    <prereq><p>Open <uicontrol>All settings</uicontrol> <uicontrol>Review</uicontrol> mode for a profile that includes a CIS layer or CIS-derived source metadata.</p></prereq>
+    <context><p>Some CIS recommendations cannot be fully automated by BPM. <uicontrol>Review</uicontrol> mode surfaces those items so the user can make an explicit decision without claiming certification.</p></context>
     <steps>
-      <step><cmd>Open Review mode and filter for CIS manual-review items if needed.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Read the recommendation identifiers, affected policy or preference, and current value.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Configure a supported value, document why manual verification remains, or leave the item intentionally unresolved.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Open <uicontrol>Review</uicontrol> mode and filter for CIS manual-review items if needed.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Read the recommendation identifiers, affected policy or preference, and current value.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Configure a supported value, document why manual verification remains, or leave the item intentionally unresolved.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
       <step><cmd>Revalidate and record the decision before export or handoff.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>CIS manual-review items are configured, documented, or intentionally left for external verification.</p></result>

@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-change-interface-theme" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Das Oberflächendesign ändern</title>
-  <shortdesc>Wählen Sie System-, helles oder dunkles Design, ohne den Profilinhalt zu ändern.</shortdesc>
+  <shortdesc>Wählen Sie <uicontrol>System</uicontrol>-, helles oder dunkles Design, ohne den Profilinhalt zu ändern.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie BPM oder das Produktdokumentationsportal im Browser.</p></prereq>
-    <context><p>Die Designauswahl wirkt sich nur auf die Darstellung aus. BPM und das Dokumentationsportal unterstützen System, Hell und Dunkel, ohne Profil- oder Hilfeinhalte zu ändern.</p></context>
+    <context><p>Die Designauswahl wirkt sich nur auf die Darstellung aus. BPM und das Dokumentationsportal unterstützen <uicontrol>System</uicontrol>, <uicontrol>Hell</uicontrol> und <uicontrol>Dunkel</uicontrol>, ohne Profil- oder Hilfeinhalte zu ändern.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie die Designauswahl im Kopf der aktuellen Seite.</cmd><info><p>Erwartetes Ergebnis: System, Hell und Dunkel stehen zur Auswahl, ohne Route, Sprache oder ausgewähltes Profil zu ändern.</p></info></step>
-      <step><cmd>Wählen Sie System, Hell oder Dunkel.</cmd><info><p>Erwartetes Ergebnis: System folgt der Betriebssystemeinstellung; Hell und Dunkel wenden den gewählten Modus auf unterstützte BPM- und Dokumentationsoberflächen an.</p></info></step>
+      <step><cmd>Öffnen Sie die Designauswahl im Kopf der aktuellen Seite.</cmd><info><p>Erwartetes Ergebnis: <uicontrol>System</uicontrol>, <uicontrol>Hell</uicontrol> und <uicontrol>Dunkel</uicontrol> stehen zur Auswahl, ohne Route, Sprache oder ausgewähltes Profil zu ändern.</p></info></step>
+      <step><cmd>Wählen Sie <uicontrol>System</uicontrol>, <uicontrol>Hell</uicontrol> oder <uicontrol>Dunkel</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: <uicontrol>System</uicontrol> folgt der Betriebssystemeinstellung; <uicontrol>Hell</uicontrol> und <uicontrol>Dunkel</uicontrol> wenden den gewählten Modus auf unterstützte BPM- und Dokumentationsoberflächen an.</p></info></step>
       <step><cmd>Prüfen Sie Editorbereiche, Tabellen, Hinweise, Codeblöcke, Fokusmarkierungen und Validierungszustände.</cmd><info><p>Erwartetes Ergebnis: Der Inhalt bleibt lesbar; das helle Dokumentationsdesign verwendet angenehme hellgraue Hauptflächen statt einer rein weißen Seite.</p></info></step>
       <step><cmd>Fahren Sie mit der Bearbeitung fort, nachdem Sie bestätigt haben, dass noch nicht gespeicherte Profildaten vorhanden sind.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
     </steps>
     <result><p>BPM und die Produktdokumentation verwenden das ausgewählte Design auf allen unterstützten Oberflächen.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der <uicontrol>Bibliothek</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-accessible-product-operation"/>

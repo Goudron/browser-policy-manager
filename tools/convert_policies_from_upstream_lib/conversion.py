@@ -156,10 +156,14 @@ def build_schema_policy(
         if linux_value is not None:
             example_values.append(linux_value)
 
-    example_values.extend(_extract_policy_value_nodes(entry.policy_key, entry.policies_json_snippet))
+    example_values.extend(
+        _extract_policy_value_nodes(entry.policy_key, entry.policies_json_snippet)
+    )
 
     if example_values:
-        inferred_nodes = [infer_schema_from_example_value(example_value) for example_value in example_values]
+        inferred_nodes = [
+            infer_schema_from_example_value(example_value) for example_value in example_values
+        ]
         inferred = _combine_inferred_nodes(inferred_nodes)
         _apply_required_property_hints(entry.section_text, inferred)
         _apply_property_description_hints(entry, inferred)
@@ -206,10 +210,7 @@ def schema_to_json_schema(
         "x-bpm-channel": channel,
         "x-bpm-version": version,
         "x-bpm-source": source,
-        "properties": {
-            p.id: _policy_definition_to_json_schema(p)
-            for p in policies
-        },
+        "properties": {p.id: _policy_definition_to_json_schema(p) for p in policies},
     }
 
 
@@ -253,7 +254,9 @@ def apply_documented_schema_overrides(schema: dict, target_version: str) -> dict
     if isinstance(installation_mode, dict):
         installation_mode["enum"] = ["allowed", "blocked", "force_installed", "normal_installed"]
 
-    allowed_types = properties.setdefault("allowed_types", {"type": "array", "items": {"type": "string"}})
+    allowed_types = properties.setdefault(
+        "allowed_types", {"type": "array", "items": {"type": "string"}}
+    )
     if isinstance(allowed_types, dict):
         allowed_type_items = allowed_types.setdefault("items", {"type": "string"})
         if isinstance(allowed_type_items, dict):
@@ -307,9 +310,13 @@ def convert_upstream_html_to_policies(html_path) -> list[UpstreamPolicyEntry]:
     result: list[UpstreamPolicyEntry] = []
 
     for name, description in table_entries:
-        compatibility, section_text, policies_json, property_descriptions = extract_policy_details(soup, name)
+        compatibility, section_text, policies_json, property_descriptions = extract_policy_details(
+            soup, name
+        )
         snippet_keys = _extract_policy_keys_from_snippet(policies_json)
-        policy_key = snippet_keys[0] if len(set(snippet_keys)) == 1 else _canonical_policy_name(name)
+        policy_key = (
+            snippet_keys[0] if len(set(snippet_keys)) == 1 else _canonical_policy_name(name)
+        )
         result.append(
             UpstreamPolicyEntry(
                 name=name,
@@ -373,7 +380,9 @@ def convert_upstream_markdown_to_policies(markdown_path: Path) -> list[UpstreamP
     """Parse the official policy-template Markdown published with current Mozilla releases."""
     lines = markdown_path.read_text(encoding="utf-8").splitlines()
     section_indexes = [
-        index for index, line in enumerate(lines) if line.startswith("### ") and not line.startswith("#### ")
+        index
+        for index, line in enumerate(lines)
+        if line.startswith("### ") and not line.startswith("#### ")
     ]
     result: list[UpstreamPolicyEntry] = []
 
@@ -392,13 +401,14 @@ def convert_upstream_markdown_to_policies(markdown_path: Path) -> list[UpstreamP
         snippet = _markdown_policies_json_snippet(section_lines)
         snippet_keys = _extract_policy_keys_from_snippet(snippet)
         base_heading = heading.split(" | ", maxsplit=1)[0]
-        policy_key = snippet_keys[0] if len(set(snippet_keys)) == 1 else _canonical_policy_name(base_heading)
+        policy_key = (
+            snippet_keys[0] if len(set(snippet_keys)) == 1 else _canonical_policy_name(base_heading)
+        )
         description = next(
             (
                 _markdown_plain_text(line)
                 for line in section_lines
-                if line.strip()
-                and not line.startswith(("**Compatibility:**", "####", "```", "|"))
+                if line.strip() and not line.startswith(("**Compatibility:**", "####", "```", "|"))
             ),
             f"Firefox policy {policy_key}.",
         )
@@ -477,15 +487,29 @@ def _merge_variant_entries(entries: list[UpstreamPolicyEntry]) -> list[UpstreamP
 
         sorted_variants = sorted(
             variants,
-            key=lambda item: _version_tuple(parse_min_version_from_compatibility(item.compatibility)),
+            key=lambda item: _version_tuple(
+                parse_min_version_from_compatibility(item.compatibility)
+            ),
         )
         primary = sorted_variants[0]
-        combined_section_text = "\n\n".join(
-            text for text in dict.fromkeys(item.section_text for item in variants if item.section_text)
-        ) or None
-        combined_snippet = "\n\nor\n\n".join(
-            snippet for snippet in dict.fromkeys(item.policies_json_snippet for item in variants if item.policies_json_snippet)
-        ) or None
+        combined_section_text = (
+            "\n\n".join(
+                text
+                for text in dict.fromkeys(
+                    item.section_text for item in variants if item.section_text
+                )
+            )
+            or None
+        )
+        combined_snippet = (
+            "\n\nor\n\n".join(
+                snippet
+                for snippet in dict.fromkeys(
+                    item.policies_json_snippet for item in variants if item.policies_json_snippet
+                )
+            )
+            or None
+        )
         combined_property_descriptions: dict[str, str] = {}
         for item in variants:
             for prop_name, description in (item.property_descriptions or {}).items():

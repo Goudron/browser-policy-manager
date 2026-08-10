@@ -90,7 +90,9 @@ class UiAuditRunner:
     def __init__(self, args: argparse.Namespace) -> None:
         self.args = args
         timestamp = time.strftime("%Y%m%d-%H%M%S")
-        self.output_dir = (Path(args.output_dir) if args.output_dir else DEFAULT_OUTPUT_ROOT / timestamp)
+        self.output_dir = (
+            Path(args.output_dir) if args.output_dir else DEFAULT_OUTPUT_ROOT / timestamp
+        )
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.server_logs_path = self.output_dir / "server.log"
         self.chromedriver_logs_path = self.output_dir / "chromedriver.log"
@@ -142,7 +144,9 @@ class UiAuditRunner:
 
             self.click_and_switch_to_new_tab(driver, By.ID, "create-profile-link")
             self.wait_for(driver, EC.presence_of_element_located((By.ID, "wizard-panel")))
-            self.wait_for(driver, EC.presence_of_element_located((By.ID, "wizard-export-save-action")))
+            self.wait_for(
+                driver, EC.presence_of_element_located((By.ID, "wizard-export-save-action"))
+            )
             self.capture(driver, viewport, "desktop_new_profile_initial")
 
             self.set_profile_metadata(driver)
@@ -155,15 +159,20 @@ class UiAuditRunner:
                 self.capture(driver, viewport, f"desktop_step{step}")
                 self.verify_layout(driver, viewport, f"desktop_step{step}")
 
-            previous_validation_state = self.text_of(driver, By.ID, "wizard-export-validation-state")
+            previous_validation_state = self.text_of(
+                driver, By.ID, "wizard-export-validation-state"
+            )
             previous_validation_preview = self.text_of(driver, By.ID, "validation-preview")
             self.click(driver, By.ID, "wizard-export-validate-action")
-            self.wait_for_text_change(driver, By.ID, "validation-preview", previous_validation_preview)
+            self.wait_for_text_change(
+                driver, By.ID, "validation-preview", previous_validation_preview
+            )
             self.dump_export_debug(driver, "after_validate")
             self.record(
                 viewport,
                 "validation_action_updates_state",
-                self.text_of(driver, By.ID, "wizard-export-validation-state") != previous_validation_state
+                self.text_of(driver, By.ID, "wizard-export-validation-state")
+                != previous_validation_state
                 or self.text_of(driver, By.ID, "validation-preview") != previous_validation_preview,
                 self.text_of(driver, By.ID, "validation-preview"),
             )
@@ -312,7 +321,10 @@ class UiAuditRunner:
         report_md.write_text("\n".join(lines), encoding="utf-8")
 
     def create_driver(self, width: int, height: int, mobile: bool) -> WebDriver:
-        if shutil.which(self.args.chromium_binary) is None and not Path(self.args.chromium_binary).exists():
+        if (
+            shutil.which(self.args.chromium_binary) is None
+            and not Path(self.args.chromium_binary).exists()
+        ):
             raise AuditError(f"Chromium binary not found: {self.args.chromium_binary}")
         if shutil.which(self.args.chromedriver_binary) is None:
             raise AuditError(f"ChromeDriver binary not found: {self.args.chromedriver_binary}")
@@ -404,12 +416,10 @@ class UiAuditRunner:
 
     def bootstrap_browser(self, driver: WebDriver) -> None:
         driver.get(f"{self.base_url}/profiles")
-        driver.execute_script(
-            """
+        driver.execute_script("""
             window.localStorage.clear();
             window.sessionStorage.clear();
-            """
-        )
+            """)
         driver.get(f"{self.base_url}/profiles")
         self.wait_for(driver, EC.presence_of_element_located((By.ID, "lang")))
 
@@ -419,7 +429,9 @@ class UiAuditRunner:
         else:
             url = urljoin(f"{self.base_url}/", path.lstrip("/"))
         driver.get(url)
-        self.wait_for(driver, lambda d: d.execute_script("return document.readyState") == "complete")
+        self.wait_for(
+            driver, lambda d: d.execute_script("return document.readyState") == "complete"
+        )
 
     def set_profile_metadata(self, driver: WebDriver) -> None:
         driver.execute_script(
@@ -457,7 +469,10 @@ class UiAuditRunner:
             select,
             mode,
         )
-        self.wait_for(driver, lambda d: d.find_element(By.TAG_NAME, "html").get_attribute("data-theme") == mode)
+        self.wait_for(
+            driver,
+            lambda d: d.find_element(By.TAG_NAME, "html").get_attribute("data-theme") == mode,
+        )
         self.record(
             viewport,
             f"theme_{mode}_applied",
@@ -477,7 +492,10 @@ class UiAuditRunner:
         )
         resolved = "en" if mode == "en" else "ru"
         try:
-            self.wait_for(driver, lambda d: d.find_element(By.TAG_NAME, "html").get_attribute("lang") == resolved)
+            self.wait_for(
+                driver,
+                lambda d: d.find_element(By.TAG_NAME, "html").get_attribute("lang") == resolved,
+            )
         except TimeoutException:
             self.record(
                 viewport,
@@ -492,7 +510,9 @@ class UiAuditRunner:
                 """,
                 mode,
             )
-            self.wait_for(driver, lambda d: d.execute_script("return document.readyState") == "complete")
+            self.wait_for(
+                driver, lambda d: d.execute_script("return document.readyState") == "complete"
+            )
             self.wait_for(
                 driver,
                 lambda d: d.find_element(By.TAG_NAME, "html").get_attribute("lang") == resolved,
@@ -506,8 +526,12 @@ class UiAuditRunner:
 
     def verify_language_switch(self, driver: WebDriver, viewport: ViewportRun) -> None:
         selector_to_key = {
-            '[data-bpm-header-control="locale"] [data-i18n="profiles.locale_label"]': "profiles.locale_label",
-            '[data-bpm-header-control="theme"] [data-i18n="profiles.theme_label"]': "profiles.theme_label",
+            '[data-bpm-header-control="locale"] [data-i18n="profiles.locale_label"]': (
+                "profiles.locale_label"
+            ),
+            '[data-bpm-header-control="theme"] [data-i18n="profiles.theme_label"]': (
+                "profiles.theme_label"
+            ),
             '[data-step="1"] .wizard-step-label': "profiles.wizard_step_one",
             '[data-step="2"] .wizard-step-label': "profiles.wizard_step_two",
             '[data-step="6"] .wizard-step-label': "profiles.wizard_step_six",
@@ -524,7 +548,10 @@ class UiAuditRunner:
                 actual_normalized = actual.casefold()
                 expected_normalized = expected.casefold()
                 opposite_normalized = opposite_text.casefold()
-                ok = actual_normalized == expected_normalized and actual_normalized != opposite_normalized
+                ok = (
+                    actual_normalized == expected_normalized
+                    and actual_normalized != opposite_normalized
+                )
                 details = f"{selector} => actual={actual!r}, expected={expected!r}"
                 self.record(
                     viewport,
@@ -536,10 +563,17 @@ class UiAuditRunner:
 
     def go_to_step(self, driver: WebDriver, step: int) -> None:
         button = driver.find_element(By.CSS_SELECTOR, f'.wizard-step[data-step="{step}"]')
-        self.safe_click(driver, button, locator=(By.CSS_SELECTOR, f'.wizard-step[data-step="{step}"]'))
+        self.safe_click(
+            driver, button, locator=(By.CSS_SELECTOR, f'.wizard-step[data-step="{step}"]')
+        )
         self.wait_for(
             driver,
-            lambda d: d.find_element(By.CSS_SELECTOR, f'.wizard-step[data-step="{step}"]').get_attribute("aria-current") == "step",
+            lambda d: (
+                d.find_element(By.CSS_SELECTOR, f'.wizard-step[data-step="{step}"]').get_attribute(
+                    "aria-current"
+                )
+                == "step"
+            ),
         )
         self.wait_for(
             driver,
@@ -553,15 +587,20 @@ class UiAuditRunner:
             response = requests.get(f"{self.base_url}/api/profiles", params=params, timeout=10)
             response.raise_for_status()
             payload = response.json()
-            items = payload.get("items", []) if isinstance(payload, dict) else payload if isinstance(payload, list) else []
+            items = (
+                payload.get("items", [])
+                if isinstance(payload, dict)
+                else payload
+                if isinstance(payload, list)
+                else []
+            )
             if items:
                 return int(items[0]["id"])
             time.sleep(0.5)
         raise AuditError(f"Timed out waiting for profile save: {self.profile_name}")
 
     def verify_layout(self, driver: WebDriver, viewport: ViewportRun, name: str) -> None:
-        result = driver.execute_script(
-            """
+        result = driver.execute_script("""
             const offenders = [];
             const vw = window.innerWidth;
             const root = document.documentElement;
@@ -592,9 +631,10 @@ class UiAuditRunner:
                 horizontalTolerance,
                 offenders,
             };
-            """
+            """)
+        allowed_width = (
+            max(result["clientWidth"], result["innerWidth"]) + result["horizontalTolerance"]
         )
-        allowed_width = max(result["clientWidth"], result["innerWidth"]) + result["horizontalTolerance"]
         ok = result["scrollWidth"] <= allowed_width and not result["offenders"]
         details = (
             f"scrollWidth={result['scrollWidth']}, clientWidth={result['clientWidth']}, "
@@ -606,8 +646,7 @@ class UiAuditRunner:
         self.record(viewport, f"{name}_fits_viewport", ok, details)
 
     def verify_dark_theme(self, driver: WebDriver, viewport: ViewportRun, name: str) -> None:
-        result = driver.execute_script(
-            """
+        result = driver.execute_script("""
             function luminance(r, g, b) {
                 const channel = (value) => {
                     const normalized = value / 255;
@@ -649,8 +688,7 @@ class UiAuditRunner:
                 if (offenders.length >= 20) break;
             }
             return offenders;
-            """
-        )
+            """)
         ok = not result
         details = "No bright backgrounds detected in dark theme."
         if result:
@@ -667,7 +705,9 @@ class UiAuditRunner:
         already_pressed = self.css_attr(driver, css_selector, "aria-pressed") == "true"
         if not already_pressed:
             self.click_css(driver, css_selector)
-            self.wait_for(driver, lambda d: self.css_attr(d, css_selector, "aria-pressed") == "true")
+            self.wait_for(
+                driver, lambda d: self.css_attr(d, css_selector, "aria-pressed") == "true"
+            )
         active_class = self.css_attr(d=driver, css=css_selector, attr="class")
         ok = "active" in active_class or "applied" in active_class or "preview" not in active_class
         self.record(
@@ -692,7 +732,9 @@ class UiAuditRunner:
             driver,
             lambda current_driver: len(current_driver.window_handles) > len(previous_handles),
         )
-        new_handle = next(handle for handle in driver.window_handles if handle not in previous_handles)
+        new_handle = next(
+            handle for handle in driver.window_handles if handle not in previous_handles
+        )
         driver.switch_to.window(new_handle)
 
     def fill_input(self, driver: WebDriver, element_id: str, value: str) -> None:
@@ -756,7 +798,10 @@ class UiAuditRunner:
     def toggle_disclosure(self, driver: WebDriver, element_id: str) -> None:
         button = driver.find_element(By.ID, element_id)
         self.safe_click(driver, button, locator=(By.ID, element_id))
-        self.wait_for(driver, lambda d: d.find_element(By.ID, element_id).get_attribute("aria-expanded") == "true")
+        self.wait_for(
+            driver,
+            lambda d: d.find_element(By.ID, element_id).get_attribute("aria-expanded") == "true",
+        )
 
     def open_details(self, driver: WebDriver, summary_selector: str) -> None:
         summary = driver.find_element(By.CSS_SELECTOR, summary_selector)
@@ -765,10 +810,16 @@ class UiAuditRunner:
     def toggle_section(self, driver: WebDriver, css_selector: str) -> None:
         button = driver.find_element(By.CSS_SELECTOR, css_selector)
         self.safe_click(driver, button, locator=(By.CSS_SELECTOR, css_selector))
-        self.wait_for(driver, lambda d: d.find_element(By.CSS_SELECTOR, css_selector).get_attribute("aria-expanded") == "true")
+        self.wait_for(
+            driver,
+            lambda d: (
+                d.find_element(By.CSS_SELECTOR, css_selector).get_attribute("aria-expanded")
+                == "true"
+            ),
+        )
 
     def capture(self, driver: WebDriver, viewport: ViewportRun, stem: str) -> str:
-        filename = f"{viewport.name}_{len(viewport.screenshots)+1:02d}_{self.slugify(stem)}.png"
+        filename = f"{viewport.name}_{len(viewport.screenshots) + 1:02d}_{self.slugify(stem)}.png"
         target = self.output_dir / filename
         driver.save_screenshot(str(target))
         viewport.screenshots.append(filename)
@@ -868,8 +919,7 @@ class UiAuditRunner:
         return text in driver.page_source
 
     def dump_export_debug(self, driver: WebDriver, stem: str) -> None:
-        ui_state = driver.execute_script(
-            """
+        ui_state = driver.execute_script("""
             const monacoModel = window.monaco?.editor?.getModels?.()?.[0] || null;
             let editorValue = "";
             let parsedDocument = null;
@@ -901,8 +951,7 @@ class UiAuditRunner:
                 parsedFlags,
                 parseError,
             };
-            """
-        )
+            """)
         (self.output_dir / f"{stem}_ui_state.json").write_text(
             json.dumps(ui_state, ensure_ascii=False, indent=2),
             encoding="utf-8",
@@ -925,7 +974,9 @@ class UiAuditRunner:
                 encoding="utf-8",
             )
 
-    def debug_validate_request(self, profile_type: str, document_payload: dict[str, Any]) -> dict[str, Any]:
+    def debug_validate_request(
+        self, profile_type: str, document_payload: dict[str, Any]
+    ) -> dict[str, Any]:
         response = requests.post(
             f"{self.base_url}/api/validate/{quote(profile_type)}",
             json={"document": document_payload},
@@ -933,7 +984,9 @@ class UiAuditRunner:
         )
         return self._format_http_debug(response)
 
-    def debug_save_request(self, ui_state: dict[str, Any], flags_payload: dict[str, Any]) -> dict[str, Any]:
+    def debug_save_request(
+        self, ui_state: dict[str, Any], flags_payload: dict[str, Any]
+    ) -> dict[str, Any]:
         payload = {
             "name": ui_state.get("profileName") or self.profile_name,
             "owner": ui_state.get("profileOwner") or self.profile_owner,
@@ -982,7 +1035,9 @@ def maybe_start_server(args: argparse.Namespace, output_dir: Path) -> Any:
     port = args.port or pick_free_port()
     args.port = port
     env = os.environ.copy()
-    env.setdefault("BPM_DATABASE_URL", f"sqlite+aiosqlite:////tmp/bpm-local-chromium-audit-{port}.db")
+    env.setdefault(
+        "BPM_DATABASE_URL", f"sqlite+aiosqlite:////tmp/bpm-local-chromium-audit-{port}.db"
+    )
     previous_cwd = Path.cwd()
     os.chdir(REPO_ROOT)
     os.environ.update(env)
@@ -1026,7 +1081,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Run a local Chromium UI audit against the BPM product.",
     )
-    parser.add_argument("--base-url", help="Use an existing BPM server instead of starting a local one.")
+    parser.add_argument(
+        "--base-url", help="Use an existing BPM server instead of starting a local one."
+    )
     parser.add_argument("--port", type=int, default=0, help="Local port for the spawned server.")
     parser.add_argument("--output-dir", help="Directory for screenshots and reports.")
     parser.add_argument(
@@ -1054,7 +1111,11 @@ def main() -> int:
     if not args.base_url and args.port == 0:
         args.port = pick_free_port()
 
-    output_dir = Path(args.output_dir) if args.output_dir else DEFAULT_OUTPUT_ROOT / time.strftime("%Y%m%d-%H%M%S")
+    output_dir = (
+        Path(args.output_dir)
+        if args.output_dir
+        else DEFAULT_OUTPUT_ROOT / time.strftime("%Y%m%d-%H%M%S")
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
 
     try:

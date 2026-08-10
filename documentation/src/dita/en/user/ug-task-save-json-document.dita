@@ -2,13 +2,13 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-json-document" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Save the JSON document</title>
-  <shortdesc>Save a valid raw JSON document back to the canonical BPM profile.</shortdesc>
+  <shortdesc><uicontrol>Save</uicontrol> a valid raw JSON document back to the canonical BPM profile.</shortdesc>
   <taskbody>
     <prereq><p>The JSON document has been validated or the remaining warnings are understood.</p></prereq>
-    <context><p>Saving writes the raw document back through BPM normalization. The saved profile can then be opened in Guided, All settings, Compare, or export workflows.</p></context>
+    <context><p>Saving writes the raw document back through BPM normalization. The saved profile can then be opened in Guided, <uicontrol>All settings</uicontrol>, Compare, or export workflows.</p></context>
     <steps>
       <step><cmd>Validate the JSON document.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
-      <step><cmd>Choose Save only when the top-level policies object and policy values are correct.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
+      <step><cmd>Choose <uicontrol>Save</uicontrol> only when the top-level policies object and policy values are correct.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
       <step><cmd>Wait for the saved status before leaving the route.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
       <step><cmd>Reopen the profile or export policies.json when you need handoff evidence.</cmd><info><note type="warning">Saving raw JSON can change the canonical BPM profile. Validate syntax and policy values before saving.</note></info></step>
     </steps>

@@ -11,14 +11,14 @@ pytestmark = pytest.mark.docs_contract
 
 
 def test_m12b_02_renders_the_title_only_floating_shell_without_transport() -> None:
-    builder = (DOCUMENTATION_ROOT / "tools/build_docs.py").read_text(encoding="utf-8")
+    builder = (DOCUMENTATION_ROOT / "buildlib/portal.py").read_text(encoding="utf-8")
     shell = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs-assistant-shell.js").read_text(
         encoding="utf-8"
     )
 
     for required in (
         "data-documentation-assistant-widget",
-        'data-assistant-expanded=\"false\"',
+        'data-assistant-expanded="false"',
         "data-assistant-toggle",
         "data-assistant-panel hidden",
         "data-assistant-collapse",

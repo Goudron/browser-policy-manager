@@ -4,12 +4,12 @@
   <title>Résoudre les éléments de révision manuelle du CIS</title>
   <shortdesc>Recherchez les recommandations CIS nécessitant une révision manuelle et décidez si vous devez les configurer, les documenter ou les laisser pour vérification externe.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Tous les paramètres Revue pour un profil qui inclut une couche CIS ou des métadonnées sources dérivées de CIS.</p></prereq>
-    <context><p>Certaines recommandations CIS ne peuvent pas être entièrement automatisées par BPM. Revue fait apparaître ces éléments afin que l'utilisateur puisse prendre une décision explicite sans réclamer de certification.</p></context>
+    <prereq><p>Ouvrez <uicontrol>Tous les paramètres</uicontrol> <uicontrol>Revue</uicontrol> pour un profil qui inclut une couche CIS ou des métadonnées sources dérivées de CIS.</p></prereq>
+    <context><p>Certaines recommandations CIS ne peuvent pas être entièrement automatisées par BPM. <uicontrol>Revue</uicontrol> fait apparaître ces éléments afin que l'utilisateur puisse prendre une décision explicite sans réclamer de certification.</p></context>
     <steps>
-      <step><cmd>Ouvrez Revue et filtrez les éléments à révision manuelle CIS si nécessaire.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Lisez les identifiants de recommandation, la politique ou préférence concernée et la valeur actuelle.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Configurez une valeur prise en charge, documentez pourquoi la vérification manuelle reste ou laissez l'élément intentionnellement non résolu.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Ouvrez <uicontrol>Revue</uicontrol> et filtrez les éléments à révision manuelle CIS si nécessaire.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Lisez les identifiants de recommandation, la politique ou préférence concernée et la valeur actuelle.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Configurez une valeur prise en charge, documentez pourquoi la vérification manuelle reste ou laissez l'élément intentionnellement non résolu.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Revalidez et enregistrez la décision avant l'exportation ou le transfert.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Les éléments de révision manuelle CIS sont configurés, documentés ou intentionnellement laissés pour vérification externe.</p></result>

@@ -55,7 +55,10 @@ def _reject_missing_locale_evidence(corpus: dict, guards: dict) -> None:
 
 def _reject_unsafe_startup(plan: dict, guards: dict) -> None:
     startup = guards["startup_and_network"]
-    if plan["network_requests_after_install"] != startup["local_mode_network_requests_after_install"]:
+    if (
+        plan["network_requests_after_install"]
+        != startup["local_mode_network_requests_after_install"]
+    ):
         raise GuardViolation("local mode network request is forbidden")
     if plan["listener_transport"] in startup["forbidden_listener_transports"]:
         raise GuardViolation("model listener is forbidden")
@@ -128,7 +131,7 @@ def _valid_chunk() -> dict:
         "documentation_version": "0.9.3",
         "bpm_version": "0.9.3",
         "provenance_class": "published_reviewed_dita",
-        "text_normalization_revision": "v1"
+        "text_normalization_revision": "v1",
     }
 
 
@@ -195,7 +198,7 @@ def test_guard_rejects_silent_startup_network_listener_and_tool_capability() -> 
         "network_requests_after_install": 0,
         "listener_transport": "direct child-process pipe",
         "triggers": [],
-        "model_tools": []
+        "model_tools": [],
     }
 
     _reject_unsafe_startup(safe_plan, guards)
@@ -224,7 +227,7 @@ def test_guard_rejects_uncited_answer_and_invalid_citation_mode() -> None:
         "disposition": "answer",
         "citation_id": "topic:ug-task-use-profile-library",
         "published_url": "/help/en/user/ug-task-use-profile-library.html",
-        "source_kind": "local"
+        "source_kind": "local",
     }
 
     _reject_uncited_answer(answer, guards)
@@ -246,7 +249,7 @@ def test_guard_rejects_unsupported_transition_partial_ready_and_ai_search_depend
         "next_state": "busy",
         "assistant_ready": True,
         "partial_artifacts": False,
-        "lexical_requires_ai": False
+        "lexical_requires_ai": False,
     }
 
     _reject_invalid_state_plan(safe_plan, guards, availability)
@@ -270,7 +273,7 @@ def test_guard_rejects_resource_ceiling_overage() -> None:
         "artifact_disk_gib": 2.5,
         "worker_and_retrieval_rss_gib": 3.5,
         "active_generations": 1,
-        "queued_generations": 1
+        "queued_generations": 1,
     }
 
     _reject_resource_overage(safe_plan, guards)

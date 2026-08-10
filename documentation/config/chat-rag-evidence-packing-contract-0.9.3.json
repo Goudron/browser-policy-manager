@@ -49,7 +49,7 @@
     "rule": "Every packed record preserves its server-resolvable active-generation citation; no model-proposed or ordinary-search URL can enter the context."
   },
   "verification": {
-    "runtime": "tests/test_documentation_evidence_packing_093.py",
+    "runtime": "tests/integration/ai/incubation/test_documentation_evidence_packing.py",
     "contract": "documentation/tests/contract/test_chat_rag_evidence_packing_0_9_3.py"
   }
 }

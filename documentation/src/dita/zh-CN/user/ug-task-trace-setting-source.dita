@@ -4,12 +4,12 @@
   <title>跟踪设置源</title>
   <shortdesc>将配置的设置跟踪到基线、CIS、手动、导入或原始源归因。</shortdesc>
   <taskbody>
-    <prereq><p>打开 所有设置 中的配置设置。</p></prereq>
+    <prereq><p>打开 <uicontrol>所有设置</uicontrol> 中的配置设置。</p></prereq>
     <context><p>源归因有助于解释某个值存在的原因以及更改该值是否会覆盖基线、CIS 层、手动编辑、导入或原始后备。</p></context>
     <steps>
-      <step><cmd>打开显示源徽章的设置详细信息或配置的摘要。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>确定该值是否来自基线、CIS、手动、导入或原始来源。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>当生成的图层贡献了价值时，请遵循相关的 CIS 或配置文件上下文链接。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>打开显示源徽章的设置详细信息或配置的摘要。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>确定该值是否来自基线、CIS、手动、导入或原始来源。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>当生成的图层贡献了价值时，请遵循相关的 CIS 或配置文件上下文链接。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>在编辑、删除或重置设置之前记录源。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>您知道配置的值来自哪里，并且可以解释更改它的影响。</p></result>

@@ -31,7 +31,7 @@
     "app/templates/profiles/_page_catalog_scripts.html",
     "app/documentation/manifest.py",
     "documentation/tools/build_docs.py",
-    "app/static/profiles_css/20-editor-wizard.css",
+    "app/static/profiles_css/21-settings.css",
     "app/static/profiles_css/30-responsive.css"
   ],
   "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
@@ -201,10 +201,10 @@
         "app/static/profiles_settings_search.js"
       ],
       "layout": [
-        "app/static/profiles_css/20-editor-wizard.css",
+        "app/static/profiles_css/21-settings.css",
         "app/static/profiles_css/30-responsive.css"
       ],
-      "focused_test": "tests/test_all_settings_row_help_rendering_contract.py",
+      "focused_test": "tests/contract/settings/test_all_settings_row_help_rendering_contract.py",
       "result": "42 focused/runtime/layout tests passed; make lint passed."
     },
     "BPM091-M9-04": {
@@ -218,7 +218,7 @@
         "profiles.all_settings.row_help.raw_not_applicable",
         "profiles.all_settings.row_help.unknown_not_supported"
       ],
-      "focused_test": "tests/test_all_settings_row_help_localization.py",
+      "focused_test": "tests/integration/settings/test_all_settings_row_help_localization.py",
       "result": "41 localization/rendering/anti-anglicism tests passed; locale catalogs are reproducible; locale-quality and make lint passed."
     },
     "BPM091-M9-05": {
@@ -237,12 +237,12 @@
         "artifact_incomplete",
         "artifact_incompatible"
       ],
-      "focused_test": "tests/test_all_settings_row_help_states.py",
+      "focused_test": "tests/integration/settings/test_all_settings_row_help_states.py",
       "result": "58 All Settings runtime/layout contracts passed; 21 documentation runtime-route tests and make lint passed."
     },
     "BPM091-M9-06": {
       "status": "accepted",
-      "dom_test": "tests/test_all_settings_row_help_states.py",
+      "dom_test": "tests/integration/settings/test_all_settings_row_help_states.py",
       "browser_test": "documentation/tests/browser/test_documentation_portal_browser_smoke.py::test_all_settings_row_help_links_cover_modes_locales_search_and_keyboard",
       "browser_coverage": [
         "Review, Configured, and Catalog modes",
@@ -259,7 +259,7 @@
   "verification": {
     "focused_contracts": [
       "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_all_settings_row_help_link_contract.py",
-      "./.venv/bin/pytest -q tests/web_profiles_page/test_static_responsive_contracts.py::test_deep_help_icon_links_are_manifest_backed_and_responsive_contract",
+      "./.venv/bin/pytest -q tests/contract/ui/profiles/test_static_responsive_contracts.py::test_deep_help_icon_links_are_manifest_backed_and_responsive_contract",
       "./.venv/bin/pytest -q -m browser_ui documentation/tests/browser/test_documentation_portal_browser_smoke.py::test_all_settings_row_help_links_cover_modes_locales_search_and_keyboard"
     ],
     "release_gates": [

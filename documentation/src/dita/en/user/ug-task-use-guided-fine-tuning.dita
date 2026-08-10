@@ -13,7 +13,7 @@
       <step><cmd>Recheck the plain-language summary and validation message before continuing.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
     </steps>
     <result><p>The profile contains deliberate advanced changes rather than accidental broad edits.</p></result>
-    <postreq><p>Recovery: if the change is hard to explain, reset the control and use All settings or JSON editor for deeper inspection.</p></postreq>
+    <postreq><p>Recovery: if the change is hard to explain, reset the control and use <uicontrol>All settings</uicontrol> or <uicontrol>JSON editor</uicontrol> for deeper inspection.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-guided-editor"/>

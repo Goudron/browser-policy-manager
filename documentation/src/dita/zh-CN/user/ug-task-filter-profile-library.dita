@@ -4,15 +4,15 @@
   <title>过滤库</title>
   <shortdesc>组合架构、生命周期和验证过滤器以集中保存的配置文件列表。</shortdesc>
   <taskbody>
-    <prereq><p>库已打开，您知道需要检查哪个配置文件状态。</p></prereq>
+    <prereq><p><uicontrol>库</uicontrol>已打开，您知道需要检查哪个配置文件状态。</p></prereq>
     <context><p>过滤器是视图控件。它们不会更改配置文件内容、验证状态或生命周期状态。</p></context>
     <steps>
       <step><cmd>当您需要发布、ESR 或所有配置文件时，选择 Firefox 架构通道过滤器。</cmd><info><p>预期结果：过滤后的计数仅反映所选通道的行。</p></info></step>
       <step><cmd>选择生命周期过滤器以显示活动、存档或所有配置文件。</cmd><info><p>当您准备恢复或永久删除保留的配置文件时，请使用已存档。</p></info></step>
       <step><cmd>选择验证过滤器以显示通过、失败或尚未验证的配置文件。</cmd><info><note type="warning">验证过滤器不运行验证。它仅显示最后保存的验证状态。</note></info></step>
-      <step><cmd>当您需要完整的库视图时，将过滤器重置为所有状态。</cmd><info><p>此重置仅更改可见列表，而不更改已保存的配置文件数据。</p></info></step>
+      <step><cmd>当您需要完整的<uicontrol>库</uicontrol>视图时，将过滤器重置为所有状态。</cmd><info><p>此重置仅更改可见列表，而不更改已保存的配置文件数据。</p></info></step>
     </steps>
-    <result><p>库显示与所选模式、生命周期、验证和搜索条件匹配的配置文件子集。</p></result>
+    <result><p><uicontrol>库</uicontrol>显示与所选模式、生命周期、验证和搜索条件匹配的配置文件子集。</p></result>
     <postreq><p>恢复：如果配置文件似乎丢失，请重置过滤器并搜索，然后将其视为不存在。</p></postreq>
   </taskbody>
   <related-links>

@@ -122,7 +122,7 @@ def extract_archive(archive: Path, destination: Path, archive_format: str, root:
 
 def ensure_archive(spec: dict[str, str], archive_dir: Path, offline: bool) -> Path:
     filename = Path(urllib.parse.urlparse(spec["url"]).path).name
-    target = archive_dir / f'{spec["sha256"]}-{filename}'
+    target = archive_dir / f"{spec['sha256']}-{filename}"
     archive_dir.mkdir(parents=True, exist_ok=True)
     if target.exists() and sha256(target) == spec["sha256"]:
         return target
@@ -133,7 +133,10 @@ def ensure_archive(spec: dict[str, str], archive_dir: Path, offline: bool) -> Pa
     temporary.unlink(missing_ok=True)
     print(f"Downloading {spec['url']}", flush=True)
     try:
-        with urllib.request.urlopen(spec["url"], timeout=120) as response, temporary.open("wb") as out:
+        with (
+            urllib.request.urlopen(spec["url"], timeout=120) as response,
+            temporary.open("wb") as out,
+        ):
             shutil.copyfileobj(response, out)
         actual = sha256(temporary)
         if actual != spec["sha256"]:
@@ -147,7 +150,7 @@ def ensure_archive(spec: dict[str, str], archive_dir: Path, offline: bool) -> Pa
 def install_component(name: str, spec: dict[str, Any], cache: Path, offline: bool) -> Path:
     archive_spec = spec["archive"]
     archive = ensure_archive(archive_spec, cache / "archives", offline)
-    destination = cache / "installs" / f'{name}-{spec["version"]}'
+    destination = cache / "installs" / f"{name}-{spec['version']}"
     marker = destination / ".bpm-toolchain.json"
     expected = {"version": spec["version"], "sha256": archive_spec["sha256"]}
     if marker.is_file():
@@ -179,14 +182,25 @@ def run_checked(command: list[str], *, env: dict[str, str] | None = None) -> str
 
 def install_python(lock: dict[str, Any], cache: Path, offline: bool) -> Path:
     if sys.version_info[:2] != (3, 14):
-        raise BootstrapError(f"documentation tests require Python >=3.14,<3.15; got {platform.python_version()}")
+        raise BootstrapError(
+            f"documentation tests require Python >=3.14,<3.15; got {platform.python_version()}"
+        )
     requirements = REPOSITORY_ROOT / lock["python"]["requirements_lock"]
     wheelhouse = cache / "python-wheelhouse"
     environment = cache / "python-venv"
     wheelhouse.mkdir(parents=True, exist_ok=True)
     if not offline:
         run_checked(
-            [sys.executable, "-m", "pip", "download", "--dest", str(wheelhouse), "-r", str(requirements)]
+            [
+                sys.executable,
+                "-m",
+                "pip",
+                "download",
+                "--dest",
+                str(wheelhouse),
+                "-r",
+                str(requirements),
+            ]
         )
     if environment.exists():
         shutil.rmtree(environment)
@@ -194,23 +208,37 @@ def install_python(lock: dict[str, Any], cache: Path, offline: bool) -> Path:
     python = environment / "bin/python"
     run_checked(
         [
-            str(python), "-m", "pip", "install", "--no-index", "--find-links", str(wheelhouse),
-            "-r", str(requirements),
+            str(python),
+            "-m",
+            "pip",
+            "install",
+            "--no-index",
+            "--find-links",
+            str(wheelhouse),
+            "-r",
+            str(requirements),
         ]
     )
     return python
 
 
-def smoke_build(dita_home: Path, java_home: Path, cache: Path) -> None:
+def smoke_build(
+    dita_home: Path,
+    java_home: Path,
+    cache: Path,
+    *,
+    expected_java_version: str,
+    expected_dita_version: str,
+) -> None:
     dita = dita_home / "bin/dita"
     java = java_home / "bin/java"
     if not dita.is_file() or not java.is_file():
         raise BootstrapError("locked DITA-OT or Java executable is missing")
     env = os.environ.copy()
     env.update({"JAVA_HOME": str(java_home), "PATH": f"{java_home / 'bin'}:{env.get('PATH', '')}"})
-    if "21.0.11" not in run_checked([str(java), "-version"], env=env):
+    if expected_java_version not in run_checked([str(java), "-version"], env=env):
         raise BootstrapError("installed Java version does not match lock")
-    if "4.4" not in run_checked([str(dita), "--version"], env=env):
+    if expected_dita_version not in run_checked([str(dita), "--version"], env=env):
         raise BootstrapError("installed DITA-OT version does not match lock")
     with tempfile.TemporaryDirectory(prefix="smoke-", dir=cache) as temp_name:
         temp = Path(temp_name)
@@ -218,7 +246,7 @@ def smoke_build(dita_home: Path, java_home: Path, cache: Path) -> None:
             '<?xml version="1.0" encoding="UTF-8"?>\n'
             '<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">\n'
             '<topic id="smoke" xml:lang="en"><title>Offline smoke</title>'
-            '<body><p>Locked toolchain.</p></body></topic>\n',
+            "<body><p>Locked toolchain.</p></body></topic>\n",
             encoding="utf-8",
         )
         (temp / "map.ditamap").write_text(
@@ -228,7 +256,15 @@ def smoke_build(dita_home: Path, java_home: Path, cache: Path) -> None:
             encoding="utf-8",
         )
         run_checked(
-            [str(dita), "--input", str(temp / "map.ditamap"), "--format", "html5", "--output", str(temp / "out")],
+            [
+                str(dita),
+                "--input",
+                str(temp / "map.ditamap"),
+                "--format",
+                "html5",
+                "--output",
+                str(temp / "out"),
+            ],
             env=env,
         )
         if not (temp / "out/topic.html").is_file():
@@ -252,7 +288,13 @@ def bootstrap(lock_path: Path, offline: bool, skip_python: bool) -> None:
     )
     dita_spec = lock["components"]["dita_ot"]
     dita_home = install_component("dita-ot", dita_spec, cache, offline)
-    smoke_build(dita_home, java_home, cache)
+    smoke_build(
+        dita_home,
+        java_home,
+        cache,
+        expected_java_version=java_spec["version"].split("+", 1)[0],
+        expected_dita_version=dita_spec["version"],
+    )
     if not skip_python:
         install_python(lock, cache, offline)
     print(f"Documentation toolchain ready in {cache.relative_to(REPOSITORY_ROOT)}", flush=True)

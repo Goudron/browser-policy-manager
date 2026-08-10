@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-comparison-states" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>比较状态和行类型</title><shortdesc>比较行解释策略或托管首选项是否相同、已更改或两侧均缺失。</shortdesc>
-  <refbody><section id="a-comparison-row-types"><title>行类型</title><p>策略行代表 Firefox Enterprise 策略。首选项行表示托管首选项键和值。</p></section><section id="a-comparison-equal"><title>等于</title><p>两个配置文件均包含设置且比较值匹配。</p></section><section id="a-comparison-changed"><title>已更改</title><p>两个配置文件都包含该设置，但配置文件 A 和配置文件 B 具有不同的值或值详细信息。</p></section><section id="a-comparison-missing"><title>缺失</title><p>该设置仅存在于一侧。在假设缺失是故意的之前，请检查缺失值的配置文件。</p></section><section id="a-comparison-recovery"><title>恢复</title><p>如果出现意外状态，请确认两个选定的配置文件，保存所有编辑器更改，然后从库中重新打开比较。</p></section></refbody>
+  <title>比较状态和行类型</title><shortdesc>比较行解释策略或<uicontrol>托管首选项</uicontrol>是否相同、已更改或两侧均缺失。</shortdesc>
+  <refbody><section id="a-comparison-row-types"><title>行类型</title><p>策略行代表 Firefox Enterprise 策略。首选项行表示<uicontrol>托管首选项</uicontrol>键和值。</p></section><section id="a-comparison-equal"><title>等于</title><p>两个配置文件均包含设置且比较值匹配。</p></section><section id="a-comparison-changed"><title>已更改</title><p>两个配置文件都包含该设置，但配置文件 A 和配置文件 B 具有不同的值或值详细信息。</p></section><section id="a-comparison-missing"><title>缺失</title><p>该设置仅存在于一侧。在假设缺失是故意的之前，请检查缺失值的配置文件。</p></section><section id="a-comparison-recovery"><title>恢复</title><p>如果出现意外状态，请确认两个选定的配置文件，保存所有编辑器更改，然后从<uicontrol>库</uicontrol>中重新打开比较。</p></section></refbody>
   <related-links><link keyref="topic.ug-task-select-comparison-profiles"/><link keyref="topic.ug-task-interpret-profile-comparison"/></related-links>
 </reference>

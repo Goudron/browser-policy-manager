@@ -12,7 +12,9 @@ from tests.support import make_test_client
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 DITA_ROOT = DOCUMENTATION_ROOT / "src/dita"
-REVIEW = REPOSITORY_ROOT / "docs/architecture/administrator-devops-guide-sufficiency-review-0.9.1.json"
+REVIEW = (
+    REPOSITORY_ROOT / "docs/architecture/administrator-devops-guide-sufficiency-review-0.9.1.json"
+)
 PROTOCOL = DOCUMENTATION_ROOT / "config/documentation-sufficiency-review-protocol-0.9.1.json"
 TAXONOMY = DOCUMENTATION_ROOT / "config/topic-section-taxonomy-0.9.1.json"
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
@@ -160,7 +162,8 @@ def test_linux_source_install_passes_while_wsl_remains_unverified_non_goal() -> 
     review = _json(REVIEW)
     sections = _sections()
     resolved = next(
-        item for item in review["resolved_findings"]
+        item
+        for item in review["resolved_findings"]
         if item["finding_id"] == "ADMIN091-SOURCE-INSTALL-EVIDENCE"
     )
     source_install_topics = sections["linux-source-deployment"]["topic_ids"]
@@ -171,9 +174,10 @@ def test_linux_source_install_passes_while_wsl_remains_unverified_non_goal() -> 
     assert "hands_on_command_transcript" in sections["linux-source-deployment"]["evidence_type"]
     assert sections["windows-wsl-source-deployment"]["review_disposition"] == "deferred-non-goal"
     assert sections["windows-wsl-source-deployment"]["blocking_finding_ids"] == []
-    assert "unverified-no-actual-host-supplied" in sections["windows-wsl-source-deployment"][
-        "expected_result"
-    ]
+    assert (
+        "unverified-no-actual-host-supplied"
+        in sections["windows-wsl-source-deployment"]["expected_result"]
+    )
     assert resolved["affected_topic_count"] == 4
     assert resolved["resolved_by"] == "BPM091-M12-05"
     assert resolved["closure_evidence"].endswith("m11-14-evidence-closure-20260715/closure.json")
@@ -190,7 +194,8 @@ def test_linux_source_install_passes_while_wsl_remains_unverified_non_goal() -> 
 def test_version_drift_is_closed_for_every_current_administrator_topic() -> None:
     review = _json(REVIEW)
     blocker = next(
-        item for item in review["resolved_findings"]
+        item
+        for item in review["resolved_findings"]
         if item["finding_id"] == "ADMIN091-VERSION-DRIFT"
     )
     topic_ids = [
@@ -231,9 +236,7 @@ def test_current_health_validation_import_and_export_results_execute() -> None:
             },
         )
         assert imported.status_code == 201
-        exported = client.get(
-            f"/api/export/profiles/{imported.json()['id']}/firefox/policies.json"
-        )
+        exported = client.get(f"/api/export/profiles/{imported.json()['id']}/firefox/policies.json")
         assert exported.status_code == 200
         assert exported.json() == {"policies": {"DisableTelemetry": True}}
 

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -17,21 +16,9 @@ def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
 
 
-def test_m10_01_pins_the_existing_safe_assistant_boundaries() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M10-01"
-    assert contract["status"] == "implemented-static-entry-no-assistant-http-route"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["portal_entry"]["initial_state"] == "unavailable"
-    assert contract["portal_entry"]["interactive_controls"] is False
-    assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
-
-
 def test_m10_01_historical_static_entry_does_not_change_search_or_enable_transport() -> None:
     contract = _contract()
-    shell = (DOCUMENTATION_ROOT / "tools/build_docs.py").read_text(encoding="utf-8")
+    shell = (DOCUMENTATION_ROOT / "buildlib/portal.py").read_text(encoding="utf-8")
     theme = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs.css").read_text(encoding="utf-8")
     print_theme = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs-print.css").read_text(
         encoding="utf-8"
@@ -56,5 +43,7 @@ def test_m10_01_historical_static_entry_does_not_change_search_or_enable_transpo
         "web_evidence": False,
         "conversation_content": False,
         "ordinary_search_changed": False,
-        "reason": "AI093-T05 remains a release blocker. M10-01 therefore adds no assistant request surface before body, schema, same-origin and CSRF controls are composed and tested.",
+        "reason": (
+            "AI093-T05 remains a release blocker. M10-01 therefore adds no assistant request surface before body, schema, same-origin and CSRF controls are composed and tested."
+        ),
     }

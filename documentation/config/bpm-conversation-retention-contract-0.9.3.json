@@ -43,7 +43,7 @@
     "cross_locale_context": false
   },
   "verification": {
-    "runtime": ["tests/test_conversation_context_093.py", "tests/test_conversation_stream_093.py", "tests/test_conversation_diagnostics_093.py"],
+    "runtime": ["tests/integration/ai/incubation/test_conversation_context.py", "tests/integration/ai/incubation/test_conversation_stream.py", "tests/integration/ai/incubation/test_conversation_diagnostics.py"],
     "contract": "documentation/tests/contract/test_bpm_conversation_retention_contract_0_9_3.py",
     "architecture": "docs/architecture/bpm-conversation-retention-0.9.3.md"
   }

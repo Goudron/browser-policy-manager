@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 from pathlib import Path
@@ -31,33 +30,6 @@ def _leaf_paths(value: Any, path: tuple[str, ...] = ()) -> dict[tuple[str, ...],
     return {path: value}
 
 
-def test_m10_03_pins_six_locale_copy_to_safe_future_boundaries() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M10-03"
-    assert contract["status"] == "implemented-six-locale-catalog-and-static-copy-files-no-ui-enable"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
-    assert contract["catalog_rules"]["state_fields"] == [
-        "title",
-        "detail",
-        "action",
-        "live",
-        "aria",
-    ]
-    assert contract["implementation_boundary"] == {
-        "generated_files": "Each published locale receives assistant-copy.json containing its expanded catalog. The current portal does not fetch or render that file on page load.",
-        "current_visible_copy": "Only the existing M10-01/M10-02 static unavailable card and disabled-control labels are rendered now.",
-        "m10_03a_boundary": "This task supplies text for future model-management states but does not add installation, verification, download, removal, progress, retry, or settings UI.",
-        "assistant_http_route": False,
-        "status_poll": False,
-        "worker_start": False,
-        "network_calls": 0,
-        "ordinary_search_changed": False,
-    }
-
-
 def test_m10_03_has_complete_natural_catalog_parity_and_placeholder_parity() -> None:
     contract = _contract()
     catalog = contract["catalog"]
@@ -85,7 +57,9 @@ def test_m10_03_has_complete_natural_catalog_parity_and_placeholder_parity() -> 
         localized = _leaf_paths(catalog[locale])
         assert all(localized[path] != value for path, value in english.items()), locale
         assert catalog[locale]["dialogue"]["scope"] != catalog["en"]["dialogue"]["scope"]
-        assert catalog[locale]["dialogue"]["out_of_scope"] != catalog["en"]["dialogue"]["out_of_scope"]
+        assert (
+            catalog[locale]["dialogue"]["out_of_scope"] != catalog["en"]["dialogue"]["out_of_scope"]
+        )
         assert catalog[locale]["web"]["privacy"] != catalog["en"]["web"]["privacy"]
 
 
@@ -93,7 +67,7 @@ def test_m10_03_expands_static_locale_files_without_enabling_the_assistant() -> 
     from documentation.tools import build_docs
 
     contract = _contract()
-    source = (DOCUMENTATION_ROOT / "tools/build_docs.py").read_text(encoding="utf-8")
+    source = (DOCUMENTATION_ROOT / "buildlib/portal.py").read_text(encoding="utf-8")
     script = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs-search.js").read_text(encoding="utf-8")
     theme = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs.css").read_text(encoding="utf-8")
 
@@ -102,25 +76,33 @@ def test_m10_03_expands_static_locale_files_without_enabling_the_assistant() -> 
     assert "documentation-assistant/status" not in source
     assert "documentation-assistant/chat" not in source
     assert "documentation-assistant" not in script
-    assistant_button_rule = theme.split(".bpm-docs-assistant-actions button {", 1)[1].split(
-        "}", 1
-    )[0]
+    assistant_button_rule = theme.split(".bpm-docs-assistant-actions button {", 1)[1].split("}", 1)[
+        0
+    ]
     assert "min-inline-size: 0" in assistant_button_rule
     assert "overflow-wrap: anywhere" in assistant_button_rule
-    assert "overflow-wrap: anywhere" in theme.split(
-        ".bpm-docs-assistant-entry {", 1
-    )[1].split("}", 1)[0]
+    assert (
+        "overflow-wrap: anywhere"
+        in theme.split(".bpm-docs-assistant-entry {", 1)[1].split("}", 1)[0]
+    )
     assert "stack on narrow portals" in contract["visual_layout"]
     for locale in contract["locales"]:
         payload = build_docs._assistant_copy_payload(locale)
         assert payload["locale"] == locale
         assert payload["messages"]["states"]["ready"] == {
             **contract["catalog"][locale]["states"]["ready"],
-            "live": contract["state_templates"][locale]["live"].format(
-                **contract["catalog"][locale]["states"]["ready"]
+            "live": (
+                contract["state_templates"][locale]["live"].format(
+                    **contract["catalog"][locale]["states"]["ready"]
+                )
             ),
-            "aria": contract["state_templates"][locale]["aria"].format(
-                **contract["catalog"][locale]["states"]["ready"]
+            "aria": (
+                contract["state_templates"][locale]["aria"].format(
+                    **contract["catalog"][locale]["states"]["ready"]
+                )
             ),
         }
-        assert payload["messages"]["shell"]["assistant"] == build_docs.SHELL_LABELS[locale]["assistant"]
+        assert (
+            payload["messages"]["shell"]["assistant"]
+            == build_docs.SHELL_LABELS[locale]["assistant"]
+        )

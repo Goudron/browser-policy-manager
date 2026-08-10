@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-open-saved-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Ein gespeichertes Profil in einem Editor öffnen</title>
-  <shortdesc>Öffnen Sie dasselbe gespeicherte Profil in Geführter Editor, Alle Einstellungen oder JSON-Editor, je nachdem, welche Änderung Sie benötigen.</shortdesc>
+  <shortdesc>Öffnen Sie dasselbe gespeicherte Profil in <uicontrol>Geführter Editor</uicontrol>, <uicontrol>Alle Einstellungen</uicontrol> oder <uicontrol>JSON-Editor</uicontrol>, je nachdem, welche Änderung Sie benötigen.</shortdesc>
   <taskbody>
-    <prereq><p>Das Profil ist in der Bibliothek sichtbar und seine Zeilenidentität stimmt mit dem Profil überein, das Sie bearbeiten oder überprüfen möchten.</p></prereq>
-    <context><p>Beim Öffnen eines gespeicherten Profils wird dieses nicht dupliziert. Jede Editoroberfläche arbeitet mit der gleichen gespeicherten Profilidentität.</p></context>
+    <prereq><p>Das Profil ist in der <uicontrol>Bibliothek</uicontrol> sichtbar und seine Zeilenidentität stimmt mit dem Profil überein, das Sie bearbeiten oder überprüfen möchten.</p></prereq>
+    <context><p>Beim Öffnen eines gespeicherten Profils wird dieses nicht dupliziert. Jede Editoroberfläche arbeitet mit der gleichen gespeicherten <uicontrol>Profilidentität</uicontrol>.</p></context>
     <steps>
-      <step><cmd>Verwenden Sie den Zeilentitel oder die geführte Aktion für aufgabenorientierte Bearbeitungen.</cmd><info><p>Erwartetes Ergebnis: BPM öffnet das Profil in Geführter Editor.</p></info></step>
-      <step><cmd>Verwenden Sie Alle Einstellungen, wenn Sie den vollständigen unterstützten Katalog und die Quellen-/Aufmerksamkeitsdetails benötigen.</cmd><info><p>Dies ist die sicherste Wahl für eine detaillierte Überprüfung von Richtlinien und Präferenzen.</p></info></step>
-      <step><cmd>Verwenden Sie JSON-Editor, wenn Sie das Rohgrenzdokument überprüfen oder bearbeiten müssen.</cmd><info><note type="warning">Rohe JSON-Änderungen sollten vor dem Export oder Vergleich validiert werden.</note></info></step>
+      <step><cmd>Verwenden Sie den Zeilentitel oder die geführte Aktion für aufgabenorientierte Bearbeitungen.</cmd><info><p>Erwartetes Ergebnis: BPM öffnet das Profil in <uicontrol>Geführter Editor</uicontrol>.</p></info></step>
+      <step><cmd>Verwenden Sie <uicontrol>Alle Einstellungen</uicontrol>, wenn Sie den vollständigen unterstützten Katalog und die Quellen-/Aufmerksamkeitsdetails benötigen.</cmd><info><p>Dies ist die sicherste Wahl für eine detaillierte Überprüfung von Richtlinien und Präferenzen.</p></info></step>
+      <step><cmd>Verwenden Sie <uicontrol>JSON-Editor</uicontrol>, wenn Sie das Rohgrenzdokument überprüfen oder bearbeiten müssen.</cmd><info><note type="warning">Rohe JSON-Änderungen sollten vor dem Export oder Vergleich validiert werden.</note></info></step>
     </steps>
     <result><p>Der ausgewählte Editor wird in seinem eigenen Profilkontext geöffnet und behält das gleiche Profil ID.</p></result>
-    <postreq><p>Wiederherstellung: Wenn Sie den falschen Editor geöffnet haben, kehren Sie zur Zeile „Bibliothek“ zurück oder verwenden Sie einen anderen Editor-Link für dasselbe Profil.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn Sie den falschen Editor geöffnet haben, kehren Sie zur Zeile „<uicontrol>Bibliothek</uicontrol>“ zurück oder verwenden Sie einen anderen Editor-Link für dasselbe Profil.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

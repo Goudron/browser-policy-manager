@@ -13,7 +13,7 @@
       <step><cmd>Validar las advertencias que se muestran junto a los controles dependientes del esquema.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
     <result><p>El perfil tiene acceso intencional al navegador y configuración de comportamiento predeterminado.</p></result>
-    <postreq><p>Recuperación: si la validación marca un valor, deshaga el último cambio o use Todos los ajustes para inspeccionar la forma de la política sin procesar.</p></postreq>
+    <postreq><p>Recuperación: si la validación marca un valor, deshaga el último cambio o use <uicontrol>Todos los ajustes</uicontrol> para inspeccionar la forma de la política sin procesar.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

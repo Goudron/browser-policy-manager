@@ -27,16 +27,14 @@ def upgrade() -> None:
         return
 
     op.execute(
-        sa.text(
-            """
+        sa.text("""
             UPDATE profiles
             SET schema_version = CASE
                 WHEN schema_version IN ('release-148', 'release-149') THEN 'release-149'
                 WHEN schema_version IN ('esr-140', 'esr-140.8', 'esr-140.9') THEN 'esr-140.9'
                 ELSE schema_version
             END
-            """
-        )
+            """)
     )
 
 
@@ -45,14 +43,12 @@ def downgrade() -> None:
         return
 
     op.execute(
-        sa.text(
-            """
+        sa.text("""
             UPDATE profiles
             SET schema_version = CASE
                 WHEN schema_version = 'release-149' THEN 'release-148'
                 WHEN schema_version = 'esr-140.9' THEN 'esr-140.8'
                 ELSE schema_version
             END
-            """
-        )
+            """)
     )

@@ -64,7 +64,7 @@
       "expected_result": "On each selected distribution userspace, a clean source installation migrates, builds all six documentation locales, answers /health and /health/ready, serves /profiles, and stops cleanly.",
       "recovery_path": ["admin-troubleshoot-failed-startup-probes", "admin-troubleshoot-database-storage", "admin-troubleshoot-documentation-portal-build-links"],
       "drift_source": ["README.md", "Makefile", "pyproject.toml", "app/core/config.py", "app/api/health.py", "docs/architecture/linux-distribution-selection-0.9.1.md"],
-      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_administrator_linux_deployment_topics.py", "./.venv/bin/pytest -q tests/test_linux_distribution_selection_091.py"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_administrator_linux_deployment_topics.py", "./.venv/bin/pytest -q tests/integration/app/test_linux_distribution_selection_091.py"],
       "evidence_type": ["hands_on_command_transcript", "api_or_unit_test"],
       "evidence_artifact": ["docs/architecture/linux-source-install-validation-0.9.1.json", "documentation/tests/contract/test_administrator_linux_deployment_topics.py"],
       "review_disposition": "pass",

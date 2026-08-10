@@ -104,7 +104,7 @@
     "fixture_execution_loads_no_model": true
   },
   "verification": {
-    "runtime": "tests/test_scope_adversarial_fixtures_093.py",
+    "runtime": "tests/integration/ai/incubation/test_scope_adversarial_fixtures.py",
     "contract": "documentation/tests/contract/test_bpm_scope_adversarial_fixtures_0_9_3.py",
     "architecture": "docs/architecture/bpm-scope-adversarial-fixtures-0.9.3.md"
   }

@@ -162,5 +162,9 @@ def _resolve_control_item(item: dict[str, Any], schema_version: str) -> dict[str
     definition = get_policy_definition(schema_version, item["policy_id"])
     resolved = deepcopy(item)
     resolved["target"] = f"policy:{item['policy_id']}"
-    resolved["enum_values"] = list(definition.enum or []) if definition is not None and item["control_kind"] == "enum-select" else []
+    resolved["enum_values"] = (
+        list(definition.enum or [])
+        if definition is not None and item["control_kind"] == "enum-select"
+        else []
+    )
     return resolved

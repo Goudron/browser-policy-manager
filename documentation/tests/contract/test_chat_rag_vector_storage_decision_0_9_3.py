@@ -30,7 +30,9 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def test_storage_decision_selects_exact_locale_private_f32_without_changing_ordinary_search() -> None:
+def test_storage_decision_selects_exact_locale_private_f32_without_changing_ordinary_search() -> (
+    None
+):
     config = _config()
 
     assert config["backlog_item"] == "BPM093-M5-04"
@@ -45,7 +47,9 @@ def test_storage_decision_selects_exact_locale_private_f32_without_changing_ordi
     assert "Offline generation may use swap" in config["acceptance"]["resource_policy"]
 
 
-def test_storage_decision_has_a_pinned_rejected_sqlite_vec_candidate_and_fail_closed_recovery() -> None:
+def test_storage_decision_has_a_pinned_rejected_sqlite_vec_candidate_and_fail_closed_recovery() -> (
+    None
+):
     config = _config()
 
     candidate = config["rejected_candidates"][0]

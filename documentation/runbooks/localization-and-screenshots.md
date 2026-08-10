@@ -134,7 +134,7 @@ For each changed localized surface:
   documentation/tests/contract/test_locale_visible_english_inventory.py \
   documentation/tests/contract/test_locale_anglicism_replacement.py \
   documentation/tests/contract/test_locale_anti_anglicism_guard.py \
-  documentation/tests/contract/test_visible_english_prose_review.py \
+  documentation/tests/contract/test_documentation_semantic_contracts_0_9_4.py \
   documentation/tests/contract/test_locale_human_qa.py
 ```
 

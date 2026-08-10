@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-library-operation" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Fehlerbehebung bei einem Bibliotheksvorgang</title>
-  <shortdesc>Sichere Wiederherstellung nach Bibliothekslade-, Lebenszyklus-, Lösch- und Aktionsstatusfehlern.</shortdesc>
+  <shortdesc>Sichere Wiederherstellung nach <uicontrol>Bibliothek</uicontrol>slade-, Lebenszyklus-, Lösch- und Aktionsstatusfehlern.</shortdesc>
   <taskbody>
-    <prereq><p>Bei einer Bibliothekslade- oder Zeilenaktion wurde ein Fehler gemeldet, es kam zu einer Zeitüberschreitung oder die sichtbaren Zeilen blieben in einem unerwarteten Zustand.</p></prereq>
+    <prereq><p>Bei einer <uicontrol>Bibliothek</uicontrol>slade- oder Zeilenaktion wurde ein Fehler gemeldet, es kam zu einer Zeitüberschreitung oder die sichtbaren Zeilen blieben in einem unerwarteten Zustand.</p></prereq>
     <context><p>Die Fehlerbehebung beginnt mit der Beibehaltung des Kontexts und dem Lesen des sichtbaren Status, bevor es erneut versucht wird.</p></context>
     <steps>
       <step><cmd>Wiederholen Sie eine destruktive Aktion nicht, bis der aktuelle Status klar ist.</cmd><info><note type="warning">Durch wiederholtes Archivieren oder dauerhaftes Löschen nach einem Teilfehler kann verborgen bleiben, welche Aktion tatsächlich erfolgreich war.</note></info></step>
       <step><cmd>Zeichnen Sie den Profilnamen, den Zeilenstatus, den Filterstatus und die sichtbare Statusmeldung auf.</cmd><info><p>Erwartetes Ergebnis: Sie können erklären, was BPM angezeigt hat, bevor Sie es erneut versuchen.</p></info></step>
-      <step><cmd>Aktualisieren Sie die Bibliothek einmal.</cmd><info><p>Wenn der aktualisierte Status mit dem beabsichtigten Ergebnis übereinstimmt, fahren Sie mit der aktualisierten Zeilenliste fort.</p></info></step>
+      <step><cmd>Aktualisieren Sie die <uicontrol>Bibliothek</uicontrol> einmal.</cmd><info><p>Wenn der aktualisierte Status mit dem beabsichtigten Ergebnis übereinstimmt, fahren Sie mit der aktualisierten Zeilenliste fort.</p></info></step>
       <step><cmd>Wenn der aktualisierte Status immer noch falsch ist, setzen Sie die Suche und Filter zurück und überprüfen Sie das Profil unter allen Lebenszyklusstatus.</cmd><info><p>Dies unterscheidet eine ausgeblendete Zeile von einem fehlgeschlagenen oder abgeschlossenen Vorgang.</p></info></step>
     </steps>
-    <result><p>Sie wissen, ob Sie den Vorgang wiederholen, das Profil wiederherstellen, vor dem Löschen anhalten oder in der aktualisierten Bibliotheksansicht fortfahren müssen.</p></result>
+    <result><p>Sie wissen, ob Sie den Vorgang wiederholen, das Profil wiederherstellen, vor dem Löschen anhalten oder in der aktualisierten <uicontrol>Bibliothek</uicontrol>sansicht fortfahren müssen.</p></result>
     <postreq><p>Wenn der Fehler erneut auftritt, beenden Sie den Arbeitsablauf und wenden Sie sich mit der sichtbaren Meldung, dem Profilnamen, dem Schemakanal und der aktuellen Seite an den Support.</p></postreq>
   </taskbody>
   <related-links>

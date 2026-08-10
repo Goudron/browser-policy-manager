@@ -13,8 +13,7 @@ RECONCILIATION = (
 COMMAND_CONTRACT = ROOT / "documentation/config/linux-source-install-command-contract-0.9.1.json"
 HISTORICAL_REPORT = ROOT / "docs/architecture/linux-source-install-validation-0.9.1.json"
 CLOSURE = (
-    ROOT
-    / "documentation/evidence/live-source-install/0.9.1/"
+    ROOT / "documentation/evidence/live-source-install/0.9.1/"
     "m11-14-evidence-closure-20260715/closure.json"
 )
 DITA_ROOT = ROOT / "documentation/src/dita/en/admin"
@@ -46,15 +45,20 @@ def test_current_compact_topics_keep_the_user_facing_source_install_path() -> No
     reconciliation = _json(RECONCILIATION)
     current = reconciliation["current_source_contract"]
     historical_targets = {
-        target["id"]: target["topic_id"]
-        for target in _json(COMMAND_CONTRACT)["targets"]
+        target["id"]: target["topic_id"] for target in _json(COMMAND_CONTRACT)["targets"]
     }
 
     assert reconciliation["editorial_policy"]["audit"].endswith(
         "documentation-audience-status-leakage-audit-0.9.2.md"
     )
     assert reconciliation["editorial_policy"]["findings"] == [
-        "A07", "A08", "A09", "A10", "A11", "A12", "A15"
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A15",
     ]
     assert [target["id"] for target in current["targets"]] == list(historical_targets)
 

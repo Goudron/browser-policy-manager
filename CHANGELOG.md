@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.9.4
+
+Status: **Release-readiness evidence accepted; reviewed commit and CI handoff remain.**
+
+### Changed
+- Completed the behavior-preserving optimization, refactoring, and release-hardening scope for
+  0.9.4, with current ownership and release boundaries recorded in the maintained technical
+  contracts.
+- Reviewed and applied the approved dependency and toolchain updates, including FastAPI, Uvicorn,
+  Selenium, Ruff, Mypy, Monaco Editor, js-yaml, and the Temurin documentation JRE.
+- Pinned the Firefox live-test environment to checksum-verified Firefox Release 153.0.1, Firefox
+  ESR 140.13.0esr, and geckodriver 0.37.1 archives.
+
+### Quality
+- Accepted the M11 six-locale documentation and PDF release review: DITA/site validation, binary
+  PDF verification, delivery/package verification, cache-bypass reproducibility, and the final
+  documentation release check passed. See the
+  [0.9.4 release-readiness evidence](docs/architecture/release-readiness-evidence-0.9.4.md).
+
 ## 0.9.3
 
 Status: **Release candidate; implementation complete.**

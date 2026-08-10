@@ -11,23 +11,31 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 VENDOR_DIR = REPO_ROOT / "app" / "static" / "vendor"
 LOCK_PATH = VENDOR_DIR / "vendor-lock.json"
 PACKAGE_PATH = REPO_ROOT / "package.json"
+PACKAGE_LOCK_PATH = REPO_ROOT / "package-lock.json"
+BUNDLED_TRANSITIVE_PACKAGES = ("dompurify", "marked")
 LOCKED_ASSET_PATHS = (
-    "js-yaml.js",
-    "js-yaml.LICENSE",
     "profiles_tailwind.css",
     "profiles_monaco.js",
     "profiles_monaco.css",
     "monaco-editor.worker.js",
     "monaco-json.worker.js",
+    "vendor/monaco-assets/codicon-KP4OV2OO.ttf",
     "monaco.LICENSE",
+    "monaco.ThirdPartyNotices.txt",
+    "dompurify.LICENSE-APACHE",
+    "dompurify.LICENSE-MPL",
+    "marked.LICENSE",
 )
 REQUIRED_LICENSE_SNIPPETS = {
-    "js-yaml.LICENSE": ("The MIT License",),
-    "profiles_monaco.js": (
-        "Copyright (c) Microsoft Corporation. All rights reserved.",
-        "Released under the MIT license",
-    ),
+    "profiles_monaco.js": ("DOMPurify 3.4.13",),
     "monaco.LICENSE": ("The MIT License", "Microsoft Corporation"),
+    "monaco.ThirdPartyNotices.txt": (
+        "THIRD-PARTY SOFTWARE NOTICES AND INFORMATION",
+        "markedjs NOTICES AND INFORMATION",
+    ),
+    "dompurify.LICENSE-APACHE": ("Apache License", "Version 2.0"),
+    "dompurify.LICENSE-MPL": ("Mozilla Public License Version 2.0",),
+    "marked.LICENSE": ("MarkedJS", "MIT license", "Markdown"),
 }
 
 
@@ -41,10 +49,13 @@ def _sha256(path: Path) -> str:
 
 def _package_versions() -> dict[str, str]:
     package = json.loads(PACKAGE_PATH.read_text(encoding="utf-8"))
+    package_lock = json.loads(PACKAGE_LOCK_PATH.read_text(encoding="utf-8"))
     versions: dict[str, str] = {}
     for section in ("dependencies", "devDependencies"):
         for name, version in package.get(section, {}).items():
             versions[name] = str(version)
+    for name in BUNDLED_TRANSITIVE_PACKAGES:
+        versions[name] = str(package_lock["packages"][f"node_modules/{name}"]["version"])
     return versions
 
 
@@ -52,11 +63,12 @@ def build_lock() -> dict[str, Any]:
     versions = _package_versions()
     return {
         "schema_version": 1,
-        "updated": "2026-07-28",
+        "updated": "2026-08-09",
         "packages": {
-            "js-yaml": versions["js-yaml"],
             "monaco-editor": versions["monaco-editor"],
             "esbuild": versions["esbuild"],
+            "dompurify": versions["dompurify"],
+            "marked": versions["marked"],
         },
         "assets": [
             {
@@ -188,7 +200,10 @@ def main() -> int:
     if errors:
         for error in errors:
             print(error, file=sys.stderr)
-        print("Run tools/verify_frontend_vendor.py --write after intentional rebuilds.", file=sys.stderr)
+        print(
+            "Run tools/verify_frontend_vendor.py --write after intentional rebuilds.",
+            file=sys.stderr,
+        )
         return 1
 
     print("Frontend vendor assets match vendor-lock.json")

@@ -148,7 +148,9 @@ def build_inventory() -> dict[str, Any]:
         layer_records.append(
             {
                 "document_sha256": _sha256_json(layer_document),
-                "file": f"app/compliance/firefox/cis/generated/cis_l{layer.level}.{layer.schema_channel}.json",
+                "file": (
+                    f"app/compliance/firefox/cis/generated/cis_l{layer.level}.{layer.schema_channel}.json"
+                ),
                 "layer_id": layer_id,
                 "level": layer.level,
                 "policy_top_level_count": len(layer.policies),
@@ -219,9 +221,7 @@ def build_inventory() -> dict[str, Any]:
         {
             "path": dotted_path.split("."),
             "path_id": dotted_path,
-            "reason": (
-                rule.get("reason") if isinstance(rule, dict) else str(rule)
-            ),
+            "reason": rule.get("reason") if isinstance(rule, dict) else str(rule),
         }
         for dotted_path, rule in sorted(
             (merge_rules_document.get("manual_review_paths") or {}).items()
@@ -311,9 +311,7 @@ def render_inventory() -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Build the BPM 0.9.0 CIS documentation inventory."
-    )
+    parser = argparse.ArgumentParser(description="Build the BPM 0.9.0 CIS documentation inventory.")
     parser.add_argument(
         "--check",
         action="store_true",

@@ -5,10 +5,10 @@
   <shortdesc>Sélectionnez le thème système, clair ou sombre sans modifier le contenu du profil.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez BPM ou le portail de documentation du produit dans le navigateur.</p></prereq>
-    <context><p>Le choix du thème ne modifie que la présentation. BPM et le portail de documentation prennent en charge les modes Système, Clair et Sombre sans modifier le profil ni le contenu de l'aide.</p></context>
+    <context><p>Le choix du thème ne modifie que la présentation. BPM et le portail de documentation prennent en charge les modes <uicontrol>Système</uicontrol>, <uicontrol>Clair</uicontrol> et <uicontrol>Sombre</uicontrol> sans modifier le profil ni le contenu de l'aide.</p></context>
     <steps>
-      <step><cmd>Ouvrez le sélecteur de thème dans l'en-tête de la page actuelle.</cmd><info><p>Résultat attendu : Système, Clair et Sombre sont disponibles sans modifier l'adresse, la langue ni le profil sélectionné.</p></info></step>
-      <step><cmd>Choisissez Système, Clair ou Sombre.</cmd><info><p>Résultat attendu : Système suit la préférence du système d'exploitation ; Clair et Sombre appliquent explicitement le mode aux interfaces BPM et de documentation prises en charge.</p></info></step>
+      <step><cmd>Ouvrez le sélecteur de thème dans l'en-tête de la page actuelle.</cmd><info><p>Résultat attendu : <uicontrol>Système</uicontrol>, <uicontrol>Clair</uicontrol> et <uicontrol>Sombre</uicontrol> sont disponibles sans modifier l'adresse, la langue ni le profil sélectionné.</p></info></step>
+      <step><cmd>Choisissez <uicontrol>Système</uicontrol>, <uicontrol>Clair</uicontrol> ou <uicontrol>Sombre</uicontrol>.</cmd><info><p>Résultat attendu : <uicontrol>Système</uicontrol> suit la préférence du système d'exploitation ; <uicontrol>Clair</uicontrol> et <uicontrol>Sombre</uicontrol> appliquent explicitement le mode aux interfaces BPM et de documentation prises en charge.</p></info></step>
       <step><cmd>Vérifiez les panneaux de l'éditeur, tableaux, notes, blocs de code, indicateurs de focus et états de validation.</cmd><info><p>Résultat attendu : le contenu reste lisible ; le thème clair de la documentation utilise des surfaces principales gris clair confortables plutôt qu'une page entièrement blanche.</p></info></step>
       <step><cmd>Poursuivez la modification après avoir confirmé que les données de profil non enregistrées sont toujours présentes.</cmd><info><note type="warning">Enregistrez ou supprimez délibérément les modifications avant de quitter un éditeur, de fermer un onglet ou de confirmer une action irréversible.</note></info></step>
     </steps>

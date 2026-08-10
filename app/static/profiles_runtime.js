@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         windowRef = window,
@@ -94,6 +93,8 @@
             removeSchemaNestedDictionaryEntry,
             currentSnapshotState,
             setStatus,
+            jsonEditorRuntime,
+            createDirtyRouteGuard,
         } = dependencies;
 
         const getEditor = state.getEditor || (() => null);
@@ -106,8 +107,7 @@
         const getLibraryStats = state.getLibraryStats || (() => ({ filtered: 0, total: 0 }));
         const getSearchTimer = state.getSearchTimer || (() => null);
         const setSearchTimer = state.setSearchTimer || (() => {});
-        const jsonEditorRuntime = windowRef.BPMProfilesJsonEditorRuntime;
-        const dirtyRouteGuard = windowRef.BPMProfilesDirtyRouteGuard.create({
+        const dirtyRouteGuard = createDirtyRouteGuard({
             windowRef,
             currentSnapshotState,
             confirmDiscard: () => t("profiles.confirm_discard"),
@@ -125,7 +125,6 @@
 
         const editorEl = documentRef.getElementById("editor");
         const formatButtonEl = documentRef.getElementById("format");
-        const modeSelectEl = documentRef.getElementById("mode");
         const saveButtonEl = documentRef.getElementById("save");
         const newProfileButtonEl = documentRef.getElementById("new-profile");
         const softDeleteButtonEl = documentRef.getElementById("soft-delete");
@@ -1986,12 +1985,8 @@
                     : jsonEditorRuntime.createHeadlessEditorAdapter("{}");
                 setEditor(editor);
 
-                const savedMode = "json";
-                let activeEditorMode = savedMode;
                 const bootstrapSchemaVersion = documentRef.body?.dataset?.editingProfileSchemaVersion || "";
 
-                modeSelectEl.value = savedMode;
-                windowRef.localStorage.setItem("bpm-editor-mode", savedMode);
                 if (bootstrapSchemaVersion && profileTypeEl) {
                     profileTypeEl.value = bootstrapSchemaVersion;
                 }
@@ -2001,7 +1996,6 @@
                 jsonEditorRuntime.setEditorModelLanguage(monacoRef, editor, "json");
                 editor.setValue(toEditorValue(
                     getCurrentRaw() && typeof getCurrentRaw() === "object" ? getCurrentRaw() : {},
-                    savedMode,
                 ));
                 syncProxyWizardUi();
                 syncWizardFieldsFromForm();
@@ -2010,32 +2004,12 @@
 
                 formatButtonEl?.addEventListener("click", () => {
                     try {
-                        const mode = modeSelectEl.value;
-                        const parsed = fromEditorValue(editor.getValue(), mode);
-                        editor.setValue(toEditorValue(parsed, mode));
+                        const parsed = fromEditorValue(editor.getValue());
+                        editor.setValue(toEditorValue(parsed));
                         setStatus(t("profiles.editor_formatted"), "success");
                     } catch (e) {
                         setStatus(t("profiles.error_format").replace("{detail}", e.message || e), "error");
                     }
-                });
-
-                modeSelectEl.addEventListener("change", (event) => {
-                    const mode = event.target.value;
-                    let currentFlags = getCurrentRaw();
-                    try {
-                        currentFlags = fromEditorValue(editor.getValue(), activeEditorMode);
-                    } catch {
-                        currentFlags = getCurrentRaw();
-                    }
-                    windowRef.localStorage.setItem("bpm-editor-mode", mode);
-                    jsonEditorRuntime.setEditorModelLanguage(monacoRef, editor, mode === "yaml" ? "yaml" : "json");
-                    editor.setValue(toEditorValue(currentFlags, mode));
-                    activeEditorMode = mode;
-                    syncWizardFieldsFromForm();
-                    syncEditorBackedUi();
-                    syncAllSchemaBranchCardsFromDom();
-                    syncWorkspaceOverview();
-                    setStatus(t("profiles.editor_mode_switched").replace("{mode}", mode.toUpperCase()), "info");
                 });
 
                 saveButtonEl.addEventListener("click", saveCurrent);
@@ -2246,5 +2220,4 @@
         };
     }
 
-    window.BPMProfilesRuntime = { create };
-})();
+    export { create };

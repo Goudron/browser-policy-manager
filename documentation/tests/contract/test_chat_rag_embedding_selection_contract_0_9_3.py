@@ -15,7 +15,9 @@ def _contract() -> dict:
     return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
 
 
-def test_chat_rag_embedding_selection_is_separate_from_ordinary_search_and_cross_locale_retrieval() -> None:
+def test_chat_rag_embedding_selection_is_separate_from_ordinary_search_and_cross_locale_retrieval() -> (
+    None
+):
     contract = _contract()
 
     assert contract["schema_version"] == 1
@@ -23,8 +25,14 @@ def test_chat_rag_embedding_selection_is_separate_from_ordinary_search_and_cross
     assert contract["supported_locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
     assert contract["scope"]["entrypoint"] == "An explicitly enabled user chat only."
     assert "not called, changed, ranked against" in contract["scope"]["ordinary_search"]
-    assert "cross-locale prose retrieval and fallback are forbidden" in contract["scope"]["retrieval_mode"]
-    assert "need not be more relevant than ordinary search" in contract["scope"]["not_a_quality_substitute"]
+    assert (
+        "cross-locale prose retrieval and fallback are forbidden"
+        in contract["scope"]["retrieval_mode"]
+    )
+    assert (
+        "need not be more relevant than ordinary search"
+        in contract["scope"]["not_a_quality_substitute"]
+    )
 
 
 def test_chat_rag_embedding_selection_requires_citable_local_evidence_or_safe_abstention() -> None:
@@ -32,7 +40,10 @@ def test_chat_rag_embedding_selection_requires_citable_local_evidence_or_safe_ab
 
     assert "exact active locale" in contract["local_evidence"]["allowed"]
     assert set(contract["local_evidence"]["forbidden"]) >= {
-        "ordinary search results", "cross-locale prose", "generated answers", "external pages"
+        "ordinary search results",
+        "cross-locale prose",
+        "generated answers",
+        "external pages",
     }
     assert "never citations" in contract["local_evidence"]["citation"]
     boundaries = contract["hard_boundaries"]
@@ -44,7 +55,9 @@ def test_chat_rag_embedding_selection_requires_citable_local_evidence_or_safe_ab
     assert boundaries["cross_locale_fallback"] == "forbidden"
 
 
-def test_chat_rag_embedding_selection_pins_candidates_and_keeps_web_opt_in_out_of_local_knowledge() -> None:
+def test_chat_rag_embedding_selection_pins_candidates_and_keeps_web_opt_in_out_of_local_knowledge() -> (
+    None
+):
     contract = _contract()
 
     artifacts = contract["candidate_artifact"]
@@ -56,5 +69,7 @@ def test_chat_rag_embedding_selection_pins_candidates_and_keeps_web_opt_in_out_o
     external = contract["optional_external_evidence"]
     assert external["default"] == "disabled"
     assert "explicit user opt-in" in external["activation"]
-    assert "never enters local chunks, embeddings, indexes, model training" in external["persistence"]
+    assert (
+        "never enters local chunks, embeddings, indexes, model training" in external["persistence"]
+    )
     assert external["citation"] == "External claims require their own labelled external citation."

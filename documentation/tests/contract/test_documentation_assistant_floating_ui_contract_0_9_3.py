@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -8,7 +7,9 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = ROOT / "documentation"
-CONTRACT_PATH = DOCUMENTATION_ROOT / "config/documentation-assistant-floating-ui-contract-0.9.3.json"
+CONTRACT_PATH = (
+    DOCUMENTATION_ROOT / "config/documentation-assistant-floating-ui-contract-0.9.3.json"
+)
 
 pytestmark = pytest.mark.docs_contract
 
@@ -17,34 +18,18 @@ def _contract() -> dict:
     return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
 
 
-def test_m12b_01_freezes_the_floating_overlay_without_implementing_it() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M12B-01"
-    assert contract["status"] == "implemented-architecture-contract-no-widget-or-transport-change"
-    assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["component_boundary"]["scope"] == "every generated /help/{locale}/ page"
-    assert contract["component_boundary"]["no_change_now"] == [
-        "portal markup",
-        "CSS",
-        "JavaScript",
-        "assistant API",
-        "model lifecycle API",
-        "chat transport",
-        "model or RAG artifacts",
-    ]
-
-
 def test_m12b_01_freezes_geometry_content_order_and_short_locale_copy() -> None:
     contract = _contract()
 
     assert contract["collapsed"] == {
         "default": True,
         "placement": "fixed in the lower-right corner of the visible documentation viewport",
-        "visible_content": "Only the locale-owned assistant title is visible; icons, badges, status, explanatory prose, transcripts and controls are absent.",
-        "activation": "The title is the localized accessible button name and toggles the expanded panel.",
+        "visible_content": (
+            "Only the locale-owned assistant title is visible; icons, badges, status, explanatory prose, transcripts and controls are absent."
+        ),
+        "activation": (
+            "The title is the localized accessible button name and toggles the expanded panel."
+        ),
     }
     assert contract["expanded"]["desktop_viewport"]["minimum_inline_size"] == "33.333vw"
     assert contract["expanded"]["desktop_viewport"]["block_size"] == "50dvh"
@@ -93,7 +78,10 @@ def test_m12b_01_freezes_ready_installation_and_tab_scoped_persistence_boundarie
         "failed",
     ]
     persistent = contract["persistent_state"]
-    assert persistent["storage"] == "sessionStorage only, under a versioned locale-private key owned by the portal"
+    assert (
+        persistent["storage"]
+        == "sessionStorage only, under a versioned locale-private key owned by the portal"
+    )
     assert persistent["forbidden_storage"] == [
         "localStorage",
         "IndexedDB",

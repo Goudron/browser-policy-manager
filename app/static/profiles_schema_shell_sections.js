@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         elements = {},
@@ -6,6 +5,7 @@
         state = {},
         wizardSchemaShellCatalog = {},
         wizardSchemaShellViews = {},
+        components = {},
     }) {
         const {
             t,
@@ -29,6 +29,11 @@
             getManagedExtensionProfileById,
             textToList,
         } = dependencies;
+        const {
+            createValueIO,
+            createReview,
+            createActions,
+        } = components;
         const renderAiReviewSummary = dependencies.renderAiReviewSummary || (() => {});
         const onDocumentChange = dependencies.onDocumentChange || (() => {});
 
@@ -56,7 +61,7 @@
             wizardExtensionSettingsCardEl,
         } = elements;
 
-        const valueIO = window.BPMProfilesSchemaShellValueIO.create({
+        const valueIO = createValueIO({
             dependencies: {
                 t,
                 textToList,
@@ -64,7 +69,7 @@
             },
         });
 
-        const review = window.BPMProfilesSchemaShellReview.create({
+        const review = createReview({
             documentRef,
             dependencies: {
                 t,
@@ -1484,7 +1489,7 @@
             `;
         }
 
-        const actions = window.BPMProfilesSchemaShellActions.create({
+        const actions = createActions({
             documentRef,
             dependencies: {
                 t,
@@ -1617,5 +1622,4 @@
         };
     }
 
-    window.BPMProfilesSchemaShellSections = { create };
-})();
+    export { create };

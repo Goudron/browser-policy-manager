@@ -1,4 +1,3 @@
-(() => {
     function create({
         dependencies = {},
     }) {
@@ -289,5 +288,4 @@
         };
     }
 
-    window.BPMProfilesPreferenceRows = { create };
-})();
+    export { create };

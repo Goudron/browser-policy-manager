@@ -48,7 +48,7 @@
     "browser_ui": false
   },
   "verification": {
-    "runtime": "tests/test_prompt_content_boundary_093.py",
+    "runtime": "tests/integration/ai/incubation/test_prompt_content_boundary.py",
     "contract": "documentation/tests/contract/test_bpm_prompt_content_boundary_contract_0_9_3.py",
     "architecture": "docs/architecture/bpm-prompt-content-boundary-0.9.3.md"
   }

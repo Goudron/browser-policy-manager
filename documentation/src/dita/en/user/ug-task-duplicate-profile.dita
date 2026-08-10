@@ -4,10 +4,10 @@
   <title>Duplicate a profile</title>
   <shortdesc>Create a named Guided draft from an existing saved profile when you want a safe starting point for changes.</shortdesc>
   <taskbody>
-    <prereq><p>The source profile is visible in the Library and you have confirmed its row identity.</p></prereq>
-    <context><p>Duplicate creates a separate profile draft based on the selected saved profile. It does not change the source profile.</p></context>
+    <prereq><p>The source profile is visible in the <uicontrol>Library</uicontrol> and you have confirmed its row identity.</p></prereq>
+    <context><p><uicontrol>Duplicate</uicontrol> creates a separate profile draft based on the selected saved profile. It does not change the source profile.</p></context>
     <steps>
-      <step><cmd>Choose Duplicate on the source profile row.</cmd><info><p>Expected result: BPM opens a clone-name panel.</p></info></step>
+      <step><cmd>Choose <uicontrol>Duplicate</uicontrol> on the source profile row.</cmd><info><p>Expected result: BPM opens a clone-name panel.</p></info></step>
       <step><cmd>Enter a clear name that differs from existing profile names.</cmd><info><p>BPM requires a name and reports duplicate-name validation before confirming.</p></info></step>
       <step><cmd>Confirm the duplicate action.</cmd><info><note type="warning">A duplicate is separate from the source. Later edits to one profile do not update the other.</note></info></step>
     </steps>

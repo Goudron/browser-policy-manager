@@ -66,7 +66,7 @@ _SYSTEM_PROMPT: Final[str] = (
 # first live M13-06A request.  This grammar owns syntax only: it cannot introduce a citation or
 # make a claim trustworthy.  The conversation validator still resolves every cited section against
 # the current evidence and rejects unsafe prose, unsupported IDs, and extractive copying.
-_STRUCTURED_RESPONSE_GBNF: Final[str] = r'''
+_STRUCTURED_RESPONSE_GBNF: Final[str] = r"""
 root ::= answer | terminal
 answer ::= "{" ws "\"disposition\"" ws ":" ws "\"answer\"" ws "," ws "\"sections\"" ws ":" ws "[" ws section (ws "," ws section){0,5} ws "]" ws "}"
 terminal ::= "{" ws "\"disposition\"" ws ":" ws terminal-disposition ws "," ws "\"sections\"" ws ":" ws "[" ws "]" ws "}"
@@ -77,7 +77,7 @@ string ::= "\"" char* "\""
 char ::= [^"\\] | "\\" (["\\/bfnrt] | "u" hex hex hex hex)
 hex ::= [0-9a-fA-F]
 ws ::= [ \t\n\r]*
-'''.strip()
+""".strip()
 
 
 class LocalWorkerError(RuntimeError):
@@ -176,7 +176,9 @@ class LocalInferenceWorker:
         self._runtime_verifier = runtime_verifier
         self._runtime_archive = Path(runtime_archive)
         self._work_root = Path(work_root)
-        self._trusted_root = Path(trusted_root) if trusted_root is not None else self._work_root.parent
+        self._trusted_root = (
+            Path(trusted_root) if trusted_root is not None else self._work_root.parent
+        )
         self._model_path = (
             Path(model_path)
             if model_path is not None
@@ -326,9 +328,7 @@ class LocalInferenceWorker:
             with self._state_lock:
                 self._terminate_process_locked()
                 self._cleanup_runtime_locked()
-            return InferenceResult(
-                visible_text, request.locale, time.monotonic_ns()
-            )
+            return InferenceResult(visible_text, request.locale, time.monotonic_ns())
 
     def cancel(self) -> bool:
         """Cancel only the active generation and terminate its process group if needed."""

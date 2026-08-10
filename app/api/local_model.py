@@ -75,7 +75,9 @@ class _SessionCsrfStore:
 
     def _prune_locked(self) -> None:
         now = self._clock()
-        for session_id in [key for key, record in self._records.items() if record.expires_at <= now]:
+        for session_id in [
+            key for key, record in self._records.items() if record.expires_at <= now
+        ]:
             del self._records[session_id]
 
     def _trim_locked(self) -> None:
@@ -107,7 +109,9 @@ _sessions = _SessionCsrfStore()
 _controller = ModelManagementController.from_settings()
 
 
-def _response(payload: dict[str, Any], *, request: Request, session_id: str, set_cookie: bool) -> JSONResponse:
+def _response(
+    payload: dict[str, Any], *, request: Request, session_id: str, set_cookie: bool
+) -> JSONResponse:
     response = JSONResponse(payload)
     if set_cookie:
         response.set_cookie(
@@ -123,7 +127,9 @@ def _response(payload: dict[str, Any], *, request: Request, session_id: str, set
 
 
 def _error(status_code: int, reason_code: str) -> HTTPException:
-    return HTTPException(status_code=status_code, detail={"api_version": API_VERSION, "reason_code": reason_code})
+    return HTTPException(
+        status_code=status_code, detail={"api_version": API_VERSION, "reason_code": reason_code}
+    )
 
 
 async def _read_bounded_json(request: Request) -> dict[str, Any]:
@@ -153,7 +159,9 @@ async def _read_bounded_json(request: Request) -> dict[str, Any]:
     return decoded
 
 
-async def _validated_action(request: Request, model: type[_ActionRequest]) -> tuple[_ActionRequest, str, str]:
+async def _validated_action(
+    request: Request, model: type[_ActionRequest]
+) -> tuple[_ActionRequest, str, str]:
     host = request.headers.get("host")
     if not host:
         raise _error(status.HTTP_400_BAD_REQUEST, "model_invalid_host")

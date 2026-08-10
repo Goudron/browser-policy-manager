@@ -88,7 +88,9 @@ def _replace_string_unions(snippet: str) -> str:
 
 
 def _replace_primitive_unions(snippet: str) -> str:
-    pattern = re.compile(r"(?:true|false|-?\d+(?:\.\d+)?)(?:\s*\|\s*(?:true|false|-?\d+(?:\.\d+)?))+")
+    pattern = re.compile(
+        r"(?:true|false|-?\d+(?:\.\d+)?)(?:\s*\|\s*(?:true|false|-?\d+(?:\.\d+)?))+"
+    )
 
     def _replace(match: re.Match[str]) -> str:
         values = [json.loads(token.strip()) for token in match.group(0).split("|")]
@@ -200,7 +202,9 @@ def _extract_policy_value_nodes(policy_name: str, snippet: str | None) -> list[A
         if not isinstance(data, dict):
             continue
 
-        policies_obj = data["policies"] if "policies" in data and isinstance(data["policies"], dict) else data
+        policies_obj = (
+            data["policies"] if "policies" in data and isinstance(data["policies"], dict) else data
+        )
         for candidate_key in _candidate_policy_keys(policy_name):
             if candidate_key in policies_obj:
                 values.append(policies_obj[candidate_key])

@@ -1,4 +1,3 @@
-(() => {
     function resolveTheme(mode, themeMediaQuery) {
         if (mode === "light" || mode === "dark") return mode;
         return themeMediaQuery.matches ? "dark" : "light";
@@ -153,7 +152,7 @@
             : translate("profiles.library_count_many", "Profiles in library");
     }
 
-    window.BPMProfilesPlatform = {
+    export {
         resolveTheme,
         resolveBrowserLanguage,
         resolveTargetLanguage,
@@ -162,4 +161,3 @@
         updateDocumentationLinks,
         libraryCountLabel,
     };
-})();

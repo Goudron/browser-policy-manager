@@ -1,4 +1,3 @@
-(() => {
     function create({
         windowRef = window,
         currentSnapshotState = () => ({ dirty: false }),
@@ -56,5 +55,4 @@
         };
     }
 
-    window.BPMProfilesDirtyRouteGuard = { create };
-})();
+    export { create };

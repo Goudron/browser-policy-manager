@@ -39,7 +39,7 @@ The implemented xdist pilot is opt-in and limited to pure `unit`/tool tests.
 | Async client fixture | `tests/conftest.py` now builds a fixture-scoped fresh app for the async `client` fixture and restores its complete override map after use. | Low | Keep API tests outside the first pure-unit pilot until a later pilot measures their stability separately. |
 | Settings and schema caches | `tests/cache_harness.py` records reset callbacks and policies for settings, schemas, validators, locale catalogs, and profile asset versions. Mutating tests can use the `reset_app_caches` fixture while immutable worker-local caches stay warm. | Low | Preserve the registry contract and add new mutable caches when application code introduces them. |
 | Mutable module state | The default FastAPI app override map is cleared before and after each test. Other monkeypatched module constants remain process-local and are restored by pytest fixtures. | Low | Keep tests that reload modules or depend on ordered state out of the first pure-unit pilot unless explicitly proven safe. |
-| Ordered tests | `tests/test_migrations.py` uses `pytest.mark.order` for two migration smoke tests. | Medium | Keep ordered migration tests out of the first xdist pilot; they are DB-heavy and do not belong in the pure unit pilot. |
+| Ordered tests | `tests/integration/db/test_migrations.py` uses `pytest.mark.order` for two migration smoke tests. | Medium | Keep ordered migration tests out of the first xdist pilot; they are DB-heavy and do not belong in the pure unit pilot. |
 | Temporary files | Most file-writing tests use `tmp_path`, which is naturally worker-safe. | Low | Keep using `tmp_path`; avoid repo-root outputs in pilot scope. |
 | Local ports | Browser tests and local audit helpers use picked ports and uvicorn threads. | High | Keep `browser_ui` and local Chromium audit out of xdist unless they get per-worker server, port, and artifact roots. |
 | Firefox live runtime | Live tests reuse `.bpm-test-browsers/` and write `distribution/policies.json` into the shared Firefox install root. | Extra high | Keep `firefox_live` and `firefox_live_amo` serial. Parallel live tests need per-worker staged Firefox install roots. |
@@ -76,7 +76,7 @@ no order-dependent failures.
   `PYTEST_XDIST_WORKER` and exports `BPM_DATABASE_URL` before application imports;
 - `tests/conftest.py`, which installs the worker database context before importing `app.db`,
   guards against `./data/bpm.db`, disposes the global engine, and cleans the worker root;
-- `tests/test_db_harness_unit.py` and `tests/test_pytest_db_isolation_contract.py`, which prove
+- `tests/unit/db/test_db_harness_unit.py` and `tests/contract/testing/test_pytest_db_isolation_contract.py`, which prove
   worker path uniqueness, stable-root cleanup, import ordering, and the project DB guard.
 
 This closed the DB URL and worker cleanup prerequisite for the future pure-unit pilot. At that
@@ -93,8 +93,8 @@ point, shared FastAPI app objects, dependency overrides, and process-local cache
   client fixture, and clears the default app override map before and after every test;
 - `tests/cache_harness.py`, which provides a named reset registry for settings, raw schemas,
   policy schemas, compiled validators, locale catalogs, and profile asset versions;
-- `tests/test_app_harness_unit.py`, `tests/test_cache_harness_unit.py`, and
-  `tests/test_pytest_app_state_isolation_contract.py`, which lock the app/client/cache contracts.
+- `tests/unit/testing/test_app_harness_unit.py`, `tests/unit/testing/test_cache_harness_unit.py`, and
+  `tests/contract/testing/test_pytest_app_state_isolation_contract.py`, which lock the app/client/cache contracts.
 
 This closes the app/client/cache prerequisites for the narrow pure-unit/tool pilot in
 `BPM085-M8-04`. It does not approve API, contract, docs, UI, browser, or live Firefox tests for

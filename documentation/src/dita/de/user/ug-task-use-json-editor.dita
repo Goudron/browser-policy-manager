@@ -4,8 +4,8 @@
   <title>JSON-Editor verwenden</title>
   <shortdesc>Öffnen Sie das vollständige Profil als Firefox-policies.json-Dokument zur genauen Überprüfung oder Rohbearbeitung.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie ein gespeichertes Profil. JSON-Editor arbeitet an einem gespeicherten Profil und stellt das Profil als Firefox-Grenzdokument dar.</p></prereq>
-    <context><p>JSON-Editor ist die Rohdokumentoberfläche. Verwenden Sie es, wenn Geführter Editor oder Alle Einstellungen für eine genaue Überprüfung, Migrationsprüfungen, Fehlerbehebung oder Rohwerte zu hoch ist.</p>
+    <prereq><p>Öffnen Sie ein gespeichertes Profil. <uicontrol>JSON-Editor</uicontrol> arbeitet an einem gespeicherten Profil und stellt das Profil als Firefox-Grenzdokument dar.</p></prereq>
+    <context><p><uicontrol>JSON-Editor</uicontrol> ist die Rohdokumentoberfläche. Verwenden Sie es, wenn <uicontrol>Geführter Editor</uicontrol> oder <uicontrol>Alle Einstellungen</uicontrol> für eine genaue Überprüfung, Migrationsprüfungen, Fehlerbehebung oder Rohwerte zu hoch ist.</p>
       <fig id="screenshot-json-editor">
         <title>JSON-Editor im dunklen Design</title>
         <image keyref="screenshot.json-editor" placement="break" scalefit="yes" align="center">
@@ -14,13 +14,13 @@
       </fig>
     </context>
     <steps>
-      <step><cmd>Öffnen Sie das gespeicherte Profil aus der Bibliothek oder einem anderen Editor.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Wechseln Sie zu JSON-Editor.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Öffnen Sie das gespeicherte Profil aus der <uicontrol>Bibliothek</uicontrol> oder einem anderen Editor.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wechseln Sie zu <uicontrol>JSON-Editor</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Bestätigen Sie, dass der Editor ein Richtlinienobjekt der obersten Ebene anzeigt und die Download-Aktion verfügbar ist.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Verwenden Sie JSON-Editor nur, wenn eine genaue Kontrolle des Rohdokuments erforderlich ist.</cmd><info><note type="warning">Das Speichern von Roh-JSON kann das kanonische BPM-Profil ändern. Überprüfen Sie die Syntax- und Richtlinienwerte vor dem Speichern.</note></info></step>
+      <step><cmd>Verwenden Sie <uicontrol>JSON-Editor</uicontrol> nur, wenn eine genaue Kontrolle des Rohdokuments erforderlich ist.</cmd><info><note type="warning">Das Speichern von Roh-JSON kann das kanonische BPM-Profil ändern. Überprüfen Sie die Syntax- und Richtlinienwerte vor dem Speichern.</note></info></step>
     </steps>
     <result><p>Das aktuelle Profil ist als bearbeitbarer Firefox-policies.json-Inhalt sichtbar.</p></result>
-    <postreq><p>Wiederherstellung: Wenn die Route nicht geöffnet werden kann, speichern Sie zuerst das Profil oder kehren Sie zur visuellen Bearbeitung zu Alle Einstellungen zurück.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn die Route nicht geöffnet werden kann, speichern Sie zuerst das Profil oder kehren Sie zur visuellen Bearbeitung zu <uicontrol>Alle Einstellungen</uicontrol> zurück.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-when-to-use-json-editor"/>

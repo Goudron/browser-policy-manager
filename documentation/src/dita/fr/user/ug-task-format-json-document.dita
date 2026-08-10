@@ -4,7 +4,7 @@
   <title>Formater le document JSON</title>
   <shortdesc>Formatez le document JSON actuel avant l'examen, la validation ou le transfert.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Éditeur JSON avec un document JSON dans l'éditeur.</p></prereq>
+    <prereq><p>Ouvrez <uicontrol>Éditeur JSON</uicontrol> avec un document JSON dans l'éditeur.</p></prereq>
     <context><p>Le formatage modifie uniquement les espaces et l'indentation. Cela devrait faciliter l’examen sans modifier le sens de la politique.</p></context>
     <steps>
       <step><cmd>Choisissez l'action de format JSON.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>

@@ -2,16 +2,16 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Create a first profile from the Library</title>
-  <shortdesc>Start a new Guided profile draft from the Library when no saved profile is suitable to reuse.</shortdesc>
+  <shortdesc>Start a new Guided profile draft from the <uicontrol>Library</uicontrol> when no saved profile is suitable to reuse.</shortdesc>
   <taskbody>
-    <prereq><p>You are in the Library and want a new profile rather than opening or duplicating an existing one.</p></prereq>
-    <context><p>The create action opens a Guided editor draft. The draft becomes a saved profile only after you save it.</p></context>
+    <prereq><p>You are in the <uicontrol>Library</uicontrol> and want a new profile rather than opening or duplicating an existing one.</p></prereq>
+    <context><p>The create action opens a <uicontrol>Guided editor</uicontrol> draft. The draft becomes a saved profile only after you save it.</p></context>
     <steps>
-      <step><cmd>Choose the Library action to create a new profile.</cmd><info><p>Expected result: BPM opens the Guided editor for a new draft.</p></info></step>
+      <step><cmd>Choose the <uicontrol>Library</uicontrol> action to create a new profile.</cmd><info><p>Expected result: BPM opens the <uicontrol>Guided editor</uicontrol> for a new draft.</p></info></step>
       <step><cmd>Choose the profile purpose, schema channel, and starter options shown by the editor.</cmd><info><p>The schema channel affects available controls and validation behavior.</p></info></step>
       <step><cmd>Save the draft when it has the name and initial settings you want.</cmd><info><note type="warning">Closing an unsaved draft can lose draft-only changes.</note></info></step>
     </steps>
-    <result><p>The new profile is saved and can be found again from the Library.</p></result>
+    <result><p>The new profile is saved and can be found again from the <uicontrol>Library</uicontrol>.</p></result>
     <postreq><p>Recovery: if you meant to reuse an existing profile, cancel the draft and duplicate the saved profile instead.</p></postreq>
   </taskbody>
   <related-links>

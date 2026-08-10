@@ -106,7 +106,7 @@ def _decoded_control_candidates(value: str) -> tuple[str, ...]:
     for token in _BASE64_TOKEN.findall(value):
         try:
             decoded = b64decode(token, validate=True)
-        except (BinasciiError, ValueError):
+        except BinasciiError, ValueError:
             continue
         if 0 < len(decoded) <= MAX_DECODED_CONTROL_BYTES:
             try:

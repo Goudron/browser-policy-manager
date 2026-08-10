@@ -4,7 +4,7 @@
   <title>在子系统内设置浏览器策略管理器源签出</title>
   <shortdesc>在 WSL 中安装 Linux 先决条件，将 BPM 克隆到 Linux 文件系统中，创建虚拟环境，安装依赖项并应用迁移。</shortdesc>
   <taskbody>
-    <prereq><p>安装并打开 WSL 2 Linux 发行版，并且管理员拥有批准的 BPM 存储库 URL 和 0.9.1 分支或标签。</p></prereq>
+    <prereq><p>安装并打开 WSL 2 Linux 发行版，并且管理员拥有批准的 BPM 存储<uicontrol>库</uicontrol> URL 和 0.9.1 分支或标签。</p></prereq>
     <context><p>本主题中的所有命令都在 WSL Linux shell 内运行，除非该步骤明确指出 PowerShell。这使设置与 Linux 源部署 操作手册 保持一致，并避免本机 Windows 路径歧义。</p></context>
     <steps>
       <step><cmd>在 WSL 发行版中安装 Linux 必备组件。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
@@ -24,13 +24,13 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
 ]]></codeblock><p>如果发行版仅将 Python 公开为 <codeph>python3</codeph>，请使用 <codeph>python3 -m venv .venv</codeph> 创建环境，然后使用激活的环境。</p></info></step>
-      <step><cmd>在 WSL 结帐内应用数据库迁移。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>在 WSL 结帐内应用数据<uicontrol>库</uicontrol>迁移。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
 ]]></codeblock><note type="warning">SQLite 文件是 WSL 内的 Linux 文件。 BPM 运行时，请勿从 Windows 工具编辑或移动 <codeph>data/bpm.db</codeph>。</note></info></step>
     </steps>
-    <result><p>WSL 签出具有 Linux 先决条件、存储库本地虚拟环境、已安装的依赖项和迁移的本地数据库。</p></result>
+    <result><p>WSL 签出具有 Linux 先决条件、存储<uicontrol>库</uicontrol>本地虚拟环境、已安装的依赖项和迁移的本地数据<uicontrol>库</uicontrol>。</p></result>
     <postreq><p>在启动 BPM 之前配置运行时变量和浏览器访问。</p></postreq>
   </taskbody>
   <related-links>

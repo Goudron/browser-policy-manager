@@ -161,5 +161,7 @@ def test_search_integrity_report_exposes_actionable_drift_ids() -> None:
     assert report["anchor_integrity"]["target_topic_mismatches"] == ["cis:missing"]
     assert report["snippet_integrity"]["broken_snippet_document_ids"] == ["en:unknown-topic"]
     assert report["snippet_integrity"]["control_character_document_ids"] == ["en:topic-a"]
-    assert "MissingPolicy" in report["inventory_gap_integrity"]["firefox_policy"]["extra_source_ids"]
+    assert (
+        "MissingPolicy" in report["inventory_gap_integrity"]["firefox_policy"]["extra_source_ids"]
+    )
     assert "missing" in report["inventory_gap_integrity"]["cis"]["extra_source_ids"]

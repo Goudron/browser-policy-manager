@@ -17,7 +17,9 @@ def test_resource_policy_allows_swap_for_offline_embedding_but_not_model_trainin
     assert amendment["status"] == "accepted"
     assert "never fine-tuned" in amendment["scope"]["model_training"]
     assert "operating-system swap" in amendment["scope"]["offline_index_build"]
-    assert amendment["resource_policy"]["index_build_threads"] == "all available logical CPU threads"
+    assert (
+        amendment["resource_policy"]["index_build_threads"] == "all available logical CPU threads"
+    )
     assert amendment["resource_policy"]["index_build_swap"] == "permitted"
 
 

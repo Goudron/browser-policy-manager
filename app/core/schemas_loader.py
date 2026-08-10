@@ -5,11 +5,11 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from app.core.schema_channels import RAW_SCHEMA_DIRS, SCHEMA_FILENAMES, get_schema_channel
+from app.core.schema_channels import SCHEMA_FILENAMES, get_schema_channel
 
 
 class SchemaNotFoundError(RuntimeError):
-    """Raised when a schema file cannot be located in any configured source."""
+    """Raised when a bundled schema file cannot be located."""
 
 
 class UnsupportedProfileError(ValueError):
@@ -18,16 +18,10 @@ class UnsupportedProfileError(ValueError):
 
 _PROFILE_FILES: dict[str, str] = dict(SCHEMA_FILENAMES)
 
-# Directories relative to this file:
+# Directory relative to this file:
 _THIS_DIR = Path(__file__).resolve().parent
 _SCHEMAS_DIR = _THIS_DIR.parent / "schemas"
-_STATIC_DIR = _SCHEMAS_DIR / "static"
-_CACHE_DIR = _SCHEMAS_DIR / "cache"
-_MOZILLA_DIR = _SCHEMAS_DIR / "mozilla"
 _POLICIES_DIR = _SCHEMAS_DIR / "policies"
-_RAW_PROFILE_DIRS: dict[str, str] = dict(RAW_SCHEMA_DIRS)
-
-_BUNDLED_POLICY_FILES: dict[str, str] = dict(SCHEMA_FILENAMES)
 
 
 def available_profiles() -> dict[str, str]:
@@ -40,40 +34,20 @@ def available_profiles() -> dict[str, str]:
     return dict(_PROFILE_FILES)
 
 
-def _ensure_dirs() -> None:
-    """Create cache/static directories if missing (safe for repeated calls)."""
-    _STATIC_DIR.mkdir(parents=True, exist_ok=True)
-    _CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    _MOZILLA_DIR.mkdir(parents=True, exist_ok=True)
-    _POLICIES_DIR.mkdir(parents=True, exist_ok=True)
-
-
 def _read_json_file(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         return _normalize_schema(json.load(f))
 
 
-def _write_json_file(path: Path, data: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-
-
-def _mozilla_raw_schema_path(profile: str) -> Path:
-    raw_dir = _RAW_PROFILE_DIRS[profile]
-    return _MOZILLA_DIR / raw_dir / "policies-schema.json"
-
-
 def _bundled_policy_schema_path(profile: str) -> Path:
-    return _POLICIES_DIR / _BUNDLED_POLICY_FILES[profile]
+    return _POLICIES_DIR / _PROFILE_FILES[profile]
 
 
 def _normalize_schema(node: Any) -> Any:
     """
     Normalize bundled schema snapshots into valid JSON Schema structures.
 
-    Historical cache files were produced from an internal simplified format.
-    The main incompatibility is array-level ``enum`` that actually described
+    The only handled compatibility shape is array-level ``enum`` that described
     allowed item values; JSON Schema expects that under ``items.enum``.
     """
 
@@ -119,11 +93,8 @@ def load_schema(profile: str, *, allow_stub_fallback: bool = False) -> dict[str,
     Load JSON schema for the given profile key.
 
     Resolution order:
-      1) app/schemas/static/{filename}
-      2) app/schemas/mozilla/{raw_dir}/policies-schema.json
-      3) app/schemas/policies/{bundled_filename}
-      4) app/schemas/cache/{filename}
-      5) (optional fallback) generate a minimal stub schema, write it to cache, return it
+      1) app/schemas/policies/{bundled_filename}
+      2) (optional test-only fallback) return a minimal in-memory stub schema
 
     Stub fallback is opt-in so application code does not silently validate against
     an incomplete schema when bundled assets are missing or packaging regresses.
@@ -133,36 +104,16 @@ def load_schema(profile: str, *, allow_stub_fallback: bool = False) -> dict[str,
             f"Unsupported profile '{profile}'. Supported: {', '.join(_PROFILE_FILES)}"
         )
 
-    _ensure_dirs()
-
-    filename = _PROFILE_FILES[profile]
-    static_path = _STATIC_DIR / filename
-    mozilla_path = _mozilla_raw_schema_path(profile)
     bundled_policy_path = _bundled_policy_schema_path(profile)
-    cache_path = _CACHE_DIR / filename
-
-    if static_path.exists():
-        return _read_json_file(static_path)
-
-    if mozilla_path.exists():
-        return _read_json_file(mozilla_path)
 
     if bundled_policy_path.exists():
         return _read_json_file(bundled_policy_path)
 
-    if cache_path.exists():
-        return _read_json_file(cache_path)
-
     if not allow_stub_fallback:
-        raise SchemaNotFoundError(
-            "Schema file not found for "
-            f"profile '{profile}' in static, mozilla raw, bundled, or cache locations"
-        )
+        raise SchemaNotFoundError(f"Bundled schema file not found for profile '{profile}'")
 
-    # Optional fallback: generate a minimal schema and persist it to cache for reproducibility.
+    # Explicit fallback is only for isolated tests; runtime must use the bundled schema.
     channel = get_schema_channel(profile)
     label = channel.label if channel else profile
     title = f"Firefox {label} Policies (stub)"
-    stub = _minimal_schema(title)
-    _write_json_file(cache_path, stub)
-    return stub
+    return _minimal_schema(title)

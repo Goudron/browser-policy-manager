@@ -8,7 +8,7 @@
     <context><p>La eliminación permanente es la acción destructiva del ciclo de vida de la biblioteca. Archive primero cuando necesite una sujeción reversible.</p></context>
     <steps>
       <step><cmd>Confirme el nombre de la fila, ID, el esquema, el estado del ciclo de vida y la hora de actualización.</cmd><info><p>Resultado esperado: puede distinguir el perfil de destino de filas con nombres similares.</p></info></step>
-      <step><cmd>Elija la acción de eliminación permanente.</cmd><info><note type="warning">La eliminación permanente no se puede restaurar desde la Biblioteca.</note></info></step>
+      <step><cmd>Elija la acción de eliminación permanente.</cmd><info><note type="warning">La eliminación permanente no se puede restaurar desde la <uicontrol>Biblioteca</uicontrol>.</note></info></step>
       <step><cmd>Complete la confirmación solo cuando el mensaje nombre el perfil deseado.</cmd><info><p>Cancele la confirmación si algún detalle de la fila es inesperado.</p></info></step>
     </steps>
     <result><p>El perfil se elimina de la biblioteca una vez que la acción de eliminación se realiza correctamente.</p></result>

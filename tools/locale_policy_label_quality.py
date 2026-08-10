@@ -14,9 +14,7 @@ from app.core.locales import ACTIVE_CATALOG_LOCALES, SOURCE_LOCALE
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE_DIR = REPO_ROOT / "app" / "i18n_src"
 POLICY_LABELS_NAMESPACE = "policy-labels"
-NON_SOURCE_LOCALES = tuple(
-    locale for locale in ACTIVE_CATALOG_LOCALES if locale != SOURCE_LOCALE
-)
+NON_SOURCE_LOCALES = tuple(locale for locale in ACTIVE_CATALOG_LOCALES if locale != SOURCE_LOCALE)
 SEVERITY_ORDER = {"low": 0, "medium": 1, "high": 2}
 
 
@@ -121,9 +119,7 @@ def collect_findings(
         for key, value in catalog.items():
             for marker in MARKERS.get(locale, ()):
                 if marker.matches(value):
-                    findings.append(
-                        finding(locale=locale, key=key, value=value, marker=marker)
-                    )
+                    findings.append(finding(locale=locale, key=key, value=value, marker=marker))
 
     return sorted(
         findings,
@@ -143,8 +139,7 @@ def summarize(findings: list[dict[str, str]]) -> dict[str, Any]:
         "finding_count": len(findings),
         "by_locale": dict(sorted(by_locale.items())),
         "by_severity": {
-            severity: by_severity.get(severity, 0)
-            for severity in ("high", "medium", "low")
+            severity: by_severity.get(severity, 0) for severity in ("high", "medium", "low")
         },
     }
 
@@ -156,9 +151,11 @@ def build_report(
 ) -> dict[str, Any]:
     findings = collect_findings(source_dir=source_dir, locales=locales)
     return {
-        "source_dir": source_dir.relative_to(REPO_ROOT).as_posix()
-        if source_dir.is_relative_to(REPO_ROOT)
-        else source_dir.as_posix(),
+        "source_dir": (
+            source_dir.relative_to(REPO_ROOT).as_posix()
+            if source_dir.is_relative_to(REPO_ROOT)
+            else source_dir.as_posix()
+        ),
         "namespace": POLICY_LABELS_NAMESPACE,
         "locales": list(locales),
         "summary": summarize(findings),
@@ -200,8 +197,7 @@ def main() -> int:
         return 0
     minimum = SEVERITY_ORDER[args.fail_on]
     has_blocking_findings = any(
-        SEVERITY_ORDER[finding["severity"]] >= minimum
-        for finding in report["findings"]
+        SEVERITY_ORDER[finding["severity"]] >= minimum for finding in report["findings"]
     )
     return 1 if has_blocking_findings else 0
 

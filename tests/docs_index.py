@@ -38,9 +38,7 @@ def doc_path_from_index(filename: str, *, status: str | None = None) -> Path:
 
     row = matches[0]
     if status is not None and row["status"] != status:
-        raise AssertionError(
-            f"{filename!r} has status {row['status']!r}, expected {status!r}"
-        )
+        raise AssertionError(f"{filename!r} has status {row['status']!r}, expected {status!r}")
 
     path = REPO_ROOT / "docs" / row["path"]
     if not path.exists():

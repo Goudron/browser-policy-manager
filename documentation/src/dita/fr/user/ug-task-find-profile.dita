@@ -7,7 +7,7 @@
     <prereq><p>La bibliothèque est ouverte et le chargement des lignes de profil est terminé.</p></prereq>
     <context><p>La recherche réduit la vue actuelle de la bibliothèque. Il fonctionne avec les contrôles de schéma, de cycle de vie, de validation et de tri.</p></context>
     <steps>
-      <step><cmd>Placez le curseur dans le champ de recherche Bibliothèque.</cmd><info><p>Résultat attendu : la liste de lignes actuelle reste visible pendant la saisie.</p></info></step>
+      <step><cmd>Placez le curseur dans le champ de recherche <uicontrol>Bibliothèque</uicontrol>.</cmd><info><p>Résultat attendu : la liste de lignes actuelle reste visible pendant la saisie.</p></info></step>
       <step><cmd>Entrez une partie distinctive du nom du profil.</cmd><info><p>Le nombre filtré est mis à jour pour correspondre aux lignes toujours visibles.</p></info></step>
       <step><cmd>Confirmez l'identité de la ligne avant de choisir une action.</cmd><info><note type="warning">La recherche n'enregistre ni ne modifie les profils. Cela change uniquement ce que la bibliothèque affiche.</note></info></step>
     </steps>

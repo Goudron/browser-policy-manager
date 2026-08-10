@@ -4,7 +4,7 @@
   <title>Durch die sechs Schritte im Modus „Geführter Editor“ navigieren</title>
   <shortdesc>Konfigurieren Sie Profil, Browserzugriff, Sicherheit, Benutzer und Websites, intelligente Funktionen sowie Überprüfung und Export nacheinander.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie ein Profil im geführten Editor aus der Bibliothek oder dem Erstellungsablauf.</p></prereq>
+    <prereq><p>Öffnen Sie ein Profil im geführten Editor aus der <uicontrol>Bibliothek</uicontrol> oder dem Erstellungsablauf.</p></prereq>
     <context><p>Der geführte Editor gliedert die Profilkonfiguration in sechs Schritte und zeigt die Schemavalidierung während der Arbeit an.</p>
       <fig id="screenshot-guided-editor-overview">
         <title>Überblick über den Modus „Geführter Editor“</title>
@@ -15,10 +15,10 @@
     </context>
     <steps>
       <step><cmd>Bestätigen Sie in Schritt 1 Name, Schemakanal, Szenario, Startvorgabe und CIS-Ebene.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Konfigurieren Sie in Schritt 2 Netzwerkzugriff, Browserverhalten, Startseite, Suche und Navigationsvorgaben.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Konfigurieren Sie in Schritt 2 Netzwerkzugriff, Browserverhalten, Startseite, <uicontrol>Suche und Navigation</uicontrol>svorgaben.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
       <step><cmd>Konfigurieren Sie in Schritt 3 Datenschutz, Berechtigungen, Cookies, Bereinigung, DNS und Sicherheitsvorgaben.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
       <step><cmd>Konfigurieren Sie in Schritt 4 Konten, Erweiterungen, Lesezeichen, Sprache, Übersetzung und Website-Regeln.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Konfigurieren Sie in Schritt 5 nur Firefox-Richtlinien für KI und intelligente Funktionen, die das gewählte Schema unterstützt.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Konfigurieren Sie in Schritt 5 nur Firefox-Richtlinien für <uicontrol>KI und intelligente Funktionen</uicontrol>, die das gewählte Schema unterstützt.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
       <step><cmd>Validieren, speichern und exportieren Sie das Profil in Schritt 6.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
     <result><p>Sie können erklären, wo jede geführte Einstellung hingehört, und mit dem richtigen Schritt fortfahren.</p></result>

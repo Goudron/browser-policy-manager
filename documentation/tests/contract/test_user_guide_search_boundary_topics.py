@@ -11,7 +11,8 @@ DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 DITA_ROOT = DOCUMENTATION_ROOT / "src/dita"
 SEARCH_CONTRACT = DOCUMENTATION_ROOT / "config/search-corpus-and-results-0.9.0.json"
 ACCESSIBILITY_SECURITY_CONTRACT = (
-    REPOSITORY_ROOT / "docs/architecture/product-documentation-accessibility-security-contract-0.9.0.md"
+    REPOSITORY_ROOT
+    / "docs/architecture/product-documentation-accessibility-security-contract-0.9.0.md"
 )
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 TOPIC_ID = "ug-concept-documentation-search-boundary"
@@ -21,7 +22,9 @@ pytestmark = pytest.mark.docs_contract
 
 
 def _root(locale: str) -> ET.Element:
-    return ET.fromstring((DITA_ROOT / locale / "user" / f"{TOPIC_ID}.dita").read_text(encoding="utf-8"))
+    return ET.fromstring(
+        (DITA_ROOT / locale / "user" / f"{TOPIC_ID}.dita").read_text(encoding="utf-8")
+    )
 
 
 def _normalized_text(root: ET.Element) -> str:
@@ -33,7 +36,10 @@ def test_search_boundary_architecture_contract_excludes_ai_functionality() -> No
     architecture = ACCESSIBILITY_SECURITY_CONTRACT.read_text(encoding="utf-8")
 
     assert search_contract["search_mode"] == "deterministic-local-static"
-    assert search_contract["non_ai_boundary"]["mode"] == "no-ai-no-rag-no-embeddings-no-generative-answers"
+    assert (
+        search_contract["non_ai_boundary"]["mode"]
+        == "no-ai-no-rag-no-embeddings-no-generative-answers"
+    )
     for term in (
         "conversational answers",
         "semantic embeddings",
@@ -67,16 +73,18 @@ def test_documentation_search_boundary_topic_is_reachable_in_every_locale() -> N
         }
         assert keydefs[f"topic.{TOPIC_ID}"] == f"../user/{TOPIC_ID}.dita"
 
-        guide = ET.fromstring((DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8"))
+        guide = ET.fromstring(
+            (DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8")
+        )
         orient = next(
             topichead
             for topichead in guide.findall("topichead")
-            if topichead.find("./topicmeta/data[@name='intent-id']").attrib["value"] == "orient-and-plan"
+            if topichead.find("./topicmeta/data[@name='intent-id']").attrib["value"]
+            == "orient-and-plan"
         )
         assert orient is not None
         assert f"topic.{TOPIC_ID}" in [
-            topicref.attrib["keyref"]
-            for topicref in orient.findall("topicref")
+            topicref.attrib["keyref"] for topicref in orient.findall("topicref")
         ]
 
 
@@ -93,7 +101,9 @@ def test_documentation_search_boundary_topics_have_full_locale_parity() -> None:
 
     for locale in LOCALES:
         root = _root(locale)
-        assert [section.attrib["id"] for section in root.findall("./conbody/section")] == expected_sections
+        assert [
+            section.attrib["id"] for section in root.findall("./conbody/section")
+        ] == expected_sections
         text = _normalized_text(root)
         for required in ("RAG", "CIS", "API"):
             assert required in text

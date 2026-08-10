@@ -44,7 +44,9 @@ def test_chunk_extraction_contract_is_bounded_manifest_backed_and_six_locale() -
     assert {"steps", "table", "code", "example"} <= set(contract["units"]["preserve_kinds"])
 
 
-def test_dita_to_chunks_is_byte_deterministic_and_keeps_published_boundaries(tmp_path: Path) -> None:
+def test_dita_to_chunks_is_byte_deterministic_and_keeps_published_boundaries(
+    tmp_path: Path,
+) -> None:
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     manifest_path = tmp_path / "manifest.json"
     manifest_path.write_text("{}\n", encoding="utf-8")
@@ -58,16 +60,14 @@ def test_dita_to_chunks_is_byte_deterministic_and_keeps_published_boundaries(tmp
     }
     chunks = []
     for locale in build_docs.LOCALES:
-        root = ET.fromstring(
-            """
+        root = ET.fromstring("""
             <task id="ug-task-export-policies-json">
               <title>Export policy JSON</title>
               <shortdesc>Export the reviewed policy document.</shortdesc>
               <taskbody><steps><step><cmd>Open Export.</cmd></step></steps></taskbody>
               <section id="a-example"><title>Example</title><example><title>JSON</title><codeblock>{&quot;policy&quot;: true}</codeblock></example><table><tgroup><tbody><row><entry>Field</entry><entry>Value</entry></row></tbody></tgroup></table></section>
             </task>
-            """
-        )
+            """)
         source = DOCUMENTATION_ROOT / f"src/dita/{locale}/user/ug-task-export-policies-json.dita"
         topic = {
             "_roots": {locale: root},
@@ -119,13 +119,18 @@ def test_dita_to_chunks_is_byte_deterministic_and_keeps_published_boundaries(tmp
         assert chunk["chunk_schema_version"] == "rag-chunk-v1"
         assert chunk["character_count"] == len(chunk["text"]) <= maximum
         assert chunk["publication_state"] == "published"
-        assert chunk["provenance_class"] in contract["source_boundary"]["allowed_provenance_classes"]
+        assert (
+            chunk["provenance_class"] in contract["source_boundary"]["allowed_provenance_classes"]
+        )
         assert chunk["chunk_id"] == "ragc-v1:{locale}:{topic_id}:{anchor}:{ordinal}".format(
             locale=chunk["locale"],
             topic_id=chunk["topic_id"],
             anchor=chunk["anchor_id_or_root"],
             ordinal=chunk["ordinal"],
         )
-        assert f"/help/{chunk['locale']}/user/ug-task-export-policies-json.html" in chunk["published_url"]
+        assert (
+            f"/help/{chunk['locale']}/user/ug-task-export-policies-json.html"
+            in chunk["published_url"]
+        )
         if chunk["anchor_id_or_root"] != "root":
             assert chunk["published_url"].endswith(f"#{chunk['anchor_id_or_root']}")

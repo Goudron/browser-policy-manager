@@ -13,7 +13,7 @@
       <step><cmd>Vuelva a verificar el resumen en lenguaje sencillo y el mensaje de validación antes de continuar.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
     <result><p>El perfil contiene cambios avanzados deliberados en lugar de ediciones amplias accidentales.</p></result>
-    <postreq><p>Recuperación: si el cambio es difícil de explicar, restablezca el control y utilice Todos los ajustes o Editor JSON para una inspección más profunda.</p></postreq>
+    <postreq><p>Recuperación: si el cambio es difícil de explicar, restablezca el control y utilice <uicontrol>Todos los ajustes</uicontrol> o <uicontrol>Editor JSON</uicontrol> para una inspección más profunda.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-guided-editor"/>

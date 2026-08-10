@@ -57,7 +57,7 @@ REQUIRED_WSL_TOKENS = (
     "python -m venv .venv",
     "python3 -m venv .venv",
     "source .venv/bin/activate",
-    "pip install -e \".[dev]\"",
+    'pip install -e ".[dev]"',
     "BPM_DATABASE_URL",
     "sqlite+aiosqlite:///./data/bpm.db",
     "alembic upgrade head",
@@ -130,14 +130,15 @@ def test_administrator_guide_maps_include_windows_wsl_runbook_topics(locale: str
         for keydef in ET.parse(maps / "keys.ditamap").getroot().findall("keydef")
     }
     assert {
-        key: f"../admin/{key.removeprefix('topic.')}.dita"
-        for key in EXPECTED_WSL_KEYREFS
+        key: f"../admin/{key.removeprefix('topic.')}.dita" for key in EXPECTED_WSL_KEYREFS
     }.items() <= keydefs.items()
 
 
 @pytest.mark.parametrize("locale", LOCALES)
 @pytest.mark.parametrize("topic_id", EXPECTED_WSL_TOPICS)
-def test_windows_wsl_runbook_topics_are_full_localized_dita_tasks(locale: str, topic_id: str) -> None:
+def test_windows_wsl_runbook_topics_are_full_localized_dita_tasks(
+    locale: str, topic_id: str
+) -> None:
     source = _source(locale, topic_id)
     assert '<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">' in source
 
@@ -203,7 +204,7 @@ def test_localized_windows_wsl_runbook_topics_preserve_parity_and_invariant_toke
         for token in (
             "sudo apt-get update",
             "python -m venv .venv",
-            "pip install -e \".[dev]\"",
+            'pip install -e ".[dev]"',
             "BPM_DATABASE_URL",
             "/mnt/c",
         ):

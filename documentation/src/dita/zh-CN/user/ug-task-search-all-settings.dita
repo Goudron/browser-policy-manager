@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-all-settings" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>搜索“所有设置”</title>
-  <shortdesc>从 所有设置 搜索配置的设置、可用策略、已知首选项和设置操作。</shortdesc>
+  <shortdesc>从 <uicontrol>所有设置</uicontrol> 搜索配置的设置、可用策略、已知首选项和设置操作。</shortdesc>
   <taskbody>
-    <prereq><p>在任何模式下打开 所有设置。</p></prereq>
+    <prereq><p>在任何模式下打开 <uicontrol>所有设置</uicontrol>。</p></prereq>
     <context><p>搜索在审阅、配置和编录工作之间共享。它可以导致设置、操作或过滤组。</p></context>
     <steps>
-      <step><cmd>将焦点置于 所有设置 搜索字段中。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>输入策略 ID、首选项键、类别、来源或简单语言术语。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>选择分组结果并确认目标设置或操作。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>将焦点置于 <uicontrol>所有设置</uicontrol> 搜索字段中。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>输入策略 ID、首选项键、类别、来源或简单语言术语。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>选择分组结果并确认目标设置或操作。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>返回浏览或过滤时清除搜索。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>选择匹配的设置或操作，而不会丢失当前配置文件上下文。</p></result>

@@ -23,7 +23,7 @@ These surfaces already name the active target as BPM 0.9.1:
   the 0.9.1 documentation release gates.
 - `docs/bpm_0_9_1_documentation_completion_backlog_2026-07-06.md` is the active
   backlog for this release.
-- `tests/test_current_version_surfaces.py` pins the maintained version-surface
+- `tests/integration/app/test_current_version_surfaces.py` pins the maintained version-surface
   contract to `0.9.1`.
 
 ## Bounded Update List

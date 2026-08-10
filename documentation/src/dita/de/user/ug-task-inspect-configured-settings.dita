@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-inspect-configured-settings" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Konfigurierte Einstellungen prüfen</title>
-  <shortdesc>Verwenden Sie Konfiguriert, um zu verstehen, was das Profil derzeit nach Domäne, Kategorie und Quelle anwendet.</shortdesc>
+  <shortdesc>Verwenden Sie <uicontrol>Konfiguriert</uicontrol>, um zu verstehen, was das Profil derzeit nach Domäne, Kategorie und Quelle anwendet.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie ein gespeichertes Profil in Alle Einstellungen.</p></prereq>
-    <context><p>Konfiguriert konzentriert sich auf Werte, die bereits im Profil vorhanden sind, nicht auf jede mögliche Richtlinie. Mithilfe von Domänenzusammenfassungen können Sie die aktive Konfiguration erläutern.</p></context>
+    <prereq><p>Öffnen Sie ein gespeichertes Profil in <uicontrol>Alle Einstellungen</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Konfiguriert</uicontrol> konzentriert sich auf Werte, die bereits im Profil vorhanden sind, nicht auf jede mögliche Richtlinie. Mithilfe von Domänenzusammenfassungen können Sie die aktive Konfiguration erläutern.</p></context>
     <steps>
-      <step><cmd>Wechseln Sie zu Konfiguriert.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Überprüfen Sie die konfigurierten Zusammenfassungskarten nach Domäne oder Kategorie.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Öffnen Sie eine Kategorie, um die dort angewendeten Einstellungen zu überprüfen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wechseln Sie zu <uicontrol>Konfiguriert</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie die konfigurierten Zusammenfassungskarten nach Domäne oder Kategorie.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Öffnen Sie eine Kategorie, um die dort angewendeten Einstellungen zu überprüfen.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Verwenden Sie Quellfilter, wenn Sie Baseline-, CIS-, manuelle, importierte oder Rohwerte trennen müssen.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Sie können die aktiven Richtlinien und verwalteten Präferenzwerte beschreiben, die vom Profil angewendet werden.</p></result>
-    <postreq><p>Wiederherstellung: Wenn ein Wert fehlt, wechseln Sie zu Katalog oder löschen Sie die Quellfilter, bevor Sie entscheiden, dass er fehlt.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn ein Wert fehlt, wechseln Sie zu <uicontrol>Katalog</uicontrol> oder löschen Sie die Quellfilter, bevor Sie entscheiden, dass er fehlt.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-filter-settings-by-source"/>

@@ -82,12 +82,11 @@ comment and test name. Do not start product-documentation updates until this gat
 Treat the following as one unit of change:
 
 - `app/core/schema_channels.py`
-- `app/services/profile_schema_normalization.py`
+- `alembic/env.py` and the new immutable revision in `alembic/versions/`
 - `app/schemas/policies/firefox-*.json`
 - `README.md`
 - `tools/convert_policies_from_upstream_lib/common.py`
 - `tools/convert_policies_from_upstream_lib/cli.py`
-- `tools/update_schemas.py`
 - `app/services/firefox_policy_ui_registry/overrides.py`
 - `app/web/firefox_wizard_shell/inline_editors.py`
 - `app/web/firefox_wizard_shell/catalog.py`
@@ -99,15 +98,14 @@ Treat the following as one unit of change:
   labels, placement copy, or policy help text changes
 - `app/i18n_src/catalog-order.json`, `app/i18n_src/overrides/*/policy-labels.json`, and generated
   `app/i18n_src/generated/*/policy-labels.json` when schema generation introduces a policy label
-- `tests/test_schema_channels.py`
-- `tests/test_schema_validation.py`
-- `tests/test_firefox_wizard_shell.py`
-- `tests/test_firefox_manual_policy_controls.py`
-- `tests/test_firefox_settings_catalog_builders.py`
-- `tests/test_web_profiles_page.py`
-- `tests/test_no_legacy_schema_refs.py`
-- `tests/test_migrations.py`
-- `tests/test_ru_locale_quality.py` and
+- `tests/unit/schema/contracts/test_schema_channels.py`
+- `tests/integration/schema/test_schema_validation.py`
+- `tests/integration/firefox/test_firefox_wizard_shell.py`
+- `tests/integration/firefox/test_firefox_manual_policy_controls.py`
+- `tests/unit/firefox/test_firefox_settings_catalog_builders.py`
+- `tests/contract/ui/localization/test_web_profiles_page.py`
+- `tests/integration/db/test_migrations.py`
+- `tests/integration/locale/test_ru_locale_quality.py` and
   `tests/fixtures/locale_contracts/visible_english_allowlists.json` when a new policy label contains
   a preserved Latin technical/product term
 - `.github/workflows/ci.yml`
@@ -130,7 +128,6 @@ Update:
 - `DEFAULT_RELEASE_SCHEMA_CHANNEL`
 - `SCHEMA_LABELS`
 - `SCHEMA_FILENAMES`
-- `RAW_SCHEMA_DIRS`
 
 This file is the product-level source of truth. UI, API, loaders, and validation should derive supported channels from here.
 
@@ -141,14 +138,12 @@ Adjust the declarative build targets in:
 - `tools/firefox_schema_targets.json`
 - `tools/convert_policies_from_upstream_lib/common.py`
 - `tools/convert_policies_from_upstream_lib/cli.py`
-- `tools/update_schemas.py`
 
 At minimum, update:
 
 - bundled output filenames
 - every supported Release / ESR channel string and version
 - each channel's Mozilla source tag and versioned input paths
-- `--version` choices in `tools/update_schemas.py` if the raw-cache helper is still used
 
 Do not use a broad version-string replacement for historical policy metadata. Existing policies
 must keep their real `x-bpm-min-version` and compatibility provenance even when the active channel
@@ -210,14 +205,13 @@ After the bundled JSON is correct:
 
 1. Remove old channel references from the product code.
 2. Add an Alembic migration that rewrites persisted `profiles.schema_version` values from the old channel strings to the new ones. Its `down_revision` must be the current Alembic head, which may be newer than the previous schema migration.
-3. Update `app/services/profile_schema_normalization.py` so explicit runtime backfill maps every
-   previously supported channel to its declared destination in the support-and-migration table. This
-   covers local databases that do not go through Alembic. Never collapse a supported ESR into a
-   different ESR merely because it is older.
-4. Run `make backfill-profile-schema-versions` against the target database and confirm the reported `scanned`, `normalized`, and `skipped_invalid` counts. The `/profiles` library route must remain read-only and must not run schema normalization during GET rendering.
-5. Update documentation and UI labels to the complete new Release/ESR support matrix.
+3. Add or update migration tests for every retained source shape and for the two-engine
+   integration contract. Run the migration only against a disposable candidate after a verified
+   backup; `alembic upgrade head` is the sole schema and stored-channel upgrade path. Never add a
+   startup, request-time, or ad-hoc backfill path.
+4. Update documentation and UI labels to the complete new Release/ESR support matrix.
    In `README.md`, refresh the Supported Firefox Schemas table, examples that carry a `schema_version`, and any prose that names the active Release / ESR versions.
-6. Update every active locale catalog when Release / ESR labels, schema-channel copy, policy names,
+5. Update every active locale catalog when Release / ESR labels, schema-channel copy, policy names,
    or schema-related UI strings change. Edit `app/i18n_src/<locale>/*.json`, then rebuild generated
    `app/i18n/*.json` with `make build-locale-catalogs`. The generated runtime catalogs
    `app/i18n/en.json`, `app/i18n/ru.json`, `app/i18n/de.json`, `app/i18n/zh-CN.json`,
@@ -225,7 +219,8 @@ After the bundled JSON is correct:
    source segment; follow `docs/locale_update_runbook_2026-06-01.md`, the global glossary, and the
    placeholder rules. If new or changed Mozilla/Firefox terms enter the UI, verify terminology
    against Pontoon/SUMO evidence and update the glossary or locale audit notes before release.
-7. Update the legacy guard so the previous release strings are banned outside the explicit migration and normalization exceptions.
+6. Update the legacy guard so the previous release strings are banned outside the explicit immutable
+   migration and its focused migration fixtures.
 
 ### Documentation drift gate
 
@@ -273,7 +268,8 @@ Treat Firefox schema documentation as part of the schema bump, not as a later cl
     that successful install so the maintainer's subsequent `make dev` serves the current
     documentation artifact; do not start `make dev` for the maintainer.
 
-Important: only the migration, runtime normalizer, and their tests should keep references to the previous channels.
+Important: only the immutable migration and its focused migration fixtures should keep references to
+the previous channels.
 
 ### Schema-generated policy labels
 
@@ -336,9 +332,9 @@ When a policy is promoted into Guided, update all relevant pieces together:
 - Guided templates/static bindings if a first-class card or workflow-specific behavior is required.
 - All settings search/context copy if users need to jump between Guided and the full catalog.
 - Source locale segments under `app/i18n_src/` and generated runtime catalogs under `app/i18n/`.
-- Tests in `tests/test_firefox_wizard_shell.py`,
-  `tests/test_firefox_manual_policy_controls.py`, `tests/test_firefox_settings_catalog_builders.py`,
-  and the relevant `tests/web_profiles_page/*` contract.
+- Tests in `tests/integration/firefox/test_firefox_wizard_shell.py`,
+  `tests/integration/firefox/test_firefox_manual_policy_controls.py`, `tests/unit/firefox/test_firefox_settings_catalog_builders.py`,
+  and the relevant `tests/contract/ui/profiles/*` contract.
 
 Record the reason for any important placement choice in the PR description or changelog note. One
 line is enough, for example: "Kept `PolicyName` in All settings only because it is a nested
@@ -348,35 +344,31 @@ environment-specific control."
 
 Expected test touch points:
 
-- `tests/test_schema_channels.py`
+- `tests/unit/schema/contracts/test_schema_channels.py`
   Checks constants and labels.
-- `tests/test_schema_validation.py`
+- `tests/integration/schema/test_schema_validation.py`
   Checks bundled metadata, source tag, and a few smoke invariants.
-- `tests/test_no_legacy_schema_refs.py`
   Prevents old channel strings and source tags from leaking back in.
-- `tests/test_migrations.py`
+- `tests/integration/db/test_migrations.py`
   Verifies old DB rows are upgraded to the new schema channel values.
-- `tests/test_profile_schema_normalization.py`
-  Verifies runtime/library normalization upgrades retired channels according to the declared support
-  matrix, preserves every currently supported channel, and leaves invalid profiles untouched.
-- `tests/test_web_profiles_page.py`
+- `tests/contract/ui/localization/test_web_profiles_page.py`
   Verifies the Library remains read-only and visible UI/header text reflects the current supported
-  versions. Startup/backfill normalization belongs in `tests/test_profile_schema_normalization.py`.
-- `tests/test_firefox_wizard_shell.py`
+  versions.
+- `tests/integration/firefox/test_firefox_wizard_shell.py`
   Verifies important new policies land in the intended UI section, bucket, and inline editor shape.
-- `tests/test_firefox_manual_policy_controls.py`
+- `tests/integration/firefox/test_firefox_manual_policy_controls.py`
   Verifies curated Guided quick controls stay backed by the active schema.
-- `tests/test_firefox_settings_catalog_builders.py`
+- `tests/unit/firefox/test_firefox_settings_catalog_builders.py`
   Verifies All settings catalog builders keep stable control metadata for schema-backed areas.
-- `tests/web_profiles_page/*`
+- `tests/contract/ui/profiles/*`
   Verifies route DOM, navigation handoff, Guided shell, assets/i18n, layout, and responsive contracts.
-- `tests/test_locale_catalogs.py`
+- `tests/integration/locale/test_locale_catalogs.py`
   Verifies locale key parity, placeholder parity, and catalog integrity after schema-related copy changes.
-- `tests/test_ui_runtime_i18n_contract.py`
+- `tests/contract/ui/localization/test_ui_runtime_i18n_contract.py`
   Verifies runtime-rendered UI keys exist in every active locale catalog.
-- `tests/test_locale_visible_english_allowlists.py`
+- `tests/integration/locale/test_locale_visible_english_allowlists.py`
   Verifies non-English locales do not accidentally expose English UI copy outside the technical allowlist.
-- `tests/test_ui_locale_glossary.py`
+- `tests/contract/ui/localization/test_ui_locale_glossary.py`
   Verifies glossary, locale-maintenance runbooks, ownership notes, and Mozilla terminology evidence stay current when schema changes add or rename user-facing terms.
 
 If CI has a legacy guard step, update it in `.github/workflows/ci.yml` in the same commit.
@@ -388,6 +380,10 @@ Run the focused checks first:
 ```bash
 make test-firefox-schema-contract
 ```
+
+`make test-firefox-schema-contract` includes the offline reproducibility contract: it regenerates
+all declared targets into a temporary directory from the pinned local source inputs and requires
+byte-identical bundled JSON. It does not fetch an upstream schema or contact Mozilla while converting.
 
 If the schema bump changes Firefox/Mozilla terminology or locale-maintenance documentation, also run
 `make test-locale-contract`.
@@ -419,7 +415,7 @@ the same local socket/browser requirements as `make test-ui`.
 Recommended gate order:
 
 1. `make test-firefox-schema-contract`
-2. focused converter, schema-manager, CIS-generation, and placement tests
+2. focused converter, offline schema-workflow, CIS-generation, and placement tests
 3. `make test-locale-contract` when any visible version or policy term changed
 4. `make lint` and `make typecheck`
 5. `make test-ui` outside the sandbox
@@ -447,10 +443,8 @@ Before calling the bump finished, confirm all of the following:
 - `app/core/schema_channels.py` matches the complete new Release/ESR support matrix
 - schema metadata points to the correct Mozilla tag
 - Alembic migration upgrades stored `schema_version` values
-- runtime profile schema normalization maps each retired channel to its declared destination and
-  leaves every currently supported Release/ESR channel unchanged
-- application startup or the explicit backfill normalizes legacy rows before normal Library use,
-  while GET `/profiles` remains read-only
+- application startup verifies the exact Alembic head without writing; legacy rows are changed only
+  by the reviewed migration while GET `/profiles` remains read-only
 - UI audit completed for newly added/changed policies
 - no separate advanced editor route, redirect, template, or bundle was reintroduced
 - current Firefox Release / ESR matrix labels are visible in the main header and schema selector

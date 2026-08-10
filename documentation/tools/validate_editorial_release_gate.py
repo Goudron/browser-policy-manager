@@ -5,10 +5,13 @@ from pathlib import Path
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 GATE_PATH = (
+    REPOSITORY_ROOT / "documentation" / "config" / "documentation-editorial-release-gate-0.9.2.json"
+)
+M11_REVIEW_PATH = (
     REPOSITORY_ROOT
     / "documentation"
     / "config"
-    / "documentation-editorial-release-gate-0.9.2.json"
+    / "documentation-editorial-pdf-release-review-0.9.4.json"
 )
 REQUIRED_LOCALES = {"en", "ru", "de", "zh-CN", "fr", "es-ES"}
 
@@ -54,9 +57,36 @@ def release_blockers(gate: dict[str, object]) -> list[str]:
     return blockers
 
 
+def m11_review_blockers(review: dict[str, object]) -> list[str]:
+    """Keep the current editorial/PDF review fail-closed beside historical gates."""
+
+    required = {
+        "schema_version": 1,
+        "review_id": "bpm-0.9.4-editorial-pdf-release-review",
+        "backlog_item": "BPM094-M11-06",
+        "target_bpm_version": "0.9.4",
+        "release_blocking": True,
+    }
+    blockers = [
+        f"M11-06 review has invalid {key}: {review.get(key)!r}"
+        for key, value in required.items()
+        if review.get(key) != value
+    ]
+    if review.get("status") != "accepted":
+        finding_ids = [
+            finding.get("finding_id")
+            for finding in review.get("blocking_findings", [])
+            if isinstance(finding, dict)
+        ]
+        detail = ", ".join(str(finding_id) for finding_id in finding_ids) or "no finding id"
+        blockers.append(f"M11-06 editorial/PDF review is not accepted: {detail}")
+    return blockers
+
+
 def main() -> int:
     gate = load_gate()
-    blockers = release_blockers(gate)
+    review = load_gate(M11_REVIEW_PATH)
+    blockers = release_blockers(gate) + m11_review_blockers(review)
     if blockers:
         print("Documentation editorial release gate is blocked:")
         for blocker in blockers:

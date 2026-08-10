@@ -2,10 +2,10 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-profile-library" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>使用配置档案库</title>
-  <shortdesc>打开配置档案库，并使用其计数、状态和行操作作为处理已保存配置档案的起点。</shortdesc>
+  <shortdesc>打开配置档案<uicontrol>库</uicontrol>，并使用其计数、状态和行操作作为处理已保存配置档案的起点。</shortdesc>
   <taskbody>
     <prereq><p>BPM 已打开，您正在使用已保存的配置文件记录，而不是未保存的编辑器草稿。</p></prereq>
-    <context><p>库会列出已保存的配置文件，并显示筛选数量和总数，以便了解搜索或筛选器是否隐藏行。操作按钮组位于前方，筛选行紧挨在配置文件表格上方。</p>
+    <context><p><uicontrol>库</uicontrol>会列出已保存的配置文件，并显示筛选数量和总数，以便了解搜索或筛选器是否隐藏行。操作按钮组位于前方，筛选行紧挨在配置文件表格上方。</p>
       <fig id="screenshot-library-overview">
         <title>库概述</title>
         <image keyref="screenshot.library-overview" placement="break" scalefit="yes" align="center">
@@ -14,12 +14,12 @@
       </fig>
     </context>
     <steps>
-      <step><cmd>打开库。</cmd><info><p>预期结果：库加载配置文件行，或者如果不存在已保存的配置文件，则显示空状态消息。</p></info></step>
+      <step><cmd>打开<uicontrol>库</uicontrol>。</cmd><info><p>预期结果：<uicontrol>库</uicontrol>加载配置文件行，或者如果不存在已保存的配置文件，则显示空状态消息。</p></info></step>
       <step><cmd>使用操作按钮组刷新列表、开始新草稿、打开比较，或导入 policies.json。</cmd><info><p>这些操作位于筛选器和表格之前。</p></info></step>
       <step><cmd>在表格正上方设置搜索、架构、配置文件状态、验证和排序筛选器；然后在使用行操作前查看筛选数量和总数。</cmd><info><note type="warning">行操作适用于已保存的配置文件，而不适用于临时编辑器草稿。</note></info></step>
     </steps>
-    <result><p>您可以识别活动的库视图并选择下一个配置文件操作，而不会丢失上下文。</p></result>
-    <postreq><p>恢复：如果行未加载或操作状态仍然失败，请刷新库，然后使用库故障排除主题。</p></postreq>
+    <result><p>您可以识别活动的<uicontrol>库</uicontrol>视图并选择下一个配置文件操作，而不会丢失上下文。</p></result>
+    <postreq><p>恢复：如果行未加载或操作状态仍然失败，请刷新<uicontrol>库</uicontrol>，然后使用<uicontrol>库</uicontrol>故障排除主题。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

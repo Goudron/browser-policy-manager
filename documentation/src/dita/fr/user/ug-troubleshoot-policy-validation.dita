@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Lisez le chemin d'accès et le message de stratégie concernés avant de modifier les valeurs.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Classifiez le problème comme stratégie non prise en charge, type de valeur incorrect, paramètre obsolète, entrée inconnue, valeur importée ou solution de secours brute.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
-      <step><cmd>Utilisez Tous les paramètres ou JSON pour accéder à l'emplacement concerné et corrigez uniquement la valeur signalée.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Utilisez <uicontrol>Tous les paramètres</uicontrol> ou JSON pour accéder à l'emplacement concerné et corrigez uniquement la valeur signalée.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Revalidez le profil dans le même canal de schéma avant de l'enregistrer ou de l'exporter.</cmd><info><note type="warning">Réessayez uniquement depuis l’interface BPM ; ne modifiez pas les données du profil en dehors de l’application.</note></info></step>
     </steps>
     <result><p>L'erreur de validation est soit résolue, soit documentée comme une valeur brute/non prise en charge délibérée qui ne peut pas être traitée comme prête à être publiée.</p></result>

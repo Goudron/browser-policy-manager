@@ -4,12 +4,12 @@
   <title>Filtrar la lista «Todos los ajustes»</title>
   <shortdesc>Filtre los ajustes por estado: configurado, disponible, cubierto por el asistente, no válido, obsoleto, sin formato o desconocido.</shortdesc>
   <taskbody>
-    <prereq><p>Abra Todos los ajustes con una lista de configuraciones visible.</p></prereq>
+    <prereq><p>Abra <uicontrol>Todos los ajustes</uicontrol> con una lista de configuraciones visible.</p></prereq>
     <context><p>Los filtros de estado limitan un inventario grande según la decisión que el usuario debe tomar. Son diferentes de los filtros de origen, que explican de dónde proviene un valor.</p></context>
     <steps>
-      <step><cmd>Abra la barra de herramientas de filtro de lista.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Elija el filtro de estado que coincida con la tarea: configurado, disponible, cubierto con guía, solo para todas las configuraciones, no válido, obsoleto, sin formato o desconocido.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Inspeccione el recuento filtrado y las filas representativas.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Abra la barra de herramientas de filtro de lista.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Elija el filtro de estado que coincida con la tarea: configurado, disponible, cubierto con guía, solo para todas las configuraciones, no válido, obsoleto, sin formato o desconocido.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Inspeccione el recuento filtrado y las filas representativas.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
       <step><cmd>Borre el filtro de estado antes de aplicar ediciones no relacionadas.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
     <result><p>La lista muestra configuraciones con el estado seleccionado únicamente.</p></result>

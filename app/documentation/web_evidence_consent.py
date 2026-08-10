@@ -143,9 +143,7 @@ class WebEvidenceModeStore:
         """Return mode/configuration state without contacting or probing the provider."""
 
         if not WebEvidenceConsentStore._valid_identity(session_id, locale):
-            return WebEvidenceModeStatus(
-                False, False, locale, "assistant_web_mode_invalid"
-            )
+            return WebEvidenceModeStatus(False, False, locale, "assistant_web_mode_invalid")
         available = self._configuration.availability_code == "assistant_web_available"
         key = (session_id, locale)
         with self._lock:
@@ -162,17 +160,13 @@ class WebEvidenceModeStore:
         )
         return WebEvidenceModeStatus(enabled, available, locale, reason_code, epoch)
 
-    def set_enabled(
-        self, *, session_id: str, locale: str, enabled: bool
-    ) -> WebEvidenceModeStatus:
+    def set_enabled(self, *, session_id: str, locale: str, enabled: bool) -> WebEvidenceModeStatus:
         """Apply one explicit reader choice; repeated questions do not alter it."""
 
         if type(enabled) is not bool or not WebEvidenceConsentStore._valid_identity(
             session_id, locale
         ):
-            return WebEvidenceModeStatus(
-                False, False, locale, "assistant_web_mode_invalid"
-            )
+            return WebEvidenceModeStatus(False, False, locale, "assistant_web_mode_invalid")
         key = (session_id, locale)
         available = self._configuration.availability_code == "assistant_web_available"
         with self._lock:
@@ -254,9 +248,7 @@ class WebEvidenceConsentStore:
         self._pending: dict[str, _PendingConsent] = {}
         self._lock = threading.RLock()
 
-    def disclose(
-        self, *, session_id: str, locale: str, question: str
-    ) -> WebEvidenceConsentResult:
+    def disclose(self, *, session_id: str, locale: str, question: str) -> WebEvidenceConsentResult:
         """Create a precise pre-call disclosure without retaining the question in server state."""
 
         unavailable = self._unavailable_result()

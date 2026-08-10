@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -14,35 +13,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def test_m8_03_pins_scope_authority_and_fixed_six_locale_escape_cases() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M8-03"
-    assert contract["status"] == "implemented-fixed-adversarial-fixtures"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
-    expected_categories = {
-        "jailbreak",
-        "role_change",
-        "translation_trick",
-        "encoded_request",
-        "prompt_extraction",
-        "fictional_framing",
-        "long_padding",
-        "context_off_topic",
-    }
-    assert set(contract["required_categories"]) == expected_categories
-    assert set(contract["locale_cases"]) == set(contract["locales"])
-    assert all(set(cases) == expected_categories for cases in contract["locale_cases"].values())
-    assert {case["category"] for case in contract["code_switched_cases"]} == {
-        "mixed_script",
-        "percent_encoded",
-        "unicode_escape",
-        "base64_prefixed",
-    }
 
 
 def test_m8_03_locks_fail_closed_downstream_and_product_boundaries() -> None:

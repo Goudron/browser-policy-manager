@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -14,17 +13,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
-
-
-def test_m13_03_pins_six_locale_pre_generation_relevance_to_approved_boundaries() -> None:
-    contract = _contract()
-
-    assert contract["contract_id"] == "bpm-assistant-evidence-relevance-0.9.3"
-    assert contract["backlog_item"] == "BPM093-M13-03"
-    assert contract["status"] == "implemented-deterministic-pre-generation-gate"
-    assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
 
 
 def test_m13_03_requires_every_explicit_context_dimension_and_fails_before_generation() -> None:

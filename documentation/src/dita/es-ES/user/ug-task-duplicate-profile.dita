@@ -4,10 +4,10 @@
   <title>Duplicar un perfil</title>
   <shortdesc>Cree un borrador guiado con nombre a partir de un perfil guardado existente cuando desee un punto de partida seguro para los cambios.</shortdesc>
   <taskbody>
-    <prereq><p>El perfil de origen está visible en la Biblioteca y usted ha confirmado su identidad de fila.</p></prereq>
-    <context><p>Duplicar crea un borrador de perfil separado basado en el perfil guardado seleccionado. No cambia el perfil de origen.</p></context>
+    <prereq><p>El perfil de origen está visible en la <uicontrol>Biblioteca</uicontrol> y usted ha confirmado su identidad de fila.</p></prereq>
+    <context><p><uicontrol>Duplicar</uicontrol> crea un borrador de perfil separado basado en el perfil guardado seleccionado. No cambia el perfil de origen.</p></context>
     <steps>
-      <step><cmd>Elija Duplicar en la fila del perfil de origen.</cmd><info><p>Resultado esperado: BPM abre un panel de nombre de clon.</p></info></step>
+      <step><cmd>Elija <uicontrol>Duplicar</uicontrol> en la fila del perfil de origen.</cmd><info><p>Resultado esperado: BPM abre un panel de nombre de clon.</p></info></step>
       <step><cmd>Introduzca un nombre claro que difiera de los nombres de perfil existentes.</cmd><info><p>BPM requiere un nombre e informa la validación del nombre duplicado antes de confirmar.</p></info></step>
       <step><cmd>Confirma la acción duplicada.</cmd><info><note type="warning">Un duplicado está separado de la fuente. Las ediciones posteriores de un perfil no actualizan el otro.</note></info></step>
     </steps>

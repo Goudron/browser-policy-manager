@@ -40,27 +40,38 @@ def main() -> int:
             runner.bootstrap_browser(driver)
             runner.open_and_wait(driver, "/profiles/new")
             runner.capture(driver, viewport, "before")
-            print("initial", driver.execute_script("return {lang: document.documentElement.lang, mode: document.documentElement.dataset.langMode, select: document.getElementById('lang').value};"))
+            print(
+                "initial",
+                driver.execute_script(
+                    "return {lang: document.documentElement.lang, mode: document.documentElement.dataset.langMode, select: document.getElementById('lang').value};"
+                ),
+            )
             runner.apply_language(driver, viewport, "en")
-            print("after_en", driver.execute_script("return {lang: document.documentElement.lang, mode: document.documentElement.dataset.langMode, select: document.getElementById('lang').value, local: window.localStorage.getItem('bpm-lang-mode')};"))
+            print(
+                "after_en",
+                driver.execute_script(
+                    "return {lang: document.documentElement.lang, mode: document.documentElement.dataset.langMode, select: document.getElementById('lang').value, local: window.localStorage.getItem('bpm-lang-mode')};"
+                ),
+            )
             print("console_en", json.dumps(driver.get_log("browser"), ensure_ascii=False))
             runner.apply_language(driver, viewport, "ru")
-            print("after_ru", driver.execute_script("return {lang: document.documentElement.lang, mode: document.documentElement.dataset.langMode, select: document.getElementById('lang').value, local: window.localStorage.getItem('bpm-lang-mode')};"))
+            print(
+                "after_ru",
+                driver.execute_script(
+                    "return {lang: document.documentElement.lang, mode: document.documentElement.dataset.langMode, select: document.getElementById('lang').value, local: window.localStorage.getItem('bpm-lang-mode')};"
+                ),
+            )
             print("console_ru", json.dumps(driver.get_log("browser"), ensure_ascii=False))
-            before_click = driver.execute_script(
-                """
+            before_click = driver.execute_script("""
                 const button = document.querySelector('[data-scenario-key="shared_devices"]');
                 return {aria: button?.getAttribute('aria-pressed'), className: button?.className};
-                """
-            )
+                """)
             print("scenario_before", before_click)
             runner.click_css(driver, '[data-scenario-key="shared_devices"]')
-            after_click = driver.execute_script(
-                """
+            after_click = driver.execute_script("""
                 const button = document.querySelector('[data-scenario-key="shared_devices"]');
                 return {aria: button?.getAttribute('aria-pressed'), className: button?.className};
-                """
-            )
+                """)
             print("scenario_after", after_click)
             print("console_after_click", json.dumps(driver.get_log("browser"), ensure_ascii=False))
             runner.capture(driver, viewport, "after")

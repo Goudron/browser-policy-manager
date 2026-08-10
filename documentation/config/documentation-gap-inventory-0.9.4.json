@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "inventory_id": "bpm-0.9.4-documentation-gap-inventory",
+  "backlog_item": "BPM094-M11-01",
+  "target_bpm_version": "0.9.4",
+  "status": "accepted-for-owned-remediation",
+  "scope": {
+    "maintained_source_roots": [
+      "documentation/src/dita",
+      "documentation/buildlib/pdf.py",
+      "documentation/assets/pdf/bpm-guide-print.css",
+      "documentation/config/pdf-generation-contract-0.9.3.json"
+    ],
+    "excluded_generated_roots": [
+      "documentation/build",
+      "documentation/dist",
+      "documentation/reports",
+      "documentation/.cache",
+      "app/documentation/site"
+    ],
+    "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "guide_families": [
+      "user-guide",
+      "firefox-policy-guide",
+      "cis-settings-guide",
+      "administrator-guide"
+    ]
+  },
+  "completed_checks": [
+    {
+      "check_id": "DOC094-CHECK-001",
+      "classification": "completed",
+      "finding": "No literal TODO, TBD, or FIXME marker occurs in maintained DITA maps or topics.",
+      "verification": "documentation/tests/contract/test_documentation_gap_inventory_0_9_4.py::test_gap_inventory_keeps_literal_placeholder_markers_absent"
+    },
+    {
+      "check_id": "DOC094-CHECK-002",
+      "classification": "completed",
+      "finding": "The inventory excludes generated HTML, PDF, delivery, report, cache, and installed-site output; source, transform, and contract owners remain the only editable evidence.",
+      "verification": "documentation/tests/contract/test_documentation_gap_inventory_0_9_4.py::test_gap_inventory_declares_only_maintained_source_and_safe_exclusions"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "DOC094-GAP-001",
+      "classification": "deferred-with-safe-boundary",
+      "owner": "BPM094-M11-02",
+      "title": "Explain system-language selection and fallback exactly",
+      "locations": [
+        "documentation/src/dita/{locale}/user/ug-concept-language-detection-fallback.dita#a-system-language",
+        "documentation/src/dita/{locale}/user/ug-concept-language-detection-fallback.dita#a-fallback",
+        "documentation/src/dita/{locale}/user/ug-task-change-interface-language.dita"
+      ],
+      "locale_impact": "all-locales",
+      "authoritative_behavior": {
+        "product_owner": "app/core/locales.py",
+        "client_owner": "app/static/profiles_platform.js",
+        "application_owner": "app/static/profiles_library_bootstrap.js",
+        "verification": "tests/integration/locale/test_locale_matrix.py",
+        "rules": [
+          "The System mode considers navigator.languages in order and then navigator.language.",
+          "Browser tags match en, ru, de, zh-CN/zh-Hans/zh, fr, and es-ES/es rules after underscore-to-hyphen normalization.",
+          "The first available matching catalog wins; an unavailable match follows its declared fallback, then en, then the first available catalog.",
+          "An explicit language selection is persisted as bpm-lang-mode; System is persisted as a mode, not as a frozen resolved locale."
+        ]
+      },
+      "safe_boundary_until_remediated": "Current topics may state the supported six-locale set and that System follows browser preferences, but must not claim an unspecified fallback order or partial-catalog behavior."
+    },
+    {
+      "finding_id": "DOC094-GAP-002",
+      "classification": "deferred-with-safe-boundary",
+      "owner": "BPM094-M11-02",
+      "title": "Make import and export examples unambiguously full Firefox policies.json documents",
+      "locations": [
+        "documentation/src/dita/{locale}/user/ug-task-import-policies-json.dita#a-import-api-examples",
+        "documentation/src/dita/{locale}/user/ug-task-export-policies-json.dita#a-export-examples",
+        "documentation/src/dita/{locale}/admin/admin-task-import-firefox-policies-json.dita",
+        "documentation/src/dita/{locale}/admin/admin-task-export-firefox-policies-json.dita"
+      ],
+      "locale_impact": "all-locales",
+      "authoritative_behavior": {
+        "product_owner": "app/services/firefox_policy_import.py and app/services/firefox_policy_export.py",
+        "public_contract": "tests/integration/firefox/test_firefox_policy_import.py and tests/integration/firefox/test_firefox_policy_export.py",
+        "boundary_shape": "{\"policies\": {...}}"
+      },
+      "safe_boundary_until_remediated": "The text must continue to distinguish BPM normalized flags from the Firefox boundary document. It must not present an inner flags/settings fragment as a deployable policies.json file."
+    },
+    {
+      "finding_id": "DOC094-GAP-003",
+      "classification": "deferred-with-safe-boundary",
+      "owner": "BPM094-M11-02",
+      "title": "Replace stale release-qualified reader claims while preserving the delivered assistant boundary",
+      "locations": [
+        "documentation/src/dita/{locale}/user/ug-concept-browser-policy-manager-overview.dita#assistant",
+        "documentation/src/dita/{locale}/user/ug-task-use-local-documentation-assistant.dita",
+        "documentation/src/dita/{locale}/admin/*local-documentation-assistant*.dita"
+      ],
+      "locale_impact": "all-locales",
+      "authoritative_behavior": {
+        "product_owner": "documentation/tests/contract/test_documentation_assistant_release_documentation_0_9_3.py",
+        "release_boundary": "The delivered assistant shows its localized training notice; it does not generate answers, retrieve an index, use citations, or use external sources. Deterministic documentation search remains independent."
+      },
+      "safe_boundary_until_remediated": "Preserve the truthful unavailable-feature boundary and never document model installation, generated answers, citations, retrieval, or external sources as delivered."
+    },
+    {
+      "finding_id": "DOC094-GAP-004",
+      "classification": "deferred-with-safe-boundary",
+      "owner": "BPM094-M11-03",
+      "title": "Normalize semantic UI names and visible admonition labels",
+      "locations": [
+        "documentation/src/dita/{locale}/{user,firefox,cis,admin}/*.dita",
+        "documentation/buildlib/pdf.py",
+        "documentation/assets/pdf/bpm-guide-print.css"
+      ],
+      "locale_impact": "all-locales",
+      "authoritative_behavior": {
+        "product_owner": "app/i18n/{locale}.json",
+        "render_owner": "documentation/buildlib/pdf.py and documentation/assets/pdf/bpm-guide-print.css"
+      },
+      "safe_boundary_until_remediated": "Do not replace codeph/API/path semantics with UI markup, and do not change UI copy merely to obtain formatting."
+    },
+    {
+      "finding_id": "DOC094-GAP-005",
+      "classification": "deferred-with-safe-boundary",
+      "owner": "BPM094-M11-04",
+      "title": "Give every maintained figure a localized caption, consecutive numbering, and cross-reference contract",
+      "locations": [
+        "documentation/src/dita/{locale}/{user,firefox,cis,admin}/*.dita",
+        "documentation/src/dita/{locale}/maps/{user-guide,firefox-policy-guide,cis-settings-guide,administrator-guide}.ditamap"
+      ],
+      "locale_impact": "all-locales",
+      "authoritative_behavior": {
+        "source_owner": "Maintained DITA fig/title/image elements",
+        "render_owner": "documentation/buildlib/pdf.py and documentation/assets/pdf/bpm-guide-print.css",
+        "existing_guard": "documentation/tests/contract/test_pdf_generation_contract_0_9_3.py"
+      },
+      "safe_boundary_until_remediated": "Keep screenshots as reviewed source assets, do not hand-edit rendered PDF images, and do not infer instructional meaning from an unlabeled image alone."
+    },
+    {
+      "finding_id": "DOC094-GAP-006",
+      "classification": "deferred-with-safe-boundary",
+      "owner": "BPM094-M11-05",
+      "title": "Make title pages, printed page numbers, and contents navigation verifiable",
+      "locations": [
+        "documentation/buildlib/pdf.py#_write_pdf_print_guide",
+        "documentation/assets/pdf/bpm-guide-print.css",
+        "documentation/config/pdf-generation-contract-0.9.3.json",
+        "documentation/tests/contract/test_pdf_generation_contract_0_9_3.py"
+      ],
+      "locale_impact": "all-locales",
+      "authoritative_behavior": {
+        "ui_footer_owner": "app/templates/profiles/_page_footer.html and app/i18n/{locale}.json",
+        "renderer": "Chromium",
+        "required_output": "Twelve delivered locale-guide PDFs"
+      },
+      "safe_boundary_until_remediated": "Chromium remains the renderer. Do not add a second PDF renderer or patch generated PDFs by hand; the title-page copyright must remain sourced from the exact UI-footer locale text."
+    },
+    {
+      "finding_id": "DOC094-GAP-007",
+      "classification": "deferred-with-safe-boundary",
+      "owner": "BPM094-M11-06",
+      "title": "Record the six-locale editorial and binary-PDF release review",
+      "locations": [
+        "documentation/runbooks/documentation-update-for-future-epics.md",
+        "documentation/tests/contract/test_documentation_release_gate.py",
+        "documentation/tests/contract/test_pdf_generation_contract_0_9_3.py",
+        "documentation/tests/contract/test_pdf_delivery_contract_0_9_3.py"
+      ],
+      "locale_impact": "all-locales",
+      "authoritative_behavior": {
+        "runbook": "documentation/runbooks/documentation-update-for-future-epics.md",
+        "required_checks": [
+          "make docs-release-check",
+          "make docs-pdf-verify",
+          "make docs-pdf-reproducibility",
+          "make docs-pdf-delivery-verify",
+          "make docs-package-verify"
+        ]
+      },
+      "safe_boundary_until_remediated": "No generated PDF, delivery directory, or installed-site artifact is evidence of acceptance until source-driven verification and visual six-locale review complete."
+    },
+    {
+      "finding_id": "DOC094-GAP-008",
+      "classification": "out-of-scope",
+      "owner": "BPM094-M11-07",
+      "title": "Refresh technical architecture and operational runbooks after the 0.9.4 implementation changes",
+      "locations": [
+        "docs/architecture/*.md",
+        "documentation/runbooks/*.md",
+        "docs/docs-index.md"
+      ],
+      "locale_impact": "not-reader-locale-specific",
+      "safe_boundary_until_remediated": "This inventory does not rewrite technical procedures or reclassify product behavior; M11-07 owns executable command and owner updates."
+    },
+    {
+      "finding_id": "DOC094-GAP-009",
+      "classification": "out-of-scope",
+      "owner": "BPM094-M11-10",
+      "title": "Optimize PDF work only after the reviewed print layout is stable",
+      "locations": [
+        "documentation/buildlib/pdf.py",
+        "documentation/config/pdf-generation-contract-0.9.3.json",
+        "documentation/assets/pdf/bpm-guide-print.css"
+      ],
+      "locale_impact": "all-locales",
+      "safe_boundary_until_remediated": "Do not add caching, partial builds, or parallel rendering before M11-06 records stable layout and reproducibility evidence."
+    }
+  ]
+}

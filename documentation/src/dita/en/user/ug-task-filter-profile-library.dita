@@ -4,15 +4,15 @@
   <title>Filter the Library</title>
   <shortdesc>Combine schema, lifecycle, and validation filters to focus the saved profile list.</shortdesc>
   <taskbody>
-    <prereq><p>The Library is open and you know which profile state you need to inspect.</p></prereq>
+    <prereq><p>The <uicontrol>Library</uicontrol> is open and you know which profile state you need to inspect.</p></prereq>
     <context><p>Filters are view controls. They do not change profile content, validation state, or lifecycle state.</p></context>
     <steps>
       <step><cmd>Choose a Firefox schema channel filter when you need Release, ESR, or all profiles.</cmd><info><p>Expected result: the filtered count reflects only rows for the selected channel.</p></info></step>
       <step><cmd>Choose a lifecycle filter to show active, archived, or all profiles.</cmd><info><p>Use archived when you are preparing to restore or permanently delete a retained profile.</p></info></step>
       <step><cmd>Choose a validation filter to show passed, failed, or not-yet-validated profiles.</cmd><info><note type="warning">A validation filter does not run validation. It only shows the last saved validation state.</note></info></step>
-      <step><cmd>Reset filters to all states when you need the complete Library view.</cmd><info><p>This reset changes only the visible list, not the saved profile data.</p></info></step>
+      <step><cmd>Reset filters to all states when you need the complete <uicontrol>Library</uicontrol> view.</cmd><info><p>This reset changes only the visible list, not the saved profile data.</p></info></step>
     </steps>
-    <result><p>The Library shows the profile subset that matches the selected schema, lifecycle, validation, and search criteria.</p></result>
+    <result><p>The <uicontrol>Library</uicontrol> shows the profile subset that matches the selected schema, lifecycle, validation, and search criteria.</p></result>
     <postreq><p>Recovery: if a profile seems missing, reset filters and search before treating it as absent.</p></postreq>
   </taskbody>
   <related-links>

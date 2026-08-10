@@ -2,9 +2,9 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="fx-reference-managed-preference-locking" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Référence de verrouillage des préférences gérées</title>
-  <shortdesc>Préférences gérées sont exportés via la stratégie Firefox <codeph>Preferences</codeph> et nécessitent un examen explicite de la valeur, du type et de l'état.</shortdesc>
+  <shortdesc><uicontrol>Préférences gérées</uicontrol> sont exportés via la stratégie Firefox <codeph>Preferences</codeph> et nécessitent un examen explicite de la valeur, du type et de l'état.</shortdesc>
   <refbody>
-    <section id="a-container-policy"><title>Politique de conteneur</title><p>Firefox stocke Préférences gérées sous <codeph>Preferences</codeph>. BPM documente les préférences connues séparément mais les exporte sous forme d'entrées dans cette stratégie de conteneur.</p></section>
+    <section id="a-container-policy"><title>Politique de conteneur</title><p>Firefox stocke <uicontrol>Préférences gérées</uicontrol> sous <codeph>Preferences</codeph>. BPM documente les préférences connues séparément mais les exporte sous forme d'entrées dans cette stratégie de conteneur.</p></section>
     <section id="a-status-values"><title>Valeurs d'état</title><p><codeph>locked</codeph> empêche les modifications utilisateur là où Firefox prend en charge la préférence. <codeph>default</codeph>, <codeph>user</codeph> et <codeph>clear</codeph> ont des significations d'exécution différentes et ne doivent pas être utilisés comme synonymes.</p></section>
     <section id="a-type-values"><title>Tapez les valeurs</title><p>Ensemble <codeph>Type</codeph> à <codeph>boolean</codeph>, <codeph>number</codeph>, ou <codeph>string</codeph> lorsque BPM a besoin d'une forme de valeur exacte. Le Le type <codeph>Value</codeph> doit correspondre au type déclaré.</p></section>
     <section id="a-source-conflicts"><title>Conflits de sources</title><p>Une préférence peut provenir d'un préréglage, d'une couche CIS, d'une importation, d'une modification manuelle ou d'une solution de secours brute. Vérifiez la source avant de verrouiller, car une préférence verrouillée peut remplacer les attentes de l'utilisateur plus fortement qu'une stratégie par défaut déverrouillée.</p></section>

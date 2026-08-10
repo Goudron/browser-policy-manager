@@ -1,22 +1,13 @@
 {
   "schema_version": 1,
-  "updated": "2026-07-28",
+  "updated": "2026-08-09",
   "packages": {
-    "js-yaml": "5.2.2",
-    "monaco-editor": "0.53.0",
-    "esbuild": "0.28.1"
+    "monaco-editor": "0.56.0",
+    "esbuild": "0.28.1",
+    "dompurify": "3.4.13",
+    "marked": "14.0.0"
   },
   "assets": [
-    {
-      "path": "js-yaml.js",
-      "size": 43461,
-      "sha256": "da1e8c845d515c586ca48897a26bf180494a21d34e2f92b0c2e2d51e7c55a53d"
-    },
-    {
-      "path": "js-yaml.LICENSE",
-      "size": 1084,
-      "sha256": "a07bc24468b9654ce76a547d47a2db282d07733b715db4c73a98bd63961f9550"
-    },
     {
       "path": "profiles_tailwind.css",
       "size": 6250,
@@ -24,28 +15,53 @@
     },
     {
       "path": "profiles_monaco.js",
-      "size": 6031542,
-      "sha256": "df33c76f1f3b04f2bedb83d3f0bb7c17cc8963ac984666131c81f632ef272714"
+      "size": 9167649,
+      "sha256": "d197cb50debbae3924b0eb3c35f8c99d3be1b5686c458973ee28c695c0040a9b"
     },
     {
       "path": "profiles_monaco.css",
-      "size": 88924,
-      "sha256": "9d81ba83b8eaf978640bb8cc9226a56c8e66b7c9ec7b6beb0da3f9ee5910993a"
+      "size": 189040,
+      "sha256": "938414c6d90fd9ec654826c6cc16e0318c6c61065e7df5f972856e6c78de6c4b"
     },
     {
       "path": "monaco-editor.worker.js",
-      "size": 598737,
-      "sha256": "52933effed568e5a30316483434c01a68ad15087a11c4eded8e96a53100ba0b2"
+      "size": 634133,
+      "sha256": "9cadb64ad37803c2d5c03a905841fc5b23847a14e9bec9885fb08ff1e4c19809"
     },
     {
       "path": "monaco-json.worker.js",
-      "size": 899201,
-      "sha256": "d4f5170872312a6cfe3ec4534ea05e0f28f912d6bb6cd745b1584a1c76cf8eee"
+      "size": 936402,
+      "sha256": "0e6da8b70f617af3a3d0eec5022669711d755c2a1c34b9c0b860f3e772c53758"
+    },
+    {
+      "path": "vendor/monaco-assets/codicon-KP4OV2OO.ttf",
+      "size": 140956,
+      "sha256": "cc2472e239e17062e7760af87f8f5997720cc0d94aa014a615c418baaf6333a8"
     },
     {
       "path": "monaco.LICENSE",
       "size": 1098,
       "sha256": "33e4ff1a06ef62ba21788ea162564ee8165269a24a9ce6ef301837447eab0ac6"
+    },
+    {
+      "path": "monaco.ThirdPartyNotices.txt",
+      "size": 63064,
+      "sha256": "790537262fc78a764e121e6b92b959bcd3f5c310b47d9d9b9e92e17fe0af5336"
+    },
+    {
+      "path": "dompurify.LICENSE-APACHE",
+      "size": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "dompurify.LICENSE-MPL",
+      "size": 16726,
+      "sha256": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85"
+    },
+    {
+      "path": "marked.LICENSE",
+      "size": 2942,
+      "sha256": "8e3a3f82f59a60958f56ca08f445647c32a4733dc7ca6c2c46f6eb898471ab9c"
     }
   ]
 }

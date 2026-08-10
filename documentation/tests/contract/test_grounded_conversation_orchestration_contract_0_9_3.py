@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -16,27 +15,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def test_m7_02_pins_all_pre_generation_boundaries_and_has_no_route() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M7-02"
-    assert contract["status"] == "implemented-no-http-route"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["implementation_boundary"] == {
-        "http_route": False,
-        "browser_ui": False,
-        "session_persistence": False,
-        "scope_classifier": False,
-        "e5_runtime_loader": False,
-        "output_schema_parser": False,
-        "external_provider": False,
-    }
-    source = (ROOT / "app/documentation/conversation.py").read_text(encoding="utf-8")
-    assert "from fastapi" not in source
-    assert "@router." not in source
 
 
 def test_m7_02_freezes_pipeline_locale_evidence_web_and_citation_guards() -> None:

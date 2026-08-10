@@ -56,11 +56,11 @@
       "recovery_path": ["ug-troubleshoot-unsaved-changes", "ug-troubleshoot-product-connection"],
       "drift_source": ["app/templates/profiles/_page_header.html", "app/static/profiles_platform.js", "app/i18n/*.json"],
       "focused_verification": [
-        "./.venv/bin/pytest -q tests/test_locale_matrix.py tests/test_ui_runtime_i18n_contract.py tests/test_light_theme_surface_contract_091.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_primary_routes_render_in_ru_and_zh_cn tests/test_ui_browser_tabs.py::test_browser_smoke_guided_disclosure_labels_follow_active_locale"
+        "./.venv/bin/pytest -q tests/integration/locale/test_locale_matrix.py tests/contract/ui/localization/test_ui_runtime_i18n_contract.py tests/integration/ui/test_light_theme_surface_contract_091.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_primary_routes_render_in_ru_and_zh_cn tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_guided_disclosure_labels_follow_active_locale"
       ],
       "evidence_type": ["browser_smoke", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_cross_cutting_topics.py"],
+      "evidence_artifact": ["tests/browser/profiles/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_cross_cutting_topics.py"],
       "review_disposition": "pass"
     },
     {
@@ -85,10 +85,10 @@
       "drift_source": ["app/api/profiles.py", "app/templates/profiles/_page_wizard.html", "app/presets", "app/compliance/firefox"],
       "focused_verification": [
         "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_schema_validation_topics.py documentation/tests/contract/test_user_guide_import_export_topics.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_imports_firefox_policies_json_in_russian_library tests/test_ui_browser_tabs.py::test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs"
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_imports_firefox_policies_json_in_russian_library tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "tests/test_ui_smoke_profile_workflow.py", "documentation/tests/contract/test_user_guide_import_export_topics.py"],
+      "evidence_artifact": ["tests/browser/profiles/test_ui_browser_tabs.py", "tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py", "documentation/tests/contract/test_user_guide_import_export_topics.py"],
       "review_disposition": "pass"
     },
     {
@@ -112,14 +112,14 @@
       "exact_steps": "Resolved from each topic step/cmd sequence and checked against the six-step Guided runtime mapping.",
       "expected_result": "Resolved from each topic result; saved and exported state matches the selected schema-supported guided controls.",
       "recovery_path": ["ug-troubleshoot-policy-validation", "ug-troubleshoot-schema-mismatch", "ug-troubleshoot-unsaved-changes"],
-      "drift_source": ["app/web/firefox_wizard_steps.py", "app/web/firefox_wizard_shell", "app/templates/profiles/_page_wizard*.html", "app/static/profiles_guided.js"],
+      "drift_source": ["app/web/firefox_wizard_steps.py", "app/web/firefox_wizard_shell", "app/templates/profiles/_page_wizard*.html", "app/static/profiles_wizard_flow.js"],
       "focused_verification": [
-        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_guided_topics.py tests/test_firefox_wizard_shell.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_guided_disclosure_labels_follow_active_locale",
-        "./.venv/bin/pytest -q tests/test_ui_smoke_profile_workflow.py::test_release_guided_ai_and_vpn_browser_regression_can_save_and_export tests/test_ui_smoke_profile_workflow.py::test_library_to_editor_browser_regression_can_load_and_save_guided_homepage"
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_guided_topics.py tests/integration/firefox/test_firefox_wizard_shell.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_guided_disclosure_labels_follow_active_locale",
+        "./.venv/bin/pytest -q tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py::test_release_guided_ai_and_vpn_browser_regression_can_save_and_export tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py::test_library_to_editor_browser_regression_can_load_and_save_guided_homepage"
       ],
       "evidence_type": ["browser_smoke", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_ui_smoke_profile_workflow.py", "tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_guided_topics.py"],
+      "evidence_artifact": ["tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py", "tests/browser/profiles/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_guided_topics.py"],
       "review_disposition": "pass"
     },
     {
@@ -140,12 +140,12 @@
       "recovery_path": ["ug-troubleshoot-save-conflict", "ug-troubleshoot-policy-validation", "ug-troubleshoot-product-connection"],
       "drift_source": ["app/api/profiles.py", "app/api/validation.py", "app/api/export.py", "app/static/profiles_workspace.js"],
       "focused_verification": [
-        "./.venv/bin/pytest -q tests/test_validation_api.py tests/test_export_firefox_policies_json.py tests/test_workspace_export_links_unit.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_editor_mode_links_preserve_route_context",
-        "./.venv/bin/pytest -q tests/test_ui_smoke_profile_workflow.py::test_visual_and_json_same_profile_regression_can_save_without_conflict"
+        "./.venv/bin/pytest -q tests/integration/api/test_validation_api.py tests/integration/firefox/test_export_firefox_policies_json.py tests/unit/profiles/test_workspace_export_links_unit.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_editor_mode_links_preserve_route_context",
+        "./.venv/bin/pytest -q tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py::test_visual_and_json_same_profile_regression_can_save_without_conflict"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_ui_smoke_profile_workflow.py", "tests/test_validation_api.py", "tests/test_export_firefox_policies_json.py"],
+      "evidence_artifact": ["tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py", "tests/integration/api/test_validation_api.py", "tests/integration/firefox/test_export_firefox_policies_json.py"],
       "review_disposition": "pass"
     },
     {
@@ -168,11 +168,11 @@
       "recovery_path": ["ug-troubleshoot-policy-validation", "ug-troubleshoot-schema-mismatch"],
       "drift_source": ["app/static/profiles_all_settings_list.js", "app/static/profiles_settings_search.js", "app/web/firefox_all_settings_categories.py"],
       "focused_verification": [
-        "./.venv/bin/pytest -q tests/test_all_settings_route_state_contract.py tests/test_all_settings_search_grouping_contract.py tests/test_all_settings_inventory_counts.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile"
+        "./.venv/bin/pytest -q tests/contract/settings/test_all_settings_route_state_contract.py tests/contract/settings/test_all_settings_search_grouping_contract.py tests/integration/settings/test_all_settings_inventory_counts.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_all_settings_topics.py"],
+      "evidence_artifact": ["tests/browser/profiles/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_all_settings_topics.py"],
       "review_disposition": "pass"
     },
     {
@@ -193,12 +193,12 @@
       "recovery_path": ["ug-troubleshoot-policy-validation", "ug-troubleshoot-save-conflict"],
       "drift_source": ["app/static/profiles_all_settings_detail.js", "app/static/profiles_schema_shell_value_io.js", "app/services/firefox_policy_ui_registry"],
       "focused_verification": [
-        "./.venv/bin/pytest -q tests/test_firefox_wizard_shell_unit.py tests/test_profiles_data_document_adapters.py tests/core/test_policy_validation_with_schema.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile",
-        "./.venv/bin/pytest -q tests/test_ui_smoke_profile_workflow.py::test_profiles_public_workflow_smoke"
+        "./.venv/bin/pytest -q tests/unit/firefox/test_firefox_wizard_shell_unit.py tests/unit/schema/general/test_policy_validation_with_schema.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile",
+        "./.venv/bin/pytest -q tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py::test_profiles_public_workflow_smoke"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_ui_smoke_profile_workflow.py", "documentation/tests/contract/test_user_guide_all_settings_topics.py"],
+      "evidence_artifact": ["tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py", "documentation/tests/contract/test_user_guide_all_settings_topics.py"],
       "review_disposition": "pass"
     },
     {
@@ -219,11 +219,11 @@
       "recovery_path": ["ug-troubleshoot-policy-validation", "ug-troubleshoot-schema-mismatch"],
       "drift_source": ["app/static/profiles_settings_inventory.js", "app/static/profiles_all_settings_state.js", "app/compliance/firefox"],
       "focused_verification": [
-        "./.venv/bin/pytest -q tests/test_all_settings_source_state_fixtures.py tests/test_profile_navigation.py tests/compliance/test_cis_firefox_merge.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile"
+        "./.venv/bin/pytest -q tests/integration/settings/test_all_settings_source_state_fixtures.py tests/unit/profiles/test_profile_navigation.py tests/contract/compliance/test_cis_firefox_merge.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_all_settings_source_state_fixtures.py", "documentation/tests/contract/test_user_guide_all_settings_topics.py"],
+      "evidence_artifact": ["tests/integration/settings/test_all_settings_source_state_fixtures.py", "documentation/tests/contract/test_user_guide_all_settings_topics.py"],
       "review_disposition": "pass"
     },
     {
@@ -242,14 +242,14 @@
       "exact_steps": "Resolved from each topic step/cmd sequence and checked against the Monaco-backed JSON surface and validation pipeline.",
       "expected_result": "Resolved from each topic result; valid JSON saves to the profile while malformed or invalid JSON remains blocked with visible feedback.",
       "recovery_path": ["ug-troubleshoot-malformed-json", "ug-troubleshoot-policy-validation", "ug-troubleshoot-save-conflict"],
-      "drift_source": ["app/static/profiles_runtime_json_editor.js", "app/static/profiles_json.js", "app/api/validation.py"],
+      "drift_source": ["app/static/profiles_runtime_json_editor.js", "app/api/validation.py"],
       "focused_verification": [
-        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_json_editor_topics.py tests/test_validation_api.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_json_editor_loads_corporate_cis_known_preferences",
-        "./.venv/bin/pytest -q tests/test_ui_smoke_profile_workflow.py::test_visual_and_json_same_profile_regression_can_save_without_conflict"
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_json_editor_topics.py tests/integration/api/test_validation_api.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_json_editor_loads_corporate_cis_known_preferences",
+        "./.venv/bin/pytest -q tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py::test_visual_and_json_same_profile_regression_can_save_without_conflict"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "tests/test_ui_smoke_profile_workflow.py", "documentation/tests/contract/test_user_guide_json_editor_topics.py"],
+      "evidence_artifact": ["tests/browser/profiles/test_ui_browser_tabs.py", "tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py", "documentation/tests/contract/test_user_guide_json_editor_topics.py"],
       "review_disposition": "pass"
     },
     {
@@ -273,13 +273,13 @@
       "exact_steps": "Resolved from each topic step/cmd sequence and checked against Library filters, row identity, confirmations, and status updates.",
       "expected_result": "Resolved from each topic result; each action changes only the intended row and exposes the resulting lifecycle state.",
       "recovery_path": ["ug-troubleshoot-library-operation", "ug-troubleshoot-profile-name", "ug-troubleshoot-missing-profile"],
-      "drift_source": ["app/static/profiles_library.js", "app/api/profiles.py", "app/templates/profiles/_page_library_workspace.html"],
+      "drift_source": ["app/static/profiles_library_bootstrap.js", "app/api/profiles.py", "app/templates/profiles/_page_library_workspace.html"],
       "focused_verification": [
-        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_library_topics.py tests/test_profiles_list_filters_and_include_deleted.py tests/test_profiles_crud_extended.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure tests/test_ui_browser_tabs.py::test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs"
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_library_topics.py tests/integration/profiles/test_profiles_list_filters_and_include_deleted.py tests/integration/profiles/test_profiles_crud_extended.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_library_topics.py"],
+      "evidence_artifact": ["tests/browser/profiles/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_library_topics.py"],
       "review_disposition": "pass"
     },
     {
@@ -298,11 +298,12 @@
       "recovery_path": ["ug-troubleshoot-missing-profile", "ug-troubleshoot-product-connection"],
       "drift_source": ["app/static/profiles_compare.js", "app/static/profiles_compare_state.js", "app/templates/profiles/_page_compare_workspace.html"],
       "focused_verification": [
-        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_comparison_topics.py tests/test_profiles_compare_entrypoint.py tests/test_profiles_compare_state.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_library_compare_preserves_locale_in_new_tab_and_selects_two_profiles tests/test_ui_browser_tabs.py::test_browser_smoke_compare_selector_scrolls_large_profile_lists_and_selects_profiles"
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_comparison_topics.py",
+        "node --test --test-timeout=10000 --experimental-test-isolation=process tests/javascript/integration/profiles/profile_compare_entrypoint.test.js tests/javascript/integration/profiles/profile_compare_state.test.js",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_compare_preserves_locale_in_new_tab_and_selects_two_profiles tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_compare_selector_scrolls_large_profile_lists_and_selects_profiles"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_comparison_topics.py"],
+      "evidence_artifact": ["tests/browser/profiles/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_comparison_topics.py"],
       "review_disposition": "pass"
     },
     {
@@ -329,26 +330,26 @@
       "recovery_path": ["Each topic is itself the terminal User Guide recovery path; persistent infrastructure failures hand off to Administrator troubleshooting."],
       "drift_source": ["app/static/profiles_runtime_dirty_guard.js", "app/api/profiles.py", "app/core/policy_validation.py", "app/i18n/*.json"],
       "focused_verification": [
-        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_troubleshooting_topics.py tests/test_profiles_update_and_pagination.py tests/test_profiles_error_branches_and_validation.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure",
-        "./.venv/bin/pytest -q tests/test_ui_smoke_profile_workflow.py::test_stale_save_conflict_browser_regression_does_not_overwrite_profile tests/test_ui_smoke_profile_workflow.py::test_save_as_copy_conflict_regression_preserves_local_draft_as_new_profile"
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_troubleshooting_topics.py tests/integration/profiles/test_profiles_update_and_pagination.py tests/integration/profiles/test_profiles_error_branches_and_validation.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure",
+        "./.venv/bin/pytest -q tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py::test_stale_save_conflict_browser_regression_does_not_overwrite_profile tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py::test_save_as_copy_conflict_regression_preserves_local_draft_as_new_profile"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
-      "evidence_artifact": ["tests/test_ui_smoke_profile_workflow.py", "tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_troubleshooting_topics.py"],
+      "evidence_artifact": ["tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py", "tests/browser/profiles/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_troubleshooting_topics.py"],
       "review_disposition": "pass"
     }
   ],
   "execution_record": {
     "browser_smoke": {
       "date": "2026-07-10",
-      "command_scope": "Eight selected browser_ui nodes from tests/test_ui_browser_tabs.py covering locale/routes, import, Guided disclosure, Library lifecycle, All Settings, JSON, Compare, and Library edit/clone.",
+      "command_scope": "Eight selected browser_ui nodes from tests/browser/profiles/test_ui_browser_tabs.py covering locale/routes, import, Guided disclosure, Library lifecycle, All Settings, JSON, Compare, and Library edit/clone.",
       "result": "pass",
       "result_summary": "8 passed in 164.89s",
       "environment": "Repository Chromium/Selenium harness with isolated test application and database state."
     },
     "api_and_source_simulation": {
       "date": "2026-07-10",
-      "command_scope": "Four selected tests from tests/test_ui_smoke_profile_workflow.py covering Guided save/export, visual-to-JSON saves, stale revision conflict, and save-as-copy recovery.",
+      "command_scope": "Four selected tests from tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py covering Guided save/export, visual-to-JSON saves, stale revision conflict, and save-as-copy recovery.",
       "result": "pass",
       "result_summary": "4 passed",
       "environment": "Isolated FastAPI test client plus maintained frontend-source assertions."

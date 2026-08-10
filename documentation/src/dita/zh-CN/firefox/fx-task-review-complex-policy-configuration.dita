@@ -4,10 +4,10 @@
   <title>在导出之前检查复杂的策略配置</title>
   <shortdesc>对嵌套对象、数组、原始回退、冲突和特定于渠道的可用性使用可重复的审核流程。</shortdesc>
   <taskbody>
-    <prereq><p>配置文件是开放的，并且至少包含一个复杂的策略系列或托管首选项。</p></prereq>
+    <prereq><p>配置文件是开放的，并且至少包含一个复杂的策略系列或<uicontrol>托管首选项</uicontrol>。</p></prereq>
     <context><p>通过族、源、模式通道和导出的边界形状进行审查时，复杂策略是最安全的。</p></context>
     <steps>
-      <step><cmd>打开 所有设置 并过滤到受影响的系列。</cmd><info><p>预期结果：相关策略、首选项和源标签一起可见。</p></info></step>
+      <step><cmd>打开 <uicontrol>所有设置</uicontrol> 并过滤到受影响的系列。</cmd><info><p>预期结果：相关策略、首选项和源标签一起可见。</p></info></step>
       <step><cmd>检查系列中每项保单的发布/ESR 徽章。</cmd><info><note type="warning">不得为面向 ESR 的配置文件导出仅发布策略。</note></info></step>
       <step><cmd>检查嵌套对象和数组值，包括未知的保留字段。</cmd><info><p>预期结果：在保存之前有意保留或删除原始后备值。</p></info></step>
       <step><cmd>比较预设、CIS、导入、手动和原始源。</cmd><info><p>预期结果：冲突被有意解决，而不是被以后的编辑隐藏。</p></info></step>

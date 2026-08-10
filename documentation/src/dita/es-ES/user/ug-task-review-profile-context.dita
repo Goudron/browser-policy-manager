@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-profile-context" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Revisar el contexto del perfil</title>
-  <shortdesc>Verifique Identidad del perfil, ciclo de vida, canal de esquema, estado de validación y contexto de origen antes de finalizar el trabajo.</shortdesc>
+  <shortdesc>Verifique <uicontrol>Identidad del perfil</uicontrol>, ciclo de vida, canal de esquema, estado de validación y contexto de origen antes de finalizar el trabajo.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM en el navegador y mantenga disponible un perfil, Biblioteca, Todos los ajustes, Guiado, JSON o Superficie de comparación.</p></prereq>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible un perfil, <uicontrol>Biblioteca</uicontrol>, <uicontrol>Todos los ajustes</uicontrol>, Guiado, JSON o Superficie de comparación.</p></prereq>
     <context><p>El contexto del perfil evita ediciones accidentales en el perfil incorrecto, el canal de Firefox incorrecto, la fila archivada, la fuente importada o la pestaña obsoleta.</p></context>
     <steps>
       <step><cmd>Lea el nombre del perfil, el estado del ciclo de vida, el canal del esquema y el contexto de la última actualización.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
       <step><cmd>Compruebe si el valor actual proviene de edición manual, línea base, CIS, importación o reserva sin procesar cuando se muestra la atribución de origen.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
       <step><cmd>Revisar el estado de validación y las advertencias antes de exportar o comparar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Si el contexto entra en conflicto con la tarea prevista, detenga y vuelva a abrir el perfil desde la Biblioteca.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
+      <step><cmd>Si el contexto entra en conflicto con la tarea prevista, detenga y vuelva a abrir el perfil desde la <uicontrol>Biblioteca</uicontrol>.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
     </steps>
     <result><p>Puede explicar qué perfil está editando y qué restricciones se le aplican.</p></result>
-    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la <uicontrol>Biblioteca</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

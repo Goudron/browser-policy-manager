@@ -4,17 +4,17 @@
   <title>在当前版本中使用文档助手</title>
   <shortdesc>验证已发布的训练提示边界，而不使 BPM 或确定性文档搜索依赖聊天窗口。</shortdesc>
   <taskbody>
-    <prereq><p>使用受支持的 BPM 0.9.3 源码检出和 <xref keyref="topic.admin-reference-minimum-system-requirements"/> 中的基础资源。</p></prereq>
+    <prereq><p>使用受支持的 BPM 0.9.4 源码检出和 <xref keyref="topic.admin-reference-minimum-system-requirements"/> 中的基础资源。</p></prereq>
     <context><p>在此版本中，聊天窗口仅是本地化的读者界面。它不会启动或安装模型、检索文档、使用 E5 索引、生成回答、显示引用或联系外部来源。确定性文档搜索保持独立且可用。</p></context>
     <steps>
-      <step><cmd>使用正常的受支持源码流程启动 BPM。</cmd><info><p>不要为 0.9.3 的 BPM 启动添加模型、索引、嵌入或外部提供商配置。</p></info></step>
+      <step><cmd>使用正常的受支持源码流程启动 BPM。</cmd><info><p>不要为 0.9.4 的 BPM 启动添加模型、索引、嵌入或外部提供商配置。</p></info></step>
       <step><cmd>以读者的语言打开文档门户。</cmd><info><p>确认助手可从右下角打开，且普通搜索控件保持不变。</p></info></step>
       <step><cmd>提交一个与 BPM 有关的问题。</cmd><info><p>对话记录必须显示本地化提示：本地模型正在训练，该功能将在后续版本中提供。</p></info></step>
       <step><cmd>提交一个无关问题。</cmd><info><p>应显示相同提示；此版本的聊天窗口不是通用助手。</p></info></step>
       <step><cmd>使用确定性文档搜索查找当前答案。</cmd><info><p>搜索、筛选、导航和结果排序仍是受支持的产品信息路径。</p></info></step>
     </steps>
     <result><p>助手显示已发布的本地化训练提示，BPM 和确定性搜索仍可独立使用。</p></result>
-    <postreq><p>不要为 0.9.3 安装模型或创建 RAG 生成。提示、语言或普通搜索边界不符合上述行为时，请记录文档缺陷。</p></postreq>
+    <postreq><p>不要为 0.9.4 安装模型或创建 RAG 生成。提示、语言或普通搜索边界不符合上述行为时，请记录文档缺陷。</p></postreq>
   </taskbody>
   <related-links><link keyref="topic.admin-reference-minimum-system-requirements"/><link keyref="topic.admin-task-gate-control-product-startup"/></related-links>
 </task>

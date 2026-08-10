@@ -1,7 +1,13 @@
-(() => {
-    window.BPMProfilesBootstrapSections = {
-        initCoreModules: (...args) => window.BPMProfilesBootstrapCore.initCoreModules(...args),
-        initFeatureModules: (...args) => window.BPMProfilesBootstrapFeatures.initFeatureModules(...args),
-        startRuntimeModule: (...args) => window.BPMProfilesBootstrapRuntime.startRuntimeModule(...args),
-    };
-})();
+    function create({
+        initCoreModules,
+        initFeatureModules,
+        startRuntimeModule,
+    }) {
+        return {
+            initCoreModules,
+            initFeatureModules,
+            startRuntimeModule,
+        };
+    }
+
+    export { create };

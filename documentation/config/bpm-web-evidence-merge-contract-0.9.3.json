@@ -58,5 +58,5 @@
     "ordinary_search_changed": false,
     "cross_locale_merge": false
   },
-  "verification": {"runtime": "tests/test_web_evidence_merge_093.py", "contract": "documentation/tests/contract/test_bpm_web_evidence_merge_contract_0_9_3.py", "architecture": "docs/architecture/bpm-web-evidence-merge-0.9.3.md"}
+  "verification": {"runtime": "tests/integration/ai/incubation/test_web_evidence_merge.py", "contract": "documentation/tests/contract/test_bpm_web_evidence_merge_contract_0_9_3.py", "architecture": "docs/architecture/bpm-web-evidence-merge-0.9.3.md"}
 }

@@ -36,9 +36,7 @@ MAX_EXTERNAL_CLAIM_CHARACTERS: Final[int] = 600
 MergeState = Literal["ready", "local_only", "abstain"]
 AnswerDisposition = Literal["answer", "clarify", "abstain", "refuse"]
 _ISO_DATE = re.compile(r"\b(\d{4}-\d{2}-\d{2})\b")
-_FIREFOX_VERSION = re.compile(
-    r"\b(?:firefox(?:\s+esr)?|esr)\s+(\d+(?:\.\d+)*)\b", re.IGNORECASE
-)
+_FIREFOX_VERSION = re.compile(r"\b(?:firefox(?:\s+esr)?|esr)\s+(\d+(?:\.\d+)*)\b", re.IGNORECASE)
 _BPM_PRODUCT_TERM = re.compile(r"\b(?:browser\s+policy\s+manager|bpm)\b", re.IGNORECASE)
 _MARKUP = re.compile(r"<[^>\n]{1,256}>")
 _CONTROL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
@@ -208,11 +206,15 @@ class ConservativeEvidenceMerger:
         )
         if _BPM_PRODUCT_TERM.search(external_text):
             return True
-        local_versions = {version.split(".", 1)[0] for version in _FIREFOX_VERSION.findall(local_text)}
+        local_versions = {
+            version.split(".", 1)[0] for version in _FIREFOX_VERSION.findall(local_text)
+        }
         external_versions = {
             version.split(".", 1)[0] for version in _FIREFOX_VERSION.findall(external_text)
         }
-        return bool(local_versions and external_versions and local_versions.isdisjoint(external_versions))
+        return bool(
+            local_versions and external_versions and local_versions.isdisjoint(external_versions)
+        )
 
     @staticmethod
     def _external_context(external: tuple[ExternalWebEvidence, ...]) -> str:
@@ -294,20 +296,15 @@ class MergedGenerationResponseValidator:
     def _answer(self, payload: dict[str, object], evidence: MergedEvidenceView) -> MergedAnswer:
         local_sections = payload["local_sections"]
         claims = payload["external_claims"]
-        if (
-            not isinstance(local_sections, list)
-            or not isinstance(claims, list)
-        ):
+        if not isinstance(local_sections, list) or not isinstance(claims, list):
             return MergedAnswer("abstain", "assistant_merged_output_invalid")
         local_text, local_ids = self._local_answer(local_sections, evidence.local_citations)
         resolved_local = _resolve_ids(local_ids, evidence.local_citations)
-        if (
-            not local_text.strip()
-            or resolved_local is None
-            or len(claims) > MAX_EXTERNAL_CLAIMS
-        ):
+        if not local_text.strip() or resolved_local is None or len(claims) > MAX_EXTERNAL_CLAIMS:
             return MergedAnswer("abstain", "assistant_merged_output_invalid")
-        external_by_id = {citation.citation_id: citation for citation in evidence.external_citations}
+        external_by_id = {
+            citation.citation_id: citation for citation in evidence.external_citations
+        }
         validated_claims: list[ExternalClaim] = []
         used_external_ids: set[str] = set()
         for claim in claims:
@@ -415,7 +412,11 @@ def _source_date(values: tuple[str, ...]) -> date | None:
 
 
 def _plain_text(value: str) -> bool:
-    return not _MARKUP.search(value) and not _CONTROL.search(value) and not contains_active_content(value)
+    return (
+        not _MARKUP.search(value)
+        and not _CONTROL.search(value)
+        and not contains_active_content(value)
+    )
 
 
 def _resolve_ids(
@@ -424,6 +425,8 @@ def _resolve_ids(
     if not citation_ids or len(set(citation_ids)) != len(citation_ids):
         return None
     by_id = {citation.citation_id: citation for citation in citations}
-    if len(by_id) != len(citations) or any(citation_id not in by_id for citation_id in citation_ids):
+    if len(by_id) != len(citations) or any(
+        citation_id not in by_id for citation_id in citation_ids
+    ):
         return None
     return tuple(by_id[citation_id] for citation_id in citation_ids)

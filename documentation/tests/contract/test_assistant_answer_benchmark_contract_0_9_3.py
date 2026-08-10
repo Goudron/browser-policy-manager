@@ -26,14 +26,23 @@ def test_m13_benchmark_defines_ten_local_and_ten_external_product_bounded_intent
     assert len(contract["external_questions"]) == 10
     assert len({item["id"] for item in contract["external_questions"]}) == 10
     assert all(item["source_domains"] for item in contract["external_questions"])
-    assert all(set(item["localized_questions"]) == {"en", "ru"} for item in contract["external_questions"])
+    assert all(
+        set(item["localized_questions"]) == {"en", "ru"} for item in contract["external_questions"]
+    )
     assert Counter(item["topic_class"] for item in contract["external_questions"]) == {
         "regulatory_requirements": 5,
         "browser_market": 2,
         "browser_news": 3,
     }
-    domains = {domain for item in contract["external_questions"] for domain in item["source_domains"]}
-    assert {"fstec.ru", "eur-lex.europa.eu", "pcisecuritystandards.org", "gs.statcounter.com"} <= domains
+    domains = {
+        domain for item in contract["external_questions"] for domain in item["source_domains"]
+    }
+    assert {
+        "fstec.ru",
+        "eur-lex.europa.eu",
+        "pcisecuritystandards.org",
+        "gs.statcounter.com",
+    } <= domains
     assert "M13-06A runner" in contract["prompt_localization"]
 
 

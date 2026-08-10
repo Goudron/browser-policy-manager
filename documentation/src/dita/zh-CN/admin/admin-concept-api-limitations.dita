@@ -5,12 +5,12 @@
   <shortdesc>BPM 清楚地记录了当前的限制，因此集成不会推断出未暴露的保证。</shortdesc>
   <conbody>
     <section id="a-security"><title>安全约束</title><p>当前 API 没有身份验证或授权层。 CORS 默认为 <codeph>*</codeph> 来源，除非部署设置覆盖它。文档不得暗示 API 令牌身份验证、OAuth、基于角色的访问控制、租户隔离或生产授权行为。</p></section>
-    <section id="a-versioning"><title>版本控制和兼容性</title><p>API 没有版本前缀、兼容性策略、弃用标头或媒体类型版本。集成应该固定他们测试的 BPM 版本并观察 <codeph>/openapi.json</codeph>、API 库存和发行说明，而不是假设有保证的向后兼容性。</p></section>
+    <section id="a-versioning"><title>版本控制和兼容性</title><p>API 没有版本前缀、兼容性策略、弃用标头或媒体类型版本。集成应该固定他们测试的 BPM 版本并观察 <codeph>/openapi.json</codeph>、API <uicontrol>库</uicontrol>存和发行说明，而不是假设有保证的向后兼容性。</p></section>
     <section id="a-concurrency"><title>并发性、幂等性和重试</title><p>只有 PATCH 通过可选的 <codeph>expected_revision</codeph> 支持乐观并发。创建、导入、删除、恢复、重置和导出不会公开 ETags、前提条件标头、幂等性密钥或重试合约。消费者必须设计自己的安全重试和重名恢复行为。</p></section>
     <section id="a-bulk-transactions"><title>批量和事务边界</title><p>BPM 不公开批量配置文件 CRUD 端点、批量导出端点、游标分页和多操作事务合约。 BPM 不会自动回滚失败的多步骤集成；集成产品拥有恢复排序和审计记录。</p></section>
     <section id="a-errors"><title>误差包络限制</title><p>错误响应不使用一种稳定版本化的信封。状态 <codeph>400</codeph>、<codeph>404</codeph>、<codeph>409</codeph>、<codeph>415</codeph>、<codeph>422</codeph> 和 <codeph>503</codeph> 可以携带不同的 <codeph>detail</codeph> 形状。消费者必须根据操作、状态和记录的体型进行分类。</p></section>
     <section id="a-exclusions"><title>排除和网页曲面</title><p>六个 OpenAPI <codeph>web</codeph> 操作是 HTML 产品路线，而不是稳定的机器集成 API。 <codeph>/i18n/{locale}.json</codeph>、<codeph>/favicon.ico</codeph>、<codeph>/static/*</codeph>、生成的架构 界面 和以下划线前缀的 Python 帮助程序不包含在集成操作主题中。</p></section>
-    <section id="a-health"><title>健康反应限制</title><p><codeph>/health</codeph> 和 <codeph>/health/ready</codeph> 仅公开紧凑状态字段。就绪情况不会报告每个依赖项的诊断、数据库详细信息、架构运行状况、文档门户状态或部署批准。操作监视器应将它们视为最小握手端点。</p></section>
+    <section id="a-health"><title>健康反应限制</title><p><codeph>/health</codeph> 和 <codeph>/health/ready</codeph> 仅公开紧凑状态字段。就绪情况不会报告每个依赖项的诊断、数据<uicontrol>库</uicontrol>详细信息、架构运行状况、文档门户状态或部署批准。操作监视器应将它们视为最小握手端点。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.admin-concept-api-conventions"/>

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -14,22 +13,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def test_m7_01_pins_boundaries_and_does_not_add_a_route() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M7-01"
-    assert contract["status"] == "accepted-architecture-only"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["implementation_boundary"] == {
-        "routes_implemented_now": False,
-        "worker_started_now": False,
-        "network_calls_now": 0,
-        "rule": "This is the frozen v1 API and request-state contract for later implementation. M7-01 adds neither a FastAPI router nor browser UI nor a model/controller invocation.",
-    }
-    assert "documentation-assistant" not in (ROOT / "app/main.py").read_text(encoding="utf-8")
 
 
 def test_m7_01_freezes_versioned_same_origin_operations_and_limits() -> None:

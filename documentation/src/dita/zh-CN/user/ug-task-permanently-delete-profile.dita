@@ -5,13 +5,13 @@
   <shortdesc>仅在确认不应保留活动或存档的配置文件后才将其删除。</shortdesc>
   <taskbody>
     <prereq><p>配置文件行可见，并且您已确认不再需要该配置文件。</p></prereq>
-    <context><p>永久删除是破坏性的库生命周期操作。当您需要可逆保留时，请先存档。</p></context>
+    <context><p>永久删除是破坏性的<uicontrol>库</uicontrol>生命周期操作。当您需要可逆保留时，请先存档。</p></context>
     <steps>
       <step><cmd>确认行名称、ID、架构、生命周期状态和更新时间。</cmd><info><p>预期结果：您可以将目标配置文件与类似命名的行区分开。</p></info></step>
-      <step><cmd>选择永久删除操作。</cmd><info><note type="warning">永久删除无法从库中恢复。</note></info></step>
-      <step><cmd>仅当提示指定所需配置文件时才完成确认。</cmd><info><p>如果任何行详细信息是意外的，则取消确认。</p></info></step>
+      <step><cmd>选择永久删除操作。</cmd><info><note type="warning">永久删除无法从<uicontrol>库</uicontrol>中恢复。</note></info></step>
+      <step><cmd>仅当提示指定所需配置文件时才完成确认。</cmd><info><p>如果任何行详细信息是意外的，则<uicontrol>取消</uicontrol>确认。</p></info></step>
     </steps>
-    <result><p>删除操作成功后，配置文件将从库中删除。</p></result>
+    <result><p>删除操作成功后，配置文件将从<uicontrol>库</uicontrol>中删除。</p></result>
     <postreq><p>恢复：如果删除失败，不要立即重复；刷新并使用故障排除主题检查状态。</p></postreq>
   </taskbody>
   <related-links>

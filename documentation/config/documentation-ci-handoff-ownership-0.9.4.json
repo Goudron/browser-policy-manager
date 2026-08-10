@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-0.9.4-documentation-ci-handoff-ownership",
+  "backlog_item": "BPM094-M11A-05",
+  "target_bpm_version": "0.9.4",
+  "status": "accepted",
+  "rule": "Every documentation check family has one primary execution owner. A later release handoff may consume its evidence, but it must not make a passing fast, scheduled, or Chromium lane appear to be a release result.",
+  "failure_classes": [
+    "authoring-source",
+    "deterministic-ci",
+    "scheduled-review",
+    "browser-runtime",
+    "binary-delivery"
+  ],
+  "lanes": [
+    {
+      "id": "fast-authoring",
+      "check_family": "changed source, map, locale peer, fixture, or configuration",
+      "primary_owner": "manual documentation author",
+      "owner_kind": "manual-authoring",
+      "failure_class": "authoring-source",
+      "timing": "before requesting review for an ordinary scoped documentation edit; bounded to 30 seconds",
+      "command": "make docs-fast-check DOCS_CHANGED='<changed documentation paths>'",
+      "progress_evidence": "stdout names the selected scope and affected locale/guide/search/output area, lists Skipped release-only checks, and prints make docs-release-handoff as escalation",
+      "artifacts": ["documentation/reports/diagnostics/ (failure only, ignored)"],
+      "escalation": "make docs-release-handoff when the release scope or a release-only risk is affected",
+      "excluded_contours": ["Chromium", "PDF", "package", "reproducibility", "snapshot", "live Firefox"]
+    },
+    {
+      "id": "required-ci-non-browser",
+      "check_family": "deterministic documentation tooling coverage and non-browser unit/contract partition",
+      "primary_owner": "CI documentation-coverage job",
+      "owner_kind": "required-pull-request-ci",
+      "failure_class": "deterministic-ci",
+      "timing": "every pull request and push after static analysis",
+      "command": "make docs-coverage && make test-docs",
+      "progress_evidence": "the documentation-coverage job log and documentation-coverage-artifacts upload",
+      "artifacts": ["documentation/reports/coverage/"],
+      "escalation": "rerun the focused test named by pytest; use the release handoff only for release scope",
+      "excluded_contours": ["Chromium", "PDF", "package", "reproducibility", "snapshot-only audit", "live Firefox"]
+    },
+    {
+      "id": "scheduled-audit",
+      "check_family": "snapshot, index, editorial, localization, and review-record drift audits",
+      "primary_owner": "documentation-audits scheduled workflow",
+      "owner_kind": "scheduled-ci",
+      "failure_class": "scheduled-review",
+      "timing": "weekly and by manual workflow dispatch; never an ordinary prose-edit prerequisite",
+      "command": "documentation-audits workflow: make docs-snapshot plus its declared docs_contract audit selection",
+      "progress_evidence": "workflow phase log and the documentation-scheduled-audit-evidence artifact",
+      "artifacts": ["documentation/reports/", "documentation/PROJECT_SNAPSHOT.generated.md (source-derived regeneration only)"],
+      "escalation": "classify the failing audit against its declared owner; run make docs-release-handoff only when the finding affects a release candidate",
+      "excluded_contours": ["ordinary authoring loop", "Chromium", "PDF", "package", "reproducibility", "live Firefox"]
+    },
+    {
+      "id": "chromium-browser",
+      "check_family": "installed portal interaction, responsive rendering, assets, search shell, and /docs coexistence",
+      "primary_owner": "CI chromium-tests job",
+      "owner_kind": "required-pull-request-ci",
+      "failure_class": "browser-runtime",
+      "timing": "every pull request and push after static analysis; immediately for a portal/UI risk",
+      "command": "make test-browser && make test-docs-browser",
+      "progress_evidence": "chromium-tests log with matching browser/driver paths and chromium-failure-artifacts upload",
+      "artifacts": ["artifacts/browser-failures/"],
+      "escalation": "rerun make test-docs-browser with the captured failure artifact; do not substitute a source-only check",
+      "excluded_contours": ["PDF", "package", "reproducibility", "snapshot", "live Firefox"]
+    },
+    {
+      "id": "manual-release-handoff",
+      "check_family": "six-locale release validation, binary PDF build/verification/delivery, reproducibility, package verification, snapshot, and local install proof",
+      "primary_owner": "manual documentation release manager",
+      "owner_kind": "manual-release",
+      "failure_class": "binary-delivery",
+      "timing": "for every documentation release candidate and any change affecting a guide map, localization, presentation, package, PDF, or delivery boundary",
+      "command": "make docs-release-handoff",
+      "progress_evidence": "truthful phase/completed/total/terminal stdout from the owned build, PDF, delivery, reproducibility, package, and install operations",
+      "artifacts": ["documentation/build/pdf/", "documentation/dist/", "documentation/reports/"],
+      "escalation": "the release manager owns candidate disposition; run make test-release separately for the general BPM release suite",
+      "excluded_contours": ["ordinary scoped prose edits", "live Firefox"]
+    }
+  ],
+  "nonoverlap": {
+    "required_pr_ci_workflows": {
+      "documentation-coverage": ["required-ci-non-browser"],
+      "chromium-tests": ["chromium-browser"]
+    },
+    "manual_or_scheduled_workflows": {
+      "documentation-audits": ["scheduled-audit"],
+      "docs-release-handoff": ["manual-release-handoff"],
+      "docs-fast-check": ["fast-authoring"]
+    },
+    "rule": "Required pull-request CI invokes each documentation command family once: documentation-coverage owns non-browser deterministic work and chromium-tests owns browser work. docs-release-handoff, PDF, reproducibility, and live Firefox are intentionally outside ordinary pull-request CI."
+  }
+}

@@ -82,9 +82,7 @@ LOCALE_MATRIX: tuple[LocaleDefinition, ...] = (
 )
 
 TARGET_UI_LOCALES = tuple(locale.code for locale in LOCALE_MATRIX)
-ACTIVE_CATALOG_LOCALES = tuple(
-    locale.code for locale in LOCALE_MATRIX if locale.has_catalog
-)
+ACTIVE_CATALOG_LOCALES = tuple(locale.code for locale in LOCALE_MATRIX if locale.has_catalog)
 LOCALE_FALLBACKS = {locale.code: locale.fallback for locale in LOCALE_MATRIX}
 LOCALE_BROWSER_LANGUAGE_MATCHES = {
     locale.code: locale.browser_language_matches for locale in LOCALE_MATRIX
@@ -113,8 +111,7 @@ def resolve_target_locale_code(language_tag: str) -> str:
 
     for locale in LOCALE_MATRIX:
         if any(
-            _language_matches_rule(language_tag, rule)
-            for rule in locale.browser_language_matches
+            _language_matches_rule(language_tag, rule) for rule in locale.browser_language_matches
         ):
             return locale.code
     return DEFAULT_LOCALE
@@ -132,9 +129,7 @@ def resolve_active_catalog_locale_code(
         return target_locale
 
     seen_locales = {target_locale}
-    fallback_locale = _LOCALE_BY_CODE.get(
-        target_locale, _LOCALE_BY_CODE[DEFAULT_LOCALE]
-    ).fallback
+    fallback_locale = _LOCALE_BY_CODE.get(target_locale, _LOCALE_BY_CODE[DEFAULT_LOCALE]).fallback
     while fallback_locale and fallback_locale not in seen_locales:
         if fallback_locale in active_locales:
             return fallback_locale

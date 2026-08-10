@@ -19,26 +19,29 @@ These keep theme selection, Monaco bundle wiring, and initial locale bootstrappi
 - Update only after an intentional vendor rebuild with
   `make rebuild-frontend-vendor`
 
-`js-yaml.js`
-- Upstream package: `js-yaml`
-- Version: `5.2.2`
-- Source URL: `https://registry.npmjs.org/js-yaml/-/js-yaml-5.2.2.tgz`
-- License file: `js-yaml.LICENSE`
-
 `profiles_monaco.js`
 - Upstream package: `monaco-editor`
-- Version: `0.52.0`
+- Version: `0.56.0`
+- Source URL: `https://registry.npmjs.org/monaco-editor/-/monaco-editor-0.56.0.tgz`
 - Built from: `monaco-editor/esm`
-- Related outputs: `profiles_monaco.css`, `monaco-editor.worker.js`, `monaco-json.worker.js`
-- License file: `monaco.LICENSE`
+- Related outputs: `profiles_monaco.css`, `monaco-editor.worker.js`, `monaco-json.worker.js`, and
+  `vendor/monaco-assets/codicon-KP4OV2OO.ttf`
+- License files: `monaco.LICENSE` and `monaco.ThirdPartyNotices.txt`
+
+Monaco `0.56.0` bundles these audited upstream implementations:
+- `DOMPurify` `3.4.13` (npm override of Monaco's vulnerable `3.4.8` dependency and ESM source),
+  with `dompurify.LICENSE-APACHE` and `dompurify.LICENSE-MPL`
+- `marked` `14.0.0`, with `marked.LICENSE`
+
+`tools/build_monaco_bundle.sh` overlays the resolved DOMPurify `3.4.13` ESM source into Monaco's
+bundled source tree before esbuild runs. Vendor verification requires the resulting browser bundle
+to identify `DOMPurify 3.4.13`; a clean npm audit alone is not accepted as bundle evidence.
 
 Update procedure:
 1. Download the pinned upstream browser build for the new version.
 2. Update `app/static/vendor/profiles_tailwind.css` if new `/profiles` utility classes are introduced.
-3. Replace `app/static/vendor/js-yaml.js`.
-4. Replace `app/static/vendor/js-yaml.LICENSE`.
-5. Update `package.json` and `package-lock.json` only for intentional dependency changes.
-6. Replace `app/static/vendor/monaco.LICENSE` if the upstream version changes.
-7. Run `make rebuild-frontend-vendor`.
-8. Keep `app/templates/profiles.html` pointing at local assets only.
-9. Run `make verify-frontend-vendor`, `ruff check .`, `mypy app`, and `pytest -q`.
+3. Update `package.json` and `package-lock.json` only for intentional dependency changes.
+4. Replace `app/static/vendor/monaco.LICENSE` if the upstream version changes.
+5. Run `make rebuild-frontend-vendor`.
+6. Keep `app/templates/profiles.html` pointing at local assets only.
+7. Run `make verify-frontend-vendor`, `ruff check .`, `mypy app`, and `pytest -q`.

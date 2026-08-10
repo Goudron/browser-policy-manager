@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "report_schema_version": 1,
+  "purpose": "BPM 0.9.4 M2-04 comparable performance guardrail; values are reviewed 2026-08-10 M12-07 fresh-run references, not the historical 0.9.3 single-request table.",
+  "required_procedure": {
+    "fixture": "fresh FastAPI app + one fixed profile in in-memory SQLite",
+    "fixture_contract": {
+      "storage": "fresh in-memory SQLite",
+      "profiles": 1,
+      "profile_name": "Performance baseline fixture",
+      "profile_schema_version": "release-153",
+      "profile_flags": {
+        "DisableTelemetry": true
+      }
+    },
+    "warmups": 1,
+    "repetitions": 3,
+    "statistic": "median wall-clock response time"
+  },
+  "current_guardrail": {
+    "variance_rule": "route and layer wall-clock ceilings are reference median * 1.25 + 0.5 seconds; response bytes, fixture, query, validation, collected-test identity, source hashes, and required work are exact.",
+    "routes": {
+      "/profiles": {"max_median_wall_seconds": 8.720, "max_median_response_bytes": 228240, "max_query_operations": 0, "max_validation_calls": 0},
+      "/profiles/compare": {"max_median_wall_seconds": 10.842, "max_median_response_bytes": 302479, "max_query_operations": 0, "max_validation_calls": 0},
+      "/profiles/new": {"max_median_wall_seconds": 8.191, "max_median_response_bytes": 1309541, "max_query_operations": 0, "max_validation_calls": 0},
+      "/profiles/{id}/edit": {"max_median_wall_seconds": 7.722, "max_median_response_bytes": 1310111, "max_query_operations": 1, "max_validation_calls": 1},
+      "/profiles/{id}/settings": {"max_median_wall_seconds": 8.465, "max_median_response_bytes": 1260823, "max_query_operations": 1, "max_validation_calls": 1},
+      "/profiles/{id}/json": {"max_median_wall_seconds": 8.039, "max_median_response_bytes": 1124748, "max_query_operations": 1, "max_validation_calls": 1}
+    },
+    "test_layers": {
+      "unit": {"minimum_collected_tests": 8, "max_wall_seconds": 11.628, "source_sha256": {"tests/unit/profiles/test_profiles_core_unit.py": "e6fe2a594bf3d72b8d1de7d70241434e8276482ee6bedd310a09bccc92886218"}},
+      "api": {"minimum_collected_tests": 3, "max_wall_seconds": 14.155, "source_sha256": {"tests/integration/api/test_profiles_api.py": "f8ddb6721facabdd3a2baff2802fde243634ff9c36d9b2229ee869b22b0dfc4e"}},
+      "ui_contract": {"minimum_collected_tests": 4, "max_wall_seconds": 24.054, "source_sha256": {"tests/contract/ui/profiles/test_semantic_characterization.py": "65776c455a89410eeb596eae9bfd7e4d4a22a5294a9aa733598a6d38c58bbc17"}}
+    },
+    "max_selected_test_layer_seconds": 49.837,
+    "owned_sizes": {
+      "application": {"max_files": 282, "max_bytes": 17902732},
+      "profile_static": {"max_files": 56, "max_bytes": 1744105},
+      "tests": {"max_files": 241, "max_bytes": 2036700},
+      "tools": {"max_files": 69, "max_bytes": 1012911}
+    },
+    "package_footprint": {"max_application_source_files": 1531, "max_application_source_bytes": 62695972},
+    "max_cyclomatic_estimate": 90
+  },
+  "release_targets": {
+    "max_route_median_wall_seconds": 1.0,
+    "max_selected_test_layer_seconds": 90.0,
+    "route_response_bytes": {
+      "/profiles": 228240,
+      "/profiles/compare": 302479,
+      "/profiles/new": 916679,
+      "/profiles/{id}/edit": 917078,
+      "/profiles/{id}/settings": 882576,
+      "/profiles/{id}/json": 787324
+    },
+    "minimum_coverage_percent": 100
+  },
+  "coverage_policy": {
+    "path": "Makefile",
+    "current_minimum_percent": 100,
+    "release_minimum_percent": 100
+  }
+}

@@ -4,14 +4,14 @@
   <title>Bibliothekszeilen sortieren</title>
   <shortdesc>Sortieren Sie gespeicherte Profile nach Aktualisierungszeit, Erstellungszeit, Name, Schemakanal oder ID in aufsteigender oder absteigender Reihenfolge.</shortdesc>
   <taskbody>
-    <prereq><p>Die Bibliothek ist geöffnet und enthält mindestens zwei sichtbare Profilzeilen.</p></prereq>
+    <prereq><p>Die <uicontrol>Bibliothek</uicontrol> ist geöffnet und enthält mindestens zwei sichtbare Profilzeilen.</p></prereq>
     <context><p>Durch die Sortierung wird die Zeilenreihenfolge im aktuellen Such- und Filterergebnis geändert.</p></context>
     <steps>
       <step><cmd>Wählen Sie das Feld aus, nach dem sortiert werden soll.</cmd><info><p>Erwartetes Ergebnis: Zeilen werden nach Aktualisierungszeit, Erstellungszeit, Name, Schema oder ID neu angeordnet.</p></info></step>
       <step><cmd>Wählen Sie die Auftragsrichtung.</cmd><info><p>Verwenden Sie die absteigende Aktualisierungszeit für aktuelle Arbeiten oder den aufsteigenden Namen für die alphabetische Suche.</p></info></step>
       <step><cmd>Überprüfen Sie die gefilterten und Gesamtzahlen, bevor Sie auf die erste Zeile reagieren.</cmd><info><note type="warning">Beim Sortieren werden keine Filter entfernt. Eine Zeile kann weiterhin durch Suche oder Filter ausgeblendet werden.</note></info></step>
     </steps>
-    <result><p>Die sichtbaren Bibliothekszeilen werden in der ausgewählten Reihenfolge angezeigt.</p></result>
+    <result><p>Die sichtbaren <uicontrol>Bibliothek</uicontrol>szeilen werden in der ausgewählten Reihenfolge angezeigt.</p></result>
     <postreq><p>Wiederherstellung: Wechseln Sie zurück zur Sortierung nach aktualisierter Zeit, wenn die Zeilenreihenfolge nicht mehr mit Ihrem Arbeitskontext übereinstimmt.</p></postreq>
   </taskbody>
   <related-links>

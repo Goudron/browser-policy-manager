@@ -61,5 +61,5 @@ search remains unchanged and independent.
 
 The normative machine-readable contract and tests are
 `documentation/config/local-chat-model-installation-contract-0.9.3.json`,
-`tests/test_local_model_installation.py`, and
+`tests/integration/ai/core/test_local_model_installation.py`, and
 `documentation/tests/contract/test_local_chat_model_installation_contract_0_9_3.py`.

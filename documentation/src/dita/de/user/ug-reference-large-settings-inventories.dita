@@ -2,13 +2,13 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-large-settings-inventories" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Große Einstellungsbestände</title>
-  <shortdesc>Verwenden Sie begrenztes Listenverhalten, Suche, Filter und Kategorien, wenn Alle Einstellungen einen großen Richtlinien- und Präferenzbestand enthält.</shortdesc>
+  <shortdesc>Verwenden Sie begrenztes Listenverhalten, Suche, Filter und Kategorien, wenn <uicontrol>Alle Einstellungen</uicontrol> einen großen Richtlinien- und Präferenzbestand enthält.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>Übersicht</title><p>Alle Einstellungen kann viele schemagestützte Richtlinien und bekannte Einstellungen offenlegen. Begrenzte Listen halten die Schnittstelle nutzbar und machen die nächste einschränkende Aktion explizit.</p></section>
-    <section id="a-list-budget"><title>Listenbudget</title><p>Alle Einstellungen zeigt möglicherweise eine begrenzte Teilmenge, Anzahl oder Fortsetzungsaktion an, anstatt jede Zeile auf einmal darzustellen.</p></section>
+    <section id="a-overview"><title>Übersicht</title><p><uicontrol>Alle Einstellungen</uicontrol> kann viele schemagestützte Richtlinien und bekannte Einstellungen offenlegen. Begrenzte Listen halten die Schnittstelle nutzbar und machen die nächste einschränkende Aktion explizit.</p></section>
+    <section id="a-list-budget"><title>Listenbudget</title><p><uicontrol>Alle Einstellungen</uicontrol> zeigt möglicherweise eine begrenzte Teilmenge, Anzahl oder Fortsetzungsaktion an, anstatt jede Zeile auf einmal darzustellen.</p></section>
     <section id="a-narrowing-tools"><title>Eingrenzungswerkzeuge</title><p>Suche, Kategorienavigation, Quellfilter und Statusfilter sind die unterstützten Möglichkeiten, einen großen Bestand zu reduzieren.</p></section>
-    <section id="a-performance-boundary"><title>Leistungsgrenze</title><p>Die Handhabung großer Bestände stellt eine UI-Grenze dar und ist kein Signal dafür, dass Einstellungen im Profil oder Katalog fehlen.</p></section>
-    <section id="a-recovery"><title>Wiederherstellung</title><p>Wenn die erwartete Zeile nicht sichtbar ist, suchen Sie nach genau ID, löschen Sie die Filter oder wechseln Sie zwischen „Konfiguriert“ und „Katalog“.</p></section>
+    <section id="a-performance-boundary"><title>Leistungsgrenze</title><p>Die Handhabung großer Bestände stellt eine UI-Grenze dar und ist kein Signal dafür, dass Einstellungen im Profil oder <uicontrol>Katalog</uicontrol> fehlen.</p></section>
+    <section id="a-recovery"><title>Wiederherstellung</title><p>Wenn die erwartete Zeile nicht sichtbar ist, suchen Sie nach genau ID, löschen Sie die Filter oder wechseln Sie zwischen „<uicontrol>Konfiguriert</uicontrol>“ und „<uicontrol>Katalog</uicontrol>“.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-browse-settings-catalog"/>

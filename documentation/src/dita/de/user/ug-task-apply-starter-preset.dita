@@ -5,7 +5,7 @@
   <shortdesc>Verwenden Sie eine Startervoreinstellung, um vor der detaillierten Bearbeitung allgemeine Firefox-Richtlinienoptionen festzulegen.</shortdesc>
   <taskbody>
     <prereq><p>In Schritt 1 ist ein Profilentwurf geöffnet.</p></prereq>
-    <context><p>Starter-Voreinstellungen bieten eine bekannte Basislinie, die Sie noch in Geführter Editor, Alle Einstellungen oder JSON-Editor ändern können.</p></context>
+    <context><p>Starter-Voreinstellungen bieten eine bekannte Basislinie, die Sie noch in <uicontrol>Geführter Editor</uicontrol>, <uicontrol>Alle Einstellungen</uicontrol> oder <uicontrol>JSON-Editor</uicontrol> ändern können.</p></context>
     <steps>
       <step><cmd>Öffnen Sie in Schritt 1 den Bereich für die Startervoreinstellung.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Vergleichen Sie die verfügbaren Voreinstellungen mit dem Profilszenario.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>

@@ -2,15 +2,15 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-advanced-schema-controls" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Usar los controles de esquema avanzados</title>
-  <shortdesc>Acceda a controles avanzados de preferencias y esquemas desde Todos los ajustes sin tratar a Editor guiado como el editor completo.</shortdesc>
+  <shortdesc>Acceda a controles avanzados de preferencias y esquemas desde <uicontrol>Todos los ajustes</uicontrol> sin tratar a <uicontrol>Editor guiado</uicontrol> como el editor completo.</shortdesc>
   <taskbody>
-    <prereq><p>Abra Todos los ajustes en Catálogo.</p></prereq>
-    <context><p>Los controles avanzados siguen siendo deliberados. Todos los ajustes es el superconjunto de políticas y preferencias respaldadas por esquemas que no son controles guiados de primera clase.</p></context>
+    <prereq><p>Abra <uicontrol>Todos los ajustes</uicontrol> en <uicontrol>Catálogo</uicontrol>.</p></prereq>
+    <context><p>Los controles avanzados siguen siendo deliberados. <uicontrol>Todos los ajustes</uicontrol> es el superconjunto de políticas y preferencias respaldadas por esquemas que no son controles guiados de primera clase.</p></context>
     <steps>
-      <step><cmd>Cambie a Catálogo y abra el esquema avanzado o la divulgación de preferencias.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Revise si el control está cubierto por guía, solo para todas las configuraciones, sin formato, obsoleto o dependiente del esquema.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Edite solo el control avanzado necesario para el objetivo del perfil.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Valide y guarde antes de regresar a Guiado, JSON o la Biblioteca.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
+      <step><cmd>Cambie a <uicontrol>Catálogo</uicontrol> y abra el esquema avanzado o la divulgación de preferencias.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Revise si el control está cubierto por guía, solo para todas las configuraciones, sin formato, obsoleto o dependiente del esquema.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Edite solo el control avanzado necesario para el objetivo del perfil.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Valide y guarde antes de regresar a Guiado, JSON o la <uicontrol>Biblioteca</uicontrol>.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
     <result><p>La configuración avanzada se alcanza y cambia deliberadamente sin editores predeterminados duplicados.</p></result>
     <postreq><p>Recuperación: si el control no es compatible con el esquema seleccionado, déjelo sin cambios y documente el límite del esquema.</p></postreq>

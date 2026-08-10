@@ -13,26 +13,29 @@ import threading
 import time
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, replace
-from typing import Protocol
+from importlib import import_module
+from typing import TYPE_CHECKING, Protocol
 
-from app.documentation.conversation import ConversationRequest, WebMode
-from app.documentation.conversation_context import (
-    ConversationContextStore,
-    ConversationContextUnavailable,
-)
-from app.documentation.conversation_diagnostics import AssistantDiagnosticsService
-from app.documentation.conversation_stream import (
-    REQUEST_TIMEOUT_SECONDS,
+from app.documentation.assistant_contracts import (
     ConversationAdmission,
-    ConversationStreamController,
+    ConversationRequest,
     ConversationStreamEvent,
+    ConversationTimePreview,
+    WebMode,
 )
-from app.documentation.response_timing import ConversationTimePreview
 from app.documentation.training_notice import training_notice
+
+if TYPE_CHECKING:
+    from app.documentation.conversation_context import ConversationContextStore
+    from app.documentation.conversation_diagnostics import AssistantDiagnosticsService
+    from app.documentation.conversation_stream import ConversationStreamController
 
 STREAM_POLL_SECONDS = 0.05
 STREAM_GRACE_SECONDS = 5.0
 WEB_TAB_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{20,64}$")
+TRAINING_REQUEST_RETENTION_SECONDS = 15 * 60.0
+MAX_TRAINING_REQUESTS = 32
+MAX_ASSISTANT_CONTEXT_SESSIONS = 32
 
 
 @dataclass(frozen=True)
@@ -67,14 +70,21 @@ class AssistantWebModeStatus:
     state_epoch: int = 0
 
 
+@dataclass(frozen=True)
+class _TrainingRequest:
+    session_id: str
+    locale: str
+    created_at: float
+
+
 class WebModeStore(Protocol):
     def status(self, *, session_id: str, locale: str) -> object: ...
 
-    def set_enabled(
-        self, *, session_id: str, locale: str, enabled: bool
-    ) -> object: ...
+    def set_enabled(self, *, session_id: str, locale: str, enabled: bool) -> object: ...
 
     def is_enabled(self, *, session_id: str, locale: str) -> bool: ...
+
+    def clear_all(self) -> int: ...
 
 
 class DocumentationAssistantService(Protocol):
@@ -115,9 +125,20 @@ class TrainingDocumentationAssistantService:
     opaque request record exists only long enough for the browser to read its final event.
     """
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        *,
+        request_retention_seconds: float = TRAINING_REQUEST_RETENTION_SECONDS,
+        max_requests: int = MAX_TRAINING_REQUESTS,
+        clock: Callable[[], float] = time.monotonic,
+    ) -> None:
+        if request_retention_seconds <= 0 or max_requests <= 0:
+            raise ValueError("training request retention bounds must be positive")
         self._lock = threading.RLock()
-        self._requests: dict[str, tuple[str, str]] = {}
+        self._request_retention_seconds = request_retention_seconds
+        self._max_requests = max_requests
+        self._clock = clock
+        self._requests: dict[str, _TrainingRequest] = {}
 
     def status(self, *, locale: str, session_id: str) -> AssistantStatus:
         del session_id
@@ -135,7 +156,10 @@ class TrainingDocumentationAssistantService:
     def ask(self, *, request: ConversationRequest, session_id: str) -> ConversationAdmission:
         request_id = secrets.token_urlsafe(24)
         with self._lock:
-            self._requests[request_id] = (session_id, request.locale)
+            self._clear_expired_locked()
+            while len(self._requests) >= self._max_requests:
+                self._requests.pop(next(iter(self._requests)))
+            self._requests[request_id] = _TrainingRequest(session_id, request.locale, self._clock())
         return ConversationAdmission(
             request_id,
             "accepted",
@@ -165,10 +189,11 @@ class TrainingDocumentationAssistantService:
         self, *, request_id: str, session_id: str
     ) -> Iterable[ConversationStreamEvent] | None:
         with self._lock:
+            self._clear_expired_locked()
             owner = self._requests.get(request_id)
-        if owner is None or owner[0] != session_id:
+        if owner is None or owner.session_id != session_id:
             return None
-        locale = owner[1]
+        locale = owner.locale
         return (
             ConversationStreamEvent(
                 "accepted",
@@ -194,22 +219,42 @@ class TrainingDocumentationAssistantService:
 
     def cancel(self, *, request_id: str, session_id: str) -> bool | None:
         with self._lock:
+            self._clear_expired_locked()
             owner = self._requests.get(request_id)
-        return owner is not None and owner[0] == session_id
+        return owner is not None and owner.session_id == session_id
 
     def clear(
         self, *, session_id: str, locale: str | None = None, tab_id: str | None = None
     ) -> bool:
         del locale, tab_id
         with self._lock:
+            self._clear_expired_locked()
             for request_id, owner in tuple(self._requests.items()):
-                if owner[0] == session_id:
+                if owner.session_id == session_id:
                     del self._requests[request_id]
         return True
 
     def source(self, *, request_id: str, source_id: str, session_id: str) -> AssistantSource | None:
         del request_id, source_id, session_id
         return None
+
+    def shutdown(self) -> int:
+        """Discard only opaque, short-lived request ownership on application shutdown."""
+
+        with self._lock:
+            count = len(self._requests)
+            self._requests.clear()
+            return count
+
+    def _clear_expired_locked(self) -> None:
+        cutoff = self._clock() - self._request_retention_seconds
+        expired = [
+            request_id
+            for request_id, record in self._requests.items()
+            if record.created_at <= cutoff
+        ]
+        for request_id in expired:
+            del self._requests[request_id]
 
 
 CitationSourceResolver = Callable[[object], AssistantSource | None]
@@ -248,26 +293,36 @@ class ControllerDocumentationAssistantService:
     def status(self, *, locale: str, session_id: str) -> AssistantStatus:
         del session_id
         snapshot = self._diagnostics.status()
-        reason_code = "assistant_ready" if snapshot.assistant_ready else f"assistant_{snapshot.state}"
+        reason_code = (
+            "assistant_ready" if snapshot.assistant_ready else f"assistant_{snapshot.state}"
+        )
         return AssistantStatus(
             state=snapshot.state,
             assistant_ready=snapshot.assistant_ready,
             lexical_search_ready=snapshot.lexical_search_ready,
             locale=locale,
             message_key=reason_code,
-            action_key="assistant_chat_send" if snapshot.assistant_ready else "assistant_manage_model",
+            action_key=(
+                "assistant_chat_send" if snapshot.assistant_ready else "assistant_manage_model"
+            ),
             reason_code=reason_code,
         )
 
     def ask(self, *, request: ConversationRequest, session_id: str) -> ConversationAdmission:
         context_key = self._context_key(session_id, request.locale, request.web_tab_id)
         with self._lock:
+            self._prune_owned_state_locked()
             context_session = self._context_sessions.get(context_key)
             created_context = False
             if context_session is None:
-                context_session = self._context_store.create(
-                    locale=request.locale, bpm_version=self._bpm_version
-                )
+                if len(self._context_sessions) >= MAX_ASSISTANT_CONTEXT_SESSIONS:
+                    return ConversationAdmission(None, "error", "assistant_busy", 0)
+                try:
+                    context_session = self._context_store.create(
+                        locale=request.locale, bpm_version=self._bpm_version
+                    )
+                except _conversation_context_unavailable_type():
+                    return ConversationAdmission(None, "error", "assistant_busy", 0)
                 self._context_sessions[context_key] = context_session
                 created_context = True
         web_identity = self._web_mode_identity(session_id, request.web_tab_id)
@@ -275,9 +330,7 @@ class ControllerDocumentationAssistantService:
             "request_web"
             if self._web_mode_store is not None
             and web_identity is not None
-            and self._web_mode_store.is_enabled(
-                session_id=web_identity, locale=request.locale
-            )
+            and self._web_mode_store.is_enabled(session_id=web_identity, locale=request.locale)
             else "local_only"
         )
         try:
@@ -287,7 +340,7 @@ class ControllerDocumentationAssistantService:
                 bpm_version=self._bpm_version,
             )
             timing_context_characters = sum(len(turn.text) for turn in timing_context.turns)
-        except ConversationContextUnavailable:
+        except _conversation_context_unavailable_type():
             # Timing is advisory only.  A race with Clear must not prevent normal admission.
             timing_context_characters = 0
         admission = self._controller.submit(
@@ -307,6 +360,7 @@ class ControllerDocumentationAssistantService:
                 self._context_store.clear(context_session)
             return admission
         with self._lock:
+            self._prune_owned_state_locked()
             self._request_owners[admission.request_id] = (session_id, context_key[0])
         return admission
 
@@ -314,14 +368,10 @@ class ControllerDocumentationAssistantService:
         self, *, locale: str, session_id: str, tab_id: str | None = None
     ) -> AssistantWebModeStatus:
         if self._web_mode_store is None:
-            return AssistantWebModeStatus(
-                False, False, locale, "assistant_web_disabled", 0
-            )
+            return AssistantWebModeStatus(False, False, locale, "assistant_web_disabled", 0)
         identity = self._web_mode_identity(session_id, tab_id)
         if identity is None:
-            return AssistantWebModeStatus(
-                False, False, locale, "assistant_web_mode_invalid", 0
-            )
+            return AssistantWebModeStatus(False, False, locale, "assistant_web_mode_invalid", 0)
         return self._safe_web_mode_status(
             self._web_mode_store.status(session_id=identity, locale=locale), locale
         )
@@ -335,29 +385,25 @@ class ControllerDocumentationAssistantService:
         tab_id: str | None = None,
     ) -> AssistantWebModeStatus:
         if self._web_mode_store is None:
-            return AssistantWebModeStatus(
-                False, False, locale, "assistant_web_disabled", 0
-            )
+            return AssistantWebModeStatus(False, False, locale, "assistant_web_disabled", 0)
         identity = self._web_mode_identity(session_id, tab_id)
         if identity is None:
-            return AssistantWebModeStatus(
-                False, False, locale, "assistant_web_mode_invalid", 0
-            )
+            return AssistantWebModeStatus(False, False, locale, "assistant_web_mode_invalid", 0)
         return self._safe_web_mode_status(
-            self._web_mode_store.set_enabled(
-                session_id=identity, locale=locale, enabled=enabled
-            ),
+            self._web_mode_store.set_enabled(session_id=identity, locale=locale, enabled=enabled),
             locale,
         )
 
     def events(
         self, *, request_id: str, session_id: str
     ) -> Iterable[ConversationStreamEvent] | None:
+        self._prune_owned_state()
         if not self._owns(request_id, session_id):
             return None
         return self._stream(request_id)
 
     def cancel(self, *, request_id: str, session_id: str) -> bool | None:
+        self._prune_owned_state()
         if not self._owns(request_id, session_id):
             return None
         return self._controller.cancel(request_id)
@@ -371,6 +417,7 @@ class ControllerDocumentationAssistantService:
             self._context_key(session_id, locale, tab_id)[0] if locale is not None else None
         )
         with self._lock:
+            self._prune_owned_state_locked()
             request_ids = [
                 request_id
                 for request_id, (owner, request_context_owner) in self._request_owners.items()
@@ -395,9 +442,8 @@ class ControllerDocumentationAssistantService:
             self._context_store.clear(context_id)
         return True
 
-    def source(
-        self, *, request_id: str, source_id: str, session_id: str
-    ) -> AssistantSource | None:
+    def source(self, *, request_id: str, source_id: str, session_id: str) -> AssistantSource | None:
+        self._prune_owned_state()
         if not self._owns(request_id, session_id):
             return None
         citation = self._controller.source(request_id, source_id)
@@ -409,6 +455,19 @@ class ControllerDocumentationAssistantService:
         # The stream controller deliberately exposes an opaque per-request ID.  The resolver
         # works with the underlying citation and must not be allowed to substitute that ID.
         return replace(source, source_id=source_id)
+
+    def shutdown(self) -> None:
+        """Release controller-owned state without exposing request or conversation content."""
+
+        with self._lock:
+            self._request_owners.clear()
+            self._context_sessions.clear()
+        shutdown = getattr(self._controller, "shutdown", None)
+        if callable(shutdown):
+            shutdown()
+        self._context_store.clear_all()
+        if self._web_mode_store is not None:
+            self._web_mode_store.clear_all()
 
     @staticmethod
     def _safe_web_mode_status(value: object, locale: str) -> AssistantWebModeStatus:
@@ -424,9 +483,7 @@ class ControllerDocumentationAssistantService:
             or not isinstance(state_epoch, int)
             or state_epoch < 0
         ):
-            return AssistantWebModeStatus(
-                False, False, locale, "assistant_web_mode_unavailable", 0
-            )
+            return AssistantWebModeStatus(False, False, locale, "assistant_web_mode_unavailable", 0)
         return AssistantWebModeStatus(
             enabled and available,
             available,
@@ -444,9 +501,7 @@ class ControllerDocumentationAssistantService:
         return f"{session_id}.{tab_id}"
 
     @classmethod
-    def _context_key(
-        cls, session_id: str, locale: str, tab_id: str | None
-    ) -> tuple[str, str]:
+    def _context_key(cls, session_id: str, locale: str, tab_id: str | None) -> tuple[str, str]:
         """Bind dialogue memory to a browser tab when the UI supplied its opaque tab handle."""
 
         return (cls._web_mode_identity(session_id, tab_id) or session_id, locale)
@@ -456,17 +511,58 @@ class ControllerDocumentationAssistantService:
             owner = self._request_owners.get(request_id)
             return owner is not None and owner[0] == session_id
 
+    def _prune_owned_state(self) -> None:
+        with self._lock:
+            self._prune_owned_state_locked()
+
+    def _prune_owned_state_locked(self) -> None:
+        retains = getattr(self._controller, "retains", None)
+        if callable(retains):
+            self._request_owners = {
+                request_id: owner
+                for request_id, owner in self._request_owners.items()
+                if retains(request_id)
+            }
+        contains = getattr(self._context_store, "contains", None)
+        if callable(contains):
+            self._context_sessions = {
+                key: context_id
+                for key, context_id in self._context_sessions.items()
+                if contains(context_id)
+            }
+
     def _stream(self, request_id: str) -> Iterable[ConversationStreamEvent]:
-        deadline = time.monotonic() + REQUEST_TIMEOUT_SECONDS + STREAM_GRACE_SECONDS
+        deadline = time.monotonic() + _request_timeout_seconds() + STREAM_GRACE_SECONDS
         terminal = False
         try:
             while not terminal and time.monotonic() < deadline:
                 events = self._controller.poll(request_id)
                 for event in events:
                     yield event
-                    terminal = event.state in {"answer", "clarify", "abstain", "refuse", "cancelled", "error"}
+                    terminal = event.state in {
+                        "answer",
+                        "clarify",
+                        "abstain",
+                        "refuse",
+                        "cancelled",
+                        "error",
+                    }
                 if not terminal:
                     time.sleep(STREAM_POLL_SECONDS)
         finally:
             if not terminal:
                 self._controller.disconnect(request_id)
+
+
+def _conversation_context_unavailable_type() -> type[RuntimeError]:
+    """Load the incubation controller's exception only when that controller is exercised."""
+
+    module = import_module("app.documentation.conversation_context")
+    return module.ConversationContextUnavailable
+
+
+def _request_timeout_seconds() -> float:
+    """Read the optional stream controller's timeout without importing it in release assembly."""
+
+    module = import_module("app.documentation.conversation_stream")
+    return module.REQUEST_TIMEOUT_SECONDS

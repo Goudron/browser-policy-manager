@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-browse-settings-catalog" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Explorar el catálogo de configuración</title>
-  <shortdesc>Utilice Catálogo para examinar todas las políticas admitidas y las preferencias administradas conocidas para el esquema seleccionado.</shortdesc>
+  <shortdesc>Utilice <uicontrol>Catálogo</uicontrol> para examinar todas las políticas admitidas y las preferencias administradas conocidas para el esquema seleccionado.</shortdesc>
   <taskbody>
-    <prereq><p>Abra un perfil guardado en Todos los ajustes.</p></prereq>
-    <context><p>Catálogo es el inventario visual completo. Incluye configuraciones configuradas y disponibles al mismo tiempo que mantiene controles avanzados detrás de las divulgaciones deliberadas.</p></context>
+    <prereq><p>Abra un perfil guardado en <uicontrol>Todos los ajustes</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Catálogo</uicontrol> es el inventario visual completo. Incluye configuraciones configuradas y disponibles al mismo tiempo que mantiene controles avanzados detrás de las divulgaciones deliberadas.</p></context>
     <steps>
-      <step><cmd>Cambiar a Catálogo.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Explore categorías para políticas admitidas y Preferencias gestionadas conocidas.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Utilice tarjetas de categorías o busque para limitar el inventario.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Cambiar a <uicontrol>Catálogo</uicontrol>.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Explore categorías para políticas admitidas y <uicontrol>Preferencias gestionadas</uicontrol> conocidas.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Utilice tarjetas de categorías o busque para limitar el inventario.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
       <step><cmd>Seleccione una configuración antes de aplicar, editar o restablecer un valor.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
     <result><p>Puede encontrar políticas admitidas y preferencias conocidas sin utilizar JSON sin formato primero.</p></result>

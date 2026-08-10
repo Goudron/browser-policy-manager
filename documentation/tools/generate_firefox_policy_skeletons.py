@@ -13,7 +13,9 @@ from typing import Any
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
-DEFAULT_INVENTORY = REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+DEFAULT_INVENTORY = (
+    REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+)
 DEFAULT_MODEL = DOCUMENTATION_ROOT / "config/firefox-policy-topic-model-0.9.0.json"
 DEFAULT_OUTPUT = DOCUMENTATION_ROOT / "src/generated/firefox"
 DEFAULT_SCHEMA_ROOT = REPOSITORY_ROOT / "app/schemas/policies"
@@ -55,10 +57,7 @@ def _display_path(path: Path) -> str:
 def _escape(value: object) -> str:
     text = str(value)
     return (
-        text.replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace('"', "&quot;")
+        text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
     )
 
 
@@ -74,7 +73,10 @@ def _policy_sort_key(policy: dict[str, Any]) -> tuple[str, str]:
 def _existing_regions(existing_text: str | None) -> dict[str, str]:
     if not existing_text:
         return {}
-    return {match.group("name"): match.group("body") for match in HAND_REGION_PATTERN.finditer(existing_text)}
+    return {
+        match.group("name"): match.group("body")
+        for match in HAND_REGION_PATTERN.finditer(existing_text)
+    }
 
 
 def _default_region(region: str, policy_id: str) -> str:
@@ -169,7 +171,9 @@ def _channel_support(policy: dict[str, Any]) -> dict[str, Any]:
 
 def _support_badge_text(policy: dict[str, Any], all_channels: dict[str, Any]) -> str:
     support = _channel_support(policy)
-    supported = ", ".join(_channel_display_name(channel_id) for channel_id in support["supported_channels"])
+    supported = ", ".join(
+        _channel_display_name(channel_id) for channel_id in support["supported_channels"]
+    )
     absent = [
         _channel_display_name(channel_id)
         for channel_id in sorted(all_channels, key=_channel_sort_key)
@@ -223,7 +227,9 @@ def _example_value(schema: dict[str, Any], depth: int = 0) -> Any:
         properties = schema.get("properties") or {}
         required = schema.get("required") or []
         keys = required or list(properties)[:1]
-        return {key: _example_value(properties[key], depth + 1) for key in keys if key in properties}
+        return {
+            key: _example_value(properties[key], depth + 1) for key in keys if key in properties
+        }
 
     return True
 
@@ -261,10 +267,10 @@ def _examples_dita(examples: list[dict[str, Any]]) -> str:
     entries = []
     for example in examples:
         entries.append(
-            "      <sectiondiv outputclass=\"schema-valid-example\">"
+            '      <sectiondiv outputclass="schema-valid-example">'
             f"<p><codeph>{_escape(example['channel'])}</codeph> schema-valid example "
             f"<codeph>{_escape(example['id'])}</codeph>:</p>"
-            f"<codeblock outputclass=\"language-json\">{_json_block(example['document'])}</codeblock>"
+            f'<codeblock outputclass="language-json">{_json_block(example["document"])}</codeblock>'
             "</sectiondiv>"
         )
     return "\n".join(entries)
@@ -287,7 +293,7 @@ def _channel_summary(policy: dict[str, Any], channels: dict[str, Any]) -> str:
         )
     if policy["channel_scope"] in {"partial", "release-only", "esr-only"}:
         items.append(
-            "        <li outputclass=\"channel-absence-note\">This policy is not available on every "
+            '        <li outputclass="channel-absence-note">This policy is not available on every '
             "supported BPM Firefox schema channel and must retain its channel-specific availability.</li>"
         )
     if policy["definition_changed_across_channels"]:
@@ -300,14 +306,20 @@ def _channel_conditional_notes(policy: dict[str, Any], all_channels: dict[str, A
     supported = set(policy["channels"])
     for channel_id in sorted(all_channels, key=_channel_sort_key):
         props = "firefox-release" if channel_id.startswith("release-") else "firefox-esr"
-        state = "supports this policy" if channel_id in supported else "does not include this policy in the bundled schema"
+        state = (
+            "supports this policy"
+            if channel_id in supported
+            else "does not include this policy in the bundled schema"
+        )
         notes.append(f'      <p props="{props}">{_channel_display_name(channel_id)} {state}.</p>')
     return "\n".join(notes)
 
 
 def _value_shape(policy: dict[str, Any], channels: dict[str, Any]) -> str:
     value_types = sorted({channel["value_type"] for channel in channels.values()})
-    preserve_unknown = any(channel["ui"]["preserve_unknown_fields"] for channel in channels.values())
+    preserve_unknown = any(
+        channel["ui"]["preserve_unknown_fields"] for channel in channels.values()
+    )
     return (
         f"      <p>Schema value type: <codeph>{_escape(', '.join(value_types))}</codeph>. "
         f"Unknown nested fields preserved by BPM UI metadata: "
@@ -342,8 +354,7 @@ def _provenance(policy: dict[str, Any], inventory: dict[str, Any]) -> str:
         f"        <li>Generated for BPM: <codeph>{_escape(inventory['generated_for_bpm'])}</codeph>.</li>",
     ]
     source_records = {
-        inventory["channels"][channel_id]["schema_source"]
-        for channel_id in policy["channels"]
+        inventory["channels"][channel_id]["schema_source"] for channel_id in policy["channels"]
     }
     for source in sorted(source_records):
         metadata = _source_metadata(source)
@@ -509,11 +520,15 @@ def _channel_differences_content(
     inventory_path: Path,
     output_root: Path,
 ) -> str:
-    release_only = [policy["policy_id"] for policy in policies if policy["channel_scope"] == "release-only"]
+    release_only = [
+        policy["policy_id"] for policy in policies if policy["channel_scope"] == "release-only"
+    ]
     esr_only = [policy["policy_id"] for policy in policies if policy["channel_scope"] == "esr-only"]
     both = [policy["policy_id"] for policy in policies if policy["channel_scope"] == "both"]
     partial = [policy["policy_id"] for policy in policies if policy["channel_scope"] == "partial"]
-    changed = [policy["policy_id"] for policy in policies if policy["definition_changed_across_channels"]]
+    changed = [
+        policy["policy_id"] for policy in policies if policy["definition_changed_across_channels"]
+    ]
     payload = {
         "schema_version": 1,
         "backlog_item": "BPM090-M5-05",
@@ -589,7 +604,9 @@ def _provenance_review_content(
             {
                 "policy_id": policy["policy_id"],
                 "doc_id": policy["doc_id"],
-                "topic_path": _display_path(output_root / POLICIES_DIRNAME / f"{policy['doc_id']}.dita"),
+                "topic_path": _display_path(
+                    output_root / POLICIES_DIRNAME / f"{policy['doc_id']}.dita"
+                ),
                 "source_family_id": "mozilla-policy-schema-facts",
                 "source_records": list(source_records.values()),
                 "source_content_sha256_when_snapshotted": {
@@ -653,9 +670,15 @@ def _provenance_review_content(
         "summary": {
             "policy_count": len(policies),
             "example_count": sum(len(policy["channels"]) for policy in policies),
-            "release_only": len([policy for policy in policies if policy["channel_scope"] == "release-only"]),
-            "both_channels": len([policy for policy in policies if policy["channel_scope"] == "both"]),
-            "esr_only": len([policy for policy in policies if policy["channel_scope"] == "esr-only"]),
+            "release_only": len(
+                [policy for policy in policies if policy["channel_scope"] == "release-only"]
+            ),
+            "both_channels": len(
+                [policy for policy in policies if policy["channel_scope"] == "both"]
+            ),
+            "esr_only": len(
+                [policy for policy in policies if policy["channel_scope"] == "esr-only"]
+            ),
             "partial": len([policy for policy in policies if policy["channel_scope"] == "partial"]),
             "changed_definitions": len(
                 [policy for policy in policies if policy["definition_changed_across_channels"]]
@@ -683,7 +706,9 @@ def build_generated_files(
     for policy in policies:
         path = output_root / POLICIES_DIRNAME / f"{policy['doc_id']}.dita"
         existing_text = path.read_text(encoding="utf-8") if path.is_file() else None
-        files.append(GeneratedFile(path, _topic_content(policy, inventory, model, schemas, existing_text)))
+        files.append(
+            GeneratedFile(path, _topic_content(policy, inventory, model, schemas, existing_text))
+        )
     files.append(GeneratedFile(output_root / MAP_FILENAME, _map_content(policies)))
     files.append(
         GeneratedFile(
@@ -700,7 +725,9 @@ def build_generated_files(
     files.append(
         GeneratedFile(
             output_root / PROVENANCE_REVIEW_FILENAME,
-            _provenance_review_content(policies, inventory, inventory_path, model_path, output_root, schemas),
+            _provenance_review_content(
+                policies, inventory, inventory_path, model_path, output_root, schemas
+            ),
         )
     )
     return files
@@ -715,8 +742,10 @@ def generate(
     expected = {generated.path for generated in files}
     policies_root = output_root / POLICIES_DIRNAME
     policies_root.mkdir(parents=True, exist_ok=True)
-    for stale in sorted(output_root.glob("*.ditamap")) + sorted(output_root.glob("*.json")) + sorted(
-        policies_root.glob("*.dita")
+    for stale in (
+        sorted(output_root.glob("*.ditamap"))
+        + sorted(output_root.glob("*.json"))
+        + sorted(policies_root.glob("*.dita"))
     ):
         if stale not in expected:
             stale.unlink()
@@ -735,7 +764,9 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
     written = generate(args.inventory.resolve(), args.model.resolve(), args.output.resolve())
-    print(f"Generated {len(written)} Firefox policy skeleton artifact(s) in {args.output}", flush=True)
+    print(
+        f"Generated {len(written)} Firefox policy skeleton artifact(s) in {args.output}", flush=True
+    )
     return 0
 
 

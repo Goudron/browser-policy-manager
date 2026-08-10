@@ -22,7 +22,7 @@ def test_lock_pins_supported_archives_and_test_dependencies() -> None:
     assert lock["components"]["dita_ot"]["version"] == "4.4"
     assert len(lock["components"]["dita_ot"]["archive"]["sha256"]) == 64
     java = lock["components"]["java"]
-    assert java["version"] == "21.0.11+10"
+    assert java["version"] == "21.0.12+8"
     assert len(java["platforms"]["linux-x86_64"]["archive"]["sha256"]) == 64
 
     requirements = (ROOT / lock["python"]["requirements_lock"]).read_text(encoding="utf-8")
@@ -50,7 +50,9 @@ def test_zip_extraction_rejects_path_traversal(tmp_path: Path) -> None:
         bootstrap_toolchain.extract_archive(archive, tmp_path / "out", "zip", "expected")
 
 
-def test_cached_archive_must_match_locked_digest(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_cached_archive_must_match_locked_digest(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     payload = tmp_path / "source.zip"
     payload.write_bytes(b"locked")
     digest = bootstrap_toolchain.sha256(payload)

@@ -1,0 +1,64 @@
+{
+  "version": "0.9.4",
+  "owner": "profile frontend",
+  "execution_model": "route-specific native ESM entry bundles use direct module imports with no profile global bridge",
+  "pure_module_sources": [
+    "profiles_modules/compare_state.mjs",
+    "profiles_modules/dirty_route_guard.mjs",
+    "profiles_modules/policy_document.mjs",
+    "profiles_modules/preference_values.mjs",
+    "profiles_modules/profile_list_url.mjs",
+    "profiles_modules/review_state.mjs",
+    "profiles_modules/workspace_state.mjs"
+  ],
+  "pure_module_bridge": "M6-02 native modules are side-effect-free and testable independently; route entries import their direct consumers.",
+  "template": "app/templates/profiles/_page_route_assets.html",
+  "bundle_boundary": {
+    "entries": {
+      "library": "app/static/profiles_bundles/profile-library.js",
+      "compare": "app/static/profiles_bundles/profile-compare.js",
+      "guided_edit": "app/static/profiles_bundles/profile-guided.js",
+      "settings": "app/static/profiles_bundles/profile-settings.js",
+      "json": "app/static/profiles_bundles/profile-json.js"
+    },
+    "manifest": "app/static/profiles_bundles/profiles-bundles-manifest.json",
+    "metafile": "app/static/profiles_bundles/profiles-bundles-metafile.json",
+    "build": "make build-profile-frontend-bundles",
+    "verify": "make check-profile-frontend-bundles",
+    "source_maps": "external, checksum-locked source maps for every generated JavaScript asset",
+    "size_budget": "manifest-owned limits verify generated, JavaScript, and transitive per-route bundle bytes"
+  },
+  "route_groups": {
+    "head": ["profiles_head_bootstrap.js"],
+    "shared": ["profiles_utils.js", "profiles_shared.js", "profiles_platform.js", "profiles_data.js"],
+    "library": ["profiles_library_bootstrap.js"],
+    "compare": ["profiles_compare_state.js", "profiles_compare.js"],
+    "editor-core": ["profiles_catalogs.js", "profiles_dom.js", "profiles_review_state.js", "profiles_review.js", "profiles_preferences_rows.js", "profiles_preferences_state.js", "profiles_preferences_views.js", "profiles_preferences.js", "profiles_search_engines.js", "profiles_network.js", "profiles_extensions.js", "profiles_schema_shell_value_io.js", "profiles_schema_shell_review.js", "profiles_schema_shell_actions.js", "profiles_schema_shell_sections.js", "profiles_schema_shell.js", "profiles_all_settings_state.js", "profiles_settings_inventory.js", "profiles_all_settings_detail.js", "profiles_all_settings_list.js", "profiles_settings_search.js", "profiles_wizard_flow.js", "profiles_workspace_state.js", "profiles_workspace.js", "profiles_page_bootstrap.js", "profiles_runtime_json_editor.js", "profiles_runtime_dirty_guard.js", "profiles_runtime.js", "profiles_bootstrap_core.js", "profiles_bootstrap_features.js", "profiles_bootstrap_runtime.js", "profiles_bootstrap_sections.js", "profiles_bootstrap.js"]
+  },
+  "routes": {
+    "library": ["shared", "library"],
+    "compare": ["shared", "compare"],
+    "guided": ["shared", "editor-core", "guided-entry"],
+    "settings": ["shared", "editor-core", "settings-entry"],
+    "json": ["shared", "editor-core", "json-entry", "vendor-monaco"]
+  },
+  "dependency_layers": {
+    "shared": [],
+    "library": ["shared"],
+    "compare": ["shared"],
+    "editor-core": ["shared"],
+    "guided-entry": ["editor-core"],
+    "settings-entry": ["editor-core"],
+    "json-entry": ["editor-core", "vendor-monaco"],
+    "editor-entry": ["editor-core"]
+  },
+  "dynamic_boundaries": ["document DOM events and MutationObserver", "fetch through profiles_network.js", "Monaco only via vendor-monaco on JSON"],
+  "vendor_boundaries": {
+    "vendor-monaco": {"files": ["app/static/vendor/profiles_monaco.js", "app/static/vendor/profiles_monaco.css"], "source": "app/static_src/profiles_monaco_entry.js", "route": "json", "verification": "make verify-frontend-vendor"},
+    "vendor-tailwind": {"files": ["app/static/vendor/profiles_tailwind.css"], "routes": ["library", "compare", "guided", "settings", "json"], "verification": "make verify-frontend-vendor"}
+  },
+  "styles": {"source_layers": ["profiles_css/00-foundation.css", "profiles_css/10-library.css", "profiles_css/20-shell.css", "profiles_css/21-settings.css", "profiles_css/22-guided-wizard.css", "profiles_css/23-workspace-editor.css", "profiles_css/24-theme-overrides.css", "profiles_css/30-responsive.css", "profiles_css/40-compact-shell.css"], "bundle": "profiles.css", "build": "make build-profiles-css"},
+  "public_dom_contracts": {"templates": ["app/templates/profiles/_page_document.html", "app/templates/profiles/_page_route_assets.html", "app/templates/profiles/_library_shell.html", "app/templates/profiles/_compare_shell.html", "app/templates/profiles/_guided_shell.html", "app/templates/profiles/_settings_shell.html", "app/templates/profiles/_json_shell.html"], "tests": ["tests/web_profiles_page/test_assets_i18n_contracts.py", "tests/web_profiles_page/test_route_dom_contracts.py", "tests/web_profiles_page/test_semantic_characterization.py", "tests/web_profiles_page/test_static_responsive_contracts.py", "tests/web_profiles_page/test_library_layout_contracts.py", "tests/contract/profiles/test_settings_inventory_frontend_contract.py", "tests/integration/profiles/test_profiles_compare_entrypoint.py", "tests/unit/profiles/test_workspace_export_links_unit.py", "tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py"]},
+  "m6_stages": ["M6-01 freeze graph", "M6-02 pure shared adapters", "M6-03 explicit dependency injection", "M6-04 route-specific esbuild bundles", "M6-05 CSS ownership split", "M6-06 remove obsolete globals after browser proof"],
+  "future_constraints": ["No new catch-all coordinator module.", "New owned profile JS/CSS files require a manifest owner and focused test owner."]
+}

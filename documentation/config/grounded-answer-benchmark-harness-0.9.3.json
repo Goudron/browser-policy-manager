@@ -15,7 +15,7 @@
     },
     "evidence_packing": {
       "path": "documentation/config/chat-rag-evidence-packing-contract-0.9.3.json",
-      "sha256": "ba81ca7f3860cb40acc4e9c85a91faa1b69f344bc337342a3da39c016cd231ad"
+      "sha256": "af6b3503baad2c08ea3d01fb5781381090e7427d4546314ff73c989145d1429a"
     },
     "resource_policy": {
       "path": "documentation/config/local-ai-preimplementation-guards-0.9.3.json",

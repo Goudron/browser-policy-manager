@@ -2,6 +2,6 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-comparison-workflow" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>配置档案比较工作流</title><shortdesc>比较功能用于查看两个配置档案的已保存设置差异，而不会更改任何配置档案。</shortdesc>
-  <conbody><p>从库中打开“比较配置档案设置”，分别查找“配置档案甲”和“配置档案乙”，查看每个配置档案的摘要，然后阅读比较表。</p><p>表格合并两个配置档案中的策略和托管首选项。每一行显示“值相同”、“值不同”，或在一侧显示“缺失”。比较功能为只读，不会合并值。</p></conbody>
+  <conbody><p>从<uicontrol>库</uicontrol>中打开“<uicontrol>比较配置档案设置</uicontrol>”，分别查找“<uicontrol>配置档案甲</uicontrol>”和“<uicontrol>配置档案乙</uicontrol>”，查看每个配置档案的摘要，然后阅读比较表。</p><p>表格合并两个配置档案中的策略和<uicontrol>托管首选项</uicontrol>。每一行显示“值相同”、“值不同”，或在一侧显示“缺失”。比较功能为只读，不会合并值。</p></conbody>
   <related-links><link keyref="topic.ug-reference-comparison-states"/><link keyref="topic.ug-task-interpret-profile-comparison"/></related-links>
 </concept>

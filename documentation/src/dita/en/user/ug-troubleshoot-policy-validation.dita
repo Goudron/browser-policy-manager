@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Read the affected policy path and message before changing values.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Classify the issue as unsupported policy, wrong value type, deprecated setting, unknown entry, imported value, or raw fallback.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
-      <step><cmd>Use All settings or JSON to navigate to the affected location and correct only the reported value.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Use <uicontrol>All settings</uicontrol> or JSON to navigate to the affected location and correct only the reported value.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Revalidate the profile in the same schema channel before saving or exporting.</cmd><info><note type="warning">Retry only from the BPM interface; do not change profile data outside the application.</note></info></step>
     </steps>
     <result><p>The validation error is either resolved or documented as a deliberate raw/unsupported value that cannot be treated as release-ready.</p></result>

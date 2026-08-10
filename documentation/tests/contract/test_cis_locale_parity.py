@@ -150,7 +150,9 @@ def _topic_signature(root: ET.Element) -> dict[str, object]:
 def test_cis_authored_topics_are_parallel_in_every_locale() -> None:
     assert {path.name for path in (DITA_ROOT / "en/cis").glob("*.dita")} == EXPECTED_CIS_TOPICS
     for locale in LOCALIZED_LOCALES:
-        assert {path.name for path in (DITA_ROOT / locale / "cis").glob("*.dita")} == EXPECTED_CIS_TOPICS
+        assert {
+            path.name for path in (DITA_ROOT / locale / "cis").glob("*.dita")
+        } == EXPECTED_CIS_TOPICS
 
 
 def test_cis_localized_topics_preserve_structure_links_notes_and_tokens() -> None:
@@ -230,10 +232,7 @@ def test_cis_generated_recommendations_remain_language_neutral_mapping_facts() -
 
     generated_topics = sorted((GENERATED_CIS_ROOT / "recommendations").glob("cis-rec-*.dita"))
     assert len(generated_topics) == 53
-    assert not any(
-        list((DITA_ROOT / locale / "cis").glob("cis-rec-*.dita"))
-        for locale in LOCALES
-    )
+    assert not any(list((DITA_ROOT / locale / "cis").glob("cis-rec-*.dita")) for locale in LOCALES)
 
     sample = ET.parse(GENERATED_CIS_ROOT / "recommendations/cis-rec-1-1-1-1.dita").getroot()
     assert XML_LANG not in sample.attrib

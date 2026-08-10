@@ -29,7 +29,7 @@ These sources are the active product-release anchors and must agree on BPM 0.9.2
   `docs/architecture/product-documentation-release-contract-0.9.2.md`, and
   `docs/bpm_0_9_2_ui_compaction_documentation_coherence_backlog_2026-07-17.md` are active
   release-planning evidence.
-- `tests/test_current_version_surfaces.py` pins the maintained current-version contract to 0.9.2.
+- `tests/integration/app/test_current_version_surfaces.py` pins the maintained current-version contract to 0.9.2.
 
 ## Active Documentation-Version Fields
 
@@ -80,7 +80,7 @@ The audit was bounded to active release anchors, maintained documentation genera
 documentation configuration, DITA source, tests, and installed artifacts; vendor, dependency,
 cache, build, and archive trees are not candidates for version replacement.
 
-Use `./.venv/bin/pytest -q tests/test_current_version_surfaces.py tests/test_docs_index.py` to
+Use `./.venv/bin/pytest -q tests/integration/app/test_current_version_surfaces.py tests/contract/docs/general/test_docs_index.py` to
 verify the current product anchors and indexed audit. M9 must add focused failures for a visible
 independent documentation version and for any artifact version that does not derive from the BPM
 product version.

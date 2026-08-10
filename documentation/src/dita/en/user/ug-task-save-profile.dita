@@ -4,16 +4,16 @@
   <title>Save profile changes</title>
   <shortdesc>Create the first saved profile from a draft or persist changes to an existing profile.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, <uicontrol>Library</uicontrol>, <uicontrol>All settings</uicontrol>, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>Saving establishes the profile ID for a new draft and makes the latest policy and managed-preference values available to other BPM surfaces.</p></context>
     <steps>
       <step><cmd>Review the profile name, schema channel, and validation state before saving.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
-      <step><cmd>Select Save on the active editor surface.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Select <uicontrol>Save</uicontrol> on the active editor surface.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Wait for the visible status message that confirms the save completed.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>If validation or connection feedback appears, read it before navigating away or retrying.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
     </steps>
     <result><p>The profile has a saved state that can be reopened, validated, exported, or compared.</p></result>
-    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the Library.</p></postreq>
+    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the <uicontrol>Library</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-profile"/>

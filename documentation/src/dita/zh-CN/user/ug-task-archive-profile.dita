@@ -4,12 +4,12 @@
   <title>归档活动配置档案</title>
   <shortdesc>将活动配置文件移出正常活动列表，而不将其永久删除。</shortdesc>
   <taskbody>
-    <prereq><p>配置文件处于活动状态，在库中可见，正常编辑或导出工作流程不再需要。</p></prereq>
+    <prereq><p>配置文件处于活动状态，在<uicontrol>库</uicontrol>中可见，正常编辑或导出工作流程不再需要。</p></prereq>
     <context><p>归档是可逆的。它通过存档或所有生命周期过滤器保持配置文件可用。</p></context>
     <steps>
       <step><cmd>确认行名称、架构、验证状态和更新时间。</cmd><info><p>预期结果：您确切地知道哪个配置文件将更改生命周期状态。</p></info></step>
       <step><cmd>选择存档生命周期操作。</cmd><info><note type="warning">存档的配置文件将被保留，但行为不再像正常的活动导出目标一样。</note></info></step>
-      <step><cmd>等待操作状态并根据需要刷新库。</cmd><info><p>操作完成后，该行将显示在已存档或所有生命周期过滤器下。</p></info></step>
+      <step><cmd>等待操作状态并根据需要刷新<uicontrol>库</uicontrol>。</cmd><info><p>操作完成后，该行将显示在已存档或所有生命周期过滤器下。</p></info></step>
     </steps>
     <result><p>配置文件已存档，稍后可以恢复。</p></result>
     <postreq><p>恢复：如果您归档了错误的行，则恢复配置文件。</p></postreq>

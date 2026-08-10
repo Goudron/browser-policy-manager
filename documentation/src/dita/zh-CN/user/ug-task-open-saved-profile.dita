@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-open-saved-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>在编辑器中打开已保存的配置档案</title>
-  <shortdesc>根据您需要的更改，在 引导式编辑器、所有设置 或 JSON 编辑器 中打开相同的已保存配置文件。</shortdesc>
+  <shortdesc>根据您需要的更改，在 <uicontrol>引导式编辑器</uicontrol>、<uicontrol>所有设置</uicontrol> 或 <uicontrol>JSON 编辑器</uicontrol> 中打开相同的已保存配置文件。</shortdesc>
   <taskbody>
-    <prereq><p>该配置文件在库中可见，并且其行标识与您要编辑或检查的配置文件相匹配。</p></prereq>
-    <context><p>打开已保存的配置文件不会重复它。每个编辑器界面都使用相同的已保存的 配置档案身份。</p></context>
+    <prereq><p>该配置文件在<uicontrol>库</uicontrol>中可见，并且其行标识与您要编辑或检查的配置文件相匹配。</p></prereq>
+    <context><p>打开已保存的配置文件不会重复它。每个编辑器界面都使用相同的已保存的 <uicontrol>配置档案身份</uicontrol>。</p></context>
     <steps>
-      <step><cmd>使用行标题或引导操作进行面向任务的编辑。</cmd><info><p>预期结果：BPM 在 引导式编辑器 中打开配置文件。</p></info></step>
-      <step><cmd>当您需要完整的支持目录和来源/注意详细信息时，请使用 所有设置。</cmd><info><p>这是详细策略和偏好检查的最安全选择。</p></info></step>
-      <step><cmd>当您需要检查或编辑原始边界文档时，请使用 JSON 编辑器。</cmd><info><note type="warning">在导出或比较之前应验证原始 JSON 更改。</note></info></step>
+      <step><cmd>使用行标题或引导操作进行面向任务的编辑。</cmd><info><p>预期结果：BPM 在 <uicontrol>引导式编辑器</uicontrol> 中打开配置文件。</p></info></step>
+      <step><cmd>当您需要完整的支持目录和来源/注意详细信息时，请使用 <uicontrol>所有设置</uicontrol>。</cmd><info><p>这是详细策略和偏好检查的最安全选择。</p></info></step>
+      <step><cmd>当您需要检查或编辑原始边界文档时，请使用 <uicontrol>JSON 编辑器</uicontrol>。</cmd><info><note type="warning">在导出或比较之前应验证原始 JSON 更改。</note></info></step>
     </steps>
     <result><p>所选编辑器在其自己的配置文件上下文中打开，并保留相同的配置文件 ID。</p></result>
-    <postreq><p>恢复：如果您打开了错误的编辑器，请返回到“库”行或使用同一配置文件的另一个编辑器链接。</p></postreq>
+    <postreq><p>恢复：如果您打开了错误的编辑器，请返回到“<uicontrol>库</uicontrol>”行或使用同一配置文件的另一个编辑器链接。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

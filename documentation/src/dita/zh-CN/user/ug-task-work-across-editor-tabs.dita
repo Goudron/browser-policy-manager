@@ -4,16 +4,16 @@
   <title>跨编辑器选项卡工作</title>
   <shortdesc>使用单独的浏览器选项卡来保存配置文件模式，而不会混淆草稿或丢失未保存的更改。</shortdesc>
   <taskbody>
-    <prereq><p>在浏览器中打开 BPM 并保持配置文件、库、所有设置、引导、JSON 或比较表面可用。</p></prereq>
-    <context><p>BPM 在单独的选项卡中打开保存的配置文件模式和比较表面，以便用户可以并排检查引导、所有设置、JSON 和比较。</p></context>
+    <prereq><p>在浏览器中打开 BPM 并保持配置文件、<uicontrol>库</uicontrol>、<uicontrol>所有设置</uicontrol>、引导、JSON 或比较表面可用。</p></prereq>
+    <context><p>BPM 在单独的选项卡中打开保存的配置文件模式和比较表面，以便用户可以并排检查引导、<uicontrol>所有设置</uicontrol>、JSON 和比较。</p></context>
     <steps>
-      <step><cmd>在所需的编辑器模式下从库中打开已保存的配置文件。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>在所需的编辑器模式下从<uicontrol>库</uicontrol>中打开已保存的配置文件。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>保持配置文件名称、模式通道和生命周期徽章在每个选项卡中可见。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>在依赖另一选项卡进行导出、比较或验证之前，先保存一个选项卡中的更改。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>仅在检查未保存更改警告和可见保存状态后关闭或刷新选项卡。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
     </steps>
     <result><p>您可以查看多个曲面，同时保持权威的保存状态清晰。</p></result>
-    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从<uicontrol>库</uicontrol>中重新打开配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-open-saved-profile"/>

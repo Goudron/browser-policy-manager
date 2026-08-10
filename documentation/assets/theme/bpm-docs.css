@@ -1188,6 +1188,16 @@ html[data-theme="dark"] .bpm-docs-header-control {
   padding: 0.08rem 0.28rem;
 }
 
+/* DITA <uicontrol>: visible product controls, distinct from code/API literals. */
+.bpm-docs-main .uicontrol {
+  border: 1px solid var(--bpm-docs-border-strong);
+  border-radius: 0.3rem;
+  font-family: inherit;
+  font-weight: 700;
+  padding: 0.04rem 0.24rem;
+  white-space: nowrap;
+}
+
 .bpm-docs-main table {
   border-collapse: collapse;
   display: block;
@@ -1219,6 +1229,10 @@ html[data-theme="dark"] .bpm-docs-header-control {
   border-inline-start: 0.35rem solid var(--bpm-docs-warning-border);
   border-radius: 0.6rem;
   padding: 0.85rem 1rem;
+}
+
+.bpm-docs-main .note__title {
+  font-weight: 700;
 }
 
 .bpm-docs-footer {

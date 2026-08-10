@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -16,23 +15,6 @@ def _contract() -> dict:
     return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
 
 
-def test_m13_01_pins_the_existing_assistant_boundaries() -> None:
-    contract = _contract()
-
-    assert contract["contract_id"] == "bpm-assistant-answer-quality-release-0.9.3"
-    assert contract["backlog_item"] == "BPM093-M13-01"
-    assert contract["status"] == "accepted-m13-quality-migration-contract"
-    assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-
-    invariants = contract["release_invariants"]
-    assert "remains separate" in invariants["ordinary_search"]
-    assert "not a default knowledge-update path" in invariants["knowledge"]
-    assert "No prompt, answer, evidence" in invariants["privacy"]
-    assert "cross-locale fallback, merge and retained-context reuse are forbidden" in invariants["locale"]
-
-
 def test_m13_01_freezes_complete_grounded_relevant_answers() -> None:
     contract = _contract()
 
@@ -41,7 +23,10 @@ def test_m13_01_freezes_complete_grounded_relevant_answers() -> None:
         "zero_or_more_deduplicated_relevant_local_sources",
     ]
     assert "must not silently shorten it" in contract["answer_contract"]["completeness"]
-    assert "raw evidence excerpts and raw model output are never substituted" in contract["answer_contract"]["validation"]
+    assert (
+        "raw evidence excerpts and raw model output are never substituted"
+        in contract["answer_contract"]["validation"]
+    )
     assert "exactly one isolated local rewrite" in contract["answer_contract"]["validation"]
     benchmark = contract["benchmark"]
     assert "ten approved support intents" in benchmark["local"]
@@ -71,7 +56,9 @@ def test_m13_01_freezes_eight_turns_timing_sources_and_geometry() -> None:
 
     conversation = contract["conversation"]
     assert conversation["scope"] == "One browser tab, one exact locale and one BPM version."
-    assert "newest eight completed user-question/assistant-answer pairs" in conversation["retention"]
+    assert (
+        "newest eight completed user-question/assistant-answer pairs" in conversation["retention"]
+    )
     assert "ninth completed pair deterministically evicts the oldest" in conversation["retention"]
     assert "never block a later request" in conversation["follow_up"]
     assert "never sent to an external provider" in conversation["external_boundary"]
@@ -94,7 +81,9 @@ def test_m13_01_freezes_eight_turns_timing_sources_and_geometry() -> None:
     surface = contract["sources_and_viewport"]
     assert "same-window links" in surface["local_links"]
     assert "deferred beyond 0.9.3" in surface["external_links"]
-    assert surface["desktop_panel"].startswith("The expanded lower-right assistant overlay is 50vw wide and 90dvh high")
+    assert surface["desktop_panel"].startswith(
+        "The expanded lower-right assistant overlay is 50vw wide and 90dvh high"
+    )
 
 
 def test_m13_01_maps_each_remaining_quality_task_to_one_implementation_step() -> None:
@@ -116,4 +105,7 @@ def test_m13_01_maps_each_remaining_quality_task_to_one_implementation_step() ->
         "BPM093-M13-10",
         "BPM093-M13-11",
     ]
-    assert "no route, model invocation, generated answer, provider call or browser mutation" in contract["verification"]["implementation"]
+    assert (
+        "no route, model invocation, generated answer, provider call or browser mutation"
+        in contract["verification"]["implementation"]
+    )

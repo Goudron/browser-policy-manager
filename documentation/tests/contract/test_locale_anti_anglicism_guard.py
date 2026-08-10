@@ -24,13 +24,9 @@ def _json(path: Path) -> dict:
 def _catalog_text(locale: str) -> str:
     chunks: list[str] = []
     for path in sorted((SOURCE_I18N / locale).glob("*.json")):
-        chunks.extend(
-            value for value in _json(path).values() if isinstance(value, str)
-        )
+        chunks.extend(value for value in _json(path).values() if isinstance(value, str))
     chunks.extend(
-        value
-        for value in _json(RUNTIME_I18N / f"{locale}.json").values()
-        if isinstance(value, str)
+        value for value in _json(RUNTIME_I18N / f"{locale}.json").values() if isinstance(value, str)
     )
     return "\n".join(chunks)
 

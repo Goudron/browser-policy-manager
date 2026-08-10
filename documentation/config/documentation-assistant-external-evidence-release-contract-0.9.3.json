@@ -82,10 +82,10 @@
     "crafted request while server mode is off"
   ],
   "verification": {
-    "mode": "tests/test_web_evidence_mode_093.py",
-    "provider": ["tests/test_web_evidence_093.py", "tests/test_web_evidence_security_093.py"],
-    "orchestration": "tests/test_grounded_conversation_orchestration_093.py",
-    "transport": ["tests/test_documentation_assistant_service_093.py", "tests/test_documentation_assistant_api_093.py", "tests/test_conversation_stream_093.py"],
+    "mode": "tests/integration/ai/incubation/test_web_evidence_mode.py",
+    "provider": ["tests/integration/ai/incubation/test_web_evidence.py", "tests/integration/ai/incubation/test_web_evidence_security.py"],
+    "orchestration": "tests/integration/ai/incubation/test_grounded_conversation_orchestration.py",
+    "transport": ["tests/integration/docs/test_documentation_assistant_service.py", "tests/integration/docs/test_documentation_assistant_api.py", "tests/integration/ai/incubation/test_conversation_stream.py"],
     "contract": "documentation/tests/contract/test_documentation_assistant_external_evidence_release_contract_0_9_3.py",
     "architecture": "docs/architecture/documentation-assistant-external-evidence-release-0.9.3.md"
   }

@@ -15,15 +15,15 @@ git status --short
 git checkout <approved-new-ref>
 git rev-parse --short HEAD
 ]]></codeblock><p>记录目标修订并将其与批准的变更单或发行说明进行比较。</p></info></step>
-      <step><cmd>刷新存储库本地 Python 环境。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>刷新存储<uicontrol>库</uicontrol>本地 Python 环境。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
-]]></codeblock><p>使用现有的 <codeph>.venv</codeph> 除非更新说明明确要求重建它。在更改数据库之前记录依赖项失败。</p></info></step>
-      <step><cmd>在未解决的源或依赖项故障时停止。</cmd><info><note type="warning">如果签出、依赖项安装或虚拟环境激活失败，请勿运行迁移。仅当数据库未更改时才返回记录的先前版本，然后重新安装先前的依赖项集并重新运行更新前的冒烟检查。</note></info></step>
+]]></codeblock><p>使用现有的 <codeph>.venv</codeph> 除非更新说明明确要求重建它。在更改数据<uicontrol>库</uicontrol>之前记录依赖项失败。</p></info></step>
+      <step><cmd>在未解决的源或依赖项故障时停止。</cmd><info><note type="warning">如果签出、依赖项安装或虚拟环境激活失败，请勿运行迁移。仅当数据<uicontrol>库</uicontrol>未更改时才返回记录的先前版本，然后重新安装先前的依赖项集并重新运行更新前的冒烟检查。</note></info></step>
     </steps>
-    <result><p>签出和 Python 环境位于已批准的目标修订版上，或者更新在数据库更改之前已停止。</p></result>
-    <postreq><p>仅在依赖项刷新成功后才运行数据库迁移和文档检查。</p></postreq>
+    <result><p>签出和 Python 环境位于已批准的目标修订版上，或者更新在数据<uicontrol>库</uicontrol>更改之前已停止。</p></result>
+    <postreq><p>仅在依赖项刷新成功后才运行数据<uicontrol>库</uicontrol>迁移和文档检查。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-source-update-evidence"/>

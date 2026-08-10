@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-navigate-settings-categories" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Navigate settings categories</title>
-  <shortdesc>Navigate All settings categories and mapped control clusters to find related policy and preference controls.</shortdesc>
+  <shortdesc>Navigate <uicontrol>All settings</uicontrol> categories and mapped control clusters to find related policy and preference controls.</shortdesc>
   <taskbody>
-    <prereq><p>Open All settings in Configured or Catalog mode.</p></prereq>
+    <prereq><p>Open <uicontrol>All settings</uicontrol> in <uicontrol>Configured</uicontrol> or <uicontrol>Catalog</uicontrol> mode.</p></prereq>
     <context><p>Categories group settings by product domain rather than by file location. They help users move between browser access, privacy, search, extensions, raw/unmapped, and other clusters.</p></context>
     <steps>
-      <step><cmd>Open the category navigation or catalog summary.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Choose the domain or cluster that matches the configuration goal.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Review category counts for configured, attention, raw, or deprecated settings.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Open the category navigation or catalog summary.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Choose the domain or cluster that matches the configuration goal.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Review category counts for configured, attention, raw, or deprecated settings.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
       <step><cmd>Open a setting detail or switch filters without losing the category context.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>You can move through the settings inventory by product domain and reach the relevant detail panel.</p></result>

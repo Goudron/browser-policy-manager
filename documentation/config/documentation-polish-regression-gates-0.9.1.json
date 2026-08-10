@@ -48,7 +48,7 @@
         "documentation/src/dita/{locale}/maps/keys.ditamap"
       ],
       "checks": [
-        "documentation/tests/contract/test_api_rehome_audit.py::test_every_migrated_api_topic_has_one_current_admin_destination",
+        "documentation/tests/contract/test_documentation_semantic_contracts_0_9_4.py::test_current_api_topic_ownership_accepts_current_maps",
         "documentation/tests/contract/test_api_integration_topics.py::test_api_integration_topics_are_keyed_and_reachable_from_administrator_guide_maps"
       ]
     },
@@ -61,8 +61,8 @@
         "documentation/tools/build_docs.py"
       ],
       "checks": [
-        "documentation/tools/build_docs.py::validate_manifest_files",
-        "documentation/tools/build_docs.py::validate_manifest_payloads",
+        "documentation/buildlib/catalog.py::validate_manifest_files",
+        "documentation/buildlib/catalog.py::validate_manifest_payloads",
         "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_navigation_artifact_record_rejects_semantic_mutations"
       ]
     },
@@ -75,7 +75,7 @@
         "documentation/tools/build_docs.py"
       ],
       "checks": [
-        "documentation/tools/build_docs.py::_validate_navigation_artifact_record",
+        "documentation/buildlib/catalog.py::_validate_navigation_artifact_record",
         "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_navigation_artifact_record_rejects_stale_hash",
         "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_navigation_artifact_record_rejects_semantic_mutations"
       ]
@@ -88,7 +88,7 @@
         "documentation/assets/theme/bpm-docs-search.js"
       ],
       "checks": [
-        "documentation/tools/build_docs.py::validate_output",
+        "documentation/buildlib/portal.py::validate_output",
         "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_generated_html_rejects_embedded_tree_copy"
       ]
     },
@@ -120,40 +120,38 @@
     },
     {
       "id": "visible-english-leakage-absent",
-      "fails_when": "A non-English visible block contains a new high-signal English sentence or exact English peer carryover that is not an approved technical literal or locale-language false positive.",
+      "fails_when": "A locale guard permits ordinary English prose or loses a protected technical-label class.",
       "source_files": [
-        "documentation/config/visible-english-prose-review-0.9.1.json",
+        "documentation/config/documentation-semantic-contracts-0.9.4.json",
         "documentation/config/locale-anti-anglicism-guard-0.9.1.json"
       ],
       "checks": [
-        "documentation/tests/contract/test_visible_english_prose_review.py::test_visible_english_review_has_no_release_blocking_exact_peer_carryover",
-        "documentation/tests/contract/test_visible_english_prose_review.py::test_visible_english_review_residual_candidates_are_technical_or_false_positive",
+        "documentation/tests/contract/test_documentation_semantic_contracts_0_9_4.py::test_localized_reader_semantics_rejects_missing_protected_class",
         "documentation/tests/contract/test_locale_anti_anglicism_guard.py::test_locale_anti_anglicism_guard_rejects_ordinary_english_fixtures",
         "documentation/tests/contract/test_locale_anti_anglicism_guard.py::test_locale_anti_anglicism_guard_accepts_allowlisted_technical_fixtures"
       ]
     },
     {
-      "id": "locale-review-coverage-complete",
-      "fails_when": "Any active non-English DITA or map source is absent from the accepted visible-prose review scope, or a generated locale silently consumes another locale's visible content.",
+      "id": "locale-reader-semantics-authoritative",
+      "fails_when": "A localized navigation or reader-semantic authority loses a required locale or a protected technical-label class.",
       "source_files": [
-        "documentation/config/visible-english-prose-review-0.9.1.json",
-        "documentation/src/dita/{locale}"
+        "documentation/config/documentation-semantic-contracts-0.9.4.json",
+        "documentation/config/locale-terminology-authority-0.9.1.json"
       ],
       "checks": [
-        "documentation/tests/contract/test_visible_english_prose_review.py::test_visible_english_review_records_complete_source_scope",
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_localized_technical_allowlist_is_authoritative",
         "documentation/tests/contract/test_navigation_tree_contract.py::test_navigation_contract_defines_accessible_keyboard_tree_and_localization"
       ]
     },
     {
       "id": "allowlist-entries-live-and-bounded",
-      "fails_when": "A reviewed exact-peer exception no longer matches a live localized and English source block, an ordinary English sentence is allowlisted, or a residual candidate lacks a maintained technical classification.",
+      "fails_when": "An ordinary English sentence is allowlisted or a protected technical-label class lacks a maintained authority.",
       "source_files": [
-        "documentation/config/visible-english-prose-review-0.9.1.json",
+        "documentation/config/documentation-semantic-contracts-0.9.4.json",
         "documentation/config/locale-terminology-authority-0.9.1.json"
       ],
       "checks": [
-        "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_exact_peer_allowlist_entries_are_live_and_bounded",
-        "documentation/tests/contract/test_visible_english_prose_review.py::test_visible_english_review_residual_candidates_are_technical_or_false_positive",
+        "documentation/tests/contract/test_locale_visible_english_inventory.py::test_locale_inventory_defers_to_current_semantic_label_authority",
         "documentation/tests/contract/test_locale_anti_anglicism_guard.py::test_locale_anti_anglicism_guard_accepts_allowlisted_technical_fixtures"
       ]
     }

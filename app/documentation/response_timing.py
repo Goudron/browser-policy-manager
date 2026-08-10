@@ -8,7 +8,6 @@ measurements outside the current process.
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass
 from math import ceil
 from typing import Protocol
 
@@ -19,23 +18,7 @@ from app.ai.local_inference_worker import (
 )
 from app.ai.model_installation import MODEL_ID
 from app.ai.runtime_installation import RUNTIME_ID
-
-
-@dataclass(frozen=True)
-class ConversationTimePreview:
-    """A display-safe, locale-neutral inclusive range in whole seconds."""
-
-    minimum_seconds: int
-    maximum_seconds: int
-
-    def __post_init__(self) -> None:
-        if (
-            not isinstance(self.minimum_seconds, int)
-            or not isinstance(self.maximum_seconds, int)
-            or self.minimum_seconds < 1
-            or self.maximum_seconds < self.minimum_seconds
-        ):
-            raise ValueError("invalid local response-time range")
+from app.documentation.assistant_contracts import ConversationTimePreview
 
 
 class _TimingRequest(Protocol):
@@ -93,9 +76,7 @@ class LocalResponseTimeEstimator:
 
     def _throughput(self, profile: WorkerTimingProfile) -> tuple[float, float]:
         baseline = self._baseline(profile, self._BASE_TOKENS_PER_SECOND_BY_THREADS)
-        measured = (
-            profile.rolling_tokens_per_second if self._known_runtime(profile) else None
-        )
+        measured = profile.rolling_tokens_per_second if self._known_runtime(profile) else None
         if measured is None or measured <= 0:
             conservative_baseline = baseline if self._known_runtime(profile) else baseline * 0.60
             return conservative_baseline, conservative_baseline * 1.6

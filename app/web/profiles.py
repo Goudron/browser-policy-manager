@@ -6,14 +6,15 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
 from app.db import get_session
 from app.services.profile_service import ProfileService
+from app.web.firefox_starter_presets import get_wizard_starter_compliance_snapshot
 from app.web.profile_navigation import (
     build_profile_json_href,
     build_profile_route_path,
@@ -107,10 +108,31 @@ def _resolve_clone_name(raw_value: str | None) -> str | None:
     return value or None
 
 
+@router.get("/profiles/guided-compliance", include_in_schema=False)
+async def profiles_guided_compliance_catalog(
+    starter_key: str = Query(..., min_length=1),
+    schema_version: str = Query(..., min_length=1),
+    layer_key: str = Query(..., min_length=1),
+) -> JSONResponse:
+    """Return the one CIS merge selected in the guided editor.
+
+    This page-private data route has constrained immutable catalog keys. It
+    avoids embedding every possible future selection into the first response.
+    """
+
+    snapshot = get_wizard_starter_compliance_snapshot(
+        starter_key,
+        schema_version,
+        layer_key,
+    )
+    if snapshot is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Unknown guided catalog")
+    return JSONResponse(snapshot, headers={"Cache-Control": "private, max-age=300"})
+
+
 @router.get("/profiles", response_class=HTMLResponse)
 async def profiles_page(
     request: Request,
-    session: Annotated[AsyncSession, Depends(get_session)],
 ) -> HTMLResponse:
     """Render the profile library page."""
     return templates.TemplateResponse(
@@ -170,7 +192,12 @@ async def profiles_edit_page(
     if profile is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
     current_route = build_profile_route_path(profile_id, "edit", include_deleted=include_deleted)
-    duplicate_requested = request.query_params.get("duplicate", "").strip().lower() in {"1", "true", "yes", "on"}
+    duplicate_requested = request.query_params.get("duplicate", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
 
     return templates.TemplateResponse(
         request,

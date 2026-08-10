@@ -11,10 +11,10 @@ pytestmark = pytest.mark.docs_contract
 
 
 def test_m12b_03_limits_persistence_to_locale_private_text_only_session_state() -> None:
-    source = (
-        DOCUMENTATION_ROOT / "assets/theme/bpm-docs-assistant-conversation.js"
-    ).read_text(encoding="utf-8")
-    builder = (DOCUMENTATION_ROOT / "tools/build_docs.py").read_text(encoding="utf-8")
+    source = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs-assistant-conversation.js").read_text(
+        encoding="utf-8"
+    )
+    builder = (DOCUMENTATION_ROOT / "buildlib/portal.py").read_text(encoding="utf-8")
 
     for required in (
         'STORAGE_PREFIX = "bpm.documentation-assistant.floating.v1."',
@@ -71,16 +71,19 @@ def test_m13_04_keeps_eight_completed_pairs_and_a_tab_private_clear_boundary() -
     conversation = (
         DOCUMENTATION_ROOT / "assets/theme/bpm-docs-assistant-conversation.js"
     ).read_text(encoding="utf-8")
-    transport = (
-        DOCUMENTATION_ROOT / "assets/theme/bpm-docs-assistant-transport.js"
-    ).read_text(encoding="utf-8")
+    transport = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs-assistant-transport.js").read_text(
+        encoding="utf-8"
+    )
 
     assert "const MAX_TURNS = 8" in conversation
     assert ".slice(-MAX_TURNS)" in conversation
     assert 'state === "cancelled" || state === "error"' in transport
     assert "function recoverableFailure(context)" in transport
-    assert "setVisualState(context, \"error\")" in transport
-    assert "conversation?locale=${encodeURIComponent(context.locale)}&tab_id=${encodeURIComponent(context.tabId)}" in transport
+    assert 'setVisualState(context, "error")' in transport
+    assert (
+        "conversation?locale=${encodeURIComponent(context.locale)}&tab_id=${encodeURIComponent(context.tabId)}"
+        in transport
+    )
 
 
 def test_m13_05_keeps_the_advisory_preview_out_of_persisted_dialogue() -> None:

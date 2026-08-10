@@ -4,12 +4,12 @@
   <title>Agregar una preferencia administrada</title>
   <shortdesc>Agregue una preferencia administrada conocida que aún no esté configurada en el perfil.</shortdesc>
   <taskbody>
-    <prereq><p>Abra Todos los ajustes con el canal de esquema correcto seleccionado.</p></prereq>
-    <context><p>Preferencias gestionadas complementa las políticas de Firefox cuando BPM expone una clave de preferencia conocida y un comportamiento de bloqueo. Agréguelos deliberadamente y valide el resultado.</p></context>
+    <prereq><p>Abra <uicontrol>Todos los ajustes</uicontrol> con el canal de esquema correcto seleccionado.</p></prereq>
+    <context><p><uicontrol>Preferencias gestionadas</uicontrol> complementa las políticas de Firefox cuando BPM expone una clave de preferencia conocida y un comportamiento de bloqueo. Agréguelos deliberadamente y valide el resultado.</p></context>
     <steps>
-      <step><cmd>Abra el control de agregar preferencia o busque la preferencia en Catálogo.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Elija la clave de preferencia conocida y revise su tipo de valor esperado.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Ingrese el valor y el estado de bloqueo requerido por el perfil.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Abra el control de agregar preferencia o busque la preferencia en <uicontrol>Catálogo</uicontrol>.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Elija la clave de preferencia conocida y revise su tipo de valor esperado.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Ingrese el valor y el estado de bloqueo requerido por el perfil.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
       <step><cmd>Aplicar, validar y guardar la preferencia administrada.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
     <result><p>El perfil contiene la nueva preferencia administrada con el valor deseado y el comportamiento de bloqueo.</p></result>

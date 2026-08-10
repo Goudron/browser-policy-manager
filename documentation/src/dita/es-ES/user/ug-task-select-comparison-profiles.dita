@@ -2,9 +2,9 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-select-comparison-profiles" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Seleccionar perfiles para comparar</title>
-  <shortdesc>Busque de forma independiente el Perfil A y el Perfil B, seleccione filas de listas de resultados delimitadas y revise cada resumen.</shortdesc>
+  <shortdesc>Busque de forma independiente el <uicontrol>Perfil A</uicontrol> y el <uicontrol>Perfil B</uicontrol>, seleccione filas de listas de resultados delimitadas y revise cada resumen.</shortdesc>
   <taskbody>
-    <prereq><p>La superficie Comparar está abierta desde la Biblioteca.</p></prereq>
+    <prereq><p>La superficie Comparar está abierta desde la <uicontrol>Biblioteca</uicontrol>.</p></prereq>
     <context><p>Cada lado tiene su propio campo de búsqueda y lista de resultados para que pueda elegir perfiles con nombres similares sin mezclar lados.</p></context>
     <steps>
       <step><cmd>Busque el perfil A en el campo de búsqueda de la izquierda y seleccione la fila deseada.</cmd><info><p>Resultado esperado: el resumen del perfil seleccionado a la izquierda muestra el nombre del perfil, el canal del esquema, el ciclo de vida y el contexto de estado.</p></info></step>
@@ -12,7 +12,7 @@
       <step><cmd>Confirme ambos resúmenes antes de leer la tabla comparativa.</cmd><info><note type="warning">No confíe únicamente en la posición de los resultados de búsqueda. Confirmar la identidad y el esquema en ambos lados.</note></info></step>
     </steps>
     <result><p>El perfil A y el perfil B están seleccionados y listos para comparar.</p></result>
-    <postreq><p>Recuperación: si falta un perfil, borre la búsqueda de ese lado, actualice la Biblioteca en la pestaña original y confirme que el perfil esté guardado.</p></postreq>
+    <postreq><p>Recuperación: si falta un perfil, borre la búsqueda de ese lado, actualice la <uicontrol>Biblioteca</uicontrol> en la pestaña original y confirme que el perfil esté guardado.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-compare-profiles"/>

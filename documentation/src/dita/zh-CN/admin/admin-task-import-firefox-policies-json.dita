@@ -15,6 +15,12 @@
       <step><cmd>在集成产品中记录进口证据。</cmd><info><note type="warning">导入创建 BPM 配置文件，但不部署 Firefox 设置、证明运行时强制执行或提供幂等性密钥。外部记录源文档哈希、架构通道、返回的配置文件 ID、修订、合规性元数据和重复名称恢复决策。</note></info></step>
     </steps>
     <result><p>Firefox <codeph>policies.json</codeph> 文档表示为标准化 BPM 配置文件，可由 ID 审核、验证、导出和跟踪。</p></result>
+    <example id="a-import-policies-document"><title>完整的 Firefox policies.json 文档</title><p><codeph>document</codeph> 中的值或多部分文件是完整的 Firefox 文档，绝不是 BPM <codeph>flags</codeph>：</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
     <postreq><p>使用导出任务将保存的配置文件渲染回规范的 Firefox JSON，然后再将其交给部署工具。</p></postreq>
   </taskbody>
   <related-links>

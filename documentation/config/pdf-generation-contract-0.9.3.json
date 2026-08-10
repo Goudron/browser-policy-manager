@@ -2,11 +2,12 @@
   "schema_version": 1,
   "contract_id": "bpm-pdf-generation-0.9.3",
   "backlog_item": "BPM093-M14-08",
-  "target_bpm_version": "0.9.3",
+  "target_bpm_version": "0.9.4",
   "candidate_root": "documentation/build/pdf",
   "candidate_path_layout": "{locale}/{filename}",
   "dita_format": "html5",
   "pdf_renderer": "chromium",
+  "ui_footer_year": 2026,
   "source_maps": [
     "user-guide.ditamap",
     "administrator-guide.ditamap"
@@ -38,6 +39,20 @@
     "source_copy": "Each DITA conversion receives an isolated copy of documentation/src and documentation/assets.",
     "source_immutability": "The generator compares source and asset SHA-256 values before and after all conversions.",
     "delivery_boundary": "This generator writes only documentation/build/pdf. BPM093-M14-09 alone promotes a validated candidate into distributions/documentation/{bpm_version}."
+  },
+  "development_cache": {
+    "schema_version": 1,
+    "root": "documentation/.cache/pdf-pipeline",
+    "unit": "locale-guide",
+    "layers": ["dita-html5", "verified-pdf"],
+    "hash_algorithm": "sha256",
+    "reuse": "verified-only",
+    "invalid_entry": "quarantine-and-rebuild",
+    "promotion": "staged-and-atomic"
+  },
+  "parallelism": {
+    "max_workers": 1,
+    "decision": "Retain one ordered worker: verified pair reuse removes unchanged renderer work, while concurrent Chromium instances would multiply peak RSS on the measured two-core target without helping cache hits."
   },
   "operator_commands": {
     "build": "make docs-pdf-build",

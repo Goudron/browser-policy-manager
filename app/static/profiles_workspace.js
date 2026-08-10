@@ -1,10 +1,10 @@
-(() => {
     function create({
         documentRef = document,
         windowRef = window,
         elements = {},
         dependencies = {},
         state = {},
+        workspaceState = {},
     }) {
         const {
             t,
@@ -126,7 +126,6 @@
         const routeMode = documentRef.body?.dataset.profilesRouteMode || "new";
         const routeFocusTarget = documentRef.body?.dataset.jsonFocusTarget || "";
         const defaultSchemaVersion = getDefaultSchemaVersion(documentRef);
-        const workspaceState = windowRef.BPMProfilesWorkspaceState || {};
         let saveConflictState = null;
 
         function normalizeSettingsModeFocusTarget(focusTarget) {
@@ -1571,5 +1570,4 @@
         };
     }
 
-    window.BPMProfilesWorkspace = { create };
-})();
+    export { create };

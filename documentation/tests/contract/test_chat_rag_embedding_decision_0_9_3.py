@@ -27,10 +27,15 @@ def test_e5_base_acceptance_is_explicit_and_does_not_rewrite_the_failed_selector
     assert decision["benchmark_evidence"]["selector_result"] == "fail"
     assert decision["benchmark_evidence"]["selector_selected"] is None
     assert decision["benchmark_evidence"]["not_a_benchmark_pass"] is True
-    assert "no longer a selection or release blocker" in decision["resource_policy_amendment"]["effect"]
+    assert (
+        "no longer a selection or release blocker"
+        in decision["resource_policy_amendment"]["effect"]
+    )
 
 
-def test_e5_base_implementation_is_chat_only_and_clean_host_validation_remains_release_blocking() -> None:
+def test_e5_base_implementation_is_chat_only_and_clean_host_validation_remains_release_blocking() -> (
+    None
+):
     decision = _decision()
 
     boundary = decision["implementation_boundary"]

@@ -28,5 +28,8 @@ def test_firefox_140_esr_never_auto_migrates_to_firefox_153_esr() -> None:
 
     assert "`release-152`, `release-153` | `release-153`" in contract
     assert "`esr-140.12`, `esr-140.13` | `esr-140.13`" in contract
-    assert "There is no automatic migration from any Firefox 140 ESR channel to `esr-153.0`" in contract
+    assert (
+        "There is no automatic migration from any Firefox 140 ESR channel to `esr-153.0`"
+        in contract
+    )
     assert "must not determine any persistence migration while two ESRs are supported" in contract

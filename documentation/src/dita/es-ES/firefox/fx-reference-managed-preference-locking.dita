@@ -2,9 +2,9 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="fx-reference-managed-preference-locking" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Referencia de bloqueo de preferencias administradas</title>
-  <shortdesc>Preferencias gestionadas se exportan a través de la política <codeph>Preferences</codeph> de Firefox y necesitan una revisión explícita de valor, tipo y estado.</shortdesc>
+  <shortdesc><uicontrol>Preferencias gestionadas</uicontrol> se exportan a través de la política <codeph>Preferences</codeph> de Firefox y necesitan una revisión explícita de valor, tipo y estado.</shortdesc>
   <refbody>
-    <section id="a-container-policy"><title>Política de contenedor</title><p>Firefox almacena Preferencias gestionadas en <codeph>Preferences</codeph>. BPM documenta las preferencias conocidas por separado pero las exporta como entradas en esa política de contenedor.</p></section>
+    <section id="a-container-policy"><title>Política de contenedor</title><p>Firefox almacena <uicontrol>Preferencias gestionadas</uicontrol> en <codeph>Preferences</codeph>. BPM documenta las preferencias conocidas por separado pero las exporta como entradas en esa política de contenedor.</p></section>
     <section id="a-status-values"><title>Valores de estado</title><p><codeph>locked</codeph> evita cambios de usuario donde Firefox admite la preferencia. <codeph>default</codeph>, <codeph>user</codeph> y <codeph>clear</codeph> tienen significados de tiempo de ejecución diferentes y no deben usarse como sinónimos.</p></section>
     <section id="a-type-values"><title>Valores de tipo</title><p>Establezca <codeph>Type</codeph> en <codeph>boolean</codeph>, <codeph>number</codeph> o <codeph>string</codeph> cuando BPM necesite una forma de valor exacta. El tipo <codeph>Value</codeph> debe coincidir con el tipo declarado.</p></section>
     <section id="a-source-conflicts"><title>Conflictos de origen</title><p>Una preferencia puede provenir de un ajuste preestablecido, una capa CIS, una importación, una edición manual o un respaldo sin formato. Revise la fuente antes de bloquear porque una preferencia bloqueada puede anular las expectativas del usuario con mayor fuerza que una política predeterminada desbloqueada.</p></section>

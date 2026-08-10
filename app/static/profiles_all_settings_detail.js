@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         elements = {},
@@ -734,5 +733,4 @@
         };
     }
 
-    window.BPMProfilesAllSettingsDetail = { create };
-})();
+    export { create };

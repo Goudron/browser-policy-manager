@@ -15,6 +15,12 @@
       <step><cmd>Запишите доказательства импорта в интегрируемый продукт.</cmd><info><note type="warning">Импорт создает профиль BPM, но не развертывает настройки Firefox, не подтверждает принудительное выполнение во время выполнения и не предоставляет ключ идемпотентности. Запишите хеш исходного документа, канал схемы, возвращенный профиль ID, версию, метаданные соответствия и решение о восстановлении повторяющегося имени на внешнем носителе.</note></info></step>
     </steps>
     <result><p>Документ Firefox <codeph>policies.json</codeph> представлен как нормализованный профиль BPM, который можно просматривать, проверять, экспортировать и отслеживать с помощью ID.</p></result>
+    <example id="a-import-policies-document"><title>Полный документ Firefox policies.json</title><p>Значение внутри <codeph>document</codeph> или многочастный файл — полный документ Firefox, а не BPM <codeph>flags</codeph>:</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
     <postreq><p>Используйте задачу экспорта, чтобы преобразовать сохраненный профиль обратно в канонический JSON Firefox, прежде чем передавать его в инструменты развертывания.</p></postreq>
   </taskbody>
   <related-links>

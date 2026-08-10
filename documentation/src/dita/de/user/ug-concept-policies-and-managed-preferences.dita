@@ -4,8 +4,8 @@
   <title>Richtlinien und verwaltete Einstellungen</title>
   <shortdesc>BPM trennt Firefox Enterprise-Richtlinien von verwalteten Einstellungswerten und behält beide in einem Profil.</shortdesc>
   <conbody>
-    <p>Richtlinien sind sogenannte Firefox Enterprise-Steuerelemente wie Browserverhalten, Zugriff, Berechtigungen oder Funktionseinstellungen. Verwaltete Einstellungen sind Präferenzschlüssel mit Werten und optionalem Sperrverhalten.</p>
-    <p>Geführter Editor deckt gemeinsame politische Ziele ab. Alle Einstellungen macht den breiteren unterstützten Katalog verfügbar. JSON-Editor zeigt die genaue Dokumentgrenze an, die für den Import und Export verwendet wird.</p>
+    <p>Richtlinien sind sogenannte Firefox Enterprise-Steuerelemente wie Browserverhalten, Zugriff, Berechtigungen oder Funktionseinstellungen. <uicontrol>Verwaltete Einstellungen</uicontrol> sind Präferenzschlüssel mit Werten und optionalem Sperrverhalten.</p>
+    <p><uicontrol>Geführter Editor</uicontrol> deckt gemeinsame politische Ziele ab. <uicontrol>Alle Einstellungen</uicontrol> macht den breiteren unterstützten Katalog verfügbar. <uicontrol>JSON-Editor</uicontrol> zeigt die genaue Dokumentgrenze an, die für den Import und Export verwendet wird.</p>
     <p>Referenzdetails zu einzelnen Richtlinien gehören zum Firefox-Richtlinienhandbuch. In diesem Benutzerhandbuch wird erklärt, wie ein Benutzer diese Steuerelemente in BPM erreicht und sicher bearbeitet.</p>
   </conbody>
 </concept>

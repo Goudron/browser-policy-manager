@@ -4,11 +4,11 @@
   <title>浏览器策略管理器概述</title>
   <shortdesc>Browser Policy Manager 可帮助您创建、审查、验证、保存和导出 Firefox 企业策略配置文件。</shortdesc>
   <conbody>
-    <section id="purpose"><title>浏览器策略管理器的作用</title><p>使用 BPM 配置 Firefox 策略和受管首选项，选择受支持的 Firefox 架构，应用 CIS 层，检查验证结果以及交换策略 JSON。指南涵盖引导式编辑器、所有设置、JSON、库、比较和审查工作流。</p></section>
+    <section id="purpose"><title>浏览器策略管理器的作用</title><p>使用 BPM 配置 Firefox 策略和受管首选项，选择受支持的 Firefox 架构，应用 CIS 层，检查验证结果以及交换策略 JSON。指南涵盖<uicontrol>引导式编辑器</uicontrol>、<uicontrol>所有设置</uicontrol>、JSON、<uicontrol>库</uicontrol>、比较和审查工作流。</p></section>
     <section id="documentation"><title>使用文档</title><p>门户提供英语、俄语、德语、简体中文、法语和西班牙语版本。确定性的本地搜索和筛选器可查找已发布主题、稳定的策略标识符、CIS 建议和 API 操作。搜索始终可独立于助手使用。</p></section>
-    <section id="assistant"><title>文档助手训练通知</title><p>在 BPM 0.9.3 中，本地模型正为后续版本训练。对于每个已发送的聊天问题，BPM 显示本地化训练通知，而不是生成回答、来源列表或外部搜索结果。</p><p>聊天与确定性文档搜索相互独立：受支持的搜索、筛选器、导航和结果顺序始终可用于所有当前产品信息。</p></section>
-    <section id="assistant-panel"><title>打开助手</title><p>每个文档页面右下角都有折叠的 <ph>BPM AI 助手</ph> 入口。打开后使用的是浮动窗口，而不是侧边栏。在桌面设备上，窗口宽度约为视口的一半，高度约为可见视口的 90%。标题、问题输入框和底部状态行始终可见，聊天记录则可以滚动。</p></section>
-    <section id="assistant-ready"><title>提问和管理对话</title><p>发送任意问题即可查看本地化训练通知。使用 <ph>清除对话</ph> 删除当前聊天内容。该通知不是 BPM 回答，不得用于配置或验证策略。</p><p>在同一浏览器标签页和同一文档语言中，折叠或展开状态以及完成的通知会在重新加载或浏览文档后保留。</p></section>
-    <section id="assistant-installation"><title>当前版本边界</title><p>模型安装、检索索引、生成回答、来源和外部来源均超出 BPM 0.9.3 范围。请使用确定性文档搜索获取当前信息。</p></section>
+    <section id="assistant"><title>文档助手训练通知</title><p>对于每个已发送的聊天问题，BPM 显示本地化训练通知，而不是生成回答、来源列表或外部搜索结果。</p><p>聊天与确定性文档搜索相互独立：受支持的搜索、筛选器、导航和结果顺序始终可用于所有当前产品信息。</p></section>
+    <section id="assistant-panel"><title>打开助手</title><p>每个文档页面右下角都有折叠的 <uicontrol>BPM AI 助手</uicontrol> 入口。打开后使用的是浮动窗口，而不是侧边栏。在桌面设备上，窗口宽度约为视口的一半，高度约为可见视口的 90%。标题、问题输入框和底部状态行始终可见，聊天记录则可以滚动。</p></section>
+    <section id="assistant-ready"><title>提问和管理对话</title><p>发送任意问题即可查看本地化训练通知。使用 <uicontrol>清除对话</uicontrol> 删除当前聊天内容。该通知不是 BPM 回答，不得用于配置或验证策略。</p><p>在同一浏览器标签页和同一文档语言中，折叠或展开状态以及完成的通知会在重新加载或浏览文档后保留。</p></section>
+    <section id="assistant-installation"><title>当前产品边界</title><p>BPM 不提供模型安装、检索索引、生成回答、来源或外部来源。请使用确定性文档搜索获取当前信息。</p></section>
   </conbody>
 </concept>

@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-library-operation" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>库操作故障排除</title>
-  <shortdesc>从库加载、生命周期、删除和操作状态故障中安全恢复。</shortdesc>
+  <shortdesc>从<uicontrol>库</uicontrol>加载、生命周期、删除和操作状态故障中安全恢复。</shortdesc>
   <taskbody>
-    <prereq><p>库加载或行操作报告错误、超时或使可见行处于意外状态。</p></prereq>
+    <prereq><p><uicontrol>库</uicontrol>加载或行操作报告错误、超时或使可见行处于意外状态。</p></prereq>
     <context><p>故障排除首先在重试之前保留上下文并读取可见状态。</p></context>
     <steps>
       <step><cmd>在当前状态明确之前不要重复破坏性操作。</cmd><info><note type="warning">在部分失败后重复存档或永久删除可以隐藏实际成功的操作。</note></info></step>
       <step><cmd>记录配置文件名称、行状态、过滤器状态和可见状态消息。</cmd><info><p>预期结果：您可以在重试之前解释 BPM 显示的内容。</p></info></step>
-      <step><cmd>刷新库一次。</cmd><info><p>如果刷新的状态与预期结果匹配，则从刷新的行列表继续。</p></info></step>
+      <step><cmd>刷新<uicontrol>库</uicontrol>一次。</cmd><info><p>如果刷新的状态与预期结果匹配，则从刷新的行列表继续。</p></info></step>
       <step><cmd>如果刷新后的状态仍然错误，请重置搜索和过滤器并检查所有生命周期状态下的配置文件。</cmd><info><p>这将隐藏行与失败或已完成的操作区分开来。</p></info></step>
     </steps>
-    <result><p>您知道是否重试操作、恢复配置文件、删除前停止或从刷新的库视图继续。</p></result>
+    <result><p>您知道是否重试操作、恢复配置文件、删除前停止或从刷新的<uicontrol>库</uicontrol>视图继续。</p></result>
     <postreq><p>如果错误再次出现，请停止当前操作，并向支持人员提供可见消息、配置文件名称、模式通道和当前页面。</p></postreq>
   </taskbody>
   <related-links>

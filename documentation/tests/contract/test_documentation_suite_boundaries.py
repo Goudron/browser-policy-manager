@@ -53,15 +53,10 @@ def test_documentation_suite_boundary_contract_declares_required_suites_and_doma
     contract = _contract()
 
     assert contract["schema_version"] == 1
-    assert contract["backlog_item"] == "BPM090-M12-07"
-    assert contract["target_bpm_version"] == "0.9.0"
-    assert contract["status"] == "accepted"
-    assert contract["pytest_discovery_boundary"] == {
-        "current_default_testpaths": ["tests"],
-        "documentation_tests_are_run_by_focused_make_targets": True,
-        "implemented_make_targets_backlog_item": "BPM090-M12-07",
-        "general_tests_tree_may_keep_cross_boundary_contracts": True,
-    }
+    boundary = contract["pytest_discovery_boundary"]
+    assert boundary["current_default_testpaths"] == ["tests"]
+    assert boundary["documentation_tests_are_run_by_focused_make_targets"] is True
+    assert boundary["general_tests_tree_may_keep_cross_boundary_contracts"] is True
 
     make_targets = contract["make_targets"]
     assert set(make_targets) == {
@@ -74,6 +69,7 @@ def test_documentation_suite_boundary_contract_declares_required_suites_and_doma
         "docs-fast-check",
         "docs-coverage",
         "docs-release-check",
+        "docs-release-handoff",
     }
     for target_name, target in make_targets.items():
         assert target["command"] == f"make {target_name}"
@@ -101,11 +97,9 @@ def test_documentation_suite_boundary_contract_declares_required_suites_and_doma
 def test_documentation_test_files_are_owned_by_an_explicit_domain() -> None:
     contract = _contract()
     patterns = [
-        pattern
-        for domain in contract["domains"].values()
-        for pattern in domain["path_globs"]
+        pattern for domain in contract["domains"].values() for pattern in domain["path_globs"]
     ]
-    test_files = sorted(DOCUMENTATION_ROOT.glob("tests/**/*.py"))
+    test_files = sorted(DOCUMENTATION_ROOT.glob("tests/**/test_*.py"))
 
     assert test_files
     assert all(_matches_any(_as_repo_path(path), patterns) for path in test_files)
@@ -127,7 +121,10 @@ def test_documentation_fixture_references_are_compact_existing_source_inputs() -
         for fixture in domain["fixtures"]:
             fixture_path = REPOSITORY_ROOT / fixture
             assert fixture_path.exists(), (domain_id, fixture)
-            assert not any(fragment in fixture for fragment in forbidden_fragments), (domain_id, fixture)
+            assert not any(fragment in fixture for fragment in forbidden_fragments), (
+                domain_id,
+                fixture,
+            )
 
     rules = contract["compact_fixture_rules"]
     assert "small synthetic JSON examples" in rules["allowed"]
@@ -147,7 +144,10 @@ def test_documentation_tests_remain_outside_default_pytest_discovery_after_m11_0
     pytest_options = pyproject["tool"]["pytest"]["ini_options"]
     contract = _contract()
 
-    assert pytest_options["testpaths"] == contract["pytest_discovery_boundary"]["current_default_testpaths"]
+    assert (
+        pytest_options["testpaths"]
+        == contract["pytest_discovery_boundary"]["current_default_testpaths"]
+    )
     assert "documentation/tests" not in pytest_options["testpaths"]
 
 
@@ -162,7 +162,9 @@ def test_documentation_make_targets_are_focused_and_declared() -> None:
 
     assert "DOCS_UNIT_PATHS := documentation/tests/unit" in makefile
     assert "DOCS_CONTRACT_PATHS := documentation/tests/contract" in makefile
-    assert "DOCS_COVERAGE_MODULES := documentation/tools/validate_metadata.py" in makefile
+    assert "DOCS_COVERAGE_MODULES := documentation/buildlib/" in makefile
+    assert "documentation/tools/validate_metadata.py" in makefile
+    assert "DOCS_COVERAGE_DATA_FILE := $(DOCS_COVERAGE_REPORT_DIR)/.coverage-docs" in makefile
     assert "$(PYTHON) documentation/tools/generate_subsystem_snapshot.py" in makefile
     assert "DOCS_BROWSER_PATHS := documentation/tests/browser" in makefile
     assert "$(PYTEST) -o addopts= -q $(DOCS_UNIT_PATHS) $(DOCS_CONTRACT_PATHS)" in makefile

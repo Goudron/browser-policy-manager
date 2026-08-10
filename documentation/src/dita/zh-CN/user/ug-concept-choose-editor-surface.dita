@@ -2,14 +2,14 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-choose-editor-surface" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>选择合适的浏览器策略管理器编辑界面</title>
-  <shortdesc>BPM 提供五个用户界面：库、引导式编辑器、所有设置、JSON 编辑器和配置档案比较。</shortdesc>
+  <shortdesc>BPM 提供五个用户界面：<uicontrol>库</uicontrol>、<uicontrol>引导式编辑器</uicontrol>、<uicontrol>所有设置</uicontrol>、<uicontrol>JSON 编辑器</uicontrol>和配置档案比较。</shortdesc>
   <conbody>
     <p>统一的紧凑标头和配置文件上下文会在所有这些界面中显示当前产品、配置文件、架构、区域设置和主题。请按所需结果选择界面，而不是按内部模块选择。</p>
     <dl>
-      <dlentry><dt>库</dt><dd>查找、创建、导入、复制、归档、恢复、删除、导出和打开配置文件。</dd></dlentry>
-      <dlentry><dt>引导式编辑器</dt><dd>通过面向任务的步骤和起始选择创建或更新常见策略配置。</dd></dlentry>
-      <dlentry><dt>所有设置</dt><dd>查看需要注意的项目，浏览完整的受支持策略和首选项目录，并编辑详细值。</dd></dlentry>
-      <dlentry><dt>JSON 编辑器</dt><dd>在需要精确原始控制时检查或编辑准确的 Firefox 策略文档。</dd></dlentry>
+      <dlentry><dt><uicontrol>库</uicontrol></dt><dd>查找、创建、导入、复制、归档、恢复、删除、导出和打开配置文件。</dd></dlentry>
+      <dlentry><dt><uicontrol>引导式编辑器</uicontrol></dt><dd>通过面向任务的步骤和起始选择创建或更新常见策略配置。</dd></dlentry>
+      <dlentry><dt><uicontrol>所有设置</uicontrol></dt><dd>查看需要注意的项目，浏览完整的受支持策略和首选项目录，并编辑详细值。</dd></dlentry>
+      <dlentry><dt><uicontrol>JSON 编辑器</uicontrol></dt><dd>在需要精确原始控制时检查或编辑准确的 Firefox 策略文档。</dd></dlentry>
       <dlentry><dt>比较</dt><dd>比较两个已保存配置文件，了解相同、不同或缺失的设置。</dd></dlentry>
     </dl>
   </conbody>

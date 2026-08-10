@@ -31,7 +31,9 @@ def _topic_root(locale: str, topic_id: str) -> ET.Element:
 
 
 def _section_keyrefs(locale: str) -> dict[str, list[str]]:
-    root = ET.fromstring((DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8"))
+    root = ET.fromstring(
+        (DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8")
+    )
     sections: dict[str, list[str]] = {}
     for topichead in root.findall("topichead"):
         intent = topichead.find("./topicmeta/data[@name='intent-id']")
@@ -46,9 +48,7 @@ def _section_keyrefs(locale: str) -> dict[str, list[str]]:
 def _case_topics() -> dict[str, dict[str, object]]:
     case_map = json.loads(USER_GUIDE_MAP.read_text(encoding="utf-8"))
     return {
-        topic["topic_id"]: topic
-        for section in case_map["sections"]
-        for topic in section["topics"]
+        topic["topic_id"]: topic for section in case_map["sections"] for topic in section["topics"]
     }
 
 
@@ -61,10 +61,13 @@ def test_import_export_fixtures_are_canonical_and_safe() -> None:
     assert set(import_doc) == {"policies"}
     assert set(export_doc) == {"policies"}
     assert "policies" in json_request["document"]
-    assert json_request["channel"] == "firefox-release"
+    assert json_request["schema_version"] == "release-153"
+    assert "channel" not in json_request
     assert multipart["endpoint"] == "/api/profiles/import/firefox/policies.json"
     assert multipart["content_type"] == "multipart/form-data"
     assert multipart["fields"]["file"] == "firefox-policies-import.example.json"
+    assert multipart["fields"]["schema_version"] == "release-153"
+    assert "channel" not in multipart["fields"]
     assert json.loads(multipart["fields"]["compliance"]) == {"source": "documentation-fixture"}
     fixture_text = json.dumps([import_doc, json_request, multipart, export_doc], sort_keys=True)
     assert "example.invalid" in fixture_text
@@ -119,7 +122,7 @@ def test_import_export_topics_are_keyed_reachable_and_case_mapped() -> None:
             assert topic_id in sections[section_id]
 
 
-def test_english_topics_document_boundary_shapes_and_api_adjacent_options() -> None:
+def test_english_topics_document_boundary_shapes_and_link_to_admin_api_options() -> None:
     import_text = "".join(_topic_root("en", "ug-task-import-policies-json").itertext())
     export_text = "".join(_topic_root("en", "ug-task-export-policies-json").itertext())
     api_inventory = API_INVENTORY.read_text(encoding="utf-8")
@@ -130,13 +133,14 @@ def test_english_topics_document_boundary_shapes_and_api_adjacent_options() -> N
         "top-level policies",
         "Release",
         "ESR",
-        "JSON and multipart API-adjacent import shapes",
         "malformed JSON",
         "duplicate name",
         "unsupported content type",
         "validation errors",
     ):
         assert required.casefold() in import_text.casefold()
+    assert "API-adjacent import shapes" not in import_text
+    assert "firefox-release" not in import_text
     for required in (
         "application/json",
         "download=1",

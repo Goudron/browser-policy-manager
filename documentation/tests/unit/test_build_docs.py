@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import copy
 import importlib.util
 import json
 import tarfile
 from pathlib import Path
 
 import pytest
+
+from documentation.buildlib.validation import ValidationIssue, ValidationReporter, ValidationStage
 
 DOCUMENTATION_ROOT = Path(__file__).resolve().parents[2]
 MODULE_PATH = DOCUMENTATION_ROOT / "tools/build_docs.py"
@@ -99,7 +102,9 @@ def test_fast_check_validates_one_changed_topic_and_reports_affected_outputs(
     assert report["search_indexes"] == ["en"]
     assert "documentation/build/site/en/user/ug-task-fast-loop.html" in report["affected_outputs"]
     assert "documentation/build/site/search/en/index.json" in report["affected_outputs"]
-    assert report["recommended_next_checks"] == ["make test-docs-contract", "make docs-validate"]
+    assert report["recommended_next_checks"] == ["make docs-release-handoff"]
+    assert "schema and direct links" in report["checked_guards"]
+    assert "binary PDF build, verification, and delivery" in report["skipped_release_only_checks"]
 
 
 def test_fast_check_rejects_broken_changed_dita_without_full_build(
@@ -164,7 +169,9 @@ def test_failure_diagnostics_name_smallest_documentation_context(
 
 
 def _minimal_site(root: Path) -> None:
-    localized_keydefs = {locale: build_docs._localized_map_keydefs(locale) for locale in build_docs.LOCALES}
+    localized_keydefs = {
+        locale: build_docs._localized_map_keydefs(locale) for locale in build_docs.LOCALES
+    }
     for locale in build_docs.LOCALES:
         locale_root = root / locale
         locale_root.mkdir(parents=True)
@@ -216,7 +223,9 @@ def test_generated_link_validation_accepts_complete_six_locale_site(tmp_path: Pa
     build_docs.validate_output(tmp_path)
 
 
-def test_locale_root_link_normalization_keeps_dita_outputs_inside_locale_root(tmp_path: Path) -> None:
+def test_locale_root_link_normalization_keeps_dita_outputs_inside_locale_root(
+    tmp_path: Path,
+) -> None:
     locale_root = tmp_path / "en"
     (locale_root / "user").mkdir(parents=True)
     (locale_root / "index.html").write_text(
@@ -318,24 +327,23 @@ def test_portal_shell_adds_accessibility_landmarks_theme_assets_and_locale_peers
         assert 'id="bpm-docs-search-query"' in html
         assert 'class="bpm-docs-discovery-tools"' in html
         assert 'class="bpm-docs-assistant-widget"' in html
-        assert 'data-documentation-assistant-widget' in html
+        assert "data-documentation-assistant-widget" in html
         assert f'data-assistant-locale="{locale}"' in html
         assert 'data-assistant-expanded="false"' in html
-        assert 'data-assistant-toggle' in html
-        assert 'data-assistant-panel hidden' in html
+        assert "data-assistant-toggle" in html
+        assert "data-assistant-panel hidden" in html
         assert 'class="bpm-docs-assistant-entry"' not in html
         assert 'data-assistant-state="unavailable"' in html
         assert 'role="log"' in html
         assert 'data-assistant-message-roles="user assistant system"' in html
-        assert 'data-assistant-question' in html
-        assert 'data-assistant-install' in html
-        assert 'data-assistant-clear' in html
-        assert 'data-assistant-send' in html
-        assert 'data-assistant-stop' in html
-        assert 'data-local-model-manager' not in html
-        assert 'data-assistant-web-control hidden' in html
-        assert 'role="switch"' in html
-        assert 'data-assistant-web-toggle' in html
+        assert "data-assistant-question" in html
+        assert "data-assistant-install" in html
+        assert "data-assistant-clear" in html
+        assert "data-assistant-send" in html
+        assert "data-assistant-stop" in html
+        assert "data-local-model-manager" not in html
+        assert "data-assistant-web-control" not in html
+        assert "data-assistant-web-toggle" not in html
         assistant_copy = json.loads(
             (tmp_path / locale / "assistant-copy.json").read_text(encoding="utf-8")
         )
@@ -347,61 +355,62 @@ def test_portal_shell_adds_accessibility_landmarks_theme_assets_and_locale_peers
         assert assistant_copy["messages"]["shell"]["assistant_clear_short"]
         assert assistant_copy["messages"]["shell"]["assistant_external_sources"]
         assert "assistant-copy.json" not in html
-        assert 'data-search-index-href="../search/' in html or 'data-search-index-href="search/' in html
+        assert (
+            'data-search-index-href="../search/' in html
+            or 'data-search-index-href="search/' in html
+        )
         assert 'role="status" aria-live="polite"' in html
         assert 'bpm-docs-search.js" defer' in html
         assert 'bpm-docs-model-manager.js" defer' in html
         assert 'bpm-docs-assistant-renderer.js" defer' in html
         assert 'bpm-docs-assistant-state-machine.js" defer' in html
-        assert 'bpm-docs-assistant-web-mode.js" defer' in html
+        assert 'bpm-docs-assistant-web-mode.js" defer' not in html
         assert 'bpm-docs-assistant-conversation.js" defer' in html
         assert 'bpm-docs-assistant-transport.js" defer' in html
         assert 'bpm-docs-assistant-shell.js" defer' in html
         assert '<meta name="theme-color" content="#edf2f7">' in html
         assert "bpm-docs-theme-control" in html
-        assert 'data-docs-theme-select' in html
+        assert "data-docs-theme-select" in html
         assert '<option value="system">' in html
         assert '<option value="light">' in html
         assert '<option value="dark">' in html
         assert 'class="bpm-docs-breadcrumbs"' in html
-        assert 'aria-label=' in html
-        assert 'data-docs-locale-select' in html
+        assert "aria-label=" in html
+        assert "data-docs-locale-select" in html
         assert '<option value="system" data-docs-locale-system>' in html
         assert f'<option value="{locale}"' in html
-        assert 'data-docs-locale-href=' in html
-        assert 'data-docs-locale-matches=' in html
-        header = html[
-            html.index('<header class="bpm-docs-header">') : html.index("</header>")
-        ]
-        sidebar = html[
-            html.index('<aside class="bpm-docs-sidebar"') : html.index("</aside>")
-        ]
+        assert "data-docs-locale-href=" in html
+        assert "data-docs-locale-matches=" in html
+        header = html[html.index('<header class="bpm-docs-header">') : html.index("</header>")]
+        sidebar = html[html.index('<aside class="bpm-docs-sidebar"') : html.index("</aside>")]
         assert 'href="#a-user-guide"' not in header
         assert 'href="#a-firefox-policy-guide"' not in header
-        assert 'data-docs-tree-host' in sidebar
+        assert "data-docs-tree-host" in sidebar
         assert 'data-navigation-href="navigation.json"' in sidebar
-        assert 'data-navigation-locale=' in sidebar
+        assert "data-navigation-locale=" in sidebar
         assert 'data-current-tree-node="documentation-root"' in sidebar
         assert 'aria-busy="true"' in sidebar
-        assert 'data-docs-tree-status' in sidebar
-        assert '<noscript>' in sidebar
+        assert "data-docs-tree-status" in sidebar
+        assert "<noscript>" in sidebar
         assert 'role="tree"' not in sidebar
-        assert 'data-tree-node=' not in sidebar
+        assert "data-tree-node=" not in sidebar
         for _guide_id, _filename, anchor, _url_root in build_docs.GUIDE_MAPS:
             assert f'id="{anchor}"' in html
-        navigation = json.loads(
-            (tmp_path / locale / "navigation.json").read_text(encoding="utf-8")
-        )
+        navigation = json.loads((tmp_path / locale / "navigation.json").read_text(encoding="utf-8"))
         nodes = _navigation_nodes(navigation)
         assert navigation["locale"] == locale
         assert navigation["node_count"] == len(nodes)
-        assert list(nodes)[:3] == ["documentation-root", "user-guide", "section:user-guide:orient-and-plan"]
+        assert list(nodes)[:3] == [
+            "documentation-root",
+            "user-guide",
+            "section:user-guide:orient-and-plan",
+        ]
         assert nodes["user-guide"]["node"]["anchor"] == "a-user-guide"
         assert nodes["firefox-policy-guide"]["node"]["anchor"] == "a-firefox-policy-guide"
         if locale == "ru":
             assert nodes["documentation-root"]["node"]["label"] == "Документы"
             assert nodes["section:user-guide:orient-and-plan"]["node"]["label"] == (
-                "Ориентируйтесь и планируйте работу с профилями"
+                "Планирование работы с профилями"
             )
         assert f"v{build_docs._product_version()}" in html
         assert "Documentation 0.9.1" not in html
@@ -411,7 +420,7 @@ def test_portal_shell_adds_accessibility_landmarks_theme_assets_and_locale_peers
         assert (tmp_path / locale / "assets/bpm-docs-model-manager.js").is_file()
         assert (tmp_path / locale / "assets/bpm-docs-assistant-renderer.js").is_file()
         assert (tmp_path / locale / "assets/bpm-docs-assistant-state-machine.js").is_file()
-        assert (tmp_path / locale / "assets/bpm-docs-assistant-web-mode.js").is_file()
+        assert not (tmp_path / locale / "assets/bpm-docs-assistant-web-mode.js").exists()
         assert (tmp_path / locale / "assets/bpm-docs-assistant-conversation.js").is_file()
         assert (tmp_path / locale / "assets/bpm-docs-assistant-transport.js").is_file()
         assert (tmp_path / locale / "assets/bpm-docs-assistant-shell.js").is_file()
@@ -429,11 +438,11 @@ def test_portal_navigation_tree_expands_current_topic_without_translated_paths(
     build_docs.apply_portal_shell(tmp_path)
 
     first_topic_id = build_docs._navigation_topic_order("user-guide.ditamap")[0]
-    first_topic_title = build_docs._navigation_model(tmp_path)["topics"][first_topic_id]["title"]["ru"]
-    html = (tmp_path / "ru" / "user" / f"{first_topic_id}.html").read_text(encoding="utf-8")
-    sidebar = html[
-        html.index('<aside class="bpm-docs-sidebar"') : html.index("</aside>")
+    first_topic_title = build_docs._navigation_model(tmp_path)["topics"][first_topic_id]["title"][
+        "ru"
     ]
+    html = (tmp_path / "ru" / "user" / f"{first_topic_id}.html").read_text(encoding="utf-8")
+    sidebar = html[html.index('<aside class="bpm-docs-sidebar"') : html.index("</aside>")]
     navigation = json.loads((tmp_path / "ru/navigation.json").read_text(encoding="utf-8"))
     nodes = _navigation_nodes(navigation)
 
@@ -444,7 +453,7 @@ def test_portal_navigation_tree_expands_current_topic_without_translated_paths(
     assert 'role="tree"' not in sidebar
     assert nodes["user-guide"]["node"]["href"] == "index.html#a-user-guide"
     assert nodes["section:user-guide:orient-and-plan"]["node"]["label"] == (
-        "Ориентируйтесь и планируйте работу с профилями"
+        "Планирование работы с профилями"
     )
     assert nodes[first_topic_id]["node"]["href"] == f"user/{first_topic_id}.html"
     assert nodes[first_topic_id]["parent"] == "section:user-guide:orient-and-plan"
@@ -478,14 +487,12 @@ def test_portal_navigation_tree_supports_hash_guide_activation_script(
     build_docs.apply_portal_shell(tmp_path)
 
     html = (tmp_path / "en" / "index.html").read_text(encoding="utf-8")
-    sidebar = html[
-        html.index('<aside class="bpm-docs-sidebar"') : html.index("</aside>")
-    ]
+    sidebar = html[html.index('<aside class="bpm-docs-sidebar"') : html.index("</aside>")]
     script = (tmp_path / "en" / "assets" / "bpm-docs-search.js").read_text(encoding="utf-8")
     navigation = json.loads((tmp_path / "en/navigation.json").read_text(encoding="utf-8"))
     nodes = _navigation_nodes(navigation)
 
-    assert 'data-docs-tree-host' in sidebar
+    assert "data-docs-tree-host" in sidebar
     assert f'data-navigation-version="{build_docs._product_version()}"' in sidebar
     assert 'role="tree"' not in sidebar
     assert nodes["documentation-root"]["node"]["label"] == "Documents"
@@ -495,10 +502,10 @@ def test_portal_navigation_tree_supports_hash_guide_activation_script(
     assert "validatedNavigationNodes" in script
     assert "expectedVersion = host.dataset.navigationVersion" in script
     assert "renderNavigationTree" in script
-    assert 'guideItemForHash' in script
-    assert 'window.location.hash' in script
-    assert 'hashchange' in script
-    assert 'setCurrentTreeItem(tree, guide)' in script
+    assert "guideItemForHash" in script
+    assert "window.location.hash" in script
+    assert "hashchange" in script
+    assert "setCurrentTreeItem(tree, guide)" in script
     assert 'tree.querySelectorAll("[data-tree-branch]")' in script
     assert 'event.key === "Enter" && item.hasAttribute("data-tree-branch")' in script
     assert 'requiredExpandedTreeNodes(tree).has(item.dataset.treeNode || "")' in script
@@ -533,7 +540,7 @@ def test_generated_compatibility_versions_follow_the_product_version(
             for document in search["documents"]
         )
         assert f'data-navigation-version="{product_version}"' in page
-        assert f"data-tree-storage-key=\"bpm-docs-tree:{locale}:{product_version}\"" in page
+        assert f'data-tree-storage-key="bpm-docs-tree:{locale}:{product_version}"' in page
 
 
 def test_portal_shell_validation_rejects_inline_styles_and_active_content(tmp_path: Path) -> None:
@@ -619,7 +626,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
         "cis-settings-guide",
         "administrator-guide",
     }
-    assert len(manifest["topics"]) == 160
+    assert len(manifest["topics"]) == 164
     assert set(manifest["navigation"]) == set(build_docs.LOCALES)
     for locale, record in manifest["navigation"].items():
         navigation_path = tmp_path / record["path"]
@@ -630,16 +637,22 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
         assert record["node_count"] == navigation["node_count"]
         assert navigation["locale"] == locale
     assert set(manifest["search"]) == set(build_docs.LOCALES)
-    search_payload = json.loads((tmp_path / manifest["search"]["en"]["path"]).read_text(encoding="utf-8"))
+    search_payload = json.loads(
+        (tmp_path / manifest["search"]["en"]["path"]).read_text(encoding="utf-8")
+    )
     assert search_payload["contract_id"] == "bpm-doc-search-corpus-results-0.9.0"
     assert search_payload["contract_schema_version"] == 1
-    assert search_payload["normalization_contract_id"] == "bpm-doc-search-normalization-aliases-0.9.0"
+    assert (
+        search_payload["normalization_contract_id"] == "bpm-doc-search-normalization-aliases-0.9.0"
+    )
     assert search_payload["normalization_schema_version"] == 1
     assert search_payload["ranking_contract_id"] == "bpm-doc-search-ranking-typo-0.9.0"
     assert search_payload["ranking_schema_version"] == 1
     assert search_payload["facets_contract_id"] == "bpm-doc-search-facets-filters-0.9.0"
     assert search_payload["facets_schema_version"] == 1
-    assert search_payload["domain_ranking_contract_id"] == "bpm-doc-search-domain-ranking-facets-0.9.3"
+    assert (
+        search_payload["domain_ranking_contract_id"] == "bpm-doc-search-domain-ranking-facets-0.9.3"
+    )
     assert search_payload["domain_ranking_schema_version"] == 1
     assert search_payload["quality_contract_id"] == "bpm-doc-search-quality-performance-0.9.0"
     assert search_payload["quality_schema_version"] == 1
@@ -656,14 +669,33 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert search_payload["normalization"]["alias_group_count"] == 5
     assert search_payload["normalization"]["query_fixture_count"] == 3
     assert search_payload["domain_ranking"] == {
-        "preserved_sources": ["identifiers", "title", "aliases", "headings", "body", "bounded_typo"],
+        "preserved_sources": [
+            "identifiers",
+            "title",
+            "aliases",
+            "headings",
+            "body",
+            "bounded_typo",
+        ],
         "evidence_fields": [
-            "topic_id", "document_id", "score", "score_breakdown", "matched_fields",
-            "identifiers", "filter_facets",
+            "topic_id",
+            "document_id",
+            "score",
+            "score_breakdown",
+            "matched_fields",
+            "identifiers",
+            "filter_facets",
         ],
         "preserved_facets": [
-            "locale", "guide_id", "topic_kind", "firefox_channel", "policy_category",
-            "cis_level", "cis_control_state", "api_area", "bpm_version",
+            "locale",
+            "guide_id",
+            "topic_kind",
+            "firefox_channel",
+            "policy_category",
+            "cis_level",
+            "cis_control_state",
+            "api_area",
+            "bpm_version",
         ],
         "maximum_evidence_rows": 50,
     }
@@ -675,7 +707,10 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
         "body",
         "bounded_typo",
     ]
-    assert search_payload["ranking"]["weights"]["exact_identifier"] > search_payload["ranking"]["weights"]["title"]
+    assert (
+        search_payload["ranking"]["weights"]["exact_identifier"]
+        > search_payload["ranking"]["weights"]["title"]
+    )
     assert search_payload["ranking"]["ranking_fixture_count"] == 5
     assert search_payload["filtering"]["composition"] == (
         "AND across facet fields; OR within values of the same facet field."
@@ -702,49 +737,76 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     }
     assert search_payload["performance_report"]["document_count"] == len(manifest["topics"])
     assert search_payload["performance_report"]["quality_fixture_count"] == 9
-    assert search_payload["performance_report"]["deterministic_scan_units"] == len(manifest["topics"]) * 9
+    assert (
+        search_payload["performance_report"]["deterministic_scan_units"]
+        == len(manifest["topics"]) * 9
+    )
     assert search_payload["performance_report"]["max_observed_visible_results"] <= 50
     assert search_payload["integrity_report"]["status"] == "pass"
     assert search_payload["integrity_report"]["failure_count"] == 0
-    assert search_payload["integrity_report"]["counts"]["manifest_topics"] == len(manifest["topics"])
+    assert search_payload["integrity_report"]["counts"]["manifest_topics"] == len(
+        manifest["topics"]
+    )
     assert search_payload["integrity_report"]["document_integrity"]["missing_topic_ids"] == []
     assert search_payload["integrity_report"]["document_integrity"]["duplicate_document_ids"] == []
     assert search_payload["integrity_report"]["anchor_integrity"]["stale_target_anchors"] == []
-    assert search_payload["integrity_report"]["snippet_integrity"]["broken_snippet_document_ids"] == []
-    assert search_payload["integrity_report"]["inventory_gap_integrity"]["api"]["missing_source_ids"] == []
+    assert (
+        search_payload["integrity_report"]["snippet_integrity"]["broken_snippet_document_ids"] == []
+    )
+    assert (
+        search_payload["integrity_report"]["inventory_gap_integrity"]["api"]["missing_source_ids"]
+        == []
+    )
     assert {fixture["locale"] for fixture in search_payload["query_fixtures"]} == {"en"}
     ranking_results = {
-        result["fixture_id"]: result
-        for result in search_payload["ranking_fixture_results"]
+        result["fixture_id"]: result for result in search_payload["ranking_fixture_results"]
     }
-    assert ranking_results["exact-policy-ai-controls"]["top_topic_id"] == "fx-concept-complex-policy-families"
+    assert (
+        ranking_results["exact-policy-ai-controls"]["top_topic_id"]
+        == "fx-concept-complex-policy-families"
+    )
     assert ranking_results["exact-policy-ai-controls"]["score_breakdown"]["exact_identifier"] > 0
-    assert ranking_results["title-api-validation"]["top_topic_id"] == "admin-task-validate-firefox-policies-json"
+    assert (
+        ranking_results["title-api-validation"]["top_topic_id"]
+        == "admin-task-validate-firefox-policies-json"
+    )
     assert ranking_results["title-api-validation"]["score_breakdown"]["title"] > 0
-    assert ranking_results["typo-en-profile-library"]["top_topic_id"] == "ug-task-use-profile-library"
+    assert (
+        ranking_results["typo-en-profile-library"]["top_topic_id"] == "ug-task-use-profile-library"
+    )
     assert ranking_results["typo-en-profile-library"]["score_breakdown"]["bounded_typo"] > 0
     filter_results = {
-        result["fixture_id"]: result
-        for result in search_payload["filter_fixture_results"]
+        result["fixture_id"]: result for result in search_payload["filter_fixture_results"]
     }
     assert filter_results["en-api-validation"]["result_count"] >= 1
-    assert "admin-task-validate-firefox-policies-json" in filter_results["en-api-validation"]["result_topic_ids"]
+    assert (
+        "admin-task-validate-firefox-policies-json"
+        in filter_results["en-api-validation"]["result_topic_ids"]
+    )
     assert filter_results["en-api-validation"]["url_query"] == (
         "api_area=validation&guide=administrator-guide"
     )
     assert filter_results["en-empty-api-cis"]["result_count"] == 0
     assert filter_results["en-empty-api-cis"]["empty_result_message"]
     quality_results = {
-        result["fixture_id"]: result
-        for result in search_payload["quality_fixture_results"]
+        result["fixture_id"]: result for result in search_payload["quality_fixture_results"]
     }
-    assert quality_results["en-exact-ai-controls"]["top_topic_id"] == "fx-concept-complex-policy-families"
+    assert (
+        quality_results["en-exact-ai-controls"]["top_topic_id"]
+        == "fx-concept-complex-policy-families"
+    )
     assert quality_results["en-exact-ai-controls"]["required_score_component_value"] > 0
-    assert quality_results["en-natural-profile-library"]["top_topic_id"] == "ug-task-use-profile-library"
+    assert (
+        quality_results["en-natural-profile-library"]["top_topic_id"]
+        == "ug-task-use-profile-library"
+    )
     assert quality_results["en-typo-profile-library"]["required_score_component_value"] > 0
     assert quality_results["en-channel-release-ai"]["result_count"] == 1
     assert quality_results["en-cis-recommendation"]["top_topic_id"] == "cis-settings-guide"
-    assert quality_results["en-api-validation"]["top_topic_id"] == "admin-task-validate-firefox-policies-json"
+    assert (
+        quality_results["en-api-validation"]["top_topic_id"]
+        == "admin-task-validate-firefox-policies-json"
+    )
     assert quality_results["en-no-result"]["result_count"] == 0
     assert quality_results["en-adversarial-html-like"]["result_count"] == 0
     assert set(search_payload["searchable_fields"]) == {
@@ -781,10 +843,11 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     ]
     assert ai_documents
     assert any(
-        "aicontrols" in document["normalized"]["fields"]["identifiers"]
-        for document in ai_documents
+        "aicontrols" in document["normalized"]["fields"]["identifiers"] for document in ai_documents
     )
-    assert any("ai_smart" in document["filter_facets"]["policy_category"] for document in ai_documents)
+    assert any(
+        "ai_smart" in document["filter_facets"]["policy_category"] for document in ai_documents
+    )
 
     api_documents = [
         document
@@ -792,31 +855,36 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
         if "validation" in document["filter_facets"]["api_area"]
     ]
     assert api_documents
-    assert any(document["topic_id"] == "admin-task-validate-firefox-policies-json" for document in api_documents)
+    assert any(
+        document["topic_id"] == "admin-task-validate-firefox-policies-json"
+        for document in api_documents
+    )
 
-    ru_payload = json.loads((tmp_path / manifest["search"]["ru"]["path"]).read_text(encoding="utf-8"))
+    ru_payload = json.loads(
+        (tmp_path / manifest["search"]["ru"]["path"]).read_text(encoding="utf-8")
+    )
     assert all(document["locale"] == "ru" for document in ru_payload["documents"])
     assert all(document["url"].startswith("/help/ru/") for document in ru_payload["documents"])
     assert all(
-        document["source"]["output_path"].startswith("ru/")
-        for document in ru_payload["documents"]
+        document["source"]["output_path"].startswith("ru/") for document in ru_payload["documents"]
     )
     ru_filter_results = {
-        result["fixture_id"]: result
-        for result in ru_payload["filter_fixture_results"]
+        result["fixture_id"]: result for result in ru_payload["filter_fixture_results"]
     }
     assert ru_filter_results["ru-empty-api-cis"]["result_count"] == 0
     assert ru_filter_results["ru-empty-api-cis"]["empty_result_message"].startswith("Нет страниц")
     ru_quality_results = {
-        result["fixture_id"]: result
-        for result in ru_payload["quality_fixture_results"]
+        result["fixture_id"]: result for result in ru_payload["quality_fixture_results"]
     }
-    assert ru_quality_results["ru-natural-profile-library"]["top_topic_id"] == "ug-task-use-profile-library"
+    assert (
+        ru_quality_results["ru-natural-profile-library"]["top_topic_id"]
+        == "ug-task-use-profile-library"
+    )
     assert ru_quality_results["ru-no-result"]["result_count"] == 0
     assert manifest["ui_target_map"]["sha256"] == build_docs._file_sha256(
         tmp_path / "ui-target-map.json"
     )
-    assert len(target_map["targets"]) == 519
+    assert len(target_map["targets"]) == 523
     assert "policy:AIControls" in target_map["targets"]
     assert "known-preference:network.IDN_show_punycode" in target_map["targets"]
     assert "capability:CAP-SET-001" in target_map["targets"]
@@ -848,7 +916,111 @@ def test_search_indexes_are_reproducible_for_clean_publish_trees(tmp_path: Path)
         assert (first / relative).read_bytes() == (second / relative).read_bytes()
 
 
-def test_package_removes_stale_outputs_before_validation(
+def test_staged_search_validation_rejects_each_semantic_failure_class(tmp_path: Path) -> None:
+    _minimal_site(tmp_path)
+    build_docs.apply_portal_shell(tmp_path)
+    build_docs.generate_manifest_files(tmp_path)
+    base_manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
+    search_path = tmp_path / base_manifest["search"]["en"]["path"]
+    base_search = json.loads(search_path.read_text(encoding="utf-8"))
+
+    def rewrite(payload: dict[str, object]) -> None:
+        manifest = copy.deepcopy(base_manifest)
+        build_docs._write_json(search_path, payload)
+        manifest["search"]["en"]["sha256"] = build_docs._file_sha256(search_path)
+        build_docs._write_json(tmp_path / "manifest.json", manifest)
+
+    cases = (
+        (
+            "contract",
+            lambda payload: payload.__setitem__("search_mode", "network"),
+            "search index mode mismatch for en",
+        ),
+        (
+            "fixtures",
+            lambda payload: payload.__setitem__("query_fixtures", []),
+            "search index query fixtures mismatch for en",
+        ),
+        (
+            "documents",
+            lambda payload: payload["documents"][0]["searchable"].pop("title"),
+            "search document searchable fields mismatch for en/",
+        ),
+        (
+            "ranking",
+            lambda payload: payload.__setitem__("ranking_fixture_results", []),
+            "search index ranking fixture results mismatch for en",
+        ),
+        (
+            "filters",
+            lambda payload: payload.__setitem__("filter_fixture_results", []),
+            "search index filter fixture results mismatch for en",
+        ),
+        (
+            "quality",
+            lambda payload: payload.__setitem__("quality_fixture_results", []),
+            "search index quality fixture results mismatch for en",
+        ),
+        (
+            "budgets",
+            lambda payload: payload.__setitem__("performance_report", {}),
+            "search index performance report mismatch for en",
+        ),
+    )
+    for _failure_class, mutate, diagnostic in cases:
+        payload = copy.deepcopy(base_search)
+        mutate(payload)
+        rewrite(payload)
+        with pytest.raises(build_docs.BuildError, match=diagnostic):
+            build_docs.validate_manifest_files(tmp_path)
+
+
+def test_manifest_validation_stages_preserve_stable_diagnostics(tmp_path: Path) -> None:
+    _minimal_site(tmp_path)
+    build_docs.apply_portal_shell(tmp_path)
+    build_docs.generate_manifest_files(tmp_path)
+    manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
+    target_map = json.loads((tmp_path / "ui-target-map.json").read_text(encoding="utf-8"))
+    topic_id = next(iter(manifest["topics"]))
+    manifest["topics"][topic_id]["dita_key"] = "topic.wrong"
+    with pytest.raises(build_docs.BuildError, match=rf"topic {topic_id} has inconsistent DITA key"):
+        build_docs._validate_manifest_semantics(manifest, target_map)
+
+
+def test_validation_reporter_exposes_typed_stage_without_changing_diagnostic() -> None:
+    reporter = ValidationReporter(build_docs.BuildError, artifact="manifest.json", locale="en")
+    with pytest.raises(build_docs.BuildError, match="stable diagnostic"):
+        reporter.require(ValidationStage.MANIFEST_TOPICS, False, "stable diagnostic")
+    assert reporter.issues[0].stage is ValidationStage.MANIFEST_TOPICS
+    assert reporter.issues[0].artifact == "manifest.json"
+    assert reporter.issues[0].locale == "en"
+
+
+def test_validation_reporter_preserves_success_and_reclassifies_legacy_failures() -> None:
+    reporter = ValidationReporter(
+        build_docs.BuildError, artifact="search/en/index.json", locale="en"
+    )
+
+    reporter.require(ValidationStage.SEARCH_CONTRACT, True, "not raised")
+    assert reporter.stage(ValidationStage.SEARCH_CONTRACT, lambda: "accepted") == "accepted"
+
+    def legacy_failure() -> None:
+        raise build_docs.BuildError("legacy diagnostic")
+
+    with pytest.raises(build_docs.BuildError, match="legacy diagnostic"):
+        reporter.stage(ValidationStage.SEARCH_RANKING, legacy_failure)
+
+    assert reporter.issues == [
+        ValidationIssue(
+            ValidationStage.SEARCH_RANKING,
+            "legacy diagnostic",
+            "search/en/index.json",
+            "en",
+        )
+    ]
+
+
+def test_package_keeps_last_verified_outputs_when_source_validation_fails(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     archive = tmp_path / "stale.tar.gz"
@@ -867,14 +1039,16 @@ def test_package_removes_stale_outputs_before_validation(
     with pytest.raises(build_docs.BuildError, match="invalid source"):
         build_docs.package()
 
-    assert not archive.exists()
-    assert not checksum.exists()
+    assert archive.read_bytes() == b"stale"
+    assert checksum.read_text(encoding="ascii") == "stale"
+    assert list((tmp_path / ".quarantine").glob("documentation-package-*"))
 
 
-def test_source_fingerprint_tracks_portal_scripts_and_local_model_copy(
+def test_source_fingerprint_tracks_current_portal_scripts_and_local_model_copy(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     fingerprint = build_docs._source_fingerprint()
+    assert not hasattr(build_docs, "ASSISTANT_WEB_MODE_SCRIPT")
 
     with monkeypatch.context() as patch:
         patch.setattr(build_docs, "SEARCH_SCRIPT", "bpm-docs-print.css")
@@ -890,10 +1064,6 @@ def test_source_fingerprint_tracks_portal_scripts_and_local_model_copy(
 
     with monkeypatch.context() as patch:
         patch.setattr(build_docs, "ASSISTANT_STATE_MACHINE_SCRIPT", "bpm-docs-print.css")
-        assert build_docs._source_fingerprint() != fingerprint
-
-    with monkeypatch.context() as patch:
-        patch.setattr(build_docs, "ASSISTANT_WEB_MODE_SCRIPT", "bpm-docs-print.css")
         assert build_docs._source_fingerprint() != fingerprint
 
     with monkeypatch.context() as patch:
@@ -928,7 +1098,9 @@ def _fake_pdf_payload() -> bytes:
 
 
 def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     documentation = tmp_path / "documentation"
     for locale in build_docs.LOCALES:
@@ -946,7 +1118,7 @@ def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
         json.dumps(
             {
                 "schema_version": 1,
-                "target_bpm_version": "0.9.3",
+                "target_bpm_version": "0.9.4",
                 "locales": list(build_docs.LOCALES),
                 "guides": [
                     {
@@ -955,7 +1127,9 @@ def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
                     },
                     {
                         "id": "administrator-guide",
-                        "filename": "browser-policy-manager-administrator-guide-{locale}-{bpm_version}.pdf",
+                        "filename": (
+                            "browser-policy-manager-administrator-guide-{locale}-{bpm_version}.pdf"
+                        ),
                     },
                 ],
             }
@@ -972,7 +1146,19 @@ def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
                 "candidate_path_layout": "{locale}/{filename}",
                 "dita_format": "html5",
                 "pdf_renderer": "chromium",
+                "ui_footer_year": 2026,
                 "source_maps": ["user-guide.ditamap", "administrator-guide.ditamap"],
+                "development_cache": {
+                    "schema_version": 1,
+                    "root": "documentation/.cache/pdf-pipeline",
+                    "unit": "locale-guide",
+                    "layers": ["dita-html5", "verified-pdf"],
+                    "hash_algorithm": "sha256",
+                    "reuse": "verified-only",
+                    "invalid_entry": "quarantine-and-rebuild",
+                    "promotion": "staged-and-atomic",
+                },
+                "parallelism": {"max_workers": 1},
             }
         ),
         encoding="utf-8",
@@ -1007,10 +1193,25 @@ def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
     monkeypatch.setattr(build_docs, "_wait_for_pdf_topic_html", lambda **_kwargs: None)
     monkeypatch.setattr(build_docs, "_write_pdf_print_guide", fake_write_pdf_print_guide)
     monkeypatch.setattr(build_docs, "_render_pdf_with_chromium", fake_render_pdf)
+    monkeypatch.setattr(
+        build_docs, "_expected_pdf_destination_ids", lambda _path: {"bpm-topic-0001"}
+    )
+    monkeypatch.setattr(
+        build_docs,
+        "_pdf_navigation_model",
+        lambda _path: (2, {"bpm-topic-0001": 2}, {"bpm-topic-0001"}),
+    )
+    monkeypatch.setattr(
+        build_docs,
+        "_pdf_navigation_model_without_destinations",
+        lambda _path: (2, {}, set()),
+    )
+    monkeypatch.setattr(build_docs, "_overlay_pdf_page_numbers", lambda _target, _overlay: None)
+    monkeypatch.setattr(build_docs, "_validate_pdf_print_contract", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(build_docs, "_canonicalize_pdf", lambda _path: None)
     candidate = tmp_path / "candidate"
 
-    build_docs.build_pdf_tree(candidate)
+    build_docs.build_pdf_tree(candidate, use_cache=False)
 
     files = sorted(path for path in candidate.rglob("*.pdf"))
     assert len(files) == 12
@@ -1019,6 +1220,240 @@ def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
         assert build_docs.PDF_FIXED_CREATION_DATE in payload
         assert payload.count(build_docs.PDF_FIXED_DOCUMENT_ID) == 2
     build_docs.validate_pdf_tree(candidate)
+    progress = capsys.readouterr().out
+    assert progress.count("DITA HTML5 cache=bypassed") == 12
+    assert progress.count("Chromium PDF cache=bypassed") == 12
+    assert "cache lookup" not in progress
+
+
+def test_pdf_pair_hashes_invalidate_only_transitive_locale_guide_inputs(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    documentation = tmp_path / "documentation"
+    maps = documentation / "src/dita/en/maps"
+    user = documentation / "src/dita/en/user/user.dita"
+    admin = documentation / "src/dita/en/admin/admin.dita"
+    screenshot = documentation / "assets/screenshots/en/user.png"
+    maps.mkdir(parents=True)
+    user.parent.mkdir(parents=True)
+    admin.parent.mkdir(parents=True)
+    screenshot.parent.mkdir(parents=True)
+    (maps / "user-guide.ditamap").write_text(
+        '<map><mapref href="keys.ditamap"/><topicref keyref="topic.user"/></map>',
+        encoding="utf-8",
+    )
+    (maps / "administrator-guide.ditamap").write_text(
+        '<map><mapref href="keys.ditamap"/><topicref keyref="topic.admin"/></map>',
+        encoding="utf-8",
+    )
+    (maps / "keys.ditamap").write_text(
+        '<map><keydef keys="topic.user" href="../user/user.dita"/>'
+        '<keydef keys="topic.admin" href="../admin/admin.dita"/>'
+        '<keydef keys="screenshot.user" '
+        'href="../../../../assets/screenshots/en/user.png"/></map>',
+        encoding="utf-8",
+    )
+    user.write_text(
+        '<topic id="user"><title>User</title><body><image keyref="screenshot.user"/>'
+        "</body></topic>",
+        encoding="utf-8",
+    )
+    admin.write_text(
+        '<topic id="admin"><title>Admin</title><body><p>Admin body</p></body></topic>',
+        encoding="utf-8",
+    )
+    screenshot.write_bytes(b"reviewed screenshot")
+    monkeypatch.setattr(build_docs, "REPOSITORY_ROOT", tmp_path)
+    monkeypatch.setattr(build_docs, "DOCUMENTATION_ROOT", documentation)
+
+    user_before = build_docs._pdf_pair_source_hashes("en", "user-guide.ditamap")
+    admin_before = build_docs._pdf_pair_source_hashes("en", "administrator-guide.ditamap")
+
+    user.write_text(
+        '<topic id="user"><title>User changed</title><body>'
+        '<image keyref="screenshot.user"/></body></topic>',
+        encoding="utf-8",
+    )
+    assert build_docs._pdf_pair_source_hashes("en", "user-guide.ditamap") != user_before
+    assert build_docs._pdf_pair_source_hashes("en", "administrator-guide.ditamap") == admin_before
+
+    policy = {
+        "dita_format": "html5",
+        "determinism": {
+            "environment": {
+                "LANG": "C.UTF-8",
+                "LC_ALL": "C.UTF-8",
+                "TZ": "UTC",
+                "SOURCE_DATE_EPOCH": "0",
+            }
+        },
+    }
+    html_with_toolchain_44 = build_docs._pdf_pair_html_inputs(
+        locale="en",
+        guide_id="user-guide",
+        map_name="user-guide.ditamap",
+        policy=policy,
+        toolchain_identity={"dita_ot": "4.4", "java": "21.0.12+8"},
+    )
+    assert (
+        build_docs._pdf_pair_html_inputs(
+            locale="en",
+            guide_id="user-guide",
+            map_name="user-guide.ditamap",
+            policy=policy,
+            toolchain_identity={"dita_ot": "4.5", "java": "21.0.12+8"},
+        )
+        != html_with_toolchain_44
+    )
+    user.write_text(
+        '<topic id="user"><title>User</title><body><image keyref="screenshot.user"/>'
+        "</body></topic>",
+        encoding="utf-8",
+    )
+
+    (maps / "user-guide.ditamap").write_text(
+        '<map id="changed"><mapref href="keys.ditamap"/><topicref keyref="topic.user"/></map>',
+        encoding="utf-8",
+    )
+    assert build_docs._pdf_pair_source_hashes("en", "user-guide.ditamap") != user_before
+    assert build_docs._pdf_pair_source_hashes("en", "administrator-guide.ditamap") == admin_before
+    (maps / "user-guide.ditamap").write_text(
+        '<map><mapref href="keys.ditamap"/><topicref keyref="topic.user"/></map>',
+        encoding="utf-8",
+    )
+
+    screenshot.write_bytes(b"changed reviewed screenshot")
+    assert build_docs._pdf_pair_source_hashes("en", "user-guide.ditamap") != user_before
+    assert build_docs._pdf_pair_source_hashes("en", "administrator-guide.ditamap") == admin_before
+
+
+def test_pdf_pair_cache_inputs_cover_print_locale_renderer_and_toolchain_changes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    documentation = tmp_path / "documentation"
+    app_i18n = tmp_path / "app/i18n"
+    app_i18n.mkdir(parents=True)
+    (app_i18n / "en.json").write_text('{"footer":"English"}', encoding="utf-8")
+    (app_i18n / "de.json").write_text('{"footer":"Deutsch"}', encoding="utf-8")
+    inputs = {
+        "PDF_PRINT_CSS": documentation / "assets/pdf/print.css",
+        "PDF_COVER_LOGO": documentation / "assets/branding/logo.png",
+        "PDF_UI_FOOTER_TEMPLATE": tmp_path / "app/templates/footer.html",
+        "PDF_LAYOUT_CONTRACT": documentation / "config/layout.json",
+        "PDF_GENERATION_CONTRACT": documentation / "config/pdf.json",
+    }
+    for path in inputs.values():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(path.name, encoding="utf-8")
+    monkeypatch.setattr(build_docs, "REPOSITORY_ROOT", tmp_path)
+    for name, path in inputs.items():
+        monkeypatch.setattr(build_docs, name, path)
+    policy = {"ui_footer_year": 2026}
+    runtime = {"chromium": {"version": "150"}, "qpdf": {"version": "12"}}
+
+    en_before = build_docs._pdf_pair_pdf_inputs(
+        locale="en",
+        guide_id="user-guide",
+        html_fingerprint="a" * 64,
+        policy=policy,
+        runtime_identity=runtime,
+    )
+    de_before = build_docs._pdf_pair_pdf_inputs(
+        locale="de",
+        guide_id="user-guide",
+        html_fingerprint="a" * 64,
+        policy=policy,
+        runtime_identity=runtime,
+    )
+    inputs["PDF_PRINT_CSS"].write_text("changed print CSS", encoding="utf-8")
+    assert (
+        build_docs._pdf_pair_pdf_inputs(
+            locale="en",
+            guide_id="user-guide",
+            html_fingerprint="a" * 64,
+            policy=policy,
+            runtime_identity=runtime,
+        )
+        != en_before
+    )
+    inputs["PDF_PRINT_CSS"].write_text("print.css", encoding="utf-8")
+    (app_i18n / "en.json").write_text('{"footer":"Changed"}', encoding="utf-8")
+    assert (
+        build_docs._pdf_pair_pdf_inputs(
+            locale="en",
+            guide_id="user-guide",
+            html_fingerprint="a" * 64,
+            policy=policy,
+            runtime_identity=runtime,
+        )
+        != en_before
+    )
+    assert (
+        build_docs._pdf_pair_pdf_inputs(
+            locale="de",
+            guide_id="user-guide",
+            html_fingerprint="a" * 64,
+            policy=policy,
+            runtime_identity=runtime,
+        )
+        == de_before
+    )
+    assert (
+        build_docs._pdf_pair_pdf_inputs(
+            locale="de",
+            guide_id="user-guide",
+            html_fingerprint="a" * 64,
+            policy=policy,
+            runtime_identity={"chromium": {"version": "151"}},
+        )
+        != de_before
+    )
+
+
+def test_pdf_cache_reuses_verified_payload_and_quarantines_corruption(
+    tmp_path: Path,
+) -> None:
+    cache_root = tmp_path / "cache"
+    payload = tmp_path / "payload"
+    payload.mkdir()
+    (payload / "guide.pdf").write_bytes(b"verified PDF payload")
+    inputs = {"source": "a" * 64}
+    fingerprint = build_docs._pdf_cache_fingerprint(inputs)
+
+    def validate(candidate: Path) -> None:
+        if (candidate / "guide.pdf").read_bytes() != b"verified PDF payload":
+            raise build_docs.BuildError("invalid cached PDF")
+
+    build_docs._store_pdf_cache_entry(
+        cache_root,
+        kind="verified-pdf",
+        fingerprint=fingerprint,
+        inputs=inputs,
+        payload=payload,
+        validate_payload=validate,
+    )
+    reused = tmp_path / "reused"
+    assert build_docs._reuse_pdf_cache_entry(
+        cache_root,
+        kind="verified-pdf",
+        fingerprint=fingerprint,
+        inputs=inputs,
+        destination=reused,
+        validate_payload=validate,
+    )
+    assert (reused / "guide.pdf").read_bytes() == b"verified PDF payload"
+
+    (cache_root / "verified-pdf" / fingerprint / "payload/guide.pdf").write_bytes(b"corrupt")
+    assert not build_docs._reuse_pdf_cache_entry(
+        cache_root,
+        kind="verified-pdf",
+        fingerprint=fingerprint,
+        inputs=inputs,
+        destination=tmp_path / "must-not-reuse",
+        validate_payload=validate,
+    )
+    assert not (tmp_path / "must-not-reuse").exists()
+    assert len(list((cache_root / ".quarantine").glob("verified-pdf-*"))) == 1
 
 
 def test_canonicalize_pdf_replaces_qpdf_trailer_id_after_the_rewrite(
@@ -1047,12 +1482,14 @@ def test_canonicalize_pdf_replaces_qpdf_trailer_id_after_the_rewrite(
     assert path.read_bytes().count(build_docs.PDF_FIXED_DOCUMENT_ID) == 2
 
 
-def test_pdf_article_drops_temporary_local_file_links_but_keeps_external_links(tmp_path: Path) -> None:
+def test_pdf_article_drops_temporary_local_file_links_but_keeps_external_links(
+    tmp_path: Path,
+) -> None:
     topic = tmp_path / "topic.html"
     topic.write_text(
-        "<html><body><article><p><a href=\"file:///tmp/build/topic.html\">Local</a>"
-        "<a href=\"admin-reference-minimum-system-requirements.html\">Topic</a>"
-        "<a href=\"https://example.invalid/article\">External</a></p></article></body></html>",
+        '<html><body><article><p><a href="file:///tmp/build/topic.html">Local</a>'
+        '<a href="admin-reference-minimum-system-requirements.html">Topic</a>'
+        '<a href="https://example.invalid/article">External</a></p></article></body></html>',
         encoding="utf-8",
     )
 
@@ -1079,16 +1516,16 @@ def test_pdf_topic_html_waits_for_delayed_map_output(
         '<map><title>Administrator guide</title><topicref keyref="topic.admin-reference"/></map>',
         encoding="utf-8",
     )
-    topic.write_text('<reference id="admin-reference"><title>Reference</title></reference>', encoding="utf-8")
+    topic.write_text(
+        '<reference id="admin-reference"><title>Reference</title></reference>', encoding="utf-8"
+    )
     output_root = tmp_path / "output"
     ticks = iter((0.0, 0.0, 0.1, 0.2))
 
     def fake_sleep(_seconds: float) -> None:
         destination = output_root / "de/admin/admin-reference.html"
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(
-            "<article><h1>Reference</h1></article>", encoding="utf-8"
-        )
+        destination.write_text("<article><h1>Reference</h1></article>", encoding="utf-8")
 
     monkeypatch.setattr(build_docs.time, "monotonic", lambda: next(ticks))
     monkeypatch.setattr(build_docs.time, "sleep", fake_sleep)
@@ -1101,6 +1538,115 @@ def test_pdf_topic_html_waits_for_delayed_map_output(
     )
 
     assert (output_root / "de/admin/admin-reference.html").is_file()
+
+
+def test_pdf_print_guide_renders_exact_footer_page_count_and_clickable_contents(
+    tmp_path: Path,
+) -> None:
+    maps = tmp_path / "src/dita/en/maps"
+    maps.mkdir(parents=True)
+    (maps / "keys.ditamap").write_text("<map/>", encoding="utf-8")
+    map_path = maps / "user-guide.ditamap"
+    map_path.write_text(
+        "<map><title>User Guide</title><topichead><topicmeta><navtitle>Get started</navtitle></topicmeta>"
+        '<topicref href="../user/start.dita"/></topichead></map>',
+        encoding="utf-8",
+    )
+    output_root = tmp_path / "output"
+    topic = output_root / "user/start.html"
+    topic.parent.mkdir(parents=True)
+    figures = "".join(
+        '<figure><figcaption><span class="fig--title-label">'
+        f"Figure {number}. "
+        f"</span>Caption {number}</figcaption></figure>"
+        for number in range(1, build_docs.PDF_USER_GUIDE_FIGURE_COUNT + 1)
+    )
+    topic.write_text(
+        '<html><body><article id="temporary" class="topic task" lang="en">'
+        f"<h1>Start here</h1><p>Body.</p>{figures}</article></body></html>",
+        encoding="utf-8",
+    )
+
+    print_path = build_docs._write_pdf_print_guide(
+        locale="en",
+        guide_id="user-guide",
+        map_path=map_path,
+        output_root=output_root,
+        total_pages=4,
+        destination_pages={"bpm-section-001": 3, "bpm-topic-0001": 4},
+        footer_year=2026,
+    )
+
+    rendered = print_path.read_text(encoding="utf-8")
+    assert "Pages: 4" in rendered
+    assert "© 2025-2026 • Valery Ledovskoy • Licensed under Mozilla Public License 2.0" in rendered
+    assert 'href="#bpm-section-001-p0003"' in rendered
+    assert 'id="bpm-section-001-p0003"' in rendered
+    assert 'href="#bpm-topic-0001-p0004"' in rendered
+    assert 'id="bpm-topic-0001-p0004" class="topic task" lang="en"' in rendered
+    assert '<span class="bpm-pdf-toc__page">3</span>' in rendered
+    assert '<span class="bpm-pdf-toc__page">4</span>' in rendered
+    for number in range(1, build_docs.PDF_USER_GUIDE_FIGURE_COUNT + 1):
+        assert f'<span class="fig--title-label">Figure {number}. </span>' in rendered
+
+
+def test_pdf_print_guide_rejects_an_incomplete_user_guide_figure_inventory(
+    tmp_path: Path,
+) -> None:
+    maps = tmp_path / "src/dita/en/maps"
+    maps.mkdir(parents=True)
+    (maps / "keys.ditamap").write_text("<map/>", encoding="utf-8")
+    map_path = maps / "user-guide.ditamap"
+    map_path.write_text(
+        "<map><title>User Guide</title><topichead><topicmeta><navtitle>Get started</navtitle></topicmeta>"
+        '<topicref href="../user/start.dita"/></topichead></map>',
+        encoding="utf-8",
+    )
+    output_root = tmp_path / "output"
+    topic = output_root / "user/start.html"
+    topic.parent.mkdir(parents=True)
+    topic.write_text(
+        '<html><body><article class="topic task" lang="en">'
+        "<h1>Start here</h1><p>Body.</p></article></body></html>",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(build_docs.BuildError, match="figure count is invalid for en: 0"):
+        build_docs._write_pdf_print_guide(
+            locale="en",
+            guide_id="user-guide",
+            map_path=map_path,
+            output_root=output_root,
+        )
+
+
+def test_pdf_footer_text_matches_ui_identity_for_russian_and_other_locales() -> None:
+    assert build_docs._pdf_footer_text("ru", current_year=2026) == (
+        "© 2025-2026 • Валерий Ледовской • Лицензия Mozilla Public License 2.0"
+    )
+    for locale in ("en", "de", "zh-CN", "fr", "es-ES"):
+        assert build_docs._pdf_footer_text(locale, current_year=2026) == (
+            "© 2025-2026 • Valery Ledovskoy • Licensed under Mozilla Public License 2.0"
+        )
+
+
+def test_pdf_page_number_overlay_leaves_only_title_page_unnumbered(tmp_path: Path) -> None:
+    overlay = build_docs._write_pdf_page_number_overlay(tmp_path, 4).read_text(encoding="utf-8")
+
+    assert overlay.count('class="bpm-pdf-page-overlay"') == 4
+    assert overlay.count('class="bpm-pdf-page-overlay__number"') == 3
+    assert ">1<" not in overlay
+    for page in (2, 3, 4):
+        assert f">{page}<" in overlay
+
+
+def test_pdf_positioned_line_text_does_not_invent_a_cjk_space() -> None:
+    line = build_docs.ET.fromstring(
+        '<line><word xMin="272.60" xMax="304.10">页数：</word>'
+        '<word xMin="304.10" xMax="322.12">103</word></line>'
+    )
+
+    assert build_docs._pdf_positioned_line_text(line) == "页数：103"
 
 
 def test_makefile_exposes_only_the_implemented_documentation_build_targets() -> None:

@@ -166,10 +166,14 @@ def _codeph_tokens(root: ET.Element) -> Counter[str]:
 
 
 def test_api_authored_topics_are_parallel_in_every_locale() -> None:
-    assert EXPECTED_API_TOPICS <= {path.name for path in (DITA_ROOT / "en/admin").glob("admin-*.dita")}
+    assert EXPECTED_API_TOPICS <= {
+        path.name for path in (DITA_ROOT / "en/admin").glob("admin-*.dita")
+    }
     assert not list((DITA_ROOT / "en/api").glob("*.dita"))
     for locale in LOCALIZED_LOCALES:
-        assert EXPECTED_API_TOPICS <= {path.name for path in (DITA_ROOT / locale / "admin").glob("admin-*.dita")}
+        assert EXPECTED_API_TOPICS <= {
+            path.name for path in (DITA_ROOT / locale / "admin").glob("admin-*.dita")
+        }
         assert not list((DITA_ROOT / locale / "api").glob("*.dita"))
 
 

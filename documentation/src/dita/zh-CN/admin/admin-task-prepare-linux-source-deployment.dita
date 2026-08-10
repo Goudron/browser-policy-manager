@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-linux-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux">
   <title>准备开源系统主机以进行源部署</title>
-  <shortdesc>在从存储库签出安装 BPM 之前，确认受支持的源部署边界、主机先决条件和延迟的生产功能。</shortdesc>
+  <shortdesc>在从存储<uicontrol>库</uicontrol>签出安装 BPM 之前，确认受支持的源部署边界、主机先决条件和延迟的生产功能。</shortdesc>
   <taskbody>
     <prereq><p>使用可以安装 Python 3.14+、Git、构建工具和curl 的 Linux 主机。此 操作手册 假定源签出，而不是打包的安装程序。</p></prereq>
     <context><p>BPM 可以从源代码运行以进行开发、审查和受控管理评估。此版本中未提供打包安装程序、本机服务单元、官方 systemd 配方、反向代理和 TLS 配方、HA 集群、托管机密和生产强化，并且不得将其呈现为受支持的部署行为。</p></context>
     <steps>
       <step><cmd>确定部署目的并记录这是基于源的 Linux 部署。</cmd><info><p>预期结果：操作说明表明 BPM 是从 Git 签出启动的，并且特定于发行版的安装程序被推迟。</p></info></step>
-      <step><cmd>安装或验证主机先决条件。</cmd><info><p>所需工具包括 Git、Python 3.14+、pip、ma​​ke、curl 和可以运行 <codeph>source .venv/bin/activate</codeph> 的 shell。存储库命令使用本地虚拟环境，不需要全局 BPM 包。</p></info></step>
-      <step><cmd>创建一个与生产数据和机密分开的工作目录。</cmd><info><p>将存储库签出、<codeph>.venv</codeph> 和本地 SQLite 数据保留在受控路径下。不要在文档示例或提交的文件中存储真正的秘密。</p></info></step>
+      <step><cmd>安装或验证主机先决条件。</cmd><info><p>所需工具包括 Git、Python 3.14+、pip、ma​​ke、curl 和可以运行 <codeph>source .venv/bin/activate</codeph> 的 shell。存储<uicontrol>库</uicontrol>命令使用本地虚拟环境，不需要全局 BPM 包。</p></info></step>
+      <step><cmd>创建一个与生产数据和机密分开的工作目录。</cmd><info><p>将存储<uicontrol>库</uicontrol>签出、<codeph>.venv</codeph> 和本地 SQLite 数据保留在受控路径下。不要在文档示例或提交的文件中存储真正的秘密。</p></info></step>
       <step><cmd>在继续之前确认有意未涵盖的内容。</cmd><info><note type="warning">此 操作手册 不提供打包安装程序、本机服务、支持的 systemd 单元、反向代理配方、TLS 终止、HA 拓扑、托管机密存储、备份自动化或生产强化清单。</note></info></step>
     </steps>
     <result><p>主机和操作假设已准备好支持受支持的 BPM 源签出工作流程。</p></result>

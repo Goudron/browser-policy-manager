@@ -55,9 +55,9 @@
       "disposition": "accepted",
       "evidence": [
         "docs/architecture/product-documentation-visual-theme-contract-0.9.1.md",
-        "tests/test_light_theme_surface_contract_091.py",
-        "tests/test_documentation_theme_alignment_091.py",
-        "tests/test_documentation_system_theme_091.py"
+        "tests/integration/ui/test_light_theme_surface_contract_091.py",
+        "tests/integration/docs/test_documentation_theme_alignment_091.py",
+        "tests/integration/docs/test_documentation_system_theme_091.py"
       ],
       "result": "BPM and documentation use comfortable non-white light surfaces, aligned dark styling, and explicit light/dark/system behavior with maintained contrast and browser checks.",
       "boundaries": []
@@ -68,7 +68,7 @@
       "evidence": [
         "documentation/config/search-ui-filter-contract-0.9.1.json",
         "documentation/tests/contract/test_search_ui_filter_contract.py",
-        "tests/test_documentation_search_filter_localization_091.py"
+        "tests/integration/docs/test_documentation_search_filter_localization_091.py"
       ],
       "result": "Search defaults to one line, expands without losing filter state, keeps deterministic offline ranking, and localizes every visible filter label.",
       "boundaries": [

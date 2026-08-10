@@ -200,7 +200,9 @@ def test_production_boundary_topics_are_keyed_and_precede_the_local_assistant_se
             DOCUMENTATION_ASSISTANT_KEYREFS
         )
         assistant_start = topicrefs.index(DOCUMENTATION_ASSISTANT_KEYREFS[0])
-        assert all(topicrefs.index(keyref) < assistant_start for keyref in PRODUCTION_BOUNDARY_KEYREFS)
+        assert all(
+            topicrefs.index(keyref) < assistant_start for keyref in PRODUCTION_BOUNDARY_KEYREFS
+        )
 
 
 def test_production_boundary_topics_preserve_locale_structure_and_full_peer_content() -> None:
@@ -221,8 +223,12 @@ def test_production_boundary_topics_preserve_locale_structure_and_full_peer_cont
                 assert token in localized_source
 
 
-def test_english_production_boundary_topics_cover_current_preparation_and_operating_responsibilities() -> None:
-    text = "\n".join(_normalized_text(_root("en", topic_id)) for topic_id in PRODUCTION_BOUNDARY_TOPICS)
+def test_english_production_boundary_topics_cover_current_preparation_and_operating_responsibilities() -> (
+    None
+):
+    text = "\n".join(
+        _normalized_text(_root("en", topic_id)) for topic_id in PRODUCTION_BOUNDARY_TOPICS
+    )
     casefolded = text.casefold()
 
     for token in REQUIRED_CURRENT_STATE_TOKENS:

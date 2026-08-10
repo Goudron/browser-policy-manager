@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-restore-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>恢复已归档的配置档案</title>
-  <shortdesc>当应再次编辑或使用存档的配置文件时，将其返回到活动库生命周期。</shortdesc>
+  <shortdesc>当应再次编辑或使用存档的配置文件时，将其返回到活动<uicontrol>库</uicontrol>生命周期。</shortdesc>
   <taskbody>
     <prereq><p>生命周期过滤器显示已存档或所有配置文件，并且目标配置文件行可见。</p></prereq>
     <context><p>恢复操作会撤销归档。它不会重新验证配置档案或更改策略值。</p></context>
     <steps>
       <step><cmd>确认归档行标识和更新时间。</cmd><info><p>预期结果：您确定要带回的存档配置文件。</p></info></step>
       <step><cmd>在该行中选择“恢复”。</cmd><info><note type="warning">恢复使配置档案再次处于活动状态，但其之前的验证状态可能仍需要审核。</note></info></step>
-      <step><cmd>切换到活动生命周期过滤器或所有配置档案以确认恢复的行。</cmd><info><p>如果状态报告成功但该行仍处于隐藏状态，请刷新库。</p></info></step>
+      <step><cmd>切换到活动生命周期过滤器或所有配置档案以确认恢复的行。</cmd><info><p>如果状态报告成功但该行仍处于隐藏状态，请刷新<uicontrol>库</uicontrol>。</p></info></step>
     </steps>
     <result><p>配置文件再次处于活动状态，可用于正常的编辑器工作流程。</p></result>
     <postreq><p>恢复：如果错误恢复，则重新归档配置文件。</p></postreq>

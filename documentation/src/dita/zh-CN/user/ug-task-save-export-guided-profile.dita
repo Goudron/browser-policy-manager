@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-export-guided-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>保存并下载引导配置档案</title>
-  <shortdesc>保存已审核的引导配置文件，并在配置准备就绪后下载切换工件。</shortdesc>
+  <shortdesc><uicontrol>保存</uicontrol>已审核的引导配置文件，并在配置准备就绪后下载切换工件。</shortdesc>
   <taskbody>
     <prereq><p>第 6 步审核已完成，验证警告已理解。</p></prereq>
-    <context><p>保存记录BPM配置文件；下载提供了用于政策移交的审阅版本。</p></context>
+    <context><p><uicontrol>保存</uicontrol>记录BPM配置文件；下载提供了用于政策移交的审阅版本。</p></context>
     <steps>
-      <step><cmd>选择保存以存储当前配置文件状态。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>在关闭编辑器之前确认保存的状态出现在库中。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>选择<uicontrol>保存</uicontrol>以存储当前配置文件状态。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>在关闭编辑器之前确认<uicontrol>保存</uicontrol>的状态出现在<uicontrol>库</uicontrol>中。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>选择切换所需的下载或导出操作。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>与识别模式通道和配置文件用途所需的上下文共享导出的文件。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>已审核的配置文件已保存，并且可以下载所需的内容。</p></result>
-    <postreq><p>恢复：如果下载已过时，请再次保存并从已审核的配置文件中重复导出。</p></postreq>
+    <result><p>已审核的配置文件已<uicontrol>保存</uicontrol>，并且可以下载所需的内容。</p></result>
+    <postreq><p>恢复：如果下载已过时，请再次<uicontrol>保存</uicontrol>并从已审核的配置文件中重复导出。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-review-guided-profile"/>

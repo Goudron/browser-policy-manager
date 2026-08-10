@@ -4,12 +4,12 @@
   <title>Gérer les paramètres bruts et inconnus</title>
   <shortdesc>Inspectez les clés inconnues importées et les valeurs de secours brutes sans les perdre accidentellement.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Revue ou une liste filtrée brute/inconnue dans Tous les paramètres.</p></prereq>
+    <prereq><p>Ouvrez <uicontrol>Revue</uicontrol> ou une liste filtrée brute/inconnue dans <uicontrol>Tous les paramètres</uicontrol>.</p></prereq>
     <context><p>Les paramètres bruts et inconnus peuvent provenir de l'importation, de différences de schéma ou de valeurs que BPM ne peut pas modéliser visuellement. Traitez-les comme des éléments de préservation et de révision, et non comme des modifications de routine.</p></context>
     <steps>
-      <step><cmd>Filtrez ou ouvrez les éléments de révision pour les paramètres bruts, inconnus ou importés.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Inspectez la valeur brute, la source, l'état de validation et le canal de schéma.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Décidez si vous souhaitez conserver, supprimer, réinitialiser ou inspecter la valeur dans Éditeur JSON.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Filtrez ou ouvrez les éléments de révision pour les paramètres bruts, inconnus ou importés.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Inspectez la valeur brute, la source, l'état de validation et le canal de schéma.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Décidez si vous souhaitez conserver, supprimer, réinitialiser ou inspecter la valeur dans <uicontrol>Éditeur JSON</uicontrol>.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Enregistrez uniquement après avoir confirmé que la valeur doit rester ou être supprimée.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Les valeurs brutes et inconnues sont conservées ou supprimées intentionnellement.</p></result>

@@ -4,14 +4,14 @@
   <title>Sort Library rows</title>
   <shortdesc>Sort saved profiles by update time, creation time, name, schema channel, or ID in ascending or descending order.</shortdesc>
   <taskbody>
-    <prereq><p>The Library is open and contains at least two visible profile rows.</p></prereq>
+    <prereq><p>The <uicontrol>Library</uicontrol> is open and contains at least two visible profile rows.</p></prereq>
     <context><p>Sorting changes the row order inside the current search and filter result.</p></context>
     <steps>
       <step><cmd>Select the field to sort by.</cmd><info><p>Expected result: rows reorder by updated time, created time, name, schema, or ID.</p></info></step>
       <step><cmd>Select the order direction.</cmd><info><p>Use descending updated time for recent work or ascending name for alphabetic browsing.</p></info></step>
       <step><cmd>Check the filtered and total counts before acting on the first row.</cmd><info><note type="warning">Sorting does not remove filters. A row can still be hidden by search or filters.</note></info></step>
     </steps>
-    <result><p>The visible Library rows appear in the selected order.</p></result>
+    <result><p>The visible <uicontrol>Library</uicontrol> rows appear in the selected order.</p></result>
     <postreq><p>Recovery: switch back to updated-time sorting if the row order no longer matches your work context.</p></postreq>
   </taskbody>
   <related-links>

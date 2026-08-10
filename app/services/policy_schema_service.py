@@ -78,7 +78,11 @@ def _json_schema_to_policy_property(name: str, node: dict[str, Any], required: b
     property_type = _json_schema_type(node)
     enum = node.get("enum")
     items = node.get("items") if isinstance(node.get("items"), dict) else None
-    items_type = items.get("type") if isinstance(items, dict) and isinstance(items.get("type"), str) else None
+    items_type = (
+        items.get("type")
+        if isinstance(items, dict) and isinstance(items.get("type"), str)
+        else None
+    )
     if property_type == "array" and enum is None and isinstance(items, dict):
         enum = items.get("enum")
     additional_properties_node = node.get("additionalProperties", True)
@@ -100,7 +104,9 @@ def _json_schema_to_policy_property(name: str, node: dict[str, Any], required: b
         for prop_name, prop_schema in (node.get("properties") or {}).items()
         if isinstance(prop_schema, dict)
     }
-    item_required_properties = set(items.get("required") or []) if isinstance(items, dict) else set()
+    item_required_properties = (
+        set(items.get("required") or []) if isinstance(items, dict) else set()
+    )
     item_properties = {
         prop_name: _json_schema_to_policy_property(
             prop_name,
@@ -110,7 +116,9 @@ def _json_schema_to_policy_property(name: str, node: dict[str, Any], required: b
         for prop_name, prop_schema in ((items or {}).get("properties") or {}).items()
         if isinstance(prop_schema, dict)
     }
-    additional_property_schema = additional_properties_node if isinstance(additional_properties_node, dict) else {}
+    additional_property_schema = (
+        additional_properties_node if isinstance(additional_properties_node, dict) else {}
+    )
     additional_property_required_properties = set(additional_property_schema.get("required") or [])
     additional_property_properties = {
         prop_name: _json_schema_to_policy_property(
@@ -171,7 +179,11 @@ def _json_schema_to_policy_definition(policy_id: str, node: dict[str, Any]) -> P
     policy_type = _json_schema_type(node)
     items = node.get("items") if isinstance(node.get("items"), dict) else None
     enum = node.get("enum")
-    items_type = items.get("type") if isinstance(items, dict) and isinstance(items.get("type"), str) else None
+    items_type = (
+        items.get("type")
+        if isinstance(items, dict) and isinstance(items.get("type"), str)
+        else None
+    )
     if policy_type == "array" and enum is None and isinstance(items, dict):
         enum = items.get("enum")
 
@@ -185,7 +197,9 @@ def _json_schema_to_policy_definition(policy_id: str, node: dict[str, Any]) -> P
         for prop_name, prop_schema in (node.get("properties") or {}).items()
         if isinstance(prop_schema, dict)
     }
-    item_required_properties = set(items.get("required") or []) if isinstance(items, dict) else set()
+    item_required_properties = (
+        set(items.get("required") or []) if isinstance(items, dict) else set()
+    )
     item_properties = {
         prop_name: _json_schema_to_policy_property(
             prop_name,
@@ -212,12 +226,14 @@ def _json_schema_to_policy_definition(policy_id: str, node: dict[str, Any]) -> P
             if isinstance(prop_schema, dict)
         }
         additional_properties = True
-    item_additional_properties = (items or {}).get("additionalProperties", True) if isinstance(items, dict) else True
+    item_additional_properties = (
+        (items or {}).get("additionalProperties", True) if isinstance(items, dict) else True
+    )
     if isinstance(item_additional_properties, dict):
         item_additional_properties = True
     branches = [
         _json_schema_to_policy_branch(branch)
-        for branch in (node.get("oneOf") or [])
+        for branch in node.get("oneOf") or []
         if isinstance(branch, dict)
     ]
 

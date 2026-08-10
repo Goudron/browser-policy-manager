@@ -47,15 +47,25 @@ def validate_retrieval_chunk(chunk: dict[str, Any]) -> None:
     path = str(chunk.get("source_dita_path", ""))
     normalized = f"/{path.strip('/')}/"
     if any(fragment in normalized for fragment in policy["deny"]["path_fragments"]):
-        raise ChunkExtractionError(json.dumps(retrieval_diagnostic(chunk, "excluded-path"), sort_keys=True))
+        raise ChunkExtractionError(
+            json.dumps(retrieval_diagnostic(chunk, "excluded-path"), sort_keys=True)
+        )
     if not any(path.startswith(prefix) for prefix in allowed["source_path_prefixes"]):
-        raise ChunkExtractionError(json.dumps(retrieval_diagnostic(chunk, "unapproved-source"), sort_keys=True))
+        raise ChunkExtractionError(
+            json.dumps(retrieval_diagnostic(chunk, "unapproved-source"), sort_keys=True)
+        )
     if chunk.get("publication_state") != allowed["publication_state"]:
-        raise ChunkExtractionError(json.dumps(retrieval_diagnostic(chunk, "not-published"), sort_keys=True))
+        raise ChunkExtractionError(
+            json.dumps(retrieval_diagnostic(chunk, "not-published"), sort_keys=True)
+        )
     if chunk.get("provenance_class") not in allowed["provenance_classes"]:
-        raise ChunkExtractionError(json.dumps(retrieval_diagnostic(chunk, "blocked-provenance"), sort_keys=True))
+        raise ChunkExtractionError(
+            json.dumps(retrieval_diagnostic(chunk, "blocked-provenance"), sort_keys=True)
+        )
     if not str(chunk.get("published_url", "")).startswith(allowed["published_url_prefix"]):
-        raise ChunkExtractionError(json.dumps(retrieval_diagnostic(chunk, "unpublished-url"), sort_keys=True))
+        raise ChunkExtractionError(
+            json.dumps(retrieval_diagnostic(chunk, "unpublished-url"), sort_keys=True)
+        )
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -238,31 +248,33 @@ def _topic_chunks(
             if not text:
                 continue
             if len(text) > config["bounds"]["maximum_characters"]:
-                raise ChunkExtractionError(f"chunk text exceeds maximum: {locale}/{topic_id}/{locator}")
+                raise ChunkExtractionError(
+                    f"chunk text exceeds maximum: {locale}/{topic_id}/{locator}"
+                )
             chunk_id = f"ragc-v1:{locale}:{topic_id}:{locator}:{ordinal}"
             chunk = {
-                    "chunk_id": chunk_id,
-                    "chunk_schema_version": config["chunk_schema_version"],
-                    "locale": locale,
-                    "topic_id": topic_id,
-                    "anchor_id_or_root": locator,
-                    "ordinal": ordinal,
-                    "guide_id": topic["guide_id"],
-                    "published_url": f"/help/{output}" + ("" if locator == "root" else f"#{locator}"),
-                    "source_dita_path": source.relative_to(REPOSITORY_ROOT).as_posix(),
-                    "source_revision": manifest["artifact"]["source_revision"],
-                    "source_sha256": source_hash,
-                    "manifest_sha256": _sha256(Path(manifest["_path"])),
-                    "documentation_version": manifest["artifact"]["documentation_version"],
-                    "bpm_version": manifest["artifact"]["bpm_version"],
-                    "provenance_class": _provenance(source),
-                    "publication_state": "published",
-                    "heading_path": heading_path,
-                    "identifiers": identifiers,
-                    "text_normalization_revision": config["text_normalization_revision"],
-                    "content_kinds": list(dict.fromkeys(kinds)),
-                    "text": text,
-                    "character_count": len(text),
+                "chunk_id": chunk_id,
+                "chunk_schema_version": config["chunk_schema_version"],
+                "locale": locale,
+                "topic_id": topic_id,
+                "anchor_id_or_root": locator,
+                "ordinal": ordinal,
+                "guide_id": topic["guide_id"],
+                "published_url": f"/help/{output}" + ("" if locator == "root" else f"#{locator}"),
+                "source_dita_path": source.relative_to(REPOSITORY_ROOT).as_posix(),
+                "source_revision": manifest["artifact"]["source_revision"],
+                "source_sha256": source_hash,
+                "manifest_sha256": _sha256(Path(manifest["_path"])),
+                "documentation_version": manifest["artifact"]["documentation_version"],
+                "bpm_version": manifest["artifact"]["bpm_version"],
+                "provenance_class": _provenance(source),
+                "publication_state": "published",
+                "heading_path": heading_path,
+                "identifiers": identifiers,
+                "text_normalization_revision": config["text_normalization_revision"],
+                "content_kinds": list(dict.fromkeys(kinds)),
+                "text": text,
+                "character_count": len(text),
             }
             validate_retrieval_chunk(chunk)
             chunks.append(chunk)
@@ -284,9 +296,23 @@ def extract_from_site(site_root: Path) -> dict[str, Any]:
         if "_roots" not in topic:
             continue  # Guide landing pages are map shells, not DITA topics.
         for locale in config["locales"]:
-            identifiers = sorted({topic_id, topic["dita_key"], *topic["anchors"], *sum(identifiers_by_topic.get(topic_id, {}).values(), [])})
+            identifiers = sorted(
+                {
+                    topic_id,
+                    topic["dita_key"],
+                    *topic["anchors"],
+                    *sum(identifiers_by_topic.get(topic_id, {}).values(), []),
+                }
+            )
             chunks.extend(_topic_chunks(locale, topic_id, topic, manifest, identifiers, config))
-    chunks.sort(key=lambda item: (item["locale"], item["topic_id"], item["anchor_id_or_root"], item["ordinal"]))
+    chunks.sort(
+        key=lambda item: (
+            item["locale"],
+            item["topic_id"],
+            item["anchor_id_or_root"],
+            item["ordinal"],
+        )
+    )
     return {
         "schema_version": 1,
         "contract_id": config["contract_id"],
@@ -305,14 +331,18 @@ def extract_from_site(site_root: Path) -> dict[str, Any]:
 def write_manifest(payload: dict[str, Any], output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     candidate = output.with_suffix(output.suffix + ".tmp")
-    candidate.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    candidate.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     candidate.replace(output)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--site-root", type=Path, help="validated publish tree; otherwise build a temporary one")
+    parser.add_argument(
+        "--site-root", type=Path, help="validated publish tree; otherwise build a temporary one"
+    )
     args = parser.parse_args()
     if args.site_root:
         payload = extract_from_site(args.site_root)

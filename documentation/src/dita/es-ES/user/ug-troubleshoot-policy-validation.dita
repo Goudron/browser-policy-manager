@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Lea la ruta de la política afectada y el mensaje antes de cambiar los valores.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Clasifique el problema como política no compatible, tipo de valor incorrecto, configuración obsoleta, entrada desconocida, valor importado o reserva sin formato.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
-      <step><cmd>Utilice Todos los ajustes o JSON para navegar a la ubicación afectada y corregir solo el valor informado.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Utilice <uicontrol>Todos los ajustes</uicontrol> o JSON para navegar a la ubicación afectada y corregir solo el valor informado.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Vuelva a validar el perfil en el mismo canal de esquema antes de guardarlo o exportarlo.</cmd><info><note type="warning">Vuelva a intentarlo solo desde la interfaz de BPM; no modifique los datos del perfil fuera de la aplicación.</note></info></step>
     </steps>
     <result><p>El error de validación se resuelve o se documenta como un valor sin procesar/no admitido deliberado que no se puede tratar como listo para su lanzamiento.</p></result>

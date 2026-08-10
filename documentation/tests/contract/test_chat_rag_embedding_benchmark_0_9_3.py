@@ -28,16 +28,21 @@ def _config() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
 
 
-def test_chat_benchmark_contract_reuses_only_pinned_candidates_and_excludes_cross_locale_retrieval() -> None:
+def test_chat_benchmark_contract_reuses_only_pinned_candidates_and_excludes_cross_locale_retrieval() -> (
+    None
+):
     config = _config()
 
     assert config["backlog_item"] == "BPM093-M5-03C"
-    assert config["selection_contract"]["path"].endswith("chat-rag-embedding-selection-contract-0.9.3.json")
+    assert config["selection_contract"]["path"].endswith(
+        "chat-rag-embedding-selection-contract-0.9.3.json"
+    )
     assert "no cross-language probe" in config["inputs"]["retrieval_mode"]
     assert config["inputs"]["top_k"] == 5
     assert config["protocol"]["validity"]["swap_must_not_change"] is True
     assert {candidate["id"] for candidate in config["candidates"]} == {
-        "multilingual-e5-small-onnx-o4", "multilingual-e5-base-onnx-o4"
+        "multilingual-e5-small-onnx-o4",
+        "multilingual-e5-base-onnx-o4",
     }
     assert all(len(candidate["source_contract_sha256"]) == 64 for candidate in config["candidates"])
 
@@ -66,11 +71,11 @@ def test_metadata_no_evidence_and_status_fail_closed() -> None:
             locale: {
                 "evidence_coverage_at_5": 1.0,
                 "citation_resolution_rate": 1.0,
-                "no_evidence_disposition_rate": 1.0
+                "no_evidence_disposition_rate": 1.0,
             }
             for locale in runner.LOCALES
         },
         "resources": {"direct_disk_gib": 0.1, "peak_rss_gib": 0.1},
-        "latency": {"p95_ms_max": 1.0}
+        "latency": {"p95_ms_max": 1.0},
     }
     assert runner._candidate_status(report, config) == ("fail", ["swap-changed-during-measurement"])

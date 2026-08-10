@@ -210,11 +210,17 @@ access with `make setup-docs-toolchain DOCS_TOOLCHAIN_OFFLINE=1`. Use `make test
 sandbox escalation. Use
 `make docs-snapshot` to refresh `documentation/PROJECT_SNAPSHOT.generated.md`. Use
 `make docs-fast-check DOCS_CHANGED="documentation/src/dita/en/user/example.dita"` as the first
-one-topic source loop; without `DOCS_CHANGED`, it derives changed documentation inputs from git.
+one-topic source loop; it accepts changed README, DITA, locale, figure, and fixture paths and
+prints its selected scope, intentional release-only skips, and `make docs-release-handoff`
+escalation. It is bounded authoring evidence, not a release gate; without `DOCS_CHANGED`, it derives
+changed documentation inputs from git.
 Use `make docs-coverage` for isolated documentation-code coverage reports under
 `documentation/reports/coverage/`. Use `make docs-release-check` for the documentation release gate;
 it runs full DITA validation and the documentation contract suite before `make test-release`
 continues into the general BPM release suite.
+Use `make docs-release-handoff` for the authoritative documentation release handoff: it retains the
+six-locale gate and adds binary PDF verification/delivery, reproducibility, package verification,
+snapshot refresh, and local install proof.
 Use `documentation/fixtures/fixture-catalog-0.9.0.json` to find the smallest synthetic fixture for a
 documentation failure domain.
 Failed focused checks may retain compact JSON diagnostics under `documentation/reports/diagnostics/`.

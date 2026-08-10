@@ -8,7 +8,7 @@ Backlog task: `BPM090-M2-06`
 
 BPM 0.9.0 product documentation will be authored as OASIS DITA 1.3 XML and published with the
 standalone DITA Open Toolkit 4.4 distribution. Release builds use Eclipse Temurin JRE
-`21.0.11+10` (HotSpot). DITA-OT itself supports Java 17 or later, but accepting whichever Java is
+`21.0.12+8` (HotSpot). DITA-OT itself supports Java 17 or later, but accepting whichever Java is
 on a workstation would make local and CI results needlessly different.
 
 The portal build uses the bundled `html5` transformation. It does not use the DITA 2.0 preview,
@@ -26,7 +26,7 @@ bootstrap command, local cache, and notices before a documentation build is acce
 | Component | Pin | License | Use |
 | --- | --- | --- | --- |
 | DITA Open Toolkit | `4.4`, release asset `dita-ot-4.4.zip` | Apache-2.0 | DITA validation, preprocessing, key/reference resolution, and HTML5 publishing |
-| Eclipse Temurin JRE | `21.0.11+10`, HotSpot | GPL-2.0 with Classpath Exception | Exact Java runtime for local and CI release builds |
+| Eclipse Temurin JRE | `21.0.12+8`, HotSpot | GPL-2.0 with Classpath Exception | Exact Java runtime for local and CI release builds |
 | DITA authoring level | OASIS DITA `1.3` | OASIS specification terms | Stable source grammar; DITA 2.0 preview features are forbidden |
 | Output transform | bundled `html5` from DITA-OT `4.4` | Included in DITA-OT | Static portal pages and navigation input |
 | BPM HTML customization | `org.bpm.docs.html5` `0.9.0` | MPL-2.0 | Repository-owned accessible shell hooks and styling |
@@ -34,7 +34,7 @@ bootstrap command, local cache, and notices before a documentation build is acce
 
 The official DITA-OT archive URL is
 `https://github.com/dita-ot/dita-ot/releases/download/4.4/dita-ot-4.4.zip`. The Temurin lock uses
-official `adoptium/temurin21-binaries` release assets for tag `jdk-21.0.11+10`; it must contain a
+official `adoptium/temurin21-binaries` release assets for tag `jdk-21.0.12+8`; it must contain a
 separate URL and upstream SHA-256 for each supported OS/architecture. Mutable `latest` URLs and
 floating container tags are forbidden in release builds.
 
@@ -142,5 +142,5 @@ Verified on 2026-06-21:
 - DITA XML/1.3 and DITA 2.0 preview status: `https://www.dita-ot.org/dev/topics/dita-xml-input`
 - DITA-OT core dependency/license inventory: `https://www.dita-ot.org/4.4/reference/third-party-software`
 - HTML5 processing and native navigation: `https://www.dita-ot.org/4.3/reference/html5-processing`
-- Temurin `21.0.11+10` official release: `https://github.com/adoptium/temurin21-binaries/releases/tag/jdk-21.0.11%2B10`
+- Temurin `21.0.12+8` official release: `https://github.com/adoptium/temurin21-binaries/releases/tag/jdk-21.0.12%2B8`
 - Temurin licensing and distribution FAQ: `https://adoptium.net/docs/faq/`

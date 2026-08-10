@@ -149,12 +149,12 @@ These tests protect the completed comparison boundary:
 
 | File | BPM 0.8.7 assertion area | Guardrail |
 | --- | --- | --- |
-| `tests/web_profiles_page/test_library_layout_contracts.py` | Library has compare navigation only, compare state lives in compare assets. | Keep Library compare state and row compare actions out. |
-| `tests/web_profiles_page/test_route_dom_contracts.py` | Library/editor routes exclude comparison DOM; `/profiles/compare` owns the compare DOM contract. | Keep `#compare-page` as the only comparison UI surface. |
+| `tests/contract/ui/profiles/test_library_layout_contracts.py` | Library has compare navigation only, compare state lives in compare assets. | Keep Library compare state and row compare actions out. |
+| `tests/contract/ui/profiles/test_route_dom_contracts.py` | Library/editor routes exclude comparison DOM; `/profiles/compare` owns the compare DOM contract. | Keep `#compare-page` as the only comparison UI surface. |
 | `tests/web_profiles_page_helpers.py` | Locale helper assertions track ownerless Library copy and active compare route copy. | Do not re-add removed Library compare locale keys. |
-| `tests/test_ui_smoke_profile_workflow.py` | Runtime locale catalogs and source contracts exclude stale Library compare keys. | Keep old compare summary/guided keys absent. |
-| `tests/test_zh_cn_script_layout_contract.py` | Chinese layout/source keys stay ownerless and Library-compare-free. | Keep removed Library compare copy out. |
-| `tests/tools/test_build_locale_catalogs.py` | Maps active compare route keys to the `library` namespace. | Keep classifier coverage on `profiles.compare_route_title` while no dedicated compare namespace exists. |
+| `tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py` | Runtime locale catalogs and source contracts exclude stale Library compare keys. | Keep old compare summary/guided keys absent. |
+| `tests/contract/ui/localization/test_zh_cn_script_layout_contract.py` | Chinese layout/source keys stay ownerless and Library-compare-free. | Keep removed Library compare copy out. |
+| `tests/unit/tooling/test_build_locale_catalogs.py` | Maps active compare route keys to the `library` namespace. | Keep classifier coverage on `profiles.compare_route_title` while no dedicated compare namespace exists. |
 | `tests/fixtures/locale_contracts/visible_english_allowlists.json` | Allows comparison-related English terms. | Review after new route copy and owner removal. |
 
 ## Implementation Notes For The Next Tasks

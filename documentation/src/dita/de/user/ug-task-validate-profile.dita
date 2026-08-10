@@ -4,16 +4,16 @@
   <title>Ein Profil validieren</title>
   <shortdesc>Führen Sie eine schemabasierte Validierung durch, bevor Sie Richtlinienänderungen speichern, exportieren oder vergleichen.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
+    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine <uicontrol>Bibliothek</uicontrol>, eine <uicontrol>Alle Einstellungen</uicontrol>, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
     <context><p>Bei der Validierung werden Richtliniennamen, Wertformen, unterstützte Schemakanäle, nicht unterstützte Nur-ESR-Unterschiede sowie in BPM sichtbare Roh- oder unbekannte Einträge überprüft.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie das Profil in Geführter Editor, Alle Einstellungen oder JSON.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
+      <step><cmd>Öffnen Sie das Profil in <uicontrol>Geführter Editor</uicontrol>, <uicontrol>Alle Einstellungen</uicontrol> oder JSON.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Bestätigen Sie den ausgewählten Firefox-Schemakanal vor der Validierung.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Führen Sie eine Validierung durch oder überprüfen Sie das sichtbare Validierungsfeld auf der aktiven Oberfläche.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Beheben Sie nicht unterstützte Richtlinien, falsche Werttypen, unbekannte Roheinträge oder veraltete importierte Werte, bevor Sie das Profil als bereit behandeln.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
     </steps>
     <result><p>Sie wissen, ob das Profil zum Speichern und Exportieren für den ausgewählten Firefox-Kanal bereit ist.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der <uicontrol>Bibliothek</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

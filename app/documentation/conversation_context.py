@@ -21,6 +21,7 @@ MAX_CONTEXT_PAIRS: Final[int] = 8
 MAX_CONTEXT_TURNS: Final[int] = MAX_CONTEXT_PAIRS * 2
 MAX_RESOLVED_ENTITIES: Final[int] = 8
 MAX_ENTITY_CHARACTERS: Final[int] = 120
+MAX_CONTEXT_SESSIONS: Final[int] = 32
 IDLE_SESSION_TTL_SECONDS: Final[float] = 15 * 60.0
 ABSOLUTE_SESSION_TTL_SECONDS: Final[float] = 8 * 60 * 60.0
 SessionRole = Literal["user", "assistant"]
@@ -74,14 +75,16 @@ class ConversationContextStore:
         *,
         idle_ttl_seconds: float = IDLE_SESSION_TTL_SECONDS,
         absolute_ttl_seconds: float = ABSOLUTE_SESSION_TTL_SECONDS,
+        max_sessions: int = MAX_CONTEXT_SESSIONS,
         clock: Clock = monotonic,
     ) -> None:
-        if idle_ttl_seconds <= 0 or absolute_ttl_seconds <= 0:
-            raise ValueError("conversation context TTL must be positive")
+        if idle_ttl_seconds <= 0 or absolute_ttl_seconds <= 0 or max_sessions <= 0:
+            raise ValueError("conversation context bounds must be positive")
         self._sessions: dict[str, _Session] = {}
         self._lock = threading.RLock()
         self._idle_ttl_seconds = idle_ttl_seconds
         self._absolute_ttl_seconds = absolute_ttl_seconds
+        self._max_sessions = max_sessions
         self._clock = clock
 
     def create(self, *, locale: str, bpm_version: str) -> str:
@@ -91,6 +94,9 @@ class ConversationContextStore:
         session_id = secrets.token_urlsafe(24)
         now = self._clock()
         with self._lock:
+            self._clear_expired_locked(now)
+            if len(self._sessions) >= self._max_sessions:
+                raise ConversationContextUnavailable("assistant_session_limit")
             self._sessions[session_id] = _Session(now, now, locale, bpm_version, [], [], [])
         return session_id
 
@@ -178,14 +184,7 @@ class ConversationContextStore:
         """Drop idle/aged sessions without exposing or logging their content."""
 
         with self._lock:
-            expired = [
-                session_id
-                for session_id, session in self._sessions.items()
-                if self._expired(session, self._clock())
-            ]
-            for session_id in expired:
-                del self._sessions[session_id]
-            return len(expired)
+            return self._clear_expired_locked(self._clock())
 
     def clear_all(self) -> int:
         """Clear every in-memory session for process shutdown or an explicit controller reset."""
@@ -194,6 +193,13 @@ class ConversationContextStore:
             count = len(self._sessions)
             self._sessions.clear()
             return count
+
+    def contains(self, session_id: str) -> bool:
+        """Check opaque session liveness for the owning adapter without refreshing its idle TTL."""
+
+        with self._lock:
+            self._clear_expired_locked(self._clock())
+            return session_id in self._sessions
 
     def _require(self, session_id: str) -> _Session:
         if not isinstance(session_id, str) or not session_id:
@@ -207,6 +213,16 @@ class ConversationContextStore:
             raise ConversationContextUnavailable("assistant_session_expired")
         session.last_accessed_at = now
         return session
+
+    def _clear_expired_locked(self, now: float) -> int:
+        expired = [
+            session_id
+            for session_id, session in self._sessions.items()
+            if self._expired(session, now)
+        ]
+        for session_id in expired:
+            del self._sessions[session_id]
+        return len(expired)
 
     def _require_identity(self, session_id: str, locale: str, bpm_version: str) -> _Session:
         session = self._require(session_id)

@@ -205,7 +205,7 @@
     "focused_contracts": [
       "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_navigation_tree_contract.py",
       "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_polish_regression_gates.py",
-      "./.venv/bin/pytest -q documentation/tests/contract/test_manifest_generation.py tests/test_product_documentation_manifest_schema.py"
+      "./.venv/bin/pytest -q documentation/tests/contract/test_manifest_generation.py tests/contract/docs/schema/test_product_documentation_manifest_schema.py"
     ],
     "release_gates": [
       "make test-docs-contract",

@@ -85,12 +85,20 @@ def _pagefind_query_metrics(site_root: Path, work_dir: Path) -> dict[str, Any]:
             input_path = work_dir / f"m3-04-pagefind-input-{locale}.json"
             output_path = work_dir / f"m3-04-pagefind-output-{locale}.json"
             input_path.write_text(
-                json.dumps([case.__dict__ for case in locale_cases], sort_keys=True), encoding="utf-8"
+                json.dumps([case.__dict__ for case in locale_cases], sort_keys=True),
+                encoding="utf-8",
             )
             completed = subprocess.run(
                 [
-                    "node", "--input-type=module", "--eval", relevance.PAGEFIND_QUERY_CLIENT,
-                    str(site_root), server.origin, locale, str(input_path), str(output_path),
+                    "node",
+                    "--input-type=module",
+                    "--eval",
+                    relevance.PAGEFIND_QUERY_CLIENT,
+                    str(site_root),
+                    server.origin,
+                    locale,
+                    str(input_path),
+                    str(output_path),
                 ],
                 check=False,
                 capture_output=True,
@@ -102,7 +110,9 @@ def _pagefind_query_metrics(site_root: Path, work_dir: Path) -> dict[str, Any]:
                 )
             payload = relevance._read_json(output_path)
             if any(not item["url"].startswith(server.origin) for item in payload["fetches"]):
-                raise relevance.BenchmarkError(f"Pagefind resource query escaped loopback for {locale}")
+                raise relevance.BenchmarkError(
+                    f"Pagefind resource query escaped loopback for {locale}"
+                )
             first_query_bytes[locale] = payload["output"][0]["fetched_bytes"]
             measurements.extend(item["elapsed_ms"] for item in payload["output"][5:])
     return {
@@ -145,7 +155,9 @@ def atomic_install_update_rollback(
     shutil.rmtree(failed_update)
     return {
         "clean_install": initial["version"] == "baseline",
-        "atomic_update": updated["version"] == "growth" and initial["tree_sha256"] != updated["tree_sha256"],
+        "atomic_update": (
+            updated["version"] == "growth" and initial["tree_sha256"] != updated["tree_sha256"]
+        ),
         "rollback": rolled_back == initial,
     }
 
@@ -163,7 +175,9 @@ def run_benchmark(
 ) -> dict[str, Any]:
     config = relevance._read_json(relevance.BENCHMARK_CONFIG)["artifacts"]
     relevance._validate_artifact(
-        pagefind_package, config["pagefind"]["npm_package"], config["pagefind"]["npm_package_sha256"]
+        pagefind_package,
+        config["pagefind"]["npm_package"],
+        config["pagefind"]["npm_package_sha256"],
     )
     relevance._validate_artifact(
         pagefind_linux_package,
@@ -233,7 +247,9 @@ def main() -> int:
         args.meilisearch_binary,
         args.output_dir,
     )
-    print(json.dumps({"status": summary["status"], "pagefind": summary["pagefind"]}, sort_keys=True))
+    print(
+        json.dumps({"status": summary["status"], "pagefind": summary["pagefind"]}, sort_keys=True)
+    )
     return 0
 
 

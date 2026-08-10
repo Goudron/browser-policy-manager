@@ -5,7 +5,7 @@
   <shortdesc>Utilisez un préréglage de démarrage pour définir les choix de politique Firefox courants avant une édition détaillée.</shortdesc>
   <taskbody>
     <prereq><p>Un brouillon de profil est ouvert à l'étape 1.</p></prereq>
-    <context><p>Les préréglages de démarrage fournissent une référence connue que vous pouvez toujours modifier dans Éditeur guidé, Tous les paramètres ou Éditeur JSON.</p></context>
+    <context><p>Les préréglages de démarrage fournissent une référence connue que vous pouvez toujours modifier dans <uicontrol>Éditeur guidé</uicontrol>, <uicontrol>Tous les paramètres</uicontrol> ou <uicontrol>Éditeur JSON</uicontrol>.</p></context>
     <steps>
       <step><cmd>Ouvrez la zone de préréglage de démarrage dans l’étape 1.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Comparez les préréglages disponibles avec le scénario de profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>

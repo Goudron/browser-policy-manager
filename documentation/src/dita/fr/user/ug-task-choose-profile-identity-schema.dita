@@ -4,7 +4,7 @@
   <title>Définir l’identité du profil et le canal de schéma</title>
   <shortdesc>Choisissez le nom du profil enregistré et le canal du schéma Firefox avant de configurer les paramètres guidés.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez un profil nouveau ou enregistré dans Éditeur guidé.</p></prereq>
+    <prereq><p>Ouvrez un profil nouveau ou enregistré dans <uicontrol>Éditeur guidé</uicontrol>.</p></prereq>
     <context><p>Utilisez l’étape 1 pour définir le nom et le canal de schéma. Ils déterminent la validation et les contrôles disponibles.</p></context>
     <steps>
       <step><cmd>Confirmez que vous modifiez le brouillon de profil prévu.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>

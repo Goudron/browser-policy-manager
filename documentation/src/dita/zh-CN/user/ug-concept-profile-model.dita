@@ -2,9 +2,9 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-profile-model" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>配置档案模型和生命周期</title>
-  <shortdesc>BPM 配置文件是由库、引导式编辑器、所有设置、JSON 编辑器 和比较共享的一个保存的 Firefox 策略工作区。</shortdesc>
+  <shortdesc>BPM 配置文件是由<uicontrol>库</uicontrol>、<uicontrol>引导式编辑器</uicontrol>、<uicontrol>所有设置</uicontrol>、<uicontrol>JSON 编辑器</uicontrol> 和比较共享的一个保存的 Firefox 策略工作区。</shortdesc>
   <conbody>
-    <p>使用配置文件将 Firefox 策略、托管首选项、验证状态、源归因和生命周期状态收集到一处。可以通过不同的 BPM 界面打开相同的配置文件，而无需更改其身份。</p>
+    <p>使用配置文件将 Firefox 策略、<uicontrol>托管首选项</uicontrol>、验证状态、源归因和生命周期状态收集到一处。可以通过不同的 BPM 界面打开相同的配置文件，而无需更改其身份。</p>
     <section id="a-lifecycle-states">
       <title>生命周期状态</title>
       <p>未保存的草稿仅在第一次保存之前存在。可以编辑、验证、导出、存档、复制或比较保存的活动配置文件。保留存档的配置文件以供审查和恢复工作流程，但不是正常的导出目标。</p>

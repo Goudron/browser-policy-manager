@@ -50,7 +50,7 @@
     "resource_flood": "rejected before a second active or queued worker can be created"
   },
   "verification": {
-    "runtime": "tests/test_ai_least_privilege_093.py",
+    "runtime": "tests/integration/ai/core/test_ai_least_privilege.py",
     "contract": "documentation/tests/contract/test_bpm_ai_least_privilege_contract_0_9_3.py",
     "architecture": "docs/architecture/bpm-ai-least-privilege-0.9.3.md"
   }

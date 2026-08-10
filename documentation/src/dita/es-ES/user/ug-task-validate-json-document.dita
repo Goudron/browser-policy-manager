@@ -4,16 +4,16 @@
   <title>Validar el documento JSON</title>
   <shortdesc>Valide la sintaxis JSON sin formato y los valores de la política de Firefox antes de guardar.</shortdesc>
   <taskbody>
-    <prereq><p>Abra Editor JSON con el documento que desea verificar.</p></prereq>
+    <prereq><p>Abra <uicontrol>Editor JSON</uicontrol> con el documento que desea verificar.</p></prereq>
     <context><p>La validación distingue JSON con formato incorrecto de errores de política o esquema. Un documento puede analizarse como JSON y aun así fallar la validación de la política.</p></context>
     <steps>
-      <step><cmd>Elija la acción Validar compartida.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Elija la acción <uicontrol>Validar</uicontrol> compartida.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
       <step><cmd>Si la validación informa que JSON tiene un formato incorrecto, corrija la sintaxis, como las comas finales o las llaves faltantes.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
       <step><cmd>Si la validación informa errores de política, corrija las claves no admitidas, los tipos de valores incorrectos o las discrepancias en el canal de esquema.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
       <step><cmd>Valide nuevamente hasta que el estado explique que el documento es aceptable o que el problema restante es intencional para revisión sin procesar.</cmd><info><note type="warning">Guardar JSON sin formato puede cambiar el perfil BPM canónico. Valide la sintaxis y los valores de política antes de guardar.</note></info></step>
     </steps>
     <result><p>El documento tiene un estado de validación conocido antes de guardarlo o exportarlo.</p></result>
-    <postreq><p>Recuperación: si los errores son difíciles de leer, utilice Todos los ajustes para inspeccionar visualmente la política o preferencia afectada.</p></postreq>
+    <postreq><p>Recuperación: si los errores son difíciles de leer, utilice <uicontrol>Todos los ajustes</uicontrol> para inspeccionar visualmente la política o preferencia afectada.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-raw-policies-json"/>

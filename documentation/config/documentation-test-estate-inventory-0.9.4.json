@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "inventory_id": "bpm-0.9.4-documentation-test-estate",
+  "backlog_item": "BPM094-M11A-01",
+  "target_bpm_version": "0.9.4",
+  "status": "accepted-for-layer-rationalization",
+  "purpose": "Classify every maintained documentation test by the responsible owner, reader-visible or delivery risk, expected execution cost, and source coupling before M11A changes commands or assertions.",
+  "maintained_test_roots": [
+    "documentation/tests/unit",
+    "documentation/tests/contract",
+    "documentation/tests/browser",
+    "tests/contract/docs"
+  ],
+  "layers": {
+    "fast_edit_time": "Targeted, deterministic source or helper checks suitable for the bounded authoring command defined by BPM094-M11A-02.",
+    "release_gate": "Fail-closed structural, localization, PDF, security, runtime, or delivery protection retained by the authoritative release chain.",
+    "scheduled_audit": "Periodic review or bounded snapshot evidence; it is not required for every ordinary editorial change.",
+    "remove_replace": "A historical or brittle witness retained until BPM094-M11A-03 replaces it with an explicit semantic authority contract; this inventory does not remove or skip it."
+  },
+  "coupling_types": [
+    "semantic",
+    "structural",
+    "fixture",
+    "literal_text",
+    "snapshot",
+    "obsolete_evidence",
+    "binary_artifact",
+    "runtime_boundary"
+  ],
+  "classifications": [
+    {
+      "id": "docs-unit-fast",
+      "include": ["documentation/tests/unit/test_*.py"],
+      "exclude": ["documentation/tests/unit/test_generate_subsystem_snapshot.py"],
+      "owner": "documentation build tooling maintainers",
+      "asserted_risks": ["build-helper regression", "source-validation regression", "deterministic fixture regression"],
+      "execution_cost": "low; pure helpers and compact temporary trees",
+      "coupling": ["semantic", "structural", "fixture"],
+      "layer": "fast_edit_time",
+      "rationale": "These tests have no browser, network, installed-site, or full-corpus requirement."
+    },
+    {
+      "id": "snapshot-audits",
+      "include": [
+        "documentation/tests/unit/test_generate_subsystem_snapshot.py",
+        "documentation/tests/contract/test_documentation_subsystem_snapshot.py",
+        "documentation/tests/contract/test_maintained_index_snapshot_contract_0_9_3.py",
+        "tests/contract/docs/general/test_codex_project_snapshot.py",
+        "tests/contract/docs/general/test_current_system_map.py",
+        "tests/contract/docs/general/test_docs_index.py"
+      ],
+      "exclude": [],
+      "owner": "documentation architecture and snapshot maintainers",
+      "asserted_risks": ["undeclared owner", "stale generated orientation record", "unreviewed architecture index drift"],
+      "execution_cost": "medium; bounded source/index scan",
+      "coupling": ["snapshot", "structural"],
+      "layer": "scheduled_audit",
+      "rationale": "Snapshots and indexes are useful review evidence but must be regenerated only by their owner and must not block unrelated prose edits."
+    },
+    {
+      "id": "m11a03-current-semantic-release",
+      "include": [
+        "documentation/tests/contract/test_documentation_semantic_contracts_0_9_4.py",
+        "documentation/tests/contract/test_wsl_source_install_validation_runner.py"
+      ],
+      "exclude": [],
+      "owner": "BPM094-M11A-03 semantic-contract owner",
+      "asserted_risks": ["missing current deployment topic", "retired command restoration", "lost WSL no-claim or privileged safety boundary", "release handoff omission"],
+      "execution_cost": "low; current configuration, source topic, and runner parsing without host transcripts",
+      "coupling": ["semantic", "structural", "runtime_boundary"],
+      "layer": "release_gate",
+      "rationale": "BPM094-M11A-03 replaces immutable host transcript witnesses with current source, command, locale, artifact, and safety semantics. The release gate still fails closed on a removed deployment envelope, delivery proof, or safety boundary."
+    },
+    {
+      "id": "editorial-and-localization-audits",
+      "include": [
+        "documentation/tests/contract/test_091_*.py",
+        "documentation/tests/contract/test_administrator_devops_guide_sufficiency_review.py",
+        "documentation/tests/contract/test_documentation_gap_inventory_0_9_4.py",
+        "documentation/tests/contract/test_documentation_navigation_locale_completion_audit.py",
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py",
+        "documentation/tests/contract/test_documentation_sufficiency_*.py",
+        "documentation/tests/contract/test_firefox_cis_guide_sufficiency_review.py",
+        "documentation/tests/contract/test_locale_*.py",
+        "documentation/tests/contract/test_navigation_tree_contract.py",
+        "documentation/tests/contract/test_topic_section_*.py",
+        "documentation/tests/contract/test_user_guide_screenshot_visual_qa.py"
+      ],
+      "exclude": [],
+      "owner": "documentation editorial and localization review maintainers",
+      "asserted_risks": ["six-locale editorial drift", "human-review disposition drift", "screenshot or navigation review omission"],
+      "execution_cost": "high; multi-locale source scans and review-record comparisons",
+      "coupling": ["literal_text", "fixture", "obsolete_evidence", "structural"],
+      "layer": "scheduled_audit",
+      "rationale": "These are review-oriented protections. Required localized labels and safety text remain exact where they are the product requirement; incidental prose and reviewed exception records are candidates for M11A-03 semantic replacement."
+    },
+    {
+      "id": "focused-contract-fast",
+      "include": [
+        "documentation/tests/contract/test_documentation_fixture_catalog.py",
+        "documentation/tests/contract/test_documentation_suite_boundaries.py",
+        "documentation/tests/contract/test_documentation_test_estate_inventory_0_9_4.py",
+        "documentation/tests/contract/test_guide_maps.py",
+        "documentation/tests/contract/test_localized_figure_captions_0_9_4.py",
+        "documentation/tests/contract/test_metadata_contract.py",
+        "documentation/tests/contract/test_semantic_ui_admonition_markup_0_9_4.py",
+        "documentation/tests/contract/test_search_*.py"
+      ],
+      "exclude": [],
+      "owner": "documentation source-contract maintainers",
+      "asserted_risks": ["invalid DITA shape", "broken local fixture", "semantic markup loss", "search-contract regression", "figure or map structure regression"],
+      "execution_cost": "low to medium; deterministic targeted source and compact-fixture checks",
+      "coupling": ["semantic", "structural", "fixture"],
+      "layer": "fast_edit_time",
+      "rationale": "Each rule has a focused source/configuration authority and can be selected by the bounded authoring command without invoking browser, package, PDF, or historical review evidence."
+    },
+    {
+      "id": "browser-release",
+      "include": ["documentation/tests/browser/test_*.py"],
+      "exclude": [],
+      "owner": "documentation portal release maintainer",
+      "asserted_risks": ["browser delivery failure", "keyboard or responsive regression", "runtime portal integration regression"],
+      "execution_cost": "high; Selenium/Chromium with immediate sandbox escalation",
+      "coupling": ["runtime_boundary", "fixture", "binary_artifact"],
+      "layer": "release_gate",
+      "rationale": "Real-browser evidence remains release-critical and is excluded from ordinary authoring loops."
+    },
+    {
+      "id": "root-docs-snapshot-excluded-release",
+      "include": ["tests/contract/docs/general/test_*.py"],
+      "exclude": [
+        "tests/contract/docs/general/test_codex_project_snapshot.py",
+        "tests/contract/docs/general/test_current_system_map.py",
+        "tests/contract/docs/general/test_docs_index.py"
+      ],
+      "owner": "documentation runtime and architecture boundary maintainers",
+      "asserted_risks": ["runtime bridge regression", "artifact ownership regression", "security or provenance boundary regression"],
+      "execution_cost": "medium; cross-boundary contract loading",
+      "coupling": ["runtime_boundary", "structural", "semantic"],
+      "layer": "release_gate",
+      "rationale": "These tests cross the documentation/application boundary and remain part of the authoritative release chain."
+    },
+    {
+      "id": "root-docs-schema-release",
+      "include": ["tests/contract/docs/schema/test_*.py"],
+      "exclude": [],
+      "owner": "documentation manifest-schema maintainer",
+      "asserted_risks": ["published manifest schema incompatibility"],
+      "execution_cost": "low; schema contract",
+      "coupling": ["structural", "semantic"],
+      "layer": "release_gate",
+      "rationale": "The manifest schema is a published delivery boundary."
+    },
+    {
+      "id": "remaining-documentation-contract-release",
+      "include": ["documentation/tests/contract/test_*.py"],
+      "exclude": [
+        "documentation/tests/contract/test_091_*.py",
+        "documentation/tests/contract/test_administrator_devops_guide_sufficiency_review.py",
+        "documentation/tests/contract/test_documentation_gap_inventory_0_9_4.py",
+        "documentation/tests/contract/test_documentation_navigation_locale_completion_audit.py",
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py",
+        "documentation/tests/contract/test_documentation_subsystem_snapshot.py",
+        "documentation/tests/contract/test_documentation_sufficiency_*.py",
+        "documentation/tests/contract/test_documentation_fixture_catalog.py",
+        "documentation/tests/contract/test_documentation_suite_boundaries.py",
+        "documentation/tests/contract/test_documentation_test_estate_inventory_0_9_4.py",
+        "documentation/tests/contract/test_firefox_cis_guide_sufficiency_review.py",
+        "documentation/tests/contract/test_guide_maps.py",
+        "documentation/tests/contract/test_locale_*.py",
+        "documentation/tests/contract/test_localized_figure_captions_0_9_4.py",
+        "documentation/tests/contract/test_maintained_index_snapshot_contract_0_9_3.py",
+        "documentation/tests/contract/test_metadata_contract.py",
+        "documentation/tests/contract/test_navigation_tree_contract.py",
+        "documentation/tests/contract/test_documentation_semantic_contracts_0_9_4.py",
+        "documentation/tests/contract/test_semantic_ui_admonition_markup_0_9_4.py",
+        "documentation/tests/contract/test_search_*.py",
+        "documentation/tests/contract/test_topic_section_*.py",
+        "documentation/tests/contract/test_user_guide_screenshot_visual_qa.py",
+        "documentation/tests/contract/test_wsl_source_install_validation_runner.py"
+      ],
+      "owner": "documentation release-contract maintainers",
+      "asserted_risks": ["published structural or localization contract regression", "PDF or package delivery regression", "security, provenance, or runtime boundary regression"],
+      "execution_cost": "medium to high; six-locale source, API, package, PDF, or runtime-boundary contract",
+      "coupling": ["semantic", "structural", "fixture", "literal_text", "binary_artifact", "runtime_boundary"],
+      "layer": "release_gate",
+      "rationale": "The residual set contains critical structural, localization, PDF, security, and delivery checks. None is downgraded by this inventory."
+    }
+  ],
+  "m11_false_blockers": [
+    {
+      "id": "M11-FB-001",
+      "source_record": "BPM090-M14-03 completion note",
+      "affected_tests": ["documentation/tests/contract/test_api_rehome_audit.py"],
+      "root_cause_class": "obsolete_evidence",
+      "observed_false_block": "Administrator/DevOps API topic grouping changed while the former grouping assertion remained current.",
+      "disposition": "Replaced by current ownership and reachable-topic semantics; API coverage remains release-gated.",
+      "replacement_required": true,
+      "replacement_status": "completed",
+      "authority_record": "documentation/config/documentation-semantic-contracts-0.9.4.json#api_topic_ownership",
+      "current_sources": ["documentation/src/dita/en/maps/administrator-guide.ditamap", "documentation/src/dita/en/maps/user-guide.ditamap", "documentation/src/dita/en/maps/keys.ditamap"],
+      "focused_regressions": ["test_current_api_topic_ownership_accepts_current_maps", "test_current_api_topic_ownership_rejects_missing_destination"]
+    },
+    {
+      "id": "M11-FB-002",
+      "source_record": "BPM090-M14-03 completion note",
+      "affected_tests": ["documentation/tests/contract/test_documentation_suite_boundaries.py"],
+      "root_cause_class": "obsolete_evidence",
+      "observed_false_block": "Current documentation target and dev-installed /help review assumptions changed while historical command evidence remained asserted.",
+      "disposition": "Replaced by maintained fast/release command authority; command and runtime coverage remain release-gated.",
+      "replacement_required": true,
+      "replacement_status": "completed",
+      "authority_record": "documentation/config/documentation-semantic-contracts-0.9.4.json#documentation_command_boundary",
+      "current_sources": ["Makefile", "documentation/buildlib/sources.py"],
+      "focused_regressions": ["test_documentation_command_boundary_accepts_fast_and_release_paths", "test_documentation_command_boundary_rejects_missing_release_proof"]
+    },
+    {
+      "id": "M11-FB-003",
+      "source_record": "BPM090-M14-03 completion note",
+      "affected_tests": ["documentation/tests/contract/test_locale_visible_english_inventory.py", "documentation/tests/contract/test_visible_english_prose_review.py"],
+      "root_cause_class": "literal_text",
+      "observed_false_block": "RU/ZH contextual-help labels changed while a product identifier was treated as accidental visible English.",
+      "disposition": "Replaced incidental wording scans with locale-aware semantic authority; protected technical labels and safety literals stay exact.",
+      "replacement_required": true,
+      "replacement_status": "completed",
+      "authority_record": "documentation/config/documentation-semantic-contracts-0.9.4.json#localized_reader_semantics",
+      "current_sources": ["documentation/config/locale-terminology-authority-0.9.1.json", "documentation/config/locale-anti-anglicism-guard-0.9.1.json"],
+      "focused_regressions": ["test_localized_reader_semantics_accepts_protected_technical_classes", "test_localized_reader_semantics_rejects_missing_protected_class"]
+    },
+    {
+      "id": "M11-FB-004",
+      "source_record": "BPM090-M14-05 completion note",
+      "affected_tests": ["documentation/tests/contract/test_manifest_generation.py"],
+      "root_cause_class": "snapshot",
+      "observed_false_block": "Already generated six-locale search indexes were treated as a runtime shipping blocker by a stale manifest contract.",
+      "disposition": "The release gate retains manifest and delivery validation while current runtime artifact policy replaces stale generated-state assumptions.",
+      "replacement_required": true,
+      "replacement_status": "completed",
+      "authority_record": "documentation/config/documentation-semantic-contracts-0.9.4.json#runtime_artifact_policy",
+      "current_sources": ["documentation/config/artifact-policy.json"],
+      "focused_regressions": ["test_runtime_artifact_policy_accepts_current_shipping_boundary", "test_runtime_artifact_policy_rejects_generated_runtime_prerequisite"]
+    },
+    {
+      "id": "M11-FB-005",
+      "source_record": "BPM090-M14-03 and BPM090-M14-05 completion notes",
+      "affected_tests": ["documentation/tests/contract/test_maintained_index_snapshot_contract_0_9_3.py", "documentation/tests/contract/test_documentation_subsystem_snapshot.py"],
+      "root_cause_class": "snapshot",
+      "observed_false_block": "Whole-tree/index snapshots changed with regenerated documentation state and could block unrelated edits.",
+      "disposition": "BPM094-M11A-04 scopes each snapshot to declared source owners, permits generation only through maintained commands, and excludes environment/report evidence. Snapshot checks remain scheduled audits.",
+      "replacement_required": true,
+      "replacement_status": "completed",
+      "authority_record": "documentation/config/documentation-test-estate-inventory-0.9.4.json#snapshot-audits",
+      "current_sources": ["documentation/tools/generate_subsystem_snapshot.py", "docs/codex/generate_project_snapshot.py", "documentation/tests/contract/test_documentation_subsystem_snapshot.py", "tests/contract/docs/general/test_codex_project_snapshot.py"],
+      "focused_regressions": ["test_snapshot_generator_uses_only_explicit_file_inputs", "test_generated_documentation_subsystem_snapshot_is_compact_and_bounded"]
+    },
+    {
+      "id": "M11-FB-006",
+      "source_record": "M11 live-source evidence test estate",
+      "affected_tests": ["documentation/tests/contract/test_live_source_install_evidence_closure.py", "documentation/tests/contract/test_docker_engine_installation_evidence.py"],
+      "root_cause_class": "fixture_and_obsolete_evidence",
+      "observed_false_block": "Pinned host-state and command evidence can become stale without a change to current documentation behavior.",
+      "disposition": "Historical host-transcript witnesses are replaced by current topic, command, no-claim, and privileged-safety semantics.",
+      "replacement_required": true,
+      "replacement_status": "completed",
+      "authority_record": "documentation/config/documentation-semantic-contracts-0.9.4.json#current_source_installation",
+      "current_sources": ["documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json", "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json", "documentation/config/wsl-source-install-validation-contract-0.9.1.json", "documentation/tools/wsl_source_install_validation.ps1"],
+      "focused_regressions": ["test_current_source_installation_accepts_current_topics_and_safety_boundary", "test_current_source_installation_rejects_removed_topic_or_safety_boundary"]
+    }
+  ],
+  "critical_risk_guards": {
+    "structural": "remaining-documentation-contract-release, focused-contract-fast",
+    "localization": "remaining-documentation-contract-release, editorial-and-localization-audits",
+    "pdf": "remaining-documentation-contract-release, browser-release",
+    "security": "root-docs-snapshot-excluded-release, remaining-documentation-contract-release",
+    "delivery": "root-docs-schema-release, root-docs-snapshot-excluded-release, remaining-documentation-contract-release, browser-release",
+    "rule": "A classification may not move a critical check out of release_gate unless a separately named equivalent release guard is recorded. This inventory makes no such move."
+  }
+}

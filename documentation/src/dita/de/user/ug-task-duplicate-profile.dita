@@ -4,10 +4,10 @@
   <title>Ein Profil duplizieren</title>
   <shortdesc>Erstellen Sie einen benannten geführten Entwurf aus einem vorhandenen gespeicherten Profil, wenn Sie einen sicheren Ausgangspunkt für Änderungen wünschen.</shortdesc>
   <taskbody>
-    <prereq><p>Das Quellprofil ist in der Bibliothek sichtbar und Sie haben seine Zeilenidentität bestätigt.</p></prereq>
-    <context><p>„Duplizieren“ erstellt einen separaten Profilentwurf basierend auf dem ausgewählten gespeicherten Profil. Das Quellprofil wird dadurch nicht geändert.</p></context>
+    <prereq><p>Das Quellprofil ist in der <uicontrol>Bibliothek</uicontrol> sichtbar und Sie haben seine Zeilenidentität bestätigt.</p></prereq>
+    <context><p>„<uicontrol>Duplizieren</uicontrol>“ erstellt einen separaten Profilentwurf basierend auf dem ausgewählten gespeicherten Profil. Das Quellprofil wird dadurch nicht geändert.</p></context>
     <steps>
-      <step><cmd>Wählen Sie „Duplizieren“ in der Quellprofilzeile.</cmd><info><p>Erwartetes Ergebnis: BPM öffnet ein Klonnamenfenster.</p></info></step>
+      <step><cmd>Wählen Sie „<uicontrol>Duplizieren</uicontrol>“ in der Quellprofilzeile.</cmd><info><p>Erwartetes Ergebnis: BPM öffnet ein Klonnamenfenster.</p></info></step>
       <step><cmd>Geben Sie einen eindeutigen Namen ein, der sich von vorhandenen Profilnamen unterscheidet.</cmd><info><p>BPM erfordert einen Namen und meldet vor der Bestätigung eine Validierung doppelter Namen.</p></info></step>
       <step><cmd>Bestätigen Sie die Duplikataktion.</cmd><info><note type="warning">Ein Duplikat ist von der Quelle getrennt. Spätere Änderungen an einem Profil aktualisieren das andere nicht.</note></info></step>
     </steps>

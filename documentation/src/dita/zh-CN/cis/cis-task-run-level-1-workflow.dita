@@ -5,16 +5,16 @@
   <shortdesc>创建、检查、比较、导出并独立验证具有代表性的 1 级 CIS 配置文件。</shortdesc>
   <taskbody>
     <prereq><p>使用夹具 <codeph>cis-workflow-level-1-esr-fixture</codeph>：Firefox ESR 140.13、图层 <codeph>cis-l1.esr-140.13</codeph>、入门预设 <codeph>basic_corporate</codeph> 和比较配置文件 <codeph>blank-esr-140.13</codeph>。</p></prereq>
-    <context><p>工作流程是确定性的，因为它每次都遵循相同的路由顺序：库、引导式编辑器、所有设置、比较配置档案设置、导出和外部验证。建议行通过生成的映射表提供受影响的 Firefox 策略主题的路径。</p></context>
+    <context><p>工作流程是确定性的，因为它每次都遵循相同的路由顺序：<uicontrol>库</uicontrol>、<uicontrol>引导式编辑器</uicontrol>、<uicontrol>所有设置</uicontrol>、<uicontrol>比较配置档案设置</uicontrol>、导出和外部验证。建议行通过生成的映射表提供受影响的 Firefox 策略主题的路径。</p></context>
     <steps>
-      <step><cmd>从库中创建配置文件，选择 Firefox ESR 140.13，应用基本企业入门预设，然后应用 1 级 CIS 层。</cmd><info><p>预期结果：配置文件将 <codeph>cis-l1.esr-140.13</codeph> 显示为活动 CIS 层，并保持启动器预设源属性可见。</p></info></step>
-      <step><cmd>打开 引导式编辑器 并查看 CIS 相关摘要、架构通道、配置档案身份 以及受 1 级层影响的主要安全/隐私组。</cmd><info><p>预期结果：引导式编辑器 将 1 级配置文件呈现为可审查配置，而不是作为 CIS 合规性证明。</p></info></step>
-      <step><cmd>打开 所有设置，按 CIS/源属性过滤，检查配置的行，并按照每个建议行找到生成的映射表和受影响的 Firefox 策略主题。</cmd><info><p>预期结果：审阅者可以通过 <codeph>baseline</codeph>、<codeph>CIS</codeph>、<codeph>manual</codeph>、<codeph>imported</codeph> 或原始源状态跟踪值。</p></info></step>
+      <step><cmd>从<uicontrol>库</uicontrol>中创建配置文件，选择 Firefox ESR 140.13，应用基本企业入门预设，然后应用 1 级 CIS 层。</cmd><info><p>预期结果：配置文件将 <codeph>cis-l1.esr-140.13</codeph> 显示为活动 CIS 层，并保持启动器预设源属性可见。</p></info></step>
+      <step><cmd>打开 <uicontrol>引导式编辑器</uicontrol> 并查看 CIS 相关摘要、架构通道、<uicontrol>配置档案身份</uicontrol> 以及受 1 级层影响的主要安全/隐私组。</cmd><info><p>预期结果：<uicontrol>引导式编辑器</uicontrol> 将 1 级配置文件呈现为可审查配置，而不是作为 CIS 合规性证明。</p></info></step>
+      <step><cmd>打开 <uicontrol>所有设置</uicontrol>，按 CIS/源属性过滤，检查配置的行，并按照每个建议行找到生成的映射表和受影响的 Firefox 策略主题。</cmd><info><p>预期结果：审阅者可以通过 <codeph>baseline</codeph>、<codeph>CIS</codeph>、<codeph>manual</codeph>、<codeph>imported</codeph> 或原始源状态跟踪值。</p></info></step>
       <step><cmd>通过记录更新治理、代理路由、证据保留、不支持的映射研究、已弃用的目标或本地部署要求的所有者和决策来解决注意事项和手动审核行。</cmd><info><note type="warning">不要通过声称合规来关闭手动审核项目；当决策取决于运行时、网络、操作系统或 BPM 外部的审计检查时，记录外部证据。</note></info></step>
       <step><cmd>将 1 级配置文件与空白 ESR 夹具配置文件进行比较，并检查相等、已更改、左缺失和右缺失的行。</cmd><info><p>预期结果：比较确认级别 1 层引入了预期的配置策略和偏好差异。</p></info></step>
       <step><cmd>验证配置文件，导出 <codeph>policies.json</codeph>，并在 BPM 外部执行已批准的独立部署验证。</cmd><info><p>预期结果：导出的文档、验证结果、比对记录、外部验证记录可以一起查看。</p></info></step>
     </steps>
-    <result><p>创建代表性的 1 级强化配置文件，在 引导式编辑器 和 所有设置 中进行检查、比较、导出，并使用可追溯的证据进行独立验证。</p></result>
+    <result><p>创建代表性的 1 级强化配置文件，在 <uicontrol>引导式编辑器</uicontrol> 和 <uicontrol>所有设置</uicontrol> 中进行检查、比较、导出，并使用可追溯的证据进行独立验证。</p></result>
     <postreq><p>如果任何推荐行缺少生成的映射表、受影响的 Firefox 策略主题路径、导出路径或外部验证记录，请保持工作流打开。</p></postreq>
   </taskbody>
   <related-links>

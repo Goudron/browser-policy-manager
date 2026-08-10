@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-validate-json-document" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Das JSON-Dokument validieren</title>
-  <shortdesc>Validieren Sie die rohe JSON-Syntax und die Firefox-Richtlinienwerte vor dem Speichern.</shortdesc>
+  <shortdesc><uicontrol>Validieren</uicontrol> Sie die rohe JSON-Syntax und die Firefox-Richtlinienwerte vor dem Speichern.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie JSON-Editor mit dem Dokument, das Sie überprüfen möchten.</p></prereq>
+    <prereq><p>Öffnen Sie <uicontrol>JSON-Editor</uicontrol> mit dem Dokument, das Sie überprüfen möchten.</p></prereq>
     <context><p>Die Validierung unterscheidet fehlerhaftes JSON von Richtlinien- oder Schemafehlern. Ein Dokument kann als JSON analysiert werden und trotzdem die Richtlinienvalidierung nicht bestehen.</p></context>
     <steps>
-      <step><cmd>Wählen Sie die gemeinsame Aktion „Validieren“.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie die gemeinsame Aktion „<uicontrol>Validieren</uicontrol>“.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Wenn die Validierung fehlerhaftes JSON meldet, korrigieren Sie die Syntax, z. B. nachgestellte Kommas oder fehlende geschweifte Klammern.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Wenn bei der Validierung Richtlinienfehler gemeldet werden, korrigieren Sie nicht unterstützte Schlüssel, falsche Werttypen oder Schema-Kanal-Nichtübereinstimmungen.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Erneut validieren, bis der Status besagt, dass das Dokument akzeptabel ist oder das verbleibende Problem für eine Rohprüfung vorgesehen ist.</cmd><info><note type="warning">Das Speichern von Roh-JSON kann das kanonische BPM-Profil ändern. Überprüfen Sie die Syntax- und Richtlinienwerte vor dem Speichern.</note></info></step>
     </steps>
     <result><p>Das Dokument hat vor dem Speichern oder Exportieren einen bekannten Validierungsstatus.</p></result>
-    <postreq><p>Wiederherstellung: Wenn Fehler schwer zu lesen sind, verwenden Sie Alle Einstellungen, um die betroffene Richtlinie oder Präferenz visuell zu überprüfen.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn Fehler schwer zu lesen sind, verwenden Sie <uicontrol>Alle Einstellungen</uicontrol>, um die betroffene Richtlinie oder Präferenz visuell zu überprüfen.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-raw-policies-json"/>

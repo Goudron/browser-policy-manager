@@ -5,7 +5,7 @@
   <shortdesc>Ouvrez la surface de comparaison dédiée dans un nouvel onglet avant de sélectionner deux profils enregistrés.</shortdesc>
   <taskbody>
     <prereq><p>La bibliothèque est ouverte et il existe au moins deux profils enregistrés.</p></prereq>
-    <context><p>« Comparer les paramètres des profils » est une page dédiée aux profils enregistrés. Elle conserve la langue et le thème actuels et ne remplace pas l'onglet Bibliothèque.</p>
+    <context><p>« <uicontrol>Comparer les paramètres des profils</uicontrol> » est une page dédiée aux profils enregistrés. Elle conserve la langue et le thème actuels et ne remplace pas l'onglet <uicontrol>Bibliothèque</uicontrol>.</p>
       <fig id="screenshot-compare-profiles">
         <title>Comparer les paramètres des profils</title>
         <image keyref="screenshot.compare-profiles" placement="break" scalefit="yes" align="center">
@@ -14,8 +14,8 @@
       </fig>
     </context>
     <steps>
-      <step><cmd>Choisissez l'action « Comparer les paramètres des profils » dans la Bibliothèque.</cmd><info><p>Résultat attendu : BPM ouvre l'interface de comparaison dans un nouvel onglet de navigateur.</p></info></step>
-      <step><cmd>Utilisez les champs de recherche gauche et droit pour choisir Profil A et Profil B.</cmd><info><note type="warning">La comparaison lit l'état enregistré des profils. Enregistrez les modifications de l’éditeur avant de vous y fier.</note></info></step>
+      <step><cmd>Choisissez l'action « <uicontrol>Comparer les paramètres des profils</uicontrol> » dans la <uicontrol>Bibliothèque</uicontrol>.</cmd><info><p>Résultat attendu : BPM ouvre l'interface de comparaison dans un nouvel onglet de navigateur.</p></info></step>
+      <step><cmd>Utilisez les champs de recherche gauche et droit pour choisir <uicontrol>Profil A</uicontrol> et <uicontrol>Profil B</uicontrol>.</cmd><info><note type="warning">La comparaison lit l'état enregistré des profils. Enregistrez les modifications de l’éditeur avant de vous y fier.</note></info></step>
     </steps>
     <result><p>La page de comparaison est prête pour la sélection indépendante du profil A et du profil B.</p></result>
     <postreq><p>Récupération : si l'onglet Comparer s'ouvre sans les profils attendus, revenez à la bibliothèque, actualisez-la et confirmez que les deux profils sont enregistrés et visibles.</p></postreq>

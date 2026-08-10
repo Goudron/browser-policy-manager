@@ -5,7 +5,7 @@
   <shortdesc>Utilice un ajuste preestablecido inicial para generar opciones de políticas comunes de Firefox antes de la edición detallada.</shortdesc>
   <taskbody>
     <prereq><p>Un borrador de perfil está abierto en el Paso 1.</p></prereq>
-    <context><p>Los ajustes preestablecidos iniciales proporcionan una línea de base conocida que aún puede cambiar en Editor guiado, Todos los ajustes o Editor JSON.</p></context>
+    <context><p>Los ajustes preestablecidos iniciales proporcionan una línea de base conocida que aún puede cambiar en <uicontrol>Editor guiado</uicontrol>, <uicontrol>Todos los ajustes</uicontrol> o <uicontrol>Editor JSON</uicontrol>.</p></context>
     <steps>
       <step><cmd>Abra el área de ajuste preestablecido inicial en el paso 1.</cmd><info><p>Resultado esperado: el perfil guiado permanece coherente.</p></info></step>
       <step><cmd>Compare los ajustes preestablecidos disponibles con el escenario del perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>

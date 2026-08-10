@@ -34,11 +34,15 @@ def test_compact_ui_refresh_uses_only_invalidated_matrix_scenarios() -> None:
         assert asset.stat().st_size > 1024, row["id"]
 
 
-def test_compact_ui_refresh_record_closes_screenshot_blocker_without_faking_locale_signoff() -> None:
+def test_compact_ui_refresh_record_closes_screenshot_blocker_without_faking_locale_signoff() -> (
+    None
+):
     review = REVIEW.read_text(encoding="utf-8")
     evidence = EVIDENCE.read_text(encoding="utf-8")
 
     assert review.count("recaptured M11-03") == len(SCENARIOS)
-    assert "automated capture complete; release review remains governed by locale sign-off" in evidence
+    assert (
+        "automated capture complete; release review remains governed by locale sign-off" in evidence
+    )
     assert "30 captured of 30 expected rows" in evidence
     assert "final locale/editorial acceptance remains governed by the release gate" in review

@@ -17,7 +17,11 @@ Included active source files:
 
 - `app/static/profiles_css/00-foundation.css`
 - `app/static/profiles_css/10-library.css`
-- `app/static/profiles_css/20-editor-wizard.css`
+- `app/static/profiles_css/20-shell.css`
+- `app/static/profiles_css/21-settings.css`
+- `app/static/profiles_css/22-guided-wizard.css`
+- `app/static/profiles_css/23-workspace-editor.css`
+- `app/static/profiles_css/24-theme-overrides.css`
 - `app/static/profiles_css/30-responsive.css`
 - `app/static/profiles_css/40-compact-shell.css`
 - `documentation/assets/theme/bpm-docs.css`
@@ -62,7 +66,7 @@ Selectors requiring 0.9.1 work in `app/static/profiles_css/10-library.css`:
 | `[class~="bg-white"]`, `[class~="bg-white/80"]`, `[class~="bg-white/70"]` compatibility selectors | Dark-mode overrides exist, which means light-mode white utility classes can still create white surfaces. | Audit templates using these classes and replace with BPM surface tokens. |
 | `.compare-target-name`, `.compare-summary-value`, `.compare-changes-copy`, `.compare-changes-item` | Hardcoded slate colors bypass the theme token set. | Tokenize text colors so light/dark/system stay coherent. |
 
-Selectors requiring 0.9.1 work in `app/static/profiles_css/20-editor-wizard.css`:
+Selectors requiring 0.9.1 work in the owned `app/static/profiles_css/20-24-*.css` layers:
 
 | Selector group | Current issue | Follow-up |
 | --- | --- | --- |
@@ -111,7 +115,7 @@ backgrounds after M3 changes.
 ## Cross-Cutting Risks
 
 - Pure-white and translucent-white values are duplicated instead of centralized, especially between
-  `00-foundation.css` and `20-editor-wizard.css`.
+  `00-foundation.css` and the owned `20-24-*.css` layers.
 - Product and documentation themes use different token namespaces and accent families, making the
   documentation portal feel separate from BPM.
 - Documentation supports OS dark mode but lacks explicit `html[data-theme="light"]`,

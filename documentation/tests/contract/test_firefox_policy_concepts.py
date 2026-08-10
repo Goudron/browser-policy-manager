@@ -10,7 +10,10 @@ from app.core.policy_validation import validate_profile_policies_for_channel
 
 DOCUMENTATION_ROOT = Path(__file__).resolve().parents[2]
 DITA_ROOT = DOCUMENTATION_ROOT / "src/dita"
-FAMILY_FIXTURE = DOCUMENTATION_ROOT / "fixtures/firefox-policy-families/complex-policy-family-examples-0.9.0.json"
+FAMILY_FIXTURE = (
+    DOCUMENTATION_ROOT
+    / "fixtures/firefox-policy-families/complex-policy-family-examples-0.9.0.json"
+)
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 XML_LANG = "{http://www.w3.org/XML/1998/namespace}lang"
 DOCTYPES = {
@@ -114,9 +117,13 @@ def test_firefox_policy_concepts_exist_in_every_locale_with_stable_metadata() ->
             assert root.find("title") is not None
             assert root.find("shortdesc") is not None
             if topic_kind == "concept":
-                assert {section.attrib["id"] for section in root.findall("./conbody/section")} == section_ids
+                assert {
+                    section.attrib["id"] for section in root.findall("./conbody/section")
+                } == section_ids
             elif topic_kind == "reference":
-                assert {section.attrib["id"] for section in root.findall("./refbody/section")} == section_ids
+                assert {
+                    section.attrib["id"] for section in root.findall("./refbody/section")
+                } == section_ids
             else:
                 steps = root.findall("./taskbody/steps/step")
                 assert len(steps) == 5
@@ -137,14 +144,15 @@ def test_firefox_policy_concepts_are_keyed_and_reachable_from_policy_guide_maps(
             if keydef.attrib["keys"] in FIREFOX_GUIDE_KEYREFS
         }
         assert keydefs == {
-            f"topic.{topic_id}": f"../firefox/{topic_id}.dita"
-            for topic_id in TOPICS
+            f"topic.{topic_id}": f"../firefox/{topic_id}.dita" for topic_id in TOPICS
         }
 
         guide = ET.fromstring(
             (DITA_ROOT / locale / "maps/firefox-policy-guide.ditamap").read_text(encoding="utf-8")
         )
-        assert [topicref.attrib["keyref"] for topicref in guide.findall("topicref")] == FIREFOX_GUIDE_KEYREFS
+        assert [
+            topicref.attrib["keyref"] for topicref in guide.findall("topicref")
+        ] == FIREFOX_GUIDE_KEYREFS
 
 
 def test_english_firefox_policy_concepts_cover_selection_boundary_and_presets() -> None:

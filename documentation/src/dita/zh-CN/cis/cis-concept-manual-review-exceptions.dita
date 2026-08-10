@@ -7,7 +7,7 @@
     <section id="a-manual-review-scope"><title>手动审核范围</title><p>BPM 标记九个路径的手动审核：AppAutoUpdate、BackgroundAppUpdate、DisableAppUpdate、DisableSystemAddonUpdate、Proxy.Locked、Proxy.Mode、SanitizeOnShutdown.FormData、SanitizeOnShutdown.History 和 SanitizeOnShutdown.Sessions。这些路径是审查点，因为企业补丁管理、代理路由和证据保留规则在部署之间可能存在合理的差异。</p></section>
     <section id="a-update-governance"><title>更新治理</title><p>与企业补丁管理所有者一起审核 AppAutoUpdate、BackgroundAppUpdate、DisableAppUpdate 和 DisableSystemAddonUpdate。验证浏览器更新是否由 Firefox、操作系统工具、软件管理平台或单独的维护时段管理。 BPM 可以保留所选值和源属性，但它不能决定哪个更新过程在操作上是正确的。</p></section>
     <section id="a-proxy-routing"><title>代理路由</title><p>与网络所有者一起检查 Proxy.Locked 和 Proxy.Mode。验证配置文件是否必须保留系统代理行为、强制执行手动代理或将路由留给另一个控制。不要将 BPM 值视为流量在部署后实际使用预期路由的证据。</p></section>
-    <section id="a-evidence-retention"><title>证据保留</title><p>与安全和隐私所有者一起查看 SanitizeOnShutdown.FormData、SanitizeOnShutdown.History 和 SanitizeOnShutdown.会话。一些强化场景会清除本地数据，而一些调查则需要保留证据。 BPM记录选择和冲突状态；它不确定法律或事件响应要求。</p></section>
+    <section id="a-evidence-retention"><title>证据保留</title><p>与<uicontrol>安全和隐私</uicontrol>所有者一起查看 SanitizeOnShutdown.FormData、SanitizeOnShutdown.History 和 SanitizeOnShutdown.会话。一些强化场景会清除本地数据，而一些调查则需要保留证据。 BPM记录选择和冲突状态；它不确定法律或事件响应要求。</p></section>
     <section id="a-exception-boundary"><title>异常边界</title><p>BPM 没有单独的持续 CIS 例外或豁免模型。在外部票证、部署说明或变更控制记录中记录故意偏差，然后保持 BPM 配置文件源归因和 manual_review_kept_base 决策可见，以供以后查看。</p></section>
   </conbody>
   <related-links>

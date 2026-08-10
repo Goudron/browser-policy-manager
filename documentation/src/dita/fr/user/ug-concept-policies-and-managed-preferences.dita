@@ -4,8 +4,8 @@
   <title>Stratégies et préférences gérées</title>
   <shortdesc>BPM sépare les politiques Firefox Enterprise des valeurs de préférences gérées tout en conservant les deux dans un seul profil.</shortdesc>
   <conbody>
-    <p>Les politiques sont appelées contrôles Firefox Enterprise tels que le comportement du navigateur, l'accès, les autorisations ou les paramètres de fonctionnalités. Préférences gérées sont des clés de préférence avec des valeurs et un comportement de verrouillage facultatif.</p>
-    <p>Éditeur guidé couvre les objectifs politiques communs. Tous les paramètres expose le catalogue plus large pris en charge. Éditeur JSON affiche la limite exacte du document utilisée pour l'importation et l'exportation.</p>
+    <p>Les politiques sont appelées contrôles Firefox Enterprise tels que le comportement du navigateur, l'accès, les autorisations ou les paramètres de fonctionnalités. <uicontrol>Préférences gérées</uicontrol> sont des clés de préférence avec des valeurs et un comportement de verrouillage facultatif.</p>
+    <p><uicontrol>Éditeur guidé</uicontrol> couvre les objectifs politiques communs. <uicontrol>Tous les paramètres</uicontrol> expose le catalogue plus large pris en charge. <uicontrol>Éditeur JSON</uicontrol> affiche la limite exacte du document utilisée pour l'importation et l'exportation.</p>
     <p>Les détails de référence stratégie par stratégie appartiennent au Guide de stratégie de Firefox ; ce guide de l'utilisateur explique comment un utilisateur atteint et modifie en toute sécurité ces contrôles dans BPM.</p>
   </conbody>
 </concept>

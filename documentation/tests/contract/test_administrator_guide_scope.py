@@ -84,7 +84,9 @@ def test_administrator_guide_has_stable_map_key_and_portal_slot_in_every_locale(
         }
         sections = root.findall("topichead")
         assert len(sections) == 8
-        assert all(section.attrib == {"outputclass": "case-oriented-section"} for section in sections)
+        assert all(
+            section.attrib == {"outputclass": "case-oriented-section"} for section in sections
+        )
         assert sections[0].findall("topicref")[0].attrib == {
             "keyref": "topic.admin-reference-minimum-system-requirements"
         }
@@ -123,23 +125,26 @@ def test_administrator_guide_has_stable_map_key_and_portal_slot_in_every_locale(
 
 def test_administrator_guide_is_registered_in_manifest_schema_and_build_tool() -> None:
     schema = json.loads(
-        (REPOSITORY_ROOT / "docs/architecture/schemas/product-documentation-manifest-v1.schema.json").read_text(
-            encoding="utf-8"
-        )
+        (
+            REPOSITORY_ROOT
+            / "docs/architecture/schemas/product-documentation-manifest-v1.schema.json"
+        ).read_text(encoding="utf-8")
     )
-    build_docs = (DOCUMENTATION_ROOT / "tools/build_docs.py").read_text(encoding="utf-8")
+    guide_catalog = (DOCUMENTATION_ROOT / "buildlib/shared.py").read_text(encoding="utf-8")
     identifiers = (
         REPOSITORY_ROOT / "docs/architecture/documentation-identifiers-and-url-conventions-0.9.0.md"
     ).read_text(encoding="utf-8")
 
     assert "administrator-guide" in schema["$defs"]["guides"]["required"]
     assert "admin" in schema["$defs"]["guide"]["properties"]["url_root"]["enum"]
-    assert '"administrator-guide.ditamap", "a-administrator-guide", "admin"' in build_docs
+    assert '"administrator-guide.ditamap", "a-administrator-guide", "admin"' in guide_catalog
     assert "| `administrator-guide` | `admin/` |" in identifiers
     assert "`admin-*` IDs reserved for source deployment" in identifiers
 
 
-def test_administrator_guide_scope_separates_current_source_operations_from_deferred_installers() -> None:
+def test_administrator_guide_scope_separates_current_source_operations_from_deferred_installers() -> (
+    None
+):
     release_contract = (
         REPOSITORY_ROOT / "docs/architecture/product-documentation-release-contract-0.9.0.md"
     ).read_text(encoding="utf-8")

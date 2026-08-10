@@ -84,7 +84,9 @@ def test_topic_section_hierarchy_audit_matches_all_locale_map_shapes() -> None:
 
         for locale in LOCALES:
             root = _map_root(locale, document["map_filename"])
-            assert [topicref.attrib["keyref"] for topicref in _topicrefs(root)] == canonical_topicrefs
+            assert [
+                topicref.attrib["keyref"] for topicref in _topicrefs(root)
+            ] == canonical_topicrefs
             assert [
                 len(_direct_topicrefs(section)) for section in _topicheads(root)
             ] == canonical_section_counts

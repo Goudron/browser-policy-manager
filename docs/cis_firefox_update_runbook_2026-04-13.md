@@ -62,7 +62,7 @@ Include `--json` for machine-readable output or `--validate-targets` to scan for
 ## 7. Run tests
 
 ```
-./.venv/bin/pytest -q tests/compliance
+./.venv/bin/pytest -q tests/contract/compliance
 ```
 
 ## 8. Documentation drift gate

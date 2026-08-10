@@ -15,6 +15,12 @@
       <step><cmd>Importnachweise im integrierenden Produkt aufzeichnen.</cmd><info><note type="warning">Import erstellt ein BPM-Profil, stellt jedoch keine Firefox-Einstellungen bereit, prüft die Laufzeiterzwingung nicht und stellt keinen Idempotenzschlüssel bereit. Zeichnen Sie den Quelldokument-Hash, den Schemakanal, das zurückgegebene Profil ID, die Revision, die Compliance-Metadaten und die Entscheidung zur Wiederherstellung doppelter Namen extern auf.</note></info></step>
     </steps>
     <result><p>Das Firefox-Dokument <codeph>policies.json</codeph> wird als normalisiertes BPM-Profil dargestellt, das von ID überprüft, validiert, exportiert und verfolgt werden kann.</p></result>
+    <example id="a-import-policies-document"><title>Vollständiges Firefox-Dokument policies.json</title><p>Der Wert in <codeph>document</codeph> oder die mehrteilige Datei ist das vollständige Firefox-Dokument und niemals BPM-<codeph>flags</codeph>:</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
     <postreq><p>Verwenden Sie die Exportaufgabe, um das gespeicherte Profil wieder im kanonischen Firefox-JSON zu rendern, bevor Sie es an die Bereitstellungstools übergeben.</p></postreq>
   </taskbody>
   <related-links>

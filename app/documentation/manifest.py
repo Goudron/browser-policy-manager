@@ -118,7 +118,11 @@ class DocumentationCatalog:
         anchor_id = target.get("anchor_id")
         if anchor_id is not None:
             anchors = topic.get("anchors")
-            if not isinstance(anchor_id, str) or not isinstance(anchors, dict) or anchor_id not in anchors:
+            if (
+                not isinstance(anchor_id, str)
+                or not isinstance(anchors, dict)
+                or anchor_id not in anchors
+            ):
                 return None
 
         outputs = topic.get("output")
@@ -246,7 +250,11 @@ def _validate_targets(manifest: dict[str, Any], target_map: dict[str, Any]) -> N
         anchor_id = target.get("anchor_id")
         if anchor_id is not None:
             anchors = topic.get("anchors")
-            if not isinstance(anchor_id, str) or not isinstance(anchors, dict) or anchor_id not in anchors:
+            if (
+                not isinstance(anchor_id, str)
+                or not isinstance(anchors, dict)
+                or anchor_id not in anchors
+            ):
                 raise ValueError(f"documentation target {target_id} references an unknown anchor")
 
 
@@ -267,7 +275,7 @@ def load_documentation_catalog(site_root: Path | None = None) -> DocumentationCa
         target_map = _load_validated_target_map(root, manifest)
         _validate_topic_outputs(root, manifest)
         _validate_targets(manifest, target_map)
-    except (OSError, ValueError, json.JSONDecodeError):
+    except OSError, ValueError, json.JSONDecodeError:
         return None
 
     default_locale = manifest["default_locale"]
@@ -292,7 +300,7 @@ def documentation_artifact_problem(site_root: Path | None = None) -> str | None:
         return "missing"
     try:
         manifest = _load_json_object(manifest_path)
-    except (OSError, ValueError, json.JSONDecodeError):
+    except OSError, ValueError, json.JSONDecodeError:
         return "incompatible"
 
     bpm_version = _manifest_bpm_version(manifest)

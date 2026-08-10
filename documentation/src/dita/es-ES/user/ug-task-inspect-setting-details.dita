@@ -4,16 +4,16 @@
   <title>Inspeccionar detalles de configuración</title>
   <shortdesc>Seleccione una configuración e inspeccione su valor, fuente, validación, soporte de esquema y ubicación del producto.</shortdesc>
   <taskbody>
-    <prereq><p>Abra Todos los ajustes y seleccione una fila de configuración entre Revisar, Configurado, Catálogo, búsqueda o un enlace profundo.</p></prereq>
+    <prereq><p>Abra <uicontrol>Todos los ajustes</uicontrol> y seleccione una fila de configuración entre Revisar, Configurado, <uicontrol>Catálogo</uicontrol>, búsqueda o un enlace profundo.</p></prereq>
     <context><p>El panel de detalles es el lugar seguro para comprender una configuración única antes de editarla. Muestra la forma del valor, la atribución de la fuente, los problemas de validación y el contexto de navegación.</p></context>
     <steps>
-      <step><cmd>Seleccione la fila de configuración que necesita comprender.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Lea el valor actual, la insignia de origen, los mensajes de validación y el soporte de esquema/canal.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Verifique la ubicación del producto o el enlace de superficie relacionado si la configuración también se cubre en otro lugar.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Seleccione la fila de configuración que necesita comprender.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Lea el valor actual, la insignia de origen, los mensajes de validación y el soporte de esquema/canal.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Verifique la ubicación del producto o el enlace de superficie relacionado si la configuración también se cubre en otro lugar.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
       <step><cmd>Decida si desea editar, eliminar, restablecer o dejar el valor sin cambios.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
     <result><p>Usted comprende qué hace la configuración en este perfil y qué acción es segura a continuación.</p></result>
-    <postreq><p>Recuperación: si la forma del valor no está clara, compárela con Editor JSON o deje la configuración sin cambios hasta que esté disponible la guía de validación.</p></postreq>
+    <postreq><p>Recuperación: si la forma del valor no está clara, compárela con <uicontrol>Editor JSON</uicontrol> o deje la configuración sin cambios hasta que esté disponible la guía de validación.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-setting-detail"/>

@@ -4,12 +4,12 @@
   <title>Einstellungen nach Quelle filtern</title>
   <shortdesc>Filtern Sie konfigurierte Einstellungen nach Baseline-, CIS-, manueller, importierter oder Rohquellenzuordnung.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie Alle Einstellungen in Konfiguriert oder einer quellfähigen Liste.</p></prereq>
+    <prereq><p>Öffnen Sie <uicontrol>Alle Einstellungen</uicontrol> in <uicontrol>Konfiguriert</uicontrol> oder einer quellfähigen Liste.</p></prereq>
     <context><p>Quellfilter erklären, warum ein Wert existiert. Sie helfen dabei, generierte Baselines, CIS-Layer, manuelle Bearbeitungen, importierte Richtlinien und rohe Fallback-Werte zu unterscheiden.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie die Quellfiltersteuerelemente.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Wählen Sie abhängig von der Frage, die Sie beantworten, „Baseline“, „CIS“, „Manuell“, „Importiert“ oder „Roh“.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Überprüfen Sie nach jeder Filteränderung die Listenanzahl und die sichtbaren Abzeichen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Öffnen Sie die Quellfiltersteuerelemente.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie abhängig von der Frage, die Sie beantworten, „Baseline“, „CIS“, „Manuell“, „Importiert“ oder „Roh“.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie nach jeder Filteränderung die Listenanzahl und die sichtbaren Abzeichen.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Löschen Sie den Filter, bevor Sie zu einem anderen Untersuchungspfad wechseln.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Die sichtbare Liste enthält nur Einstellungen aus der ausgewählten Quellkategorie.</p></result>

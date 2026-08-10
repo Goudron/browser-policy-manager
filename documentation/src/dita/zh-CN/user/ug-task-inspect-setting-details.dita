@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-inspect-setting-details" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>检查设置详细信息</title>
-  <shortdesc>选择一个设置并检查其值、来源、验证、架构支持和产品位置。</shortdesc>
+  <shortdesc>选择一个设置并<uicontrol>检查</uicontrol>其值、来源、验证、架构支持和产品位置。</shortdesc>
   <taskbody>
-    <prereq><p>打开 所有设置 并从“查看”、“已配置”、“目录”、“搜索”或“深层链接”中选择设置行。</p></prereq>
+    <prereq><p>打开 <uicontrol>所有设置</uicontrol> 并从“查看”、“<uicontrol>已配置</uicontrol>”、“<uicontrol>目录</uicontrol>”、“搜索”或“深层链接”中选择设置行。</p></prereq>
     <context><p>详细信息面板是在编辑单个设置之前了解该设置的安全位置。它显示了值形状、来源归因、验证问题和导航上下文。</p></context>
     <steps>
-      <step><cmd>选择您需要了解的设置行。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>读取当前值、源标记、验证消息和模式/通道支持。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>如果其他地方也涵盖了该设置，请检查产品位置或相关表面链接。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>选择您需要了解的设置行。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>读取当前值、源标记、验证消息和模式/通道支持。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>如果其他地方也涵盖了该设置，请<uicontrol>检查</uicontrol>产品位置或相关表面链接。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>决定是否编辑、删除、重置该值或保持该值不变。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>您了解此配置文件中的设置的作用以及接下来的操作是安全的。</p></result>
-    <postreq><p>恢复：如果值形状不清楚，请与 JSON 编辑器 进行比较或保持设置不变，直到有验证指导为止。</p></postreq>
+    <postreq><p>恢复：如果值形状不清楚，请与 <uicontrol>JSON 编辑器</uicontrol> 进行比较或保持设置不变，直到有验证指导为止。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-setting-detail"/>

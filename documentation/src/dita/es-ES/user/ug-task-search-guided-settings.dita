@@ -4,7 +4,7 @@
   <title>Buscar ajustes en el «Editor guiado»</title>
   <shortdesc>Busque controles guiados y salte a la configuración correspondiente sin escanear cada paso.</shortdesc>
   <taskbody>
-    <prereq><p>Hay un perfil abierto en Editor guiado.</p></prereq>
+    <prereq><p>Hay un perfil abierto en <uicontrol>Editor guiado</uicontrol>.</p></prereq>
     <context><p>La búsqueda guiada es útil cuando conoce el objetivo de la política pero no el paso que contiene la familia de controles.</p>
       <fig id="screenshot-guided-settings-search">
         <title>Resultados de búsqueda de ajustes en el «Editor guiado»</title>

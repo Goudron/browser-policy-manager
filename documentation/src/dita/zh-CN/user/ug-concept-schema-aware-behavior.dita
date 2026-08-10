@@ -11,7 +11,7 @@
     <section id="a-state-meanings"><title>支持、不可用、已弃用、未知和原始状态</title><p>可以针对所选模式编辑和验证支持的设置。切换前应检查不可用或未知的设置；已弃用的设置可能仍然存在，但需要当前频道确认；应故意保留或删除原始后备值。</p></section>
     <section id="a-migration-expectations"><title>检查通道变更</title><p>切换架构通道是一项审查决定，而不是静默迁移。切换后请重新验证，并在保存或导出前检查较新通道中的值、ESR 中不可用的值、导入值、原始值和已弃用值。</p></section>
     <section id="a-example-boundary"><title>检查支持边界</title><p>DisableTelemetry 是常见的有效示例。AIControls 和 VisualSearchEnabled 在 Release 153 和 ESR 153.0 中可能有效，但在 ESR 140.13 中不受支持。错误的值类型（例如为 DisableTelemetry 提供字符串）对所有架构都无效。</p></section>
-    <section id="a-recovery"><title>恢复</title><p>如果验证失败，请读取受影响的策略路径，确认架构通道，检查 所有设置 或 JSON 编辑器 中的设置，然后才编辑、删除或保留该值。</p></section>
+    <section id="a-recovery"><title>恢复</title><p>如果验证失败，请读取受影响的策略路径，确认架构通道，检查 <uicontrol>所有设置</uicontrol> 或 <uicontrol>JSON 编辑器</uicontrol> 中的设置，然后才编辑、删除或保留该值。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.ug-task-choose-firefox-schema"/>

@@ -1,0 +1,70 @@
+{
+  "schema_version": 3,
+  "backlog_item": "BPM094-M7-04",
+  "target_bpm_version": "0.9.4",
+  "status": "accepted",
+  "purpose": "Keep maintained documentation build-library coverage separate from product application coverage.",
+  "deterministic_library_surfaces": [
+    {"path": "documentation/buildlib/artifacts.py", "coverage_target_percent": 100},
+    {"path": "documentation/buildlib/catalog.py", "coverage_target_percent": 100},
+    {"path": "documentation/buildlib/lifecycle.py", "coverage_target_percent": 100},
+    {"path": "documentation/buildlib/portal.py", "coverage_target_percent": 100},
+    {"path": "documentation/buildlib/shared.py", "coverage_target_percent": 100},
+    {"path": "documentation/buildlib/sources.py", "coverage_target_percent": 100},
+    {"path": "documentation/buildlib/validation.py", "coverage_target_percent": 100},
+    {"path": "documentation/tools/validate_metadata.py", "coverage_target_percent": 100}
+  ],
+  "execution_layer_contracts": [
+    {
+      "path": "documentation/buildlib/pdf.py",
+      "reason": "Owns DITA-OT, WeasyPrint, and qpdf process orchestration plus PDF staging; line coverage with mocked executables is not release evidence.",
+      "commands": ["make docs-pdf-build", "make docs-pdf-verify", "make docs-pdf-reproducibility"],
+      "focused_tests": [
+        "documentation/tests/unit/test_build_docs.py::test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata",
+        "documentation/tests/unit/test_build_docs.py::test_canonicalize_pdf_replaces_qpdf_trailer_id_after_the_rewrite",
+        "documentation/tests/unit/test_build_docs.py::test_pdf_article_drops_temporary_local_file_links_but_keeps_external_links",
+        "documentation/tests/unit/test_build_docs.py::test_pdf_topic_html_waits_for_delayed_map_output"
+      ],
+      "mandatory_ci_job": "documentation-coverage"
+    },
+    {
+      "path": "documentation/buildlib/publishing.py",
+      "reason": "Owns full-build command composition, staged promotion, installation, and reproducibility orchestration; command and rollback contracts are the maintained evidence.",
+      "commands": ["make docs-build", "make docs-reproducibility-check", "make docs-package", "make docs-package-verify"],
+      "focused_tests": [
+        "documentation/tests/unit/test_build_docs.py::test_package_keeps_last_verified_outputs_when_source_validation_fails",
+        "documentation/tests/unit/test_build_lifecycle.py"
+      ],
+      "mandatory_ci_job": "documentation-coverage"
+    }
+  ],
+  "test_command": "make docs-coverage",
+  "test_paths": [
+    "documentation/tests/unit/test_build_docs.py",
+    "documentation/tests/unit/test_build_docs_structure.py",
+    "documentation/tests/unit/test_buildlib_artifacts.py",
+    "documentation/tests/unit/test_buildlib_catalog.py",
+    "documentation/tests/unit/test_buildlib_portal.py",
+    "documentation/tests/unit/test_buildlib_shared.py",
+    "documentation/tests/unit/test_buildlib_sources.py",
+    "documentation/tests/unit/test_build_lifecycle.py",
+    "documentation/tests/unit/test_validate_metadata.py"
+  ],
+  "excluded_execution_layers": {
+    "cli_and_subprocess_adapters": "Covered through focused unit and contract tests; they are not library coverage targets.",
+    "browser_checks": "Covered through documentation/tests/browser and are not executed by the deterministic Python coverage gate.",
+    "runtime_documentation_modules": "Remain under the product app coverage gate."
+  },
+  "report_outputs": {
+    "terminal": true,
+    "xml": "documentation/reports/coverage/docs-coverage.xml",
+    "html": "documentation/reports/coverage/html/index.html",
+    "data_file": "documentation/reports/coverage/.coverage-docs"
+  },
+  "release_gate": {
+    "covered_scope_must_be_100_percent": true,
+    "shortfall_is_not_known_debt": true,
+    "branch_coverage_required": true,
+    "mandatory_ci_job": "documentation-coverage"
+  }
+}

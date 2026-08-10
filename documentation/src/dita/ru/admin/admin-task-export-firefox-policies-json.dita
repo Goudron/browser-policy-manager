@@ -15,6 +15,12 @@
       <step><cmd>Запишите точный экспортированный артефакт на внешний объект.</cmd><info><note type="warning">Экспорт не имеет ETag, заголовка предварительного условия, массовой конечной точки или оболочки транзакции. Запишите профиль ID, ревизию, наблюдаемую перед экспортом, канал схемы, параметры запроса, хэш экспортированного документа и решение о последующей передаче за пределы BPM.</note></info></step>
     </steps>
     <result><p>Интеграция включает канонический артефакт Firefox <codeph>policies.json</codeph>, который исключает метаданные только для BPM и может быть предоставлен в инструменты развертывания.</p></result>
+    <example id="a-export-policies-document"><title>Полный документ Firefox policies.json</title><p>Тело ответа — полный документ развёртывания Firefox, а не метаданные профиля BPM и не <codeph>flags</codeph>:</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
     <postreq><p>Если проверка не удалась или версия профиля изменилась между чтением и экспортом, остановите передачу обслуживания и обновите состояние профиля.</p></postreq>
   </taskbody>
   <related-links>

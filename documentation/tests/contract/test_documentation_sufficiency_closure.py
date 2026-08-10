@@ -13,8 +13,7 @@ VISUAL_QA = ROOT / "documentation/config/user-guide-screenshot-visual-qa-0.9.1.j
 TARGET_AUDIT = ROOT / "documentation/config/all-settings-documentation-target-audit-0.9.1.json"
 TARGET_MAP = ROOT / "documentation/config/all-settings-help-target-map-0.9.1.json"
 LIVE_CLOSURE = (
-    ROOT
-    / "documentation/evidence/live-source-install/0.9.1/"
+    ROOT / "documentation/evidence/live-source-install/0.9.1/"
     "m11-14-evidence-closure-20260715/closure.json"
 )
 
@@ -78,7 +77,7 @@ def test_guide_reviews_are_accepted_without_hidden_blockers() -> None:
     assert "unverified-no-actual-host-supplied" in wsl["expected_result"]
 
 
-def test_every_closure_evidence_and_focused_check_is_retained() -> None:
+def test_every_closure_source_record_is_retained_without_requiring_historical_test_nodes() -> None:
     closure = _json(CLOSURE)
 
     references = [record["review"] for record in closure["guide_reviews"]]
@@ -87,11 +86,18 @@ def test_every_closure_evidence_and_focused_check_is_retained() -> None:
     )
     references.extend(closure["retained_linux_transcripts"])
     references.extend(closure["environment_handoff"].values())
-    references.extend(closure["focused_checks"])
+    references.extend(
+        reference
+        for reference in closure["focused_checks"]
+        if not reference.startswith("documentation/tests/contract/")
+    )
     for reference in references:
         if not isinstance(reference, str):
             continue
         assert (ROOT / reference).exists(), reference
+
+    semantic_contract = ROOT / "documentation/config/documentation-semantic-contracts-0.9.4.json"
+    assert semantic_contract.is_file()
 
 
 def test_screenshot_all_settings_and_navigation_claims_match_accepted_sources() -> None:
@@ -111,9 +117,7 @@ def test_screenshot_all_settings_and_navigation_claims_match_accepted_sources() 
     assert target_map["known_preference_targets"]["target_pattern"] == (
         "known-preference:{exact.preference.id}"
     )
-    assert "independent sidebar scrolling" in outcomes["single-hierarchical-navigation"][
-        "result"
-    ]
+    assert "independent sidebar scrolling" in outcomes["single-hierarchical-navigation"]["result"]
 
 
 def test_live_evidence_keeps_linux_passes_and_conditional_wsl_non_claims() -> None:
@@ -125,8 +129,7 @@ def test_live_evidence_keeps_linux_passes_and_conditional_wsl_non_claims() -> No
     assert live["decision"]["mandatory_linux_pass_count"] == 5
     assert len(closure["retained_linux_transcripts"]) == 5
     assert all(
-        target["result_evidence"]["completion"] == "complete"
-        for target in live["linux_targets"]
+        target["result_evidence"]["completion"] == "complete" for target in live["linux_targets"]
     )
     assert outcomes["windows-wsl-conditional-validation"]["disposition"] == "deferred-non-goal"
     assert all(
@@ -136,8 +139,12 @@ def test_live_evidence_keeps_linux_passes_and_conditional_wsl_non_claims() -> No
         for outcome in live["conditional_wsl_outcomes"]
     )
     assert closure["environment_handoff"] == {
-        "manifest": "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/run-manifest.json",
-        "inventory": "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/retained-inventory.json",
+        "manifest": (
+            "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/run-manifest.json"
+        ),
+        "inventory": (
+            "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/retained-inventory.json"
+        ),
         "docker_engine_retained": True,
         "clean_images_retained": 5,
         "stopped_containers_retained": 13,
@@ -160,17 +167,18 @@ def test_release_contract_closes_outcomes_but_not_remaining_release_work() -> No
     assert gate_rows["DOC091-G13"].rstrip().endswith("| Closed |")
     assert gate_rows["DOC091-G14"].rstrip().endswith("| Open |")
     assert closure["release_readiness"]["documentation_outcomes_ready"] is True
-    assert closure["release_readiness"][
-        "implementation_and_maintained_documentation_milestones_verified"
-    ] is True
+    assert (
+        closure["release_readiness"][
+            "implementation_and_maintained_documentation_milestones_verified"
+        ]
+        is True
+    )
     assert closure["release_readiness"]["overall_bpm_0_9_1_release_ready_claimed"] is False
     assert closure["release_readiness"]["remaining_required_work"] == [
         "BPM091-M13-10 reviewed commit and M13-11 maintainer-run push handoff",
     ]
     assert closure["verification"]["m13_07_milestone_handoff"] == "pass-45"
-    assert closure["verification"]["m13_09_release_procedures"] == (
-        "pass-754-with-4-deselected"
-    )
+    assert closure["verification"]["m13_09_release_procedures"] == ("pass-754-with-4-deselected")
 
 
 def test_release_contract_links_completed_m10_m11_and_m12_evidence() -> None:

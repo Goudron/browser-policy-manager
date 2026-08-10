@@ -15,6 +15,12 @@
       <step><cmd>Record import evidence in the integrating product.</cmd><info><note type="warning">Import creates a BPM profile but does not deploy Firefox settings, prove runtime enforcement, or provide an idempotency key. Record the source document hash, schema channel, returned profile ID, revision, compliance metadata, and duplicate-name recovery decision externally.</note></info></step>
     </steps>
     <result><p>The Firefox <codeph>policies.json</codeph> document is represented as a normalized BPM profile that can be reviewed, validated, exported, and tracked by ID.</p></result>
+    <example id="a-import-policies-document"><title>Full Firefox policies.json document</title><p>The value inside <codeph>document</codeph> or the multipart file is the complete Firefox document, never BPM <codeph>flags</codeph>:</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
     <postreq><p>Use the export task to render the saved profile back to canonical Firefox JSON before handing it to deployment tooling.</p></postreq>
   </taskbody>
   <related-links>

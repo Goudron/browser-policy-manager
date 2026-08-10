@@ -29,9 +29,7 @@ def test_browser_tuning_benchmark_contract_locks_per_locale_comparative_rule() -
     assert contract["contract_id"] == "bpm-doc-search-browser-tuning-benchmark-0.9.3"
     assert contract["backlog_item"] == "BPM093-M4-04"
     assert contract["metrics"] == ["top_1", "mrr", "recall_at_5", "no_result_recall"]
-    assert contract["acceptance"]["strict_improvement_metrics"] == [
-        "top_1", "mrr", "recall_at_5"
-    ]
+    assert contract["acceptance"]["strict_improvement_metrics"] == ["top_1", "mrr", "recall_at_5"]
     assert "Every maintained locale independently" in contract["acceptance"]["scope"]
     assert "no network request" in contract["network_boundary"]
 
@@ -44,8 +42,11 @@ def test_browser_tuning_benchmark_improves_each_locale_without_no_result_regress
     for locale, comparison in report["comparison"].items():
         assert comparison["no_regression"], locale
         assert set(comparison["strictly_improved_metrics"]) >= {
-            "top_1", "mrr", "recall_at_5"
+            "top_1",
+            "mrr",
+            "recall_at_5",
         }, locale
-        assert report["selected_browser_metrics"][locale]["no_result_recall"] >= report[
-            "frozen_control_metrics"
-        ][locale]["no_result_recall"]
+        assert (
+            report["selected_browser_metrics"][locale]["no_result_recall"]
+            >= report["frozen_control_metrics"][locale]["no_result_recall"]
+        )

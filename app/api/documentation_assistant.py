@@ -23,6 +23,12 @@ from app.ai.least_privilege import (
     AssistantRequestMetadata,
     LeastPrivilegeViolation,
 )
+from app.documentation.assistant_contracts import (
+    SUPPORTED_LOCALES,
+    ConversationAdmission,
+    ConversationRequest,
+    ConversationStreamEvent,
+)
 from app.documentation.assistant_service import (
     AssistantSource,
     AssistantStatus,
@@ -30,9 +36,6 @@ from app.documentation.assistant_service import (
     DocumentationAssistantService,
     TrainingDocumentationAssistantService,
 )
-from app.documentation.conversation import ConversationRequest
-from app.documentation.conversation_stream import ConversationAdmission, ConversationStreamEvent
-from app.documentation.retrieval import SUPPORTED_LOCALES
 
 router = APIRouter(prefix="/api/documentation-assistant", tags=["documentation-assistant"])
 
@@ -89,9 +92,7 @@ class UnavailableDocumentationAssistantService:
     def web_mode_status(
         self, *, locale: str, session_id: str, tab_id: str | None = None
     ) -> AssistantWebModeStatus:
-        return AssistantWebModeStatus(
-            False, False, locale, "assistant_web_disabled", 0
-        )
+        return AssistantWebModeStatus(False, False, locale, "assistant_web_disabled", 0)
 
     def set_web_mode(
         self,
@@ -102,11 +103,11 @@ class UnavailableDocumentationAssistantService:
         tab_id: str | None = None,
     ) -> AssistantWebModeStatus:
         del session_id, enabled, tab_id
-        return AssistantWebModeStatus(
-            False, False, locale, "assistant_web_disabled", 0
-        )
+        return AssistantWebModeStatus(False, False, locale, "assistant_web_disabled", 0)
 
-    def events(self, *, request_id: str, session_id: str) -> Iterable[ConversationStreamEvent] | None:
+    def events(
+        self, *, request_id: str, session_id: str
+    ) -> Iterable[ConversationStreamEvent] | None:
         return None
 
     def cancel(self, *, request_id: str, session_id: str) -> bool | None:
@@ -124,7 +125,9 @@ class UnavailableDocumentationAssistantService:
 _DEFAULT_SERVICE = TrainingDocumentationAssistantService()
 
 
-def _error(status_code: int, reason_code: str, *, state: str = "error", epoch: int = 0) -> HTTPException:
+def _error(
+    status_code: int, reason_code: str, *, state: str = "error", epoch: int = 0
+) -> HTTPException:
     return HTTPException(
         status_code=status_code,
         detail={
@@ -228,8 +231,19 @@ def _require_same_origin_json(request: Request) -> None:
             )
         )
     except LeastPrivilegeViolation as exc:
-        code = "assistant_request_too_large" if exc.code == "assistant_request_too_large" else "assistant_invalid_request"
-        raise _error(status.HTTP_413_CONTENT_TOO_LARGE if code.endswith("too_large") else status.HTTP_403_FORBIDDEN, code) from exc
+        code = (
+            "assistant_request_too_large"
+            if exc.code == "assistant_request_too_large"
+            else "assistant_invalid_request"
+        )
+        raise _error(
+            (
+                status.HTTP_413_CONTENT_TOO_LARGE
+                if code.endswith("too_large")
+                else status.HTTP_403_FORBIDDEN
+            ),
+            code,
+        ) from exc
 
 
 def _status_payload(value: AssistantStatus) -> dict[str, object]:
@@ -283,9 +297,7 @@ async def assistant_web_mode_status(
     tab_id = _valid_tab_id(tab_id)
     response = JSONResponse({})
     session_id = _session(request, response)
-    value = _service(request).web_mode_status(
-        locale=locale, session_id=session_id, tab_id=tab_id
-    )
+    value = _service(request).web_mode_status(locale=locale, session_id=session_id, tab_id=tab_id)
     response.body = json.dumps(
         {"api_version": API_VERSION, **value.__dict__},
         ensure_ascii=False,
@@ -337,7 +349,12 @@ async def assistant_ask(request: Request) -> JSONResponse:
         session_id=session_id,
     )
     if admission.request_id is None:
-        raise _error(status.HTTP_503_SERVICE_UNAVAILABLE, admission.reason_code, state=admission.state, epoch=admission.state_epoch)
+        raise _error(
+            status.HTTP_503_SERVICE_UNAVAILABLE,
+            admission.reason_code,
+            state=admission.state,
+            epoch=admission.state_epoch,
+        )
     response.body = json.dumps(
         {
             "api_version": API_VERSION,
@@ -411,7 +428,9 @@ async def assistant_clear(
 @router.get("/chat/{request_id}/sources/{source_id}")
 async def assistant_source(request: Request, request_id: str, source_id: str) -> JSONResponse:
     session_id = _session(request)
-    source = _service(request).source(request_id=request_id, source_id=source_id, session_id=session_id)
+    source = _service(request).source(
+        request_id=request_id, source_id=source_id, session_id=session_id
+    )
     if source is None:
         raise _error(status.HTTP_404_NOT_FOUND, "assistant_not_found")
     excerpt = source.excerpt[:MAX_SOURCE_EXCERPT_CHARACTERS]
@@ -424,7 +443,5 @@ async def assistant_source(request: Request, request_id: str, source_id: str) ->
         "excerpt": excerpt,
     }
     if source.source_kind != "local":
-        payload.update(
-            {"source_kind": source.source_kind, "provider_id": source.provider_id}
-        )
+        payload.update({"source_kind": source.source_kind, "provider_id": source.provider_id})
     return JSONResponse(payload)

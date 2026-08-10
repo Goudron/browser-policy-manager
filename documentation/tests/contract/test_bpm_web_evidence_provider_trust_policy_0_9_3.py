@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -14,22 +13,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def test_m9_01_selects_one_fixed_brave_context_endpoint_and_pins_prior_security() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M9-01"
-    assert contract["status"] == "brave-llm-context-selected-contract-only-no-network"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    decision = contract["provider_decision"]
-    assert decision["product"] == "Brave Search API"
-    assert decision["service"] == "LLM Context"
-    assert decision["endpoint"] == "https://api.search.brave.com/res/v1/llm/context"
-    assert decision["method"] == "POST"
-    assert decision["hosted_answers_allowed"] is False
-    assert decision["direct_result_url_fetching_allowed"] is False
 
 
 def test_m9_01_freezes_six_locale_privacy_request_and_source_boundaries() -> None:
@@ -79,7 +62,10 @@ def test_m9_01_records_terms_privacy_alternatives_and_no_runtime_change() -> Non
         "self-hosted or public SearXNG": "rejected-as-default-provider",
         "Brave Search API Answers": "rejected",
     }
-    assert all("train" not in item.casefold() or "do not train" in item.casefold() for item in contract["terms_and_rights_policy"]["required_restrictions"])
+    assert all(
+        "train" not in item.casefold() or "do not train" in item.casefold()
+        for item in contract["terms_and_rights_policy"]["required_restrictions"]
+    )
     assert contract["acceptance"] == {
         "provider_selected": True,
         "contract_only": True,

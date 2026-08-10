@@ -15,6 +15,12 @@
       <step><cmd>在外部记录准确导出的工件。</cmd><info><note type="warning">导出没有 ETag、前提条件标头、批量端点或事务包装器。记录配置文件 ID、导出前观察到的修订、架构通道、查询参数、导出的文档哈希以及 BPM 之外的下游切换决策。</note></info></step>
     </steps>
     <result><p>该集成具有规范的 Firefox <codeph>policies.json</codeph> 工件，该工件排除仅限 BPM 的元数据，并且可以提供给部署工具。</p></result>
+    <example id="a-export-policies-document"><title>完整的 Firefox policies.json 文档</title><p>响应正文是完整的 Firefox 部署文档，而不是 BPM 配置文件元数据或 <codeph>flags</codeph>：</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
     <postreq><p>如果验证失败或配置文件修订版在读取和导出之间发生更改，请停止切换并刷新配置文件状态。</p></postreq>
   </taskbody>
   <related-links>

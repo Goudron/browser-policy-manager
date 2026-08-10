@@ -62,9 +62,10 @@ def test_documentation_diagnostics_policy_is_registered_in_suite_boundary_contra
     diagnostics = boundaries["domains"]["diagnostics"]
 
     assert diagnostics["primary_suite"] == "contract"
-    assert "documentation/tests/contract/test_documentation_diagnostics_policy.py" in diagnostics[
-        "path_globs"
-    ]
+    assert (
+        "documentation/tests/contract/test_documentation_diagnostics_policy.py"
+        in diagnostics["path_globs"]
+    )
     assert "documentation/config/diagnostics-policy-0.9.0.json" in diagnostics["fixtures"]
     assert diagnostics["focused_rerun"] == (
         "./.venv/bin/pytest -q -m docs_contract "

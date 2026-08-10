@@ -2,10 +2,10 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Navigate the six Guided editor steps</title>
-  <shortdesc>Move through Profile &amp; baseline, Browser access &amp; defaults, Security &amp; privacy, Users, add-ons &amp; sites, AI &amp; smart features, and Review &amp; export.</shortdesc>
+  <shortdesc>Move through <uicontrol>Profile &amp; baseline</uicontrol>, <uicontrol>Browser access &amp; defaults</uicontrol>, <uicontrol>Security &amp; privacy</uicontrol>, <uicontrol>Users, add-ons &amp; sites</uicontrol>, <uicontrol>AI &amp; smart features</uicontrol>, and <uicontrol>Review &amp; export</uicontrol>.</shortdesc>
   <taskbody>
-    <prereq><p>Open a profile in Guided editor from the Library or creation flow.</p></prereq>
-    <context><p>Guided editor turns profile configuration into six task-first steps and keeps schema validation visible while you work.</p>
+    <prereq><p>Open a profile in <uicontrol>Guided editor</uicontrol> from the <uicontrol>Library</uicontrol> or creation flow.</p></prereq>
+    <context><p><uicontrol>Guided editor</uicontrol> turns profile configuration into six task-first steps and keeps schema validation visible while you work.</p>
       <fig id="screenshot-guided-editor-overview">
         <title>Guided editor overview</title>
         <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
@@ -14,12 +14,12 @@
       </fig>
     </context>
     <steps>
-      <step><cmd>Start with Step 1, Profile &amp; baseline, to confirm name, schema channel, scenario, starter preset, and CIS layer.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Continue through Step 2, Browser access &amp; defaults, for network access, browser behavior, home, search, and navigation defaults.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Start with Step 1, <uicontrol>Profile &amp; baseline</uicontrol>, to confirm name, schema channel, scenario, starter preset, and CIS layer.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Continue through Step 2, <uicontrol>Browser access &amp; defaults</uicontrol>, for network access, browser behavior, home, search, and navigation defaults.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Use Step 3 for privacy controls, permissions, cookies, cleanup, DNS, and security hardening posture.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Use Step 4 for accounts, extensions, bookmarks, language, translation, add-ons, and website handling.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Use Step 5 only for existing Firefox AI &amp; smart features policy controls that the selected schema supports.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Finish in Step 6, Review &amp; export, to validate, save, and download the reviewed profile.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+      <step><cmd>Use Step 5 only for existing Firefox <uicontrol>AI &amp; smart features</uicontrol> policy controls that the selected schema supports.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Finish in Step 6, <uicontrol>Review &amp; export</uicontrol>, to validate, save, and download the reviewed profile.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
     </steps>
     <result><p>You can explain where each guided setting belongs and continue from the correct step.</p></result>
     <postreq><p>Recovery: if you land in the wrong area, use the stepper or search instead of changing unrelated controls.</p></postreq>

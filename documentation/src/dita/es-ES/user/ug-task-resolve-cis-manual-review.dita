@@ -4,12 +4,12 @@
   <title>Resolver elementos de revisión manual de CIS</title>
   <shortdesc>Encuentre recomendaciones CIS que requieran revisión manual y decida si configurarlas, documentarlas o dejarlas para verificación externa.</shortdesc>
   <taskbody>
-    <prereq><p>Abra Todos los ajustes Revisión para un perfil que incluya una capa CIS o metadatos de origen derivados de CIS.</p></prereq>
-    <context><p>Algunas recomendaciones CIS no pueden automatizarse completamente mediante BPM. Revisión muestra esos elementos para que el usuario pueda tomar una decisión explícita sin reclamar la certificación.</p></context>
+    <prereq><p>Abra <uicontrol>Todos los ajustes</uicontrol> <uicontrol>Revisión</uicontrol> para un perfil que incluya una capa CIS o metadatos de origen derivados de CIS.</p></prereq>
+    <context><p>Algunas recomendaciones CIS no pueden automatizarse completamente mediante BPM. <uicontrol>Revisión</uicontrol> muestra esos elementos para que el usuario pueda tomar una decisión explícita sin reclamar la certificación.</p></context>
     <steps>
-      <step><cmd>Abra Revisión y filtre los elementos de revisión manual de CIS si es necesario.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Lea los identificadores de recomendación, la política o preferencia afectada y el valor actual.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Configure un valor admitido, documente por qué permanece la verificación manual o deje el elemento sin resolver intencionalmente.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Abra <uicontrol>Revisión</uicontrol> y filtre los elementos de revisión manual de CIS si es necesario.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Lea los identificadores de recomendación, la política o preferencia afectada y el valor actual.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Configure un valor admitido, documente por qué permanece la verificación manual o deje el elemento sin resolver intencionalmente.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
       <step><cmd>Revalidar y registrar la decisión antes de exportar o traspasar.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
     <result><p>Los elementos de revisión manual de CIS se configuran, documentan o se dejan intencionalmente para verificación externa.</p></result>

@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-troubleshoot-database-storage" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
   <title>解决数据库和存储问题</title>
-  <shortdesc>诊断本地 SQLite、存储路径、备份和配置文件可见性问题，而无需直接编辑数据库行。</shortdesc>
+  <shortdesc>诊断本地 SQLite、存储路径、备份和配置文件可见性问题，而无需直接编辑数据<uicontrol>库</uicontrol>行。</shortdesc>
   <taskbody>
     <prereq><p>当配置文件消失、写入失败、迁移证据不清楚、备份校验和不匹配或 <codeph>BPM_DATABASE_URL</codeph> 指向意外位置时，请使用此过程。</p></prereq>
-    <context><p>当前源部署使用本地存储（例如 <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>）和 <codeph>data/</codeph> 下存储库拥有的文件、架构缓存路径和文档站点路径。 BPM 中没有托管备份或恢复编排。</p></context>
+    <context><p>当前源部署使用本地存储（例如 <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>）和 <codeph>data/</codeph> 下存储<uicontrol>库</uicontrol>拥有的文件、架构缓存路径和文档站点路径。 BPM 中没有托管备份或恢复编排。</p></context>
     <steps>
-      <step><cmd>确认活动数据库 URL 和工作目录。</cmd><info><p>记录 <codeph>BPM_DATABASE_URL</codeph>、当前目录、源版本以及进程是否从 Linux 文件系统或 <codeph>/mnt/c</codeph> 运行。不要假设两个 shell 指向同一个 <codeph>data/bpm.db</codeph>。</p></info></step>
+      <step><cmd>确认活动数据<uicontrol>库</uicontrol> URL 和工作目录。</cmd><info><p>记录 <codeph>BPM_DATABASE_URL</codeph>、当前目录、源版本以及进程是否从 Linux 文件系统或 <codeph>/mnt/c</codeph> 运行。不要假设两个 shell 指向同一个 <codeph>data/bpm.db</codeph>。</p></info></step>
   <step><cmd>在打开存储文件之前检查迁移和配置文件 API 证据。</cmd><info><p>重点重新运行：<codeph>alembic upgrade head</codeph>，然后是 <codeph>curl -fsS http://127.0.0.1:8000/api/profiles?limit=50</codeph>。如果 API 返回预期的配置文件，则症状可能是过滤器、生命周期或浏览器状态。</p></info></step>
   <step><cmd>在破坏性恢复之前验证备份证据。</cmd><info><p>检查 <codeph>mkdir -p backups</codeph>、<codeph>cp data/bpm.db backups/bpm-pre-update.db</codeph> 和 <codeph>sha256sum backups/bpm-pre-update.db</codeph> 记录。将关键的 <codeph>policies.json</codeph> 配置文件的导出保留为单独的证据。</p></info></step>
-  <step><cmd>避免直接数据库行编辑。</cmd><info><p>请勿将 SQLite 行、生成的工件或架构缓存文件作为例行恢复进行编辑。请改用记录的配置文件存档、恢复、导入、导出或从源更新过程。</p></info></step>
-  <step><cmd>当恢复不安全时使用存储证据升级。</cmd><info><p>包括数据库 URL、文件路径、校验和、迁移命令、API 响应和备份/导出证据。</p><note type="warning">如果不存在经过验证的故障前备份，则在删除或替换 <codeph>data/bpm.db</codeph> 之前停止； BPM 不提供时间点恢复。</note></info></step>
+  <step><cmd>避免直接数据<uicontrol>库</uicontrol>行编辑。</cmd><info><p>请勿将 SQLite 行、生成的工件或架构缓存文件作为例行恢复进行编辑。请改用记录的配置文件存档、恢复、导入、导出或从源更新过程。</p></info></step>
+  <step><cmd>当恢复不安全时使用存储证据升级。</cmd><info><p>包括数据<uicontrol>库</uicontrol> URL、文件路径、校验和、迁移命令、API 响应和备份/导出证据。</p><note type="warning">如果不存在经过验证的故障前备份，则在删除或替换 <codeph>data/bpm.db</codeph> 之前停止； BPM 不提供时间点恢复。</note></info></step>
     </steps>
-    <result><p>操作员具有存储诊断功能，可保留用户数据并将数据库状态与 UI 或过滤器症状分开。</p></result>
+    <result><p>操作员具有存储诊断功能，可保留用户数据并将数据<uicontrol>库</uicontrol>状态与 UI 或过滤器症状分开。</p></result>
     <postreq><p>存储稳定后，重新运行运行状况/就绪状态和受影响最小的 API 工作流程。</p></postreq>
   </taskbody>
   <related-links>

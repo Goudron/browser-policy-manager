@@ -116,8 +116,7 @@ def test_devops_integration_runbooks_are_keyed_and_reachable_from_admin_guide() 
             if keydef.attrib["keys"] in DEVOPS_RUNBOOK_KEYREFS
         }
         assert keydefs == {
-            f"topic.{topic_id}": f"../admin/{topic_id}.dita"
-            for topic_id in DEVOPS_RUNBOOK_TOPICS
+            f"topic.{topic_id}": f"../admin/{topic_id}.dita" for topic_id in DEVOPS_RUNBOOK_TOPICS
         }
 
         admin_guide = ET.fromstring(
@@ -149,12 +148,16 @@ def test_devops_integration_runbooks_preserve_locale_structure_and_full_peer_con
 
 def test_devops_integration_runbooks_preserve_invariant_api_terms_in_every_locale() -> None:
     for locale in LOCALES:
-        text = "\n".join(_normalized_text(_topic_root(locale, topic_id)) for topic_id in DEVOPS_RUNBOOK_TOPICS)
+        text = "\n".join(
+            _normalized_text(_topic_root(locale, topic_id)) for topic_id in DEVOPS_RUNBOOK_TOPICS
+        )
         assert all(term in text for term in REQUIRED_INVARIANT_TERMS)
 
 
 def test_english_devops_integration_runbooks_cover_m12_08_acceptance_boundaries() -> None:
-    text = "\n".join(_normalized_text(_topic_root("en", topic_id)) for topic_id in DEVOPS_RUNBOOK_TOPICS)
+    text = "\n".join(
+        _normalized_text(_topic_root("en", topic_id)) for topic_id in DEVOPS_RUNBOOK_TOPICS
+    )
 
     for required in (
         "pull/list/read",

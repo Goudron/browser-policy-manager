@@ -4,8 +4,8 @@
   <title>Einstellungs- und Dokumentationslinks öffnen</title>
   <shortdesc>Öffnen Sie eine fokussierte Editorposition oder das genaue Dokumentationsthema für eine unterstützte Richtlinie oder bekannte verwaltete Einstellung.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie Alle Einstellungen oder eine andere BPM-Oberfläche mit einem Einstellungslink.</p></prereq>
-    <context><p>Editor-Direktlinks fokussieren eine Einstellung oder Rohposition. In Alle Einstellungen öffnet das separate eingekreiste Informationssymbol die über das Manifest aufgelöste Dokumentation für jede unterstützte Richtlinie und bekannte verwaltete Einstellung.</p></context>
+    <prereq><p>Öffnen Sie <uicontrol>Alle Einstellungen</uicontrol> oder eine andere BPM-Oberfläche mit einem Einstellungslink.</p></prereq>
+    <context><p>Editor-Direktlinks fokussieren eine Einstellung oder Rohposition. In <uicontrol>Alle Einstellungen</uicontrol> öffnet das separate eingekreiste Informationssymbol die über das Manifest aufgelöste Dokumentation für jede unterstützte Richtlinie und bekannte verwaltete Einstellung.</p></context>
     <steps>
       <step><cmd>Aktivieren Sie bei einer unterstützten Richtlinie oder bekannten verwalteten Einstellung das eingekreiste Informationssymbol neben der Zeile.</cmd><info><p>Erwartetes Ergebnis: Die lokalisierte Dokumentation wird in einem neuen Tab geöffnet, ohne die Zeile auszuwählen oder Profildaten zu ändern.</p></info></step>
       <step><cmd>Prüfen Sie das Dokumentationsziel und das aktive Baumelement.</cmd><info><p>Erwartetes Ergebnis: Der Baum ist von „Dokumente“ über das zugehörige Handbuch und den Abschnitt bis zum genauen sichtbaren und aktiven Thema aufgeklappt.</p></info></step>

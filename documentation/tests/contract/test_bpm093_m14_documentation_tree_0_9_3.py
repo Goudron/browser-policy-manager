@@ -53,7 +53,9 @@ def test_m14_01_m14_02_m14_04_and_m14_05_are_present_in_every_documentation_tree
         assistant_text = " ".join(assistant_use.itertext()).casefold()
         for marker in ("bpm", "90"):
             assert marker in assistant_text
-        requirement_sections = {section.attrib["id"] for section in requirements.findall(".//section")}
+        requirement_sections = {
+            section.attrib["id"] for section in requirements.findall(".//section")
+        }
         assert requirement_sections == {
             "base-platform",
             "browser-network-and-access",
@@ -70,9 +72,9 @@ def test_m14_01_m14_02_m14_04_and_m14_05_are_present_in_every_documentation_tree
             assert topic.find("./taskbody/postreq") is not None
         operation_text = " ".join(operation.itertext()).casefold()
         maintenance_text = " ".join(maintenance.itertext()).casefold()
-        for marker in ("bpm", "0.9.3"):
+        for marker in ("bpm", "0.9.4"):
             assert marker in operation_text
-        for marker in ("bpm", "0.9.3"):
+        for marker in ("bpm", "0.9.4"):
             assert marker in maintenance_text
         for released_text in (operation_text, maintenance_text):
             assert "ai-rag-install-dev" not in released_text

@@ -10,8 +10,8 @@
       <step><cmd>确认源签出和虚拟环境所在的位置。</cmd><info><p>更喜欢使用 Linux 文件系统进行签出和 <codeph>.venv</codeph>。记录文件是否在<codeph>/mnt/c</codeph>下，这可以改变性能和权限。诊断期间不要混合多次检查。</p></info></step>
   <step><cmd>验证 WSL 进程绑定和 Windows 路由。</cmd><info><p>检查 WSL 内的 <codeph>BPM_HOST="0.0.0.0"</codeph>、<codeph>BPM_PORT="8000"</codeph>、<codeph>curl -fsS http://127.0.0.1:8000/health</codeph> 以及从 Windows 进行的浏览器访问。如果 Windows 出现故障，请记录防火墙和端口转发证据。</p></info></step>
   <step><cmd>在源移动或修订更改后刷新依赖关系。</cmd><info><p>重点重新运行：<codeph>source .venv/bin/activate</codeph>、<codeph>python -m pip install --upgrade pip</codeph> 和 <codeph>pip install -e ".[dev]"</codeph>。如果依赖性错误仍然存​​在，请记录包名称和源版本，而不是手动编辑已安装的包。</p></info></step>
-  <step><cmd>将过时的依赖症状与模式或数据库问题分开。</cmd><info><p>如果依赖项刷新后导入/导出或验证失败，请使用架构/缓存和导入/导出故障排除。如果配置文件可见性发生变化，请使用数据库/存储故障排除。</p></info></step>
-  <step><cmd>停止不安全的本机 Windows 假设。</cmd><info><p>不要创建未记录的 Windows 服务、在文件系统之间移动数据库或声明本机安装程序行为。</p><note type="warning">如果 WSL 网络仍然不明确，请停止外部集成并使用 WSL 发行版、签出路径、绑定地址、Windows URL 和探测输出进行升级。</note></info></step>
+  <step><cmd>将过时的依赖症状与模式或数据<uicontrol>库</uicontrol>问题分开。</cmd><info><p>如果依赖项刷新后导入/导出或验证失败，请使用架构/缓存和导入/导出故障排除。如果配置文件可见性发生变化，请使用数据<uicontrol>库</uicontrol>/存储故障排除。</p></info></step>
+  <step><cmd>停止不安全的本机 Windows 假设。</cmd><info><p>不要创建未记录的 Windows 服务、在文件系统之间移动数据<uicontrol>库</uicontrol>或声明本机安装程序行为。</p><note type="warning">如果 WSL 网络仍然不明确，请停止外部集成并使用 WSL 发行版、签出路径、绑定地址、Windows URL 和探测输出进行升级。</note></info></step>
     </steps>
     <result><p>操作员可以在不更改产品存储的情况下区分 WSL 路由、文件系统放置和依赖项刷新缺陷。</p></result>
     <postreq><p>WSL 访问稳定后，返回源部署验证和运行状况门控启动。</p></postreq>

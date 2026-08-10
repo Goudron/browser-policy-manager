@@ -7,7 +7,7 @@
     <prereq><p>Un perfil está abierto y contiene al menos una familia de políticas compleja o una preferencia administrada.</p></prereq>
     <context><p>Las políticas complejas son más seguras cuando se revisan por familia, fuente, canal de esquema y forma de límite exportado.</p></context>
     <steps>
-      <step><cmd>Abra Todos los ajustes y filtre por la familia afectada.</cmd><info><p>Resultado esperado: las políticas, preferencias y etiquetas de origen relacionadas son visibles juntas.</p></info></step>
+      <step><cmd>Abra <uicontrol>Todos los ajustes</uicontrol> y filtre por la familia afectada.</cmd><info><p>Resultado esperado: las políticas, preferencias y etiquetas de origen relacionadas son visibles juntas.</p></info></step>
       <step><cmd>Verifique la insignia de Versión/ESR para cada póliza de la familia.</cmd><info><note type="warning">No se debe exportar una política de solo versión para un perfil dirigido a ESR.</note></info></step>
       <step><cmd>Inspecciona los valores de matriz y objetos anidados, incluidos los campos preservados desconocidos.</cmd><info><p>Resultado esperado: los valores de reserva sin procesar se mantienen o eliminan intencionalmente antes de guardarlos.</p></info></step>
       <step><cmd>Compara fuentes preestablecidas, CIS, importadas, manuales y sin procesar.</cmd><info><p>Resultado esperado: los conflictos se resuelven deliberadamente en lugar de ocultarse mediante ediciones posteriores.</p></info></step>

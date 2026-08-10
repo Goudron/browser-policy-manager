@@ -73,10 +73,14 @@ def _queries(vectors: dict[str, np.ndarray]) -> dict[str, list[np.ndarray]]:
 def _exact_top_k(matrix: np.ndarray, query: np.ndarray, top_k: int) -> list[int]:
     scores = matrix @ query
     candidate_ids = np.argpartition(-scores, top_k - 1)[:top_k]
-    return [int(index) for index in candidate_ids[np.argsort(-scores[candidate_ids], kind="stable")]]
+    return [
+        int(index) for index in candidate_ids[np.argsort(-scores[candidate_ids], kind="stable")]
+    ]
 
 
-def _exact_measure(vectors: dict[str, np.ndarray], queries: dict[str, list[np.ndarray]], top_k: int) -> dict[str, Any]:
+def _exact_measure(
+    vectors: dict[str, np.ndarray], queries: dict[str, list[np.ndarray]], top_k: int
+) -> dict[str, Any]:
     result: dict[str, Any] = {"top_k": {}, "p95_ms_by_locale": {}}
     for locale, matrix in vectors.items():
         samples: list[int] = []
@@ -94,7 +98,9 @@ def _load_sqlite_vec(config: dict[str, Any]) -> Any:
     try:
         sqlite_vec = importlib.import_module("sqlite_vec")
     except ModuleNotFoundError as error:
-        raise BenchmarkError("sqlite-vec must be supplied through an isolated PYTHONPATH") from error
+        raise BenchmarkError(
+            "sqlite-vec must be supplied through an isolated PYTHONPATH"
+        ) from error
     candidate = config["rejected_candidates"][0]["observed_package"]
     if getattr(sqlite_vec, "__version__", None) != candidate["distribution"].split("==", 1)[1]:
         raise BenchmarkError("sqlite-vec distribution version drifted")
@@ -107,7 +113,11 @@ def _load_sqlite_vec(config: dict[str, Any]) -> Any:
 
 
 def _sqlite_measure(
-    vectors: dict[str, np.ndarray], queries: dict[str, list[np.ndarray]], top_k: int, sqlite_vec: Any, root: Path
+    vectors: dict[str, np.ndarray],
+    queries: dict[str, list[np.ndarray]],
+    top_k: int,
+    sqlite_vec: Any,
+    root: Path,
 ) -> tuple[dict[str, Any], int]:
     database_path = root / "sqlite-vec.db"
     connection = sqlite3.connect(database_path)
@@ -117,10 +127,15 @@ def _sqlite_measure(
     for ordinal, (locale, matrix) in enumerate(vectors.items()):
         table = f"vectors_{ordinal}"
         tables[locale] = table
-        connection.execute(f"CREATE VIRTUAL TABLE {table} USING vec0(vector float[{matrix.shape[1]}])")
+        connection.execute(
+            f"CREATE VIRTUAL TABLE {table} USING vec0(vector float[{matrix.shape[1]}])"
+        )
         connection.executemany(
             f"INSERT INTO {table}(rowid, vector) VALUES (?, ?)",
-            ((index + 1, sqlite_vec.serialize_float32(vector)) for index, vector in enumerate(matrix)),
+            (
+                (index + 1, sqlite_vec.serialize_float32(vector))
+                for index, vector in enumerate(matrix)
+            ),
         )
     connection.commit()
     result: dict[str, Any] = {"top_k": {}, "p95_ms_by_locale": {}}
@@ -154,9 +169,12 @@ def run(config_path: Path = CONFIG_PATH) -> dict[str, Any]:
         "contract_sha256": _sha256(config_path),
         "network_calls": 0,
         "ordinary_search_calls": 0,
-        "scales": {}
+        "scales": {},
     }
-    for scale_name, multiplier in (("current", 1), ("growth_10x", config["corpus_scope"]["growth_multiplier"])):
+    for scale_name, multiplier in (
+        ("current", 1),
+        ("growth_10x", config["corpus_scope"]["growth_multiplier"]),
+    ):
         vectors = _dataset(config, multiplier)
         queries = _queries(vectors)
         exact = _exact_measure(vectors, queries, config["corpus_scope"]["top_k"])
@@ -174,19 +192,24 @@ def run(config_path: Path = CONFIG_PATH) -> dict[str, Any]:
             "exact_matrix": {
                 "vector_bytes": _matrix_bytes(vectors),
                 "p95_ms_by_locale": exact["p95_ms_by_locale"],
-                "p95_ms_max": max(exact["p95_ms_by_locale"].values())
+                "p95_ms_max": max(exact["p95_ms_by_locale"].values()),
             },
             "sqlite_vec": {
                 "database_bytes": sqlite_bytes,
                 "p95_ms_by_locale": sqlite_result["p95_ms_by_locale"],
-                "p95_ms_max": max(sqlite_result["p95_ms_by_locale"].values())
-            }
+                "p95_ms_max": max(sqlite_result["p95_ms_by_locale"].values()),
+            },
         }
     growth = output["scales"]["growth_10x"]
     output["acceptance"] = {
         "correct": all(scale["same_ordered_top_k"] for scale in output["scales"].values()),
-        "exact_latency": growth["exact_matrix"]["p95_ms_max"] <= config["acceptance"]["latency_p95_ms_max"],
-        "exact_disk": growth["exact_matrix"]["vector_bytes"] / 1024**3 <= config["acceptance"]["disk_gib_max_at_growth"]
+        "exact_latency": (
+            growth["exact_matrix"]["p95_ms_max"] <= config["acceptance"]["latency_p95_ms_max"]
+        ),
+        "exact_disk": (
+            growth["exact_matrix"]["vector_bytes"] / 1024**3
+            <= config["acceptance"]["disk_gib_max_at_growth"]
+        ),
     }
     output["status"] = "pass" if all(output["acceptance"].values()) else "fail"
     return output

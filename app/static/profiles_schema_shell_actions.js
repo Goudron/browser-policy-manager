@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         dependencies = {},
@@ -484,5 +483,4 @@
         };
     }
 
-    window.BPMProfilesSchemaShellActions = { create };
-})();
+    export { create };

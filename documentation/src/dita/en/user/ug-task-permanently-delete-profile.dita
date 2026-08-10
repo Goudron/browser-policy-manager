@@ -5,13 +5,13 @@
   <shortdesc>Remove an active or archived profile only after confirming that it should not be retained.</shortdesc>
   <taskbody>
     <prereq><p>The profile row is visible and you have confirmed that the profile is no longer needed.</p></prereq>
-    <context><p>Permanent delete is the destructive Library lifecycle action. Archive first when you need a reversible hold.</p></context>
+    <context><p>Permanent delete is the destructive <uicontrol>Library</uicontrol> lifecycle action. Archive first when you need a reversible hold.</p></context>
     <steps>
       <step><cmd>Confirm the row name, ID, schema, lifecycle state, and updated time.</cmd><info><p>Expected result: you can distinguish the target profile from similarly named rows.</p></info></step>
-      <step><cmd>Choose the permanent delete action.</cmd><info><note type="warning">Permanent delete cannot be restored from the Library.</note></info></step>
-      <step><cmd>Complete the confirmation only when the prompt names the intended profile.</cmd><info><p>Cancel the confirmation if any row detail is unexpected.</p></info></step>
+      <step><cmd>Choose the permanent delete action.</cmd><info><note type="warning">Permanent delete cannot be restored from the <uicontrol>Library</uicontrol>.</note></info></step>
+      <step><cmd>Complete the confirmation only when the prompt names the intended profile.</cmd><info><p><uicontrol>Cancel</uicontrol> the confirmation if any row detail is unexpected.</p></info></step>
     </steps>
-    <result><p>The profile is removed from the Library after the delete action succeeds.</p></result>
+    <result><p>The profile is removed from the <uicontrol>Library</uicontrol> after the delete action succeeds.</p></result>
     <postreq><p>Recovery: if deletion fails, do not repeat immediately; refresh and use the troubleshooting topic to inspect the status.</p></postreq>
   </taskbody>
   <related-links>

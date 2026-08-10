@@ -138,7 +138,9 @@ def _current_control_topics(documents: list[dict[str, Any]], query: str) -> list
 
 def _remove_accents(text: str) -> str:
     return "".join(
-        character for character in unicodedata.normalize("NFD", text) if not unicodedata.combining(character)
+        character
+        for character in unicodedata.normalize("NFD", text)
+        if not unicodedata.combining(character)
     )
 
 
@@ -240,8 +242,8 @@ def _pagefind_html(document: dict[str, Any]) -> str:
             f'<meta charset="utf-8"><meta data-pagefind-meta="topic_id" content="{html.escape(document["topic_id"])}">',
             "</head><body>",
             f'<main data-pagefind-body><h1 data-pagefind-meta="title">{html.escape(searchable["title"])}</h1>',
-            f'<p>{html.escape(searchable["shortdesc"])}</p>',
-            f'<p>{html.escape(searchable["body"])}</p>{facets}</main></body></html>',
+            f"<p>{html.escape(searchable['shortdesc'])}</p>",
+            f"<p>{html.escape(searchable['body'])}</p>{facets}</main></body></html>",
         ]
     )
 
@@ -276,7 +278,9 @@ def _prepare_pagefind_site(
             text=True,
         )
         if completed.returncode:
-            raise BenchmarkError(f"Pagefind indexing failed for {locale}: {completed.stderr.strip()}")
+            raise BenchmarkError(
+                f"Pagefind indexing failed for {locale}: {completed.stderr.strip()}"
+            )
     return site_root
 
 
@@ -306,7 +310,7 @@ class _StaticServer:
         self.thread.join(timeout=5)
 
 
-PAGEFIND_QUERY_CLIENT = r'''
+PAGEFIND_QUERY_CLIENT = r"""
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -340,10 +344,12 @@ for (const item of cases) {
   });
 }
 fs.writeFileSync(outputPath, JSON.stringify({ fetches, output }));
-'''
+"""
 
 
-def _pagefind_topics(site_root: Path, query_cases: list[QueryCase], documents: list[dict[str, Any]], work_dir: Path) -> dict[str, list[str]]:
+def _pagefind_topics(
+    site_root: Path, query_cases: list[QueryCase], documents: list[dict[str, Any]], work_dir: Path
+) -> dict[str, list[str]]:
     document_by_filename = {
         Path(document["source"]["output_path"]).name: document["topic_id"] for document in documents
     }
@@ -355,15 +361,29 @@ def _pagefind_topics(site_root: Path, query_cases: list[QueryCase], documents: l
         for locale, cases in by_locale.items():
             input_path = work_dir / f"pagefind-input-{locale}.json"
             output_path = work_dir / f"pagefind-output-{locale}.json"
-            input_path.write_text(json.dumps([case.__dict__ for case in cases], sort_keys=True), encoding="utf-8")
+            input_path.write_text(
+                json.dumps([case.__dict__ for case in cases], sort_keys=True), encoding="utf-8"
+            )
             completed = subprocess.run(
-                ["node", "--input-type=module", "--eval", PAGEFIND_QUERY_CLIENT, str(site_root), server.origin, locale, str(input_path), str(output_path)],
+                [
+                    "node",
+                    "--input-type=module",
+                    "--eval",
+                    PAGEFIND_QUERY_CLIENT,
+                    str(site_root),
+                    server.origin,
+                    locale,
+                    str(input_path),
+                    str(output_path),
+                ],
                 check=False,
                 capture_output=True,
                 text=True,
             )
             if completed.returncode:
-                raise BenchmarkError(f"Pagefind query failed for {locale}: {completed.stderr.strip()}")
+                raise BenchmarkError(
+                    f"Pagefind query failed for {locale}: {completed.stderr.strip()}"
+                )
             payload = _read_json(output_path)
             if not payload["fetches"] or any(
                 not fetch["url"].startswith(server.origin) for fetch in payload["fetches"]
@@ -382,7 +402,9 @@ def _pagefind_topics(site_root: Path, query_cases: list[QueryCase], documents: l
     return topics
 
 
-def _http_json(url: str, method: str = "GET", payload: dict[str, Any] | list[Any] | None = None) -> dict[str, Any]:
+def _http_json(
+    url: str, method: str = "GET", payload: dict[str, Any] | list[Any] | None = None
+) -> dict[str, Any]:
     parsed = urllib.parse.urlparse(url)
     if parsed.hostname != "127.0.0.1":
         raise BenchmarkError(f"non-loopback benchmark request rejected: {url}")
@@ -405,7 +427,7 @@ def _wait_for_meilisearch(origin: str, timeout_seconds: float = 30) -> None:
             health = _http_json(f"{origin}/health")
             if health.get("status") == "available":
                 return
-        except (BenchmarkError, urllib.error.URLError):
+        except BenchmarkError, urllib.error.URLError:
             pass
         time.sleep(0.1)
     raise BenchmarkError("Meilisearch did not become healthy")
@@ -433,23 +455,41 @@ def _task_uid(payload: dict[str, Any]) -> int:
 def _meili_documents(documents: list[dict[str, Any]], locale: str) -> list[dict[str, Any]]:
     return [
         {
-            "id": document["document_id"].replace(":", "-"), "locale": locale, "guide_id": document["guide_id"],
-            "topic_id": document["topic_id"], "topic_kind": document["topic_kind"], "url": document["url"],
-            "title": document["searchable"]["title"], "aliases": document["searchable"]["aliases"],
-            "headings": document["searchable"]["headings"], "body": document["searchable"]["body"],
+            "id": document["document_id"].replace(":", "-"),
+            "locale": locale,
+            "guide_id": document["guide_id"],
+            "topic_id": document["topic_id"],
+            "topic_kind": document["topic_kind"],
+            "url": document["url"],
+            "title": document["searchable"]["title"],
+            "aliases": document["searchable"]["aliases"],
+            "headings": document["searchable"]["headings"],
+            "body": document["searchable"]["body"],
             "identifiers": document["searchable"]["identifiers"],
             **{field: values for field, values in document["facets"].items() if field != "locale"},
         }
-        for document in documents if document["locale"] == locale
+        for document in documents
+        if document["locale"] == locale
     ]
 
 
-def _meilisearch_topics(binary: Path, query_cases: list[QueryCase], documents: list[dict[str, Any]], work_dir: Path) -> dict[str, list[str]]:
+def _meilisearch_topics(
+    binary: Path, query_cases: list[QueryCase], documents: list[dict[str, Any]], work_dir: Path
+) -> dict[str, list[str]]:
     log_path = work_dir / "meilisearch.log"
     db_path = work_dir / "meilisearch-db"
     binary.chmod(binary.stat().st_mode | 0o111)
     process = subprocess.Popen(
-        [str(binary), "--http-addr", "127.0.0.1:17703", "--master-key", MASTER_KEY, "--db-path", str(db_path), "--no-analytics"],
+        [
+            str(binary),
+            "--http-addr",
+            "127.0.0.1:17703",
+            "--master-key",
+            MASTER_KEY,
+            "--db-path",
+            str(db_path),
+            "--no-analytics",
+        ],
         cwd=work_dir,
         env={**os.environ, "MEILI_NO_ANALYTICS": "true"},
         stdout=log_path.open("w", encoding="utf-8"),
@@ -461,22 +501,40 @@ def _meilisearch_topics(binary: Path, query_cases: list[QueryCase], documents: l
         _wait_for_meilisearch(origin)
         for locale in _read_json(EVALUATION_CORPUS)["locales"]:
             index_uid = f"bpm093-{locale.lower()}".replace("-", "_")
-            created = _http_json(f"{origin}/indexes", "POST", {"uid": index_uid, "primaryKey": "id"})
+            created = _http_json(
+                f"{origin}/indexes", "POST", {"uid": index_uid, "primaryKey": "id"}
+            )
             _wait_task(origin, _task_uid(created))
             settings = _http_json(
-                f"{origin}/indexes/{index_uid}/settings", "PATCH",
+                f"{origin}/indexes/{index_uid}/settings",
+                "PATCH",
                 {
                     "searchableAttributes": ["identifiers", "title", "aliases", "headings", "body"],
-                    "filterableAttributes": ["guide_id", "topic_kind", "firefox_channel", "policy_category", "cis_level", "cis_control_state", "api_area", "bpm_version"],
+                    "filterableAttributes": [
+                        "guide_id",
+                        "topic_kind",
+                        "firefox_channel",
+                        "policy_category",
+                        "cis_level",
+                        "cis_control_state",
+                        "api_area",
+                        "bpm_version",
+                    ],
                 },
             )
             _wait_task(origin, _task_uid(settings))
-            added = _http_json(f"{origin}/indexes/{index_uid}/documents?primaryKey=id", "POST", _meili_documents(documents, locale))
+            added = _http_json(
+                f"{origin}/indexes/{index_uid}/documents?primaryKey=id",
+                "POST",
+                _meili_documents(documents, locale),
+            )
             _wait_task(origin, _task_uid(added))
         topics: dict[str, list[str]] = {}
         for case in query_cases:
             index_uid = f"bpm093-{case.locale.lower()}".replace("-", "_")
-            response = _http_json(f"{origin}/indexes/{index_uid}/search", "POST", {"q": case.query, "limit": 5})
+            response = _http_json(
+                f"{origin}/indexes/{index_uid}/search", "POST", {"q": case.query, "limit": 5}
+            )
             topics[case.query_id] = [hit["topic_id"] for hit in response.get("hits", [])]
         return topics
     finally:
@@ -512,63 +570,144 @@ def _rank_metrics(records: list[dict[str, Any]]) -> dict[str, Any]:
 def _host_fingerprint() -> dict[str, Any]:
     cpuinfo = Path("/proc/cpuinfo").read_text(encoding="utf-8")
     meminfo = Path("/proc/meminfo").read_text(encoding="utf-8")
-    model = next((line.split(":", 1)[1].strip() for line in cpuinfo.splitlines() if line.startswith("model name")), "unknown")
-    memory_kib = int(next(line.split()[1] for line in meminfo.splitlines() if line.startswith("MemTotal:")))
-    return {"cpu_model": model, "memory_bytes": memory_kib * 1024, "kernel": os.uname().release, "architecture": os.uname().machine}
+    model = next(
+        (
+            line.split(":", 1)[1].strip()
+            for line in cpuinfo.splitlines()
+            if line.startswith("model name")
+        ),
+        "unknown",
+    )
+    memory_kib = int(
+        next(line.split()[1] for line in meminfo.splitlines() if line.startswith("MemTotal:"))
+    )
+    return {
+        "cpu_model": model,
+        "memory_bytes": memory_kib * 1024,
+        "kernel": os.uname().release,
+        "architecture": os.uname().machine,
+    }
 
 
-def run_benchmark(work_dir: Path, pagefind_package: Path, pagefind_linux_package: Path, meilisearch_binary: Path, output_dir: Path) -> dict[str, Any]:
+def run_benchmark(
+    work_dir: Path,
+    pagefind_package: Path,
+    pagefind_linux_package: Path,
+    meilisearch_binary: Path,
+    output_dir: Path,
+) -> dict[str, Any]:
     config = _read_json(BENCHMARK_CONFIG)
     artifacts = config["artifacts"]
-    _validate_artifact(pagefind_package, artifacts["pagefind"]["npm_package"], artifacts["pagefind"]["npm_package_sha256"])
-    _validate_artifact(pagefind_linux_package, artifacts["pagefind"]["linux_x64_package"], artifacts["pagefind"]["linux_x64_package_sha256"])
-    _validate_artifact(meilisearch_binary, artifacts["meilisearch_ce"]["linux_amd64_binary"], artifacts["meilisearch_ce"]["linux_amd64_binary_sha256"])
+    _validate_artifact(
+        pagefind_package,
+        artifacts["pagefind"]["npm_package"],
+        artifacts["pagefind"]["npm_package_sha256"],
+    )
+    _validate_artifact(
+        pagefind_linux_package,
+        artifacts["pagefind"]["linux_x64_package"],
+        artifacts["pagefind"]["linux_x64_package_sha256"],
+    )
+    _validate_artifact(
+        meilisearch_binary,
+        artifacts["meilisearch_ce"]["linux_amd64_binary"],
+        artifacts["meilisearch_ce"]["linux_amd64_binary_sha256"],
+    )
     work_dir.mkdir(parents=True, exist_ok=True)
     output_dir.mkdir(parents=True, exist_ok=True)
     documents = build_compact_documents()
     cases = build_query_plan()
-    current_topics = {case.query_id: _current_control_topics([doc for doc in documents if doc["locale"] == case.locale], case.query) for case in cases}
+    current_topics = {
+        case.query_id: _current_control_topics(
+            [doc for doc in documents if doc["locale"] == case.locale], case.query
+        )
+        for case in cases
+    }
     pagefind_site = _prepare_pagefind_site(work_dir, pagefind_package, pagefind_linux_package)
     pagefind_topics = _pagefind_topics(pagefind_site, cases, documents, work_dir)
     meilisearch_topics = _meilisearch_topics(meilisearch_binary, cases, documents, work_dir)
-    topic_sets = {CURRENT_CANDIDATE: current_topics, PAGEFIND_CANDIDATE: pagefind_topics, MEILISEARCH_CANDIDATE: meilisearch_topics}
+    topic_sets = {
+        CURRENT_CANDIDATE: current_topics,
+        PAGEFIND_CANDIDATE: pagefind_topics,
+        MEILISEARCH_CANDIDATE: meilisearch_topics,
+    }
     fixture_hash = _sha256(EVALUATION_CORPUS)
     raw_records: list[dict[str, Any]] = []
     for candidate_id in CANDIDATES:
         for case in cases:
             result_topics = topic_sets[candidate_id][case.query_id]
             try:
-                rank = result_topics.index(case.expected_topic_id) + 1 if case.expected_topic_id else None
+                rank = (
+                    result_topics.index(case.expected_topic_id) + 1
+                    if case.expected_topic_id
+                    else None
+                )
             except ValueError:
                 rank = None
-            raw_records.append({
-                "schema_version": 1, "backlog_item": "BPM093-M3-03", "candidate_id": candidate_id,
-                "fixture_sha256": fixture_hash, "locale": case.locale, "query_id": case.query_id,
-                "query": case.query, "query_class": case.query_class, "expected_topic_id": case.expected_topic_id,
-                "expected_no_result": case.expected_no_result, "expected_disposition": case.disposition,
-                "scored": case.scored, "result_topic_ids": result_topics, "rank": rank,
-                "top_1_correct": bool(rank == 1), "recall_at_5": bool(rank and rank <= 5),
-                "reciprocal_rank": 1 / rank if rank else 0,
-            })
+            raw_records.append(
+                {
+                    "schema_version": 1,
+                    "backlog_item": "BPM093-M3-03",
+                    "candidate_id": candidate_id,
+                    "fixture_sha256": fixture_hash,
+                    "locale": case.locale,
+                    "query_id": case.query_id,
+                    "query": case.query,
+                    "query_class": case.query_class,
+                    "expected_topic_id": case.expected_topic_id,
+                    "expected_no_result": case.expected_no_result,
+                    "expected_disposition": case.disposition,
+                    "scored": case.scored,
+                    "result_topic_ids": result_topics,
+                    "rank": rank,
+                    "top_1_correct": bool(rank == 1),
+                    "recall_at_5": bool(rank and rank <= 5),
+                    "reciprocal_rank": 1 / rank if rank else 0,
+                }
+            )
     raw_path = output_dir / "bpm093-m3-03-search-relevance.raw.ndjson"
-    raw_path.write_text("".join(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n" for record in raw_records), encoding="utf-8")
+    raw_path.write_text(
+        "".join(
+            json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n" for record in raw_records
+        ),
+        encoding="utf-8",
+    )
     summary = {
-        "schema_version": 1, "backlog_item": "BPM093-M3-03", "status": "measured-no-selection",
-        "fixture_sha256": fixture_hash, "host": _host_fingerprint(),
-        "artifacts": {candidate: {"sha256": _sha256(path)} for candidate, path in {PAGEFIND_CANDIDATE: pagefind_package, "pagefind-linux-x64": pagefind_linux_package, MEILISEARCH_CANDIDATE: meilisearch_binary}.items()},
-        "candidate_execution": config["candidate_execution"], "raw_record_count": len(raw_records), "raw_path": str(raw_path), "candidates": {},
+        "schema_version": 1,
+        "backlog_item": "BPM093-M3-03",
+        "status": "measured-no-selection",
+        "fixture_sha256": fixture_hash,
+        "host": _host_fingerprint(),
+        "artifacts": {
+            candidate: {"sha256": _sha256(path)}
+            for candidate, path in {
+                PAGEFIND_CANDIDATE: pagefind_package,
+                "pagefind-linux-x64": pagefind_linux_package,
+                MEILISEARCH_CANDIDATE: meilisearch_binary,
+            }.items()
+        },
+        "candidate_execution": config["candidate_execution"],
+        "raw_record_count": len(raw_records),
+        "raw_path": str(raw_path),
+        "candidates": {},
     }
     for candidate_id in CANDIDATES:
-        candidate_records = [record for record in raw_records if record["candidate_id"] == candidate_id]
+        candidate_records = [
+            record for record in raw_records if record["candidate_id"] == candidate_id
+        ]
         summary["candidates"][candidate_id] = {
             "all_locales": _rank_metrics(candidate_records),
             "locales": {
-                locale: _rank_metrics([record for record in candidate_records if record["locale"] == locale])
+                locale: _rank_metrics(
+                    [record for record in candidate_records if record["locale"] == locale]
+                )
                 for locale in _read_json(EVALUATION_CORPUS)["locales"]
             },
         }
     summary_path = output_dir / "bpm093-m3-03-search-relevance.summary.json"
-    summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    summary_path.write_text(
+        json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     return summary
 
 
@@ -580,8 +719,19 @@ def main() -> int:
     parser.add_argument("--meilisearch-binary", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
-    summary = run_benchmark(args.work_dir, args.pagefind_package, args.pagefind_linux_package, args.meilisearch_binary, args.output_dir)
-    print(json.dumps({"raw_record_count": summary["raw_record_count"], "status": summary["status"]}, sort_keys=True))
+    summary = run_benchmark(
+        args.work_dir,
+        args.pagefind_package,
+        args.pagefind_linux_package,
+        args.meilisearch_binary,
+        args.output_dir,
+    )
+    print(
+        json.dumps(
+            {"raw_record_count": summary["raw_record_count"], "status": summary["status"]},
+            sort_keys=True,
+        )
+    )
     return 0
 
 

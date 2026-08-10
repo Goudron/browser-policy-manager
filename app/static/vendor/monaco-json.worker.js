@@ -40,6 +40,12 @@
     }
     return void 0;
   }
+  function onUnexpectedExternalError(e) {
+    if (!isCancellationError(e)) {
+      errorHandler.onUnexpectedExternalError(e);
+    }
+    return void 0;
+  }
   function transformErrorForSerialization(error) {
     if (error instanceof Error) {
       const { name, message, cause } = error;
@@ -93,29 +99,6 @@
       Object.setPrototypeOf(this, _BugIndicatingError.prototype);
     }
   };
-
-  // node_modules/monaco-editor/esm/vs/base/common/functional.js
-  function createSingleCallFunction(fn, fnDidRunCallback) {
-    const _this = this;
-    let didCall = false;
-    let result;
-    return function() {
-      if (didCall) {
-        return result;
-      }
-      didCall = true;
-      if (fnDidRunCallback) {
-        try {
-          result = fn.apply(_this, arguments);
-        } finally {
-          fnDidRunCallback();
-        }
-      } else {
-        result = fn.apply(_this, arguments);
-      }
-      return result;
-    };
-  }
 
   // node_modules/monaco-editor/esm/vs/base/common/assert.js
   function assertNever(value, message = "Unreachable") {
@@ -180,7 +163,7 @@
     }
     Iterable2.wrap = wrap;
     function from(iterable) {
-      return iterable || _empty2;
+      return iterable ?? _empty2;
     }
     Iterable2.from = from;
     function* reverse(array) {
@@ -328,59 +311,7 @@
   })(Iterable || (Iterable = {}));
 
   // node_modules/monaco-editor/esm/vs/base/common/lifecycle.js
-  var TRACK_DISPOSABLES = false;
-  var disposableTracker = null;
-  function setDisposableTracker(tracker) {
-    disposableTracker = tracker;
-  }
-  if (TRACK_DISPOSABLES) {
-    const __is_disposable_tracked__ = "__is_disposable_tracked__";
-    setDisposableTracker(new class {
-      trackDisposable(x) {
-        const stack = new Error("Potentially leaked disposable").stack;
-        setTimeout(() => {
-          if (!x[__is_disposable_tracked__]) {
-            console.log(stack);
-          }
-        }, 3e3);
-      }
-      setParent(child, parent) {
-        if (child && child !== Disposable.None) {
-          try {
-            child[__is_disposable_tracked__] = true;
-          } catch {
-          }
-        }
-      }
-      markAsDisposed(disposable) {
-        if (disposable && disposable !== Disposable.None) {
-          try {
-            disposable[__is_disposable_tracked__] = true;
-          } catch {
-          }
-        }
-      }
-      markAsSingleton(disposable) {
-      }
-    }());
-  }
-  function trackDisposable(x) {
-    disposableTracker?.trackDisposable(x);
-    return x;
-  }
-  function markAsDisposed(disposable) {
-    disposableTracker?.markAsDisposed(disposable);
-  }
   function setParentOfDisposable(child, parent) {
-    disposableTracker?.setParent(child, parent);
-  }
-  function setParentOfDisposables(children, parent) {
-    if (!disposableTracker) {
-      return;
-    }
-    for (const child of children) {
-      disposableTracker.setParent(child, parent);
-    }
   }
   function dispose(arg) {
     if (Iterable.is(arg)) {
@@ -407,23 +338,31 @@
   }
   function combinedDisposable(...disposables) {
     const parent = toDisposable(() => dispose(disposables));
-    setParentOfDisposables(disposables, parent);
     return parent;
   }
+  var FunctionDisposable = class {
+    constructor(fn) {
+      this._isDisposed = false;
+      this._fn = fn;
+    }
+    dispose() {
+      if (this._isDisposed) {
+        return;
+      }
+      if (!this._fn) {
+        throw new Error(`Unbound disposable context: Need to use an arrow function to preserve the value of this`);
+      }
+      this._isDisposed = true;
+      this._fn();
+    }
+  };
   function toDisposable(fn) {
-    const self2 = trackDisposable({
-      dispose: createSingleCallFunction(() => {
-        markAsDisposed(self2);
-        fn();
-      })
-    });
-    return self2;
+    return new FunctionDisposable(fn);
   }
   var _DisposableStore = class _DisposableStore {
     constructor() {
       this._toDispose = /* @__PURE__ */ new Set();
       this._isDisposed = false;
-      trackDisposable(this);
     }
     /**
      * Dispose of all registered disposables and mark this object as disposed.
@@ -434,7 +373,6 @@
       if (this._isDisposed) {
         return;
       }
-      markAsDisposed(this);
       this._isDisposed = true;
       this.clear();
     }
@@ -467,7 +405,6 @@
       if (o === this) {
         throw new Error("Cannot register a disposable on itself!");
       }
-      setParentOfDisposable(o, this);
       if (this._isDisposed) {
         if (!_DisposableStore.DISABLE_DISPOSED_WARNING) {
           console.warn(new Error("Trying to add a disposable to a DisposableStore that has already been disposed of. The added object will be leaked!").stack);
@@ -497,11 +434,9 @@
   var _Disposable = class _Disposable {
     constructor() {
       this._store = new DisposableStore();
-      trackDisposable(this);
-      setParentOfDisposable(this._store, this);
+      setParentOfDisposable(this._store);
     }
     dispose() {
-      markAsDisposed(this);
       this._store.dispose();
     }
     /**
@@ -627,6 +562,215 @@
     }
   };
 
+  // node_modules/monaco-editor/esm/vs/nls.js
+  function getNLSMessages() {
+    return globalThis._VSCODE_NLS_MESSAGES;
+  }
+  function getNLSLanguage() {
+    return globalThis._VSCODE_NLS_LANGUAGE;
+  }
+  var isPseudo = getNLSLanguage() === "pseudo" || typeof document !== "undefined" && document.location && typeof document.location.hash === "string" && document.location.hash.indexOf("pseudo=true") >= 0;
+  function _format(message, args) {
+    let result;
+    if (args.length === 0) {
+      result = message;
+    } else {
+      result = message.replace(/\{(\d+)\}/g, (match, rest) => {
+        const index = rest[0];
+        const arg = args[index];
+        let result2 = match;
+        if (typeof arg === "string") {
+          result2 = arg;
+        } else if (typeof arg === "number" || typeof arg === "boolean" || arg === void 0 || arg === null) {
+          result2 = String(arg);
+        }
+        return result2;
+      });
+    }
+    if (isPseudo) {
+      result = "\uFF3B" + result.replace(/[aouei]/g, "$&$&") + "\uFF3D";
+    }
+    return result;
+  }
+  function localize(data, message, ...args) {
+    if (typeof data === "number") {
+      return _format(lookupMessage(data, message), args);
+    }
+    return _format(message, args);
+  }
+  function lookupMessage(index, fallback) {
+    const message = getNLSMessages()?.[index];
+    if (typeof message !== "string") {
+      if (typeof fallback === "string") {
+        return fallback;
+      }
+      throw new Error(`!!! NLS MISSING: ${index} !!!`);
+    }
+    return message;
+  }
+
+  // node_modules/monaco-editor/esm/vs/base/common/platform.js
+  var LANGUAGE_DEFAULT = "en";
+  var _isWindows = false;
+  var _isMacintosh = false;
+  var _isLinux = false;
+  var _isNative = false;
+  var _isWeb = false;
+  var _isIOS = false;
+  var _isMobile = false;
+  var _locale = void 0;
+  var _language = LANGUAGE_DEFAULT;
+  var _platformLocale = LANGUAGE_DEFAULT;
+  var _translationsConfigFile = void 0;
+  var _userAgent = void 0;
+  var $globalThis = globalThis;
+  var nodeProcess = void 0;
+  if (typeof $globalThis.vscode !== "undefined" && typeof $globalThis.vscode.process !== "undefined") {
+    nodeProcess = $globalThis.vscode.process;
+  } else if (typeof process !== "undefined" && typeof process?.versions?.node === "string") {
+    nodeProcess = process;
+  }
+  var isElectronProcess = typeof nodeProcess?.versions?.electron === "string";
+  var isElectronRenderer = isElectronProcess && nodeProcess?.type === "renderer";
+  if (typeof nodeProcess === "object") {
+    _isWindows = nodeProcess.platform === "win32";
+    _isMacintosh = nodeProcess.platform === "darwin";
+    _isLinux = nodeProcess.platform === "linux";
+    _isLinux && !!nodeProcess.env["SNAP"] && !!nodeProcess.env["SNAP_REVISION"];
+    !!nodeProcess.env["CI"] || !!nodeProcess.env["BUILD_ARTIFACTSTAGINGDIRECTORY"] || !!nodeProcess.env["GITHUB_WORKSPACE"];
+    _locale = LANGUAGE_DEFAULT;
+    _language = LANGUAGE_DEFAULT;
+    const rawNlsConfig = nodeProcess.env["VSCODE_NLS_CONFIG"];
+    if (rawNlsConfig) {
+      try {
+        const nlsConfig = JSON.parse(rawNlsConfig);
+        _locale = nlsConfig.userLocale;
+        _platformLocale = nlsConfig.osLocale;
+        _language = nlsConfig.resolvedLanguage || LANGUAGE_DEFAULT;
+        _translationsConfigFile = nlsConfig.languagePack?.translationsConfigFile;
+      } catch (e) {
+      }
+    }
+    _isNative = true;
+  } else if (typeof navigator === "object" && !isElectronRenderer) {
+    _userAgent = navigator.userAgent;
+    _isWindows = _userAgent.indexOf("Windows") >= 0;
+    _isMacintosh = _userAgent.indexOf("Macintosh") >= 0;
+    _isIOS = (_userAgent.indexOf("Macintosh") >= 0 || _userAgent.indexOf("iPad") >= 0 || _userAgent.indexOf("iPhone") >= 0) && !!navigator.maxTouchPoints && navigator.maxTouchPoints > 0;
+    _isLinux = _userAgent.indexOf("Linux") >= 0;
+    _isMobile = _userAgent?.indexOf("Mobi") >= 0;
+    _isWeb = true;
+    _language = getNLSLanguage() || LANGUAGE_DEFAULT;
+    _locale = navigator.language.toLowerCase();
+    _platformLocale = _locale;
+  } else {
+    console.error("Unable to resolve platform.");
+  }
+  var _platform = 0;
+  if (_isMacintosh) {
+    _platform = 1;
+  } else if (_isWindows) {
+    _platform = 3;
+  } else if (_isLinux) {
+    _platform = 2;
+  }
+  var isWindows = _isWindows;
+  var isMacintosh = _isMacintosh;
+  var isNative = _isNative;
+  var isWeb = _isWeb;
+  var isWebWorker = _isWeb && typeof $globalThis.importScripts === "function";
+  var webWorkerOrigin = isWebWorker ? $globalThis.origin : void 0;
+  var userAgent = _userAgent;
+  var setTimeout0IsFaster = typeof $globalThis.postMessage === "function" && !$globalThis.importScripts;
+  var setTimeout0 = (() => {
+    if (setTimeout0IsFaster) {
+      const pending = [];
+      $globalThis.addEventListener("message", (e) => {
+        if (e.data && e.data.vscodeScheduleAsyncWork) {
+          for (let i = 0, len = pending.length; i < len; i++) {
+            const candidate = pending[i];
+            if (candidate.id === e.data.vscodeScheduleAsyncWork) {
+              pending.splice(i, 1);
+              candidate.callback();
+              return;
+            }
+          }
+        }
+      });
+      let lastId = 0;
+      return (callback) => {
+        const myId = ++lastId;
+        pending.push({
+          id: myId,
+          callback
+        });
+        $globalThis.postMessage({ vscodeScheduleAsyncWork: myId }, "*");
+      };
+    }
+    return (callback) => setTimeout(callback);
+  })();
+  var isChrome = !!(userAgent && userAgent.indexOf("Chrome") >= 0);
+  var isFirefox = !!(userAgent && userAgent.indexOf("Firefox") >= 0);
+  var isSafari = !!(!isChrome && (userAgent && userAgent.indexOf("Safari") >= 0));
+  var isEdge = !!(userAgent && userAgent.indexOf("Edg/") >= 0);
+  var isAndroid = !!(userAgent && userAgent.indexOf("Android") >= 0);
+
+  // node_modules/monaco-editor/esm/vs/base/common/process.js
+  var safeProcess;
+  var vscodeGlobal = globalThis.vscode;
+  if (typeof vscodeGlobal !== "undefined" && typeof vscodeGlobal.process !== "undefined") {
+    const sandboxProcess = vscodeGlobal.process;
+    safeProcess = {
+      get platform() {
+        return sandboxProcess.platform;
+      },
+      get arch() {
+        return sandboxProcess.arch;
+      },
+      get env() {
+        return sandboxProcess.env;
+      },
+      cwd() {
+        return sandboxProcess.cwd();
+      }
+    };
+  } else if (typeof process !== "undefined" && typeof process?.versions?.node === "string") {
+    safeProcess = {
+      get platform() {
+        return process.platform;
+      },
+      get arch() {
+        return process.arch;
+      },
+      get env() {
+        return process.env;
+      },
+      cwd() {
+        return process.env["VSCODE_CWD"] || process.cwd();
+      }
+    };
+  } else {
+    safeProcess = {
+      // Supported
+      get platform() {
+        return isWindows ? "win32" : isMacintosh ? "darwin" : "linux";
+      },
+      get arch() {
+        return void 0;
+      },
+      // Unsupported
+      get env() {
+        return {};
+      },
+      cwd() {
+        return "/";
+      }
+    };
+  }
+  var cwd = safeProcess.cwd;
+  var env = safeProcess.env;
+  var platform = safeProcess.platform;
+
   // node_modules/monaco-editor/esm/vs/base/common/stopwatch.js
   var performanceNow = globalThis.performance.now.bind(globalThis.performance);
   var StopWatch = class _StopWatch {
@@ -654,27 +798,16 @@
   };
 
   // node_modules/monaco-editor/esm/vs/base/common/event.js
-  var _enableDisposeWithListenerWarning = false;
-  var _enableSnapshotPotentialLeakWarning = false;
+  var _bufferLeakWarnCountThreshold = 100;
+  var _bufferLeakWarnTimeThreshold = 6e4;
+  function _isBufferLeakWarningEnabled() {
+    return !!env["VSCODE_DEV"];
+  }
   var Event;
   (function(Event2) {
     Event2.None = () => Disposable.None;
-    function _addLeakageTraceLogic(options) {
-      if (_enableSnapshotPotentialLeakWarning) {
-        const { onDidAddListener: origListenerDidAdd } = options;
-        const stack = Stacktrace.create();
-        let count = 0;
-        options.onDidAddListener = () => {
-          if (++count === 2) {
-            console.warn("snapshotted emitter LIKELY used public and SHOULD HAVE BEEN created with DisposableStore. snapshotted here");
-            stack.print();
-          }
-          origListenerDidAdd?.();
-        };
-      }
-    }
-    function defer(event, disposable) {
-      return debounce(event, () => void 0, 0, void 0, true, void 0, disposable);
+    function defer(event, flushOnListenerRemove, disposable) {
+      return debounce(event, () => void 0, 0, void 0, flushOnListenerRemove ?? true, void 0, disposable);
     }
     Event2.defer = defer;
     function once(event) {
@@ -746,9 +879,6 @@
           listener?.dispose();
         }
       };
-      if (!disposable) {
-        _addLeakageTraceLogic(options);
-      }
       const emitter = new Emitter(options);
       disposable?.add(emitter);
       return emitter.event;
@@ -809,24 +939,70 @@
           subscription.dispose();
         }
       };
-      if (!disposable) {
-        _addLeakageTraceLogic(options);
-      }
       const emitter = new Emitter(options);
       disposable?.add(emitter);
       return emitter.event;
     }
     Event2.debounce = debounce;
-    function accumulate(event, delay = 0, disposable) {
+    function accumulate(event, delay = 0, flushOnListenerRemove, disposable) {
       return Event2.debounce(event, (last, e) => {
         if (!last) {
           return [e];
         }
         last.push(e);
         return last;
-      }, delay, void 0, true, void 0, disposable);
+      }, delay, void 0, flushOnListenerRemove ?? true, void 0, disposable);
     }
     Event2.accumulate = accumulate;
+    function throttle(event, merge, delay = 100, leading = true, trailing = true, leakWarningThreshold, disposable) {
+      let subscription;
+      let output = void 0;
+      let handle = void 0;
+      let numThrottledCalls = 0;
+      const options = {
+        leakWarningThreshold,
+        onWillAddFirstListener() {
+          subscription = event((cur) => {
+            numThrottledCalls++;
+            output = merge(output, cur);
+            if (handle === void 0) {
+              if (leading) {
+                emitter.fire(output);
+                output = void 0;
+                numThrottledCalls = 0;
+              }
+              if (typeof delay === "number") {
+                handle = setTimeout(() => {
+                  if (trailing && numThrottledCalls > 0) {
+                    emitter.fire(output);
+                  }
+                  output = void 0;
+                  handle = void 0;
+                  numThrottledCalls = 0;
+                }, delay);
+              } else {
+                handle = 0;
+                queueMicrotask(() => {
+                  if (trailing && numThrottledCalls > 0) {
+                    emitter.fire(output);
+                  }
+                  output = void 0;
+                  handle = void 0;
+                  numThrottledCalls = 0;
+                });
+              }
+            }
+          });
+        },
+        onDidRemoveLastListener() {
+          subscription.dispose();
+        }
+      };
+      const emitter = new Emitter(options);
+      disposable?.add(emitter);
+      return emitter.event;
+    }
+    Event2.throttle = throttle;
     function latch(event, equals4 = (a2, b) => a2 === b, disposable) {
       let firstCall = true;
       let cache;
@@ -845,11 +1021,38 @@
       ];
     }
     Event2.split = split;
-    function buffer(event, flushAfterTimeout = false, _buffer = [], disposable) {
+    function buffer(event, debugName, flushAfterTimeout = false, _buffer = [], disposable) {
       let buffer2 = _buffer.slice();
+      let bufferLeakWarningData;
+      if (_isBufferLeakWarningEnabled()) {
+        bufferLeakWarningData = {
+          stack: Stacktrace.create(),
+          timerId: setTimeout(() => {
+            if (buffer2 && buffer2.length > 0 && bufferLeakWarningData && !bufferLeakWarningData.warned) {
+              bufferLeakWarningData.warned = true;
+              console.warn(`[Event.buffer][${debugName}] potential LEAK detected: ${buffer2.length} events buffered for ${_bufferLeakWarnTimeThreshold / 1e3}s without being consumed. Buffered here:`);
+              bufferLeakWarningData.stack.print();
+            }
+          }, _bufferLeakWarnTimeThreshold),
+          warned: false
+        };
+        if (disposable) {
+          disposable.add(toDisposable(() => clearTimeout(bufferLeakWarningData.timerId)));
+        }
+      }
+      const clearLeakWarningTimer = () => {
+        if (bufferLeakWarningData) {
+          clearTimeout(bufferLeakWarningData.timerId);
+        }
+      };
       let listener = event((e) => {
         if (buffer2) {
           buffer2.push(e);
+          if (_isBufferLeakWarningEnabled() && bufferLeakWarningData && !bufferLeakWarningData.warned && buffer2.length >= _bufferLeakWarnCountThreshold) {
+            bufferLeakWarningData.warned = true;
+            console.warn(`[Event.buffer][${debugName}] potential LEAK detected: ${buffer2.length} events buffered without being consumed. Buffered here:`);
+            bufferLeakWarningData.stack.print();
+          }
         } else {
           emitter.fire(e);
         }
@@ -860,6 +1063,7 @@
       const flush = () => {
         buffer2?.forEach((e) => emitter.fire(e));
         buffer2 = null;
+        clearLeakWarningTimer();
       };
       const emitter = new Emitter({
         onWillAddFirstListener() {
@@ -884,6 +1088,7 @@
             listener.dispose();
           }
           listener = null;
+          clearLeakWarningTimer();
         }
       });
       if (disposable) {
@@ -972,11 +1177,18 @@
     Event2.fromDOMEventEmitter = fromDOMEventEmitter;
     function toPromise(event, disposables) {
       let cancelRef;
-      const promise = new Promise((resolve2, reject) => {
-        const listener = once(event)(resolve2, null, disposables);
-        cancelRef = () => listener.dispose();
+      let listener;
+      const promise = new Promise((resolve2) => {
+        listener = once(event)(resolve2);
+        addToDisposables(listener, disposables);
+        cancelRef = () => {
+          disposeAndRemove(listener, disposables);
+        };
       });
       promise.cancel = cancelRef;
+      if (disposables) {
+        promise.finally(() => disposeAndRemove(listener, disposables));
+      }
       return promise;
     }
     Event2.toPromise = toPromise;
@@ -1003,9 +1215,6 @@
             _observable.removeObserver(this);
           }
         };
-        if (!store) {
-          _addLeakageTraceLogic(options);
-        }
         this.emitter = new Emitter(options);
         if (store) {
           store.add(this.emitter);
@@ -1066,11 +1275,7 @@
             observable.removeObserver(observer);
           }
         };
-        if (disposables instanceof DisposableStore) {
-          disposables.add(disposable);
-        } else if (Array.isArray(disposables)) {
-          disposables.push(disposable);
-        }
+        addToDisposables(disposable, disposables);
         return disposable;
       };
     }
@@ -1127,10 +1332,12 @@
       if (this._warnCountdown <= 0) {
         this._warnCountdown = threshold * 0.5;
         const [topStack, topCount] = this.getMostFrequentStack();
+        const emitterName = /^[0-9a-f]+$/i.test(this.name) ? void 0 : this.name;
         const message = `[${this.name}] potential listener LEAK detected, having ${listenerCount} listeners already. MOST frequent listener (${topCount}):`;
         console.warn(message);
         console.warn(topStack);
-        const error = new ListenerLeakError(message, topStack);
+        const kind = topCount / listenerCount > 0.3 ? "dominated" : "popular";
+        const error = new ListenerLeakError(kind, message, topStack, listenerCount, emitterName);
         this._errorHandler(error);
       }
       return () => {
@@ -1167,18 +1374,23 @@
       console.warn(this.value.split("\n").slice(2).join("\n"));
     }
   };
-  var ListenerLeakError = class extends Error {
-    constructor(message, stack) {
-      super(message);
+  var ListenerLeakError = class _ListenerLeakError extends Error {
+    constructor(kind, details, stack, listenerCount, emitterName) {
+      super(emitterName ? `[${emitterName}] potential listener LEAK detected, ${kind}` : `potential listener LEAK detected, ${kind}`);
       this.name = "ListenerLeakError";
+      this.kind = kind;
+      this.listenerCount = listenerCount;
+      this.details = details;
       this.stack = stack;
     }
+    static is(err) {
+      return err instanceof _ListenerLeakError || err instanceof Error && typeof err.kind === "string" && typeof err.listenerCount === "number";
+    }
   };
-  var ListenerRefusalError = class extends Error {
-    constructor(message, stack) {
-      super(message);
+  var ListenerRefusalError = class extends ListenerLeakError {
+    constructor(kind, details, stack, listenerCount, emitterName) {
+      super(kind, details, stack, listenerCount, emitterName);
       this.name = "ListenerRefusalError";
-      this.stack = stack;
     }
   };
   var UniqueContainer = class {
@@ -1187,23 +1399,11 @@
     }
   };
   var compactionThreshold = 2;
-  var forEachListener = (listeners, fn) => {
-    if (listeners instanceof UniqueContainer) {
-      fn(listeners);
-    } else {
-      for (let i = 0; i < listeners.length; i++) {
-        const l = listeners[i];
-        if (l) {
-          fn(l);
-        }
-      }
-    }
-  };
   var Emitter = class {
     constructor(options) {
       this._size = 0;
       this._options = options;
-      this._leakageMon = _globalLeakWarningThreshold > 0 || this._options?.leakWarningThreshold ? new LeakageMonitor(options?.onListenerError ?? onUnexpectedError, this._options?.leakWarningThreshold ?? _globalLeakWarningThreshold) : void 0;
+      this._leakageMon = this._options?.leakWarningThreshold ? new LeakageMonitor(options?.onListenerError ?? onUnexpectedError, this._options?.leakWarningThreshold ?? _globalLeakWarningThreshold, this._options?.leakWarningName) : void 0;
       this._perfMon = this._options?._profName ? new EventProfiling(this._options._profName) : void 0;
       this._deliveryQueue = this._options?.deliveryQueue;
     }
@@ -1214,12 +1414,6 @@
           this._deliveryQueue.reset();
         }
         if (this._listeners) {
-          if (_enableDisposeWithListenerWarning) {
-            const listeners = this._listeners;
-            queueMicrotask(() => {
-              forEachListener(listeners, (l) => l.stack?.print());
-            });
-          }
           this._listeners = void 0;
           this._size = 0;
         }
@@ -1237,7 +1431,8 @@
           const message = `[${this._leakageMon.name}] REFUSES to accept new listeners because it exceeded its threshold by far (${this._size} vs ${this._leakageMon.threshold})`;
           console.warn(message);
           const tuple = this._leakageMon.getMostFrequentStack() ?? ["UNKNOWN stack", -1];
-          const error = new ListenerRefusalError(`${message}. HINT: Stack shows most frequent listener (${tuple[1]}-times)`, tuple[0]);
+          const kind = tuple[1] / this._size > 0.3 ? "dominated" : "popular";
+          const error = new ListenerRefusalError(kind, `${message}. HINT: Stack shows most frequent listener (${tuple[1]}-times)`, tuple[0], this._size, this._options?.leakWarningName);
           const errorHandler2 = this._options?.onListenerError || onUnexpectedError;
           errorHandler2(error);
           return Disposable.None;
@@ -1250,13 +1445,9 @@
         }
         const contained = new UniqueContainer(callback);
         let removeMonitor;
-        let stack;
         if (this._leakageMon && this._size >= Math.ceil(this._leakageMon.threshold * 0.2)) {
           contained.stack = Stacktrace.create();
           removeMonitor = this._leakageMon.check(contained.stack, this._size + 1);
-        }
-        if (_enableDisposeWithListenerWarning) {
-          contained.stack = stack ?? Stacktrace.create();
         }
         if (!this._listeners) {
           this._options?.onWillAddFirstListener?.(this);
@@ -1274,11 +1465,7 @@
           removeMonitor?.();
           this._removeListener(contained);
         });
-        if (disposables instanceof DisposableStore) {
-          disposables.add(result);
-        } else if (Array.isArray(disposables)) {
-          disposables.push(result);
-        }
+        addToDisposables(result, disposables);
         return result;
       });
       return this._event;
@@ -1353,8 +1540,8 @@
         this._perfMon?.stop();
       }
       this._perfMon?.start(this._size);
-      if (!this._listeners) {
-      } else if (this._listeners instanceof UniqueContainer) {
+      if (!this._listeners) ;
+      else if (this._listeners instanceof UniqueContainer) {
         this._deliver(this._listeners, event);
       } else {
         const dq = this._deliveryQueue;
@@ -1384,163 +1571,24 @@
       this.value = void 0;
     }
   };
-
-  // node_modules/monaco-editor/esm/vs/nls.messages.js
-  function getNLSMessages() {
-    return globalThis._VSCODE_NLS_MESSAGES;
-  }
-  function getNLSLanguage() {
-    return globalThis._VSCODE_NLS_LANGUAGE;
-  }
-
-  // node_modules/monaco-editor/esm/vs/nls.js
-  var isPseudo = getNLSLanguage() === "pseudo" || typeof document !== "undefined" && document.location && typeof document.location.hash === "string" && document.location.hash.indexOf("pseudo=true") >= 0;
-  function _format(message, args) {
-    let result;
-    if (args.length === 0) {
-      result = message;
-    } else {
-      result = message.replace(/\{(\d+)\}/g, (match, rest) => {
-        const index = rest[0];
-        const arg = args[index];
-        let result2 = match;
-        if (typeof arg === "string") {
-          result2 = arg;
-        } else if (typeof arg === "number" || typeof arg === "boolean" || arg === void 0 || arg === null) {
-          result2 = String(arg);
-        }
-        return result2;
-      });
+  function addToDisposables(result, disposables) {
+    if (disposables instanceof DisposableStore) {
+      disposables.add(result);
+    } else if (Array.isArray(disposables)) {
+      disposables.push(result);
     }
-    if (isPseudo) {
-      result = "\uFF3B" + result.replace(/[aouei]/g, "$&$&") + "\uFF3D";
-    }
-    return result;
   }
-  function localize(data, message, ...args) {
-    if (typeof data === "number") {
-      return _format(lookupMessage(data, message), args);
-    }
-    return _format(message, args);
-  }
-  function lookupMessage(index, fallback) {
-    const message = getNLSMessages()?.[index];
-    if (typeof message !== "string") {
-      if (typeof fallback === "string") {
-        return fallback;
-      }
-      throw new Error(`!!! NLS MISSING: ${index} !!!`);
-    }
-    return message;
-  }
-
-  // node_modules/monaco-editor/esm/vs/base/common/platform.js
-  var LANGUAGE_DEFAULT = "en";
-  var _isWindows = false;
-  var _isMacintosh = false;
-  var _isLinux = false;
-  var _isLinuxSnap = false;
-  var _isNative = false;
-  var _isWeb = false;
-  var _isElectron = false;
-  var _isIOS = false;
-  var _isCI = false;
-  var _isMobile = false;
-  var _locale = void 0;
-  var _language = LANGUAGE_DEFAULT;
-  var _platformLocale = LANGUAGE_DEFAULT;
-  var _translationsConfigFile = void 0;
-  var _userAgent = void 0;
-  var $globalThis = globalThis;
-  var nodeProcess = void 0;
-  if (typeof $globalThis.vscode !== "undefined" && typeof $globalThis.vscode.process !== "undefined") {
-    nodeProcess = $globalThis.vscode.process;
-  } else if (typeof process !== "undefined" && typeof process?.versions?.node === "string") {
-    nodeProcess = process;
-  }
-  var isElectronProcess = typeof nodeProcess?.versions?.electron === "string";
-  var isElectronRenderer = isElectronProcess && nodeProcess?.type === "renderer";
-  if (typeof nodeProcess === "object") {
-    _isWindows = nodeProcess.platform === "win32";
-    _isMacintosh = nodeProcess.platform === "darwin";
-    _isLinux = nodeProcess.platform === "linux";
-    _isLinuxSnap = _isLinux && !!nodeProcess.env["SNAP"] && !!nodeProcess.env["SNAP_REVISION"];
-    _isElectron = isElectronProcess;
-    _isCI = !!nodeProcess.env["CI"] || !!nodeProcess.env["BUILD_ARTIFACTSTAGINGDIRECTORY"] || !!nodeProcess.env["GITHUB_WORKSPACE"];
-    _locale = LANGUAGE_DEFAULT;
-    _language = LANGUAGE_DEFAULT;
-    const rawNlsConfig = nodeProcess.env["VSCODE_NLS_CONFIG"];
-    if (rawNlsConfig) {
-      try {
-        const nlsConfig = JSON.parse(rawNlsConfig);
-        _locale = nlsConfig.userLocale;
-        _platformLocale = nlsConfig.osLocale;
-        _language = nlsConfig.resolvedLanguage || LANGUAGE_DEFAULT;
-        _translationsConfigFile = nlsConfig.languagePack?.translationsConfigFile;
-      } catch (e) {
+  function disposeAndRemove(result, disposables) {
+    if (disposables instanceof DisposableStore) {
+      disposables.delete(result);
+    } else if (Array.isArray(disposables)) {
+      const index = disposables.indexOf(result);
+      if (index !== -1) {
+        disposables.splice(index, 1);
       }
     }
-    _isNative = true;
-  } else if (typeof navigator === "object" && !isElectronRenderer) {
-    _userAgent = navigator.userAgent;
-    _isWindows = _userAgent.indexOf("Windows") >= 0;
-    _isMacintosh = _userAgent.indexOf("Macintosh") >= 0;
-    _isIOS = (_userAgent.indexOf("Macintosh") >= 0 || _userAgent.indexOf("iPad") >= 0 || _userAgent.indexOf("iPhone") >= 0) && !!navigator.maxTouchPoints && navigator.maxTouchPoints > 0;
-    _isLinux = _userAgent.indexOf("Linux") >= 0;
-    _isMobile = _userAgent?.indexOf("Mobi") >= 0;
-    _isWeb = true;
-    _language = getNLSLanguage() || LANGUAGE_DEFAULT;
-    _locale = navigator.language.toLowerCase();
-    _platformLocale = _locale;
-  } else {
-    console.error("Unable to resolve platform.");
+    result.dispose();
   }
-  var _platform = 0;
-  if (_isMacintosh) {
-    _platform = 1;
-  } else if (_isWindows) {
-    _platform = 3;
-  } else if (_isLinux) {
-    _platform = 2;
-  }
-  var isWindows = _isWindows;
-  var isMacintosh = _isMacintosh;
-  var isWebWorker = _isWeb && typeof $globalThis.importScripts === "function";
-  var webWorkerOrigin = isWebWorker ? $globalThis.origin : void 0;
-  var userAgent = _userAgent;
-  var setTimeout0IsFaster = typeof $globalThis.postMessage === "function" && !$globalThis.importScripts;
-  var setTimeout0 = (() => {
-    if (setTimeout0IsFaster) {
-      const pending = [];
-      $globalThis.addEventListener("message", (e) => {
-        if (e.data && e.data.vscodeScheduleAsyncWork) {
-          for (let i = 0, len = pending.length; i < len; i++) {
-            const candidate = pending[i];
-            if (candidate.id === e.data.vscodeScheduleAsyncWork) {
-              pending.splice(i, 1);
-              candidate.callback();
-              return;
-            }
-          }
-        }
-      });
-      let lastId = 0;
-      return (callback) => {
-        const myId = ++lastId;
-        pending.push({
-          id: myId,
-          callback
-        });
-        $globalThis.postMessage({ vscodeScheduleAsyncWork: myId }, "*");
-      };
-    }
-    return (callback) => setTimeout(callback);
-  })();
-  var isChrome = !!(userAgent && userAgent.indexOf("Chrome") >= 0);
-  var isFirefox = !!(userAgent && userAgent.indexOf("Firefox") >= 0);
-  var isSafari = !!(!isChrome && (userAgent && userAgent.indexOf("Safari") >= 0));
-  var isEdge = !!(userAgent && userAgent.indexOf("Edg/") >= 0);
-  var isAndroid = !!(userAgent && userAgent.indexOf("Android") >= 0);
 
   // node_modules/monaco-editor/esm/vs/base/common/cache.js
   function identity(t2) {
@@ -1692,14 +1740,6 @@
   function isBasicASCII(str) {
     return IS_BASIC_ASCII.test(str);
   }
-  var CSI_SEQUENCE = /(?:\x1b\[|\x9b)[=?>!]?[\d;:]*["$#'* ]?[a-zA-Z@^`{}|~]/;
-  var OSC_SEQUENCE = /(?:\x1b\]|\x9d).*?(?:\x1b\\|\x07|\x9c)/;
-  var ESC_SEQUENCE = /\x1b(?:[ #%\(\)\*\+\-\.\/]?[a-zA-Z0-9\|}~@])/;
-  var CONTROL_SEQUENCES = new RegExp("(?:" + [
-    CSI_SEQUENCE.source,
-    OSC_SEQUENCE.source,
-    ESC_SEQUENCE.source
-  ].join("|") + ")", "g");
   var UTF8_BOM_CHARACTER = String.fromCharCode(
     65279
     /* CharCode.UTF8_BOM */
@@ -1749,7 +1789,7 @@
   }
   var _AmbiguousCharacters = class _AmbiguousCharacters {
     static getInstance(locales) {
-      return _AmbiguousCharacters.cache.get(Array.from(locales));
+      return _AmbiguousCharacters.cache.get(Array.from(locales).join(","));
     }
     static getLocales() {
       return _AmbiguousCharacters._locales.value;
@@ -1774,7 +1814,8 @@
   _AmbiguousCharacters.ambiguousCharacterData = new Lazy(() => {
     return JSON.parse('{"_common":[8232,32,8233,32,5760,32,8192,32,8193,32,8194,32,8195,32,8196,32,8197,32,8198,32,8200,32,8201,32,8202,32,8287,32,8199,32,8239,32,2042,95,65101,95,65102,95,65103,95,8208,45,8209,45,8210,45,65112,45,1748,45,8259,45,727,45,8722,45,10134,45,11450,45,1549,44,1643,44,184,44,42233,44,894,59,2307,58,2691,58,1417,58,1795,58,1796,58,5868,58,65072,58,6147,58,6153,58,8282,58,1475,58,760,58,42889,58,8758,58,720,58,42237,58,451,33,11601,33,660,63,577,63,2429,63,5038,63,42731,63,119149,46,8228,46,1793,46,1794,46,42510,46,68176,46,1632,46,1776,46,42232,46,1373,96,65287,96,8219,96,1523,96,8242,96,1370,96,8175,96,65344,96,900,96,8189,96,8125,96,8127,96,8190,96,697,96,884,96,712,96,714,96,715,96,756,96,699,96,701,96,700,96,702,96,42892,96,1497,96,2036,96,2037,96,5194,96,5836,96,94033,96,94034,96,65339,91,10088,40,10098,40,12308,40,64830,40,65341,93,10089,41,10099,41,12309,41,64831,41,10100,123,119060,123,10101,125,65342,94,8270,42,1645,42,8727,42,66335,42,5941,47,8257,47,8725,47,8260,47,9585,47,10187,47,10744,47,119354,47,12755,47,12339,47,11462,47,20031,47,12035,47,65340,92,65128,92,8726,92,10189,92,10741,92,10745,92,119311,92,119355,92,12756,92,20022,92,12034,92,42872,38,708,94,710,94,5869,43,10133,43,66203,43,8249,60,10094,60,706,60,119350,60,5176,60,5810,60,5120,61,11840,61,12448,61,42239,61,8250,62,10095,62,707,62,119351,62,5171,62,94015,62,8275,126,732,126,8128,126,8764,126,65372,124,65293,45,118002,50,120784,50,120794,50,120804,50,120814,50,120824,50,130034,50,42842,50,423,50,1000,50,42564,50,5311,50,42735,50,119302,51,118003,51,120785,51,120795,51,120805,51,120815,51,120825,51,130035,51,42923,51,540,51,439,51,42858,51,11468,51,1248,51,94011,51,71882,51,118004,52,120786,52,120796,52,120806,52,120816,52,120826,52,130036,52,5070,52,71855,52,118005,53,120787,53,120797,53,120807,53,120817,53,120827,53,130037,53,444,53,71867,53,118006,54,120788,54,120798,54,120808,54,120818,54,120828,54,130038,54,11474,54,5102,54,71893,54,119314,55,118007,55,120789,55,120799,55,120809,55,120819,55,120829,55,130039,55,66770,55,71878,55,2819,56,2538,56,2666,56,125131,56,118008,56,120790,56,120800,56,120810,56,120820,56,120830,56,130040,56,547,56,546,56,66330,56,2663,57,2920,57,2541,57,3437,57,118009,57,120791,57,120801,57,120811,57,120821,57,120831,57,130041,57,42862,57,11466,57,71884,57,71852,57,71894,57,9082,97,65345,97,119834,97,119886,97,119938,97,119990,97,120042,97,120094,97,120146,97,120198,97,120250,97,120302,97,120354,97,120406,97,120458,97,593,97,945,97,120514,97,120572,97,120630,97,120688,97,120746,97,65313,65,117974,65,119808,65,119860,65,119912,65,119964,65,120016,65,120068,65,120120,65,120172,65,120224,65,120276,65,120328,65,120380,65,120432,65,913,65,120488,65,120546,65,120604,65,120662,65,120720,65,5034,65,5573,65,42222,65,94016,65,66208,65,119835,98,119887,98,119939,98,119991,98,120043,98,120095,98,120147,98,120199,98,120251,98,120303,98,120355,98,120407,98,120459,98,388,98,5071,98,5234,98,5551,98,65314,66,8492,66,117975,66,119809,66,119861,66,119913,66,120017,66,120069,66,120121,66,120173,66,120225,66,120277,66,120329,66,120381,66,120433,66,42932,66,914,66,120489,66,120547,66,120605,66,120663,66,120721,66,5108,66,5623,66,42192,66,66178,66,66209,66,66305,66,65347,99,8573,99,119836,99,119888,99,119940,99,119992,99,120044,99,120096,99,120148,99,120200,99,120252,99,120304,99,120356,99,120408,99,120460,99,7428,99,1010,99,11429,99,43951,99,66621,99,128844,67,71913,67,71922,67,65315,67,8557,67,8450,67,8493,67,117976,67,119810,67,119862,67,119914,67,119966,67,120018,67,120174,67,120226,67,120278,67,120330,67,120382,67,120434,67,1017,67,11428,67,5087,67,42202,67,66210,67,66306,67,66581,67,66844,67,8574,100,8518,100,119837,100,119889,100,119941,100,119993,100,120045,100,120097,100,120149,100,120201,100,120253,100,120305,100,120357,100,120409,100,120461,100,1281,100,5095,100,5231,100,42194,100,8558,68,8517,68,117977,68,119811,68,119863,68,119915,68,119967,68,120019,68,120071,68,120123,68,120175,68,120227,68,120279,68,120331,68,120383,68,120435,68,5024,68,5598,68,5610,68,42195,68,8494,101,65349,101,8495,101,8519,101,119838,101,119890,101,119942,101,120046,101,120098,101,120150,101,120202,101,120254,101,120306,101,120358,101,120410,101,120462,101,43826,101,1213,101,8959,69,65317,69,8496,69,117978,69,119812,69,119864,69,119916,69,120020,69,120072,69,120124,69,120176,69,120228,69,120280,69,120332,69,120384,69,120436,69,917,69,120492,69,120550,69,120608,69,120666,69,120724,69,11577,69,5036,69,42224,69,71846,69,71854,69,66182,69,119839,102,119891,102,119943,102,119995,102,120047,102,120099,102,120151,102,120203,102,120255,102,120307,102,120359,102,120411,102,120463,102,43829,102,42905,102,383,102,7837,102,1412,102,119315,70,8497,70,117979,70,119813,70,119865,70,119917,70,120021,70,120073,70,120125,70,120177,70,120229,70,120281,70,120333,70,120385,70,120437,70,42904,70,988,70,120778,70,5556,70,42205,70,71874,70,71842,70,66183,70,66213,70,66853,70,65351,103,8458,103,119840,103,119892,103,119944,103,120048,103,120100,103,120152,103,120204,103,120256,103,120308,103,120360,103,120412,103,120464,103,609,103,7555,103,397,103,1409,103,117980,71,119814,71,119866,71,119918,71,119970,71,120022,71,120074,71,120126,71,120178,71,120230,71,120282,71,120334,71,120386,71,120438,71,1292,71,5056,71,5107,71,42198,71,65352,104,8462,104,119841,104,119945,104,119997,104,120049,104,120101,104,120153,104,120205,104,120257,104,120309,104,120361,104,120413,104,120465,104,1211,104,1392,104,5058,104,65320,72,8459,72,8460,72,8461,72,117981,72,119815,72,119867,72,119919,72,120023,72,120179,72,120231,72,120283,72,120335,72,120387,72,120439,72,919,72,120494,72,120552,72,120610,72,120668,72,120726,72,11406,72,5051,72,5500,72,42215,72,66255,72,731,105,9075,105,65353,105,8560,105,8505,105,8520,105,119842,105,119894,105,119946,105,119998,105,120050,105,120102,105,120154,105,120206,105,120258,105,120310,105,120362,105,120414,105,120466,105,120484,105,618,105,617,105,953,105,8126,105,890,105,120522,105,120580,105,120638,105,120696,105,120754,105,1110,105,42567,105,1231,105,43893,105,5029,105,71875,105,65354,106,8521,106,119843,106,119895,106,119947,106,119999,106,120051,106,120103,106,120155,106,120207,106,120259,106,120311,106,120363,106,120415,106,120467,106,1011,106,1112,106,65322,74,117983,74,119817,74,119869,74,119921,74,119973,74,120025,74,120077,74,120129,74,120181,74,120233,74,120285,74,120337,74,120389,74,120441,74,42930,74,895,74,1032,74,5035,74,5261,74,42201,74,119844,107,119896,107,119948,107,120000,107,120052,107,120104,107,120156,107,120208,107,120260,107,120312,107,120364,107,120416,107,120468,107,8490,75,65323,75,117984,75,119818,75,119870,75,119922,75,119974,75,120026,75,120078,75,120130,75,120182,75,120234,75,120286,75,120338,75,120390,75,120442,75,922,75,120497,75,120555,75,120613,75,120671,75,120729,75,11412,75,5094,75,5845,75,42199,75,66840,75,1472,108,8739,73,9213,73,65512,73,1633,108,1777,73,66336,108,125127,108,118001,108,120783,73,120793,73,120803,73,120813,73,120823,73,130033,73,65321,73,8544,73,8464,73,8465,73,117982,108,119816,73,119868,73,119920,73,120024,73,120128,73,120180,73,120232,73,120284,73,120336,73,120388,73,120440,73,65356,108,8572,73,8467,108,119845,108,119897,108,119949,108,120001,108,120053,108,120105,73,120157,73,120209,73,120261,73,120313,73,120365,73,120417,73,120469,73,448,73,120496,73,120554,73,120612,73,120670,73,120728,73,11410,73,1030,73,1216,73,1493,108,1503,108,1575,108,126464,108,126592,108,65166,108,65165,108,1994,108,11599,73,5825,73,42226,73,93992,73,66186,124,66313,124,119338,76,8556,76,8466,76,117985,76,119819,76,119871,76,119923,76,120027,76,120079,76,120131,76,120183,76,120235,76,120287,76,120339,76,120391,76,120443,76,11472,76,5086,76,5290,76,42209,76,93974,76,71843,76,71858,76,66587,76,66854,76,65325,77,8559,77,8499,77,117986,77,119820,77,119872,77,119924,77,120028,77,120080,77,120132,77,120184,77,120236,77,120288,77,120340,77,120392,77,120444,77,924,77,120499,77,120557,77,120615,77,120673,77,120731,77,1018,77,11416,77,5047,77,5616,77,5846,77,42207,77,66224,77,66321,77,119847,110,119899,110,119951,110,120003,110,120055,110,120107,110,120159,110,120211,110,120263,110,120315,110,120367,110,120419,110,120471,110,1400,110,1404,110,65326,78,8469,78,117987,78,119821,78,119873,78,119925,78,119977,78,120029,78,120081,78,120185,78,120237,78,120289,78,120341,78,120393,78,120445,78,925,78,120500,78,120558,78,120616,78,120674,78,120732,78,11418,78,42208,78,66835,78,3074,111,3202,111,3330,111,3458,111,2406,111,2662,111,2790,111,3046,111,3174,111,3302,111,3430,111,3664,111,3792,111,4160,111,1637,111,1781,111,65359,111,8500,111,119848,111,119900,111,119952,111,120056,111,120108,111,120160,111,120212,111,120264,111,120316,111,120368,111,120420,111,120472,111,7439,111,7441,111,43837,111,959,111,120528,111,120586,111,120644,111,120702,111,120760,111,963,111,120532,111,120590,111,120648,111,120706,111,120764,111,11423,111,4351,111,1413,111,1505,111,1607,111,126500,111,126564,111,126596,111,65259,111,65260,111,65258,111,65257,111,1726,111,64428,111,64429,111,64427,111,64426,111,1729,111,64424,111,64425,111,64423,111,64422,111,1749,111,3360,111,4125,111,66794,111,71880,111,71895,111,66604,111,1984,79,2534,79,2918,79,12295,79,70864,79,71904,79,118000,79,120782,79,120792,79,120802,79,120812,79,120822,79,130032,79,65327,79,117988,79,119822,79,119874,79,119926,79,119978,79,120030,79,120082,79,120134,79,120186,79,120238,79,120290,79,120342,79,120394,79,120446,79,927,79,120502,79,120560,79,120618,79,120676,79,120734,79,11422,79,1365,79,11604,79,4816,79,2848,79,66754,79,42227,79,71861,79,66194,79,66219,79,66564,79,66838,79,9076,112,65360,112,119849,112,119901,112,119953,112,120005,112,120057,112,120109,112,120161,112,120213,112,120265,112,120317,112,120369,112,120421,112,120473,112,961,112,120530,112,120544,112,120588,112,120602,112,120646,112,120660,112,120704,112,120718,112,120762,112,120776,112,11427,112,65328,80,8473,80,117989,80,119823,80,119875,80,119927,80,119979,80,120031,80,120083,80,120187,80,120239,80,120291,80,120343,80,120395,80,120447,80,929,80,120504,80,120562,80,120620,80,120678,80,120736,80,11426,80,5090,80,5229,80,42193,80,66197,80,119850,113,119902,113,119954,113,120006,113,120058,113,120110,113,120162,113,120214,113,120266,113,120318,113,120370,113,120422,113,120474,113,1307,113,1379,113,1382,113,8474,81,117990,81,119824,81,119876,81,119928,81,119980,81,120032,81,120084,81,120188,81,120240,81,120292,81,120344,81,120396,81,120448,81,11605,81,119851,114,119903,114,119955,114,120007,114,120059,114,120111,114,120163,114,120215,114,120267,114,120319,114,120371,114,120423,114,120475,114,43847,114,43848,114,7462,114,11397,114,43905,114,119318,82,8475,82,8476,82,8477,82,117991,82,119825,82,119877,82,119929,82,120033,82,120189,82,120241,82,120293,82,120345,82,120397,82,120449,82,422,82,5025,82,5074,82,66740,82,5511,82,42211,82,94005,82,65363,115,119852,115,119904,115,119956,115,120008,115,120060,115,120112,115,120164,115,120216,115,120268,115,120320,115,120372,115,120424,115,120476,115,42801,115,445,115,1109,115,43946,115,71873,115,66632,115,65331,83,117992,83,119826,83,119878,83,119930,83,119982,83,120034,83,120086,83,120138,83,120190,83,120242,83,120294,83,120346,83,120398,83,120450,83,1029,83,1359,83,5077,83,5082,83,42210,83,94010,83,66198,83,66592,83,119853,116,119905,116,119957,116,120009,116,120061,116,120113,116,120165,116,120217,116,120269,116,120321,116,120373,116,120425,116,120477,116,8868,84,10201,84,128872,84,65332,84,117993,84,119827,84,119879,84,119931,84,119983,84,120035,84,120087,84,120139,84,120191,84,120243,84,120295,84,120347,84,120399,84,120451,84,932,84,120507,84,120565,84,120623,84,120681,84,120739,84,11430,84,5026,84,42196,84,93962,84,71868,84,66199,84,66225,84,66325,84,119854,117,119906,117,119958,117,120010,117,120062,117,120114,117,120166,117,120218,117,120270,117,120322,117,120374,117,120426,117,120478,117,42911,117,7452,117,43854,117,43858,117,651,117,965,117,120534,117,120592,117,120650,117,120708,117,120766,117,1405,117,66806,117,71896,117,8746,85,8899,85,117994,85,119828,85,119880,85,119932,85,119984,85,120036,85,120088,85,120140,85,120192,85,120244,85,120296,85,120348,85,120400,85,120452,85,1357,85,4608,85,66766,85,5196,85,42228,85,94018,85,71864,85,8744,118,8897,118,65366,118,8564,118,119855,118,119907,118,119959,118,120011,118,120063,118,120115,118,120167,118,120219,118,120271,118,120323,118,120375,118,120427,118,120479,118,7456,118,957,118,120526,118,120584,118,120642,118,120700,118,120758,118,1141,118,1496,118,71430,118,43945,118,71872,118,119309,86,1639,86,1783,86,8548,86,117995,86,119829,86,119881,86,119933,86,119985,86,120037,86,120089,86,120141,86,120193,86,120245,86,120297,86,120349,86,120401,86,120453,86,1140,86,11576,86,5081,86,5167,86,42719,86,42214,86,93960,86,71840,86,66845,86,623,119,119856,119,119908,119,119960,119,120012,119,120064,119,120116,119,120168,119,120220,119,120272,119,120324,119,120376,119,120428,119,120480,119,7457,119,1121,119,1309,119,1377,119,71434,119,71438,119,71439,119,43907,119,71910,87,71919,87,117996,87,119830,87,119882,87,119934,87,119986,87,120038,87,120090,87,120142,87,120194,87,120246,87,120298,87,120350,87,120402,87,120454,87,1308,87,5043,87,5076,87,42218,87,5742,120,10539,120,10540,120,10799,120,65368,120,8569,120,119857,120,119909,120,119961,120,120013,120,120065,120,120117,120,120169,120,120221,120,120273,120,120325,120,120377,120,120429,120,120481,120,5441,120,5501,120,5741,88,9587,88,66338,88,71916,88,65336,88,8553,88,117997,88,119831,88,119883,88,119935,88,119987,88,120039,88,120091,88,120143,88,120195,88,120247,88,120299,88,120351,88,120403,88,120455,88,42931,88,935,88,120510,88,120568,88,120626,88,120684,88,120742,88,11436,88,11613,88,5815,88,42219,88,66192,88,66228,88,66327,88,66855,88,611,121,7564,121,65369,121,119858,121,119910,121,119962,121,120014,121,120066,121,120118,121,120170,121,120222,121,120274,121,120326,121,120378,121,120430,121,120482,121,655,121,7935,121,43866,121,947,121,8509,121,120516,121,120574,121,120632,121,120690,121,120748,121,1199,121,4327,121,71900,121,65337,89,117998,89,119832,89,119884,89,119936,89,119988,89,120040,89,120092,89,120144,89,120196,89,120248,89,120300,89,120352,89,120404,89,120456,89,933,89,978,89,120508,89,120566,89,120624,89,120682,89,120740,89,11432,89,1198,89,5033,89,5053,89,42220,89,94019,89,71844,89,66226,89,119859,122,119911,122,119963,122,120015,122,120067,122,120119,122,120171,122,120223,122,120275,122,120327,122,120379,122,120431,122,120483,122,7458,122,43923,122,71876,122,71909,90,66293,90,65338,90,8484,90,8488,90,117999,90,119833,90,119885,90,119937,90,119989,90,120041,90,120197,90,120249,90,120301,90,120353,90,120405,90,120457,90,918,90,120493,90,120551,90,120609,90,120667,90,120725,90,5059,90,42204,90,71849,90,65282,34,65283,35,65284,36,65285,37,65286,38,65290,42,65291,43,65294,46,65295,47,65296,48,65298,50,65299,51,65300,52,65301,53,65302,54,65303,55,65304,56,65305,57,65308,60,65309,61,65310,62,65312,64,65316,68,65318,70,65319,71,65324,76,65329,81,65330,82,65333,85,65334,86,65335,87,65343,95,65346,98,65348,100,65350,102,65355,107,65357,109,65358,110,65361,113,65362,114,65364,116,65365,117,65367,119,65370,122,65371,123,65373,125,119846,109],"_default":[160,32,8211,45,65374,126,8218,44,65306,58,65281,33,8216,96,8217,96,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"cs":[65374,126,8218,44,65306,58,65281,33,8216,96,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"de":[65374,126,65306,58,65281,33,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"es":[8211,45,65374,126,8218,44,65306,58,65281,33,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"fr":[65374,126,8218,44,65306,58,65281,33,8216,96,8245,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"it":[160,32,8211,45,65374,126,8218,44,65306,58,65281,33,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"ja":[8211,45,8218,44,65281,33,8216,96,8245,96,180,96,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65292,44,65297,49,65307,59],"ko":[8211,45,65374,126,8218,44,65306,58,65281,33,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"pl":[65374,126,65306,58,65281,33,8216,96,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"pt-BR":[65374,126,8218,44,65306,58,65281,33,8216,96,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"qps-ploc":[160,32,8211,45,65374,126,8218,44,65306,58,65281,33,8216,96,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"ru":[65374,126,8218,44,65306,58,65281,33,8216,96,8245,96,180,96,12494,47,305,105,921,73,1009,112,215,120,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"tr":[160,32,8211,45,65374,126,8218,44,65306,58,65281,33,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65288,40,65289,41,65292,44,65297,49,65307,59,65311,63],"zh-hans":[160,32,65374,126,8218,44,8245,96,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89,65297,49],"zh-hant":[8211,45,65374,126,8218,44,180,96,12494,47,1047,51,1073,54,1072,97,1040,65,1068,98,1042,66,1089,99,1057,67,1077,101,1045,69,1053,72,305,105,1050,75,921,73,1052,77,1086,111,1054,79,1009,112,1088,112,1056,80,1075,114,1058,84,215,120,1093,120,1061,88,1091,121,1059,89]}');
   });
-  _AmbiguousCharacters.cache = new LRUCachedFunction({ getCacheKey: JSON.stringify }, (locales) => {
+  _AmbiguousCharacters.cache = new LRUCachedFunction((localesStr) => {
+    const locales = localesStr.split(",");
     function arrayToMap(arr) {
       const result = /* @__PURE__ */ new Map();
       for (let i = 0; i < arr.length; i += 2) {
@@ -1802,7 +1843,7 @@
       return result;
     }
     const data = _AmbiguousCharacters.ambiguousCharacterData.value;
-    let filteredLocales = locales.filter((l) => !l.startsWith("_") && l in data);
+    let filteredLocales = locales.filter((l) => !l.startsWith("_") && Object.hasOwn(data, l));
     if (filteredLocales.length === 0) {
       filteredLocales = ["_default"];
     }
@@ -1896,7 +1937,7 @@
     setWorkerId(workerId) {
       this._workerId = workerId;
     }
-    sendMessage(channel, method, args) {
+    async sendMessage(channel, method, args) {
       const req = String(++this._lastSentReq);
       return new Promise((resolve2, reject) => {
         this._pendingReplies[req] = {
@@ -1977,10 +2018,11 @@
       if (replyMessage.err) {
         let err = replyMessage.err;
         if (replyMessage.err.$isError) {
-          err = new Error();
-          err.name = replyMessage.err.name;
-          err.message = replyMessage.err.message;
-          err.stack = replyMessage.err.stack;
+          const newErr = new Error();
+          newErr.name = replyMessage.err.name;
+          newErr.message = replyMessage.err.message;
+          newErr.stack = replyMessage.err.stack;
+          err = newErr;
         }
         reply.reject(err);
         return;
@@ -2007,26 +2049,29 @@
       this._pendingEvents.set(req, disposable);
     }
     _handleEventMessage(msg) {
-      if (!this._pendingEmitters.has(msg.req)) {
+      const emitter = this._pendingEmitters.get(msg.req);
+      if (emitter === void 0) {
         console.warn("Got event for unknown req");
         return;
       }
-      this._pendingEmitters.get(msg.req).fire(msg.event);
+      emitter.fire(msg.event);
     }
     _handleUnsubscribeEventMessage(msg) {
-      if (!this._pendingEvents.has(msg.req)) {
+      const event = this._pendingEvents.get(msg.req);
+      if (event === void 0) {
         console.warn("Got unsubscribe for unknown req");
         return;
       }
-      this._pendingEvents.get(msg.req).dispose();
+      event.dispose();
       this._pendingEvents.delete(msg.req);
     }
     _send(msg) {
       const transfer = [];
       if (msg.type === 0) {
         for (let i = 0; i < msg.args.length; i++) {
-          if (msg.args[i] instanceof ArrayBuffer) {
-            transfer.push(msg.args[i]);
+          const arg = msg.args[i];
+          if (arg instanceof ArrayBuffer) {
+            transfer.push(arg);
           }
         }
       } else if (msg.type === 1) {
@@ -2067,11 +2112,12 @@
       if (!requestHandler) {
         return Promise.reject(new Error(`Missing channel ${channel} on worker thread`));
       }
-      if (typeof requestHandler[method] !== "function") {
+      const fn = requestHandler[method];
+      if (typeof fn !== "function") {
         return Promise.reject(new Error(`Missing method ${method} on worker thread channel ${channel}`));
       }
       try {
-        return Promise.resolve(requestHandler[method].apply(requestHandler, args));
+        return Promise.resolve(fn.apply(requestHandler, args));
       } catch (e) {
         return Promise.reject(e);
       }
@@ -2082,7 +2128,11 @@
         throw new Error(`Missing channel ${channel} on worker thread`);
       }
       if (propertyIsDynamicEvent(eventName)) {
-        const event = requestHandler[eventName].call(requestHandler, arg);
+        const fn = requestHandler[eventName];
+        if (typeof fn !== "function") {
+          throw new Error(`Missing dynamic event ${eventName} on request handler.`);
+        }
+        const event = fn.call(requestHandler, arg);
         if (typeof event !== "function") {
           throw new Error(`Missing dynamic event ${eventName} on request handler.`);
         }
@@ -2098,11 +2148,12 @@
       throw new Error(`Malformed event name ${eventName}`);
     }
     getChannel(channel) {
-      if (!this._remoteChannels.has(channel)) {
-        const inst = this._protocol.createProxyToRemoteChannel(channel);
+      let inst = this._remoteChannels.get(channel);
+      if (inst === void 0) {
+        inst = this._protocol.createProxyToRemoteChannel(channel);
         this._remoteChannels.set(channel, inst);
       }
-      return this._remoteChannels.get(channel);
+      return inst;
     }
     async initialize(workerId) {
       this._protocol.setWorkerId(workerId);
@@ -2151,7 +2202,7 @@
 
   // node_modules/monaco-editor/esm/vs/base/common/buffer.js
   var hasBuffer = typeof Buffer !== "undefined";
-  var indexOfTable = new Lazy(() => new Uint8Array(256));
+  new Lazy(() => new Uint8Array(256));
   var textDecoder;
   var VSBuffer = class _VSBuffer {
     /**
@@ -2174,7 +2225,7 @@
         return this.buffer.toString();
       } else {
         if (!textDecoder) {
-          textDecoder = new TextDecoder();
+          textDecoder = new TextDecoder(void 0, { ignoreBOM: true });
         }
         return textDecoder.decode(this.buffer);
       }
@@ -3116,7 +3167,6 @@
       }
     }
   };
-  var precomputedEqualityArray = new Uint32Array(65536);
 
   // node_modules/monaco-editor/esm/vs/editor/common/core/position.js
   var Position = class _Position {
@@ -3237,7 +3287,7 @@
      * Test if `obj` is an `IPosition`.
      */
     static isIPosition(obj) {
-      return obj && typeof obj.lineNumber === "number" && typeof obj.column === "number";
+      return !!obj && typeof obj.lineNumber === "number" && typeof obj.column === "number";
     }
     toJSON() {
       return {
@@ -3522,6 +3572,9 @@
     delta(lineCount) {
       return new _Range(this.startLineNumber + lineCount, this.startColumn, this.endLineNumber + lineCount, this.endColumn);
     }
+    /**
+     * Test if this range starts and ends on the same line.
+     */
     isSingleLine() {
       return this.startLineNumber === this.endLineNumber;
     }
@@ -3539,7 +3592,7 @@
      * Test if `obj` is an `IRange`.
      */
     static isIRange(obj) {
-      return obj && typeof obj.startLineNumber === "number" && typeof obj.startColumn === "number" && typeof obj.endLineNumber === "number" && typeof obj.endColumn === "number";
+      return !!obj && typeof obj.startLineNumber === "number" && typeof obj.startColumn === "number" && typeof obj.endLineNumber === "number" && typeof obj.endColumn === "number";
     }
     /**
      * Test if the two ranges are touching in any way.
@@ -4246,17 +4299,11 @@
   var userSettingsUSMap = new KeyCodeStrMap();
   var userSettingsGeneralMap = new KeyCodeStrMap();
   var EVENT_KEY_CODE_MAP = new Array(230);
-  var NATIVE_WINDOWS_KEY_CODE_TO_KEY_CODE = {};
-  var scanCodeIntToStr = [];
   var scanCodeStrToInt = /* @__PURE__ */ Object.create(null);
   var scanCodeLowerCaseStrToInt = /* @__PURE__ */ Object.create(null);
   var IMMUTABLE_CODE_TO_KEY_CODE = [];
-  var IMMUTABLE_KEY_CODE_TO_CODE = [];
   for (let i = 0; i <= 193; i++) {
     IMMUTABLE_CODE_TO_KEY_CODE[i] = -1;
-  }
-  for (let i = 0; i <= 132; i++) {
-    IMMUTABLE_KEY_CODE_TO_CODE[i] = -1;
   }
   (function() {
     const empty = "";
@@ -4345,7 +4392,7 @@
       [1, 79, "Insert", 19, "Insert", 45, "VK_INSERT", empty, empty],
       [1, 80, "Home", 14, "Home", 36, "VK_HOME", empty, empty],
       [1, 81, "PageUp", 11, "PageUp", 33, "VK_PRIOR", empty, empty],
-      [1, 82, "Delete", 20, "Delete", 46, "VK_DELETE", empty, empty],
+      [1, 82, "Delete", 20, "Del", 46, "VK_DELETE", "Delete", empty],
       [1, 83, "End", 13, "End", 35, "VK_END", empty, empty],
       [1, 84, "PageDown", 12, "PageDown", 34, "VK_NEXT", empty, empty],
       [1, 85, "ArrowRight", 17, "RightArrow", 39, "VK_RIGHT", "Right", empty],
@@ -4501,14 +4548,10 @@
       const [immutable, scanCode, scanCodeStr, keyCode, keyCodeStr, eventKeyCode, vkey, usUserSettingsLabel, generalUserSettingsLabel] = mapping;
       if (!seenScanCode[scanCode]) {
         seenScanCode[scanCode] = true;
-        scanCodeIntToStr[scanCode] = scanCodeStr;
         scanCodeStrToInt[scanCodeStr] = scanCode;
         scanCodeLowerCaseStrToInt[scanCodeStr.toLowerCase()] = scanCode;
         if (immutable) {
           IMMUTABLE_CODE_TO_KEY_CODE[scanCode] = keyCode;
-          if (keyCode !== 0 && keyCode !== 3 && keyCode !== 5 && keyCode !== 4 && keyCode !== 6 && keyCode !== 57) {
-            IMMUTABLE_KEY_CODE_TO_CODE[keyCode] = scanCode;
-          }
         }
       }
       if (!seenKeyCode[keyCode]) {
@@ -4523,14 +4566,7 @@
       if (eventKeyCode) {
         EVENT_KEY_CODE_MAP[eventKeyCode] = keyCode;
       }
-      if (vkey) {
-        NATIVE_WINDOWS_KEY_CODE_TO_KEY_CODE[vkey] = keyCode;
-      }
     }
-    IMMUTABLE_KEY_CODE_TO_CODE[
-      3
-      /* KeyCode.Enter */
-    ] = 46;
   })();
   var KeyCodeUtils;
   (function(KeyCodeUtils2) {
@@ -4567,6 +4603,8 @@
           return "Left";
         case 17:
           return "Right";
+        case 20:
+          return "Delete";
       }
       return uiMap.keyCodeToStr(keyCode);
     }
@@ -4576,62 +4614,6 @@
     const chordPart = (secondPart & 65535) << 16 >>> 0;
     return (firstPart | chordPart) >>> 0;
   }
-
-  // node_modules/monaco-editor/esm/vs/base/common/process.js
-  var safeProcess;
-  var vscodeGlobal = globalThis.vscode;
-  if (typeof vscodeGlobal !== "undefined" && typeof vscodeGlobal.process !== "undefined") {
-    const sandboxProcess = vscodeGlobal.process;
-    safeProcess = {
-      get platform() {
-        return sandboxProcess.platform;
-      },
-      get arch() {
-        return sandboxProcess.arch;
-      },
-      get env() {
-        return sandboxProcess.env;
-      },
-      cwd() {
-        return sandboxProcess.cwd();
-      }
-    };
-  } else if (typeof process !== "undefined" && typeof process?.versions?.node === "string") {
-    safeProcess = {
-      get platform() {
-        return process.platform;
-      },
-      get arch() {
-        return process.arch;
-      },
-      get env() {
-        return process.env;
-      },
-      cwd() {
-        return process.env["VSCODE_CWD"] || process.cwd();
-      }
-    };
-  } else {
-    safeProcess = {
-      // Supported
-      get platform() {
-        return isWindows ? "win32" : isMacintosh ? "darwin" : "linux";
-      },
-      get arch() {
-        return void 0;
-      },
-      // Unsupported
-      get env() {
-        return {};
-      },
-      cwd() {
-        return "/";
-      }
-    };
-  }
-  var cwd = safeProcess.cwd;
-  var env = safeProcess.env;
-  var platform = safeProcess.platform;
 
   // node_modules/monaco-editor/esm/vs/base/common/path.js
   var CHAR_UPPERCASE_A = 65;
@@ -4694,8 +4676,8 @@
         code = CHAR_FORWARD_SLASH;
       }
       if (isPathSeparator2(code)) {
-        if (lastSlash === i - 1 || dots === 1) {
-        } else if (dots === 2) {
+        if (lastSlash === i - 1 || dots === 1) ;
+        else if (dots === 2) {
           if (res.length < 2 || lastSegmentLength !== 2 || res.charCodeAt(res.length - 1) !== CHAR_DOT || res.charCodeAt(res.length - 2) !== CHAR_DOT) {
             if (res.length > 2) {
               const lastSlashIndex = res.lastIndexOf(separator);
@@ -5399,8 +5381,8 @@
     if (platformIsWin32) {
       const regexp = /\\/g;
       return () => {
-        const cwd2 = cwd().replace(regexp, "/");
-        return cwd2.slice(cwd2.indexOf("/"));
+        const cwd$1 = cwd().replace(regexp, "/");
+        return cwd$1.slice(cwd$1.indexOf("/"));
       };
     }
     return () => cwd();
@@ -5720,6 +5702,7 @@
   posix.win32 = win32.win32 = win32;
   posix.posix = win32.posix = posix;
   var normalize = platformIsWin32 ? win32.normalize : posix.normalize;
+  var join = platformIsWin32 ? win32.join : posix.join;
   var resolve = platformIsWin32 ? win32.resolve : posix.resolve;
   var relative = platformIsWin32 ? win32.relative : posix.relative;
   var dirname = platformIsWin32 ? win32.dirname : posix.dirname;
@@ -5736,7 +5719,9 @@
       throw new Error(`[UriError]: Scheme is missing: {scheme: "", authority: "${ret.authority}", path: "${ret.path}", query: "${ret.query}", fragment: "${ret.fragment}"}`);
     }
     if (ret.scheme && !_schemePattern.test(ret.scheme)) {
-      throw new Error("[UriError]: Scheme contains illegal characters.");
+      const matches = [...ret.scheme.matchAll(/[^\w\d+.-]/gu)];
+      const detail = matches.length > 0 ? ` Found '${matches[0][0]}' at index ${matches[0].index} (${matches.length} total)` : "";
+      throw new Error(`[UriError]: Scheme contains illegal characters.${detail} (len:${ret.scheme.length})`);
     }
     if (ret.path) {
       if (ret.authority) {
@@ -5938,7 +5923,7 @@
      */
     static joinPath(uri, ...pathFragment) {
       if (!uri.path) {
-        throw new Error(`[UriError]: cannot call joinPath on URI without path`);
+        throw new Error(`[UriError]: cannot call joinPath on URI without path: ${uri.toString()}`);
       }
       let newPath;
       if (isWindows && uri.scheme === "file") {
@@ -6373,7 +6358,7 @@
      * Test if `obj` is an `ISelection`.
      */
     static isISelection(obj) {
-      return obj && typeof obj.selectionStartLineNumber === "number" && typeof obj.selectionStartColumn === "number" && typeof obj.positionLineNumber === "number" && typeof obj.positionColumn === "number";
+      return !!obj && typeof obj.selectionStartLineNumber === "number" && typeof obj.selectionStartColumn === "number" && typeof obj.positionLineNumber === "number" && typeof obj.positionColumn === "number";
     }
     /**
      * Create with a direction.
@@ -6424,9 +6409,6 @@
     personFollow: register("person-follow", 60007),
     personOutline: register("person-outline", 60007),
     personFilled: register("person-filled", 60007),
-    gitBranch: register("git-branch", 60008),
-    gitBranchCreate: register("git-branch-create", 60008),
-    gitBranchDelete: register("git-branch-delete", 60008),
     sourceControl: register("source-control", 60008),
     mirror: register("mirror", 60009),
     mirrorPublic: register("mirror-public", 60009),
@@ -6475,7 +6457,6 @@
     vm: register("vm", 60026),
     deviceDesktop: register("device-desktop", 60026),
     file: register("file", 60027),
-    fileText: register("file-text", 60027),
     more: register("more", 60028),
     ellipsis: register("ellipsis", 60028),
     kebabHorizontal: register("kebab-horizontal", 60028),
@@ -6657,6 +6638,7 @@
     italic: register("italic", 60173),
     jersey: register("jersey", 60174),
     json: register("json", 60175),
+    bracket: register("bracket", 60175),
     kebabVertical: register("kebab-vertical", 60176),
     key: register("key", 60177),
     law: register("law", 60178),
@@ -6883,7 +6865,6 @@
     graphLine: register("graph-line", 60386),
     graphScatter: register("graph-scatter", 60387),
     pieChart: register("pie-chart", 60388),
-    bracket: register("bracket", 60175),
     bracketDot: register("bracket-dot", 60389),
     bracketError: register("bracket-error", 60390),
     lockSmall: register("lock-small", 60391),
@@ -7005,7 +6986,126 @@
     sendToRemoteAgent: register("send-to-remote-agent", 60499),
     commentDiscussionSparkle: register("comment-discussion-sparkle", 60500),
     chatSparkleWarning: register("chat-sparkle-warning", 60501),
-    chatSparkleError: register("chat-sparkle-error", 60502)
+    chatSparkleError: register("chat-sparkle-error", 60502),
+    collection: register("collection", 60503),
+    newCollection: register("new-collection", 60504),
+    thinking: register("thinking", 60505),
+    build: register("build", 60506),
+    commentDiscussionQuote: register("comment-discussion-quote", 60507),
+    cursor: register("cursor", 60508),
+    eraser: register("eraser", 60509),
+    fileText: register("file-text", 60510),
+    quotes: register("quotes", 60512),
+    rename: register("rename", 60513),
+    runWithDeps: register("run-with-deps", 60514),
+    debugConnected: register("debug-connected", 60515),
+    strikethrough: register("strikethrough", 60516),
+    openInProduct: register("open-in-product", 60517),
+    indexZero: register("index-zero", 60518),
+    agent: register("agent", 60519),
+    editCode: register("edit-code", 60520),
+    repoSelected: register("repo-selected", 60521),
+    skip: register("skip", 60522),
+    mergeInto: register("merge-into", 60523),
+    gitBranchChanges: register("git-branch-changes", 60524),
+    gitBranchStagedChanges: register("git-branch-staged-changes", 60525),
+    gitBranchConflicts: register("git-branch-conflicts", 60526),
+    gitBranch: register("git-branch", 60527),
+    gitBranchCreate: register("git-branch-create", 60527),
+    gitBranchDelete: register("git-branch-delete", 60527),
+    searchLarge: register("search-large", 60528),
+    terminalGitBash: register("terminal-git-bash", 60529),
+    windowActive: register("window-active", 60530),
+    forward: register("forward", 60531),
+    download: register("download", 60532),
+    clockface: register("clockface", 60533),
+    unarchive: register("unarchive", 60534),
+    sessionInProgress: register("session-in-progress", 60535),
+    collectionSmall: register("collection-small", 60536),
+    vmSmall: register("vm-small", 60537),
+    cloudSmall: register("cloud-small", 60538),
+    addSmall: register("add-small", 60539),
+    removeSmall: register("remove-small", 60540),
+    worktreeSmall: register("worktree-small", 60541),
+    worktree: register("worktree", 60542),
+    screenCut: register("screen-cut", 60543),
+    ask: register("ask", 60544),
+    openai: register("openai", 60545),
+    claude: register("claude", 60546),
+    openInWindow: register("open-in-window", 60547),
+    newSession: register("new-session", 60548),
+    terminalSecure: register("terminal-secure", 60549),
+    chatImport: register("chat-import", 60550),
+    chatExport: register("chat-export", 60551),
+    shareWindow: register("share-window", 60552),
+    circleSlashCompact: register("circle-slash-compact", 60553),
+    copilotCompact: register("copilot-compact", 60554),
+    folderOpenedCompact: register("folder-opened-compact", 60555),
+    folderCompact: register("folder-compact", 60556),
+    gearCompact: register("gear-compact", 60557),
+    gitBranchCompact: register("git-branch-compact", 60558),
+    libraryCompact: register("library-compact", 60559),
+    recordKeysCompact: register("record-keys-compact", 60560),
+    remoteCompact: register("remote-compact", 60561),
+    repoForkedCompact: register("repo-forked-compact", 60562),
+    repoCompact: register("repo-compact", 60563),
+    shieldCompact: register("shield-compact", 60564),
+    sparkleCompact: register("sparkle-compact", 60565),
+    symbolColorCompact: register("symbol-color-compact", 60566),
+    windowCompact: register("window-compact", 60567),
+    errorCompact: register("error-compact", 60568),
+    warningCompact: register("warning-compact", 60569),
+    passCompact: register("pass-compact", 60570),
+    important: register("important", 60571),
+    importantCompact: register("important-compact", 60572),
+    rocketCompact: register("rocket-compact", 60573),
+    unpin: register("unpin", 60574),
+    addCompact: register("add-compact", 60575),
+    attachCompact: register("attach-compact", 60576),
+    beakerCompact: register("beaker-compact", 60577),
+    checkCompact: register("check-compact", 60578),
+    checklistCompact: register("checklist-compact", 60579),
+    chevronDownCompact: register("chevron-down-compact", 60580),
+    chevronLeftCompact: register("chevron-left-compact", 60581),
+    chevronRightCompact: register("chevron-right-compact", 60582),
+    chevronUpCompact: register("chevron-up-compact", 60583),
+    circleFilledCompact: register("circle-filled-compact", 60584),
+    circleSmallFilledCompact: register("circle-small-filled-compact", 60585),
+    closeCompact: register("close-compact", 60586),
+    collapseAllCompact: register("collapse-all-compact", 60587),
+    commentCompact: register("comment-compact", 60588),
+    commentUnresolvedCompact: register("comment-unresolved-compact", 60589),
+    debugConnectedCompact: register("debug-connected-compact", 60590),
+    debugDisconnectCompact: register("debug-disconnect-compact", 60591),
+    editCompact: register("edit-compact", 60592),
+    fileMediaCompact: register("file-media-compact", 60593),
+    gitFetch: register("git-fetch", 60594),
+    lightbulbCompact: register("lightbulb-compact", 60595),
+    loadingCompact: register("loading-compact", 60596),
+    passFilledCompact: register("pass-filled-compact", 60597),
+    projectCompact: register("project-compact", 60598),
+    refreshCompact: register("refresh-compact", 60599),
+    searchCompact: register("search-compact", 60600),
+    sessionInProgressCompact: register("session-in-progress-compact", 60601),
+    syncCompact: register("sync-compact", 60602),
+    terminalCompact: register("terminal-compact", 60603),
+    vmPending: register("vm-pending", 60604),
+    worktreeCompact: register("worktree-compact", 60605),
+    developerTools: register("developer-tools", 60606),
+    cloudCompact: register("cloud-compact", 60607),
+    agentCompact: register("agent-compact", 60608),
+    askCompact: register("ask-compact", 60609),
+    settingsCompact: register("settings-compact", 60610),
+    vmCompact: register("vm-compact", 60611),
+    runCompact: register("run-compact", 60612),
+    gitPullRequestComment: register("git-pull-request-comment", 60613),
+    gitPullRequestError: register("git-pull-request-error", 60614),
+    rightPanelHide: register("right-panel-hide", 60615),
+    rightPanelShow: register("right-panel-show", 60616),
+    vscodeInsidersOutline: register("vscode-insiders-outline", 60617),
+    vscodeOutline: register("vscode-outline", 60618),
+    voiceMode: register("voice-mode", 60619),
+    voiceModeCompact: register("voice-mode-compact", 60620)
   };
 
   // node_modules/monaco-editor/esm/vs/base/common/codicons.js
@@ -7038,7 +7138,9 @@
     thumbsUpFilled: register("thumbsup-filled", 60436),
     gitFetch: register("git-fetch", 60445),
     lightbulbSparkleAutofix: register("lightbulb-sparkle-autofix", 60447),
-    debugBreakpointPending: register("debug-breakpoint-pending", 60377)
+    debugBreakpointPending: register("debug-breakpoint-pending", 60377),
+    chatImport: register("chat-import", 60550),
+    chatExport: register("chat-export", 60551)
   };
   var Codicon = {
     ...codiconsLibrary,
@@ -7224,63 +7326,63 @@
     function toLabel(kind) {
       switch (kind) {
         case 0:
-          return localize(721, "Method");
+          return localize(763, "Method");
         case 1:
-          return localize(722, "Function");
+          return localize(764, "Function");
         case 2:
-          return localize(723, "Constructor");
+          return localize(765, "Constructor");
         case 3:
-          return localize(724, "Field");
+          return localize(766, "Field");
         case 4:
-          return localize(725, "Variable");
+          return localize(767, "Variable");
         case 5:
-          return localize(726, "Class");
+          return localize(768, "Class");
         case 6:
-          return localize(727, "Struct");
+          return localize(769, "Struct");
         case 7:
-          return localize(728, "Interface");
+          return localize(770, "Interface");
         case 8:
-          return localize(729, "Module");
+          return localize(771, "Module");
         case 9:
-          return localize(730, "Property");
+          return localize(772, "Property");
         case 10:
-          return localize(731, "Event");
+          return localize(773, "Event");
         case 11:
-          return localize(732, "Operator");
+          return localize(774, "Operator");
         case 12:
-          return localize(733, "Unit");
+          return localize(775, "Unit");
         case 13:
-          return localize(734, "Value");
+          return localize(776, "Value");
         case 14:
-          return localize(735, "Constant");
+          return localize(777, "Constant");
         case 15:
-          return localize(736, "Enum");
+          return localize(778, "Enum");
         case 16:
-          return localize(737, "Enum Member");
+          return localize(779, "Enum Member");
         case 17:
-          return localize(738, "Keyword");
+          return localize(780, "Keyword");
         case 18:
-          return localize(739, "Text");
+          return localize(781, "Text");
         case 19:
-          return localize(740, "Color");
+          return localize(782, "Color");
         case 20:
-          return localize(741, "File");
+          return localize(783, "File");
         case 21:
-          return localize(742, "Reference");
+          return localize(784, "Reference");
         case 22:
-          return localize(743, "Custom Color");
+          return localize(785, "Custom Color");
         case 23:
-          return localize(744, "Folder");
+          return localize(786, "Folder");
         case 24:
-          return localize(745, "Type Parameter");
+          return localize(787, "Type Parameter");
         case 25:
-          return localize(746, "User");
+          return localize(788, "User");
         case 26:
-          return localize(747, "Issue");
+          return localize(789, "Issue");
         case 27:
-          return localize(748, "Tool");
+          return localize(790, "Tool");
         case 28:
-          return localize(749, "Snippet");
+          return localize(791, "Snippet");
         default:
           return "";
       }
@@ -7456,11 +7558,11 @@
     InlineCompletionTriggerKind4[InlineCompletionTriggerKind4["Automatic"] = 0] = "Automatic";
     InlineCompletionTriggerKind4[InlineCompletionTriggerKind4["Explicit"] = 1] = "Explicit";
   })(InlineCompletionTriggerKind || (InlineCompletionTriggerKind = {}));
-  var InlineCompletionDisplayLocationKind;
-  (function(InlineCompletionDisplayLocationKind3) {
-    InlineCompletionDisplayLocationKind3[InlineCompletionDisplayLocationKind3["Code"] = 1] = "Code";
-    InlineCompletionDisplayLocationKind3[InlineCompletionDisplayLocationKind3["Label"] = 2] = "Label";
-  })(InlineCompletionDisplayLocationKind || (InlineCompletionDisplayLocationKind = {}));
+  var InlineCompletionHintStyle;
+  (function(InlineCompletionHintStyle3) {
+    InlineCompletionHintStyle3[InlineCompletionHintStyle3["Code"] = 1] = "Code";
+    InlineCompletionHintStyle3[InlineCompletionHintStyle3["Label"] = 2] = "Label";
+  })(InlineCompletionHintStyle || (InlineCompletionHintStyle = {}));
   var InlineCompletionEndOfLifeReasonKind;
   (function(InlineCompletionEndOfLifeReasonKind3) {
     InlineCompletionEndOfLifeReasonKind3[InlineCompletionEndOfLifeReasonKind3["Accepted"] = 0] = "Accepted";
@@ -7488,107 +7590,107 @@
     [
       17
       /* SymbolKind.Array */
-    ]: localize(750, "array"),
+    ]: localize(792, "array"),
     [
       16
       /* SymbolKind.Boolean */
-    ]: localize(751, "boolean"),
+    ]: localize(793, "boolean"),
     [
       4
       /* SymbolKind.Class */
-    ]: localize(752, "class"),
+    ]: localize(794, "class"),
     [
       13
       /* SymbolKind.Constant */
-    ]: localize(753, "constant"),
+    ]: localize(795, "constant"),
     [
       8
       /* SymbolKind.Constructor */
-    ]: localize(754, "constructor"),
+    ]: localize(796, "constructor"),
     [
       9
       /* SymbolKind.Enum */
-    ]: localize(755, "enumeration"),
+    ]: localize(797, "enumeration"),
     [
       21
       /* SymbolKind.EnumMember */
-    ]: localize(756, "enumeration member"),
+    ]: localize(798, "enumeration member"),
     [
       23
       /* SymbolKind.Event */
-    ]: localize(757, "event"),
+    ]: localize(799, "event"),
     [
       7
       /* SymbolKind.Field */
-    ]: localize(758, "field"),
+    ]: localize(800, "field"),
     [
       0
       /* SymbolKind.File */
-    ]: localize(759, "file"),
+    ]: localize(801, "file"),
     [
       11
       /* SymbolKind.Function */
-    ]: localize(760, "function"),
+    ]: localize(802, "function"),
     [
       10
       /* SymbolKind.Interface */
-    ]: localize(761, "interface"),
+    ]: localize(803, "interface"),
     [
       19
       /* SymbolKind.Key */
-    ]: localize(762, "key"),
+    ]: localize(804, "key"),
     [
       5
       /* SymbolKind.Method */
-    ]: localize(763, "method"),
+    ]: localize(805, "method"),
     [
       1
       /* SymbolKind.Module */
-    ]: localize(764, "module"),
+    ]: localize(806, "module"),
     [
       2
       /* SymbolKind.Namespace */
-    ]: localize(765, "namespace"),
+    ]: localize(807, "namespace"),
     [
       20
       /* SymbolKind.Null */
-    ]: localize(766, "null"),
+    ]: localize(808, "null"),
     [
       15
       /* SymbolKind.Number */
-    ]: localize(767, "number"),
+    ]: localize(809, "number"),
     [
       18
       /* SymbolKind.Object */
-    ]: localize(768, "object"),
+    ]: localize(810, "object"),
     [
       24
       /* SymbolKind.Operator */
-    ]: localize(769, "operator"),
+    ]: localize(811, "operator"),
     [
       3
       /* SymbolKind.Package */
-    ]: localize(770, "package"),
+    ]: localize(812, "package"),
     [
       6
       /* SymbolKind.Property */
-    ]: localize(771, "property"),
+    ]: localize(813, "property"),
     [
       14
       /* SymbolKind.String */
-    ]: localize(772, "string"),
+    ]: localize(814, "string"),
     [
       22
       /* SymbolKind.Struct */
-    ]: localize(773, "struct"),
+    ]: localize(815, "struct"),
     [
       25
       /* SymbolKind.TypeParameter */
-    ]: localize(774, "type parameter"),
+    ]: localize(816, "type parameter"),
     [
       12
       /* SymbolKind.Variable */
-    ]: localize(775, "variable")
+    ]: localize(817, "variable")
   };
   var SymbolKinds;
   (function(SymbolKinds2) {
@@ -8009,91 +8111,93 @@
     EditorOption2[EditorOption2["mouseWheelZoom"] = 84] = "mouseWheelZoom";
     EditorOption2[EditorOption2["multiCursorMergeOverlapping"] = 85] = "multiCursorMergeOverlapping";
     EditorOption2[EditorOption2["multiCursorModifier"] = 86] = "multiCursorModifier";
-    EditorOption2[EditorOption2["multiCursorPaste"] = 87] = "multiCursorPaste";
-    EditorOption2[EditorOption2["multiCursorLimit"] = 88] = "multiCursorLimit";
-    EditorOption2[EditorOption2["occurrencesHighlight"] = 89] = "occurrencesHighlight";
-    EditorOption2[EditorOption2["occurrencesHighlightDelay"] = 90] = "occurrencesHighlightDelay";
-    EditorOption2[EditorOption2["overtypeCursorStyle"] = 91] = "overtypeCursorStyle";
-    EditorOption2[EditorOption2["overtypeOnPaste"] = 92] = "overtypeOnPaste";
-    EditorOption2[EditorOption2["overviewRulerBorder"] = 93] = "overviewRulerBorder";
-    EditorOption2[EditorOption2["overviewRulerLanes"] = 94] = "overviewRulerLanes";
-    EditorOption2[EditorOption2["padding"] = 95] = "padding";
-    EditorOption2[EditorOption2["pasteAs"] = 96] = "pasteAs";
-    EditorOption2[EditorOption2["parameterHints"] = 97] = "parameterHints";
-    EditorOption2[EditorOption2["peekWidgetDefaultFocus"] = 98] = "peekWidgetDefaultFocus";
-    EditorOption2[EditorOption2["placeholder"] = 99] = "placeholder";
-    EditorOption2[EditorOption2["definitionLinkOpensInPeek"] = 100] = "definitionLinkOpensInPeek";
-    EditorOption2[EditorOption2["quickSuggestions"] = 101] = "quickSuggestions";
-    EditorOption2[EditorOption2["quickSuggestionsDelay"] = 102] = "quickSuggestionsDelay";
-    EditorOption2[EditorOption2["readOnly"] = 103] = "readOnly";
-    EditorOption2[EditorOption2["readOnlyMessage"] = 104] = "readOnlyMessage";
-    EditorOption2[EditorOption2["renameOnType"] = 105] = "renameOnType";
-    EditorOption2[EditorOption2["renderRichScreenReaderContent"] = 106] = "renderRichScreenReaderContent";
-    EditorOption2[EditorOption2["renderControlCharacters"] = 107] = "renderControlCharacters";
-    EditorOption2[EditorOption2["renderFinalNewline"] = 108] = "renderFinalNewline";
-    EditorOption2[EditorOption2["renderLineHighlight"] = 109] = "renderLineHighlight";
-    EditorOption2[EditorOption2["renderLineHighlightOnlyWhenFocus"] = 110] = "renderLineHighlightOnlyWhenFocus";
-    EditorOption2[EditorOption2["renderValidationDecorations"] = 111] = "renderValidationDecorations";
-    EditorOption2[EditorOption2["renderWhitespace"] = 112] = "renderWhitespace";
-    EditorOption2[EditorOption2["revealHorizontalRightPadding"] = 113] = "revealHorizontalRightPadding";
-    EditorOption2[EditorOption2["roundedSelection"] = 114] = "roundedSelection";
-    EditorOption2[EditorOption2["rulers"] = 115] = "rulers";
-    EditorOption2[EditorOption2["scrollbar"] = 116] = "scrollbar";
-    EditorOption2[EditorOption2["scrollBeyondLastColumn"] = 117] = "scrollBeyondLastColumn";
-    EditorOption2[EditorOption2["scrollBeyondLastLine"] = 118] = "scrollBeyondLastLine";
-    EditorOption2[EditorOption2["scrollPredominantAxis"] = 119] = "scrollPredominantAxis";
-    EditorOption2[EditorOption2["selectionClipboard"] = 120] = "selectionClipboard";
-    EditorOption2[EditorOption2["selectionHighlight"] = 121] = "selectionHighlight";
-    EditorOption2[EditorOption2["selectionHighlightMaxLength"] = 122] = "selectionHighlightMaxLength";
-    EditorOption2[EditorOption2["selectionHighlightMultiline"] = 123] = "selectionHighlightMultiline";
-    EditorOption2[EditorOption2["selectOnLineNumbers"] = 124] = "selectOnLineNumbers";
-    EditorOption2[EditorOption2["showFoldingControls"] = 125] = "showFoldingControls";
-    EditorOption2[EditorOption2["showUnused"] = 126] = "showUnused";
-    EditorOption2[EditorOption2["snippetSuggestions"] = 127] = "snippetSuggestions";
-    EditorOption2[EditorOption2["smartSelect"] = 128] = "smartSelect";
-    EditorOption2[EditorOption2["smoothScrolling"] = 129] = "smoothScrolling";
-    EditorOption2[EditorOption2["stickyScroll"] = 130] = "stickyScroll";
-    EditorOption2[EditorOption2["stickyTabStops"] = 131] = "stickyTabStops";
-    EditorOption2[EditorOption2["stopRenderingLineAfter"] = 132] = "stopRenderingLineAfter";
-    EditorOption2[EditorOption2["suggest"] = 133] = "suggest";
-    EditorOption2[EditorOption2["suggestFontSize"] = 134] = "suggestFontSize";
-    EditorOption2[EditorOption2["suggestLineHeight"] = 135] = "suggestLineHeight";
-    EditorOption2[EditorOption2["suggestOnTriggerCharacters"] = 136] = "suggestOnTriggerCharacters";
-    EditorOption2[EditorOption2["suggestSelection"] = 137] = "suggestSelection";
-    EditorOption2[EditorOption2["tabCompletion"] = 138] = "tabCompletion";
-    EditorOption2[EditorOption2["tabIndex"] = 139] = "tabIndex";
-    EditorOption2[EditorOption2["trimWhitespaceOnDelete"] = 140] = "trimWhitespaceOnDelete";
-    EditorOption2[EditorOption2["unicodeHighlighting"] = 141] = "unicodeHighlighting";
-    EditorOption2[EditorOption2["unusualLineTerminators"] = 142] = "unusualLineTerminators";
-    EditorOption2[EditorOption2["useShadowDOM"] = 143] = "useShadowDOM";
-    EditorOption2[EditorOption2["useTabStops"] = 144] = "useTabStops";
-    EditorOption2[EditorOption2["wordBreak"] = 145] = "wordBreak";
-    EditorOption2[EditorOption2["wordSegmenterLocales"] = 146] = "wordSegmenterLocales";
-    EditorOption2[EditorOption2["wordSeparators"] = 147] = "wordSeparators";
-    EditorOption2[EditorOption2["wordWrap"] = 148] = "wordWrap";
-    EditorOption2[EditorOption2["wordWrapBreakAfterCharacters"] = 149] = "wordWrapBreakAfterCharacters";
-    EditorOption2[EditorOption2["wordWrapBreakBeforeCharacters"] = 150] = "wordWrapBreakBeforeCharacters";
-    EditorOption2[EditorOption2["wordWrapColumn"] = 151] = "wordWrapColumn";
-    EditorOption2[EditorOption2["wordWrapOverride1"] = 152] = "wordWrapOverride1";
-    EditorOption2[EditorOption2["wordWrapOverride2"] = 153] = "wordWrapOverride2";
-    EditorOption2[EditorOption2["wrappingIndent"] = 154] = "wrappingIndent";
-    EditorOption2[EditorOption2["wrappingStrategy"] = 155] = "wrappingStrategy";
-    EditorOption2[EditorOption2["showDeprecated"] = 156] = "showDeprecated";
-    EditorOption2[EditorOption2["inertialScroll"] = 157] = "inertialScroll";
-    EditorOption2[EditorOption2["inlayHints"] = 158] = "inlayHints";
-    EditorOption2[EditorOption2["wrapOnEscapedLineFeeds"] = 159] = "wrapOnEscapedLineFeeds";
-    EditorOption2[EditorOption2["effectiveCursorStyle"] = 160] = "effectiveCursorStyle";
-    EditorOption2[EditorOption2["editorClassName"] = 161] = "editorClassName";
-    EditorOption2[EditorOption2["pixelRatio"] = 162] = "pixelRatio";
-    EditorOption2[EditorOption2["tabFocusMode"] = 163] = "tabFocusMode";
-    EditorOption2[EditorOption2["layoutInfo"] = 164] = "layoutInfo";
-    EditorOption2[EditorOption2["wrappingInfo"] = 165] = "wrappingInfo";
-    EditorOption2[EditorOption2["defaultColorDecorators"] = 166] = "defaultColorDecorators";
-    EditorOption2[EditorOption2["colorDecoratorsActivatedOn"] = 167] = "colorDecoratorsActivatedOn";
-    EditorOption2[EditorOption2["inlineCompletionsAccessibilityVerbose"] = 168] = "inlineCompletionsAccessibilityVerbose";
-    EditorOption2[EditorOption2["effectiveEditContext"] = 169] = "effectiveEditContext";
-    EditorOption2[EditorOption2["scrollOnMiddleClick"] = 170] = "scrollOnMiddleClick";
-    EditorOption2[EditorOption2["effectiveAllowVariableFonts"] = 171] = "effectiveAllowVariableFonts";
+    EditorOption2[EditorOption2["mouseMiddleClickAction"] = 87] = "mouseMiddleClickAction";
+    EditorOption2[EditorOption2["multiCursorPaste"] = 88] = "multiCursorPaste";
+    EditorOption2[EditorOption2["multiCursorLimit"] = 89] = "multiCursorLimit";
+    EditorOption2[EditorOption2["occurrencesHighlight"] = 90] = "occurrencesHighlight";
+    EditorOption2[EditorOption2["occurrencesHighlightDelay"] = 91] = "occurrencesHighlightDelay";
+    EditorOption2[EditorOption2["overtypeCursorStyle"] = 92] = "overtypeCursorStyle";
+    EditorOption2[EditorOption2["overtypeOnPaste"] = 93] = "overtypeOnPaste";
+    EditorOption2[EditorOption2["overviewRulerBorder"] = 94] = "overviewRulerBorder";
+    EditorOption2[EditorOption2["overviewRulerLanes"] = 95] = "overviewRulerLanes";
+    EditorOption2[EditorOption2["padding"] = 96] = "padding";
+    EditorOption2[EditorOption2["pasteAs"] = 97] = "pasteAs";
+    EditorOption2[EditorOption2["parameterHints"] = 98] = "parameterHints";
+    EditorOption2[EditorOption2["peekWidgetDefaultFocus"] = 99] = "peekWidgetDefaultFocus";
+    EditorOption2[EditorOption2["placeholder"] = 100] = "placeholder";
+    EditorOption2[EditorOption2["definitionLinkOpensInPeek"] = 101] = "definitionLinkOpensInPeek";
+    EditorOption2[EditorOption2["quickSuggestions"] = 102] = "quickSuggestions";
+    EditorOption2[EditorOption2["quickSuggestionsDelay"] = 103] = "quickSuggestionsDelay";
+    EditorOption2[EditorOption2["readOnly"] = 104] = "readOnly";
+    EditorOption2[EditorOption2["readOnlyMessage"] = 105] = "readOnlyMessage";
+    EditorOption2[EditorOption2["renameOnType"] = 106] = "renameOnType";
+    EditorOption2[EditorOption2["renderRichScreenReaderContent"] = 107] = "renderRichScreenReaderContent";
+    EditorOption2[EditorOption2["renderControlCharacters"] = 108] = "renderControlCharacters";
+    EditorOption2[EditorOption2["renderFinalNewline"] = 109] = "renderFinalNewline";
+    EditorOption2[EditorOption2["renderLineHighlight"] = 110] = "renderLineHighlight";
+    EditorOption2[EditorOption2["renderLineHighlightOnlyWhenFocus"] = 111] = "renderLineHighlightOnlyWhenFocus";
+    EditorOption2[EditorOption2["renderValidationDecorations"] = 112] = "renderValidationDecorations";
+    EditorOption2[EditorOption2["renderWhitespace"] = 113] = "renderWhitespace";
+    EditorOption2[EditorOption2["revealHorizontalRightPadding"] = 114] = "revealHorizontalRightPadding";
+    EditorOption2[EditorOption2["roundedSelection"] = 115] = "roundedSelection";
+    EditorOption2[EditorOption2["rulers"] = 116] = "rulers";
+    EditorOption2[EditorOption2["scrollbar"] = 117] = "scrollbar";
+    EditorOption2[EditorOption2["scrollBeyondLastColumn"] = 118] = "scrollBeyondLastColumn";
+    EditorOption2[EditorOption2["scrollBeyondLastLine"] = 119] = "scrollBeyondLastLine";
+    EditorOption2[EditorOption2["scrollPredominantAxis"] = 120] = "scrollPredominantAxis";
+    EditorOption2[EditorOption2["selectionClipboard"] = 121] = "selectionClipboard";
+    EditorOption2[EditorOption2["selectionHighlight"] = 122] = "selectionHighlight";
+    EditorOption2[EditorOption2["selectionHighlightMaxLength"] = 123] = "selectionHighlightMaxLength";
+    EditorOption2[EditorOption2["selectionHighlightMultiline"] = 124] = "selectionHighlightMultiline";
+    EditorOption2[EditorOption2["selectOnLineNumbers"] = 125] = "selectOnLineNumbers";
+    EditorOption2[EditorOption2["showFoldingControls"] = 126] = "showFoldingControls";
+    EditorOption2[EditorOption2["showUnused"] = 127] = "showUnused";
+    EditorOption2[EditorOption2["snippetSuggestions"] = 128] = "snippetSuggestions";
+    EditorOption2[EditorOption2["smartSelect"] = 129] = "smartSelect";
+    EditorOption2[EditorOption2["smoothScrolling"] = 130] = "smoothScrolling";
+    EditorOption2[EditorOption2["stickyScroll"] = 131] = "stickyScroll";
+    EditorOption2[EditorOption2["stickyTabStops"] = 132] = "stickyTabStops";
+    EditorOption2[EditorOption2["stopRenderingLineAfter"] = 133] = "stopRenderingLineAfter";
+    EditorOption2[EditorOption2["suggest"] = 134] = "suggest";
+    EditorOption2[EditorOption2["suggestFontSize"] = 135] = "suggestFontSize";
+    EditorOption2[EditorOption2["suggestLineHeight"] = 136] = "suggestLineHeight";
+    EditorOption2[EditorOption2["suggestOnTriggerCharacters"] = 137] = "suggestOnTriggerCharacters";
+    EditorOption2[EditorOption2["suggestSelection"] = 138] = "suggestSelection";
+    EditorOption2[EditorOption2["tabCompletion"] = 139] = "tabCompletion";
+    EditorOption2[EditorOption2["tabIndex"] = 140] = "tabIndex";
+    EditorOption2[EditorOption2["trimWhitespaceOnDelete"] = 141] = "trimWhitespaceOnDelete";
+    EditorOption2[EditorOption2["unicodeHighlighting"] = 142] = "unicodeHighlighting";
+    EditorOption2[EditorOption2["unusualLineTerminators"] = 143] = "unusualLineTerminators";
+    EditorOption2[EditorOption2["useShadowDOM"] = 144] = "useShadowDOM";
+    EditorOption2[EditorOption2["useTabStops"] = 145] = "useTabStops";
+    EditorOption2[EditorOption2["wordBreak"] = 146] = "wordBreak";
+    EditorOption2[EditorOption2["wordSegmenterLocales"] = 147] = "wordSegmenterLocales";
+    EditorOption2[EditorOption2["wordSeparators"] = 148] = "wordSeparators";
+    EditorOption2[EditorOption2["wordWrap"] = 149] = "wordWrap";
+    EditorOption2[EditorOption2["wordWrapBreakAfterCharacters"] = 150] = "wordWrapBreakAfterCharacters";
+    EditorOption2[EditorOption2["wordWrapBreakBeforeCharacters"] = 151] = "wordWrapBreakBeforeCharacters";
+    EditorOption2[EditorOption2["wordWrapColumn"] = 152] = "wordWrapColumn";
+    EditorOption2[EditorOption2["wordWrapOverride1"] = 153] = "wordWrapOverride1";
+    EditorOption2[EditorOption2["wordWrapOverride2"] = 154] = "wordWrapOverride2";
+    EditorOption2[EditorOption2["wrappingIndent"] = 155] = "wrappingIndent";
+    EditorOption2[EditorOption2["wrappingStrategy"] = 156] = "wrappingStrategy";
+    EditorOption2[EditorOption2["showDeprecated"] = 157] = "showDeprecated";
+    EditorOption2[EditorOption2["inertialScroll"] = 158] = "inertialScroll";
+    EditorOption2[EditorOption2["inlayHints"] = 159] = "inlayHints";
+    EditorOption2[EditorOption2["wrapOnEscapedLineFeeds"] = 160] = "wrapOnEscapedLineFeeds";
+    EditorOption2[EditorOption2["effectiveCursorStyle"] = 161] = "effectiveCursorStyle";
+    EditorOption2[EditorOption2["editorClassName"] = 162] = "editorClassName";
+    EditorOption2[EditorOption2["pixelRatio"] = 163] = "pixelRatio";
+    EditorOption2[EditorOption2["tabFocusMode"] = 164] = "tabFocusMode";
+    EditorOption2[EditorOption2["layoutInfo"] = 165] = "layoutInfo";
+    EditorOption2[EditorOption2["wrappingInfo"] = 166] = "wrappingInfo";
+    EditorOption2[EditorOption2["defaultColorDecorators"] = 167] = "defaultColorDecorators";
+    EditorOption2[EditorOption2["colorDecoratorsActivatedOn"] = 168] = "colorDecoratorsActivatedOn";
+    EditorOption2[EditorOption2["inlineCompletionsAccessibilityVerbose"] = 169] = "inlineCompletionsAccessibilityVerbose";
+    EditorOption2[EditorOption2["effectiveEditContext"] = 170] = "effectiveEditContext";
+    EditorOption2[EditorOption2["scrollOnMiddleClick"] = 171] = "scrollOnMiddleClick";
+    EditorOption2[EditorOption2["effectiveAllowVariableFonts"] = 172] = "effectiveAllowVariableFonts";
+    EditorOption2[EditorOption2["doubleClickSelectsBlock"] = 173] = "doubleClickSelectsBlock";
   })(EditorOption || (EditorOption = {}));
   var EndOfLinePreference;
   (function(EndOfLinePreference2) {
@@ -8136,17 +8240,17 @@
     InlayHintKind4[InlayHintKind4["Type"] = 1] = "Type";
     InlayHintKind4[InlayHintKind4["Parameter"] = 2] = "Parameter";
   })(InlayHintKind2 || (InlayHintKind2 = {}));
-  var InlineCompletionDisplayLocationKind2;
-  (function(InlineCompletionDisplayLocationKind3) {
-    InlineCompletionDisplayLocationKind3[InlineCompletionDisplayLocationKind3["Code"] = 1] = "Code";
-    InlineCompletionDisplayLocationKind3[InlineCompletionDisplayLocationKind3["Label"] = 2] = "Label";
-  })(InlineCompletionDisplayLocationKind2 || (InlineCompletionDisplayLocationKind2 = {}));
   var InlineCompletionEndOfLifeReasonKind2;
   (function(InlineCompletionEndOfLifeReasonKind3) {
     InlineCompletionEndOfLifeReasonKind3[InlineCompletionEndOfLifeReasonKind3["Accepted"] = 0] = "Accepted";
     InlineCompletionEndOfLifeReasonKind3[InlineCompletionEndOfLifeReasonKind3["Rejected"] = 1] = "Rejected";
     InlineCompletionEndOfLifeReasonKind3[InlineCompletionEndOfLifeReasonKind3["Ignored"] = 2] = "Ignored";
   })(InlineCompletionEndOfLifeReasonKind2 || (InlineCompletionEndOfLifeReasonKind2 = {}));
+  var InlineCompletionHintStyle2;
+  (function(InlineCompletionHintStyle3) {
+    InlineCompletionHintStyle3[InlineCompletionHintStyle3["Code"] = 1] = "Code";
+    InlineCompletionHintStyle3[InlineCompletionHintStyle3["Label"] = 2] = "Label";
+  })(InlineCompletionHintStyle2 || (InlineCompletionHintStyle2 = {}));
   var InlineCompletionTriggerKind2;
   (function(InlineCompletionTriggerKind4) {
     InlineCompletionTriggerKind4[InlineCompletionTriggerKind4["Automatic"] = 0] = "Automatic";
@@ -8749,6 +8853,8 @@
         [Symbol.iterator]() {
           return iterator;
         },
+        [Symbol.dispose]() {
+        },
         next() {
           if (map._state !== state) {
             throw new Error(`LinkedMap got modified during iteration.`);
@@ -8772,6 +8878,8 @@
         [Symbol.iterator]() {
           return iterator;
         },
+        [Symbol.dispose]() {
+        },
         next() {
           if (map._state !== state) {
             throw new Error(`LinkedMap got modified during iteration.`);
@@ -8794,6 +8902,8 @@
       const iterator = {
         [Symbol.iterator]() {
           return iterator;
+        },
+        [Symbol.dispose]() {
         },
         next() {
           if (map._state !== state) {
@@ -9347,7 +9457,7 @@
               } else if (highlightReason === 1) {
                 nonBasicAsciiCharacterCount++;
               } else {
-                assertNever(highlightReason);
+                assertNever();
               }
               const MAX_RESULT_LENGTH = 1e3;
               if (ranges.length >= MAX_RESULT_LENGTH) {
@@ -9437,9 +9547,9 @@
       if (wordContext) {
         for (const char of wordContext) {
           const codePoint2 = char.codePointAt(0);
-          const isBasicASCII2 = isBasicASCII(char);
-          hasBasicASCIICharacters = hasBasicASCIICharacters || isBasicASCII2;
-          if (!isBasicASCII2 && !this.ambiguousCharacters.isAmbiguous(codePoint2) && !InvisibleCharacters.isInvisibleCharacter(codePoint2)) {
+          const isBasicASCII$1 = isBasicASCII(char);
+          hasBasicASCIICharacters = hasBasicASCIICharacters || isBasicASCII$1;
+          if (!isBasicASCII$1 && !this.ambiguousCharacters.isAmbiguous(codePoint2) && !InvisibleCharacters.isInvisibleCharacter(codePoint2)) {
             hasNonConfusableNonBasicAsciiCharacter = true;
           }
         }
@@ -9673,6 +9783,9 @@
     equals(other) {
       return this.start === other.start && this.endExclusive === other.endExclusive;
     }
+    containsRange(other) {
+      return this.start <= other.start && other.endExclusive <= this.endExclusive;
+    }
     contains(offset) {
       return this.start <= offset && offset < this.endExclusive;
     }
@@ -9702,6 +9815,10 @@
       const end = Math.min(this.endExclusive, range.endExclusive);
       return Math.max(0, end - start2);
     }
+    /**
+     * `a.intersects(b)` iff there exists a number n so that `a.contains(n)` and `b.contains(n)`.
+     * Warning: If one range is empty, this method returns always false.
+    */
     intersects(other) {
       const start2 = Math.max(this.start, other.start);
       const end = Math.min(this.endExclusive, other.endExclusive);
@@ -9766,6 +9883,12 @@
         throw new BugIndicatingError(`Invalid join: ${this.toString()} and ${range.toString()}`);
       }
       return new _OffsetRange(this.start, range.endExclusive);
+    }
+    withMargin(marginStart, marginEnd) {
+      if (marginEnd === void 0) {
+        marginEnd = marginStart;
+      }
+      return new _OffsetRange(this.start - marginStart, this.endExclusive + marginEnd);
     }
   };
 
@@ -9836,6 +9959,9 @@
   var _LineRange = class _LineRange {
     static ofLength(startLineNumber, length) {
       return new _LineRange(startLineNumber, startLineNumber + length);
+    }
+    static fromRange(range) {
+      return new _LineRange(range.startLineNumber, range.endLineNumber);
     }
     static fromRangeInclusive(range) {
       return new _LineRange(range.startLineNumber, range.endLineNumber + 1);
@@ -10206,24 +10332,41 @@
   };
   _Deps._deps = void 0;
   var Deps = _Deps;
+  function _setPositionOffsetTransformerDependencies(deps) {
+    Deps._deps = deps;
+  }
   var PositionOffsetTransformer = class extends PositionOffsetTransformerBase {
     constructor(text) {
       super();
       this.text = text;
-      this.lineStartOffsetByLineIdx = [];
-      this.lineEndOffsetByLineIdx = [];
-      this.lineStartOffsetByLineIdx.push(0);
-      for (let i = 0; i < text.length; i++) {
-        if (text.charAt(i) === "\n") {
-          this.lineStartOffsetByLineIdx.push(i + 1);
-          if (i > 0 && text.charAt(i - 1) === "\r") {
-            this.lineEndOffsetByLineIdx.push(i - 1);
+    }
+    get lineStartOffsetByLineIdx() {
+      if (!this._lineStartOffsetByLineIdx) {
+        this._computeLineOffsets();
+      }
+      return this._lineStartOffsetByLineIdx;
+    }
+    get lineEndOffsetByLineIdx() {
+      if (!this._lineEndOffsetByLineIdx) {
+        this._computeLineOffsets();
+      }
+      return this._lineEndOffsetByLineIdx;
+    }
+    _computeLineOffsets() {
+      this._lineStartOffsetByLineIdx = [];
+      this._lineEndOffsetByLineIdx = [];
+      this._lineStartOffsetByLineIdx.push(0);
+      for (let i = 0; i < this.text.length; i++) {
+        if (this.text.charAt(i) === "\n") {
+          this._lineStartOffsetByLineIdx.push(i + 1);
+          if (i > 0 && this.text.charAt(i - 1) === "\r") {
+            this._lineEndOffsetByLineIdx.push(i - 1);
           } else {
-            this.lineEndOffsetByLineIdx.push(i);
+            this._lineEndOffsetByLineIdx.push(i);
           }
         }
       }
-      this.lineEndOffsetByLineIdx.push(text.length);
+      this._lineEndOffsetByLineIdx.push(this.text.length);
     }
     getOffset(position) {
       const valPos = this._validatePosition(position);
@@ -10323,8 +10466,187 @@
       super((lineNumber) => lines[lineNumber - 1], lines.length);
     }
   };
+  var StringText = class extends AbstractText {
+    constructor(value) {
+      super();
+      this.value = value;
+      this._t = new PositionOffsetTransformer(this.value);
+    }
+    getValueOfRange(range) {
+      return this._t.getOffsetRange(range).substring(this.value);
+    }
+    get length() {
+      return this._t.textLength;
+    }
+    // Override the getTransformer method to return the cached transformer
+    getTransformer() {
+      return this._t;
+    }
+  };
 
   // node_modules/monaco-editor/esm/vs/editor/common/core/edits/textEdit.js
+  var TextEdit = class _TextEdit {
+    static fromStringEdit(edit, initialState) {
+      const edits = edit.replacements.map((e) => TextReplacement.fromStringReplacement(e, initialState));
+      return new _TextEdit(edits);
+    }
+    static fromParallelReplacementsUnsorted(replacements) {
+      const r = replacements.slice().sort(compareBy((i) => i.range, Range.compareRangesUsingStarts));
+      return new _TextEdit(r);
+    }
+    constructor(replacements) {
+      this.replacements = replacements;
+      assertFn(() => checkAdjacentItems(replacements, (a2, b) => a2.range.getEndPosition().isBeforeOrEqual(b.range.getStartPosition())));
+    }
+    mapPosition(position) {
+      let lineDelta = 0;
+      let curLine = 0;
+      let columnDeltaInCurLine = 0;
+      for (const replacement of this.replacements) {
+        const start2 = replacement.range.getStartPosition();
+        if (position.isBeforeOrEqual(start2)) {
+          break;
+        }
+        const end = replacement.range.getEndPosition();
+        const len = TextLength.ofText(replacement.text);
+        if (position.isBefore(end)) {
+          const startPos = new Position(start2.lineNumber + lineDelta, start2.column + (start2.lineNumber + lineDelta === curLine ? columnDeltaInCurLine : 0));
+          const endPos = len.addToPosition(startPos);
+          return rangeFromPositions(startPos, endPos);
+        }
+        if (start2.lineNumber + lineDelta !== curLine) {
+          columnDeltaInCurLine = 0;
+        }
+        lineDelta += len.lineCount - (replacement.range.endLineNumber - replacement.range.startLineNumber);
+        if (len.lineCount === 0) {
+          if (end.lineNumber !== start2.lineNumber) {
+            columnDeltaInCurLine += len.columnCount - (end.column - 1);
+          } else {
+            columnDeltaInCurLine += len.columnCount - (end.column - start2.column);
+          }
+        } else {
+          columnDeltaInCurLine = len.columnCount;
+        }
+        curLine = end.lineNumber + lineDelta;
+      }
+      return new Position(position.lineNumber + lineDelta, position.column + (position.lineNumber + lineDelta === curLine ? columnDeltaInCurLine : 0));
+    }
+    mapRange(range) {
+      function getStart(p) {
+        return p instanceof Position ? p : p.getStartPosition();
+      }
+      function getEnd(p) {
+        return p instanceof Position ? p : p.getEndPosition();
+      }
+      const start2 = getStart(this.mapPosition(range.getStartPosition()));
+      const end = getEnd(this.mapPosition(range.getEndPosition()));
+      return rangeFromPositions(start2, end);
+    }
+    apply(text) {
+      let result = "";
+      let lastEditEnd = new Position(1, 1);
+      for (const replacement of this.replacements) {
+        const editRange = replacement.range;
+        const editStart = editRange.getStartPosition();
+        const editEnd = editRange.getEndPosition();
+        const r2 = rangeFromPositions(lastEditEnd, editStart);
+        if (!r2.isEmpty()) {
+          result += text.getValueOfRange(r2);
+        }
+        result += replacement.text;
+        lastEditEnd = editEnd;
+      }
+      const r = rangeFromPositions(lastEditEnd, text.endPositionExclusive);
+      if (!r.isEmpty()) {
+        result += text.getValueOfRange(r);
+      }
+      return result;
+    }
+    applyToString(str) {
+      const strText = new StringText(str);
+      return this.apply(strText);
+    }
+    getNewRanges() {
+      const newRanges = [];
+      let previousEditEndLineNumber = 0;
+      let lineOffset = 0;
+      let columnOffset = 0;
+      for (const replacement of this.replacements) {
+        const textLength = TextLength.ofText(replacement.text);
+        const newRangeStart = Position.lift({
+          lineNumber: replacement.range.startLineNumber + lineOffset,
+          column: replacement.range.startColumn + (replacement.range.startLineNumber === previousEditEndLineNumber ? columnOffset : 0)
+        });
+        const newRange = textLength.createRange(newRangeStart);
+        newRanges.push(newRange);
+        lineOffset = newRange.endLineNumber - replacement.range.endLineNumber;
+        columnOffset = newRange.endColumn - replacement.range.endColumn;
+        previousEditEndLineNumber = replacement.range.endLineNumber;
+      }
+      return newRanges;
+    }
+    toReplacement(text) {
+      if (this.replacements.length === 0) {
+        throw new BugIndicatingError();
+      }
+      if (this.replacements.length === 1) {
+        return this.replacements[0];
+      }
+      const startPos = this.replacements[0].range.getStartPosition();
+      const endPos = this.replacements[this.replacements.length - 1].range.getEndPosition();
+      let newText = "";
+      for (let i = 0; i < this.replacements.length; i++) {
+        const curEdit = this.replacements[i];
+        newText += curEdit.text;
+        if (i < this.replacements.length - 1) {
+          const nextEdit = this.replacements[i + 1];
+          const gapRange = Range.fromPositions(curEdit.range.getEndPosition(), nextEdit.range.getStartPosition());
+          const gapText = text.getValueOfRange(gapRange);
+          newText += gapText;
+        }
+      }
+      return new TextReplacement(Range.fromPositions(startPos, endPos), newText);
+    }
+    toString(text) {
+      if (text === void 0) {
+        return this.replacements.map((edit) => edit.toString()).join("\n");
+      }
+      if (typeof text === "string") {
+        return this.toString(new StringText(text));
+      }
+      if (this.replacements.length === 0) {
+        return "";
+      }
+      return this.replacements.map((r) => {
+        const maxLength = 10;
+        const originalText = text.getValueOfRange(r.range);
+        const beforeRange = Range.fromPositions(new Position(Math.max(1, r.range.startLineNumber - 1), 1), r.range.getStartPosition());
+        let beforeText = text.getValueOfRange(beforeRange);
+        if (beforeText.length > maxLength) {
+          beforeText = "..." + beforeText.substring(beforeText.length - maxLength);
+        }
+        const afterRange = Range.fromPositions(r.range.getEndPosition(), new Position(r.range.endLineNumber + 1, 1));
+        let afterText = text.getValueOfRange(afterRange);
+        if (afterText.length > maxLength) {
+          afterText = afterText.substring(0, maxLength) + "...";
+        }
+        let replacedText = originalText;
+        if (replacedText.length > maxLength) {
+          const halfMax = Math.floor(maxLength / 2);
+          replacedText = replacedText.substring(0, halfMax) + "..." + replacedText.substring(replacedText.length - halfMax);
+        }
+        let newText = r.text;
+        if (newText.length > maxLength) {
+          const halfMax = Math.floor(maxLength / 2);
+          newText = newText.substring(0, halfMax) + "..." + newText.substring(newText.length - halfMax);
+        }
+        if (replacedText.length === 0) {
+          return `${beforeText}\u2770${newText}\u2771${afterText}`;
+        }
+        return `${beforeText}\u2770${replacedText}\u21A6${newText}\u2771${afterText}`;
+      }).join("\n");
+    }
+  };
   var TextReplacement = class _TextReplacement {
     static joinReplacements(replacements, initialValue) {
       if (replacements.length === 0) {
@@ -10396,6 +10718,14 @@
       return `(${start2.lineNumber},${start2.column} -> ${end.lineNumber},${end.column}): "${this.text}"`;
     }
   };
+  function rangeFromPositions(start2, end) {
+    if (start2.lineNumber === end.lineNumber && start2.column === Number.MAX_SAFE_INTEGER) {
+      return Range.fromPositions(end, end);
+    } else if (!start2.isBeforeOrEqual(end)) {
+      throw new BugIndicatingError("start must be before end");
+    }
+    return new Range(start2.lineNumber, start2.column, end.lineNumber, end.column);
+  }
 
   // node_modules/monaco-editor/esm/vs/editor/common/diff/rangeMapping.js
   var LineRangeMapping = class _LineRangeMapping {
@@ -11290,13 +11620,10 @@
         const lowerBound = -Math.min(d, seqY.length + d % 2);
         const upperBound = Math.min(d, seqX.length + d % 2);
         for (k = lowerBound; k <= upperBound; k += 2) {
-          let step = 0;
           const maxXofDLineTop = k === upperBound ? -1 : V.get(k + 1);
           const maxXofDLineLeft = k === lowerBound ? -1 : V.get(k - 1) + 1;
-          step++;
           const x = Math.min(Math.max(maxXofDLineTop, maxXofDLineLeft), seqX.length);
           const y = x - k;
-          step++;
           if (x > seqX.length || y > seqY.length) {
             continue;
           }
@@ -12300,37 +12627,15 @@
       const slice1 = new LinesSliceCharSequence(originalLines, rangeMapping.originalRange, considerWhitespaceChanges);
       const slice2 = new LinesSliceCharSequence(modifiedLines, rangeMapping.modifiedRange, considerWhitespaceChanges);
       const diffResult = slice1.length + slice2.length < 500 ? this.dynamicProgrammingDiffing.compute(slice1, slice2, timeout) : this.myersDiffingAlgorithm.compute(slice1, slice2, timeout);
-      const check = false;
       let diffs = diffResult.diffs;
-      if (check) {
-        SequenceDiff.assertSorted(diffs);
-      }
       diffs = optimizeSequenceDiffs(slice1, slice2, diffs);
-      if (check) {
-        SequenceDiff.assertSorted(diffs);
-      }
       diffs = extendDiffsToEntireWordIfAppropriate(slice1, slice2, diffs, (seq, idx) => seq.findWordContaining(idx));
-      if (check) {
-        SequenceDiff.assertSorted(diffs);
-      }
       if (options.extendToSubwords) {
         diffs = extendDiffsToEntireWordIfAppropriate(slice1, slice2, diffs, (seq, idx) => seq.findSubWordContaining(idx), true);
-        if (check) {
-          SequenceDiff.assertSorted(diffs);
-        }
       }
       diffs = removeShortMatches(slice1, slice2, diffs);
-      if (check) {
-        SequenceDiff.assertSorted(diffs);
-      }
       diffs = removeVeryShortMatchingTextBetweenLongDiffs(slice1, slice2, diffs);
-      if (check) {
-        SequenceDiff.assertSorted(diffs);
-      }
       const result = diffs.map((d) => new RangeMapping(slice1.translateRange(d.seq1Range), slice2.translateRange(d.seq2Range)));
-      if (check) {
-        RangeMapping.assertSorted(result);
-      }
       return {
         mappings: result,
         hitTimeout: diffResult.hitTimeout
@@ -12341,10 +12646,606 @@
     return new LineRangeMapping(new LineRange(sequenceDiff.seq1Range.start + 1, sequenceDiff.seq1Range.endExclusive + 1), new LineRange(sequenceDiff.seq2Range.start + 1, sequenceDiff.seq2Range.endExclusive + 1));
   }
 
+  // node_modules/monaco-editor/esm/vs/base/common/network.js
+  var Schemas;
+  (function(Schemas2) {
+    Schemas2.inMemory = "inmemory";
+    Schemas2.vscode = "vscode";
+    Schemas2.internal = "private";
+    Schemas2.walkThrough = "walkThrough";
+    Schemas2.walkThroughSnippet = "walkThroughSnippet";
+    Schemas2.http = "http";
+    Schemas2.https = "https";
+    Schemas2.file = "file";
+    Schemas2.mailto = "mailto";
+    Schemas2.untitled = "untitled";
+    Schemas2.data = "data";
+    Schemas2.command = "command";
+    Schemas2.vscodeRemote = "vscode-remote";
+    Schemas2.vscodeRemoteResource = "vscode-remote-resource";
+    Schemas2.vscodeManagedRemoteResource = "vscode-managed-remote-resource";
+    Schemas2.vscodeUserData = "vscode-userdata";
+    Schemas2.vscodeCustomEditor = "vscode-custom-editor";
+    Schemas2.vscodeNotebookCell = "vscode-notebook-cell";
+    Schemas2.vscodeNotebookCellMetadata = "vscode-notebook-cell-metadata";
+    Schemas2.vscodeNotebookCellMetadataDiff = "vscode-notebook-cell-metadata-diff";
+    Schemas2.vscodeNotebookCellOutput = "vscode-notebook-cell-output";
+    Schemas2.vscodeNotebookCellOutputDiff = "vscode-notebook-cell-output-diff";
+    Schemas2.vscodeNotebookMetadata = "vscode-notebook-metadata";
+    Schemas2.vscodeInteractiveInput = "vscode-interactive-input";
+    Schemas2.vscodeSettings = "vscode-settings";
+    Schemas2.vscodeWorkspaceTrust = "vscode-workspace-trust";
+    Schemas2.vscodeTerminal = "vscode-terminal";
+    Schemas2.vscodeImageCarousel = "vscode-image-carousel";
+    Schemas2.vscodeChatCodeBlock = "vscode-chat-code-block";
+    Schemas2.vscodeChatCodeCompareBlock = "vscode-chat-code-compare-block";
+    Schemas2.vscodeChatEditor = "vscode-chat-editor";
+    Schemas2.vscodeChatInput = "chatSessionInput";
+    Schemas2.vscodeLocalChatSession = "vscode-chat-session";
+    Schemas2.webviewPanel = "webview-panel";
+    Schemas2.vscodeWebview = "vscode-webview";
+    Schemas2.vscodeBrowser = "vscode-browser";
+    Schemas2.extension = "extension";
+    Schemas2.vscodeFileResource = "vscode-file";
+    Schemas2.tmp = "tmp";
+    Schemas2.vsls = "vsls";
+    Schemas2.vscodeSourceControl = "vscode-scm";
+    Schemas2.commentsInput = "comment";
+    Schemas2.codeSetting = "code-setting";
+    Schemas2.outputChannel = "output";
+    Schemas2.accessibleView = "accessible-view";
+    Schemas2.chatEditingSnapshotScheme = "chat-editing-snapshot-text-model";
+    Schemas2.chatEditingModel = "chat-editing-text-model";
+    Schemas2.copilotPr = "copilot-pr";
+  })(Schemas || (Schemas = {}));
+  var connectionTokenQueryName = "tkn";
+  var RemoteAuthoritiesImpl = class {
+    constructor() {
+      this._hosts = /* @__PURE__ */ Object.create(null);
+      this._ports = /* @__PURE__ */ Object.create(null);
+      this._connectionTokens = /* @__PURE__ */ Object.create(null);
+      this._preferredWebSchema = "http";
+      this._delegate = null;
+      this._serverRootPath = "/";
+    }
+    setPreferredWebSchema(schema) {
+      this._preferredWebSchema = schema;
+    }
+    get _remoteResourcesPath() {
+      return posix.join(this._serverRootPath, Schemas.vscodeRemoteResource);
+    }
+    rewrite(uri) {
+      if (this._delegate) {
+        try {
+          return this._delegate(uri);
+        } catch (err) {
+          onUnexpectedExternalError(err);
+          return uri;
+        }
+      }
+      const authority = uri.authority;
+      let host = this._hosts[authority];
+      if (host && host.indexOf(":") !== -1 && host.indexOf("[") === -1) {
+        host = `[${host}]`;
+      }
+      const port = this._ports[authority];
+      const connectionToken = this._connectionTokens[authority];
+      let query = `path=${encodeURIComponent(uri.path)}`;
+      if (typeof connectionToken === "string") {
+        query += `&${connectionTokenQueryName}=${encodeURIComponent(connectionToken)}`;
+      }
+      return URI.from({
+        scheme: isWeb ? this._preferredWebSchema : Schemas.vscodeRemoteResource,
+        authority: `${host}:${port}`,
+        path: this._remoteResourcesPath,
+        query
+      });
+    }
+  };
+  var RemoteAuthorities = new RemoteAuthoritiesImpl();
+  var nodeModulesPath = "vs/../../node_modules";
+  var VSCODE_AUTHORITY = "vscode-app";
+  var _FileAccessImpl = class _FileAccessImpl {
+    /**
+     * Returns a URI to use in contexts where the browser is responsible
+     * for loading (e.g. fetch()) or when used within the DOM.
+     *
+     * **Note:** use `dom.ts#asCSSUrl` whenever the URL is to be used in CSS context.
+     */
+    asBrowserUri(resourcePath) {
+      const uri = this.toUri(resourcePath);
+      return this.uriToBrowserUri(uri);
+    }
+    /**
+     * Returns a URI to use in contexts where the browser is responsible
+     * for loading (e.g. fetch()) or when used within the DOM.
+     *
+     * **Note:** use `dom.ts#asCSSUrl` whenever the URL is to be used in CSS context.
+     */
+    uriToBrowserUri(uri) {
+      if (uri.scheme === Schemas.vscodeRemote) {
+        return RemoteAuthorities.rewrite(uri);
+      }
+      if (
+        // ...only ever for `file` resources
+        uri.scheme === Schemas.file && // ...and we run in native environments
+        (isNative || // ...or web worker extensions on desktop
+        webWorkerOrigin === `${Schemas.vscodeFileResource}://${_FileAccessImpl.FALLBACK_AUTHORITY}`)
+      ) {
+        return uri.with({
+          scheme: Schemas.vscodeFileResource,
+          // We need to provide an authority here so that it can serve
+          // as origin for network and loading matters in chromium.
+          // If the URI is not coming with an authority already, we
+          // add our own
+          authority: uri.authority || _FileAccessImpl.FALLBACK_AUTHORITY,
+          query: null,
+          fragment: null
+        });
+      }
+      return uri;
+    }
+    toUri(uriOrModule) {
+      if (URI.isUri(uriOrModule)) {
+        return uriOrModule;
+      }
+      if (globalThis._VSCODE_FILE_ROOT) {
+        const rootUriOrPath = globalThis._VSCODE_FILE_ROOT;
+        if (/^\w[\w\d+.-]*:\/\//.test(rootUriOrPath)) {
+          return URI.joinPath(URI.parse(rootUriOrPath, true), uriOrModule);
+        }
+        const modulePath = join(rootUriOrPath, uriOrModule);
+        return URI.file(modulePath);
+      }
+      throw new Error("Cannot determine URI for module id!");
+    }
+  };
+  _FileAccessImpl.FALLBACK_AUTHORITY = VSCODE_AUTHORITY;
+  var FileAccessImpl = _FileAccessImpl;
+  var FileAccess = new FileAccessImpl();
+  var COI;
+  (function(COI2) {
+    const coiHeaders = /* @__PURE__ */ new Map([
+      ["1", { "Cross-Origin-Opener-Policy": "same-origin" }],
+      ["2", { "Cross-Origin-Embedder-Policy": "require-corp" }],
+      ["3", { "Cross-Origin-Opener-Policy": "same-origin", "Cross-Origin-Embedder-Policy": "require-corp" }]
+    ]);
+    COI2.CoopAndCoep = Object.freeze(coiHeaders.get("3"));
+    const coiSearchParamName = "vscode-coi";
+    function getHeadersFromQuery(url) {
+      let params;
+      if (typeof url === "string") {
+        params = new URL(url).searchParams;
+      } else if (url instanceof URL) {
+        params = url.searchParams;
+      } else if (URI.isUri(url)) {
+        params = new URL(url.toString(true)).searchParams;
+      }
+      const value = params?.get(coiSearchParamName);
+      if (!value) {
+        return void 0;
+      }
+      return coiHeaders.get(value);
+    }
+    COI2.getHeadersFromQuery = getHeadersFromQuery;
+    function addSearchParam(urlOrSearch, coop, coep) {
+      if (!globalThis.crossOriginIsolated) {
+        return;
+      }
+      const value = coop && coep ? "3" : coep ? "2" : "1";
+      if (urlOrSearch instanceof URLSearchParams) {
+        urlOrSearch.set(coiSearchParamName, value);
+      } else {
+        urlOrSearch[coiSearchParamName] = value;
+      }
+    }
+    COI2.addSearchParam = addSearchParam;
+  })(COI || (COI = {}));
+
+  // node_modules/monaco-editor/esm/vs/amdX.js
+  function resolveAmdNodeModulePath(nodeModuleName, pathInsideNodeModule) {
+    const product = globalThis._VSCODE_PRODUCT_JSON;
+    Boolean((product ?? globalThis.vscode?.context?.configuration()?.product)?.commit);
+    const nodeModulePath = `${nodeModuleName}/${pathInsideNodeModule}`;
+    const actualNodeModulesPath = nodeModulesPath;
+    const resourcePath = `${actualNodeModulesPath}/${nodeModulePath}`;
+    return FileAccess.asBrowserUri(resourcePath).toString(true);
+  }
+
+  // node_modules/monaco-editor/esm/vs/editor/common/core/edits/edit.js
+  var BaseEdit = class {
+    constructor(replacements) {
+      this.replacements = replacements;
+      let lastEndEx = -1;
+      for (const replacement of replacements) {
+        if (!(replacement.replaceRange.start >= lastEndEx)) {
+          throw new BugIndicatingError(`Edits must be disjoint and sorted. Found ${replacement} after ${lastEndEx}`);
+        }
+        lastEndEx = replacement.replaceRange.endExclusive;
+      }
+    }
+    toString() {
+      const edits = this.replacements.map((e) => e.toString()).join(", ");
+      return `[${edits}]`;
+    }
+    /**
+     * Normalizes the edit by removing empty replacements and joining touching replacements (if the replacements allow joining).
+     * Two edits have an equal normalized edit if and only if they have the same effect on any input.
+     *
+     * ![](https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/src/vs/editor/common/core/edits/docs/BaseEdit_normalize.drawio.png)
+     *
+     * Invariant:
+     * ```
+     * (forall base: TEdit.apply(base).equals(other.apply(base))) <-> this.normalize().equals(other.normalize())
+     * ```
+     * and
+     * ```
+     * forall base: TEdit.apply(base).equals(this.normalize().apply(base))
+     * ```
+     *
+     */
+    normalize() {
+      const newReplacements = [];
+      let lastReplacement;
+      for (const r of this.replacements) {
+        if (r.getNewLength() === 0 && r.replaceRange.length === 0) {
+          continue;
+        }
+        if (lastReplacement && lastReplacement.replaceRange.endExclusive === r.replaceRange.start) {
+          const joined = lastReplacement.tryJoinTouching(r);
+          if (joined) {
+            lastReplacement = joined;
+            continue;
+          }
+        }
+        if (lastReplacement) {
+          newReplacements.push(lastReplacement);
+        }
+        lastReplacement = r;
+      }
+      if (lastReplacement) {
+        newReplacements.push(lastReplacement);
+      }
+      return this._createNew(newReplacements);
+    }
+    /**
+     * Combines two edits into one with the same effect.
+     *
+     * ![](https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/src/vs/editor/common/core/edits/docs/BaseEdit_compose.drawio.png)
+     *
+     * Invariant:
+     * ```
+     * other.apply(this.apply(s0)) = this.compose(other).apply(s0)
+     * ```
+     */
+    compose(other) {
+      const edits1 = this.normalize();
+      const edits2 = other.normalize();
+      if (edits1.isEmpty()) {
+        return edits2;
+      }
+      if (edits2.isEmpty()) {
+        return edits1;
+      }
+      const edit1Queue = [...edits1.replacements];
+      const result = [];
+      let edit1ToEdit2 = 0;
+      for (const r2 of edits2.replacements) {
+        while (true) {
+          const r1 = edit1Queue[0];
+          if (!r1 || r1.replaceRange.start + edit1ToEdit2 + r1.getNewLength() >= r2.replaceRange.start) {
+            break;
+          }
+          edit1Queue.shift();
+          result.push(r1);
+          edit1ToEdit2 += r1.getNewLength() - r1.replaceRange.length;
+        }
+        const firstEdit1ToEdit2 = edit1ToEdit2;
+        let firstIntersecting;
+        let lastIntersecting;
+        while (true) {
+          const r1 = edit1Queue[0];
+          if (!r1 || r1.replaceRange.start + edit1ToEdit2 > r2.replaceRange.endExclusive) {
+            break;
+          }
+          if (!firstIntersecting) {
+            firstIntersecting = r1;
+          }
+          lastIntersecting = r1;
+          edit1Queue.shift();
+          edit1ToEdit2 += r1.getNewLength() - r1.replaceRange.length;
+        }
+        if (!firstIntersecting) {
+          result.push(r2.delta(-edit1ToEdit2));
+        } else {
+          const newReplaceRangeStart = Math.min(firstIntersecting.replaceRange.start, r2.replaceRange.start - firstEdit1ToEdit2);
+          const prefixLength = r2.replaceRange.start - (firstIntersecting.replaceRange.start + firstEdit1ToEdit2);
+          if (prefixLength > 0) {
+            const prefix = firstIntersecting.slice(OffsetRange.emptyAt(newReplaceRangeStart), new OffsetRange(0, prefixLength));
+            result.push(prefix);
+          }
+          if (!lastIntersecting) {
+            throw new BugIndicatingError(`Invariant violation: lastIntersecting is undefined`);
+          }
+          const suffixLength = lastIntersecting.replaceRange.endExclusive + edit1ToEdit2 - r2.replaceRange.endExclusive;
+          if (suffixLength > 0) {
+            const e = lastIntersecting.slice(OffsetRange.ofStartAndLength(lastIntersecting.replaceRange.endExclusive, 0), new OffsetRange(lastIntersecting.getNewLength() - suffixLength, lastIntersecting.getNewLength()));
+            edit1Queue.unshift(e);
+            edit1ToEdit2 -= e.getNewLength() - e.replaceRange.length;
+          }
+          const newReplaceRange = new OffsetRange(newReplaceRangeStart, r2.replaceRange.endExclusive - edit1ToEdit2);
+          const middle = r2.slice(newReplaceRange, new OffsetRange(0, r2.getNewLength()));
+          result.push(middle);
+        }
+      }
+      while (true) {
+        const item = edit1Queue.shift();
+        if (!item) {
+          break;
+        }
+        result.push(item);
+      }
+      return this._createNew(result).normalize();
+    }
+    /**
+     * Returns the range of each replacement in the applied value.
+    */
+    getNewRanges() {
+      const ranges = [];
+      let offset = 0;
+      for (const e of this.replacements) {
+        ranges.push(OffsetRange.ofStartAndLength(e.replaceRange.start + offset, e.getNewLength()));
+        offset += e.getLengthDelta();
+      }
+      return ranges;
+    }
+    isEmpty() {
+      return this.replacements.length === 0;
+    }
+    /**
+     * Return undefined if the originalOffset is within an edit
+     */
+    applyToOffsetOrUndefined(originalOffset) {
+      let accumulatedDelta = 0;
+      for (const edit of this.replacements) {
+        if (edit.replaceRange.start <= originalOffset) {
+          if (originalOffset < edit.replaceRange.endExclusive) {
+            return void 0;
+          }
+          accumulatedDelta += edit.getNewLength() - edit.replaceRange.length;
+        } else {
+          break;
+        }
+      }
+      return originalOffset + accumulatedDelta;
+    }
+  };
+  var BaseReplacement = class {
+    constructor(replaceRange) {
+      this.replaceRange = replaceRange;
+    }
+    delta(offset) {
+      return this.slice(this.replaceRange.delta(offset), new OffsetRange(0, this.getNewLength()));
+    }
+    getLengthDelta() {
+      return this.getNewLength() - this.replaceRange.length;
+    }
+    toString() {
+      return `{ ${this.replaceRange.toString()} -> ${this.getNewLength()} }`;
+    }
+    get isEmpty() {
+      return this.getNewLength() === 0 && this.replaceRange.length === 0;
+    }
+    getRangeAfterReplace() {
+      return new OffsetRange(this.replaceRange.start, this.replaceRange.start + this.getNewLength());
+    }
+  };
+
+  // node_modules/monaco-editor/esm/vs/editor/common/core/edits/stringEdit.js
+  var BaseStringEdit = class extends BaseEdit {
+    apply(base) {
+      const resultText = [];
+      let pos = 0;
+      for (const edit of this.replacements) {
+        resultText.push(base.substring(pos, edit.replaceRange.start));
+        resultText.push(edit.newText);
+        pos = edit.replaceRange.endExclusive;
+      }
+      resultText.push(base.substring(pos));
+      return resultText.join("");
+    }
+    removeCommonSuffixPrefix(originalText) {
+      const edits = [];
+      for (const e of this.replacements) {
+        const edit = e.removeCommonSuffixPrefix(originalText);
+        if (!edit.isEmpty) {
+          edits.push(edit);
+        }
+      }
+      return new StringEdit(edits);
+    }
+  };
+  var BaseStringReplacement = class extends BaseReplacement {
+    constructor(range, newText) {
+      super(range);
+      this.newText = newText;
+    }
+    getNewLength() {
+      return this.newText.length;
+    }
+    toString() {
+      return `${this.replaceRange} -> ${JSON.stringify(this.newText)}`;
+    }
+    replace(str) {
+      return str.substring(0, this.replaceRange.start) + this.newText + str.substring(this.replaceRange.endExclusive);
+    }
+    removeCommonSuffixPrefix(originalText) {
+      const oldText = originalText.substring(this.replaceRange.start, this.replaceRange.endExclusive);
+      const prefixLen = commonPrefixLength(oldText, this.newText);
+      const suffixLen = Math.min(oldText.length - prefixLen, this.newText.length - prefixLen, commonSuffixLength(oldText, this.newText));
+      const replaceRange = new OffsetRange(this.replaceRange.start + prefixLen, this.replaceRange.endExclusive - suffixLen);
+      const newText = this.newText.substring(prefixLen, this.newText.length - suffixLen);
+      return new StringReplacement(replaceRange, newText);
+    }
+    removeCommonSuffixAndPrefix(source) {
+      return this.removeCommonSuffix(source).removeCommonPrefix(source);
+    }
+    removeCommonPrefix(source) {
+      const oldText = this.replaceRange.substring(source);
+      const prefixLen = commonPrefixLength(oldText, this.newText);
+      if (prefixLen === 0) {
+        return this;
+      }
+      return this.slice(this.replaceRange.deltaStart(prefixLen), new OffsetRange(prefixLen, this.newText.length));
+    }
+    removeCommonSuffix(source) {
+      const oldText = this.replaceRange.substring(source);
+      const suffixLen = commonSuffixLength(oldText, this.newText);
+      if (suffixLen === 0) {
+        return this;
+      }
+      return this.slice(this.replaceRange.deltaEnd(-suffixLen), new OffsetRange(0, this.newText.length - suffixLen));
+    }
+    toJson() {
+      return {
+        txt: this.newText,
+        pos: this.replaceRange.start,
+        len: this.replaceRange.length
+      };
+    }
+  };
+  var _StringEdit = class _StringEdit extends BaseStringEdit {
+    static replace(range, replacement) {
+      return new _StringEdit([new StringReplacement(range, replacement)]);
+    }
+    static compose(edits) {
+      if (edits.length === 0) {
+        return _StringEdit.empty;
+      }
+      let result = edits[0];
+      for (let i = 1; i < edits.length; i++) {
+        result = result.compose(edits[i]);
+      }
+      return result;
+    }
+    constructor(replacements) {
+      super(replacements);
+    }
+    _createNew(replacements) {
+      return new _StringEdit(replacements);
+    }
+  };
+  _StringEdit.empty = new _StringEdit([]);
+  var StringEdit = _StringEdit;
+  var StringReplacement = class _StringReplacement extends BaseStringReplacement {
+    static insert(offset, text) {
+      return new _StringReplacement(OffsetRange.emptyAt(offset), text);
+    }
+    static replace(range, text) {
+      return new _StringReplacement(range, text);
+    }
+    equals(other) {
+      return this.replaceRange.equals(other.replaceRange) && this.newText === other.newText;
+    }
+    tryJoinTouching(other) {
+      return new _StringReplacement(this.replaceRange.joinRightTouching(other.replaceRange), this.newText + other.newText);
+    }
+    slice(range, rangeInReplacement) {
+      return new _StringReplacement(range, rangeInReplacement ? rangeInReplacement.substring(this.newText) : this.newText);
+    }
+  };
+
+  // node_modules/monaco-editor/esm/vs/editor/common/core/text/positionToOffset.js
+  _setPositionOffsetTransformerDependencies({
+    StringEdit,
+    StringReplacement,
+    TextReplacement,
+    TextEdit,
+    TextLength
+  });
+
+  // node_modules/monaco-editor/esm/vs/editor/common/diff/externalLinesDiffComputer.js
+  var externalModulePromise;
+  var externalDiffComputerPromise;
+  var externalWasmDiffComputerPromise;
+  function loadExternalModule() {
+    if (!externalModulePromise) {
+      const url = resolveAmdNodeModulePath("@vscode/diff", "dist/index.js");
+      externalModulePromise = import(
+        /* webpackIgnore: true */
+        /* @vite-ignore */
+        `${url}`
+      );
+    }
+    return externalModulePromise;
+  }
+  function loadExternalComputer(useWasm) {
+    if (useWasm) {
+      if (!externalWasmDiffComputerPromise) {
+        externalWasmDiffComputerPromise = loadExternalModule().then((m) => m.createDiffComputer({ useWasm: true }));
+      }
+      return externalWasmDiffComputerPromise;
+    }
+    if (!externalDiffComputerPromise) {
+      externalDiffComputerPromise = loadExternalModule().then((m) => m.createDiffComputer({ useWasm: false }));
+    }
+    return externalDiffComputerPromise;
+  }
+  async function getExternalLinesDiffComputer(useWasm) {
+    const computer = await loadExternalComputer(useWasm);
+    return new ExternalLinesDiffComputer(computer);
+  }
+  var ExternalLinesDiffComputer = class {
+    constructor(_computer) {
+      this._computer = _computer;
+    }
+    computeDiff(originalLines, modifiedLines, options) {
+      const originalText = new StringText(originalLines.join("\n"));
+      const modifiedText = new StringText(modifiedLines.join("\n"));
+      const result = this._computer.computeDiff(originalText.value, modifiedText.value, {
+        // TODO: this currently throws
+        ignoreTrimWhitespace: true,
+        // ignoreTrimWhitespace: options.ignoreTrimWhitespace,
+        // TODO: support this. Currently throws with "Time is not implemented in this environment."
+        // maxComputationTimeMs: options.maxComputationTimeMs,
+        computeMoves: options.computeMoves,
+        extendToSubwords: options.extendToSubwords
+      });
+      const originalTransformer = originalText.getTransformer();
+      const modifiedTransformer = modifiedText.getTransformer();
+      const rangeMappings = [];
+      let delta = 0;
+      for (const r of result.edits.replacements) {
+        const modifiedStart = r.range.start + delta;
+        const modifiedEndExclusive = modifiedStart + r.newText.length;
+        const originalRange = originalTransformer.getRange(new OffsetRange(r.range.start, r.range.endExclusive));
+        const modifiedRange = modifiedTransformer.getRange(new OffsetRange(modifiedStart, modifiedEndExclusive));
+        rangeMappings.push(new RangeMapping(originalRange, modifiedRange));
+        delta += r.newText.length - (r.range.endExclusive - r.range.start);
+      }
+      const changes = lineRangeMappingFromRangeMappings(rangeMappings, originalText, modifiedText);
+      const moves = [];
+      if (options.computeMoves) {
+        for (const move of result.moves) {
+          const originalStartPos = originalTransformer.getPosition(move.range.original.start);
+          const originalEndPos = originalTransformer.getPosition(move.range.original.endExclusive);
+          const modifiedStartPos = modifiedTransformer.getPosition(move.range.modified.start);
+          const modifiedEndPos = modifiedTransformer.getPosition(move.range.modified.endExclusive);
+          const originalLineRange = new LineRange(originalStartPos.lineNumber, originalEndPos.lineNumber);
+          const modifiedLineRange = new LineRange(modifiedStartPos.lineNumber, modifiedEndPos.lineNumber);
+          moves.push(new MovedText(new LineRangeMapping(originalLineRange, modifiedLineRange), []));
+        }
+      }
+      return new LinesDiff(changes, moves, result.hitTimeout);
+    }
+  };
+
   // node_modules/monaco-editor/esm/vs/editor/common/diff/linesDiffComputers.js
   var linesDiffComputers = {
     getLegacy: () => new LegacyLinesDiffComputer(),
-    getDefault: () => new DefaultLinesDiffComputer()
+    getDefault: () => new DefaultLinesDiffComputer(),
+    getAdvancedExternal: () => getExternalLinesDiffComputer(false),
+    getAdvancedWasm: () => getExternalLinesDiffComputer(true)
   };
 
   // node_modules/monaco-editor/esm/vs/base/common/color.js
@@ -12676,32 +13577,30 @@
   _Color.transparent = new _Color(new RGBA(0, 0, 0, 0));
   var Color = _Color;
   (function(Color3) {
-    let Format;
-    (function(Format2) {
-      let CSS;
-      (function(CSS2) {
+    (function(Format) {
+      (function(CSS) {
         function formatRGB(color) {
           if (color.rgba.a === 1) {
             return `rgb(${color.rgba.r}, ${color.rgba.g}, ${color.rgba.b})`;
           }
           return Color3.Format.CSS.formatRGBA(color);
         }
-        CSS2.formatRGB = formatRGB;
+        CSS.formatRGB = formatRGB;
         function formatRGBA(color) {
           return `rgba(${color.rgba.r}, ${color.rgba.g}, ${color.rgba.b}, ${+color.rgba.a.toFixed(2)})`;
         }
-        CSS2.formatRGBA = formatRGBA;
+        CSS.formatRGBA = formatRGBA;
         function formatHSL(color) {
           if (color.hsla.a === 1) {
             return `hsl(${color.hsla.h}, ${Math.round(color.hsla.s * 100)}%, ${Math.round(color.hsla.l * 100)}%)`;
           }
           return Color3.Format.CSS.formatHSLA(color);
         }
-        CSS2.formatHSL = formatHSL;
+        CSS.formatHSL = formatHSL;
         function formatHSLA(color) {
           return `hsla(${color.hsla.h}, ${Math.round(color.hsla.s * 100)}%, ${Math.round(color.hsla.l * 100)}%, ${color.hsla.a.toFixed(2)})`;
         }
-        CSS2.formatHSLA = formatHSLA;
+        CSS.formatHSLA = formatHSLA;
         function _toTwoDigitHex(n) {
           const r = n.toString(16);
           return r.length !== 2 ? "0" + r : r;
@@ -12709,21 +13608,21 @@
         function formatHex(color) {
           return `#${_toTwoDigitHex(color.rgba.r)}${_toTwoDigitHex(color.rgba.g)}${_toTwoDigitHex(color.rgba.b)}`;
         }
-        CSS2.formatHex = formatHex;
+        CSS.formatHex = formatHex;
         function formatHexA(color, compact = false) {
           if (compact && color.rgba.a === 1) {
             return Color3.Format.CSS.formatHex(color);
           }
           return `#${_toTwoDigitHex(color.rgba.r)}${_toTwoDigitHex(color.rgba.g)}${_toTwoDigitHex(color.rgba.b)}${_toTwoDigitHex(Math.round(color.rgba.a * 255))}`;
         }
-        CSS2.formatHexA = formatHexA;
+        CSS.formatHexA = formatHexA;
         function format5(color) {
           if (color.isOpaque()) {
             return Color3.Format.CSS.formatHex(color);
           }
           return Color3.Format.CSS.formatRGBA(color);
         }
-        CSS2.format = format5;
+        CSS.format = format5;
         function parse4(css) {
           if (css === "transparent") {
             return Color3.transparent;
@@ -12754,7 +13653,7 @@
           }
           return parseNamedKeyword(css);
         }
-        CSS2.parse = parse4;
+        CSS.parse = parse4;
         function parseNamedKeyword(css) {
           switch (css) {
             case "aliceblue":
@@ -13093,7 +13992,7 @@
           }
           return null;
         }
-        CSS2.parseHex = parseHex;
+        CSS.parseHex = parseHex;
         function _parseHexDigit(charCode) {
           switch (charCode) {
             case 48:
@@ -13143,8 +14042,8 @@
           }
           return 0;
         }
-      })(CSS = Format2.CSS || (Format2.CSS = {}));
-    })(Format = Color3.Format || (Color3.Format = {}));
+      })(Format.CSS || (Format.CSS = {}));
+    })(Color3.Format || (Color3.Format = {}));
   })(Color || (Color = {}));
 
   // node_modules/monaco-editor/esm/vs/editor/common/languages/defaultDocumentColorsComputer.js
@@ -13228,7 +14127,7 @@
   }
   function computeColors(model) {
     const result = [];
-    const initialValidationRegex = /\b(rgb|rgba|hsl|hsla)(\([0-9\s,.\%]*\))|^(#)([A-Fa-f0-9]{3})\b|^(#)([A-Fa-f0-9]{4})\b|^(#)([A-Fa-f0-9]{6})\b|^(#)([A-Fa-f0-9]{8})\b|(?<=['"\s])(#)([A-Fa-f0-9]{3})\b|(?<=['"\s])(#)([A-Fa-f0-9]{4})\b|(?<=['"\s])(#)([A-Fa-f0-9]{6})\b|(?<=['"\s])(#)([A-Fa-f0-9]{8})\b/gm;
+    const initialValidationRegex = /\b(rgb|rgba|hsl|hsla)(\([0-9\s,.\%\/]*\))|^(#)([A-Fa-f0-9]{3})\b|^(#)([A-Fa-f0-9]{4})\b|^(#)([A-Fa-f0-9]{6})\b|^(#)([A-Fa-f0-9]{8})\b|(?<=['"\s])(#)([A-Fa-f0-9]{3})\b|(?<=['"\s])(#)([A-Fa-f0-9]{4})\b|(?<=['"\s])(#)([A-Fa-f0-9]{6})\b|(?<=['"\s])(#)([A-Fa-f0-9]{8})\b/gm;
     const initialValidationMatches = _findMatches(model, initialValidationRegex);
     if (initialValidationMatches.length > 0) {
       for (const initialMatch of initialValidationMatches) {
@@ -13240,16 +14139,16 @@
         }
         let colorInformation;
         if (colorScheme === "rgb") {
-          const regexParameters = /^\(\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*,\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*,\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*\)$/gm;
+          const regexParameters = /^\(\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*[\s,]\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*[\s,]\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*\)$/gm;
           colorInformation = _findRGBColorInformation(_findRange(model, initialMatch), _findMatches(colorParameters, regexParameters), false);
         } else if (colorScheme === "rgba") {
-          const regexParameters = /^\(\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*,\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*,\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*,\s*(0[.][0-9]+|[.][0-9]+|[01][.]|[01])\s*\)$/gm;
+          const regexParameters = /^\(\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*[\s,]\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*[\s,]\s*(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\s*(?:[\s,]|[\s]*\/)\s*(0[.][0-9]+|[.][0-9]+|[01][.]|[01])\s*\)$/gm;
           colorInformation = _findRGBColorInformation(_findRange(model, initialMatch), _findMatches(colorParameters, regexParameters), true);
         } else if (colorScheme === "hsl") {
-          const regexParameters = /^\(\s*((?:360(?:\.0+)?|(?:36[0]|3[0-5][0-9]|[12][0-9][0-9]|[1-9]?[0-9])(?:\.\d+)?))\s*[\s,]\s*(100|\d{1,2}[.]\d*|\d{1,2})%\s*[\s,]\s*(100|\d{1,2}[.]\d*|\d{1,2})%\s*\)$/gm;
+          const regexParameters = /^\(\s*((?:360(?:\.0+)?|(?:36[0]|3[0-5][0-9]|[12][0-9][0-9]|[1-9]?[0-9])(?:\.\d+)?))\s*[\s,]\s*(100(?:\.0+)?|\d{1,2}[.]\d*|\d{1,2})%\s*[\s,]\s*(100(?:\.0+)?|\d{1,2}[.]\d*|\d{1,2})%\s*\)$/gm;
           colorInformation = _findHSLColorInformation(_findRange(model, initialMatch), _findMatches(colorParameters, regexParameters), false);
         } else if (colorScheme === "hsla") {
-          const regexParameters = /^\(\s*((?:360(?:\.0+)?|(?:36[0]|3[0-5][0-9]|[12][0-9][0-9]|[1-9]?[0-9])(?:\.\d+)?))\s*[\s,]\s*(100|\d{1,2}[.]\d*|\d{1,2})%\s*[\s,]\s*(100|\d{1,2}[.]\d*|\d{1,2})%\s*[\s,]\s*(0[.][0-9]+|[.][0-9]+|[01][.]0*|[01])\s*\)$/gm;
+          const regexParameters = /^\(\s*((?:360(?:\.0+)?|(?:36[0]|3[0-5][0-9]|[12][0-9][0-9]|[1-9]?[0-9])(?:\.\d+)?))\s*[\s,]\s*(100(?:\.0+)?|\d{1,2}[.]\d*|\d{1,2})%\s*[\s,]\s*(100(?:\.0+)?|\d{1,2}[.]\d*|\d{1,2})%\s*(?:[\s,]|[\s]*\/)\s*(0[.][0-9]+|[.][0-9]+|[01][.]0*|[01])\s*\)$/gm;
           colorInformation = _findHSLColorInformation(_findRange(model, initialMatch), _findMatches(colorParameters, regexParameters), true);
         } else if (colorScheme === "#") {
           colorInformation = _findHexColorInformation(_findRange(model, initialMatch), colorScheme + colorParameters);
@@ -13429,6 +14328,9 @@
       });
     }
     complete(value) {
+      if (this.isSettled) {
+        return Promise.resolve();
+      }
       return new Promise((resolve2) => {
         this.completeCallback(value);
         this.outcome = { outcome: 0, value };
@@ -13436,6 +14338,9 @@
       });
     }
     error(err) {
+      if (this.isSettled) {
+        return Promise.resolve();
+      }
       return new Promise((resolve2) => {
         this.errorCallback(err);
         this.outcome = { outcome: 1, value: err };
@@ -13473,170 +14378,6 @@
     }
     Promises2.withAsyncBody = withAsyncBody;
   })(Promises || (Promises = {}));
-  var _AsyncIterableObject = class _AsyncIterableObject {
-    static fromArray(items) {
-      return new _AsyncIterableObject((writer) => {
-        writer.emitMany(items);
-      });
-    }
-    static fromPromise(promise) {
-      return new _AsyncIterableObject(async (emitter) => {
-        emitter.emitMany(await promise);
-      });
-    }
-    static fromPromisesResolveOrder(promises) {
-      return new _AsyncIterableObject(async (emitter) => {
-        await Promise.all(promises.map(async (p) => emitter.emitOne(await p)));
-      });
-    }
-    static merge(iterables) {
-      return new _AsyncIterableObject(async (emitter) => {
-        await Promise.all(iterables.map(async (iterable) => {
-          for await (const item of iterable) {
-            emitter.emitOne(item);
-          }
-        }));
-      });
-    }
-    constructor(executor, onReturn) {
-      this._state = 0;
-      this._results = [];
-      this._error = null;
-      this._onReturn = onReturn;
-      this._onStateChanged = new Emitter();
-      queueMicrotask(async () => {
-        const writer = {
-          emitOne: (item) => this.emitOne(item),
-          emitMany: (items) => this.emitMany(items),
-          reject: (error) => this.reject(error)
-        };
-        try {
-          await Promise.resolve(executor(writer));
-          this.resolve();
-        } catch (err) {
-          this.reject(err);
-        } finally {
-          writer.emitOne = void 0;
-          writer.emitMany = void 0;
-          writer.reject = void 0;
-        }
-      });
-    }
-    [Symbol.asyncIterator]() {
-      let i = 0;
-      return {
-        next: async () => {
-          do {
-            if (this._state === 2) {
-              throw this._error;
-            }
-            if (i < this._results.length) {
-              return { done: false, value: this._results[i++] };
-            }
-            if (this._state === 1) {
-              return { done: true, value: void 0 };
-            }
-            await Event.toPromise(this._onStateChanged.event);
-          } while (true);
-        },
-        return: async () => {
-          this._onReturn?.();
-          return { done: true, value: void 0 };
-        }
-      };
-    }
-    static map(iterable, mapFn) {
-      return new _AsyncIterableObject(async (emitter) => {
-        for await (const item of iterable) {
-          emitter.emitOne(mapFn(item));
-        }
-      });
-    }
-    map(mapFn) {
-      return _AsyncIterableObject.map(this, mapFn);
-    }
-    static filter(iterable, filterFn) {
-      return new _AsyncIterableObject(async (emitter) => {
-        for await (const item of iterable) {
-          if (filterFn(item)) {
-            emitter.emitOne(item);
-          }
-        }
-      });
-    }
-    filter(filterFn) {
-      return _AsyncIterableObject.filter(this, filterFn);
-    }
-    static coalesce(iterable) {
-      return _AsyncIterableObject.filter(iterable, (item) => !!item);
-    }
-    coalesce() {
-      return _AsyncIterableObject.coalesce(this);
-    }
-    static async toPromise(iterable) {
-      const result = [];
-      for await (const item of iterable) {
-        result.push(item);
-      }
-      return result;
-    }
-    toPromise() {
-      return _AsyncIterableObject.toPromise(this);
-    }
-    /**
-     * The value will be appended at the end.
-     *
-     * **NOTE** If `resolve()` or `reject()` have already been called, this method has no effect.
-     */
-    emitOne(value) {
-      if (this._state !== 0) {
-        return;
-      }
-      this._results.push(value);
-      this._onStateChanged.fire();
-    }
-    /**
-     * The values will be appended at the end.
-     *
-     * **NOTE** If `resolve()` or `reject()` have already been called, this method has no effect.
-     */
-    emitMany(values) {
-      if (this._state !== 0) {
-        return;
-      }
-      this._results = this._results.concat(values);
-      this._onStateChanged.fire();
-    }
-    /**
-     * Calling `resolve()` will mark the result array as complete.
-     *
-     * **NOTE** `resolve()` must be called, otherwise all consumers of this iterable will hang indefinitely, similar to a non-resolved promise.
-     * **NOTE** If `resolve()` or `reject()` have already been called, this method has no effect.
-     */
-    resolve() {
-      if (this._state !== 0) {
-        return;
-      }
-      this._state = 1;
-      this._onStateChanged.fire();
-    }
-    /**
-     * Writing an error will permanently invalidate this iterable.
-     * The current users will receive an error thrown, as will all future users.
-     *
-     * **NOTE** If `resolve()` or `reject()` have already been called, this method has no effect.
-     */
-    reject(error) {
-      if (this._state !== 0) {
-        return;
-      }
-      this._state = 2;
-      this._error = error;
-      this._onStateChanged.fire();
-    }
-  };
-  _AsyncIterableObject.EMPTY = _AsyncIterableObject.fromArray([]);
-  var AsyncIterableObject = _AsyncIterableObject;
   var ProducerConsumer = class {
     constructor() {
       this._unsatisfiedConsumers = [];
@@ -13754,6 +14495,38 @@
           emitter.emitOne(mapFn(item));
         }
       });
+    }
+    static tee(iterable) {
+      let emitter1;
+      let emitter2;
+      const defer = new DeferredPromise();
+      const start2 = async () => {
+        if (!emitter1 || !emitter2) {
+          return;
+        }
+        try {
+          for await (const item of iterable) {
+            emitter1.emitOne(item);
+            emitter2.emitOne(item);
+          }
+        } catch (err) {
+          emitter1.reject(err);
+          emitter2.reject(err);
+        } finally {
+          defer.complete();
+        }
+      };
+      const p1 = new _AsyncIterableProducer(async (emitter) => {
+        emitter1 = emitter;
+        start2();
+        return defer.p;
+      });
+      const p2 = new _AsyncIterableProducer(async (emitter) => {
+        emitter2 = emitter;
+        start2();
+        return defer.p;
+      });
+      return [p1, p2];
     }
     map(mapFn) {
       return _AsyncIterableProducer.map(this, mapFn);
@@ -14226,6 +14999,7 @@
   var _EditorWorker = class _EditorWorker {
     constructor(_foreignModule = null) {
       this._foreignModule = _foreignModule;
+      this._requestHandlerBrand = void 0;
       this._workerTextModelSyncServer = new WorkerTextModelSyncServer();
     }
     dispose() {
@@ -14269,11 +15043,11 @@
       if (!original || !modified) {
         return null;
       }
-      const result = _EditorWorker.computeDiff(original, modified, options, algorithm);
+      const diffAlgorithm = await resolveLinesDiffComputer(algorithm);
+      const result = _EditorWorker.computeDiff(original, modified, options, diffAlgorithm);
       return result;
     }
-    static computeDiff(originalTextModel, modifiedTextModel, options, algorithm) {
-      const diffAlgorithm = algorithm === "advanced" ? linesDiffComputers.getDefault() : linesDiffComputers.getLegacy();
+    static computeDiff(originalTextModel, modifiedTextModel, options, diffAlgorithm) {
       const originalLines = originalTextModel.getLinesContent();
       const modifiedLines = modifiedTextModel.getLinesContent();
       const result = diffAlgorithm.computeDiff(originalLines, modifiedLines, options);
@@ -14489,6 +15263,18 @@
   if (typeof importScripts === "function") {
     globalThis.monaco = createMonacoBaseAPI();
   }
+  function resolveLinesDiffComputer(algorithm) {
+    switch (algorithm) {
+      case "legacy":
+        return linesDiffComputers.getLegacy();
+      case "advanced":
+        return linesDiffComputers.getDefault();
+      case "advanced-external":
+        return linesDiffComputers.getAdvancedExternal();
+      case "advanced-wasm":
+        return linesDiffComputers.getAdvancedWasm();
+    }
+  }
 
   // node_modules/monaco-editor/esm/vs/editor/common/services/editorWorkerHost.js
   var _EditorWorkerHost = class _EditorWorkerHost {
@@ -14532,7 +15318,7 @@
     return client;
   }
 
-  // node_modules/monaco-editor/esm/vs/language/json/json.worker.js
+  // node_modules/monaco-editor/esm/vs/internal/common/initialize.js
   var initialized2 = false;
   function initialize2(callback) {
     initialized2 = true;
@@ -14542,13 +15328,15 @@
       });
     };
   }
+
+  // node_modules/monaco-editor/esm/external/jsonc-parser/lib/esm/impl/scanner.js
   function createScanner(text, ignoreTrivia = false) {
     const len = text.length;
     let pos = 0, value = "", tokenOffset = 0, token = 16, lineNumber = 0, lineStartOffset = 0, tokenLineStartOffset = 0, prevTokenLineStartOffset = 0, scanError = 0;
     function scanHexDigits(count, exact) {
       let digits = 0;
       let value2 = 0;
-      while (digits < count || !exact) {
+      while (digits < count || false) {
         let ch = text.charCodeAt(pos);
         if (ch >= 48 && ch <= 57) {
           value2 = value2 * 16 + ch - 48;
@@ -14662,7 +15450,7 @@
               result += "	";
               break;
             case 117:
-              const ch3 = scanHexDigits(4, true);
+              const ch3 = scanHexDigits(4);
               if (ch3 >= 0) {
                 result += String.fromCharCode(ch3);
               } else {
@@ -14961,6 +15749,8 @@
     CharacterCodes2[CharacterCodes2["formFeed"] = 12] = "formFeed";
     CharacterCodes2[CharacterCodes2["tab"] = 9] = "tab";
   })(CharacterCodes || (CharacterCodes = {}));
+
+  // node_modules/monaco-editor/esm/external/jsonc-parser/lib/esm/impl/string-intern.js
   var cachedSpaces = new Array(20).fill(0).map((_, index) => {
     return " ".repeat(index);
   });
@@ -14990,6 +15780,8 @@
     }
   };
   var supportedEols = ["\n", "\r", "\r\n"];
+
+  // node_modules/monaco-editor/esm/external/jsonc-parser/lib/esm/impl/format.js
   function format(documentText, range, options) {
     let initialIndentLevel;
     let formatText;
@@ -15088,7 +15880,6 @@
         if (firstToken !== 1) {
           indentLevel--;
         }
-        ;
         if (options.keepLines && numberLineBreaks > 0 || !options.keepLines && firstToken !== 1) {
           replaceContent = newLinesAndIndent();
         } else if (options.keepLines) {
@@ -15098,7 +15889,6 @@
         if (firstToken !== 3) {
           indentLevel--;
         }
-        ;
         if (options.keepLines && numberLineBreaks > 0 || !options.keepLines && firstToken !== 3) {
           replaceContent = newLinesAndIndent();
         } else if (options.keepLines) {
@@ -15224,6 +16014,8 @@
   function isEOL(text, offset) {
     return "\r\n".indexOf(text.charAt(offset)) !== -1;
   }
+
+  // node_modules/monaco-editor/esm/external/jsonc-parser/lib/esm/impl/parser.js
   var ParseOptions;
   (function(ParseOptions2) {
     ParseOptions2.DEFAULT = {
@@ -15614,6 +16406,8 @@
     }
     return true;
   }
+
+  // node_modules/monaco-editor/esm/external/jsonc-parser/lib/esm/main.js
   var createScanner2 = createScanner;
   var ScanError;
   (function(ScanError2) {
@@ -15671,6 +16465,8 @@
   function format2(documentText, range, options) {
     return format(documentText, range, options);
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/utils/objects.js
   function equals3(one, other) {
     if (one === other) {
       return true;
@@ -15734,6 +16530,8 @@
   function isObject2(val) {
     return typeof val === "object" && val !== null && !Array.isArray(val);
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/utils/strings.js
   function startsWith(haystack, needle) {
     if (haystack.length < needle.length) {
       return false;
@@ -15782,6 +16580,8 @@
     }
     return count;
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-languageserver-types/lib/esm/main.js
   var DocumentUri;
   (function(DocumentUri2) {
     function is(value) {
@@ -15790,11 +16590,11 @@
     DocumentUri2.is = is;
   })(DocumentUri || (DocumentUri = {}));
   var URI2;
-  (function(URI3) {
+  (function(URI4) {
     function is(value) {
       return typeof value === "string";
     }
-    URI3.is = is;
+    URI4.is = is;
   })(URI2 || (URI2 = {}));
   var integer;
   (function(integer2) {
@@ -15815,7 +16615,7 @@
     uinteger2.is = is;
   })(uinteger || (uinteger = {}));
   var Position2;
-  (function(Position22) {
+  (function(Position3) {
     function create(line, character) {
       if (line === Number.MAX_VALUE) {
         line = uinteger.MAX_VALUE;
@@ -15825,15 +16625,15 @@
       }
       return { line, character };
     }
-    Position22.create = create;
+    Position3.create = create;
     function is(value) {
       let candidate = value;
       return Is.objectLiteral(candidate) && Is.uinteger(candidate.line) && Is.uinteger(candidate.character);
     }
-    Position22.is = is;
+    Position3.is = is;
   })(Position2 || (Position2 = {}));
   var Range2;
-  (function(Range22) {
+  (function(Range3) {
     function create(one, two, three, four) {
       if (Is.uinteger(one) && Is.uinteger(two) && Is.uinteger(three) && Is.uinteger(four)) {
         return { start: Position2.create(one, two), end: Position2.create(three, four) };
@@ -15843,12 +16643,12 @@
         throw new Error(`Range#create called with invalid arguments[${one}, ${two}, ${three}, ${four}]`);
       }
     }
-    Range22.create = create;
+    Range3.create = create;
     function is(value) {
       let candidate = value;
       return Is.objectLiteral(candidate) && Position2.is(candidate.start) && Position2.is(candidate.end);
     }
-    Range22.is = is;
+    Range3.is = is;
   })(Range2 || (Range2 = {}));
   var Location;
   (function(Location2) {
@@ -15875,7 +16675,7 @@
     LocationLink2.is = is;
   })(LocationLink || (LocationLink = {}));
   var Color2;
-  (function(Color22) {
+  (function(Color3) {
     function create(red, green, blue, alpha) {
       return {
         red,
@@ -15884,12 +16684,12 @@
         alpha
       };
     }
-    Color22.create = create;
+    Color3.create = create;
     function is(value) {
       const candidate = value;
       return Is.objectLiteral(candidate) && Is.numberRange(candidate.red, 0, 1) && Is.numberRange(candidate.green, 0, 1) && Is.numberRange(candidate.blue, 0, 1) && Is.numberRange(candidate.alpha, 0, 1);
     }
-    Color22.is = is;
+    Color3.is = is;
   })(Color2 || (Color2 = {}));
   var ColorInformation;
   (function(ColorInformation2) {
@@ -15918,15 +16718,15 @@
     ColorPresentation2.create = create;
     function is(value) {
       const candidate = value;
-      return Is.objectLiteral(candidate) && Is.string(candidate.label) && (Is.undefined(candidate.textEdit) || TextEdit.is(candidate)) && (Is.undefined(candidate.additionalTextEdits) || Is.typedArray(candidate.additionalTextEdits, TextEdit.is));
+      return Is.objectLiteral(candidate) && Is.string(candidate.label) && (Is.undefined(candidate.textEdit) || TextEdit2.is(candidate)) && (Is.undefined(candidate.additionalTextEdits) || Is.typedArray(candidate.additionalTextEdits, TextEdit2.is));
     }
     ColorPresentation2.is = is;
   })(ColorPresentation || (ColorPresentation = {}));
   var FoldingRangeKind2;
-  (function(FoldingRangeKind22) {
-    FoldingRangeKind22.Comment = "comment";
-    FoldingRangeKind22.Imports = "imports";
-    FoldingRangeKind22.Region = "region";
+  (function(FoldingRangeKind3) {
+    FoldingRangeKind3.Comment = "comment";
+    FoldingRangeKind3.Imports = "imports";
+    FoldingRangeKind3.Region = "region";
   })(FoldingRangeKind2 || (FoldingRangeKind2 = {}));
   var FoldingRange;
   (function(FoldingRange2) {
@@ -16018,7 +16818,7 @@
     Diagnostic2.is = is;
   })(Diagnostic || (Diagnostic = {}));
   var Command2;
-  (function(Command22) {
+  (function(Command3) {
     function create(title, command, ...args) {
       let result = { title, command };
       if (Is.defined(args) && args.length > 0) {
@@ -16026,33 +16826,33 @@
       }
       return result;
     }
-    Command22.create = create;
+    Command3.create = create;
     function is(value) {
       let candidate = value;
       return Is.defined(candidate) && Is.string(candidate.title) && Is.string(candidate.command);
     }
-    Command22.is = is;
+    Command3.is = is;
   })(Command2 || (Command2 = {}));
-  var TextEdit;
-  (function(TextEdit2) {
+  var TextEdit2;
+  (function(TextEdit3) {
     function replace(range, newText) {
       return { range, newText };
     }
-    TextEdit2.replace = replace;
+    TextEdit3.replace = replace;
     function insert(position, newText) {
       return { range: { start: position, end: position }, newText };
     }
-    TextEdit2.insert = insert;
+    TextEdit3.insert = insert;
     function del(range) {
       return { range, newText: "" };
     }
-    TextEdit2.del = del;
+    TextEdit3.del = del;
     function is(value) {
       const candidate = value;
       return Is.objectLiteral(candidate) && Is.string(candidate.newText) && Range2.is(candidate.range);
     }
-    TextEdit2.is = is;
-  })(TextEdit || (TextEdit = {}));
+    TextEdit3.is = is;
+  })(TextEdit2 || (TextEdit2 = {}));
   var ChangeAnnotation;
   (function(ChangeAnnotation2) {
     function create(label, needsConfirmation, description) {
@@ -16096,7 +16896,7 @@
     AnnotatedTextEdit2.del = del;
     function is(value) {
       const candidate = value;
-      return TextEdit.is(candidate) && (ChangeAnnotation.is(candidate.annotationId) || ChangeAnnotationIdentifier.is(candidate.annotationId));
+      return TextEdit2.is(candidate) && (ChangeAnnotation.is(candidate.annotationId) || ChangeAnnotationIdentifier.is(candidate.annotationId));
     }
     AnnotatedTextEdit2.is = is;
   })(AnnotatedTextEdit || (AnnotatedTextEdit = {}));
@@ -16260,32 +17060,32 @@
     MarkupContent2.is = is;
   })(MarkupContent || (MarkupContent = {}));
   var CompletionItemKind2;
-  (function(CompletionItemKind22) {
-    CompletionItemKind22.Text = 1;
-    CompletionItemKind22.Method = 2;
-    CompletionItemKind22.Function = 3;
-    CompletionItemKind22.Constructor = 4;
-    CompletionItemKind22.Field = 5;
-    CompletionItemKind22.Variable = 6;
-    CompletionItemKind22.Class = 7;
-    CompletionItemKind22.Interface = 8;
-    CompletionItemKind22.Module = 9;
-    CompletionItemKind22.Property = 10;
-    CompletionItemKind22.Unit = 11;
-    CompletionItemKind22.Value = 12;
-    CompletionItemKind22.Enum = 13;
-    CompletionItemKind22.Keyword = 14;
-    CompletionItemKind22.Snippet = 15;
-    CompletionItemKind22.Color = 16;
-    CompletionItemKind22.File = 17;
-    CompletionItemKind22.Reference = 18;
-    CompletionItemKind22.Folder = 19;
-    CompletionItemKind22.EnumMember = 20;
-    CompletionItemKind22.Constant = 21;
-    CompletionItemKind22.Struct = 22;
-    CompletionItemKind22.Event = 23;
-    CompletionItemKind22.Operator = 24;
-    CompletionItemKind22.TypeParameter = 25;
+  (function(CompletionItemKind3) {
+    CompletionItemKind3.Text = 1;
+    CompletionItemKind3.Method = 2;
+    CompletionItemKind3.Function = 3;
+    CompletionItemKind3.Constructor = 4;
+    CompletionItemKind3.Field = 5;
+    CompletionItemKind3.Variable = 6;
+    CompletionItemKind3.Class = 7;
+    CompletionItemKind3.Interface = 8;
+    CompletionItemKind3.Module = 9;
+    CompletionItemKind3.Property = 10;
+    CompletionItemKind3.Unit = 11;
+    CompletionItemKind3.Value = 12;
+    CompletionItemKind3.Enum = 13;
+    CompletionItemKind3.Keyword = 14;
+    CompletionItemKind3.Snippet = 15;
+    CompletionItemKind3.Color = 16;
+    CompletionItemKind3.File = 17;
+    CompletionItemKind3.Reference = 18;
+    CompletionItemKind3.Folder = 19;
+    CompletionItemKind3.EnumMember = 20;
+    CompletionItemKind3.Constant = 21;
+    CompletionItemKind3.Struct = 22;
+    CompletionItemKind3.Event = 23;
+    CompletionItemKind3.Operator = 24;
+    CompletionItemKind3.TypeParameter = 25;
   })(CompletionItemKind2 || (CompletionItemKind2 = {}));
   var InsertTextFormat;
   (function(InsertTextFormat2) {
@@ -16293,8 +17093,8 @@
     InsertTextFormat2.Snippet = 2;
   })(InsertTextFormat || (InsertTextFormat = {}));
   var CompletionItemTag2;
-  (function(CompletionItemTag22) {
-    CompletionItemTag22.Deprecated = 1;
+  (function(CompletionItemTag3) {
+    CompletionItemTag3.Deprecated = 1;
   })(CompletionItemTag2 || (CompletionItemTag2 = {}));
   var InsertReplaceEdit;
   (function(InsertReplaceEdit2) {
@@ -16379,10 +17179,10 @@
     SignatureInformation2.create = create;
   })(SignatureInformation || (SignatureInformation = {}));
   var DocumentHighlightKind3;
-  (function(DocumentHighlightKind22) {
-    DocumentHighlightKind22.Text = 1;
-    DocumentHighlightKind22.Read = 2;
-    DocumentHighlightKind22.Write = 3;
+  (function(DocumentHighlightKind4) {
+    DocumentHighlightKind4.Text = 1;
+    DocumentHighlightKind4.Read = 2;
+    DocumentHighlightKind4.Write = 3;
   })(DocumentHighlightKind3 || (DocumentHighlightKind3 = {}));
   var DocumentHighlight;
   (function(DocumentHighlight2) {
@@ -16396,37 +17196,37 @@
     DocumentHighlight2.create = create;
   })(DocumentHighlight || (DocumentHighlight = {}));
   var SymbolKind2;
-  (function(SymbolKind22) {
-    SymbolKind22.File = 1;
-    SymbolKind22.Module = 2;
-    SymbolKind22.Namespace = 3;
-    SymbolKind22.Package = 4;
-    SymbolKind22.Class = 5;
-    SymbolKind22.Method = 6;
-    SymbolKind22.Property = 7;
-    SymbolKind22.Field = 8;
-    SymbolKind22.Constructor = 9;
-    SymbolKind22.Enum = 10;
-    SymbolKind22.Interface = 11;
-    SymbolKind22.Function = 12;
-    SymbolKind22.Variable = 13;
-    SymbolKind22.Constant = 14;
-    SymbolKind22.String = 15;
-    SymbolKind22.Number = 16;
-    SymbolKind22.Boolean = 17;
-    SymbolKind22.Array = 18;
-    SymbolKind22.Object = 19;
-    SymbolKind22.Key = 20;
-    SymbolKind22.Null = 21;
-    SymbolKind22.EnumMember = 22;
-    SymbolKind22.Struct = 23;
-    SymbolKind22.Event = 24;
-    SymbolKind22.Operator = 25;
-    SymbolKind22.TypeParameter = 26;
+  (function(SymbolKind3) {
+    SymbolKind3.File = 1;
+    SymbolKind3.Module = 2;
+    SymbolKind3.Namespace = 3;
+    SymbolKind3.Package = 4;
+    SymbolKind3.Class = 5;
+    SymbolKind3.Method = 6;
+    SymbolKind3.Property = 7;
+    SymbolKind3.Field = 8;
+    SymbolKind3.Constructor = 9;
+    SymbolKind3.Enum = 10;
+    SymbolKind3.Interface = 11;
+    SymbolKind3.Function = 12;
+    SymbolKind3.Variable = 13;
+    SymbolKind3.Constant = 14;
+    SymbolKind3.String = 15;
+    SymbolKind3.Number = 16;
+    SymbolKind3.Boolean = 17;
+    SymbolKind3.Array = 18;
+    SymbolKind3.Object = 19;
+    SymbolKind3.Key = 20;
+    SymbolKind3.Null = 21;
+    SymbolKind3.EnumMember = 22;
+    SymbolKind3.Struct = 23;
+    SymbolKind3.Event = 24;
+    SymbolKind3.Operator = 25;
+    SymbolKind3.TypeParameter = 26;
   })(SymbolKind2 || (SymbolKind2 = {}));
   var SymbolTag2;
-  (function(SymbolTag22) {
-    SymbolTag22.Deprecated = 1;
+  (function(SymbolTag3) {
+    SymbolTag3.Deprecated = 1;
   })(SymbolTag2 || (SymbolTag2 = {}));
   var SymbolInformation;
   (function(SymbolInformation2) {
@@ -16681,13 +17481,13 @@
     InlineValueContext2.is = is;
   })(InlineValueContext || (InlineValueContext = {}));
   var InlayHintKind3;
-  (function(InlayHintKind22) {
-    InlayHintKind22.Type = 1;
-    InlayHintKind22.Parameter = 2;
+  (function(InlayHintKind4) {
+    InlayHintKind4.Type = 1;
+    InlayHintKind4.Parameter = 2;
     function is(value) {
       return value === 1 || value === 2;
     }
-    InlayHintKind22.is = is;
+    InlayHintKind4.is = is;
   })(InlayHintKind3 || (InlayHintKind3 = {}));
   var InlayHintLabelPart;
   (function(InlayHintLabelPart2) {
@@ -16713,7 +17513,7 @@
     InlayHint2.create = create;
     function is(value) {
       const candidate = value;
-      return Is.objectLiteral(candidate) && Position2.is(candidate.position) && (Is.string(candidate.label) || Is.typedArray(candidate.label, InlayHintLabelPart.is)) && (candidate.kind === void 0 || InlayHintKind3.is(candidate.kind)) && candidate.textEdits === void 0 || Is.typedArray(candidate.textEdits, TextEdit.is) && (candidate.tooltip === void 0 || Is.string(candidate.tooltip) || MarkupContent.is(candidate.tooltip)) && (candidate.paddingLeft === void 0 || Is.boolean(candidate.paddingLeft)) && (candidate.paddingRight === void 0 || Is.boolean(candidate.paddingRight));
+      return Is.objectLiteral(candidate) && Position2.is(candidate.position) && (Is.string(candidate.label) || Is.typedArray(candidate.label, InlayHintLabelPart.is)) && (candidate.kind === void 0 || InlayHintKind3.is(candidate.kind)) && candidate.textEdits === void 0 || Is.typedArray(candidate.textEdits, TextEdit2.is) && (candidate.tooltip === void 0 || Is.string(candidate.tooltip) || MarkupContent.is(candidate.tooltip)) && (candidate.paddingLeft === void 0 || Is.boolean(candidate.paddingLeft)) && (candidate.paddingRight === void 0 || Is.boolean(candidate.paddingRight));
     }
     InlayHint2.is = is;
   })(InlayHint || (InlayHint = {}));
@@ -16739,9 +17539,9 @@
     InlineCompletionList2.create = create;
   })(InlineCompletionList || (InlineCompletionList = {}));
   var InlineCompletionTriggerKind3;
-  (function(InlineCompletionTriggerKind22) {
-    InlineCompletionTriggerKind22.Invoked = 0;
-    InlineCompletionTriggerKind22.Automatic = 1;
+  (function(InlineCompletionTriggerKind4) {
+    InlineCompletionTriggerKind4.Invoked = 0;
+    InlineCompletionTriggerKind4.Automatic = 1;
   })(InlineCompletionTriggerKind3 || (InlineCompletionTriggerKind3 = {}));
   var SelectedCompletionInfo;
   (function(SelectedCompletionInfo2) {
@@ -16922,10 +17722,10 @@
       return typeof value !== "undefined";
     }
     Is2.defined = defined;
-    function undefined2(value) {
+    function undefined$1(value) {
       return typeof value === "undefined";
     }
-    Is2.undefined = undefined2;
+    Is2.undefined = undefined$1;
     function boolean(value) {
       return value === true || value === false;
     }
@@ -16963,6 +17763,8 @@
     }
     Is2.typedArray = typedArray;
   })(Is || (Is = {}));
+
+  // node_modules/monaco-editor/esm/external/vscode-languageserver-textdocument/lib/esm/main.js
   var FullTextDocument2 = class _FullTextDocument {
     constructor(uri, languageId, version, content) {
       this._uri = uri;
@@ -17171,6 +17973,8 @@
     }
     return textEdit;
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/jsonLanguageTypes.js
   var ErrorCode;
   (function(ErrorCode2) {
     ErrorCode2[ErrorCode2["Undefined"] = 0] = "Undefined";
@@ -17218,7 +18022,8 @@
       }
     };
   })(ClientCapabilities || (ClientCapabilities = {}));
-  var bundle;
+
+  // node_modules/monaco-editor/esm/external/@vscode/l10n/dist/browser.js
   function t(...args) {
     const firstArg = args[0];
     let key;
@@ -17247,17 +18052,9 @@
       }
       formatArgs = firstArg.args ?? {};
     }
-    const messageFromBundle = bundle?.[key];
-    if (!messageFromBundle) {
+    {
       return format3(message, formatArgs);
     }
-    if (typeof messageFromBundle === "string") {
-      return format3(messageFromBundle, formatArgs);
-    }
-    if (messageFromBundle.comment) {
-      return format3(messageFromBundle.message, formatArgs);
-    }
-    return format3(message, formatArgs);
   }
   var _format2Regexp = /{([^}]+)}/g;
   function format3(template, values) {
@@ -17266,6 +18063,8 @@
     }
     return template.replace(_format2Regexp, (match, group) => values[group] ?? match);
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/parser/jsonParser.js
   var formats = {
     "color-hex": { errorMessage: t("Invalid color format. Use #RGB, #RGBA, #RRGGBB or #RRGGBBAA."), pattern: /^#([0-9A-Fa-f]{3,4}|([0-9A-Fa-f]{2}){3,4})$/ },
     "date-time": { errorMessage: t("String is not a RFC3339 date-time."), pattern: /^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\.[0-9]+)?(Z|(\+|-)([01][0-9]|2[0-3]):([0-5][0-9]))$/i },
@@ -17733,7 +18532,6 @@
           multiplier: (parts[2]?.length || 0) - (parseInt(parts[3]) || 0)
         };
       }
-      ;
       if (isNumber(schema.multipleOf)) {
         let remainder = -1;
         if (Number.isInteger(schema.multipleOf)) {
@@ -17863,7 +18661,6 @@
                 message: schema.patternErrorMessage || schema.errorMessage || format5.errorMessage
               });
             }
-          default:
         }
       }
     }
@@ -18224,13 +19021,6 @@
         }
       }
     }
-    function _accept(token2) {
-      if (scanner.getToken() === token2) {
-        _scanNext();
-        return true;
-      }
-      return false;
-    }
     function _errorAtRange(message, code, startOffset, endOffset, severity = DiagnosticSeverity.Error) {
       if (problems.length === 0 || startOffset !== lastProblemOffset) {
         const range = Range2.create(textDocument.positionAt(startOffset), textDocument.positionAt(endOffset));
@@ -18302,7 +19092,6 @@
       }
       const node = new ArrayASTNodeImpl(parent, scanner.getTokenOffset());
       _scanNext();
-      const count = 0;
       let needsComma = false;
       while (scanner.getToken() !== 4 && scanner.getToken() !== 17) {
         if (scanner.getToken() === 5) {
@@ -18457,7 +19246,6 @@
       return _finalize(node, true);
     }
     function _parseLiteral(parent) {
-      let node;
       switch (scanner.getToken()) {
         case 7:
           return _finalize(new NullASTNodeImpl(parent, scanner.getTokenOffset()), true);
@@ -18484,6 +19272,8 @@
     }
     return new JSONDocument(_root, problems, commentRanges);
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/utils/json.js
   function stringifyObject(obj, indent, stringifyLiteral) {
     if (obj !== null && typeof obj === "object") {
       const newIndent = indent + "	";
@@ -18521,8 +19311,8 @@
     }
     return stringifyLiteral(obj);
   }
-  var valueCommitCharacters = [",", "}", "]"];
-  var propertyCommitCharacters = [":"];
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/services/jsonCompletion.js
   var JSONCompletion = class {
     constructor(schemaService, contributions = [], promiseConstructor = Promise, clientCapabilities = {}) {
       this.schemaService = schemaService;
@@ -18570,7 +19360,6 @@
         }
         overwriteRange = Range2.create(document2.positionAt(overwriteStart), position);
       }
-      const supportsCommitCharacters = false;
       const proposed = /* @__PURE__ */ new Map();
       const collector = {
         add: (suggestion) => {
@@ -18584,10 +19373,7 @@
                 label = shortendedLabel;
               }
             }
-            suggestion.textEdit = TextEdit.replace(overwriteRange, suggestion.insertText);
-            if (supportsCommitCharacters) {
-              suggestion.commitCharacters = suggestion.kind === CompletionItemKind2.Property ? propertyCommitCharacters : valueCommitCharacters;
-            }
+            suggestion.textEdit = TextEdit2.replace(overwriteRange, suggestion.insertText);
             suggestion.label = label;
             proposed.set(label, suggestion);
             result.items.push(suggestion);
@@ -19053,10 +19839,9 @@
           let insertText;
           let filterText;
           if (isDefined(value)) {
-            let type2 = schema.type;
+            schema.type;
             for (let i = arrayDepth; i > 0; i--) {
               value = [value];
-              type2 = "array";
             }
             insertText = this.getInsertTextForSnippetValue(value, separatorAfter);
             filterText = this.getFilterTextForSnippetValue(value);
@@ -19442,6 +20227,8 @@
       return this.labelDetailsSupport;
     }
   };
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/services/jsonHover.js
   var JSONHover = class {
     constructor(schemaService, contributions = [], promiseConstructor) {
       this.schemaService = schemaService;
@@ -19542,6 +20329,8 @@
     }
     return content;
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/services/jsonValidation.js
   var JSONValidation = class {
     constructor(jsonSchemaService, promiseConstructor) {
       this.jsonSchemaService = jsonSchemaService;
@@ -19685,6 +20474,8 @@
     }
     return void 0;
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/utils/colors.js
   var Digit0 = 48;
   var Digit9 = 57;
   var A = 65;
@@ -19741,6 +20532,8 @@
     }
     return void 0;
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/services/jsonDocumentSymbols.js
   var JSONDocumentSymbols = class {
     constructor(schemaService) {
       this.schemaService = schemaService;
@@ -19981,7 +20774,7 @@
       } else {
         label = `#${toTwoDigitHex(red256)}${toTwoDigitHex(green256)}${toTwoDigitHex(blue256)}${toTwoDigitHex(Math.round(color.alpha * 255))}`;
       }
-      result.push({ label, textEdit: TextEdit.replace(range, JSON.stringify(label)) });
+      result.push({ label, textEdit: TextEdit2.replace(range, JSON.stringify(label)) });
       return result;
     }
   };
@@ -19991,6 +20784,8 @@
   function getName(node) {
     return getNodeValue3(node) || t("<empty>");
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/services/configuration.js
   var schemaContributions = {
     schemaAssociations: [],
     schemas: {
@@ -20506,9 +21301,10 @@
       }
     }
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-uri/lib/esm/index.js
   var LIB;
   (() => {
-    "use strict";
     var t2 = { 470: (t3) => {
       function e2(t4) {
         if ("string" != typeof t4) throw new TypeError("Path must be a string. Received " + JSON.stringify(t4));
@@ -20702,7 +21498,7 @@
           return t4 instanceof f2 || !!t4 && "string" == typeof t4.authority && "string" == typeof t4.fragment && "string" == typeof t4.path && "string" == typeof t4.query && "string" == typeof t4.scheme && "string" == typeof t4.fsPath && "function" == typeof t4.with && "function" == typeof t4.toString;
         }
         get fsPath() {
-          return m(this, false);
+          return m(this);
         }
         with(t4) {
           if (!t4) return this;
@@ -20750,7 +21546,7 @@
           __publicField(this, "_fsPath", null);
         }
         get fsPath() {
-          return this._fsPath || (this._fsPath = m(this, false)), this._fsPath;
+          return this._fsPath || (this._fsPath = m(this)), this._fsPath;
         }
         toString(t4 = false) {
           return t4 ? y(this, true) : (this._formatted || (this._formatted = y(this, false)), this._formatted);
@@ -20784,7 +21580,7 @@
       }
       function m(e3, r2) {
         let n2;
-        return n2 = e3.authority && e3.path.length > 1 && "file" === e3.scheme ? `//${e3.authority}${e3.path}` : 47 === e3.path.charCodeAt(0) && (e3.path.charCodeAt(1) >= 65 && e3.path.charCodeAt(1) <= 90 || e3.path.charCodeAt(1) >= 97 && e3.path.charCodeAt(1) <= 122) && 58 === e3.path.charCodeAt(2) ? r2 ? e3.path.substr(1) : e3.path[1].toLowerCase() + e3.path.substr(2) : e3.path, t3 && (n2 = n2.replace(/\//g, "\\")), n2;
+        return n2 = e3.authority && e3.path.length > 1 && "file" === e3.scheme ? `//${e3.authority}${e3.path}` : 47 === e3.path.charCodeAt(0) && (e3.path.charCodeAt(1) >= 65 && e3.path.charCodeAt(1) <= 90 || e3.path.charCodeAt(1) >= 97 && e3.path.charCodeAt(1) <= 122) && 58 === e3.path.charCodeAt(2) ? e3.path[1].toLowerCase() + e3.path.substr(2) : e3.path, t3 && (n2 = n2.replace(/\//g, "\\")), n2;
       }
       function y(t4, e3) {
         const r2 = e3 ? p : d;
@@ -20843,15 +21639,17 @@
       })(P || (P = {}));
     })(), LIB = n;
   })();
-  var { URI: URI22, Utils } = LIB;
+  var { URI: URI3, Utils } = LIB;
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/utils/glob.js
   function createRegex(glob, opts) {
     if (typeof glob !== "string") {
       throw new TypeError("Expected a string");
     }
     const str = String(glob);
     let reStr = "";
-    const extended = opts ? !!opts.extended : false;
-    const globstar = opts ? !!opts.globstar : false;
+    const extended = opts ? true : false;
+    const globstar = opts ? true : false;
     let inGroup = false;
     const flags = opts && typeof opts.flags === "string" ? opts.flags : "";
     let c;
@@ -20933,6 +21731,8 @@
     }
     return new RegExp(reStr, flags);
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/services/jsonSchemaService.js
   var BANG = "!";
   var PATH_SEP = "/";
   var FilePatternAssociation = class {
@@ -21081,7 +21881,7 @@
     }
     getRegisteredSchemaIds(filter) {
       return Object.keys(this.registeredSchemasIds).filter((id) => {
-        const scheme = URI22.parse(id).scheme;
+        const scheme = URI3.parse(id).scheme;
         return scheme !== "schemaservice" && (!filter || filter(scheme));
       });
     }
@@ -21480,21 +22280,21 @@
   var idCounter2 = 0;
   function normalizeId(id) {
     try {
-      return URI22.parse(id).toString(true);
+      return URI3.parse(id).toString(true);
     } catch (e) {
       return id;
     }
   }
   function normalizeResourceForMatching(resource) {
     try {
-      return URI22.parse(resource).with({ fragment: null, query: null }).toString(true);
+      return URI3.parse(resource).with({ fragment: null, query: null }).toString(true);
     } catch (e) {
       return resource;
     }
   }
   function toDisplayString(url) {
     try {
-      const uri = URI22.parse(url);
+      const uri = URI3.parse(url);
       if (uri.scheme === "file") {
         return uri.fsPath;
       }
@@ -21502,6 +22302,8 @@
     }
     return url;
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/services/jsonFolding.js
   function getFoldingRanges(document2, context) {
     const ranges = [];
     const nestingLevels = [];
@@ -21614,6 +22416,8 @@
     }
     return result;
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/services/jsonSelectionRanges.js
   function getSelectionRanges(document2, positions, doc) {
     function getSelectionRange(position) {
       let offset = document2.offsetAt(position);
@@ -21672,6 +22476,8 @@
     }
     return positions.map(getSelectionRange);
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/utils/format.js
   function format4(documentToFormat, formattingOptions, formattingRange) {
     let range = void 0;
     if (formattingRange) {
@@ -21687,9 +22493,11 @@
       keepLines: formattingOptions?.keepLines === true
     };
     return format2(documentToFormat.getText(), range, options).map((edit) => {
-      return TextEdit.replace(Range2.create(documentToFormat.positionAt(edit.offset), documentToFormat.positionAt(edit.offset + edit.length)), edit.content);
+      return TextEdit2.replace(Range2.create(documentToFormat.positionAt(edit.offset), documentToFormat.positionAt(edit.offset + edit.length)), edit.content);
     });
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/utils/propertyTree.js
   var Container;
   (function(Container2) {
     Container2[Container2["Object"] = 0] = "Object";
@@ -21757,6 +22565,8 @@
     }
     return -m - 1;
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/utils/sort.js
   function sort(documentToSort, formattingOptions) {
     const options = {
       ...formattingOptions,
@@ -21769,7 +22579,7 @@
     const sortedJsonDocument = sortJsoncDocument(formattedJsonDocument, jsonPropertyTree);
     const edits = format4(sortedJsonDocument, options, void 0);
     const sortedAndFormattedJsonDocument = TextDocument2.applyEdits(sortedJsonDocument, edits);
-    return [TextEdit.replace(Range2.create(Position2.create(0, 0), documentToSort.positionAt(documentToSort.getText().length)), sortedAndFormattedJsonDocument)];
+    return [TextEdit2.replace(Range2.create(Position2.create(0, 0), documentToSort.positionAt(documentToSort.getText().length)), sortedAndFormattedJsonDocument)];
   }
   function findJsoncPropertyTree(formattedDocument) {
     const formattedString = formattedDocument.getText();
@@ -22017,6 +22827,8 @@
       this.propertyTreeArray = propertyTreeArray;
     }
   };
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/services/jsonLinks.js
   function findLinks(document2, doc) {
     const links = [];
     doc.visit((node) => {
@@ -22083,6 +22895,8 @@
   function unescape(str) {
     return str.replace(/~1/g, "/").replace(/~0/g, "~");
   }
+
+  // node_modules/monaco-editor/esm/external/vscode-json-languageservice/lib/esm/jsonLanguageService.js
   function getLanguageService(params) {
     const promise = params.promiseConstructor || Promise;
     const jsonSchemaService = new JSONSchemaService(params.schemaRequestService, params.workspaceContext, promise);
@@ -22118,6 +22932,8 @@
       sort: (document2, options) => sort(document2, options)
     };
   }
+
+  // node_modules/monaco-editor/esm/vs/languages/features/json/jsonWorker.js
   var defaultSchemaRequestService;
   if (typeof fetch !== "undefined") {
     defaultSchemaRequestService = function(url) {
@@ -22266,7 +23082,7 @@
   }
   function resolvePath(uriString, path) {
     if (isAbsolutePath(path)) {
-      const uri = URI22.parse(uriString);
+      const uri = URI3.parse(uriString);
       const parts = path.split("/");
       return uri.with({ path: normalizePath(parts) }).toString();
     }
@@ -22275,8 +23091,8 @@
   function normalizePath(parts) {
     const newParts = [];
     for (const part of parts) {
-      if (part.length === 0 || part.length === 1 && part.charCodeAt(0) === Dot) {
-      } else if (part.length === 2 && part.charCodeAt(0) === Dot && part.charCodeAt(1) === Dot) {
+      if (part.length === 0 || part.length === 1 && part.charCodeAt(0) === Dot) ;
+      else if (part.length === 2 && part.charCodeAt(0) === Dot && part.charCodeAt(1) === Dot) {
         newParts.pop();
       } else {
         newParts.push(part);
@@ -22292,26 +23108,18 @@
     return res;
   }
   function joinPath(uriString, ...paths) {
-    const uri = URI22.parse(uriString);
+    const uri = URI3.parse(uriString);
     const parts = uri.path.split("/");
     for (let path of paths) {
       parts.push(...path.split("/"));
     }
     return uri.with({ path: normalizePath(parts) }).toString();
   }
+
+  // node_modules/monaco-editor/esm/vs/languages/features/json/json.worker.js
   self.onmessage = () => {
     initialize2((ctx, createData) => {
       return new JSONWorker(ctx, createData);
     });
   };
 })();
-/*! Bundled license information:
-
-monaco-editor/esm/vs/language/json/json.worker.js:
-  (*!-----------------------------------------------------------------------------
-   * Copyright (c) Microsoft Corporation. All rights reserved.
-   * Version: 0.53.0(4e45ba0c5ff45fc61c0ccac61c0987369df04a6e)
-   * Released under the MIT license
-   * https://github.com/microsoft/monaco-editor/blob/main/LICENSE.txt
-   *-----------------------------------------------------------------------------*)
-*/

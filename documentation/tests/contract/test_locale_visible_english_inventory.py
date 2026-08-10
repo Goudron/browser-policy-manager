@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 from collections import Counter
 from pathlib import Path
@@ -10,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[3]
 DOC_ROOT = ROOT / "documentation"
 INVENTORY = DOC_ROOT / "config" / "locale-visible-english-inventory-0.9.1.json"
 VISUAL_QA = DOC_ROOT / "config" / "user-guide-screenshot-visual-qa-0.9.1.json"
+SEMANTIC_AUTHORITY = DOC_ROOT / "config" / "documentation-semantic-contracts-0.9.4.json"
 
 LOCALES = ("ru", "de", "zh-CN", "fr", "es-ES")
 CLASSIFICATIONS = {
@@ -94,8 +96,7 @@ def test_locale_visible_english_inventory_classifies_every_finding() -> None:
             assert (
                 "app/i18n_src/" in source_refs
                 or "documentation/src/dita/" in source_refs
-                or "documentation/config/user-guide-screenshot-visual-qa-0.9.1.json"
-                in source_refs
+                or "documentation/config/user-guide-screenshot-visual-qa-0.9.1.json" in source_refs
             )
         elif classification == "false positive":
             assert finding["decision"] == "ignore"
@@ -112,7 +113,9 @@ def test_locale_visible_english_inventory_matches_summary_counts() -> None:
         actual[finding["locale"]][finding["classification"]] += 1
 
     assert {
-        locale: {classification: actual[locale][classification] for classification in CLASSIFICATIONS}
+        locale: {
+            classification: actual[locale][classification] for classification in CLASSIFICATIONS
+        }
         for locale in LOCALES
     } == expected
 
@@ -133,3 +136,23 @@ def test_locale_visible_english_inventory_links_screenshot_visual_qa_blockers() 
     assert set(blocker_ids_by_locale) <= set(replace_findings_by_locale)
     for locale, blocker_id in blocker_ids_by_locale.items():
         assert blocker_id in replace_findings_by_locale[locale].get("related_blockers", [])
+
+
+def _protected_label_class_errors(terminology: dict, authority: dict) -> list[str]:
+    missing = set(authority["protected_exactness_classes"]) - set(terminology["allowlist"])
+    if missing:
+        return [f"missing protected technical-label classes: {sorted(missing)}"]
+    return []
+
+
+def test_locale_inventory_defers_to_current_semantic_label_authority() -> None:
+    authority = _json(SEMANTIC_AUTHORITY)["authorities"]["localized_reader_semantics"]
+    terminology = _json(ROOT / authority["sources"][0])
+
+    assert _protected_label_class_errors(terminology, authority) == []
+
+    stale_terminology = copy.deepcopy(terminology)
+    del stale_terminology["allowlist"]["identifier"]
+    assert _protected_label_class_errors(stale_terminology, authority) == [
+        "missing protected technical-label classes: ['identifier']"
+    ]

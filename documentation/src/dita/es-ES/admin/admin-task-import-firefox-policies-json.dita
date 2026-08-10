@@ -15,6 +15,12 @@
       <step><cmd>Registrar evidencia de importación en el producto integrante.</cmd><info><note type="warning">La importación crea un perfil BPM pero no implementa la configuración de Firefox, no demuestra la aplicación del tiempo de ejecución ni proporciona una clave de idempotencia. Registre externamente el hash del documento fuente, el canal del esquema, el perfil devuelto ID, la revisión, los metadatos de cumplimiento y la decisión de recuperación de nombres duplicados.</note></info></step>
     </steps>
     <result><p>El documento <codeph>policies.json</codeph> de Firefox se representa como un perfil BPM normalizado que puede ser revisado, validado, exportado y rastreado por ID.</p></result>
+    <example id="a-import-policies-document"><title>Documento Firefox policies.json completo</title><p>El valor dentro de <codeph>document</codeph> o el archivo multipart es el documento Firefox completo, nunca los <codeph>flags</codeph> de BPM:</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
     <postreq><p>Utilice la tarea de exportación para devolver el perfil guardado al JSON canónico de Firefox antes de entregarlo a las herramientas de implementación.</p></postreq>
   </taskbody>
   <related-links>

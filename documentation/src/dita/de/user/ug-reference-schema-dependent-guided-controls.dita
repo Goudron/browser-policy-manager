@@ -7,7 +7,7 @@
     <section id="a-release-controls"><title>Steuerelemente in aktuellen Schemata</title><p>In Release 153 und ESR 153.0 kann Schritt 5 unterstützte Richtlinien für KI- und intelligente Funktionen, die visuelle Suche und intelligente Browserfunktionen anzeigen.</p></section>
     <section id="a-esr-unavailable"><title>Nicht verfügbare ESR-Steuerelemente</title><p>Unter ESR 140.13 sind nicht unterstützte KI-Richtlinien nicht vorhanden oder als nicht verfügbar gekennzeichnet. Fügen Sie sie nicht manuell hinzu, als ob der geführte Editor sie unterstützen würde.</p></section>
     <section id="a-no-documentation-ai"><title>Vom Dokumentationsassistenten getrennt</title><p>Diese Referenz erläutert nur vorhandene Firefox-Browserrichtlinienkontrollen. Diese Steuerelemente konfigurieren, aktivieren oder beschränken den separaten Dokumentationsassistenten nicht.</p></section>
-    <section id="a-recovery"><title>Wiederherstellung</title><p>Wenn ein Steuerelement fehlt, bestätigen Sie den Schemakanal, prüfen Sie „Alle Einstellungen“ und halten Sie den nicht unterstützten Status bei der Überprüfung fest.</p></section>
+    <section id="a-recovery"><title>Wiederherstellung</title><p>Wenn ein Steuerelement fehlt, bestätigen Sie den Schemakanal, prüfen Sie „<uicontrol>Alle Einstellungen</uicontrol>“ und halten Sie den nicht unterstützten Status bei der Überprüfung fest.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-configure-firefox-ai-policies"/>

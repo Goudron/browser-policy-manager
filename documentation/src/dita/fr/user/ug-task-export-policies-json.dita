@@ -2,17 +2,23 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-export-policies-json" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Exporter un profil au format Firefox policies.json</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Exporter un profil en Firefox policies.json » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <shortdesc>Téléchargez un profil BPM actif sous forme de document canonique Firefox Enterprise <filepath>policies.json</filepath>.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Le profil est enregistré, actif et visible dans la <uicontrol>Bibliothèque</uicontrol> ou l'éditeur JSON ; son état de validation pour le canal de schéma Firefox choisi a été examiné.</p></prereq>
+    <context><p>L'exportation franchit la frontière produit dans le sens inverse de l'importation : BPM rend les données de profil normalisées comme document Firefox avec un objet <codeph>policies</codeph> de niveau supérieur. Les métadonnées du profil BPM, l'attribution de source, les notes et les métadonnées opaques de conformité ne sont pas exportées.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Exporter un profil en Firefox policies.json ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Avant l'exportation, confirmez l'identité de la ligne, l'état du cycle de vie, le canal de schéma et l'état de validation.</cmd><info><p>Résultat attendu : vous savez quel profil enregistré actif sera rendu.</p></info></step>
+      <step><cmd>Choisissez l'action d'exportation de la <uicontrol>Bibliothèque</uicontrol> ou l'action de téléchargement Firefox de l'éditeur JSON.</cmd><info><p>Résultat attendu : BPM renvoie un document <codeph>application/json</codeph> adapté aux politiques Firefox Enterprise.</p></info></step>
+      <step><cmd>Utilisez les options de téléchargement et de formatage uniquement pour la remise et la présentation.</cmd><info><p>L'exportation API prend en charge <codeph>download=1</codeph>, <codeph>pretty=1</codeph> et <codeph>indent</codeph> ; elles ne changent pas la signification des politiques.</p><note type="warning">Les profils archivés ne sont pas des cibles normales d'exportation directe de la <uicontrol>Bibliothèque</uicontrol>. L'API fournit l'option explicite <codeph>include_deleted</codeph> pour les scénarios d'exportation archivés.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Vous disposez d'un fichier Firefox <filepath>policies.json</filepath> canonique ne contenant que le document <codeph>policies</codeph> exporté.</p></result>
+    <example id="a-export-examples"><title>Forme canonique d'exportation</title><p>Le fichier exporté est toujours un document Firefox complet :</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock><p>Utilisez <codeph>/api/export/profiles/{profile_id}/firefox/policies.json?download=1&amp;pretty=1</codeph> pour une réponse jointe avec indentation de deux espaces, ou <codeph>indent</codeph> lorsqu'une indentation JSON particulière est requise.</p></example>
+    <postreq><p>Récupération : si l'exportation signale un profil manquant ou archivé, une option de requête invalide ou un contexte de ligne obsolète, actualisez la <uicontrol>Bibliothèque</uicontrol>, confirmez le cycle de vie et l'ID de profil, puis réessayez depuis la ligne active enregistrée ou l'éditeur JSON de ce profil.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

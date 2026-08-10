@@ -11,6 +11,9 @@ the general BPM test tree.
 `suite-boundaries-0.9.0.json` is the machine-readable boundary contract for `BPM090-M11-02`. It
 maps each documentation failure domain to a primary suite, owned fixtures, focused Make targets, and
 the smallest focused rerun command. Keep it updated before adding or moving documentation tests.
+`documentation/config/documentation-test-estate-inventory-0.9.4.json` separately resolves every
+maintained documentation test to exactly one M11A execution layer, risk owner, cost, and coupling;
+use its focused contract before changing a test layer or retiring stale evidence.
 
 ## Suite Boundary
 
@@ -65,10 +68,10 @@ make docs-coverage      # isolated documentation-code coverage policy
 the affected locale, guide, search, and build-output area without invoking DITA-OT or unrelated BPM
 runtime code. Use `make docs-validate` when generated HTML, manifests, and search indexes must be
 proved end to end.
-`make docs-coverage` writes terminal, XML, and HTML reports under `documentation/reports/coverage/`
-and fails below 100% for the included policy scope. Documentation-owned modules outside that scope
-must stay named in `documentation/config/coverage-policy-0.9.0.json` until their focused tests are
-added.
+`make docs-coverage` writes isolated terminal, XML, HTML, and coverage-data reports under
+`documentation/reports/coverage/` and fails below 100% line and branch coverage for the maintained
+build library plus metadata validator. CLI/subprocess adapters and browser checks stay in their
+focused execution layers, as declared in `documentation/config/coverage-policy-0.9.4.json`.
 Failed `make docs-fast-check` runs write a compact JSON diagnostic artifact under
 `documentation/reports/diagnostics/` with topic, locale, guide, source line, target URL, query,
 screenshot state, and focused rerun context.

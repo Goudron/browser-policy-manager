@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-maintain-local-documentation-assistant" xml:lang="en" audience="administrator devops security-reviewer" product="bpm-0-9-1" platform="linux">
-  <title>Maintain the documentation-assistant boundary in BPM 0.9.3</title>
+  <title>Maintain the documentation-assistant boundary in BPM 0.9.4</title>
   <shortdesc>Keep the released localized training notice and deterministic-search boundary accurate while maintaining BPM documentation.</shortdesc>
   <taskbody>
     <prereq><p>Have the approved BPM source revision and documentation publication workflow available.</p></prereq>
-    <context><p>There is no local model, model artifact, RAG generation, embedding store, citation store, or external-source provider to maintain in 0.9.3. Do not create maintenance state for features that this release does not deliver.</p></context>
+    <context><p>There is no local model, model artifact, RAG generation, embedding store, citation store, or external-source provider to maintain in 0.9.4. Do not create maintenance state for features that this release does not deliver.</p></context>
     <steps>
       <step><cmd>Apply the approved BPM source revision and rebuild the documentation.</cmd><info><p>Use the normal documentation workflow, including <codeph>make docs-install-dev</codeph> when preparing a development checkout.</p></info></step>
       <step><cmd>Open the published documentation in every supported locale.</cmd><info><p>Confirm that the assistant entry remains available and that deterministic search still works independently.</p></info></step>
       <step><cmd>Submit one question in each locale.</cmd><info><p>Verify the locale-owned training notice and confirm that no answer, source, citation, external claim, or model-installation flow is presented.</p></info></step>
-      <step><cmd>Do not run model-installation or RAG-generation commands for 0.9.3.</cmd><info><p>They belong to a later product release and are not a recovery path for the training notice.</p></info></step>
+      <step><cmd>Do not run model-installation or RAG-generation commands for 0.9.4.</cmd><info><p>They belong to a later product release and are not a recovery path for the training notice.</p></info></step>
       <step><cmd>Record the documentation revision and verification result.</cmd><info><p>Escalate a mismatch between the released notice and the deterministic-search boundary as a documentation defect.</p></info></step>
     </steps>
     <result><p>The published portal preserves a localized training notice for the chat and a separate current-information path through deterministic search.</p></result>

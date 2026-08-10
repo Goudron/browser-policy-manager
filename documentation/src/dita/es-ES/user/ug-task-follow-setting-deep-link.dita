@@ -4,8 +4,8 @@
   <title>Abrir enlaces de ajustes y documentación</title>
   <shortdesc>Abra una ubicación específica del editor o el tema de documentación exacto para una política compatible o un ajuste administrado conocido.</shortdesc>
   <taskbody>
-    <prereq><p>Abra Todos los ajustes u otra interfaz de BPM que incluya un enlace a un ajuste.</p></prereq>
-    <context><p>Los enlaces directos del editor enfocan un ajuste o una ubicación sin formato. En Todos los ajustes, el icono de información con círculo abre por separado la documentación resuelta por el manifiesto para cada política compatible y ajuste administrado conocido.</p></context>
+    <prereq><p>Abra <uicontrol>Todos los ajustes</uicontrol> u otra interfaz de BPM que incluya un enlace a un ajuste.</p></prereq>
+    <context><p>Los enlaces directos del editor enfocan un ajuste o una ubicación sin formato. En <uicontrol>Todos los ajustes</uicontrol>, el icono de información con círculo abre por separado la documentación resuelta por el manifiesto para cada política compatible y ajuste administrado conocido.</p></context>
     <steps>
       <step><cmd>Para una política compatible o un ajuste administrado conocido, active el icono de información con círculo junto a su fila.</cmd><info><p>Resultado esperado: la documentación localizada se abre en una pestaña nueva sin seleccionar la fila ni modificar los datos del perfil.</p></info></step>
       <step><cmd>Confirme el destino de la documentación y el elemento activo del árbol.</cmd><info><p>Resultado esperado: el árbol se expande desde «Documentos» por la guía y la sección correspondientes hasta el tema exacto, que queda visible y activo.</p></info></step>

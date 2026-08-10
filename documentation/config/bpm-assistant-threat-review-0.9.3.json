@@ -42,29 +42,29 @@
       "severity": "high",
       "finding": "A BPM anchor could admit typoglycemia, invisible-format, hex or double-percent encoded control overrides before semantic screening.",
       "resolution": "The deterministic pre-generation gate now rejects bounded action-plus-target typoglycemia, unsafe Unicode format/control shaping, hex payloads and two percent-decoding layers before aliases, semantic similarity, retrieval or inference.",
-      "regression": "tests/test_assistant_threat_review_093.py"
+      "regression": "tests/integration/ai/incubation/test_assistant_threat_review.py"
     },
     {
       "id": "M8R-02",
       "severity": "high",
       "finding": "Managed-path validation did not reject an encoded/backslash path component or a symlink located above the configured managed root.",
       "resolution": "Execution-path admission rejects encoded separators, backslashes, alternate-stream colons, controls and every existing symlink component from the filesystem anchor through the managed file.",
-      "regression": "tests/test_ai_least_privilege_093.py"
+      "regression": "tests/integration/ai/core/test_ai_least_privilege.py"
     }
   ],
   "threat_dispositions": [
-    {"id": "AI093-T01", "disposition": "closed", "evidence": ["tests/test_scope_adversarial_fixtures_093.py", "tests/test_assistant_threat_review_093.py", "tests/test_prompt_content_boundary_093.py"]},
+    {"id": "AI093-T01", "disposition": "closed", "evidence": ["tests/integration/ai/incubation/test_scope_adversarial_fixtures.py", "tests/integration/ai/incubation/test_assistant_threat_review.py", "tests/integration/ai/incubation/test_prompt_content_boundary.py"]},
     {"id": "AI093-T02", "disposition": "release-blocker", "blocking_milestone": "M9", "condition": "No web adapter may be enabled until fixed-provider SSRF, redirect, DNS/IP and proxy tests pass."},
-    {"id": "AI093-T03", "disposition": "closed", "evidence": ["tests/test_ai_least_privilege_093.py", "tests/test_local_model_installation.py", "tests/test_local_runtime_installation.py"]},
-    {"id": "AI093-T04", "disposition": "closed", "evidence": ["tests/test_local_inference_worker.py", "documentation/config/local-chat-worker-contract-0.9.3.json"]},
+    {"id": "AI093-T03", "disposition": "closed", "evidence": ["tests/integration/ai/core/test_ai_least_privilege.py", "tests/integration/ai/core/test_local_model_installation.py", "tests/integration/ai/core/test_local_runtime_installation.py"]},
+    {"id": "AI093-T04", "disposition": "closed", "evidence": ["tests/integration/ai/incubation/test_local_inference_worker.py", "documentation/config/local-chat-worker-contract-0.9.3.json"]},
     {"id": "AI093-T05", "disposition": "release-blocker", "blocking_milestone": "M10", "condition": "No assistant HTTP route may be added until actual-body bounds, session-bound CSRF rotation/replay, strict schema and same-origin rejection are composed and tested."},
     {"id": "AI093-T06", "disposition": "release-blocker", "blocking_milestone": "M10", "condition": "Backend answer/citation validation is closed; browser enablement additionally requires text-only sinks, strict help CSP and malicious-render fixtures."},
     {"id": "AI093-T07", "disposition": "release-blocker", "blocking_milestone": "M10", "condition": "Worker, packet, queue, timeout and RSS bounds are closed; route enablement additionally requires bounded body reading and per-session request rate."},
-    {"id": "AI093-T08", "disposition": "closed", "evidence": ["tests/test_local_model_installation.py", "tests/test_local_runtime_installation.py", "tests/test_documentation_chat_retrieval_093.py"]},
-    {"id": "AI093-T09", "disposition": "closed", "evidence": ["tests/test_conversation_context_093.py", "tests/test_conversation_stream_093.py", "documentation/config/bpm-conversation-retention-contract-0.9.3.json"]},
+    {"id": "AI093-T08", "disposition": "closed", "evidence": ["tests/integration/ai/core/test_local_model_installation.py", "tests/integration/ai/core/test_local_runtime_installation.py", "tests/integration/ai/incubation/test_documentation_chat_retrieval.py"]},
+    {"id": "AI093-T09", "disposition": "closed", "evidence": ["tests/integration/ai/incubation/test_conversation_context.py", "tests/integration/ai/incubation/test_conversation_stream.py", "documentation/config/bpm-conversation-retention-contract-0.9.3.json"]},
     {"id": "AI093-T10", "disposition": "release-blocker", "blocking_milestone": "M11", "condition": "Content-free diagnostics, memory-only retention and proxy-free offline worker are closed; the production launcher must prove zero post-install network and disabled core/crash dumps."},
     {"id": "AI093-T11", "disposition": "release-blocker", "blocking_milestone": "M13", "condition": "Exact model/runtime source, revision, license, size and SHA-256 are pinned; release still requires locked dependency/advisory/provenance evidence."},
-    {"id": "AI093-T12", "disposition": "closed", "evidence": ["tests/test_ai_least_privilege_093.py", "tests/test_local_inference_worker.py", "tests/test_scope_adversarial_fixtures_093.py"]},
+    {"id": "AI093-T12", "disposition": "closed", "evidence": ["tests/integration/ai/core/test_ai_least_privilege.py", "tests/integration/ai/incubation/test_local_inference_worker.py", "tests/integration/ai/incubation/test_scope_adversarial_fixtures.py"]},
     {"id": "AI093-T13", "disposition": "release-blocker", "blocking_milestone": "M9", "condition": "No web evidence exists; provider activation requires per-query consent, minimal disclosure, sanitization, external labelling and local-only fallback tests."},
     {"id": "AI093-T14", "disposition": "release-blocker", "blocking_milestone": "M11", "condition": "Current cancellation, timeout, process-group termination and unload fail closed; full update, rollback, removal and recovery composition remains mandatory."}
   ],
@@ -84,17 +84,17 @@
     "M13": ["AI093-T11"]
   },
   "regression_suite": [
-    "tests/test_assistant_threat_review_093.py",
-    "tests/test_scope_adversarial_fixtures_093.py",
-    "tests/test_prompt_content_boundary_093.py",
-    "tests/test_ai_least_privilege_093.py",
-    "tests/test_local_inference_worker.py",
-    "tests/test_local_model_installation.py",
-    "tests/test_local_runtime_installation.py",
-    "tests/test_generation_answer_validation_093.py",
-    "tests/test_conversation_context_093.py",
-    "tests/test_conversation_stream_093.py",
-    "tests/test_conversation_diagnostics_093.py"
+    "tests/integration/ai/incubation/test_assistant_threat_review.py",
+    "tests/integration/ai/incubation/test_scope_adversarial_fixtures.py",
+    "tests/integration/ai/incubation/test_prompt_content_boundary.py",
+    "tests/integration/ai/core/test_ai_least_privilege.py",
+    "tests/integration/ai/incubation/test_local_inference_worker.py",
+    "tests/integration/ai/core/test_local_model_installation.py",
+    "tests/integration/ai/core/test_local_runtime_installation.py",
+    "tests/integration/ai/incubation/test_generation_answer_validation.py",
+    "tests/integration/ai/incubation/test_conversation_context.py",
+    "tests/integration/ai/incubation/test_conversation_stream.py",
+    "tests/integration/ai/incubation/test_conversation_diagnostics.py"
   ],
   "reviewed_guidance": [
     "https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html",

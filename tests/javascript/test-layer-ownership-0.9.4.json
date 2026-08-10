@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM094-M8-05",
+  "test_owners": [
+    {
+      "id": "native-contract-settings",
+      "prefix": "tests/javascript/contract/settings/",
+      "layer": "contract",
+      "subsystem": "settings"
+    },
+    {
+      "id": "native-integration-profiles",
+      "prefix": "tests/javascript/integration/profiles/",
+      "layer": "integration",
+      "subsystem": "profiles"
+    },
+    {
+      "id": "native-integration-settings",
+      "prefix": "tests/javascript/integration/settings/",
+      "layer": "integration",
+      "subsystem": "settings"
+    }
+  ],
+  "support_owners": [
+    {
+      "id": "native-harness",
+      "prefix": "tests/javascript/support/"
+    },
+    {
+      "id": "native-cross-language-fixtures",
+      "prefix": "tests/javascript/fixtures/"
+    }
+  ]
+}

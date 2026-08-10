@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-guided-scenario" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Elegir un escenario guiado</title>
-  <shortdesc>Seleccione el escenario que mejor se adapte al objetivo del perfil para que Editor guiado pueda presentar un punto de partida útil.</shortdesc>
+  <shortdesc>Seleccione el escenario que mejor se adapte al objetivo del perfil para que <uicontrol>Editor guiado</uicontrol> pueda presentar un punto de partida útil.</shortdesc>
   <taskbody>
     <prereq><p>Usted conoce el propósito del perfil que desea respaldar.</p></prereq>
     <context><p>Los escenarios mantienen el primer paso orientado a las tareas y hacen que la línea de base sea más fácil de explicar durante la revisión.</p></context>

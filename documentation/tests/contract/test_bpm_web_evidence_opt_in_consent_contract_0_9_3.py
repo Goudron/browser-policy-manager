@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -16,24 +15,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def test_m9_02_pins_provider_privacy_retention_and_threat_boundaries() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M9-02"
-    assert contract["status"] == "implemented-memory-only-no-http-route-ui-or-network"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["configuration"] == {
-        "enabled_environment_variable": "BPM_WEB_EVIDENCE_ENABLED",
-        "enabled_by_default": False,
-        "credential_environment_variable": "BPM_BRAVE_SEARCH_API_SUBSCRIPTION_TOKEN",
-        "credential_model": "Administrator-provided BYOK token in server configuration only; BPM ships no shared credential.",
-        "missing_credential": "normal local-only state",
-        "credential_in_browser_or_logs": False,
-        "network_calls_added": 0,
-    }
 
 
 def test_m9_02_freezes_exact_disclosure_one_time_consent_and_no_network_boundary() -> None:

@@ -178,7 +178,10 @@ def build_inline_editor(definition) -> dict[str, Any] | None:
     if definition.id == "SanitizeOnShutdown":
         return _build_branch_inline_editor(definition)
 
-    if definition.additional_property_type == "object" and definition.additional_property_properties:
+    if (
+        definition.additional_property_type == "object"
+        and definition.additional_property_properties
+    ):
         return _build_dictionary_inline_editor(definition)
 
     if definition.type == "array" and definition.items_type == "object":
@@ -295,7 +298,12 @@ def _build_object_field_spec(prop, *, allow_nested: bool = True) -> dict[str, An
                 "enum": list(prop.enum or []),
             }
 
-    if allow_nested and prop.type == "object" and prop.additional_property_type == "object" and prop.additional_property_properties:
+    if (
+        allow_nested
+        and prop.type == "object"
+        and prop.additional_property_type == "object"
+        and prop.additional_property_properties
+    ):
         nested_fields: list[dict[str, Any]] = []
         unsupported_count = 0
 
@@ -323,7 +331,12 @@ def _build_object_field_spec(prop, *, allow_nested: bool = True) -> dict[str, An
                 "enum": list(prop.enum or []),
             }
 
-    if allow_nested and prop.type == "array" and prop.items_type == "object" and prop.item_properties:
+    if (
+        allow_nested
+        and prop.type == "array"
+        and prop.items_type == "object"
+        and prop.item_properties
+    ):
         array_item_fields: list[dict[str, Any]] = []
         unsupported_count = 0
 

@@ -24,9 +24,17 @@ def test_search_selection_shortlist_freezes_public_gates_and_exact_weights() -> 
     assert shortlist["target_bpm_version"] == "0.9.3"
     assert shortlist["status"] == "accepted-shortlist-not-benchmarked"
     assert tuple(shortlist["selection_inputs"]["locales"]) == LOCALES
-    assert shortlist["gate_rule"]["visibility"] == "All entry gates are explicit in this contract; there are no hidden vetoes."
+    assert (
+        shortlist["gate_rule"]["visibility"]
+        == "All entry gates are explicit in this contract; there are no hidden vetoes."
+    )
     assert [gate["id"] for gate in shortlist["entry_gates"]] == [
-        "SG093-E1", "SG093-E2", "SG093-E3", "SG093-E4", "SG093-E5", "SG093-E6"
+        "SG093-E1",
+        "SG093-E2",
+        "SG093-E3",
+        "SG093-E4",
+        "SG093-E5",
+        "SG093-E6",
     ]
 
     dimensions = shortlist["weighted_matrix"]["dimensions"]
@@ -44,16 +52,19 @@ def test_search_selection_shortlist_freezes_public_gates_and_exact_weights() -> 
         "maximum": 5,
         "meaning": "0 is no demonstrated fit; 5 is demonstrated fit on the frozen evidence.",
     }
-    assert "at least 4/5 for relevance and locale parity" in shortlist["weighted_matrix"]["selection_rule"]
+    assert (
+        "at least 4/5 for relevance and locale parity"
+        in shortlist["weighted_matrix"]["selection_rule"]
+    )
 
 
-def test_search_selection_shortlist_admits_only_control_pagefind_and_community_meilisearch() -> None:
+def test_search_selection_shortlist_admits_only_control_pagefind_and_community_meilisearch() -> (
+    None
+):
     shortlist = _shortlist()
     candidates = {candidate["id"]: candidate for candidate in shortlist["candidates"]}
 
-    assert set(candidates) == {
-        "current-static-control", "pagefind-1.5.2", "meilisearch-ce-1.45.1"
-    }
+    assert set(candidates) == {"current-static-control", "pagefind-1.5.2", "meilisearch-ce-1.45.1"}
     assert candidates["current-static-control"]["entry_status"] == "admitted-control"
     assert "browser scorer is simpler" in candidates["current-static-control"]["known_constraint"]
 
@@ -68,8 +79,13 @@ def test_search_selection_shortlist_admits_only_control_pagefind_and_community_m
     assert meilisearch["license"] == "MIT (Community Edition only)"
     assert meilisearch["version"] == "1.45.1"
     assert meilisearch["entry_status"] == "admitted-to-prototype-with-isolation-condition"
-    assert any("browser never contacts the daemon" in condition for condition in meilisearch["prototype_conditions"])
-    assert any("LAN/public listener" in condition for condition in meilisearch["prototype_conditions"])
+    assert any(
+        "browser never contacts the daemon" in condition
+        for condition in meilisearch["prototype_conditions"]
+    )
+    assert any(
+        "LAN/public listener" in condition for condition in meilisearch["prototype_conditions"]
+    )
     assert "No additional candidate is admitted" in shortlist["additional_candidate_policy"]
 
 

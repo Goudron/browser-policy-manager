@@ -32,7 +32,9 @@ def _topic_root(locale: str, topic_id: str) -> ET.Element:
 
 
 def _section_keyrefs(locale: str) -> dict[str, list[str]]:
-    root = ET.fromstring((DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8"))
+    root = ET.fromstring(
+        (DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8")
+    )
     sections: dict[str, list[str]] = {}
     for topichead in root.findall("topichead"):
         intent = topichead.find("./topicmeta/data[@name='intent-id']")
@@ -91,10 +93,7 @@ def test_core_topics_are_registered_in_the_case_oriented_user_guide_plan() -> No
 
 
 def test_english_core_topics_cover_first_time_user_decision_concepts() -> None:
-    text = "\n".join(
-        "".join(_topic_root("en", topic_id).itertext())
-        for topic_id in CORE_TOPICS
-    )
+    text = "\n".join("".join(_topic_root("en", topic_id).itertext()) for topic_id in CORE_TOPICS)
 
     catalog = json.loads(
         (DOCUMENTATION_ROOT.parent / "app/i18n/en.json").read_text(encoding="utf-8")

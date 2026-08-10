@@ -128,10 +128,10 @@ Future command topics must:
 
 ## Verification
 
-Focused check: `./.venv/bin/pytest -q tests/test_linux_distribution_selection_091.py`
+Focused check: `./.venv/bin/pytest -q tests/integration/app/test_linux_distribution_selection_091.py`
 
 ```bash
-./.venv/bin/pytest -q tests/test_linux_distribution_selection_091.py
+./.venv/bin/pytest -q tests/integration/app/test_linux_distribution_selection_091.py
 ```
 
 Release gates: `make test-docs-contract`, `make docs-release-check`, `make test-release`

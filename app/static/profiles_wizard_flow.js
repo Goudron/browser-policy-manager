@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         elements = {},
@@ -86,6 +85,7 @@
         let wizardStarter = "basic_corporate";
         let wizardComplianceLayer = "none";
         let wizardComplianceSnapshot = null;
+        let complianceLoadSequence = 0;
         const wizardComplianceNotes = new Map();
         let wizardPreviewStarter = null;
         let siteDataFineTuningPreference = null;
@@ -689,6 +689,52 @@
                 return cloneJsonValue(schemaVariant.policy_values, {}) || {};
             }
             return null;
+        }
+
+        async function loadComplianceSelection(starterKey, schemaVersion, layerKey) {
+            if (layerKey === "none" || starterKey === "keep_current") return;
+            const starterVariants = complianceMergedPresets[starterKey] || {};
+            const layerVariants = starterVariants[layerKey] || {};
+            if (layerVariants[schemaVersion]) return;
+
+            const query = new URLSearchParams({
+                starter_key: starterKey,
+                schema_version: schemaVersion,
+                layer_key: layerKey,
+            });
+            const response = await fetch(`/profiles/guided-compliance?${query.toString()}`);
+            if (!response.ok) {
+                throw new Error(`Guided CIS data request failed (${response.status}).`);
+            }
+            const snapshot = await response.json();
+            if (!snapshot || typeof snapshot !== "object" || Array.isArray(snapshot)) {
+                throw new Error("Guided CIS data response is invalid.");
+            }
+            if (!complianceMergedPresets[starterKey]) complianceMergedPresets[starterKey] = {};
+            if (!complianceMergedPresets[starterKey][layerKey]) {
+                complianceMergedPresets[starterKey][layerKey] = {};
+            }
+            complianceMergedPresets[starterKey][layerKey][schemaVersion] = snapshot;
+        }
+
+        async function ensureActiveComplianceSelection(starterKey, layerKey) {
+            if (layerKey === "none" || starterKey === "keep_current") return true;
+            const schemaVersion = documentRef.getElementById("profile-type").value
+                || wizardSchemaEl.value
+                || defaultSchemaVersion;
+            try {
+                await loadComplianceSelection(starterKey, schemaVersion, layerKey);
+                return true;
+            } catch (error) {
+                setStatus(
+                    t("profiles.error_wizard_starter").replace(
+                        "{detail}",
+                        error?.message || error,
+                    ),
+                    "error",
+                );
+                return false;
+            }
         }
 
         function getMergedStarterSummary(starterKey, schemaVersion, complianceLayerKey = wizardComplianceLayer) {
@@ -1565,15 +1611,27 @@
             updateWizardSummary();
         }
 
-        function setWizardComplianceLayer(nextLayer, options = {}) {
-            wizardComplianceLayer = complianceLayers[nextLayer] !== undefined ? nextLayer : "none";
-            if (wizardStarter === "keep_current" && wizardComplianceLayer !== "none" && !options.allowKeepCurrent) {
-                wizardComplianceLayer = "none";
+        async function setWizardComplianceLayer(nextLayer, options = {}) {
+            const requestedLayer = complianceLayers[nextLayer] !== undefined ? nextLayer : "none";
+            const layer = wizardStarter === "keep_current" && requestedLayer !== "none" && !options.allowKeepCurrent
+                ? "none"
+                : requestedLayer;
+            const loadSequence = ++complianceLoadSequence;
+            if (!options.skipApply && !(await ensureActiveComplianceSelection(wizardStarter, layer))) {
+                return;
             }
+            if (loadSequence !== complianceLoadSequence) {
+                return;
+            }
+            wizardComplianceLayer = layer;
             updateWizardStarterUi();
             updateWizardSummary();
             if (!options.skipApply && wizardStarter !== "keep_current") {
-                applyStarterPreset(wizardStarter, { preserveScenario: true, preserveComplianceLayer: true });
+                await applyStarterPreset(wizardStarter, {
+                    preserveScenario: true,
+                    preserveComplianceLayer: true,
+                    complianceLoaded: true,
+                });
             }
         }
 
@@ -1624,13 +1682,18 @@
             applyStarterPreset(resolveScenarioStarter(wizardScenario), { preserveScenario: true });
         }
 
-        function applyStarterPreset(starterKey, options = {}) {
+        async function applyStarterPreset(starterKey, options = {}) {
             const editor = getEditor();
             if (!editor) return;
 
             if (starterKey === "keep_current") {
                 setWizardStarter(starterKey, options);
                 setStatus(t("profiles.wizard_starter_applied_keep"), "info");
+                return;
+            }
+
+            if (!options.complianceLoaded
+                && !(await ensureActiveComplianceSelection(starterKey, wizardComplianceLayer))) {
                 return;
             }
 
@@ -2017,5 +2080,4 @@
         };
     }
 
-    window.BPMProfilesWizardFlow = { create };
-})();
+    export { create };

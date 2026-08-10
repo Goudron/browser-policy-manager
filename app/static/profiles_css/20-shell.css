@@ -1,0 +1,154 @@
+        .app-body {
+            min-height: 100vh;
+        }
+        .app-shell {
+            max-width: 1480px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .app-hero {
+            margin-bottom: 20px;
+            padding: 28px;
+            border-radius: 18px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) 340px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .hero-content,
+        .hero-rail {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(52, 211, 153, 0.28);
+            background: rgba(236, 253, 245, 0.8);
+            color: #0f766e;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            margin: 18px 0 0;
+            max-width: 10ch;
+            font-size: clamp(2.8rem, 5vw, 5rem);
+            line-height: 0.96;
+            letter-spacing: -0.04em;
+        }
+
+        .hero-subtitle {
+            margin: 18px 0 0;
+            max-width: 62ch;
+            font-size: 1.12rem;
+            line-height: 1.75;
+            color: var(--muted);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 28px;
+        }
+
+        .metric-card {
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .metric-card-value {
+            font-size: 2.2rem;
+            line-height: 1;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .settings-panel {
+            display: grid;
+            gap: 14px;
+            border-radius: 14px;
+            padding: 18px;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .setting-stack {
+            display: grid;
+            gap: 14px;
+        }
+
+        .setting-note {
+            border-radius: 10px;
+            padding: 12px 14px;
+            line-height: 1.6;
+        }
+
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+            position: sticky;
+            top: 14px;
+            z-index: 20;
+            padding: 10px;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            background: var(--raised-surface-bg);
+        }
+
+        .section-nav-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--panel-strong);
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 600;
+            transition: border-color 160ms ease, background-color 160ms ease;
+        }
+
+        .section-nav-link:hover {
+            border-color: rgba(15, 118, 110, 0.32);
+            background: var(--control-hover-bg);
+        }
+
+        .app-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .workspace-dock {
+            display: grid;
+            grid-template-columns: minmax(0, 0.92fr) minmax(420px, 1.08fr);
+            gap: 16px;
+            align-items: start;
+            margin-bottom: 18px;
+            padding: 16px 18px;
+            border-radius: 16px;
+        }

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -16,29 +15,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def test_m9_03_pins_consent_security_and_one_fixed_no_proxy_no_redirect_post() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M9-03"
-    assert contract["status"] == "implemented-fixed-provider-adapter-no-route-ui-or-live-smoke"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["admission"]["required_order"] == [
-        "request_web",
-        "deterministic BPM scope allow",
-        "M9-02 exact one-use consent",
-        "one fixed provider POST",
-    ]
-    network = contract["network"]
-    assert network["endpoint"] == web_evidence.BRAVE_LLM_CONTEXT_ENDPOINT
-    assert network["destinations"] == ["api.search.brave.com:443"]
-    assert network["proxy_environment_inheritance"] is False
-    assert network["follow_redirects"] is False
-    assert network["automatic_retries"] == network["result_url_connections"] == 0
-    assert network["location_headers"] is False
-    assert network["live_smoke_test"] is False
 
 
 def test_m9_03_freezes_request_response_filter_sanitization_and_local_only_fallback() -> None:

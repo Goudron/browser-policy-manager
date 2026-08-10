@@ -24,7 +24,7 @@ APP_CACHE_RESET_REGISTRY = (
         policy="reset when tests mutate BPM_* environment or reload settings consumers",
     ),
     CacheResetSpec(
-        name="raw_schema_loader",
+        name="schema_loader",
         module="app.core.schemas_loader",
         callback_path="load_schema.cache_clear",
         policy="reset when tests replace schema directories or files",
@@ -39,7 +39,7 @@ APP_CACHE_RESET_REGISTRY = (
         name="policy_validators",
         module="app.core.policy_validation",
         callback_path="clear_policy_validator_cache",
-        policy="reset when tests replace schema loaders or validator builders",
+        policy="reset when tests replace schema loaders or validator builders; normal invalidation follows schema artifact identity",
     ),
     CacheResetSpec(
         name="locale_catalogs",
@@ -48,10 +48,22 @@ APP_CACHE_RESET_REGISTRY = (
         policy="reset when tests replace locale roots or locale files",
     ),
     CacheResetSpec(
+        name="response_assets",
+        module="app.core.response_assets",
+        callback_path="clear_response_asset_cache",
+        policy="reset when tests replace locale or favicon assets; normal invalidation follows file identity",
+    ),
+    CacheResetSpec(
         name="profile_asset_version",
         module="app.web.profiles_context",
         callback_path="_resolve_profiles_asset_version_from_paths.cache_clear",
         policy="worker-local immutable cache in normal tests; reset when files are replaced",
+    ),
+    CacheResetSpec(
+        name="profiles_page_catalogs",
+        module="app.web.profiles_context",
+        callback_path="clear_profiles_page_catalog_cache",
+        policy="reset when schema, documentation, or catalog builders are replaced; normal invalidation follows artifact identity",
     ),
 )
 

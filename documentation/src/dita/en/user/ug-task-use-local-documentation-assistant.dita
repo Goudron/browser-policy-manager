@@ -5,15 +5,15 @@
   <shortdesc>Use the documentation-assistant chat while local-model training is scheduled for a later BPM version.</shortdesc>
   <taskbody>
     <prereq><p>Open a BPM documentation page in the language in which you want to ask the question. The assistant entry is in the lower-right corner; the ordinary documentation search remains available whether or not the assistant is ready.</p></prereq>
-    <context><p>In BPM 0.9.3, local-model training is not delivered. For every submitted question the chat displays: <q>The local model is currently being trained. This functionality will be available in one of the following versions.</q> It does not generate an answer, search an index, use external sources, or replace ordinary documentation search.</p></context>
+    <context><p>In BPM 0.9.4, local-model training is not delivered. For every submitted question the chat displays: <q>The local model is currently being trained. This functionality will be available in one of the following versions.</q> It does not generate an answer, search an index, use external sources, or replace ordinary documentation search.</p></context>
     <steps>
-      <step><cmd>Select <ph>BPM AI Assistant</ph> to open the floating chat.</cmd><info><p>On a desktop, the expanded panel is about half of the viewport width and 90 percent of its visible height. The transcript scrolls while the question field and status row remain visible.</p></info></step>
+      <step><cmd>Select <uicontrol>BPM AI Assistant</uicontrol> to open the floating chat.</cmd><info><p>On a desktop, the expanded panel is about half of the viewport width and 90 percent of its visible height. The transcript scrolls while the question field and status row remain visible.</p></info></step>
       <step><cmd>Enter any question in the current documentation language and send it.</cmd><info><p>The chat accepts the turn and returns the localized training notice. It does not start a model, a retrieval worker, an index request, or an external request.</p></info></step>
       <step><cmd>Read the training notice in the transcript.</cmd><info><p>This is a product-state message, not a BPM answer and it has no documentation sources. Do not rely on it to configure or validate a policy.</p></info></step>
-      <step><cmd>Use deterministic documentation search for current product information.</cmd><info><p>Search, filters, navigation and their result order remain independent of the assistant and are the supported way to find published BPM topics in 0.9.3.</p></info></step>
-      <step><cmd>Use <ph>Clear</ph> if you want to remove the visible conversation.</cmd><info><p>The panel state and completed messages remain in the current browser tab and documentation language after navigation or reload. Clearing a conversation does not remove local artifacts.</p></info></step>
+      <step><cmd>Use deterministic documentation search for current product information.</cmd><info><p>Search, filters, navigation and their result order remain independent of the assistant and are the supported way to find published BPM topics in 0.9.4.</p></info></step>
+      <step><cmd>Use <uicontrol>Clear</uicontrol> if you want to remove the visible conversation.</cmd><info><p>The panel state and completed messages remain in the current browser tab and documentation language after navigation or reload. Clearing a conversation does not remove local artifacts.</p></info></step>
     </steps>
     <result><p>The chat shows the localized training notice for the submitted question. Deterministic search remains available for every current BPM-information need.</p></result>
-    <postreq><p>Local-model training, generated answers, citations and external sources are outside BPM 0.9.3. Do not treat the notice as a substitute for testing a policy or administrator approval.</p></postreq>
+    <postreq><p>Local-model training, generated answers, citations and external sources are outside BPM 0.9.4. Do not treat the notice as a substitute for testing a policy or administrator approval.</p></postreq>
   </taskbody>
 </task>

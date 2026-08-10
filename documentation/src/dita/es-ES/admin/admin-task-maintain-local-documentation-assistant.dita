@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-maintain-local-documentation-assistant" xml:lang="es-ES" audience="administrator devops security-reviewer" product="bpm-0-9-1" platform="linux">
-  <title>Mantener el límite del asistente de documentación en BPM 0.9.3</title>
+  <title>Mantener el límite del asistente de documentación en BPM 0.9.4</title>
   <shortdesc>Mantenga correcto el aviso de entrenamiento localizado y el límite con la búsqueda determinista al actualizar la documentación de BPM.</shortdesc>
   <taskbody>
     <prereq><p>Tenga preparada la revisión de código fuente BPM aprobada y el flujo de publicación de documentación.</p></prereq>
-    <context><p>En 0.9.3 no hay un modelo local, artefacto de modelo, generación RAG, almacén de embeddings, almacén de citas ni proveedor de fuentes externas que mantener. No cree estado de mantenimiento para funciones que esta versión no entrega.</p></context>
+    <context><p>En 0.9.4 no hay un modelo local, artefacto de modelo, generación RAG, almacén de embeddings, almacén de citas ni proveedor de fuentes externas que mantener. No cree estado de mantenimiento para funciones que esta versión no entrega.</p></context>
     <steps>
       <step><cmd>Aplique la revisión BPM aprobada y vuelva a compilar la documentación.</cmd><info><p>Use el flujo documental normal, incluido <codeph>make docs-install-dev</codeph> al preparar un entorno de desarrollo.</p></info></step>
       <step><cmd>Abra la documentación publicada en todos los idiomas compatibles.</cmd><info><p>Compruebe la entrada del asistente y el funcionamiento independiente de la búsqueda determinista.</p></info></step>
       <step><cmd>Envíe una pregunta en cada configuración regional.</cmd><info><p>Compruebe el aviso de cada idioma y la ausencia de respuesta, fuente, cita, afirmación externa o instalación de modelo.</p></info></step>
-      <step><cmd>No ejecute comandos de instalación de modelo ni de generación RAG para 0.9.3.</cmd><info><p>Pertenecen a una versión posterior y no recuperan el aviso de entrenamiento.</p></info></step>
+      <step><cmd>No ejecute comandos de instalación de modelo ni de generación RAG para 0.9.4.</cmd><info><p>Pertenecen a una versión posterior y no recuperan el aviso de entrenamiento.</p></info></step>
       <step><cmd>Registre la revisión de documentación y el resultado de la verificación.</cmd><info><p>Trate cualquier diferencia entre el aviso publicado y el límite de búsqueda determinista como un defecto de documentación.</p></info></step>
     </steps>
     <result><p>El portal publicado conserva un aviso localizado en el chat y una ruta independiente hacia la información actual mediante la búsqueda determinista.</p></result>

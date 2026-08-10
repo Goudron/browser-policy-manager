@@ -16,5 +16,5 @@
   "topic_and_citation_reset": "If the accepted current evidence has no topic identity in common with the session, retain bounded dialogue but discard stale resolved entities before worker generation. A version change deletes the session. Every answer binds only citations from its fresh current EvidencePack.",
   "clear": "Clear removes the exact session, turns, entities, topic identities and all handles. A missing or cleared session cannot provide context.",
   "boundaries": {"http_route": false, "browser_storage": false, "database": false, "disk": false, "telemetry": false, "cross_locale_context": false, "ordinary_search_calls": 0, "summary_model": false},
-  "verification": {"runtime": "tests/test_conversation_context_093.py", "contract": "documentation/tests/contract/test_grounded_conversation_context_contract_0_9_3.py", "architecture": "docs/architecture/grounded-conversation-context-0.9.3.md"}
+  "verification": {"runtime": "tests/integration/ai/incubation/test_conversation_context.py", "contract": "documentation/tests/contract/test_grounded_conversation_context_contract_0_9_3.py", "architecture": "docs/architecture/grounded-conversation-context-0.9.3.md"}
 }

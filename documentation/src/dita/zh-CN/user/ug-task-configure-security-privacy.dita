@@ -12,7 +12,7 @@
       <step><cmd>设置配置文件所需的 cookie、清理、DNS 和安全强化选项。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>检查验证消息并解释审核中的任何异常情况。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>该配置文件经过审查的安全和隐私状况。</p></result>
+    <result><p>该配置文件经过审查的<uicontrol>安全和隐私</uicontrol>状况。</p></result>
     <postreq><p>恢复：如果站点工作流程中断，请重新访问权限或 cookie 设置并与配置文件目标进行比较。</p></postreq>
   </taskbody>
   <related-links>

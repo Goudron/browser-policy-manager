@@ -16,10 +16,12 @@ def test_generated_documentation_subsystem_snapshot_is_bounded_and_reproducible(
     second = generate_subsystem_snapshot.generate_snapshot()
 
     assert first == second
-    assert "Deterministic input digest:" in first
+    assert "Declared source digest:" in first
+    assert "Generated only by `make docs-snapshot`" in first
+    assert "Declared Source Owners" in first
     assert "Runtime `/help/` bridge" in first
     assert "`make docs-snapshot`" in first
-    assert "`documentation/PROJECT_SNAPSHOT.md`" in first
+    assert "`documentation/AGENTS.md`" in first
 
 
 def test_generated_documentation_subsystem_snapshot_excludes_heavy_and_unrelated_surfaces() -> None:
@@ -31,21 +33,26 @@ def test_generated_documentation_subsystem_snapshot_excludes_heavy_and_unrelated
         "documentation/reports/",
         "documentation/.cache/",
         "documentation/.toolchain/",
-        "__pycache__",
-        ".pyc",
+        "documentation/src/generated/",
         "search/en/index.json",
         "app/api/",
         "app/services/",
         "app/static/",
     ):
         assert excluded not in snapshot
-    assert "app/documentation" not in snapshot
-    assert "unrelated application modules outside the documentation runtime bridge" in snapshot
+    assert "Environment And Report Evidence Excluded From This Snapshot" in snapshot
+    assert "Git state, local-machine paths" in snapshot
 
 
-def test_snapshot_generator_includes_only_allowed_files() -> None:
-    paths = generate_subsystem_snapshot._files_under(DOCUMENTATION_ROOT / "tests")
+def test_snapshot_generator_uses_only_explicit_file_inputs() -> None:
+    paths = generate_subsystem_snapshot._declared_paths()
 
     assert paths
-    assert all("__pycache__" not in path.parts for path in paths)
-    assert all(path.suffix != ".pyc" for path in paths)
+    assert all(path.is_file() for path in paths)
+    assert all(path.is_relative_to(DOCUMENTATION_ROOT.parent) for path in paths)
+    assert all("build" not in path.parts for path in paths)
+    assert all("reports" not in path.parts for path in paths)
+    assert all("vendor" not in path.parts for path in paths)
+    assert (
+        DOCUMENTATION_ROOT / "src/dita/en/user/ug-concept-browser-policy-manager-overview.dita"
+    ) not in paths

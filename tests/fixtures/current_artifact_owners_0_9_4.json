@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "facts": {
+    "release": {
+      "authoritative_paths": [
+        "pyproject.toml",
+        "app/core/config.py",
+        "CHANGELOG.md"
+      ],
+      "historical_paths": [
+        "docs/bpm_0_8_5_refactoring_backlog_2026-06-01.md",
+        "docs/bpm_0_9_3_documentation_search_local_rag_backlog_2026-07-28.md"
+      ]
+    },
+    "documentation_build": {
+      "authoritative_paths": [
+        "documentation/buildlib/",
+        "documentation/config/artifact-policy.json",
+        "documentation/config/pdf-generation-contract-0.9.3.json"
+      ],
+      "historical_paths": [
+        "documentation/tools/build_docs.py"
+      ]
+    },
+    "documentation_security": {
+      "authoritative_paths": [
+        "documentation/buildlib/portal.py",
+        "documentation/assets/theme/bpm-docs-search.js",
+        "documentation/config/artifact-policy.json"
+      ],
+      "historical_paths": [
+        "docs/architecture/product-documentation-accessibility-security-contract-0.9.0.md"
+      ]
+    },
+    "provenance_and_licensing": {
+      "authoritative_paths": [
+        "docs/architecture/product-documentation-provenance-matrix-0.9.0.json",
+        "app/compliance/firefox/cis/sources.yaml",
+        "LICENSE"
+      ],
+      "historical_paths": [
+        "docs/architecture/product-documentation-provenance-review-0.9.0.md"
+      ]
+    },
+    "migrations": {
+      "authoritative_paths": [
+        "alembic/versions/",
+        "docs/architecture/database-upgrade-matrix-0.9.4.json",
+        "tests/fixtures/database_upgrade/golden_profiles_0_9_4.json"
+      ],
+      "historical_paths": [
+        "docs/archive/2026-q2/"
+      ]
+    },
+    "documentation_history": {
+      "authoritative_paths": [
+        "docs/docs-index.md",
+        "docs/docs-manifest.json"
+      ],
+      "historical_paths": [
+        "docs/archive/",
+        "docs/bpm_0_8_5_refactoring_backlog_2026-06-01.md",
+        "docs/bpm_0_9_0_product_documentation_portal_backlog_2026-06-20.md",
+        "docs/bpm_0_9_1_documentation_completion_backlog_2026-07-06.md",
+        "docs/bpm_0_9_2_ui_compaction_documentation_coherence_backlog_2026-07-17.md",
+        "docs/bpm_0_9_3_documentation_search_local_rag_backlog_2026-07-28.md"
+      ]
+    }
+  },
+  "history_rule": "Historical documents are indexed for traceability. They must not be used as the authoritative owner of current release, runtime, security, provenance, licensing, migration, or documentation-build behavior."
+}

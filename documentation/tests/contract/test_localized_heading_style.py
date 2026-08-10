@@ -104,11 +104,7 @@ def test_russian_heading_review_records_normalized_titles_and_no_exceptions() ->
     ):
         assert required_fragment in review
 
-    violations = [
-        (str(path), title)
-        for path, title in _titles("ru")
-        if title.endswith(".")
-    ]
+    violations = [(str(path), title) for path, title in _titles("ru") if title.endswith(".")]
     assert violations == []
 
 
@@ -129,7 +125,10 @@ def test_german_heading_review_records_native_titles_and_ui_names() -> None:
         (str(path), title)
         for path, title in titles
         if title.endswith(".")
-        or any(fragment in title for fragment in ("Rohrichtlinien", "Suchgeführte", "Schemainkongruenz"))
+        or any(
+            fragment in title
+            for fragment in ("Rohrichtlinien", "Suchgeführte", "Schemainkongruenz")
+        )
     ]
     assert violations == []
 
@@ -223,10 +222,6 @@ def test_spanish_heading_review_preserves_infinitives_and_ui_names() -> None:
 @pytest.mark.parametrize("locale", sorted(IMPERATIVE_PATTERNS))
 def test_localized_dita_headings_use_the_locale_standard(locale: str) -> None:
     pattern = IMPERATIVE_PATTERNS[locale]
-    violations = [
-        (str(path), title)
-        for path, title in _titles(locale)
-        if pattern.search(title)
-    ]
+    violations = [(str(path), title) for path, title in _titles(locale) if pattern.search(title)]
 
     assert violations == []

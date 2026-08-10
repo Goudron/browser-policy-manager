@@ -30,11 +30,19 @@ def _process_state(pid: int | None) -> dict[str, Any] | None:
 
 
 def _active_stage(output_root: Path) -> Path | None:
-    stages = sorted(path for path in output_root.glob(".staging-*") if path.is_dir() and not path.is_symlink())
+    stages = sorted(
+        path for path in output_root.glob(".staging-*") if path.is_dir() and not path.is_symlink()
+    )
     return stages[-1] if stages else None
 
 
-def progress(chunks_path: Path, output_root: Path, cache_root: Path, pid: int | None = None, config_path: Path = CONFIG_PATH) -> dict[str, Any]:
+def progress(
+    chunks_path: Path,
+    output_root: Path,
+    cache_root: Path,
+    pid: int | None = None,
+    config_path: Path = CONFIG_PATH,
+) -> dict[str, Any]:
     """Return an exact cache/staging snapshot; this function never writes artifacts."""
     config = _read_json(config_path)
     candidate = _decision_candidate(config)
@@ -59,21 +67,32 @@ def progress(chunks_path: Path, output_root: Path, cache_root: Path, pid: int | 
             _read_cached_vector(cache_root, compatibility, _passage(chunk), dimension) is not None
             for chunk in grouped[locale]
         )
-        staged = bool(inspection_root and (inspection_root / locale / config["matrix"]["locale_manifest_file_name"]).is_file())
+        staged = bool(
+            inspection_root
+            and (inspection_root / locale / config["matrix"]["locale_manifest_file_name"]).is_file()
+        )
         locales.append(
             {
                 "locale": locale,
                 "chunk_count": len(grouped[locale]),
                 "cached_vectors": cached,
                 "staged": staged,
-                "state": "complete" if active_root and staged else "staged" if staged else "embedding_or_waiting",
+                "state": (
+                    "complete"
+                    if active_root and staged
+                    else "staged"
+                    if staged
+                    else "embedding_or_waiting"
+                ),
             }
         )
     complete = sum(entry["staged"] for entry in locales)
     cache_complete = sum(entry["cached_vectors"] for entry in locales)
     total = sum(entry["chunk_count"] for entry in locales)
     result: dict[str, Any] = {
-        "state": "activated" if active_pointer.is_file() else "building" if stage else "not_started",
+        "state": (
+            "activated" if active_pointer.is_file() else "building" if stage else "not_started"
+        ),
         "stage": str(stage) if stage else None,
         "active_pointer": str(active_pointer) if active_pointer.is_file() else None,
         "locales_complete": complete,
@@ -100,9 +119,13 @@ def _render(snapshot: dict[str, Any]) -> str:
         lines.append(f"Process {process['pid']}: {state}")
     for locale in snapshot["locales"]:
         marker = locale["state"] if locale["staged"] else "in progress / queued"
-        lines.append(f"  {locale['locale']}: {marker}; cache {locale['cached_vectors']}/{locale['chunk_count']}")
+        lines.append(
+            f"  {locale['locale']}: {marker}; cache {locale['cached_vectors']}/{locale['chunk_count']}"
+        )
     if snapshot["state"] == "building":
-        lines.append("The active index has not changed; activation happens only after every locale validates.")
+        lines.append(
+            "The active index has not changed; activation happens only after every locale validates."
+        )
     return "\n".join(lines)
 
 
@@ -121,7 +144,14 @@ def main() -> int:
         parser.error("--interval must be positive")
     while True:
         snapshot = progress(args.chunks, args.output_root, args.cache_root, args.pid, args.config)
-        print(json.dumps(snapshot, ensure_ascii=False, sort_keys=True) if args.json else _render(snapshot), flush=True)
+        print(
+            (
+                json.dumps(snapshot, ensure_ascii=False, sort_keys=True)
+                if args.json
+                else _render(snapshot)
+            ),
+            flush=True,
+        )
         if not args.watch:
             return 0
         time.sleep(args.interval)

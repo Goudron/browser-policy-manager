@@ -12,7 +12,11 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 DITA_ROOT = DOCUMENTATION_ROOT / "src/dita"
 GUARD = DOCUMENTATION_ROOT / "config/documentation-sufficiency-drift-guard-0.9.1.json"
-TEST_PATH_RE = re.compile(r"(?P<path>[A-Za-z0-9_./-]+\.py)(?:::(?P<test>test_[A-Za-z0-9_]+))?")
+SEMANTIC_AUTHORITY = DOCUMENTATION_ROOT / "config/documentation-semantic-contracts-0.9.4.json"
+SEMANTIC_TEST = DOCUMENTATION_ROOT / "tests/contract/test_documentation_semantic_contracts_0_9_4.py"
+TEST_PATH_RE = re.compile(
+    r"(?P<path>[A-Za-z0-9_./-]+\.(?:py|js))(?:::(?P<test>test_[A-Za-z0-9_]+))?"
+)
 TOPIC_TARGET_RE = re.compile(r"^(?:ug|admin|fx|cis)-")
 
 pytestmark = pytest.mark.docs_contract
@@ -51,6 +55,15 @@ def _keydefs(locale: str) -> dict[str, Path]:
 
 def _repository_matches(reference: str) -> list[Path]:
     return [Path(path) for path in glob.glob(str(REPOSITORY_ROOT / reference))]
+
+
+def _retired_witnesses() -> set[str]:
+    contract = _json(SEMANTIC_AUTHORITY)
+    return {
+        path
+        for replacement in contract["replacements"]
+        for path in replacement.get("retired_witnesses", [])
+    }
 
 
 def test_drift_guard_declares_all_review_sources_and_fail_closed_checks() -> None:
@@ -161,8 +174,7 @@ def test_linux_source_install_topics_retain_executable_command_blocks() -> None:
                 "codeblock",
             )
             assert all(
-                "".join(block.itertext()).strip() or block.attrib.get("conref")
-                for block in blocks
+                "".join(block.itertext()).strip() or block.attrib.get("conref") for block in blocks
             ), (locale, target["topic_id"], "codeblock content or conref")
 
 
@@ -181,6 +193,9 @@ def test_review_drift_sources_evidence_and_pytest_nodes_still_exist() -> None:
             assert matches, (item["review_id"], "focused_verification", command)
             for match in matches:
                 path = REPOSITORY_ROOT / match["path"]
+                if not path.is_file() and match["path"] in _retired_witnesses():
+                    assert SEMANTIC_TEST.is_file()
+                    continue
                 assert path.is_file(), (item["review_id"], match.group(0))
                 if match["test"]:
                     assert f"def {match['test']}(" in path.read_text(encoding="utf-8"), (

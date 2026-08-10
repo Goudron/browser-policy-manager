@@ -72,8 +72,7 @@ def _browser_document(document: dict[str, Any], aliases: dict[str, Any]) -> dict
         aliases,
     )
     searchable["aliases"] = sorted(
-        set(searchable["aliases"])
-        | {term for group in alias_groups for term in group["terms"]}
+        set(searchable["aliases"]) | {term for group in alias_groups for term in group["terms"]}
     )
     normalized_fields = {
         field: build_docs._normalize_search_values(
@@ -213,10 +212,14 @@ def run_benchmark() -> dict[str, Any]:
             "no_regression": no_regression,
             "strictly_improved_metrics": improvements,
         }
-    status = "pass" if all(
-        result["no_regression"] and result["strictly_improved_metrics"]
-        for result in comparison.values()
-    ) else "fail"
+    status = (
+        "pass"
+        if all(
+            result["no_regression"] and result["strictly_improved_metrics"]
+            for result in comparison.values()
+        )
+        else "fail"
+    )
     return {
         "schema_version": 1,
         "backlog_item": config["backlog_item"],
@@ -239,7 +242,9 @@ def main() -> int:
     args = parser.parse_args()
     report = run_benchmark()
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    args.output.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(f"browser tuning benchmark: {report['status']}", flush=True)
     return 0 if report["status"] == "pass" else 1
 

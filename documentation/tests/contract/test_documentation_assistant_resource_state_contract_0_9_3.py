@@ -23,23 +23,28 @@ def test_m10_05_renders_only_reviewed_resource_states_without_enabling_chat() ->
     state_machine = (
         DOCUMENTATION_ROOT / "assets/theme/bpm-docs-assistant-state-machine.js"
     ).read_text(encoding="utf-8")
-    builder = (DOCUMENTATION_ROOT / "tools/build_docs.py").read_text(encoding="utf-8")
+    builder = (DOCUMENTATION_ROOT / "buildlib/portal.py").read_text(encoding="utf-8")
 
     assert contract["backlog_item"] == "BPM093-M10-05"
     assert contract["status"] == "implemented-transport-free-resource-state-renderer"
     assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
     assert contract["input_boundary"]["exact_snapshot_fields"] == [
-        "api_version", "locale", "state", "state_epoch"
+        "api_version",
+        "locale",
+        "state",
+        "state_epoch",
     ]
     assert contract["boundaries"] == {
-        "page_load": "The script only registers a future-callable function. It performs no fetch, model inspection, status poll, retrieval, worker start, timeout, retry, unload, request or DOM update on page load.",
+        "page_load": (
+            "The script only registers a future-callable function. It performs no fetch, model inspection, status poll, retrieval, worker start, timeout, retry, unload, request or DOM update on page load."
+        ),
         "assistant_http_route": False,
         "chat_controls_enabled": False,
         "ordinary_search_changed": False,
         "web_request": False,
     }
     for required in (
-        "exactKeys(snapshot, [\"api_version\", \"locale\", \"state\", \"state_epoch\"])",
+        'exactKeys(snapshot, ["api_version", "locale", "state", "state_epoch"])',
         "snapshot.state_epoch <= previousEpoch",
         "stateEpochs = new WeakMap()",
         "data-assistant-recovery",

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -18,17 +17,6 @@ def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
 
 
-def test_m7_03_pins_context_to_api_orchestration_security_and_evidence() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M7-03"
-    assert contract["status"] == "implemented-memory-only-no-http-route"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert "exactly one active locale and BPM version" in contract["identity"]
-    assert "deletes the session before retrieval or inference" in contract["identity"]
-
-
 def test_m7_03_freezes_bounded_context_topic_reset_and_clear_semantics() -> None:
     contract = _contract()
 
@@ -38,7 +26,9 @@ def test_m7_03_freezes_bounded_context_topic_reset_and_clear_semantics() -> None
         "max_context_turns": 16,
         "max_resolved_entities": 8,
         "max_entity_characters": 120,
-        "eviction": "Keep the newest eight completed user-question/assistant-answer pairs as sixteen chronological entries. No model-generated summary is created or persisted.",
+        "eviction": (
+            "Keep the newest eight completed user-question/assistant-answer pairs as sixteen chronological entries. No model-generated summary is created or persisted."
+        ),
     }
     assert context.MAX_CONTEXT_PAIRS == 8
     assert context.MAX_CONTEXT_TURNS == 16

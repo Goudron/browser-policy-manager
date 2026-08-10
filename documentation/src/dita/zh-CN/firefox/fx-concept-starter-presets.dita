@@ -4,7 +4,7 @@
   <title>在详细策略编辑之前选择起始预设</title>
   <shortdesc>在您查看、验证和调整各个 Firefox 策略之前，入门预设会为常见环境生成 BPM 配置文件。</shortdesc>
   <conbody>
-    <section id="a-purpose"><title>目的</title><p>入门预设是 BPM 基线，而不是完成的部署建议。使用它创建初始策略集，然后在导出之前检查 引导式编辑器、所有设置 或 JSON 编辑器 中的每个更改值。</p></section>
+    <section id="a-purpose"><title>目的</title><p>入门预设是 BPM 基线，而不是完成的部署建议。使用它创建初始策略集，然后在导出之前检查 <uicontrol>引导式编辑器</uicontrol>、<uicontrol>所有设置</uicontrol> 或 <uicontrol>JSON 编辑器</uicontrol> 中的每个更改值。</p></section>
     <section id="a-basic-corporate"><title>基本企业</title><p>当配置文件应支持托管更新、遥测缩减、帐户和 Pocket 限制、企业根、系统代理、锁定的 Intranet 主页、受控下载和阻止默认扩展安装时，请选择企业预设。</p></section>
     <section id="a-classroom-kiosk"><title>教室信息亭</title><p>当浏览器从锁定的学校页面启动时选择教室或信息亭预设，使用受限浏览行为，限制隐私浏览和内部页面，并可以强制审查教室扩展，同时阻止其他扩展。</p></section>
     <section id="a-protected-station"><title>受保护站</title><p>为需要更严格代理、DNS、证书、权限、私密浏览、扩展和首选项控制的强化工作站或 SOC 式环境选择受保护站预设。导出前请检查每个网络和证书值，因为必须替换特定于环境的占位符。</p></section>

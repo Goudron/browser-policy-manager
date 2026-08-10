@@ -4,12 +4,12 @@
   <title>Handle raw and unknown settings</title>
   <shortdesc>Inspect imported unknown keys and raw-fallback values without losing them accidentally.</shortdesc>
   <taskbody>
-    <prereq><p>Open Review mode or a raw/unknown filtered list in All settings.</p></prereq>
+    <prereq><p>Open <uicontrol>Review</uicontrol> mode or a raw/unknown filtered list in <uicontrol>All settings</uicontrol>.</p></prereq>
     <context><p>Raw and unknown settings may come from import, schema differences, or values BPM cannot model visually. Treat them as preservation and review items, not routine edits.</p></context>
     <steps>
-      <step><cmd>Filter or open Review items for raw, unknown, or imported settings.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Inspect the raw value, source, validation state, and schema channel.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Decide whether to preserve, remove, reset, or inspect the value in JSON editor.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Filter or open <uicontrol>Review</uicontrol> items for raw, unknown, or imported settings.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Inspect the raw value, source, validation state, and schema channel.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Decide whether to preserve, remove, reset, or inspect the value in <uicontrol>JSON editor</uicontrol>.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
       <step><cmd>Save only after confirming the value should remain or be removed.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>Raw and unknown values are preserved or removed intentionally.</p></result>

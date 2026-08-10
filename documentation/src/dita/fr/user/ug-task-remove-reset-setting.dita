@@ -7,9 +7,9 @@
     <prereq><p>Ouvrez le panneau de détails des paramètres pour une valeur configurée.</p></prereq>
     <context><p>Les actions de suppression et de réinitialisation sont destructrices pour la valeur sélectionnée. L'utilisateur doit donc d'abord comprendre la source et les effets en aval.</p></context>
     <steps>
-      <step><cmd>Inspectez la valeur actuelle et le badge source.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Choisissez Supprimer ou Réinitialiser uniquement pour le paramètre que vous souhaitez modifier.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Lire tout message d'avertissement ou de validation affiché par le panneau de détails.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Inspectez la valeur actuelle et le badge source.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez <uicontrol>Supprimer</uicontrol> ou Réinitialiser uniquement pour le paramètre que vous souhaitez modifier.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Lire tout message d'avertissement ou de validation affiché par le panneau de détails.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Enregistrez le profil après avoir confirmé que la valeur est absente, réinitialisée ou héritée comme prévu.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Le paramètre ne s'applique plus à partir de la valeur configurée précédente.</p></result>

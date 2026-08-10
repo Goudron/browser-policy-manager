@@ -4,7 +4,7 @@
   <title>选择要比较的配置档案</title>
   <shortdesc>独立搜索配置文件 A 和配置文件 B，从有限结果列表中选择行，并查看每个摘要。</shortdesc>
   <taskbody>
-    <prereq><p>比较表面从库中打开。</p></prereq>
+    <prereq><p>比较表面从<uicontrol>库</uicontrol>中打开。</p></prereq>
     <context><p>每面都有自己的搜索字段和结果列表，因此您可以选择具有相似名称的配置文件，而无需混合面。</p></context>
     <steps>
       <step><cmd>在左侧搜索字段中搜索配置文件 A，然后选择所需的行。</cmd><info><p>预期结果：左侧选定配置文件摘要显示配置文件名称、模式通道、生命周期和状态上下文。</p></info></step>
@@ -12,7 +12,7 @@
       <step><cmd>在阅读比较表之前确认两个摘要。</cmd><info><note type="warning">不要单独依赖搜索结果位置。确认双方的身份和架构。</note></info></step>
     </steps>
     <result><p>配置文件 A 和配置文件 B 已选择并准备进行比较。</p></result>
-    <postreq><p>恢复：如果一个配置文件丢失，请清除该侧的搜索，刷新原始选项卡中的库，并确认配置文件已保存。</p></postreq>
+    <postreq><p>恢复：如果一个配置文件丢失，请清除该侧的搜索，刷新原始选项卡中的<uicontrol>库</uicontrol>，并确认配置文件已保存。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-compare-profiles"/>

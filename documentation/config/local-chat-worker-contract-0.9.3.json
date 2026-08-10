@@ -72,8 +72,8 @@
     "not_implemented": ["FastAPI assistant routes", "browser controls", "scope gate", "retrieval invocation", "citation validation", "conversation persistence", "web search"]
   },
   "verification": {
-    "runtime_unit": "tests/test_local_runtime_installation.py",
-    "worker_unit": "tests/test_local_inference_worker.py",
+    "runtime_unit": "tests/integration/ai/core/test_local_runtime_installation.py",
+    "worker_unit": "tests/integration/ai/incubation/test_local_inference_worker.py",
     "contract": "documentation/tests/contract/test_local_chat_worker_contract_0_9_3.py",
     "architecture": "docs/architecture/local-chat-worker-0.9.3.md"
   }

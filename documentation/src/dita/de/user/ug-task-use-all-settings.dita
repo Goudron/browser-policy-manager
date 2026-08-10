@@ -2,25 +2,25 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-all-settings" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Alle Einstellungen verwenden</title>
-  <shortdesc>Öffnen Sie Alle Einstellungen für ein gespeichertes Profil, wenn Sie über den kürzeren geführten Arbeitsablauf hinaus eine vollständige visuelle Kontrolle benötigen.</shortdesc>
+  <shortdesc>Öffnen Sie <uicontrol>Alle Einstellungen</uicontrol> für ein gespeichertes Profil, wenn Sie über den kürzeren geführten Arbeitsablauf hinaus eine vollständige visuelle Kontrolle benötigen.</shortdesc>
   <taskbody>
-    <prereq><p>Ein gespeichertes Profil ist vorhanden. Neue nicht gespeicherte Entwürfe müssen gespeichert werden, bevor Alle Einstellungen geöffnet werden kann.</p></prereq>
-    <context><p>Alle Einstellungen ist der vollständige visuelle Editor für Firefox-Richtlinien und enthält den Bereich Verwaltete Einstellungen. Der Editor wird im Modus Prüfung geöffnet, sodass Elemente mit Handlungsbedarf vor dem umfassenden Durchsuchen des Katalogs sichtbar sind.</p>
+    <prereq><p>Ein gespeichertes Profil ist vorhanden. Neue nicht gespeicherte Entwürfe müssen gespeichert werden, bevor <uicontrol>Alle Einstellungen</uicontrol> geöffnet werden kann.</p></prereq>
+    <context><p><uicontrol>Alle Einstellungen</uicontrol> ist der vollständige visuelle Editor für Firefox-Richtlinien und enthält den Bereich <uicontrol>Verwaltete Einstellungen</uicontrol>. Der Editor wird im Modus <uicontrol>Prüfung</uicontrol> geöffnet, sodass Elemente mit Handlungsbedarf vor dem umfassenden Durchsuchen des <uicontrol>Katalog</uicontrol>s sichtbar sind.</p>
       <fig id="screenshot-all-settings-review">
-        <title>Alle Einstellungen Prüfung</title>
+        <title>Prüfung in Alle Einstellungen</title>
         <image keyref="screenshot.all-settings-review" placement="break" height="150mm" align="center">
           <alt>Alle Einstellungen zeigt die Überprüfungsliste, die konfigurierten Einstellungen und den Einstellungsdetailbereich auf einem schmalen Bildschirm an.</alt>
         </image>
       </fig>
     </context>
     <steps>
-      <step><cmd>Öffnen Sie das gespeicherte Profil aus der Bibliothek.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Wählen Sie die Editoroberfläche Alle Einstellungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Bestätigen Sie, dass „Überprüfen“, „Konfiguriert“ und „Katalog“ verfügbar sind.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Verwenden Sie den Modus, der zur Aufgabe passt: „Auf Aufmerksamkeit prüfen“, „Konfiguriert für angewendete Werte“ oder „Katalog“ für jede unterstützte Einstellung.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
+      <step><cmd>Öffnen Sie das gespeicherte Profil aus der <uicontrol>Bibliothek</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie die Editoroberfläche <uicontrol>Alle Einstellungen</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Bestätigen Sie, dass „Überprüfen“, „<uicontrol>Konfiguriert</uicontrol>“ und „<uicontrol>Katalog</uicontrol>“ verfügbar sind.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Verwenden Sie den Modus, der zur Aufgabe passt: „Auf Aufmerksamkeit prüfen“, „<uicontrol>Konfiguriert</uicontrol> für angewendete Werte“ oder „<uicontrol>Katalog</uicontrol>“ für jede unterstützte Einstellung.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
-    <result><p>Das gespeicherte Profil ist in Alle Einstellungen geöffnet und der richtige Modus ist verfügbar.</p></result>
-    <postreq><p>Wiederherstellung: Wenn Alle Einstellungen nicht verfügbar ist, speichern Sie zuerst den geführten Entwurf oder öffnen Sie ein gespeichertes Profil erneut aus der Bibliothek.</p></postreq>
+    <result><p>Das gespeicherte Profil ist in <uicontrol>Alle Einstellungen</uicontrol> geöffnet und der richtige Modus ist verfügbar.</p></result>
+    <postreq><p>Wiederherstellung: Wenn <uicontrol>Alle Einstellungen</uicontrol> nicht verfügbar ist, speichern Sie zuerst den geführten Entwurf oder öffnen Sie ein gespeichertes Profil erneut aus der <uicontrol>Bibliothek</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

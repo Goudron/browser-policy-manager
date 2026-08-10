@@ -12,7 +12,9 @@ DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 DITA_ROOT = DOCUMENTATION_ROOT / "src/dita"
 CASE_MAP = DOCUMENTATION_ROOT / "config/user-guide-map-0.9.0.json"
 CLOSURE = DOCUMENTATION_ROOT / "config/user-guide-coverage-closure-0.9.0.json"
-CAPABILITY_INVENTORY = REPOSITORY_ROOT / "docs/architecture/product-user-capability-inventory-0.9.0.md"
+CAPABILITY_INVENTORY = (
+    REPOSITORY_ROOT / "docs/architecture/product-user-capability-inventory-0.9.0.md"
+)
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 XML_LANG = "{http://www.w3.org/XML/1998/namespace}lang"
 
@@ -33,11 +35,7 @@ def _case_map() -> dict[str, object]:
 
 
 def _case_topics() -> list[dict[str, object]]:
-    return [
-        topic
-        for section in _case_map()["sections"]
-        for topic in section["topics"]
-    ]
+    return [topic for section in _case_map()["sections"] for topic in section["topics"]]
 
 
 def _inventory_rows() -> list[dict[str, str]]:
@@ -66,7 +64,9 @@ def _readme_main_capability_bullets() -> list[str]:
 
 
 def _topic_root(locale: str, topic_id: str) -> ET.Element:
-    return ET.fromstring((DITA_ROOT / locale / "user" / f"{topic_id}.dita").read_text(encoding="utf-8"))
+    return ET.fromstring(
+        (DITA_ROOT / locale / "user" / f"{topic_id}.dita").read_text(encoding="utf-8")
+    )
 
 
 def _expected_tag(kind: str) -> str:
@@ -78,7 +78,9 @@ def _expected_tag(kind: str) -> str:
 
 
 def _section_keyrefs(locale: str) -> set[str]:
-    root = ET.fromstring((DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8"))
+    root = ET.fromstring(
+        (DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8")
+    )
     return {
         topicref.attrib["keyref"].removeprefix("topic.")
         for topicref in root.findall(".//topicref")
@@ -94,7 +96,10 @@ def test_user_guide_coverage_closure_artifact_is_complete_and_source_backed() ->
     assert closure["guide_id"] == "user-guide"
     assert closure["status"] == "closed"
     assert closure["closed_by_backlog_item"] == "BPM090-M4-12"
-    assert closure["source_inventory"] == "docs/architecture/product-user-capability-inventory-0.9.0.md"
+    assert (
+        closure["source_inventory"]
+        == "docs/architecture/product-user-capability-inventory-0.9.0.md"
+    )
     assert closure["case_map"] == "documentation/config/user-guide-map-0.9.0.json"
 
     summary = closure["summary"]
@@ -123,9 +128,7 @@ def test_every_inventory_capability_has_reachable_localized_dita_topic() -> None
     assert len(case_by_topic) == closure["summary"]["planned_topic_count"]
 
     mapped_capabilities = {
-        capability
-        for topic in case_topics
-        for capability in topic["capability_ids"]
+        capability for topic in case_topics for capability in topic["capability_ids"]
     }
     assert mapped_capabilities == set(row_by_capability)
     assert set(case_by_topic) == {row["topic"] for row in rows}
@@ -194,15 +197,19 @@ def test_template_locale_and_browser_smoke_evidence_remain_covered() -> None:
 
     catalog_keysets = []
     for locale in LOCALES:
-        catalog = json.loads((REPOSITORY_ROOT / "app/i18n" / f"{locale}.json").read_text(encoding="utf-8"))
+        catalog = json.loads(
+            (REPOSITORY_ROOT / "app/i18n" / f"{locale}.json").read_text(encoding="utf-8")
+        )
         catalog_keysets.append(set(catalog))
         assert "profiles.title" in catalog
         assert "profiles.nav_library" in catalog
         assert "profiles.theme_dark" in catalog
     assert all(keys == catalog_keysets[0] for keys in catalog_keysets)
 
-    browser_smoke = (REPOSITORY_ROOT / "tests/test_ui_browser_tabs.py").read_text(encoding="utf-8")
-    assert "pytestmark = pytest.mark.browser_ui" in browser_smoke
+    browser_smoke = (REPOSITORY_ROOT / "tests/browser/profiles/test_ui_browser_tabs.py").read_text(
+        encoding="utf-8"
+    )
+    assert "pytest.mark.browser_ui," in browser_smoke
     assert 'SMOKE_LOCALES = ("ru", "zh-CN")' in browser_smoke
     for flow in closure["browser_smoke_flows"]:
         assert f"def {flow}" in browser_smoke

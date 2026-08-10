@@ -22,6 +22,13 @@ npm ci
 echo "Building Monaco vendor bundles..."
 npm run build:monaco
 
+echo "Synchronizing bundled dependency license notices..."
+install -m 0644 node_modules/monaco-editor/LICENSE app/static/vendor/monaco.LICENSE
+install -m 0644 node_modules/monaco-editor/ThirdPartyNotices.txt app/static/vendor/monaco.ThirdPartyNotices.txt
+install -m 0644 node_modules/dompurify/LICENSE app/static/vendor/dompurify.LICENSE-APACHE
+install -m 0644 node_modules/dompurify/LICENSE-MPL app/static/vendor/dompurify.LICENSE-MPL
+install -m 0644 node_modules/marked/LICENSE.md app/static/vendor/marked.LICENSE
+
 echo "Verifying vendor license notices..."
 "$PYTHON_BIN" tools/verify_frontend_vendor.py --check-licenses
 

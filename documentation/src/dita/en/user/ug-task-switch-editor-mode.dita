@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-switch-editor-mode" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Switch editor mode</title>
-  <shortdesc>Move between Guided, All settings, and JSON for the same saved profile while using the compact shared profile context.</shortdesc>
+  <shortdesc>Move between Guided, <uicontrol>All settings</uicontrol>, and JSON for the same saved profile while using the compact shared profile context.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, <uicontrol>Library</uicontrol>, <uicontrol>All settings</uicontrol>, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>The compact shared context identifies the current profile by name, state, schema channel, and validation signal. Switching mode changes the editing surface, not the underlying saved profile; save unsaved changes before relying on another surface.</p></context>
     <steps>
       <step><cmd>Confirm that the current profile is saved and has a visible ID.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
-      <step><cmd>Choose the target mode: Guided for common workflows, All settings for complete inspection, or JSON for raw document work.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Choose the target mode: Guided for common workflows, <uicontrol>All settings</uicontrol> for complete inspection, or JSON for raw document work.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Open the target mode and verify the compact context: profile name, state, schema channel, and validation signal.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Return to the previous mode only after saving or intentionally discarding changes.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
     </steps>
     <result><p>You are working on the same profile in the editor mode that fits the current task.</p></result>
-    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the Library.</p></postreq>
+    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the <uicontrol>Library</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

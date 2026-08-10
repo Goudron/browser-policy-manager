@@ -13,7 +13,7 @@
       <step><cmd>Validierungswarnungen, die neben schemaabhängigen Steuerelementen angezeigt werden.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
     <result><p>Das Profil verfügt über absichtlichen Browserzugriff und Standardverhaltenseinstellungen.</p></result>
-    <postreq><p>Wiederherstellung: Wenn bei der Validierung ein Wert beanstandet wird, machen Sie die letzte Änderung rückgängig oder verwenden Sie Alle Einstellungen, um die Rohform der Richtlinie zu überprüfen.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn bei der Validierung ein Wert beanstandet wird, machen Sie die letzte Änderung rückgängig oder verwenden Sie <uicontrol>Alle Einstellungen</uicontrol>, um die Rohform der Richtlinie zu überprüfen.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

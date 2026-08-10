@@ -367,12 +367,25 @@ When executing a backlog interactively with the user:
 
 1. Show exactly one next task with its ID, essence, acceptance, minimum model, and minimal reasoning.
 2. Wait for explicit approval.
-3. Execute only that approved task.
-4. Report what changed and which checks passed.
-5. Show the next task for approval.
+3. Execute only that approved task through exactly one focused subagent. Select the subagent's
+   model and reasoning effort from the task row: the `Model` value is mandatory and the
+   `Minimal reasoning` value is the minimum effort. Do not silently substitute a cheaper model,
+   lower effort, or a general-purpose primary-agent pass. If the requested model is unavailable
+   in the current execution environment, report that fact and obtain explicit approval for the
+   nearest available replacement before starting the task.
+4. Keep the primary agent as the maintainer-facing coordinator. It reports the subagent's major
+   real-work milestones in the main chat: task start, meaningful phase transitions, a material
+   finding/blocker, and terminal verification. It reports the result, changed surface, and passed
+   checks when the task completes.
+5. Do not relay raw subagent command streams by default. Provide them only when the maintainer
+   explicitly asks for commands or a diagnostic requires the exact output. This does not replace
+   a task's own flushed stdout progress requirement.
+6. Show the next task for approval after the current task is complete, unless the maintainer has
+   explicitly approved a stated sequential batch.
 
-For a long-running command, emit its interactive, real-work progress in the command's own output
-and keep chat silent until it finishes; do not replace it with periodic status messages.
+For a long-running command, emit interactive, real-work progress in the command's own output.
+The primary agent may relay only the durable major milestones above; it must not replace genuine
+command progress with guessed percentages, timers, or repeated chat status messages.
 
 Do not start executing a backlog task just because the backlog exists.
 
@@ -423,6 +436,10 @@ Before calling a new backlog ready, confirm:
 - runbook notes that product language is English while maintainer chat may be Russian;
 - docs index includes the new backlog;
 - assumptions and non-goals are explicit;
-- execution protocol says each task requires separate user approval.
+- execution protocol says each task requires separate user approval, one focused subagent, and
+  exact selection of the task-row model plus minimum reasoning (or an explicitly approved
+  replacement when unavailable);
+- execution protocol says that the primary agent relays major subagent milestones to the main
+  chat while raw command output remains opt-in;
 - long-running commands have explicit stdout progress requirements, and the execution protocol
-  keeps progress out of chat.
+  preserves those real-work milestones without substituting chat-only progress.

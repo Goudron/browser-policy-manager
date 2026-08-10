@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import inspect
 import socket
 import tempfile
 import threading
@@ -16,16 +17,18 @@ from typing import Any
 import httpx
 import requests
 import uvicorn
+from alembic.config import Config
 from fastapi import FastAPI
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from alembic import command
 from app.core.schema_channels import (
     CURRENT_ESR_SCHEMA_CHANNEL,
     CURRENT_RELEASE_SCHEMA_CHANNEL,
     DEFAULT_SCHEMA_CHANNEL,
 )
-from app.db import AsyncSessionAdapter, get_session
+from app.db import DatabaseRuntime, get_session
 from app.models.profile import Base
 from app.web.firefox_preferences import get_wizard_preferences_catalog
 from app.web.firefox_starter_presets import get_wizard_starter_catalog
@@ -46,17 +49,30 @@ class TestClient:
         self,
         app: FastAPI,
         base_url: str = "http://testserver",
+        on_start: Any | None = None,
         on_close: Any | None = None,
         **kwargs: Any,
     ):
         self.app = app
         self.base_url = base_url
+        self._on_start = on_start
         self._on_close = on_close
         self._client_kwargs = kwargs
         self._runner = asyncio.Runner()
         self._closed = False
+        self._started = False
+
+    async def _start(self) -> None:
+        if self._started:
+            return
+        if self._on_start is not None:
+            start_result = self._on_start()
+            if inspect.isawaitable(start_result):
+                await start_result
+        self._started = True
 
     async def _request_async(self, method: str, url: str, **kwargs: Any):
+        await self._start()
         transport = httpx.ASGITransport(app=self.app)
         async with httpx.AsyncClient(
             transport=transport,
@@ -94,7 +110,9 @@ class TestClient:
         if self._closed:
             return
         if self._on_close is not None:
-            self._on_close()
+            cleanup_result = self._on_close()
+            if inspect.isawaitable(cleanup_result):
+                self._runner.run(cleanup_result)
             self._on_close = None
         self._runner.close()
         self._closed = True
@@ -251,15 +269,15 @@ def build_all_settings_inventory_counts(
         policy_entries=len(policy_items) + len(unknown_policy_ids),
         preference_entries=len(known_preference_names) + len(imported_preference_names),
         configured_entries=(
-            len(configured_policy_ids)
-            + len(unknown_policy_ids)
-            + len(configured_preference_names)
+            len(configured_policy_ids) + len(unknown_policy_ids) + len(configured_preference_names)
         ),
         configured_policy_entries=len(configured_policy_ids) + len(unknown_policy_ids),
         configured_preference_entries=len(configured_preference_names),
         unknown_policy_entries=len(unknown_policy_ids),
         imported_preference_entries=len(imported_preference_names),
-        guided_policy_entries=len([item for bucket, item in policy_items if bucket == "recommended"]),
+        guided_policy_entries=len(
+            [item for bucket, item in policy_items if bucket == "recommended"]
+        ),
         raw_fallback_policy_entries=len(
             [
                 item
@@ -285,7 +303,10 @@ def _find_cis_decision(
     for decision in decisions:
         if decision_type is not None and decision.get("decision") != decision_type:
             continue
-        if review_required is not None and bool(decision.get("review_required")) is not review_required:
+        if (
+            review_required is not None
+            and bool(decision.get("review_required")) is not review_required
+        ):
             continue
         path = _decision_path(decision)
         if path_prefix is not None and path[: len(path_prefix)] != path_prefix:
@@ -626,23 +647,30 @@ def make_test_client(app: FastAPI | None = None, **kwargs: Any) -> TestClient:
     """
     app = resolve_test_app(app)
 
-    engine = create_engine("sqlite:///:memory:", echo=False, future=True)
-    testing_session_factory = sessionmaker(bind=engine, expire_on_commit=False)
-    Base.metadata.create_all(bind=engine)
-    session = testing_session_factory()
+    database_runtime = DatabaseRuntime(
+        database_url="sqlite+aiosqlite:///:memory:",
+        echo=False,
+    )
     override_snapshot = snapshot_dependency_overrides(app)
 
     async def override_get_session():
-        yield AsyncSessionAdapter(session)
+        async with database_runtime.session() as session:
+            yield session
 
     app.dependency_overrides[get_session] = override_get_session
 
-    def _cleanup() -> None:
-        restore_dependency_overrides(app, override_snapshot)
-        session.close()
-        engine.dispose()
+    async def _start() -> None:
+        await database_runtime.init()
+        assert database_runtime.engine is not None
+        # Test fixture setup only. Production schema/data changes are Alembic-owned.
+        async with database_runtime.engine.begin() as connection:
+            await connection.run_sync(Base.metadata.create_all)
 
-    return TestClient(app, on_close=_cleanup, **kwargs)
+    async def _cleanup() -> None:
+        restore_dependency_overrides(app, override_snapshot)
+        await database_runtime.dispose()
+
+    return TestClient(app, on_start=_start, on_close=_cleanup, **kwargs)
 
 
 def assert_contains_all(text: str, snippets: Iterable[str]) -> None:
@@ -682,9 +710,15 @@ def run_test_app_server_handle(
     temporary browser-test database.
     """
 
-    app = resolve_test_app()
     with tempfile.TemporaryDirectory(prefix="bpm-ui-server-") as tmp_dir:
         db_path = Path(tmp_dir) / "bpm-ui.db"
+        database_url = f"sqlite+aiosqlite:///{db_path}"
+        from app.main import create_app
+
+        alembic_config = Config(str(Path(__file__).resolve().parents[1] / "alembic.ini"))
+        alembic_config.set_main_option("sqlalchemy.url", f"sqlite:///{db_path}")
+        command.upgrade(alembic_config, "head")
+        app = create_app(database_runtime=DatabaseRuntime(database_url=database_url, echo=False))
         engine = create_engine(
             f"sqlite:///{db_path}",
             echo=False,
@@ -692,17 +726,7 @@ def run_test_app_server_handle(
             connect_args={"check_same_thread": False},
         )
         testing_session_factory = sessionmaker(bind=engine, expire_on_commit=False)
-        Base.metadata.create_all(bind=engine)
-
-        async def override_get_session():
-            session = testing_session_factory()
-            try:
-                yield AsyncSessionAdapter(session)
-            finally:
-                session.close()
-
         override_snapshot = snapshot_dependency_overrides(app)
-        app.dependency_overrides[get_session] = override_get_session
         port = pick_free_port(host)
         config = uvicorn.Config(app=app, host=host, port=port, log_level=log_level)
         server = uvicorn.Server(config)
@@ -724,7 +748,9 @@ def run_test_app_server_handle(
                     last_error = str(exc)
                 time.sleep(0.2)
             else:
-                raise RuntimeError(f"Timed out waiting for test app server at {base_url}: {last_error}")
+                raise RuntimeError(
+                    f"Timed out waiting for test app server at {base_url}: {last_error}"
+                )
 
             yield TestAppServerHandle(
                 base_url=base_url,

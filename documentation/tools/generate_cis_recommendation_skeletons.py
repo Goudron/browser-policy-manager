@@ -21,7 +21,9 @@ MAP_FILENAME = "cis-recommendation-skeletons.ditamap"
 INDEX_FILENAME = "cis-recommendation-skeletons-0.9.0.json"
 PROVENANCE_REVIEW_FILENAME = "cis-provenance-review-0.9.0.json"
 GENERATOR_NAME = "documentation/tools/generate_cis_recommendation_skeletons.py"
-CIS_DRIFT_GATE_RUNBOOK = "documentation/runbooks/inventory-refresh.md#cis-benchmark-and-mapping-drift-gate"
+CIS_DRIFT_GATE_RUNBOOK = (
+    "documentation/runbooks/inventory-refresh.md#cis-benchmark-and-mapping-drift-gate"
+)
 HAND_REGION_PATTERN = re.compile(
     r"(<!-- BPM-HAND-REGION-START (?P<name>[a-z0-9-]+) -->\n)"
     r"(?P<body>.*?)"
@@ -54,10 +56,7 @@ def _display_path(path: Path) -> str:
 def _escape(value: object) -> str:
     text = str(value)
     return (
-        text.replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace('"', "&quot;")
+        text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
     )
 
 
@@ -88,7 +87,10 @@ def _provenance_only(recommendations: list[dict[str, Any]]) -> list[dict[str, An
 def _existing_regions(existing_text: str | None) -> dict[str, str]:
     if not existing_text:
         return {}
-    return {match.group("name"): match.group("body") for match in HAND_REGION_PATTERN.finditer(existing_text)}
+    return {
+        match.group("name"): match.group("body")
+        for match in HAND_REGION_PATTERN.finditer(existing_text)
+    }
 
 
 def _default_region(region: str, recommendation_id: str) -> str:
@@ -219,7 +221,9 @@ def _layer_checks(
     return checks
 
 
-def _mapping_rows(recommendation: dict[str, Any], inventory: dict[str, Any]) -> list[dict[str, Any]]:
+def _mapping_rows(
+    recommendation: dict[str, Any], inventory: dict[str, Any]
+) -> list[dict[str, Any]]:
     return [
         {
             "kind": target["kind"],
@@ -283,9 +287,7 @@ def _mapping_table_dita(recommendation: dict[str, Any], inventory: dict[str, Any
         "<stentry>Channels</stentry>"
         "<stentry>Merge rule</stentry>"
         "<stentry>Layer checks</stentry>"
-        "</sthead>\n"
-        + "\n".join(row_text)
-        + "\n      </simpletable>"
+        "</sthead>\n" + "\n".join(row_text) + "\n      </simpletable>"
     )
 
 
@@ -296,7 +298,7 @@ def _mapping_examples_dita(recommendation: dict[str, Any], inventory: dict[str, 
         examples.append(
             '      <sectiondiv outputclass="cis-mapping-example">'
             f"<p>Minimal BPM-owned boundary fragment for <codeph>{_escape(row['path_id'])}</codeph>:</p>"
-            f"<codeblock outputclass=\"language-json\">{_json_inline(row['example_document'])}</codeblock>"
+            f'<codeblock outputclass="language-json">{_json_inline(row["example_document"])}</codeblock>'
             "</sectiondiv>"
         )
     return "\n".join(examples)
@@ -556,7 +558,9 @@ def _review_record(
         "source_expression_indexed": False,
         "source_title_published": False,
         "benchmark_prose_published": False,
-        "topic_section_ids": [section["id"] for section in model["required_sections"]] if planned else [],
+        "topic_section_ids": (
+            [section["id"] for section in model["required_sections"]] if planned else []
+        ),
         "accuracy_basis": [
             "docs/architecture/cis-documentation-inventory-0.9.0.json",
             "app/compliance/firefox/cis/generated/*.json",
@@ -644,7 +648,9 @@ def _provenance_review_content(
             "recommendation_count": len(recommendations),
             "planned_topic_count": len(planned),
             "provenance_only_count": len(provenance_only),
-            "target_count": sum(len(recommendation["targets"]) for recommendation in recommendations),
+            "target_count": sum(
+                len(recommendation["targets"]) for recommendation in recommendations
+            ),
             "manual_review_path_count": len(inventory["manual_review_paths"]),
             "level_counts": inventory["summary"]["level_counts"],
             "mapping_status_counts": inventory["summary"]["mapping_status_counts"],
@@ -679,7 +685,9 @@ def build_generated_files(
     for recommendation in planned:
         path = output_root / RECOMMENDATIONS_DIRNAME / f"{recommendation['doc_id']}.dita"
         existing_text = path.read_text(encoding="utf-8") if path.is_file() else None
-        files.append(GeneratedFile(path, _topic_content(recommendation, inventory, model, existing_text)))
+        files.append(
+            GeneratedFile(path, _topic_content(recommendation, inventory, model, existing_text))
+        )
     files.append(GeneratedFile(output_root / MAP_FILENAME, _map_content(planned)))
     files.append(
         GeneratedFile(
@@ -712,8 +720,10 @@ def generate(
     expected = {generated.path for generated in files}
     recommendations_root = output_root / RECOMMENDATIONS_DIRNAME
     recommendations_root.mkdir(parents=True, exist_ok=True)
-    for stale in sorted(output_root.glob("*.ditamap")) + sorted(output_root.glob("*.json")) + sorted(
-        recommendations_root.glob("*.dita")
+    for stale in (
+        sorted(output_root.glob("*.ditamap"))
+        + sorted(output_root.glob("*.json"))
+        + sorted(recommendations_root.glob("*.dita"))
     ):
         if stale not in expected:
             stale.unlink()
@@ -732,7 +742,10 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
     written = generate(args.inventory.resolve(), args.model.resolve(), args.output.resolve())
-    print(f"Generated {len(written)} CIS recommendation skeleton artifact(s) in {args.output}", flush=True)
+    print(
+        f"Generated {len(written)} CIS recommendation skeleton artifact(s) in {args.output}",
+        flush=True,
+    )
     return 0
 
 

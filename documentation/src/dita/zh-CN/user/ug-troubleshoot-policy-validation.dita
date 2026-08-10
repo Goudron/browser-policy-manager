@@ -5,11 +5,11 @@
   <shortdesc>诊断不支持的策略、错误值类型、未知条目、原始回退或受影响的策略路径的验证错误。</shortdesc>
   <taskbody>
     <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败的操作表明当前工作流程无法安全地继续。</p></prereq>
-    <context><p>验证错误是有关所选 Firefox 架构通道以及 BPM 无法接受为就绪的确切策略或托管首选项的结构化反馈。</p></context>
+    <context><p>验证错误是有关所选 Firefox 架构通道以及 BPM 无法接受为就绪的确切策略或<uicontrol>托管首选项</uicontrol>的结构化反馈。</p></context>
     <steps>
       <step><cmd>在更改值之前阅读受影响的策略路径和消息。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>将问题分类为不支持的策略、错误的值类型、已弃用的设置、未知的条目、导入的值或原始回退。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
-      <step><cmd>使用 所有设置 或 JSON 导航到受影响的位置并仅更正报告的值。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
+      <step><cmd>使用 <uicontrol>所有设置</uicontrol> 或 JSON 导航到受影响的位置并仅更正报告的值。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>在保存或导出之前重新验证同一模式通道中的配置文件。</cmd><info><note type="warning">仅通过 BPM 界面重试；不要在应用程序外修改配置文件数据。</note></info></step>
     </steps>
     <result><p>验证错误已解决或记录为故意的原始/不受支持的值，不能将其视为已发布就绪。</p></result>

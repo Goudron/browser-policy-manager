@@ -59,7 +59,7 @@
   },
   "verification": {
     "implementation": "app/ai/model_installation.py",
-    "unit_test": "tests/test_local_model_installation.py",
+    "unit_test": "tests/integration/ai/core/test_local_model_installation.py",
     "contract_test": "documentation/tests/contract/test_local_chat_model_installation_contract_0_9_3.py",
     "architecture": "docs/architecture/local-chat-model-installation-0.9.3.md"
   }

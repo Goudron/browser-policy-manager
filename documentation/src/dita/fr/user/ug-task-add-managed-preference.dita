@@ -4,12 +4,12 @@
   <title>Ajouter une préférence gérée</title>
   <shortdesc>Ajoutez une préférence gérée connue qui n'est pas encore configurée dans le profil.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Tous les paramètres avec le canal de schéma correct sélectionné.</p></prereq>
-    <context><p>Préférences gérées complète les politiques de Firefox lorsque BPM expose une clé de préférence et un comportement de verrouillage connus. Ajoutez-les volontairement et validez le résultat.</p></context>
+    <prereq><p>Ouvrez <uicontrol>Tous les paramètres</uicontrol> avec le canal de schéma correct sélectionné.</p></prereq>
+    <context><p><uicontrol>Préférences gérées</uicontrol> complète les politiques de Firefox lorsque BPM expose une clé de préférence et un comportement de verrouillage connus. Ajoutez-les volontairement et validez le résultat.</p></context>
     <steps>
-      <step><cmd>Ouvrez le contrôle d'ajout de préférence ou recherchez la préférence dans Catalogue.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Choisissez la clé de préférence connue et vérifiez son type de valeur attendue.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Entrez la valeur et l'état de verrouillage requis par le profil.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Ouvrez le contrôle d'ajout de préférence ou recherchez la préférence dans <uicontrol>Catalogue</uicontrol>.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez la clé de préférence connue et vérifiez son type de valeur attendue.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Entrez la valeur et l'état de verrouillage requis par le profil.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Appliquez, validez et enregistrez la préférence gérée.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Le profil contient la nouvelle préférence gérée avec la valeur et le comportement de verrouillage prévus.</p></result>

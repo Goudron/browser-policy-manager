@@ -11,7 +11,7 @@
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
 ]]></codeblock><p>Use the actual deployment value for <codeph>BPM_DATABASE_URL</codeph>. Stop immediately if migration output is unclear or fails.</p></info></step>
-      <step><cmd>Start the updated BPM process and verify its current interface.</cmd><info><p>Check health and readiness, then open the Library route. If documentation is required for the deployment, confirm that <codeph>/help/</codeph> reports a ready installed artifact rather than a missing or incompatible state.</p></info></step>
+      <step><cmd>Start the updated BPM process and verify its current interface.</cmd><info><p>Check health and readiness, then open the <uicontrol>Library</uicontrol> route. If documentation is required for the deployment, confirm that <codeph>/help/</codeph> reports a ready installed artifact rather than a missing or incompatible state.</p></info></step>
       <step><cmd>Stop on migration or runtime verification failures.</cmd><info><note type="warning">After a migration has run, do not assume Git checkout rollback is enough. Do not run <codeph>alembic downgrade</codeph> unless a reviewed release note explicitly says it is supported for the exact revision pair. Use the pre-update database backup as the safe recovery baseline when rollback is required.</note></info></step>
     </steps>
     <result><p>The updated source revision has completed migrations and runtime verification, or the update has stopped at a named failure point.</p></result>

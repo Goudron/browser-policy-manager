@@ -4,10 +4,10 @@
   <title>Editar políticas JSON sin formato</title>
   <shortdesc>Edite el documento policies.json sin procesar con el editor Monaco incluido localmente.</shortdesc>
   <taskbody>
-    <prereq><p>Abra Editor JSON para obtener un perfil guardado.</p></prereq>
+    <prereq><p>Abra <uicontrol>Editor JSON</uicontrol> para obtener un perfil guardado.</p></prereq>
     <context><p>El editor Monaco se incluye localmente y edita el texto JSON sin formato. BPM aún se valida antes de guardar en el modelo de perfil normalizado.</p></context>
     <steps>
-      <step><cmd>Coloque el foco en Editor JSON.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Coloque el foco en <uicontrol>Editor JSON</uicontrol>.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
       <step><cmd>Edite solo la política, preferencia o valor sin procesar requerido por la tarea.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
       <step><cmd>Mantenga el objeto de políticas de nivel superior y la sintaxis JSON válida.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
       <step><cmd>Utilice la validación antes de guardar la edición sin formato.</cmd><info><note type="warning">Guardar JSON sin formato puede cambiar el perfil BPM canónico. Valide la sintaxis y los valores de política antes de guardar.</note></info></step>

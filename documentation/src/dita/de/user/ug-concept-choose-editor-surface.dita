@@ -2,14 +2,14 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-choose-editor-surface" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Die passende BPM-Oberfläche auswählen</title>
-  <shortdesc>BPM verfügt über fünf Benutzeroberflächen: Bibliothek, Geführter Editor, Alle Einstellungen, JSON-Editor und Profileinstellungen vergleichen.</shortdesc>
+  <shortdesc>BPM verfügt über fünf Benutzeroberflächen: <uicontrol>Bibliothek</uicontrol>, <uicontrol>Geführter Editor</uicontrol>, <uicontrol>Alle Einstellungen</uicontrol>, <uicontrol>JSON-Editor</uicontrol> und <uicontrol>Profileinstellungen vergleichen</uicontrol>.</shortdesc>
   <conbody>
     <p>Der gemeinsame kompakte Kopf und Profilkontext halten Produkt, Profil, Schema, Gebietsschema und Thema auf allen diesen Oberflächen sichtbar. Wählen Sie die Oberfläche nach dem gewünschten Ergebnis aus, nicht nach einem internen Modul.</p>
     <dl>
-      <dlentry><dt>Bibliothek</dt><dd>Profile finden, erstellen, importieren, duplizieren, archivieren, wiederherstellen, löschen, exportieren und öffnen.</dd></dlentry>
-      <dlentry><dt>Geführter Editor</dt><dd>Häufige Richtlinienkonfigurationen über aufgabenorientierte Schritte und Startauswahlen erstellen oder aktualisieren.</dd></dlentry>
-      <dlentry><dt>Alle Einstellungen</dt><dd>Aufmerksamkeitspunkte prüfen, den vollständigen unterstützten Richtlinien- und Preference-Katalog durchsuchen und Detailwerte bearbeiten.</dd></dlentry>
-      <dlentry><dt>JSON-Editor</dt><dd>Das genaue Firefox-Richtliniendokument prüfen oder bearbeiten, wenn direkte Rohkontrolle erforderlich ist.</dd></dlentry>
+      <dlentry><dt><uicontrol>Bibliothek</uicontrol></dt><dd>Profile finden, erstellen, importieren, duplizieren, archivieren, wiederherstellen, löschen, exportieren und öffnen.</dd></dlentry>
+      <dlentry><dt><uicontrol>Geführter Editor</uicontrol></dt><dd>Häufige Richtlinienkonfigurationen über aufgabenorientierte Schritte und Startauswahlen erstellen oder aktualisieren.</dd></dlentry>
+      <dlentry><dt><uicontrol>Alle Einstellungen</uicontrol></dt><dd>Aufmerksamkeitspunkte prüfen, den vollständigen unterstützten Richtlinien- und Preference-Katalog durchsuchen und Detailwerte bearbeiten.</dd></dlentry>
+      <dlentry><dt><uicontrol>JSON-Editor</uicontrol></dt><dd>Das genaue Firefox-Richtliniendokument prüfen oder bearbeiten, wenn direkte Rohkontrolle erforderlich ist.</dd></dlentry>
       <dlentry><dt>Vergleich</dt><dd>Zwei gespeicherte Profile vergleichen und gleiche, unterschiedliche oder fehlende Einstellungen verstehen.</dd></dlentry>
     </dl>
   </conbody>

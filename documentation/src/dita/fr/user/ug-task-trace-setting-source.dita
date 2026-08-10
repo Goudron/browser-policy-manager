@@ -4,12 +4,12 @@
   <title>Tracer une source de réglage</title>
   <shortdesc>Tracez un paramètre configuré jusqu'à l'attribution de référence, CIS, manuelle, importée ou source brute.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez un paramètre configuré dans Tous les paramètres.</p></prereq>
+    <prereq><p>Ouvrez un paramètre configuré dans <uicontrol>Tous les paramètres</uicontrol>.</p></prereq>
     <context><p>L'attribution de la source permet d'expliquer pourquoi une valeur existe et si sa modification remplacerait une référence, une couche CIS, une modification manuelle, une importation ou une solution de secours brute.</p></context>
     <steps>
-      <step><cmd>Ouvrez les détails des paramètres ou le résumé configuré qui affiche les badges sources.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Identifiez si la valeur provient d'une source de référence, CIS, manuelle, importée ou brute.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Suivez les liens contextuels CIS ou de profil associés lorsqu'une couche générée a contribué à la valeur.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Ouvrez les détails des paramètres ou le résumé configuré qui affiche les badges sources.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Identifiez si la valeur provient d'une source de référence, CIS, manuelle, importée ou brute.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Suivez les liens contextuels CIS ou de profil associés lorsqu'une couche générée a contribué à la valeur.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Enregistrez la source avant de modifier, supprimer ou réinitialiser le paramètre.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Vous savez d'où vient la valeur configurée et pouvez expliquer l'impact de sa modification.</p></result>

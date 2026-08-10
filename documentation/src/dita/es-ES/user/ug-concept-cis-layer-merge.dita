@@ -5,7 +5,7 @@
   <shortdesc>Los ajustes preestablecidos iniciales y las capas CIS ayudan a crear un perfil inicial antes de la revisión y edición manual.</shortdesc>
   <conbody>
     <p>Un ajuste preestablecido inicial le da a un perfil un propósito inicial, como un uso corporativo, de aula o orientado a la seguridad. Una capa CIS agrega opciones de referencia de seguridad asignadas de BPM donde BPM las admite.</p>
-    <p>Las fuentes en capas permanecen visibles en Todos los ajustes para que pueda distinguir valores de referencia, CIS, importados, manuales y sin procesar. Algunos elementos relacionados con CIS requieren revisión manual en lugar de aceptación automática.</p>
+    <p>Las fuentes en capas permanecen visibles en <uicontrol>Todos los ajustes</uicontrol> para que pueda distinguir valores de referencia, CIS, importados, manuales y sin procesar. Algunos elementos relacionados con CIS requieren revisión manual en lugar de aceptación automática.</p>
     <p>La documentación de BPM describe las asignaciones de BPM y el comportamiento del flujo de trabajo. No reclama certificación ni respaldo CIS.</p>
   </conbody>
 </concept>

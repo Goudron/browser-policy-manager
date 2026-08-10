@@ -48,9 +48,7 @@ def test_replacement_evidence_closes_the_exact_authority_alias_baseline() -> Non
     assert evidence["target_bpm_version"] == "0.9.1"
     assert evidence["backlog_item"] == "BPM091-M10-05"
     assert evidence["status"] == "accepted"
-    assert evidence["authority"] == (
-        "documentation/config/interface-name-authority-0.9.1.json"
-    )
+    assert evidence["authority"] == ("documentation/config/interface-name-authority-0.9.1.json")
     assert evidence["locales"] == list(LOCALES)
     assert evidence["baseline"]["affected_file_count"] == 234
     assert evidence["baseline"]["occurrences_by_locale"] == {
@@ -100,10 +98,8 @@ def test_no_localized_visible_dita_text_contains_a_forbidden_ui_alias() -> None:
 
     english_text = "\n".join(
         _visible_text(path)
-        for path in (
-            sorted((DOC_ROOT / "src/dita/en").rglob("*.dita"))
-            + sorted((DOC_ROOT / "src/dita/en").rglob("*.ditamap"))
-        )
+        for path in sorted((DOC_ROOT / "src/dita/en").rglob("*.dita"))
+        + sorted((DOC_ROOT / "src/dita/en").rglob("*.ditamap"))
     )
     assert all(term not in english_text for term in evidence["english_forbidden_source_terms"])
 
@@ -112,12 +108,14 @@ def test_all_authority_catalog_findings_and_additional_corrections_are_resolved(
     authority = _json(AUTHORITY)
     evidence = _json(EVIDENCE)
 
-    assert len(authority["catalog_quality_findings"]) == evidence["catalog_corrections"][
-        "authority_findings_resolved"
-    ]
-    assert len(authority["additional_catalog_corrections"]) == evidence[
-        "catalog_corrections"
-    ]["additional_malformed_values_resolved"]
+    assert (
+        len(authority["catalog_quality_findings"])
+        == evidence["catalog_corrections"]["authority_findings_resolved"]
+    )
+    assert (
+        len(authority["additional_catalog_corrections"])
+        == evidence["catalog_corrections"]["additional_malformed_values_resolved"]
+    )
     for finding in authority["catalog_quality_findings"]:
         assert finding["status"] == "resolved"
         actual = [
@@ -126,9 +124,7 @@ def test_all_authority_catalog_findings_and_additional_corrections_are_resolved(
         ]
         assert actual == finding["resolved_values"]
     for correction in authority["additional_catalog_corrections"]:
-        actual = _json(ROOT / f"app/i18n/{correction['locale']}.json")[
-            correction["catalog_key"]
-        ]
+        actual = _json(ROOT / f"app/i18n/{correction['locale']}.json")[correction["catalog_key"]]
         assert actual == correction["resolved"]
 
     assert evidence["closure"]["unresolved_authority_catalog_findings"] == 0

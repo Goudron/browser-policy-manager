@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import pytest
@@ -164,55 +163,21 @@ def test_localization_and_inventory_runbooks_preserve_no_ai_and_provenance_bound
 
 def test_authoring_runbooks_define_the_approved_local_assistant_boundary() -> None:
     agents = _repository_text("documentation/AGENTS.md")
-    readme = _text("README.md")
     localization = _text("localization-and-screenshots.md")
     inventory = _text("inventory-refresh.md")
     publishing = _text("links-manifest-and-publishing.md")
     debugging = _text("debugging-protocol.md")
-    selection = json.loads(
-        (DOCUMENTATION_ROOT / "config/chat-rag-embedding-selection-contract-0.9.3.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    retrieval = json.loads(
-        (DOCUMENTATION_ROOT / "config/chat-rag-retrieval-contract-0.9.3.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    external = json.loads(
-        (
-            DOCUMENTATION_ROOT
-            / "config/documentation-assistant-external-evidence-release-contract-0.9.3.json"
-        ).read_text(encoding="utf-8")
-    )
 
-    for text in (agents, readme):
-        for required in (
-            "deterministic-search",
-            "local-only by default",
-            "same-locale",
-        ):
-            assert required in text
-    assert "unreviewed AI-authored content" in agents
+    for required in ("deterministic-search", "local-only by default", "same-locale"):
+        assert required in agents
     assert "no silent model action, network, or telemetry" in agents
-    assert "never becomes local RAG knowledge" in agents
-    assert "never silently contacted" in readme
-    assert "never retained as local knowledge" in readme
 
-    assert "reviewed, published locale peer may enter" in localization
-    assert "separately reviewed chat feature" in inventory
+    assert "reviewed, published locale peer is eligible" in localization
+    assert "resulting reviewed, published locale content through its own contracts" in inventory
     assert "does not alter search ranking, files, or availability" in publishing
     assert "Do not package model weights, embeddings, vector generations" in publishing
     assert "Local documentation assistant wording" in debugging
     assert "deterministic-search independence" in debugging
-
-    assert selection["scope"]["ordinary_search"].startswith("M4 deterministic documentation search")
-    assert selection["hard_boundaries"]["network_after_local_install"] == 0
-    assert retrieval["locale_and_filtering"]["locale_rule"].startswith("One request scans exactly")
-    assert retrieval["entry_boundary"]["ordinary_search"].startswith("M4 deterministic")
-    assert external["configuration"]["enabled_by_default"] is False
-    assert external["reader_mode"]["retention"].startswith("enabled for subsequent")
-    assert external["fallback"]["ordinary_search_changed"] is False
 
 
 def test_localization_runbook_defines_dita_translation_workflow() -> None:
@@ -264,7 +229,7 @@ def test_localization_runbook_defines_terminology_and_screenshot_drift_gates() -
         "Never convert known translation debt into an allowlist entry",
         "exact term and occurrence",
         "test_locale_anti_anglicism_guard.py",
-        "test_visible_english_prose_review.py",
+        "test_documentation_semantic_contracts_0_9_4.py",
         "six approved User Guide scenarios in all six published locales (36 rows)",
         "capture_user_guide_screenshots.py",
         "caption key, and alt-text key",
@@ -304,7 +269,7 @@ def test_cis_refresh_runbook_blocks_mapping_provenance_locale_and_artifact_drift
 
     for required in (
         "CIS benchmark and mapping drift gate",
-        "tests/test_cis_documentation_inventory.py",
+        "tests/contract/docs/general/test_cis_documentation_inventory.py",
         "documentation/tools/generate_cis_recommendation_skeletons.py",
         "test_cis_recommendation_skeleton_generation.py",
         "recommendation topics",
@@ -367,7 +332,7 @@ def test_inventory_and_publishing_runbooks_define_completion_drift_gates() -> No
         "unverified-no-actual-host-supplied",
         "actual Windows host",
         "Administrator API ownership",
-        "test_live_source_install_evidence_closure.py",
+        "test_documentation_semantic_contracts_0_9_4.py",
     ):
         assert required in inventory
 

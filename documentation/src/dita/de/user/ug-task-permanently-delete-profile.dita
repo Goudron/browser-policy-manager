@@ -5,13 +5,13 @@
   <shortdesc>Entfernen Sie ein aktives oder archiviertes Profil erst, nachdem Sie bestätigt haben, dass es nicht beibehalten werden soll.</shortdesc>
   <taskbody>
     <prereq><p>Die Profilzeile ist sichtbar und Sie haben bestätigt, dass das Profil nicht mehr benötigt wird.</p></prereq>
-    <context><p>Permanentes Löschen ist die destruktive Lebenszyklusaktion der Bibliothek. Archivieren Sie zuerst, wenn Sie einen reversiblen Halt benötigen.</p></context>
+    <context><p>Permanentes Löschen ist die destruktive Lebenszyklusaktion der <uicontrol>Bibliothek</uicontrol>. Archivieren Sie zuerst, wenn Sie einen reversiblen Halt benötigen.</p></context>
     <steps>
       <step><cmd>Bestätigen Sie den Zeilennamen, ID, das Schema, den Lebenszyklusstatus und die Aktualisierungszeit.</cmd><info><p>Erwartetes Ergebnis: Sie können das Zielprofil von ähnlich benannten Zeilen unterscheiden.</p></info></step>
-      <step><cmd>Wählen Sie die dauerhafte Löschaktion.</cmd><info><note type="warning">Das dauerhafte Löschen kann nicht aus der Bibliothek wiederhergestellt werden.</note></info></step>
+      <step><cmd>Wählen Sie die dauerhafte Löschaktion.</cmd><info><note type="warning">Das dauerhafte Löschen kann nicht aus der <uicontrol>Bibliothek</uicontrol> wiederhergestellt werden.</note></info></step>
       <step><cmd>Schließen Sie die Bestätigung erst ab, wenn die Eingabeaufforderung das gewünschte Profil nennt.</cmd><info><p>Brechen Sie die Bestätigung ab, wenn Zeilendetails unerwartet sind.</p></info></step>
     </steps>
-    <result><p>Das Profil wird aus der Bibliothek entfernt, nachdem die Löschaktion erfolgreich war.</p></result>
+    <result><p>Das Profil wird aus der <uicontrol>Bibliothek</uicontrol> entfernt, nachdem die Löschaktion erfolgreich war.</p></result>
     <postreq><p>Wiederherstellung: Wenn das Löschen fehlschlägt, nicht sofort wiederholen; Aktualisieren Sie den Status und verwenden Sie das Problembehandlungsthema, um den Status zu überprüfen.</p></postreq>
   </taskbody>
   <related-links>

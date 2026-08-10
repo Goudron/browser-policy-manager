@@ -11,7 +11,7 @@
       <step><cmd>Attendez le message d'état avant de démarrer une autre action de la bibliothèque.</cmd><info><note type="warning">La répétition des actions de cycle de vie ou de suppression alors que l'état n'est pas résolu peut rendre plus difficile la détermination de l'opération qui a échoué.</note></info></step>
       <step><cmd>Examinez les décomptes filtrés et totaux après l'actualisation.</cmd><info><p>Les comptes peuvent changer si un autre onglet a enregistré, archivé, restauré ou supprimé un profil.</p></info></step>
     </steps>
-    <result><p>La vue Bibliothèque reflète la dernière liste de profils disponible pour BPM.</p></result>
+    <result><p>La vue <uicontrol>Bibliothèque</uicontrol> reflète la dernière liste de profils disponible pour BPM.</p></result>
     <postreq><p>Récupération : si l'actualisation échoue, laissez la page actuelle ouverte et utilisez la rubrique de dépannage pour décider s'il faut réessayer ou conserver le contexte.</p></postreq>
   </taskbody>
   <related-links>

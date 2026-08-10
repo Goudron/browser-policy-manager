@@ -7,9 +7,9 @@
     <prereq><p>打开配置值的设置详细信息面板。</p></prereq>
     <context><p>删除和重置操作对所选值具有破坏性，因此用户应首先了解源和下游影响。</p></context>
     <steps>
-      <step><cmd>检查当前值和源标记。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>仅针对您想要更改的设置选择“删除”或“重置”。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>阅读详细信息面板显示的任何警告或验证消息。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>检查当前值和源标记。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>仅针对您想要更改的设置选择“删除”或“重置”。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>阅读详细信息面板显示的任何警告或验证消息。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>在确认值不存在、重置或按预期继承后保存配置文件。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>该设置不再适用之前配置的值。</p></result>

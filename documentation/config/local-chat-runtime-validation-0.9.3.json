@@ -38,7 +38,7 @@
     "network": "No network request, ordinary-search call, retrieval call, browser route, or listener is made."
   },
   "verification": {
-    "runtime_unit": "tests/test_local_inference_worker.py",
+    "runtime_unit": "tests/integration/ai/incubation/test_local_inference_worker.py",
     "contract": "documentation/tests/contract/test_local_chat_runtime_validation_0_9_3.py",
     "architecture": "docs/architecture/local-chat-runtime-validation-0.9.3.md"
   }

@@ -12,7 +12,9 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 CONTRACT = DOCUMENTATION_ROOT / "config/all-settings-help-target-map-0.9.1.json"
 INVENTORY = REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
-TARGET_SCHEMA = REPOSITORY_ROOT / "docs/architecture/schemas/product-documentation-ui-target-map-v1.schema.json"
+TARGET_SCHEMA = (
+    REPOSITORY_ROOT / "docs/architecture/schemas/product-documentation-ui-target-map-v1.schema.json"
+)
 BUILD_DOCS_PATH = DOCUMENTATION_ROOT / "tools/build_docs.py"
 
 SPEC = importlib.util.spec_from_file_location("build_docs_m9_02", BUILD_DOCS_PATH)
@@ -50,8 +52,12 @@ def test_contract_declares_exact_manifest_backed_identity_rules() -> None:
         "target_pattern": "known-preference:{exact.preference.id}",
         "topic_id": "fx-reference-managed-preference-locking",
         "anchor_id": "a-safe-review",
-        "coverage": "Exact set of known managed preference IDs in the Firefox documentation inventory.",
-        "identity_rule": "Preference IDs are case-sensitive and must not be lowercased, translated, slugified, or derived from visible labels.",
+        "coverage": (
+            "Exact set of known managed preference IDs in the Firefox documentation inventory."
+        ),
+        "identity_rule": (
+            "Preference IDs are case-sensitive and must not be lowercased, translated, slugified, or derived from visible labels."
+        ),
     }
     assert contract["alias_policy"]["generated_alias_target_ids"] == []
     assert "canonical policy or preference identity" in contract["alias_policy"]["rule"]
@@ -64,7 +70,9 @@ def test_target_map_covers_exact_release_esr_policy_union_and_known_preferences(
     preference_ids = {item["preference_id"] for item in inventory["managed_preferences"]}
 
     assert inventory["summary"]["policy_scope_counts"] == {"both": 112, "partial": 9}
-    assert {key.removeprefix("policy:") for key in targets if key.startswith("policy:")} == policy_ids
+    assert {
+        key.removeprefix("policy:") for key in targets if key.startswith("policy:")
+    } == policy_ids
     assert {
         key.removeprefix("known-preference:")
         for key in targets
@@ -86,7 +94,9 @@ def test_known_preference_targets_preserve_case_and_use_local_reference_anchor()
         assert target == {
             "kind": "known-preference",
             "source_id": target_id.removeprefix("known-preference:"),
-            "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+            "source_inventory": (
+                "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+            ),
             "topic_id": "fx-reference-managed-preference-locking",
             "anchor_id": "a-safe-review",
         }
@@ -106,8 +116,7 @@ def test_known_preference_reference_anchor_exists_in_every_locale() -> None:
         assert root.find("./refbody/section[@id='a-safe-review']") is not None
 
 
-def test_target_coverage_validation_fails_for_missing_removed_and_case_changed_ids(
-) -> None:
+def test_target_coverage_validation_fails_for_missing_removed_and_case_changed_ids() -> None:
     targets = _target_map()["targets"]
 
     missing = dict(targets)
@@ -132,9 +141,11 @@ def test_target_map_rejects_unknown_contract_version(monkeypatch: pytest.MonkeyP
     monkeypatch.setattr(
         build_docs,
         "_read_json_file",
-        lambda path: {"schema_version": 2}
-        if path == build_docs.ALL_SETTINGS_HELP_TARGET_MAP
-        else _json(path),
+        lambda path: (
+            {"schema_version": 2}
+            if path == build_docs.ALL_SETTINGS_HELP_TARGET_MAP
+            else _json(path)
+        ),
     )
 
     with pytest.raises(build_docs.BuildError, match="unsupported All Settings help target"):

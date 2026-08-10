@@ -127,14 +127,20 @@ def report_top_files(stats: list[FileStats], limit: int) -> None:
     print("## Largest Tracked Files By Size")
     print_table(
         ("Path", "Size", "Lines"),
-        [(item.path, human_size(item.size), item.lines) for item in sorted(stats, key=lambda item: item.size, reverse=True)[:limit]],
+        [
+            (item.path, human_size(item.size), item.lines)
+            for item in sorted(stats, key=lambda item: item.size, reverse=True)[:limit]
+        ],
     )
     print()
 
     print("## Largest Tracked Files By Lines")
     print_table(
         ("Path", "Lines", "Size"),
-        [(item.path, item.lines, human_size(item.size)) for item in sorted(stats, key=lambda item: item.lines, reverse=True)[:limit]],
+        [
+            (item.path, item.lines, human_size(item.size))
+            for item in sorted(stats, key=lambda item: item.lines, reverse=True)[:limit]
+        ],
     )
     print()
 
@@ -155,11 +161,15 @@ def report_vendor_generated(files: list[Path]) -> None:
     rows = []
     for prefix in VENDOR_OR_GENERATED_PREFIXES:
         matching = [
-            path
-            for path in files
-            if path.relative_to(REPO_ROOT).as_posix().startswith(prefix)
+            path for path in files if path.relative_to(REPO_ROOT).as_posix().startswith(prefix)
         ]
-        rows.append((prefix.rstrip("/"), len(matching), human_size(sum(path.stat().st_size for path in matching))))
+        rows.append(
+            (
+                prefix.rstrip("/"),
+                len(matching),
+                human_size(sum(path.stat().st_size for path in matching)),
+            )
+        )
     print_table(("Prefix", "Files", "Size"), rows)
     print()
 
@@ -205,16 +215,26 @@ def report_file_mix(files: list[Path]) -> None:
     print("## Tracked File Mix")
     top_levels = Counter(path.relative_to(REPO_ROOT).parts[0] for path in files)
     extensions = Counter(path.suffix or "[none]" for path in files)
-    print_table(("Top-level path", "Files"), sorted(top_levels.items(), key=lambda item: (-item[1], item[0])))
+    print_table(
+        ("Top-level path", "Files"),
+        sorted(top_levels.items(), key=lambda item: (-item[1], item[0])),
+    )
     print()
-    print_table(("Extension", "Files"), sorted(extensions.items(), key=lambda item: (-item[1], item[0]))[:15])
+    print_table(
+        ("Extension", "Files"),
+        sorted(extensions.items(), key=lambda item: (-item[1], item[0]))[:15],
+    )
     print()
 
 
 def collect_default_pytest_count() -> str:
     try:
         output = subprocess.check_output(
-            [".venv/bin/pytest" if (REPO_ROOT / ".venv/bin/pytest").exists() else "pytest", "--collect-only", "-q"],
+            [
+                ".venv/bin/pytest" if (REPO_ROOT / ".venv/bin/pytest").exists() else "pytest",
+                "--collect-only",
+                "-q",
+            ],
             cwd=REPO_ROOT,
             stderr=subprocess.STDOUT,
             text=True,

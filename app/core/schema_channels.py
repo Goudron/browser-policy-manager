@@ -9,7 +9,6 @@ class SchemaChannel:
     value: str
     label: str
     filename: str
-    raw_dir: str
     mozilla_version: str
     source_tag: str
     family: str
@@ -22,7 +21,6 @@ SCHEMA_CHANNELS: tuple[SchemaChannel, ...] = (
         value="esr-140.13",
         label="ESR 140.13",
         filename="firefox-esr-140.13.json",
-        raw_dir="esr14013",
         mozilla_version="140.13",
         source_tag="mozilla-policy-templates-v7.12",
         family="esr",
@@ -33,7 +31,6 @@ SCHEMA_CHANNELS: tuple[SchemaChannel, ...] = (
         value="esr-153.0",
         label="ESR 153.0",
         filename="firefox-esr-153.0.json",
-        raw_dir="esr1530",
         mozilla_version="153.0",
         source_tag="mozilla-policy-templates-v8.0",
         family="esr",
@@ -43,7 +40,6 @@ SCHEMA_CHANNELS: tuple[SchemaChannel, ...] = (
         value="release-153",
         label="Release 153",
         filename="firefox-release-153.json",
-        raw_dir="release153",
         mozilla_version="153.0",
         source_tag="mozilla-policy-templates-v8.0",
         family="release",
@@ -80,7 +76,6 @@ CURRENT_RELEASE_SCHEMA_CHANNEL = DEFAULT_RELEASE_SCHEMA_CHANNEL
 
 SCHEMA_LABELS: dict[str, str] = {channel.value: channel.label for channel in SCHEMA_CHANNELS}
 SCHEMA_FILENAMES: dict[str, str] = {channel.value: channel.filename for channel in SCHEMA_CHANNELS}
-RAW_SCHEMA_DIRS: dict[str, str] = {channel.value: channel.raw_dir for channel in SCHEMA_CHANNELS}
 SCHEMA_MOZILLA_VERSIONS: dict[str, str] = {
     channel.value: channel.mozilla_version for channel in SCHEMA_CHANNELS
 }
@@ -100,9 +95,9 @@ def build_schema_channels_catalog(
     label_overrides: Mapping[str, str] | None = None,
 ) -> dict[str, object]:
     labels = {
-        channel.value: label_overrides.get(channel.value, channel.label)
-        if label_overrides
-        else channel.label
+        channel.value: (
+            label_overrides.get(channel.value, channel.label) if label_overrides else channel.label
+        )
         for channel in SCHEMA_CHANNELS
     }
     return {

@@ -14,7 +14,9 @@ SEARCH_UI_CONTRACT = CONFIG_ROOT / "search-ui-filter-contract-0.9.1.json"
 SEARCH_FACETS_CONTRACT = CONFIG_ROOT / "search-facets-filters-0.9.0.json"
 NAVIGATION_CONTRACT = CONFIG_ROOT / "navigation-tree-contract-0.9.1.json"
 ALL_SETTINGS_CONTRACT = CONFIG_ROOT / "all-settings-row-help-link-contract-0.9.1.json"
-THEME_CONTRACT = REPOSITORY_ROOT / "docs/architecture/product-documentation-visual-theme-contract-0.9.1.md"
+THEME_CONTRACT = (
+    REPOSITORY_ROOT / "docs/architecture/product-documentation-visual-theme-contract-0.9.1.md"
+)
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 
 pytestmark = pytest.mark.docs_contract
@@ -130,7 +132,10 @@ def test_guardrail_fails_for_duplicate_titles_and_broken_root_return() -> None:
         "The left navigation is the authoritative place"
     )
     assert "must not be repeated" in navigation["display_rules"]["no_duplicate_guide_title"]
-    assert "topic title or documentation home title" in navigation["display_rules"]["topic_heading_rule"]
+    assert (
+        "topic title or documentation home title"
+        in navigation["display_rules"]["topic_heading_rule"]
+    )
 
     active = navigation["active_state"]
     assert active["root_page"]["current_node"] == "documentation-root"
@@ -166,7 +171,9 @@ def test_guardrail_registers_pure_white_source_checks_for_theme_implementation()
 
     assert "Light theme must not use pure white as a primary surface." in contract
     assert "`#ffffff`, `white`, or equivalent pure-white primary backgrounds" in contract
-    assert "Page background, shell header, sidebar, main content surface, search surface" in contract
+    assert (
+        "Page background, shell header, sidebar, main content surface, search surface" in contract
+    )
 
 
 def test_guardrail_fails_for_all_settings_rows_without_valid_help_disposition() -> None:
@@ -197,6 +204,8 @@ def test_guardrail_fails_for_all_settings_rows_without_valid_help_disposition() 
 
     rules = {rule["entry_kind"]: rule for rule in resolution["rules"]}
     assert rules["firefox_policy"]["target_id"] == "policy:{exact_policy_id}"
-    assert rules["known_managed_preference"]["target_id"] == "known-preference:{exact.preference.id}"
+    assert (
+        rules["known_managed_preference"]["target_id"] == "known-preference:{exact.preference.id}"
+    )
     assert rules["raw_fallback"]["fallback_disposition"] == "not_applicable_raw"
     assert rules["unknown_imported"]["fallback_disposition"] == "unsupported_unknown"

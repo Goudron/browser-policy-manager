@@ -28,10 +28,17 @@ def test_m10_06_renderer_is_retained_but_not_included_in_the_m13_release_ui() ->
     assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
     assert contract["release_amendment"]["owner"] == "BPM093-M12B-06"
     assert contract["input_boundary"]["exact_snapshot_fields"] == [
-        "api_version", "available", "enabled", "locale", "reason_code", "state_epoch"
+        "api_version",
+        "available",
+        "enabled",
+        "locale",
+        "reason_code",
+        "state_epoch",
     ]
     assert contract["boundaries"] == {
-        "page_load": "The helper only registers validation/render functions and performs no fetch, status poll, provider request or DOM mutation on its own.",
+        "page_load": (
+            "The helper only registers validation/render functions and performs no fetch, status poll, provider request or DOM mutation on its own."
+        ),
         "provider_request": False,
         "ordinary_search_changed": False,
         "local_or_session_storage_access": False,

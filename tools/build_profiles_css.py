@@ -11,7 +11,11 @@ BUNDLE_PATH = REPO_ROOT / "app" / "static" / "profiles.css"
 LAYERS = (
     "00-foundation.css",
     "10-library.css",
-    "20-editor-wizard.css",
+    "20-shell.css",
+    "21-settings.css",
+    "22-guided-wizard.css",
+    "23-workspace-editor.css",
+    "24-theme-overrides.css",
     "30-responsive.css",
     "40-compact-shell.css",
 )

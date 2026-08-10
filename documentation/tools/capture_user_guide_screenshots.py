@@ -374,7 +374,9 @@ def _wait_for(driver: Any, condition: str, *args: Any, timeout: float = WAIT_SEC
         if last_value:
             return last_value
         time.sleep(0.15)
-    raise CaptureError(f"Timed out waiting for browser condition: {condition!r}; last={last_value!r}")
+    raise CaptureError(
+        f"Timed out waiting for browser condition: {condition!r}; last={last_value!r}"
+    )
 
 
 def _set_locale_and_theme(driver: Any, locale: str, theme: str) -> None:
@@ -429,8 +431,7 @@ def _stabilize_page(driver: Any, scenario_id: str) -> None:
         } else {
           window.scrollTo(0, 0);
         }
-        """
-        ,
+        """,
         scenario_id,
     )
     time.sleep(0.35)
@@ -469,26 +470,34 @@ def _click_selector(driver: Any, selector: str) -> None:
 
 def _prepare_scenario(driver: Any, scenario_id: str) -> None:
     if scenario_id == "library-overview":
-        _wait_for(driver, "return document.querySelectorAll('#list [data-library-profile-id]').length > 0;")
-        driver.execute_script(
-            """
+        _wait_for(
+            driver,
+            "return document.querySelectorAll('#list [data-library-profile-id]').length > 0;",
+        )
+        driver.execute_script("""
             const sort = document.getElementById("sort");
             const order = document.getElementById("order");
             if (sort) sort.value = "name";
             if (order) order.value = "asc";
             sort?.dispatchEvent(new Event("change", { bubbles: true }));
             order?.dispatchEvent(new Event("change", { bubbles: true }));
-            """
+            """)
+        _wait_for(
+            driver,
+            "return document.querySelectorAll('#list [data-library-profile-id]').length > 0;",
         )
-        _wait_for(driver, "return document.querySelectorAll('#list [data-library-profile-id]').length > 0;")
         return
 
     if scenario_id == "guided-editor-overview":
-        _wait_for(driver, "return Boolean(document.querySelector('#wizard-panel .wizard-step--active'));")
+        _wait_for(
+            driver, "return Boolean(document.querySelector('#wizard-panel .wizard-step--active'));"
+        )
         return
 
     if scenario_id == "guided-settings-search":
-        _wait_for(driver, "return Boolean(document.querySelector('#wizard-settings-search-input'));")
+        _wait_for(
+            driver, "return Boolean(document.querySelector('#wizard-settings-search-input'));"
+        )
         _set_input_value(driver, "#wizard-settings-search-input", "homepage")
         _wait_for(
             driver,
@@ -498,12 +507,15 @@ def _prepare_scenario(driver: Any, scenario_id: str) -> None:
         return
 
     if scenario_id == "all-settings-review":
-        _wait_for(driver, "return document.querySelectorAll('#all-settings-list [data-settings-entry-id]').length > 0;")
+        _wait_for(
+            driver,
+            "return document.querySelectorAll('#all-settings-list [data-settings-entry-id]').length > 0;",
+        )
         _click_selector(driver, '[data-settings-list-filter="configured"]')
         _wait_for(
             driver,
             "return document.querySelectorAll('#all-settings-list "
-            "[data-settings-entry-state=\"configured\"]').length > 0;",
+            '[data-settings-entry-state="configured"]\').length > 0;',
         )
         _click_selector(driver, "#all-settings-list [data-settings-entry-id]")
         _wait_for(
@@ -528,7 +540,9 @@ def _prepare_scenario(driver: Any, scenario_id: str) -> None:
             "return document.querySelectorAll('[data-compare-selected-profile] "
             ".compare-selected-profile__name').length >= 2;",
         )
-        _wait_for(driver, "return document.querySelectorAll('#compare-settings-rows tr').length > 0;")
+        _wait_for(
+            driver, "return document.querySelectorAll('#compare-settings-rows tr').length > 0;"
+        )
         return
 
     raise CaptureError(f"Unknown screenshot scenario: {scenario_id}")
@@ -600,8 +614,7 @@ def _capture_row(
         expected_height = int(viewport["height"])
         if (width, height) != (expected_width, expected_height):
             raise CaptureError(
-                f"PNG dimensions {width}x{height} do not match "
-                f"{expected_width}x{expected_height}"
+                f"PNG dimensions {width}x{height} do not match {expected_width}x{expected_height}"
             )
     except Exception as exc:
         payload = json.dumps(context, ensure_ascii=False, sort_keys=True)
@@ -685,7 +698,9 @@ def capture_screenshots(
         "captured": captured,
     }
     report_path = report_root / "user-guide-screenshots-0.9.1.json"
-    report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    report_path.write_text(
+        json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
     return report
 
 

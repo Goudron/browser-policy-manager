@@ -7,7 +7,7 @@
     <prereq><p>Un profil est ouvert et contient au moins une famille de stratégies complexes ou une préférence gérée.</p></prereq>
     <context><p>Les stratégies complexes sont plus sûres lorsqu'elles sont examinées par famille, source, canal de schéma et forme de limite exportée.</p></context>
     <steps>
-      <step><cmd>Ouvrez Tous les paramètres et filtrez sur la famille concernée.</cmd><info><p>Résultat attendu : les stratégies, préférences et étiquettes de source associées sont visibles ensemble.</p></info></step>
+      <step><cmd>Ouvrez <uicontrol>Tous les paramètres</uicontrol> et filtrez sur la famille concernée.</cmd><info><p>Résultat attendu : les stratégies, préférences et étiquettes de source associées sont visibles ensemble.</p></info></step>
       <step><cmd>Vérifiez le badge Release/ESR pour chaque police de la famille.</cmd><info><note type="warning">Une stratégie de version uniquement ne doit pas être exportée pour un profil ciblé par ESR.</note></info></step>
       <step><cmd>Inspectez les valeurs des objets et des tableaux imbriqués, y compris les champs préservés inconnus.</cmd><info><p>Résultat attendu : les valeurs de secours brutes sont intentionnellement conservées ou supprimées avant l'enregistrement.</p></info></step>
       <step><cmd>Comparez les sources prédéfinies, CIS, importées, manuelles et brutes.</cmd><info><p>Résultat attendu : les conflits sont résolus délibérément plutôt que masqués par des modifications ultérieures.</p></info></step>

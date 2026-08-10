@@ -5,9 +5,9 @@
   <shortdesc>Use Step 3 for privacy posture, permissions, cookies, cleanup, DNS, and hardening controls.</shortdesc>
   <taskbody>
     <prereq><p>A Guided profile draft is open on the intended schema channel.</p></prereq>
-    <context><p>Security &amp; privacy settings can change both user experience and risk posture, so review warnings before saving.</p></context>
+    <context><p><uicontrol>Security &amp; privacy</uicontrol> settings can change both user experience and risk posture, so review warnings before saving.</p></context>
     <steps>
-      <step><cmd>Open Step 3, Security &amp; privacy.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Open Step 3, <uicontrol>Security &amp; privacy</uicontrol>.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Configure privacy controls and permission defaults.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Set cookies, cleanup, DNS, and security hardening options needed by the profile.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Check validation messages and explain any exception in the review.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>

@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-handle-raw-unknown-settings" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>处理原始和未知设置</title>
-  <shortdesc>检查导入的未知键和原始回退值，而不会意外丢失它们。</shortdesc>
+  <shortdesc><uicontrol>检查</uicontrol>导入的未知键和原始回退值，而不会意外丢失它们。</shortdesc>
   <taskbody>
-    <prereq><p>打开 检查 或 所有设置 中的原始/未知过滤列表。</p></prereq>
+    <prereq><p>打开 <uicontrol>检查</uicontrol> 或 <uicontrol>所有设置</uicontrol> 中的原始/未知过滤列表。</p></prereq>
     <context><p>原始和未知设置可能来自导入、架构差异或 BPM 无法进行可视化建模的值。将它们视为保存和审查项目，而不是常规编辑。</p></context>
     <steps>
-      <step><cmd>过滤或打开查看原始、未知或导入设置的项目。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>检查原始值、源、验证状态和模式通道。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>决定是否保留、删除、重置或检查 JSON 编辑器 中的值。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>过滤或打开查看原始、未知或导入设置的项目。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd><uicontrol>检查</uicontrol>原始值、源、验证状态和模式通道。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>决定是否保留、删除、重置或<uicontrol>检查</uicontrol> <uicontrol>JSON 编辑器</uicontrol> 中的值。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>仅在确认该值应保留或删除后才保存。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>有意保留或删除原始值和未知值。</p></result>

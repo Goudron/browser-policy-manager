@@ -48,7 +48,10 @@ FALLBACK_SECTION_MAPPINGS: dict[str, dict[str, tuple[str, list[str]]]] = {
         "DisablePasswordReveal": ("passwords", ["passwords"]),
         "EnableTrackingProtection": ("tracking", ["tracking"]),
         "EncryptedMediaExtensions": ("security", ["drm"]),
-        "ExemptDomainFileTypePairsFromFileTypeDownloadWarnings": ("downloads", ["downloads", "warnings"]),
+        "ExemptDomainFileTypePairsFromFileTypeDownloadWarnings": (
+            "downloads",
+            ["downloads", "warnings"],
+        ),
         "PDFjs": ("security", ["pdf"]),
         "PictureInPicture": ("surfaces", ["video"]),
         "PostQuantumKeyAgreementEnabled": ("security", ["tls"]),

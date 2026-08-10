@@ -170,7 +170,11 @@ def _build_channel_step_shell(
         ),
         key=lambda item: item["label"],
     )
-    preferences = [preferences_by_id[section_id] for section_id in step_meta["preference_sections"] if section_id in preferences_by_id]
+    preferences = [
+        preferences_by_id[section_id]
+        for section_id in step_meta["preference_sections"]
+        if section_id in preferences_by_id
+    ]
 
     return {
         "recommended": recommended,

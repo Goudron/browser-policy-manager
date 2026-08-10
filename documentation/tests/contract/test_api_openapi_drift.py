@@ -43,7 +43,10 @@ PROGRAMMATIC_OPERATIONS: tuple[OperationContract, ...] = (
         path="/",
         operation_id="root__get",
         tags=(),
-        guide_topics=("admin-concept-api-conventions", "admin-concept-supported-integration-patterns"),
+        guide_topics=(
+            "admin-concept-api-conventions",
+            "admin-concept-supported-integration-patterns",
+        ),
         inventory_topic="admin-task-check-health-readiness",
         responses=(("200", ("application/json",), ()),),
         documented_statuses=("200",),
@@ -76,7 +79,10 @@ PROGRAMMATIC_OPERATIONS: tuple[OperationContract, ...] = (
         path="/api/profiles",
         operation_id="list_profiles_api_profiles_get",
         tags=("profiles",),
-        guide_topics=("admin-task-sync-profile-lifecycle", "admin-task-run-pull-compare-update-scenario"),
+        guide_topics=(
+            "admin-task-sync-profile-lifecycle",
+            "admin-task-run-pull-compare-update-scenario",
+        ),
         inventory_topic="admin-task-sync-profile-lifecycle",
         parameters=(
             ("q", "query", False, "anyOf:string|null", None, None, None),
@@ -159,7 +165,10 @@ PROGRAMMATIC_OPERATIONS: tuple[OperationContract, ...] = (
         path="/api/profiles/{profile_id}",
         operation_id="update_profile_api_profiles__profile_id__patch",
         tags=("profiles",),
-        guide_topics=("admin-task-sync-profile-lifecycle", "admin-task-run-pull-compare-update-scenario"),
+        guide_topics=(
+            "admin-task-sync-profile-lifecycle",
+            "admin-task-run-pull-compare-update-scenario",
+        ),
         inventory_topic="admin-task-sync-profile-lifecycle",
         parameters=(("profile_id", "path", True, "integer", None, None, None),),
         request=(("application/json", ("ProfileUpdate",)),),
@@ -322,7 +331,10 @@ WEB_OPERATIONS: tuple[OperationContract, ...] = (
         guide_topics=("user-guide",),
         inventory_topic="Saved Guided Editor HTML route",
         parameters=(("profile_id", "path", True, "integer", None, None, None),),
-        responses=(("200", ("text/html",), ()), ("422", ("application/json",), ("HTTPValidationError",))),
+        responses=(
+            ("200", ("text/html",), ()),
+            ("422", ("application/json",), ("HTTPValidationError",)),
+        ),
     ),
     OperationContract(
         api_id="WEB-005",
@@ -333,7 +345,10 @@ WEB_OPERATIONS: tuple[OperationContract, ...] = (
         guide_topics=("user-guide",),
         inventory_topic="All Settings HTML route",
         parameters=(("profile_id", "path", True, "integer", None, None, None),),
-        responses=(("200", ("text/html",), ()), ("422", ("application/json",), ("HTTPValidationError",))),
+        responses=(
+            ("200", ("text/html",), ()),
+            ("422", ("application/json",), ("HTTPValidationError",)),
+        ),
     ),
     OperationContract(
         api_id="WEB-006",
@@ -344,7 +359,10 @@ WEB_OPERATIONS: tuple[OperationContract, ...] = (
         guide_topics=("user-guide",),
         inventory_topic="JSON Editor HTML route",
         parameters=(("profile_id", "path", True, "integer", None, None, None),),
-        responses=(("200", ("text/html",), ()), ("422", ("application/json",), ("HTTPValidationError",))),
+        responses=(
+            ("200", ("text/html",), ()),
+            ("422", ("application/json",), ("HTTPValidationError",)),
+        ),
     ),
 )
 
@@ -446,7 +464,9 @@ def _schema_refs(schema: Any) -> tuple[str, ...]:
     return tuple(sorted(refs))
 
 
-def _actual_operation_contract(schema: Mapping[str, Any], operation: OperationContract) -> dict[str, Any]:
+def _actual_operation_contract(
+    schema: Mapping[str, Any], operation: OperationContract
+) -> dict[str, Any]:
     openapi_operation = schema["paths"][operation.path][operation.method.lower()]
     request_content = openapi_operation.get("requestBody", {}).get("content", {})
     responses = openapi_operation.get("responses", {})
@@ -500,9 +520,7 @@ def test_openapi_operation_inventory_matches_generated_schema_with_topic_ids() -
     schema = _openapi_schema()
     expected_operations = PROGRAMMATIC_OPERATIONS + WEB_OPERATIONS
     actual_route_keys = {
-        (method.upper(), path)
-        for path, methods in schema["paths"].items()
-        for method in methods
+        (method.upper(), path) for path, methods in schema["paths"].items() for method in methods
     }
     expected_route_keys = {(operation.method, operation.path) for operation in expected_operations}
 
@@ -549,8 +567,7 @@ def test_api_inventory_rows_match_current_operation_topics_and_status_families()
                 f"for topic {operation.inventory_topic}"
             )
             assert any(
-                status_code in guide_text_cache[topic_id]
-                for topic_id in operation.guide_topics
+                status_code in guide_text_cache[topic_id] for topic_id in operation.guide_topics
             ), (
                 f"{operation.api_id} DITA status drift: status {status_code} is not documented "
                 f"in guide topics {operation.guide_topics}"
@@ -596,7 +613,9 @@ def test_openapi_examples_match_documented_copyable_examples_boundary() -> None:
     import_schema = schema["paths"]["/api/profiles/import/firefox/policies.json"]["post"][
         "requestBody"
     ]["content"]["application/json"]["schema"]
-    validation_schema = schema["components"]["schemas"]["ValidationRequest"]["properties"]["document"]
+    validation_schema = schema["components"]["schemas"]["ValidationRequest"]["properties"][
+        "document"
+    ]
 
     assert import_schema["example"] == {
         "name": "Workstation baseline",

@@ -2,16 +2,16 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-refresh-profile-library" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Die Bibliothek aktualisieren</title>
-  <shortdesc>Bibliothekszeilen neu laden und Lade- oder Aktionsstatus interpretieren, bevor ein Vorgang wiederholt wird.</shortdesc>
+  <shortdesc><uicontrol>Bibliothek</uicontrol>szeilen neu laden und Lade- oder Aktionsstatus interpretieren, bevor ein Vorgang wiederholt wird.</shortdesc>
   <taskbody>
-    <prereq><p>Die Bibliothek ist geöffnet und Sie müssen den aktuellen Status des gespeicherten Profils nach einer Änderung oder einem fehlgeschlagenen Ladevorgang bestätigen.</p></prereq>
-    <context><p>Aktualisieren lädt die Bibliothek von BPM neu. Profile werden nicht validiert und nicht gespeicherte Editoränderungen werden nicht gespeichert.</p></context>
+    <prereq><p>Die <uicontrol>Bibliothek</uicontrol> ist geöffnet und Sie müssen den aktuellen Status des gespeicherten Profils nach einer Änderung oder einem fehlgeschlagenen Ladevorgang bestätigen.</p></prereq>
+    <context><p>Aktualisieren lädt die <uicontrol>Bibliothek</uicontrol> von BPM neu. Profile werden nicht validiert und nicht gespeicherte Editoränderungen werden nicht gespeichert.</p></context>
     <steps>
-      <step><cmd>Wählen Sie „Aktualisieren“ in der Bibliothek.</cmd><info><p>Erwartetes Ergebnis: Der Status kündigt das Laden an und dann entweder eine aktualisierte Liste oder einen Fehler.</p></info></step>
-      <step><cmd>Warten Sie auf die Statusmeldung, bevor Sie eine weitere Bibliotheksaktion starten.</cmd><info><note type="warning">Das Wiederholen von Lebenszyklus- oder Löschaktionen, während der Status ungelöst ist, kann es schwieriger machen, zu erkennen, welcher Vorgang fehlgeschlagen ist.</note></info></step>
+      <step><cmd>Wählen Sie „Aktualisieren“ in der <uicontrol>Bibliothek</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Der Status kündigt das Laden an und dann entweder eine aktualisierte Liste oder einen Fehler.</p></info></step>
+      <step><cmd>Warten Sie auf die Statusmeldung, bevor Sie eine weitere <uicontrol>Bibliothek</uicontrol>saktion starten.</cmd><info><note type="warning">Das Wiederholen von Lebenszyklus- oder Löschaktionen, während der Status ungelöst ist, kann es schwieriger machen, zu erkennen, welcher Vorgang fehlgeschlagen ist.</note></info></step>
       <step><cmd>Überprüfen Sie die gefilterten und Gesamtzahlen nach der Aktualisierung.</cmd><info><p>Die Anzahl kann sich ändern, wenn ein Profil auf einer anderen Registerkarte gespeichert, archiviert, wiederhergestellt oder gelöscht wird.</p></info></step>
     </steps>
-    <result><p>Die Bibliotheksansicht spiegelt die neueste für BPM verfügbare Profilliste wider.</p></result>
+    <result><p>Die <uicontrol>Bibliothek</uicontrol>sansicht spiegelt die neueste für BPM verfügbare Profilliste wider.</p></result>
     <postreq><p>Wiederherstellung: Wenn die Aktualisierung fehlschlägt, lassen Sie die aktuelle Seite geöffnet und entscheiden Sie anhand des Themas zur Fehlerbehebung, ob Sie es erneut versuchen oder den Kontext beibehalten möchten.</p></postreq>
   </taskbody>
   <related-links>

@@ -4,12 +4,12 @@
   <title>解决安全基线手动审核项目</title>
   <shortdesc>查找需要手动审核的 CIS 建议，并决定是否配置、记录或将其留作外部验证。</shortdesc>
   <taskbody>
-    <prereq><p>打开包含 CIS 层或 CIS 派生源元数据的配置文件的 所有设置 检查。</p></prereq>
-    <context><p>某些 CIS 建议无法通过 BPM 完全自动化。 检查 会显示这些项目，以便用户无需声明认证即可做出明确的决定。</p></context>
+    <prereq><p>打开包含 CIS 层或 CIS 派生源元数据的配置文件的 <uicontrol>所有设置</uicontrol> <uicontrol>检查</uicontrol>。</p></prereq>
+    <context><p>某些 CIS 建议无法通过 BPM 完全自动化。 <uicontrol>检查</uicontrol> 会显示这些项目，以便用户无需声明认证即可做出明确的决定。</p></context>
     <steps>
-      <step><cmd>打开 检查 并根据需要过滤 CIS 手动审核项目。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>读取建议标识符、受影响的策略或首选项以及当前值。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>配置受支持的值，记录仍需手动验证的原因，或有意保留该项目的未解决状态。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>打开 <uicontrol>检查</uicontrol> 并根据需要过滤 CIS 手动审核项目。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>读取建议标识符、受影响的策略或首选项以及当前值。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>配置受支持的值，记录仍需手动验证的原因，或有意保留该项目的未解决状态。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>在导出或移交之前重新验证并记录决策。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>CIS 手动审核项目已配置、记录或有意留作外部验​​证。</p></result>

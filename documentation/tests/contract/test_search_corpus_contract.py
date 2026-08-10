@@ -52,8 +52,14 @@ def test_search_contract_identifies_corpus_fields_sources_and_exclusions() -> No
 
     source_authority = set(corpus["source_authority"])
     assert "documentation/src/dita/{locale}/{user,firefox,cis,api,admin}/*.dita" in source_authority
-    assert "documentation/src/generated/firefox/firefox-policy-skeletons-0.9.0.json" in source_authority
-    assert "documentation/src/generated/cis/cis-recommendation-skeletons-0.9.0.json" in source_authority
+    assert (
+        "documentation/src/generated/firefox/firefox-policy-skeletons-0.9.0.json"
+        in source_authority
+    )
+    assert (
+        "documentation/src/generated/cis/cis-recommendation-skeletons-0.9.0.json"
+        in source_authority
+    )
     assert "docs/architecture/api-documentation-inventory-0.9.0.md" in source_authority
 
     searchable_fields = {field["field"] for field in corpus["searchable_fields"]}
@@ -196,7 +202,15 @@ def test_search_facet_and_integrity_contracts_are_release_gate_ready() -> None:
         "provenance-only",
         None,
     ]
-    assert facets["api_area"] == ["service", "health", "profiles", "validation", "import-export", "ui", None]
+    assert facets["api_area"] == [
+        "service",
+        "health",
+        "profiles",
+        "validation",
+        "import-export",
+        "ui",
+        None,
+    ]
 
     integrity = contract["integrity"]
     assert integrity == {

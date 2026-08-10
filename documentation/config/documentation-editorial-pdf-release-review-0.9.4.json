@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "review_id": "bpm-0.9.4-editorial-pdf-release-review",
+  "backlog_item": "BPM094-M11-06",
+  "target_bpm_version": "0.9.4",
+  "release_blocking": true,
+  "status": "accepted",
+  "reviewed_at": "2026-08-08",
+  "reviewer": "BPM 0.9.4 product-documentation editorial and PDF release review",
+  "reviewed_source": {
+    "source_fingerprint": "ceac12476c4839494274ed6fe8e7c2beb4b17244a28e88d8710a0b5c8f7f9829",
+    "source_revision": "af8fb0c9d67c7e7a35fa7bd51aee0900109930c2",
+    "changed_physical_topic_files": {
+      "user": 461,
+      "admin": 84,
+      "firefox": 30,
+      "cis": 33
+    },
+    "guide_map_changes": 0,
+    "generated_artifacts_are_not_hand_edited": true
+  },
+  "topic_authority_review": {
+    "coverage_rule": "Each mapped topic in every published locale is covered by its guide-family product authority and the locale catalog authority; this is intentionally broader than the changed-topic set.",
+    "user": {
+      "product_authorities": [
+        "documentation/tests/contract/test_documentation_explanations_0_9_4.py",
+        "documentation/tests/contract/test_semantic_ui_admonition_markup_0_9_4.py",
+        "documentation/tests/contract/test_user_guide_import_export_topics.py"
+      ],
+      "locale_authority": "app/i18n/{en,ru,de,zh-CN,fr,es-ES}.json"
+    },
+    "admin": {
+      "product_authorities": [
+        "documentation/tests/contract/test_administrator_guide_scope.py",
+        "documentation/tests/contract/test_api_integration_topics.py"
+      ],
+      "locale_authority": "app/i18n/{en,ru,de,zh-CN,fr,es-ES}.json"
+    },
+    "firefox": {
+      "product_authorities": [
+        "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+        "documentation/tests/contract/test_firefox_policy_topic_model.py"
+      ],
+      "locale_authority": "app/i18n/{en,ru,de,zh-CN,fr,es-ES}.json"
+    },
+    "cis": {
+      "product_authorities": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "documentation/tests/contract/test_cis_topic_model.py"
+      ],
+      "locale_authority": "app/i18n/{en,ru,de,zh-CN,fr,es-ES}.json"
+    }
+  },
+  "locale_reviews": {
+    "en": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]},
+    "ru": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]},
+    "de": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]},
+    "zh-CN": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]},
+    "fr": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]},
+    "es-ES": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]}
+  },
+  "pdf_visual_reviews": [
+    {"locale": "en", "guide": "user", "artifact": "documentation/build/pdf/en/browser-policy-manager-user-guide-en-0.9.4.pdf", "sha256": "e2ace361b6d942dbcec2e6ee20ad83facecc152ac0416c033989fb3627f606fd", "page_count": 105},
+    {"locale": "en", "guide": "admin", "artifact": "documentation/build/pdf/en/browser-policy-manager-administrator-guide-en-0.9.4.pdf", "sha256": "72cef8385f1f1413e2b4d72e2d82fc3da967ca3382cef56221a23c2789604be0", "page_count": 79},
+    {"locale": "ru", "guide": "user", "artifact": "documentation/build/pdf/ru/browser-policy-manager-user-guide-ru-0.9.4.pdf", "sha256": "fc38668e35696b3c94cbf27f1f639bccec81a60c3207c1985ee1fc8e4044ff8e", "page_count": 108},
+    {"locale": "ru", "guide": "admin", "artifact": "documentation/build/pdf/ru/browser-policy-manager-administrator-guide-ru-0.9.4.pdf", "sha256": "0be4ad5e741a3bcbc1450f196f1dadbcbb99cbd43e4c3fae5ccc595ca44dcdec", "page_count": 99},
+    {"locale": "de", "guide": "user", "artifact": "documentation/build/pdf/de/browser-policy-manager-user-guide-de-0.9.4.pdf", "sha256": "dace7089b8e90fb35abdff8052766d82cc025107307f76978834e2bdcf46b63d", "page_count": 107},
+    {"locale": "de", "guide": "admin", "artifact": "documentation/build/pdf/de/browser-policy-manager-administrator-guide-de-0.9.4.pdf", "sha256": "2c8605a76c60ab38a55330e55710ceb6a4ebc5cdc06550e6ea9434389e956fc7", "page_count": 95},
+    {"locale": "zh-CN", "guide": "user", "artifact": "documentation/build/pdf/zh-CN/browser-policy-manager-user-guide-zh-CN-0.9.4.pdf", "sha256": "80ddd755d4cec870a2e4393ced90015d34cb64cd75e1f2fd99b2f83eac7bfac7", "page_count": 103},
+    {"locale": "zh-CN", "guide": "admin", "artifact": "documentation/build/pdf/zh-CN/browser-policy-manager-administrator-guide-zh-CN-0.9.4.pdf", "sha256": "05967b9b6d648c1fadbab6e7ae006d9014271a60d135b3b8915b1f125d24efde", "page_count": 69},
+    {"locale": "fr", "guide": "user", "artifact": "documentation/build/pdf/fr/browser-policy-manager-user-guide-fr-0.9.4.pdf", "sha256": "6793bdf3cce9414ab71c986d424bdd27289abce86304ed13fdc750f02bc47540", "page_count": 107},
+    {"locale": "fr", "guide": "admin", "artifact": "documentation/build/pdf/fr/browser-policy-manager-administrator-guide-fr-0.9.4.pdf", "sha256": "0908a8bd3019bc471c9b065582b27b5fa944a87a89a7ab6e308a9fb098ba8cbe", "page_count": 95},
+    {"locale": "es-ES", "guide": "user", "artifact": "documentation/build/pdf/es-ES/browser-policy-manager-user-guide-es-ES-0.9.4.pdf", "sha256": "0cf5c09f6c1e0a7e2ac31e7e251dfd7beae2dd80a2f9b3c9b80e4614e770ee49", "page_count": 106},
+    {"locale": "es-ES", "guide": "admin", "artifact": "documentation/build/pdf/es-ES/browser-policy-manager-administrator-guide-es-ES-0.9.4.pdf", "sha256": "0a85a46b9c9dff1396b2152b215032a2f188a66fe6a69381f98bfe0874d63bd7", "page_count": 96}
+  ],
+  "visual_checks": {
+    "title_page_page_count_and_footer": "passed",
+    "contents_page_numbers_and_linked_navigation": "passed by binary verifier",
+    "ui_control_and_admonition_formatting": "passed",
+    "code_and_cjk_layout": "passed; zh-CN prose, API literals and codeph were inspected",
+    "caption_visibility": "passed",
+    "guide_wide_figure_numbering": "passed: every User Guide prints the localized sequence 1 through 6"
+  },
+  "blocking_findings": [],
+  "automated_evidence": {
+    "focused_m11_contracts": "passed: 13 post-M11-04 figure, semantic UI, and explanation contracts",
+    "dita_and_site_validation": "passed: make docs-validate",
+    "pdf_build": "passed: make docs-pdf-build",
+    "pdf_binary_verification": "passed: make docs-pdf-verify",
+    "pdf_independent_reproducibility": "passed: clean rerun completed 24 of 24 locale-guide build phases and matched all 12 PDFs plus manifest (13 files)",
+    "pdf_delivery_and_package": "passed: make docs-pdf-delivery-verify and make docs-package-verify",
+    "docs_release_check": "passed: final make docs-release-check completed DITA validation, editorial sign-off, and 1029 documentation contracts"
+  },
+  "external_runtime_record": {
+    "status": "resolved",
+    "environment": "CPython 3.14.6",
+    "verification": "The exact aiosqlite health-validation case completed successfully on the local Python 3.14.6 runtime.",
+    "affected_check": "test_current_health_validation_import_and_export_results_execute",
+    "decision": "The earlier 3.14.4 observation is superseded by the successful local 3.14.6 verification; no Python change is made by M11-06."
+  },
+  "final_sign_off": {
+    "state": "accepted",
+    "reason": "All six-locale editorial/PDF evidence and the clean post-remediation documentation contract preflight are accepted."
+  }
+}

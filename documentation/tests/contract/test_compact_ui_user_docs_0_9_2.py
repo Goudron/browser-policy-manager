@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -15,7 +16,8 @@ pytestmark = pytest.mark.docs_contract
 
 def _topic(locale: str, topic_id: str) -> str:
     path = DITA_ROOT / locale / "user" / f"{topic_id}.dita"
-    return " ".join(ET.parse(path).getroot().itertext())
+    text = " ".join(" ".join(ET.parse(path).getroot().itertext()).split())
+    return re.sub(r"\s+([,.;:!?])", r"\1", text)
 
 
 def test_compact_ui_guidance_exists_in_all_active_locales() -> None:
@@ -29,7 +31,14 @@ def test_compact_ui_guidance_exists_in_all_active_locales() -> None:
         assert library.strip(), locale
         assert switcher.strip(), locale
         assert surfaces.strip(), locale
-        assert len(ET.parse(DITA_ROOT / locale / "user" / "ug-task-use-profile-library.dita").findall(".//step")) == 3
+        assert (
+            len(
+                ET.parse(DITA_ROOT / locale / "user" / "ug-task-use-profile-library.dita").findall(
+                    ".//step"
+                )
+            )
+            == 3
+        )
 
 
 def test_english_guidance_uses_single_bpm_version_and_compact_library_order() -> None:

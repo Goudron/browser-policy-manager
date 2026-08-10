@@ -1,0 +1,64 @@
+name: Documentation Scheduled Audits
+
+on:
+  schedule:
+    # Sunday 04:11 UTC: review-only evidence, outside the pull-request critical path.
+    - cron: "11 4 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  documentation-audits:
+    name: Documentation snapshot and editorial audits
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: "pip"
+
+      - name: Install documentation audit dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Regenerate source-derived documentation snapshot
+        run: make docs-snapshot
+
+      - name: Run the owned scheduled documentation audits
+        run: |
+          python -m pytest -o addopts= -q -m docs_contract \
+            documentation/tests/unit/test_generate_subsystem_snapshot.py \
+            documentation/tests/contract/test_documentation_subsystem_snapshot.py \
+            documentation/tests/contract/test_maintained_index_snapshot_contract_0_9_3.py \
+            documentation/tests/contract/test_091_*.py \
+            documentation/tests/contract/test_administrator_devops_guide_sufficiency_review.py \
+            documentation/tests/contract/test_documentation_gap_inventory_0_9_4.py \
+            documentation/tests/contract/test_documentation_navigation_locale_completion_audit.py \
+            documentation/tests/contract/test_documentation_polish_regression_gates.py \
+            documentation/tests/contract/test_documentation_sufficiency_*.py \
+            documentation/tests/contract/test_firefox_cis_guide_sufficiency_review.py \
+            documentation/tests/contract/test_locale_*.py \
+            documentation/tests/contract/test_navigation_tree_contract.py \
+            documentation/tests/contract/test_topic_section_*.py \
+            documentation/tests/contract/test_user_guide_screenshot_visual_qa.py \
+            tests/contract/docs/general/test_codex_project_snapshot.py \
+            tests/contract/docs/general/test_current_system_map.py \
+            tests/contract/docs/general/test_docs_index.py
+
+      - name: Upload scheduled-audit evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: documentation-scheduled-audit-evidence
+          path: documentation/reports/
+          if-no-files-found: warn
+          retention-days: 14

@@ -50,7 +50,9 @@ class _Service(Protocol):
 
     def source(self, *, request_id: str, source_id: str, session_id: str) -> object | None: ...
 
-    def clear(self, *, session_id: str, locale: str | None = None, tab_id: str | None = None) -> bool: ...
+    def clear(
+        self, *, session_id: str, locale: str | None = None, tab_id: str | None = None
+    ) -> bool: ...
 
 
 @dataclass(frozen=True)
@@ -68,10 +70,16 @@ NATIVE_QUESTIONS: dict[str, dict[str, str]] = {
         "local-create-profile": "How do I create a Firefox policy profile in BPM?",
         "local-import-policy": "How do I import policies.json and validate it?",
         "local-supported-schemas": "How do I choose a supported Firefox schema for a profile?",
-        "local-apply-policy": "How do I configure a Firefox policy in BPM and verify that it applies?",
+        "local-apply-policy": (
+            "How do I configure a Firefox policy in BPM and verify that it applies?"
+        ),
         "local-profile-revision": "How do I export a profile and restore the required revision?",
-        "local-health-api": "How do I check the BPM health and readiness endpoints through the API?",
-        "local-assistant-and-sources": "How do I use the BPM AI assistant and enable external sources?",
+        "local-health-api": (
+            "How do I check the BPM health and readiness endpoints through the API?"
+        ),
+        "local-assistant-and-sources": (
+            "How do I use the BPM AI assistant and enable external sources?"
+        ),
     },
     "ru": {
         "local-capabilities": "На какие вопросы ты можешь отвечать?",
@@ -83,7 +91,9 @@ NATIVE_QUESTIONS: dict[str, dict[str, str]] = {
         "local-apply-policy": "Как настроить политику Firefox в BPM и проверить её применение?",
         "local-profile-revision": "Как экспортировать профиль и восстановить нужную ревизию?",
         "local-health-api": "Как через API BPM проверить работоспособность и готовность сервиса?",
-        "local-assistant-and-sources": "Как пользоваться ИИ-помощником BPM и включить внешние источники?",
+        "local-assistant-and-sources": (
+            "Как пользоваться ИИ-помощником BPM и включить внешние источники?"
+        ),
     },
     "de": {
         "local-capabilities": "Welche Fragen können Sie beantworten?",
@@ -91,11 +101,19 @@ NATIVE_QUESTIONS: dict[str, dict[str, str]] = {
         "local-minimum-requirements": "Wie lauten die minimalen Systemanforderungen für BPM?",
         "local-create-profile": "Wie erstelle ich in BPM ein Firefox-Richtlinienprofil?",
         "local-import-policy": "Wie importiere ich policies.json und prüfe die Datei?",
-        "local-supported-schemas": "Wie wähle ich ein unterstütztes Firefox-Schema für ein Profil aus?",
-        "local-apply-policy": "Wie konfiguriere ich eine Firefox-Richtlinie in BPM und prüfe ihre Anwendung?",
-        "local-profile-revision": "Wie exportiere ich ein Profil und stelle die benötigte Revision wieder her?",
+        "local-supported-schemas": (
+            "Wie wähle ich ein unterstütztes Firefox-Schema für ein Profil aus?"
+        ),
+        "local-apply-policy": (
+            "Wie konfiguriere ich eine Firefox-Richtlinie in BPM und prüfe ihre Anwendung?"
+        ),
+        "local-profile-revision": (
+            "Wie exportiere ich ein Profil und stelle die benötigte Revision wieder her?"
+        ),
         "local-health-api": "Wie prüfe ich über die API die BPM-Health- und Readiness-Endpunkte?",
-        "local-assistant-and-sources": "Wie nutze ich den BPM-KI-Assistenten und aktiviere externe Quellen?",
+        "local-assistant-and-sources": (
+            "Wie nutze ich den BPM-KI-Assistenten und aktiviere externe Quellen?"
+        ),
     },
     "zh-CN": {
         "local-capabilities": "你可以回答哪些问题？",
@@ -115,11 +133,21 @@ NATIVE_QUESTIONS: dict[str, dict[str, str]] = {
         "local-minimum-requirements": "Quelles sont les exigences système minimales de BPM ?",
         "local-create-profile": "Comment créer un profil de stratégies Firefox dans BPM ?",
         "local-import-policy": "Comment importer policies.json et vérifier sa validité ?",
-        "local-supported-schemas": "Comment choisir un schéma Firefox pris en charge pour un profil ?",
-        "local-apply-policy": "Comment configurer une stratégie Firefox dans BPM et vérifier son application ?",
-        "local-profile-revision": "Comment exporter un profil et restaurer la révision nécessaire ?",
-        "local-health-api": "Comment vérifier les points de terminaison de santé et de disponibilité de BPM via l’API ?",
-        "local-assistant-and-sources": "Comment utiliser l’assistant IA de BPM et activer les sources externes ?",
+        "local-supported-schemas": (
+            "Comment choisir un schéma Firefox pris en charge pour un profil ?"
+        ),
+        "local-apply-policy": (
+            "Comment configurer une stratégie Firefox dans BPM et vérifier son application ?"
+        ),
+        "local-profile-revision": (
+            "Comment exporter un profil et restaurer la révision nécessaire ?"
+        ),
+        "local-health-api": (
+            "Comment vérifier les points de terminaison de santé et de disponibilité de BPM via l’API ?"
+        ),
+        "local-assistant-and-sources": (
+            "Comment utiliser l’assistant IA de BPM et activer les sources externes ?"
+        ),
     },
     "es-ES": {
         "local-capabilities": "¿Qué preguntas puedes responder?",
@@ -128,10 +156,16 @@ NATIVE_QUESTIONS: dict[str, dict[str, str]] = {
         "local-create-profile": "¿Cómo creo un perfil de políticas de Firefox en BPM?",
         "local-import-policy": "¿Cómo importo policies.json y compruebo su validez?",
         "local-supported-schemas": "¿Cómo elijo un esquema de Firefox compatible para un perfil?",
-        "local-apply-policy": "¿Cómo configuro una política de Firefox en BPM y verifico que se aplique?",
+        "local-apply-policy": (
+            "¿Cómo configuro una política de Firefox en BPM y verifico que se aplique?"
+        ),
         "local-profile-revision": "¿Cómo exporto un perfil y restauro la revisión necesaria?",
-        "local-health-api": "¿Cómo compruebo los puntos de estado y disponibilidad de BPM mediante la API?",
-        "local-assistant-and-sources": "¿Cómo uso el asistente de IA de BPM y activo las fuentes externas?",
+        "local-health-api": (
+            "¿Cómo compruebo los puntos de estado y disponibilidad de BPM mediante la API?"
+        ),
+        "local-assistant-and-sources": (
+            "¿Cómo uso el asistente de IA de BPM y activo las fuentes externas?"
+        ),
     },
 }
 
@@ -281,9 +315,15 @@ def _failure_category(reason_code: str) -> str:
         "assistant_evidence_unavailable",
     }:
         return "retrieval_or_relevance"
-    if reason_code in {"assistant_output_invalid", "assistant_excessive_quotation", "assistant_invalid_citations"}:
+    if reason_code in {
+        "assistant_output_invalid",
+        "assistant_excessive_quotation",
+        "assistant_invalid_citations",
+    }:
         return "composition"
-    if reason_code.startswith("assistant_generation") or reason_code.startswith("assistant_timeout"):
+    if reason_code.startswith("assistant_generation") or reason_code.startswith(
+        "assistant_timeout"
+    ):
         return "model_quality"
     return "evidence"
 
@@ -302,13 +342,24 @@ def _case_record(
     reason_code = getattr(terminal, "reason_code", "assistant_internal_error")
     text = getattr(terminal, "text", "")
     source_ids = getattr(terminal, "source_ids", ())
-    if not isinstance(disposition, str) or not isinstance(reason_code, str) or not isinstance(text, str):
+    if (
+        not isinstance(disposition, str)
+        or not isinstance(reason_code, str)
+        or not isinstance(text, str)
+    ):
         raise BenchmarkError("assistant terminal event is malformed")
     if not isinstance(source_ids, tuple) or not all(isinstance(value, str) for value in source_ids):
         raise BenchmarkError("assistant source event is malformed")
-    sources = [service.source(request_id=request_id, source_id=source_id, session_id=session_id) for source_id in source_ids]
-    source_locales = tuple(getattr(source, "locale", "") for source in sources if source is not None)
-    source_kinds = tuple(getattr(source, "source_kind", "") for source in sources if source is not None)
+    sources = [
+        service.source(request_id=request_id, source_id=source_id, session_id=session_id)
+        for source_id in source_ids
+    ]
+    source_locales = tuple(
+        getattr(source, "locale", "") for source in sources if source is not None
+    )
+    source_kinds = tuple(
+        getattr(source, "source_kind", "") for source in sources if source is not None
+    )
     structurally_grounded = (
         disposition == "answer"
         and bool(text.strip())
@@ -428,11 +479,15 @@ def run(
         "status": (
             "partial_structural_pass_pending_human_content_review"
             if (case_limit is not None or representative_smoke) and not failures
-            else "partial_structural_fail"
-            if case_limit is not None or representative_smoke
-            else "structural_pass_pending_human_content_review"
-            if not failures
-            else "structural_fail"
+            else (
+                "partial_structural_fail"
+                if case_limit is not None or representative_smoke
+                else (
+                    "structural_pass_pending_human_content_review"
+                    if not failures
+                    else "structural_fail"
+                )
+            )
         ),
         "completed_cases": len(results),
         "expected_cases": len(cases),
@@ -469,7 +524,9 @@ def main() -> int:
     parser.add_argument("run", nargs="?", default="run")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--config", type=Path, default=CONFIG_PATH)
-    parser.add_argument("--limit", type=int, help="run only a prefix for lifecycle smoke validation")
+    parser.add_argument(
+        "--limit", type=int, help="run only a prefix for lifecycle smoke validation"
+    )
     parser.add_argument(
         "--representative-smoke",
         action="store_true",

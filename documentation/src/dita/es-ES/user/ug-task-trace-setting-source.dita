@@ -4,12 +4,12 @@
   <title>Rastrear una fuente de configuración</title>
   <shortdesc>Rastree una configuración configurada hasta la atribución de línea base, CIS, manual, importada o de fuente sin procesar.</shortdesc>
   <taskbody>
-    <prereq><p>Abrir una configuración configurada en Todos los ajustes.</p></prereq>
+    <prereq><p>Abrir una configuración configurada en <uicontrol>Todos los ajustes</uicontrol>.</p></prereq>
     <context><p>La atribución de origen ayuda a explicar por qué existe un valor y si cambiarlo anularía una línea base, una capa CIS, una edición manual, una importación o un respaldo sin formato.</p></context>
     <steps>
-      <step><cmd>Abra el detalle de configuración o el resumen configurado que muestra las insignias de origen.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Identifique si el valor proviene de una fuente inicial, CIS, manual, importada o sin procesar.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Siga los enlaces de contexto de perfil o CIS relacionados cuando una capa generada contribuyó con el valor.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Abra el detalle de configuración o el resumen configurado que muestra las insignias de origen.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Identifique si el valor proviene de una fuente inicial, CIS, manual, importada o sin procesar.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Siga los enlaces de contexto de perfil o CIS relacionados cuando una capa generada contribuyó con el valor.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
       <step><cmd>Registre la fuente antes de editar, eliminar o restablecer la configuración.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
     <result><p>Usted sabe de dónde proviene el valor configurado y puede explicar el impacto de cambiarlo.</p></result>

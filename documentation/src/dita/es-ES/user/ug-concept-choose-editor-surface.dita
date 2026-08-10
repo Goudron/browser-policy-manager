@@ -2,14 +2,14 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-choose-editor-surface" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Elección de la interfaz de BPM adecuada</title>
-  <shortdesc>BPM tiene cinco superficies de usuario: Biblioteca, Editor guiado, Todos los ajustes, Editor JSON y Comparar.</shortdesc>
+  <shortdesc>BPM tiene cinco superficies de usuario: <uicontrol>Biblioteca</uicontrol>, <uicontrol>Editor guiado</uicontrol>, <uicontrol>Todos los ajustes</uicontrol>, <uicontrol>Editor JSON</uicontrol> y Comparar.</shortdesc>
   <conbody>
     <p>El encabezado compacto compartido y el contexto del perfil mantienen visibles el producto, perfil, esquema, configuración regional y tema actuales en todas estas superficies. Elija una superficie por el resultado que necesita, no por un módulo interno.</p>
     <dl>
-      <dlentry><dt>Biblioteca</dt><dd>Buscar, crear, importar, duplicar, archivar, restaurar, eliminar, exportar y abrir perfiles.</dd></dlentry>
-      <dlentry><dt>Editor guiado</dt><dd>Crear o actualizar configuraciones de políticas comunes mediante pasos orientados a tareas y opciones iniciales.</dd></dlentry>
-      <dlentry><dt>Todos los ajustes</dt><dd>Revisar elementos que requieren atención, explorar el catálogo completo de políticas y preferencias admitidas, y editar valores detallados.</dd></dlentry>
-      <dlentry><dt>Editor JSON</dt><dd>Inspeccionar o editar el documento exacto de políticas de Firefox cuando se necesita control directo del JSON.</dd></dlentry>
+      <dlentry><dt><uicontrol>Biblioteca</uicontrol></dt><dd>Buscar, crear, importar, duplicar, archivar, restaurar, eliminar, exportar y abrir perfiles.</dd></dlentry>
+      <dlentry><dt><uicontrol>Editor guiado</uicontrol></dt><dd>Crear o actualizar configuraciones de políticas comunes mediante pasos orientados a tareas y opciones iniciales.</dd></dlentry>
+      <dlentry><dt><uicontrol>Todos los ajustes</uicontrol></dt><dd>Revisar elementos que requieren atención, explorar el catálogo completo de políticas y preferencias admitidas, y editar valores detallados.</dd></dlentry>
+      <dlentry><dt><uicontrol>Editor JSON</uicontrol></dt><dd>Inspeccionar o editar el documento exacto de políticas de Firefox cuando se necesita control directo del JSON.</dd></dlentry>
       <dlentry><dt>Comparar</dt><dd>Comparar dos perfiles guardados y entender ajustes iguales, diferentes o ausentes.</dd></dlentry>
     </dl>
   </conbody>

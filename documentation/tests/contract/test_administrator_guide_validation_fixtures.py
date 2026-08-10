@@ -19,6 +19,8 @@ README = REPOSITORY_ROOT / "README.md"
 CONFIG = REPOSITORY_ROOT / "app/core/config.py"
 ADMIN_GUIDE = "administrator-guide.ditamap"
 KEYS = "keys.ditamap"
+README_READER_ENTRYPOINTS = ("/profiles", "/help/", "/docs")
+README_MAINTAINER_COMMANDS = ("python -m venv .venv", "pip install .", "make dev")
 
 pytestmark = pytest.mark.docs_contract
 
@@ -47,11 +49,7 @@ def _keydefs(locale: str) -> dict[str, str | None]:
 
 def _all_admin_sources(locale: str) -> dict[str, str]:
     fixture = _fixture()
-    topics = [
-        topic_id
-        for group in fixture["admin_topic_groups"].values()
-        for topic_id in group
-    ]
+    topics = [topic_id for group in fixture["admin_topic_groups"].values() for topic_id in group]
     return {topic_id: _source(locale, topic_id) for topic_id in topics}
 
 
@@ -67,12 +65,14 @@ def test_administrator_validation_fixture_is_compact_and_registered() -> None:
     assert fixture["synthetic"] is True
     assert fixture["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
     assert FIXTURE.stat().st_size <= 16384
-    assert "documentation/tests/contract/test_administrator_guide_validation_fixtures.py" in domain[
-        "path_globs"
-    ]
-    assert "documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json" in domain[
-        "fixtures"
-    ]
+    assert (
+        "documentation/tests/contract/test_administrator_guide_validation_fixtures.py"
+        in domain["path_globs"]
+    )
+    assert (
+        "documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json"
+        in domain["fixtures"]
+    )
     assert domain["focused_rerun"] == (
         "./.venv/bin/pytest -q -m docs_contract "
         "documentation/tests/contract/test_administrator_guide_validation_fixtures.py"
@@ -115,8 +115,10 @@ def test_fixture_commands_config_names_paths_and_health_endpoints_stay_current()
         assert command in english_text
         if command.startswith("make "):
             assert f"{command.removeprefix('make ')}:" in makefile
-    for command in ("pip install .", "make dev"):
-        assert command in readme
+    for entrypoint in README_READER_ENTRYPOINTS:
+        assert entrypoint in readme
+    for command in README_MAINTAINER_COMMANDS:
+        assert command not in readme
     assert "make dev" in english_text
     assert "alembic upgrade head" in english_text
     for config_name in fixture["required_config_names"]:

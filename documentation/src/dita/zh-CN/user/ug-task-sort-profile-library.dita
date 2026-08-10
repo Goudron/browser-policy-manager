@@ -4,14 +4,14 @@
   <title>对库行进行排序</title>
   <shortdesc>按更新时间、创建时间、名称、模式通道或 ID 按升序或降序对保存的配置文件进行排序。</shortdesc>
   <taskbody>
-    <prereq><p>库已打开并包含至少两个可见的轮廓行。</p></prereq>
+    <prereq><p><uicontrol>库</uicontrol>已打开并包含至少两个可见的轮廓行。</p></prereq>
     <context><p>排序更改当前搜索和过滤结果内的行顺序。</p></context>
     <steps>
       <step><cmd>选择排序依据的字段。</cmd><info><p>预期结果：行按更新时间、创建时间、名称、架构或 ID 重新排序。</p></info></step>
       <step><cmd>选择订单方向。</cmd><info><p>使用降序更新时间表示最近的工作，或使用升序名称进行字母顺序浏览。</p></info></step>
       <step><cmd>在对第一行进行操作之前检查过滤计数和总计数。</cmd><info><note type="warning">排序不会删除过滤器。行仍然可以通过搜索或过滤器隐藏。</note></info></step>
     </steps>
-    <result><p>可见的库行按选定的顺序出现。</p></result>
+    <result><p>可见的<uicontrol>库</uicontrol>行按选定的顺序出现。</p></result>
     <postreq><p>恢复：如果行顺序不再与您的工作上下文匹配，则切换回更新时间排序。</p></postreq>
   </taskbody>
   <related-links>

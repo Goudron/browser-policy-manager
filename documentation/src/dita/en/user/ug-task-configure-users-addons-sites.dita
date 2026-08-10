@@ -7,7 +7,7 @@
     <prereq><p>A Guided draft is open.</p></prereq>
     <context><p>This step collects controls that affect user identity surfaces, extension governance, localization, and website-specific behavior.</p></context>
     <steps>
-      <step><cmd>Open Step 4, Users, add-ons &amp; sites.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Open Step 4, <uicontrol>Users, add-ons &amp; sites</uicontrol>.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Review Mozilla accounts and identity-related browser surfaces.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Configure extensions, add-ons, and bookmarks according to deployment rules.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Set language, translation, and website handling options.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>

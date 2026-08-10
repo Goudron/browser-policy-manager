@@ -39,9 +39,9 @@
     "app/i18n/zh-CN.json",
     "app/i18n/fr.json",
     "app/i18n/es-ES.json",
-    "tests/test_ui_browser_tabs.py",
-    "tests/test_chromium_locale_smoke_matrix_contract.py",
-    "tests/test_localized_import_edit_export_workflow_contract.py"
+    "tests/browser/profiles/test_ui_browser_tabs.py",
+    "tests/contract/ui/localization/test_chromium_locale_smoke_matrix_contract.py",
+    "tests/contract/ui/localization/test_localized_import_edit_export_workflow_contract.py"
   ],
   "readme_capabilities": [
     "Database-backed Firefox policy profile library.",
@@ -138,7 +138,7 @@
     {
       "readme_endpoint": "DELETE /api/profiles/{id}",
       "source_file": "app/api/profiles.py",
-      "source_token": "@router.delete(\"/{profile_id}\"",
+      "source_token": "@router.delete(\n    \"/{profile_id}\", status_code=status.HTTP_204_NO_CONTENT, summary=\"Soft-delete profile\"",
       "topic_ids": ["ug-task-archive-profile", "ug-task-manage-destructive-actions"]
     },
     {

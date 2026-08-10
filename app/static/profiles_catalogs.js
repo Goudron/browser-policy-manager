@@ -1,4 +1,3 @@
-(() => {
     function readEmbeddedJson(documentRef, elementId) {
         const element = documentRef.getElementById(elementId);
         try {
@@ -216,5 +215,4 @@
         };
     }
 
-    window.BPMProfilesCatalogs = { read };
-})();
+    export { read };

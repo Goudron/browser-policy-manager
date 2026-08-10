@@ -126,7 +126,9 @@ class ModelManagementController:
                 operation_id=secrets.token_urlsafe(18),
                 owner_session_id=session_id,
                 kind=kind,
-                phase="downloading" if kind == "install" else "verifying" if kind == "verify" else "",
+                phase=(
+                    "downloading" if kind == "install" else "verifying" if kind == "verify" else ""
+                ),
                 after_install=after_install,
             )
             self._operation = operation
@@ -172,7 +174,9 @@ class ModelManagementController:
         with self._lock:
             if self._operation is not operation or operation.state != "running":
                 return
-            operation.downloaded_bytes = min(max(int(progress.downloaded_bytes), 0), int(progress.total_bytes))
+            operation.downloaded_bytes = min(
+                max(int(progress.downloaded_bytes), 0), int(progress.total_bytes)
+            )
             operation.total_bytes = max(int(progress.total_bytes), 0)
 
     def _set_phase(self, operation: _Operation, phase: str) -> None:
@@ -181,7 +185,9 @@ class ModelManagementController:
                 operation.phase = phase
 
     def _record_result(self, operation: _Operation, result: InstallationResult) -> None:
-        state: OperationState = "installed" if result.state in {"installed", "already-installed"} else "removed"
+        state: OperationState = (
+            "installed" if result.state in {"installed", "already-installed"} else "removed"
+        )
         if state == "installed":
             self._record_install_verification(result)
         else:
@@ -219,7 +225,9 @@ class ModelManagementController:
             if self._operation is operation:
                 operation.state = state
                 operation.reason_code = reason_code
-                operation.phase = "completed" if state == "installed" else "failed" if state == "failed" else ""
+                operation.phase = (
+                    "completed" if state == "installed" else "failed" if state == "failed" else ""
+                )
                 operation.after_install = None
 
     def _verification_snapshot_locked(self) -> dict[str, Any]:
@@ -243,7 +251,10 @@ class ModelManagementController:
             return {"state": "idle"}
         payload = self._operation_payload(operation)
         if operation.owner_session_id != session_id:
-            return {"state": "running" if operation.state == "running" else "idle", "busy": operation.state == "running"}
+            return {
+                "state": "running" if operation.state == "running" else "idle",
+                "busy": operation.state == "running",
+            }
         return payload
 
     @staticmethod

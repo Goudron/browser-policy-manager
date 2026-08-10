@@ -4,8 +4,8 @@
   <title>浏览“引导式编辑器”的六个步骤</title>
   <shortdesc>依次配置配置档案、浏览器访问、安全性、用户和网站、智能功能，以及检查和导出。</shortdesc>
   <taskbody>
-    <prereq><p>从资料库或创建流程中打开“引导式编辑器”中的配置档案。</p></prereq>
-    <context><p>“引导式编辑器”将配置档案配置分为六个步骤，并在您工作时显示架构验证状态。</p>
+    <prereq><p>从资料<uicontrol>库</uicontrol>或创建流程中打开“<uicontrol>引导式编辑器</uicontrol>”中的配置档案。</p></prereq>
+    <context><p>“<uicontrol>引导式编辑器</uicontrol>”将配置档案配置分为六个步骤，并在您工作时显示架构验证状态。</p>
       <fig id="screenshot-guided-editor-overview">
         <title>“引导式编辑器”概述</title>
         <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
@@ -15,7 +15,7 @@
     </context>
     <steps>
       <step><cmd>在第 1 步确认名称、架构通道、场景、初始预设和 CIS 层。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
-      <step><cmd>在第 2 步配置网络访问、浏览器行为、主页、搜索和导航默认值。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
+      <step><cmd>在第 2 步配置网络访问、浏览器行为、主页、<uicontrol>搜索和导航</uicontrol>默认值。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
       <step><cmd>在第 3 步配置隐私、权限、Cookie、清理、DNS 和安全性。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
       <step><cmd>在第 4 步配置帐户、扩展、书签、语言、翻译和网站规则。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
       <step><cmd>在第 5 步仅配置所选架构支持的 Firefox AI 和智能功能策略。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>

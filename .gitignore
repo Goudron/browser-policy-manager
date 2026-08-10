@@ -84,6 +84,8 @@ pytestdebug.log
 *.orig
 *.rej
 /artifacts/
+# Generated from the resolved CI environments; never retain stale evidence in source.
+/artifacts/dependency-audit/
 /tmp_screens/
 /docs/screenshots/
 
@@ -104,6 +106,8 @@ pytestdebug.log
 /app/schemas/cache/
 /app/documentation/site/
 /app/documentation/.site-dev-install.json
+/app/static/profiles_bundles/
+/distributions/documentation/[0-9]*/
 
 # -----------------------------------------------------------------------------
 # Local deployment helpers

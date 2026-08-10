@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-restore-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Ein archiviertes Profil wiederherstellen</title>
-  <shortdesc>Geben Sie ein archiviertes Profil in den aktiven Bibliothekslebenszyklus zurück, wenn es bearbeitet oder erneut verwendet werden soll.</shortdesc>
+  <shortdesc>Geben Sie ein archiviertes Profil in den aktiven <uicontrol>Bibliothek</uicontrol>slebenszyklus zurück, wenn es bearbeitet oder erneut verwendet werden soll.</shortdesc>
   <taskbody>
     <prereq><p>Der Lebenszyklusfilter zeigt archivierte oder alle Profile an und die Zielprofilzeile ist sichtbar.</p></prereq>
     <context><p>Wiederherstellen macht das Archiv rückgängig. Das Profil wird nicht erneut validiert und die Richtlinienwerte werden nicht geändert.</p></context>

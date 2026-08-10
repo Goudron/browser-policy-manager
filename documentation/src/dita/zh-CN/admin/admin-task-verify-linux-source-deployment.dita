@@ -4,14 +4,14 @@
   <title>验证开源系统源部署</title>
   <shortdesc>使用运行状况探测、Web UI、日志和狭义测试命令来确认源运行的 BPM 实例可用。</shortdesc>
   <taskbody>
-    <prereq><p>BPM 流程从存储库签出运行，具有预期的 <codeph>BPM_DATABASE_URL</codeph>、主机、端口和文档站点设置。</p></prereq>
+    <prereq><p>BPM 流程从存储<uicontrol>库</uicontrol>签出运行，具有预期的 <codeph>BPM_DATABASE_URL</codeph>、主机、端口和文档站点设置。</p></prereq>
     <context><p>当前应用程序在 <codeph>/health</codeph> 处公开活动状态，在 <codeph>/health/ready</codeph> 处公开就绪状态。这些探测器仅确认正在运行的进程响应；它们不能证明生产强化、Firefox 强制执行、备份准备情况或 HA 行为。</p></context>
     <steps>
       <step><cmd>检查 Linux 主机的活跃度和准备情况。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
 ]]></codeblock><p>预期响应为 <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>。</p></info></step>
-      <step><cmd>打开产品 UI 并确认库路由有响应。</cmd><info><p>使用 <codeph>http://127.0.0.1:8000/profiles</codeph>。该路由应加载 BPM 界面或显示有意的应用程序状态，而不是服务器回溯。</p></info></step>
+      <step><cmd>打开产品 UI 并确认<uicontrol>库</uicontrol>路由有响应。</cmd><info><p>使用 <codeph>http://127.0.0.1:8000/profiles</codeph>。该路由应加载 BPM 界面或显示有意的应用程序状态，而不是服务器回溯。</p></info></step>
       <step><cmd>检查前台应用程序日志。</cmd><info><p>检查运行 <codeph>make dev</codeph> 或 <codeph>uvicorn app.main:app --reload --port 8000</codeph> 的终端。记录启动错误、迁移错误、端口冲突和文档站点警告，而无需将机密复制到票证中。</p></info></step>
       <step><cmd>记录验证结果的支持边界。</cmd><info><note type="warning">Health 探测、UI 路由和前台日志通过，并不能证明生产就绪、反向代理行为、托管备份或 Firefox 策略在运行时得到实施。</note></info></step>
     </steps>

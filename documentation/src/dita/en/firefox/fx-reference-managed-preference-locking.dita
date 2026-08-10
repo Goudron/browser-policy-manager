@@ -2,7 +2,7 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="fx-reference-managed-preference-locking" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Managed preference locking reference</title>
-  <shortdesc>Managed preferences are exported through the Firefox <codeph>Preferences</codeph> policy and need explicit value, type, and status review.</shortdesc>
+  <shortdesc><uicontrol>Managed preferences</uicontrol> are exported through the Firefox <codeph>Preferences</codeph> policy and need explicit value, type, and status review.</shortdesc>
   <refbody>
     <section id="a-container-policy"><title>Container policy</title><p>Firefox stores managed preferences under <codeph>Preferences</codeph>. BPM documents known preferences separately but exports them as entries in that container policy.</p></section>
     <section id="a-status-values"><title>Status values</title><p><codeph>locked</codeph> prevents user changes where Firefox supports the preference. <codeph>default</codeph>, <codeph>user</codeph>, and <codeph>clear</codeph> have different runtime meanings and should not be used as synonyms.</p></section>

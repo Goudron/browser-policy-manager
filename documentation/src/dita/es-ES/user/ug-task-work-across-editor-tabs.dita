@@ -4,16 +4,16 @@
   <title>Trabajar en las pestañas del editor</title>
   <shortdesc>Utilice pestañas separadas del navegador para los modos de perfil guardado sin confundir borradores ni perder cambios no guardados.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM en el navegador y mantenga disponible un perfil, Biblioteca, Todos los ajustes, Guiado, JSON o Superficie de comparación.</p></prereq>
-    <context><p>BPM abre modos de perfil guardados y superficies de comparación en pestañas separadas para que los usuarios puedan inspeccionar Guiado, Todos los ajustes, JSON y Comparar uno al lado del otro.</p></context>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible un perfil, <uicontrol>Biblioteca</uicontrol>, <uicontrol>Todos los ajustes</uicontrol>, Guiado, JSON o Superficie de comparación.</p></prereq>
+    <context><p>BPM abre modos de perfil guardados y superficies de comparación en pestañas separadas para que los usuarios puedan inspeccionar Guiado, <uicontrol>Todos los ajustes</uicontrol>, JSON y Comparar uno al lado del otro.</p></context>
     <steps>
-      <step><cmd>Abra un perfil guardado de la Biblioteca en el modo de editor requerido.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Abra un perfil guardado de la <uicontrol>Biblioteca</uicontrol> en el modo de editor requerido.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
       <step><cmd>Mantenga visibles el nombre del perfil, el canal del esquema y la insignia del ciclo de vida en cada pestaña.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
       <step><cmd>Guarde los cambios en una pestaña antes de confiar en otra pestaña para exportar, comparar o validar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
       <step><cmd>Cierre o actualice las pestañas solo después de verificar la advertencia de cambios no guardados y el estado de guardado visible.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
     </steps>
     <result><p>Puede revisar varias superficies manteniendo claro el estado guardado autorizado.</p></result>
-    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la <uicontrol>Biblioteca</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-open-saved-profile"/>

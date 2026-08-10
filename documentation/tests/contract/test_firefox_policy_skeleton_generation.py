@@ -12,7 +12,9 @@ from app.core.policy_validation import validate_profile_policies_for_channel
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
-INVENTORY_PATH = REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+INVENTORY_PATH = (
+    REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+)
 MODEL_PATH = DOCUMENTATION_ROOT / "config/firefox-policy-topic-model-0.9.0.json"
 GENERATED_ROOT = DOCUMENTATION_ROOT / "src/generated/firefox"
 POLICIES_ROOT = GENERATED_ROOT / "policies"
@@ -90,10 +92,7 @@ def test_generated_policy_skeleton_map_is_stable_and_keyed() -> None:
     assert root.findtext("title") == "Generated Firefox policy skeletons"
     assert len(topicrefs) == len(inventory["policies"])
     assert [topicref.attrib["href"] for topicref in topicrefs] == sorted(
-        [
-            f"policies/{policy['doc_id']}.dita"
-            for policy in inventory["policies"]
-        ],
+        [f"policies/{policy['doc_id']}.dita" for policy in inventory["policies"]],
         key=str.casefold,
     )
     assert all(
@@ -140,7 +139,11 @@ def test_channel_differences_artifact_records_release_esr_support_and_filter_fie
     differences = json.loads(CHANNEL_DIFFERENCES_PATH.read_text(encoding="utf-8"))
     inventory = _inventory()
     policies_by_scope = {
-        scope: [policy["policy_id"] for policy in inventory["policies"] if policy["channel_scope"] == scope]
+        scope: [
+            policy["policy_id"]
+            for policy in inventory["policies"]
+            if policy["channel_scope"] == scope
+        ]
         for scope in ("both", "partial", "release-only", "esr-only")
     }
     changed = [
@@ -182,8 +185,9 @@ def test_policy_provenance_review_records_approved_sources_and_forbidden_claims(
     provenance = _provenance_review()
     index = _index()
     matrix = json.loads(
-        (REPOSITORY_ROOT / "docs/architecture/product-documentation-provenance-matrix-0.9.0.json")
-        .read_text(encoding="utf-8")
+        (
+            REPOSITORY_ROOT / "docs/architecture/product-documentation-provenance-matrix-0.9.0.json"
+        ).read_text(encoding="utf-8")
     )
     source_family = next(
         family
@@ -228,20 +232,24 @@ def test_policy_provenance_review_records_approved_sources_and_forbidden_claims(
         assert {record["source_version_or_revision"] for record in entry["source_records"]} == {
             inventory_channel["schema_source"]
             for inventory_channel in (
-                _inventory()["channels"][channel_id]
-                for channel_id in entry["supported_channels"]
+                _inventory()["channels"][channel_id] for channel_id in entry["supported_channels"]
             )
         }
         assert entry["copied_mozilla_prose"] is False
         assert entry["live_browser_verification_claim"] is False
-        assert entry["no_affiliation_notice"] == "BPM is not affiliated with or endorsed by Mozilla."
-        assert set(entry["source_content_sha256_when_snapshotted"]) == set(entry["supported_channels"])
+        assert (
+            entry["no_affiliation_notice"] == "BPM is not affiliated with or endorsed by Mozilla."
+        )
+        assert set(entry["source_content_sha256_when_snapshotted"]) == set(
+            entry["supported_channels"]
+        )
         for channel in entry["channels"]:
             assert channel["source_version_or_revision"] == channel["schema_source"]
             assert len(channel["schema_sha256"]) == 64
-            assert channel["schema_sha256"] == entry["source_content_sha256_when_snapshotted"][
-                channel["channel"]
-            ]
+            assert (
+                channel["schema_sha256"]
+                == entry["source_content_sha256_when_snapshotted"][channel["channel"]]
+            )
             assert channel["topic_section_id"] == "a-provenance"
 
 
@@ -259,7 +267,7 @@ def test_each_generated_policy_topic_carries_source_version_and_license_metadata
             "mozilla-policy-schema-facts",
             "generated-facts",
             "MPL-2.0",
-                "BPM is not affiliated with or endorsed by Mozilla.",
+            "BPM is not affiliated with or endorsed by Mozilla.",
             "BPM090-M2-03",
             "0.9.0",
         ):
@@ -328,7 +336,9 @@ def test_each_generated_policy_example_validates_against_its_declared_channel() 
             assert issues == []
 
 
-def test_each_generated_policy_topic_embeds_one_schema_valid_example_per_supported_channel() -> None:
+def test_each_generated_policy_topic_embeds_one_schema_valid_example_per_supported_channel() -> (
+    None
+):
     index = _index()
     examples_by_policy = {
         entry["policy_id"]: {example["channel"]: example for example in entry["examples"]}
@@ -336,7 +346,9 @@ def test_each_generated_policy_topic_embeds_one_schema_valid_example_per_support
     }
 
     for policy_id, examples in examples_by_policy.items():
-        doc_id = next(entry["doc_id"] for entry in index["policies"] if entry["policy_id"] == policy_id)
+        doc_id = next(
+            entry["doc_id"] for entry in index["policies"] if entry["policy_id"] == policy_id
+        )
         root = ET.parse(POLICIES_ROOT / f"{doc_id}.dita").getroot()
         example_divs = root.findall("./refbody/section[@id='a-examples']/sectiondiv")
         assert len(example_divs) == len(examples)

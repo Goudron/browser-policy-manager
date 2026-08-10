@@ -10,7 +10,7 @@
       <step><cmd>Elija un filtro de canal de esquema de Firefox cuando necesite Versión, ESR o todos los perfiles.</cmd><info><p>Resultado esperado: el recuento filtrado refleja solo filas para el canal seleccionado.</p></info></step>
       <step><cmd>Elija un filtro de ciclo de vida para mostrar los perfiles activos, archivados o todos.</cmd><info><p>Utilice archivado cuando se esté preparando para restaurar o eliminar permanentemente un perfil retenido.</p></info></step>
       <step><cmd>Elija un filtro de validación para mostrar perfiles aprobados, fallidos o aún no validados.</cmd><info><note type="warning">Un filtro de validación no ejecuta la validación. Solo muestra el último estado de validación guardado.</note></info></step>
-      <step><cmd>Restablezca los filtros a todos los estados cuando necesite la vista completa de la Biblioteca.</cmd><info><p>Este reinicio cambia solo la lista visible, no los datos del perfil guardado.</p></info></step>
+      <step><cmd>Restablezca los filtros a todos los estados cuando necesite la vista completa de la <uicontrol>Biblioteca</uicontrol>.</cmd><info><p>Este reinicio cambia solo la lista visible, no los datos del perfil guardado.</p></info></step>
     </steps>
     <result><p>La biblioteca muestra el subconjunto de perfiles que coincide con el esquema, el ciclo de vida, la validación y los criterios de búsqueda seleccionados.</p></result>
     <postreq><p>Recuperación: si parece que falta un perfil, restablezca los filtros y busque antes de tratarlo como ausente.</p></postreq>

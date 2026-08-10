@@ -4,16 +4,16 @@
   <title>Über Editor-Registerkarten hinweg arbeiten</title>
   <shortdesc>Verwenden Sie separate Browser-Registerkarten für gespeicherte Profilmodi, ohne Entwürfe zu verwirren oder nicht gespeicherte Änderungen zu verlieren.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
-    <context><p>BPM öffnet gespeicherte Profilmodi und Vergleichsoberflächen in separaten Registerkarten, sodass Benutzer Geführter Editor, Alle Einstellungen, JSON und Profileinstellungen vergleichen nebeneinander prüfen können.</p></context>
+    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine <uicontrol>Bibliothek</uicontrol>, eine <uicontrol>Alle Einstellungen</uicontrol>, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
+    <context><p>BPM öffnet gespeicherte Profilmodi und Vergleichsoberflächen in separaten Registerkarten, sodass Benutzer <uicontrol>Geführter Editor</uicontrol>, <uicontrol>Alle Einstellungen</uicontrol>, JSON und <uicontrol>Profileinstellungen vergleichen</uicontrol> nebeneinander prüfen können.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie ein gespeichertes Profil aus der Bibliothek im erforderlichen Editormodus.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
+      <step><cmd>Öffnen Sie ein gespeichertes Profil aus der <uicontrol>Bibliothek</uicontrol> im erforderlichen Editormodus.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Lassen Sie den Profilnamen, den Schemakanal und das Lebenszyklus-Badge auf jeder Registerkarte sichtbar.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Speichern Sie Änderungen auf einer Registerkarte, bevor Sie sich für den Export, Vergleich oder die Validierung auf eine andere Registerkarte verlassen.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Schließen oder aktualisieren Sie Tabs erst, nachdem Sie die Warnung vor nicht gespeicherten Änderungen und den sichtbaren Speicherstatus überprüft haben.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
     </steps>
     <result><p>Sie können mehrere Oberflächen überprüfen und dabei den maßgeblichen gespeicherten Zustand freihalten.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der <uicontrol>Bibliothek</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-open-saved-profile"/>

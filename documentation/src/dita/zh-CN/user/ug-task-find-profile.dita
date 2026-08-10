@@ -2,16 +2,16 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-find-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>按名称查找配置档案</title>
-  <shortdesc>在打开、复制或更改生命周期状态之前，使用库搜索按名称缩小已保存的配置文件的范围。</shortdesc>
+  <shortdesc>在打开、复制或更改生命周期状态之前，使用<uicontrol>库</uicontrol>搜索按名称缩小已保存的配置文件的范围。</shortdesc>
   <taskbody>
-    <prereq><p>库已打开，配置文件行已完成加载。</p></prereq>
-    <context><p>搜索缩小当前库视图的范围。它与架构、生命周期、验证和排序控件一起工作。</p></context>
+    <prereq><p><uicontrol>库</uicontrol>已打开，配置文件行已完成加载。</p></prereq>
+    <context><p>搜索缩小当前<uicontrol>库</uicontrol>视图的范围。它与架构、生命周期、验证和排序控件一起工作。</p></context>
     <steps>
-      <step><cmd>将光标置于库搜索字段中。</cmd><info><p>预期结果：在您键入时当前行列表保持可见。</p></info></step>
+      <step><cmd>将光标置于<uicontrol>库</uicontrol>搜索字段中。</cmd><info><p>预期结果：在您键入时当前行列表保持可见。</p></info></step>
       <step><cmd>输入配置文件名称的独特部分。</cmd><info><p>过滤后的计数会更新以匹配仍然可见的行。</p></info></step>
       <step><cmd>在选择操作之前确认行标识。</cmd><info><note type="warning">搜索不会保存或更改配置文件。它只会改变图书馆显示的内容。</note></info></step>
     </steps>
-    <result><p>库仅显示与搜索文本和任何活动过滤器匹配的行。</p></result>
+    <result><p><uicontrol>库</uicontrol>仅显示与搜索文本和任何活动过滤器匹配的行。</p></result>
     <postreq><p>恢复：如果缺少预期的配置文件，则清除搜索文本，如果该行仍未出现，则刷新。</p></postreq>
   </taskbody>
   <related-links>

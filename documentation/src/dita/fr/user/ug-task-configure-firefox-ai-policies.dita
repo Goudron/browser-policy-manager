@@ -7,7 +7,7 @@
     <prereq><p>Sélectionnez Release 153 ou ESR 153.0. Certains contrôles ne sont pas disponibles dans ESR 140.13.</p></prereq>
     <context><p>Cette rubrique documente les paramètres de stratégie Firefox existants en tant que fonctionnalité du produit. Ces contrôles du navigateur sont distincts de l’assistant de documentation et ne modifient ni son chat ni la recherche déterministe.</p></context>
     <steps>
-      <step><cmd>Ouvrez l’étape 5 « IA et fonctionnalités intelligentes ».</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez l’étape 5 « <uicontrol>IA et fonctionnalités intelligentes</uicontrol> ».</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
       <step><cmd>Examinez les stratégies d’IA, de recherche visuelle et de navigateur intelligent prises en charge par le schéma sélectionné.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
       <step><cmd>Activez, désactivez ou quittez chaque stratégie prise en charge en fonction de l'objectif du profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Si un contrôle est absent dans ESR 140.13, traitez-le comme non pris en charge et ne créez pas le paramètre manuellement.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>

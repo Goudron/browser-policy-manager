@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-switch-editor-mode" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Editormodus wechseln</title>
-  <shortdesc>Wechseln Sie zwischen Geführtem Editor, Alle Einstellungen und JSON für dasselbe gespeicherte Profil und nutzen Sie dabei den gemeinsamen kompakten Profilkontext.</shortdesc>
+  <shortdesc>Wechseln Sie zwischen Geführtem Editor, <uicontrol>Alle Einstellungen</uicontrol> und JSON für dasselbe gespeicherte Profil und nutzen Sie dabei den gemeinsamen kompakten Profilkontext.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
+    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine <uicontrol>Bibliothek</uicontrol>, eine <uicontrol>Alle Einstellungen</uicontrol>, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
     <context><p>Der gemeinsame kompakte Kontext zeigt Name, Status, Schemakanal und Validierungssignal des aktuellen Profils. Beim Wechseln ändert sich die Bearbeitungsoberfläche, nicht das gespeicherte Profil; speichern Sie nicht gespeicherte Änderungen vor dem Wechsel.</p></context>
     <steps>
       <step><cmd>Bestätigen Sie, dass das aktuelle Profil gespeichert ist und über eine sichtbare ID verfügt.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
-      <step><cmd>Wählen Sie den Zielmodus: Geführt für gängige Arbeitsabläufe, Alle Einstellungen für eine vollständige Inspektion oder JSON für Rohdokumentarbeit.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
+      <step><cmd>Wählen Sie den Zielmodus: Geführt für gängige Arbeitsabläufe, <uicontrol>Alle Einstellungen</uicontrol> für eine vollständige Inspektion oder JSON für Rohdokumentarbeit.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Öffnen Sie den Zielmodus und prüfen Sie den kompakten Kontext: Profilname, Status, Schemakanal und Validierungssignal.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Rückkehr zum vorherigen Modus nur nach Speichern oder absichtlichem Verwerfen von Änderungen.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
     </steps>
     <result><p>Sie arbeiten im Editormodus an demselben Profil, das zur aktuellen Aufgabe passt.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der <uicontrol>Bibliothek</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

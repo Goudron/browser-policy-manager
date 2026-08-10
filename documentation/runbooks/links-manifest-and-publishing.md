@@ -82,7 +82,7 @@ changes:
    telemetry, or generated chat answers as documentation artifacts. Future RAG or external-evidence
    work requires its own reviewed release scope.
 8. Before final release handoff, update `docs/docs-index.md` for any new maintained architecture,
-   runbook, audit, or backlog file under `docs/`, and verify `tests/test_docs_index.py` so generated
+   runbook, audit, or backlog file under `docs/`, and verify `tests/contract/docs/general/test_docs_index.py` so generated
    product docs, local artifacts, screenshots, Codex snapshots, package output, and debug reports do
    not become maintained docs by accident.
 
@@ -92,13 +92,13 @@ changes:
 ./documentation/.cache/toolchain/python-venv/bin/pytest -q documentation/tests/unit/test_build_docs.py
 ./documentation/.cache/toolchain/python-venv/bin/pytest -q documentation/tests/contract/test_manifest_generation.py
 ./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_polish_regression_gates.py
-./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_live_source_install_evidence_closure.py
+./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_semantic_contracts_0_9_4.py
 make docs-validate
 make docs-install-dev
 make docs-reproducibility-check
 make docs-package
 make docs-package-verify
-./.venv/bin/pytest -q tests/test_docs_index.py
+./.venv/bin/pytest -q tests/contract/docs/general/test_docs_index.py
 git diff --check -- <changed_files>
 ```
 

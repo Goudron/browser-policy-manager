@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-json-document" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>保存数据交换文档文档</title>
-  <shortdesc>将有效的原始 JSON 文档保存回规范的 BPM 配置文件。</shortdesc>
+  <shortdesc>将有效的原始 JSON 文档<uicontrol>保存</uicontrol>回规范的 BPM 配置文件。</shortdesc>
   <taskbody>
     <prereq><p>JSON 文档已被验证或其余警告已被理解。</p></prereq>
-    <context><p>保存通过 BPM 规范化写回原始文档。然后可以在引导、所有设置、比较或导出工作流程中打开保存的配置文件。</p></context>
+    <context><p><uicontrol>保存</uicontrol>通过 BPM 规范化写回原始文档。然后可以在引导、<uicontrol>所有设置</uicontrol>、比较或导出工作流程中打开<uicontrol>保存</uicontrol>的配置文件。</p></context>
     <steps>
       <step><cmd>验证 JSON 文档。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
-      <step><cmd>仅当顶级策略对象和策略值正确时才选择“保存”。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
-      <step><cmd>在离开路线之前等待保存的状态。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>仅当顶级策略对象和策略值正确时才选择“<uicontrol>保存</uicontrol>”。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>在离开路线之前等待<uicontrol>保存</uicontrol>的状态。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
       <step><cmd>当您需要移交证据时，重新打开配置文件或导出 policies.json。</cmd><info><note type="warning">保存原始 JSON 可以更改规范的 BPM 配置文件。保存之前验证语法和策略值。</note></info></step>
     </steps>
     <result><p>BPM 配置文件将 JSON 更改存储在规范配置文件模型中。</p></result>
-    <postreq><p>恢复：如果保存失败，请修复验证错误或在再次编辑之前返回到以前保存的配置文件。</p></postreq>
+    <postreq><p>恢复：如果<uicontrol>保存</uicontrol>失败，请修复验证错误或在再次编辑之前返回到以前<uicontrol>保存</uicontrol>的配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-json-document"/>

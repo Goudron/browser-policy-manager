@@ -5,7 +5,7 @@
   <shortdesc>Starter presets and CIS layers help create an initial profile before manual review and editing.</shortdesc>
   <conbody>
     <p>A starter preset gives a profile an initial purpose, such as corporate, classroom, or security-oriented use. A CIS layer adds BPM's mapped security baseline choices where BPM supports them.</p>
-    <p>Layered sources remain visible in All settings so you can distinguish baseline, CIS, imported, manual, and raw values. Some CIS-related items require manual review instead of automatic acceptance.</p>
+    <p>Layered sources remain visible in <uicontrol>All settings</uicontrol> so you can distinguish baseline, CIS, imported, manual, and raw values. Some CIS-related items require manual review instead of automatic acceptance.</p>
     <p>BPM documentation describes BPM mappings and workflow behavior. It does not claim CIS certification or endorsement.</p>
   </conbody>
 </concept>

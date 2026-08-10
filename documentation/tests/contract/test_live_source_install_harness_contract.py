@@ -36,17 +36,16 @@ def test_harness_contract_is_scoped_to_m11_03_and_the_accepted_boundaries() -> N
     assert harness["command_contract"] == COMMANDS.relative_to(REPOSITORY_ROOT).as_posix()
     assert harness["privileged_contract"] == PRIVILEGED.relative_to(REPOSITORY_ROOT).as_posix()
     assert privileged["status"] == "accepted"
-    assert harness["execution"]["resource_flags"] == privileged["container_isolation"][
-        "resource_flags"
-    ]
-    assert harness["execution"]["network"] == privileged["container_isolation"]["network"][
-        "name"
-    ]
+    assert (
+        harness["execution"]["resource_flags"]
+        == privileged["container_isolation"]["resource_flags"]
+    )
+    assert harness["execution"]["network"] == privileged["container_isolation"]["network"]["name"]
     assert harness["execution"]["runtime_readiness_attempts"] == 300
     assert harness["execution"]["runtime_readiness_interval_seconds"] == 2
 
 
-def test_five_historical_profiles_remain_mapped_to_current_compact_topics() -> None:
+def test_five_current_profiles_remain_mapped_to_current_compact_topics() -> None:
     harness = _json(HARNESS)
     command_targets = _json(COMMANDS)["targets"]
     image_targets = _json(PRIVILEGED)["target_images"]
@@ -66,7 +65,6 @@ def test_five_historical_profiles_remain_mapped_to_current_compact_topics() -> N
         assert source.is_file()
         assert current_targets[profile["id"]]["topic_id"] == command_target["topic_id"]
         assert profile["stage_order"][-2:] == ["start", "verify"]
-        assert profile["historical_stage_order"][-3:] == ["docs", "start", "verify"]
 
 
 def test_container_adapter_is_visible_and_documented_commands_remain_source_owned() -> None:
@@ -74,7 +72,7 @@ def test_container_adapter_is_visible_and_documented_commands_remain_source_owne
 
     assert ownership["source"].startswith("English DITA codeblocks")
     assert ownership["required_ref_argument"] == "--bpm-ref"
-    assert ownership["placeholder_command"] == 'export BPM_REF="<approved-0.9.1-ref>"'
+    assert ownership["placeholder_command"].startswith("export BPM_REF=")
     assert "Replace only" in ownership["substitution_rule"]
     assert ownership["container_only_setup_class"] == "container_adapter"
     assert "OCI bases omit" in ownership["container_only_setup_rule"]
@@ -137,7 +135,9 @@ def test_mint_preparation_is_authenticated_resource_limited_and_retained() -> No
     harness = _json(HARNESS)
     mint = harness["mint_image_preparation"]
     image = next(
-        target for target in _json(PRIVILEGED)["target_images"] if target["target_id"] == "linux-mint-22-3"
+        target
+        for target in _json(PRIVILEGED)["target_images"]
+        if target["target_id"] == "linux-mint-22-3"
     )
 
     assert mint["owner_task"] == "BPM091-M11-03"

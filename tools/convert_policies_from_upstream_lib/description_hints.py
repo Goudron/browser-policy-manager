@@ -65,9 +65,7 @@ def _extract_enum_values_from_description(description: str, value_type: str) -> 
     else:
         cleaned_clause = re.sub(r"\([^)]*\)", "", clause)
         raw_tokens = [
-            part.strip()
-            for part in re.split(r",|\band\b|\bor\b", cleaned_clause)
-            if part.strip()
+            part.strip() for part in re.split(r",|\band\b|\bor\b", cleaned_clause) if part.strip()
         ]
 
     if len(raw_tokens) < 2:
@@ -82,7 +80,9 @@ def _extract_enum_values_from_description(description: str, value_type: str) -> 
     return values if len(values) >= 2 else None
 
 
-def _extract_numeric_bounds_from_description(description: str, value_type: str) -> dict[str, int | float]:
+def _extract_numeric_bounds_from_description(
+    description: str, value_type: str
+) -> dict[str, int | float]:
     if value_type not in {"integer", "number"}:
         return {}
 
@@ -143,7 +143,17 @@ def _infer_property_schema_from_description(description: str) -> dict[str, Any] 
             "items": items_schema,
         }
 
-    if any(phrase in lowered for phrase in ("maps to a string", "string that", "string indicating", "a string", "the url", "url from")):
+    if any(
+        phrase in lowered
+        for phrase in (
+            "maps to a string",
+            "string that",
+            "string indicating",
+            "a string",
+            "the url",
+            "url from",
+        )
+    ):
         schema = {"type": "string"}
         if enum_values := _extract_enum_values_from_description(description, "string"):
             schema["enum"] = enum_values
@@ -166,11 +176,18 @@ def _find_target_candidate_for_property(
     if not candidates:
         return None
 
-    direct_matches = [candidate for candidate in candidates if property_name in (candidate.get("properties") or {})]
+    direct_matches = [
+        candidate
+        for candidate in candidates
+        if property_name in (candidate.get("properties") or {})
+    ]
     if len(direct_matches) == 1:
         return direct_matches[0]
     if len(direct_matches) > 1:
-        return max(direct_matches, key=lambda candidate: _candidate_overlap_score(candidate, known_property_names))
+        return max(
+            direct_matches,
+            key=lambda candidate: _candidate_overlap_score(candidate, known_property_names),
+        )
 
     scored_candidates = [
         (candidate, _candidate_overlap_score(candidate, known_property_names))
@@ -232,7 +249,7 @@ def _extract_required_property_names(section_text: str | None, node: dict[str, A
     property_names = {
         prop_name
         for candidate in _collect_object_property_candidates(node)
-        for prop_name in (candidate.get("properties") or {})
+        for prop_name in candidate.get("properties") or {}
     }
     if not property_names:
         return set()

@@ -1,4 +1,3 @@
-(() => {
     function startRuntimeModule({
         documentRef = document,
         windowRef = window,
@@ -8,6 +7,7 @@
         data = {},
         core = {},
         features = {},
+        components = {},
     }) {
         const {
             resolveTheme,
@@ -17,6 +17,11 @@
             updateDocumentationLinks,
         } = platform;
         const { fromEditorValue, toEditorValue } = data;
+        const {
+            createRuntime,
+            jsonEditorRuntime,
+            createDirtyRouteGuard,
+        } = components;
         const {
             t,
             setStatus,
@@ -32,7 +37,7 @@
             setSearchTimer,
         } = shared;
 
-        const { start: startRuntime } = window.BPMProfilesRuntime.create({
+        const { start: startRuntime } = createRuntime({
             documentRef,
             windowRef,
             dependencies: {
@@ -124,6 +129,8 @@
                 currentSnapshotState: core.currentSnapshotState,
                 setStatus,
                 t,
+                jsonEditorRuntime,
+                createDirtyRouteGuard,
             },
             state: {
                 getEditor,
@@ -142,7 +149,6 @@
         startRuntime();
     }
 
-    window.BPMProfilesBootstrapRuntime = {
+    export {
         startRuntimeModule,
     };
-})();

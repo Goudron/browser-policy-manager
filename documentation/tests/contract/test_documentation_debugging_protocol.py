@@ -29,6 +29,7 @@ def test_debugging_protocol_names_ladder_commands_and_remaining_risk() -> None:
         "make test-docs-browser",
         "make docs-coverage",
         "make docs-release-check",
+        "make docs-release-handoff",
         "make test-release",
     ):
         assert f"`{command}" in runbook
@@ -38,6 +39,7 @@ def test_debugging_protocol_names_ladder_commands_and_remaining_risk() -> None:
         "Full DITA-OT output",
         "Real browser rendering",
         "Full screenshot capture/review",
+        "Skipped release-only checks",
         "manual documentation QA",
         "live Firefox gates",
     ):
@@ -65,4 +67,6 @@ def test_debugging_protocol_is_registered_in_suite_boundary_contract() -> None:
 
     assert "debugging_protocol" in suite_boundaries
     assert "documentation/runbooks/debugging-protocol.md" in suite_boundaries
-    assert "documentation/tests/contract/test_documentation_debugging_protocol.py" in suite_boundaries
+    assert (
+        "documentation/tests/contract/test_documentation_debugging_protocol.py" in suite_boundaries
+    )

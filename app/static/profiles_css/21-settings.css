@@ -1,0 +1,955 @@
+        .wizard-shell {
+            display: grid;
+            gap: 14px;
+            margin-bottom: 22px;
+            padding: 18px;
+            border-radius: 16px;
+        }
+
+        .wizard-header {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+            align-items: start;
+            gap: 14px;
+        }
+
+        .wizard-copy {
+            max-width: 54ch;
+            display: grid;
+            gap: 6px;
+        }
+
+        .wizard-settings-search-shell {
+            box-sizing: border-box;
+            display: grid;
+            gap: 0.65rem;
+            width: 100%;
+            max-width: 360px;
+            min-width: min(100%, 260px);
+            border-radius: 12px;
+            padding: 0.85rem;
+        }
+
+        .wizard-settings-search-field {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .wizard-settings-search-row {
+            display: flex;
+            gap: 0.7rem;
+            align-items: center;
+        }
+
+        .wizard-settings-search-row .soft-input {
+            min-height: 2.7rem;
+        }
+
+        .wizard-settings-search-clear {
+            min-width: 92px;
+            min-height: 2.7rem;
+            padding: 0 0.85rem;
+            border-radius: 12px;
+        }
+
+        .wizard-settings-search-results {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .wizard-settings-search-results[hidden] {
+            display: none;
+        }
+
+        .wizard-settings-search-result {
+            display: grid;
+            gap: 0.45rem;
+            text-align: left;
+            align-content: start;
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+        }
+
+        .wizard-settings-search-result-shell {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 2.75rem;
+            align-items: center;
+            gap: 0.35rem;
+            min-width: 0;
+        }
+
+        .wizard-settings-search-result-shell .wizard-settings-search-result {
+            min-width: 0;
+            width: 100%;
+        }
+
+        .wizard-settings-search-group {
+            display: grid;
+            gap: 0.5rem;
+            min-width: 0;
+        }
+
+        .wizard-settings-search-group-title {
+            color: var(--ink-soft);
+            font-size: 0.72rem;
+            font-weight: 800;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+            text-transform: uppercase;
+        }
+
+        .wizard-settings-search-scope {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            min-width: 0;
+        }
+
+        .wizard-settings-search-scope[hidden] {
+            display: none;
+        }
+
+        .wizard-settings-search-scope-button {
+            min-height: 2rem;
+            min-width: 0;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            white-space: normal;
+        }
+
+        .wizard-settings-search-scope-button.is-active {
+            border-color: rgba(15, 118, 110, 0.28);
+            background: rgba(20, 184, 166, 0.12);
+            color: rgb(15 118 110);
+        }
+
+        .wizard-settings-search-result-top {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .wizard-settings-search-result-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .wizard-settings-search-result-step {
+            font-size: 0.76rem;
+            color: var(--ink-soft);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .wizard-settings-search-result-meta {
+            font-size: 0.82rem;
+            line-height: 1.55;
+            color: var(--muted);
+        }
+
+        .all-settings-list-shell {
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .all-settings-mode-bar {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .all-settings-mode-button {
+            display: grid;
+            justify-items: start;
+            gap: 4px;
+            min-width: 0;
+            min-height: 72px;
+            border-radius: 8px;
+            text-align: left;
+            white-space: normal;
+        }
+
+        .all-settings-mode-button.is-active {
+            border-color: rgba(15, 118, 110, 0.32);
+            background: rgba(20, 184, 166, 0.12);
+            color: rgb(15 118 110);
+        }
+
+        .all-settings-mode-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .all-settings-mode-copy {
+            font-size: 0.78rem;
+            font-weight: 600;
+            line-height: 1.35;
+            color: var(--muted);
+        }
+
+        .all-settings-manager-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 14px;
+            align-items: start;
+        }
+
+        .all-settings-manager-list {
+            min-width: 0;
+        }
+
+        .all-settings-list-heading {
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: start;
+        }
+
+        .all-settings-list-heading > .wizard-input-hint {
+            grid-column: 1 / -1;
+        }
+
+        .all-settings-domain-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .all-settings-domain-card {
+            display: grid;
+            gap: 8px;
+            min-width: 0;
+            min-height: 132px;
+            padding: 12px;
+            border: 1px solid var(--line-soft);
+            border-radius: 8px;
+            background: var(--raised-surface-bg);
+            color: inherit;
+            text-align: left;
+            overflow-wrap: anywhere;
+            cursor: pointer;
+            transition:
+                background-color 160ms ease,
+                border-color 160ms ease,
+                transform 160ms ease;
+        }
+
+        .all-settings-domain-card:hover,
+        .all-settings-domain-card:focus-visible,
+        .all-settings-domain-card.is-active {
+            transform: translateY(-1px);
+            border-color: rgba(15, 118, 110, 0.3);
+            background: rgba(240, 253, 250, 0.78);
+        }
+
+        .all-settings-domain-card:disabled {
+            cursor: default;
+            opacity: 0.68;
+        }
+
+        .all-settings-domain-card:disabled:hover {
+            transform: none;
+            border-color: var(--line-soft);
+            background: var(--raised-surface-bg);
+        }
+
+        .all-settings-domain-card-title {
+            min-width: 0;
+            color: var(--ink);
+            font-size: 0.9rem;
+            font-weight: 800;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-domain-card-body {
+            min-width: 0;
+            color: var(--muted);
+            font-size: 0.76rem;
+            line-height: 1.38;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-domain-card-counts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-self: end;
+            min-width: 0;
+        }
+
+        .all-settings-domain-card-coverage {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .all-settings-domain-card-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 0;
+            padding: 4px 7px;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 999px;
+            background: rgba(248, 250, 252, 0.78);
+            color: var(--muted);
+            font-size: 0.72rem;
+            line-height: 1.2;
+        }
+
+        .all-settings-domain-card-count strong {
+            color: var(--ink);
+            font-size: 0.78rem;
+        }
+
+        .all-settings-domain-card-count.has-attention {
+            border-color: rgba(190, 24, 93, 0.2);
+            background: rgba(244, 63, 94, 0.1);
+            color: rgb(190 24 93);
+        }
+
+        .all-settings-domain-card-count.has-attention strong {
+            color: rgb(190 24 93);
+        }
+
+        .all-settings-source-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .all-settings-source-filter-button {
+            gap: 8px;
+            min-height: 36px;
+            min-width: 0;
+            max-width: 100%;
+            border-radius: 999px;
+            white-space: normal;
+        }
+
+        .all-settings-source-filter-button.is-active {
+            border-color: rgba(15, 118, 110, 0.28);
+            background: rgba(20, 184, 166, 0.12);
+            color: rgb(15 118 110);
+        }
+
+        .all-settings-source-filter-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            min-width: 22px;
+            min-height: 22px;
+            padding: 0 6px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.16);
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .all-settings-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .all-settings-filter-button {
+            gap: 8px;
+            min-height: 38px;
+            min-width: 0;
+            max-width: 100%;
+            border-radius: 999px;
+            white-space: normal;
+        }
+
+        .all-settings-filter-button.is-active {
+            border-color: rgba(15, 118, 110, 0.28);
+            background: rgba(20, 184, 166, 0.12);
+            color: rgb(15 118 110);
+        }
+
+        .all-settings-filter-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            min-width: 22px;
+            min-height: 22px;
+            padding: 0 6px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.16);
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .all-settings-review-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .all-settings-review-card {
+            display: grid;
+            gap: 10px;
+            min-width: 0;
+            min-height: 142px;
+            padding: 14px;
+            border: 1px solid var(--line-soft);
+            border-radius: 14px;
+            background: var(--raised-surface-bg);
+            color: inherit;
+            text-align: left;
+            overflow-wrap: anywhere;
+            cursor: pointer;
+            transition:
+                background-color 160ms ease,
+                border-color 160ms ease,
+                transform 160ms ease;
+        }
+
+        .all-settings-review-card:hover,
+        .all-settings-review-card:focus-visible {
+            transform: translateY(-1px);
+            border-color: rgba(15, 118, 110, 0.28);
+            background: rgba(240, 253, 250, 0.78);
+        }
+
+        .all-settings-review-card:disabled {
+            cursor: default;
+            opacity: 0.72;
+        }
+
+        .all-settings-review-card:disabled:hover {
+            transform: none;
+            border-color: var(--line-soft);
+            background: var(--raised-surface-bg);
+        }
+
+        .all-settings-review-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .all-settings-review-card-title {
+            min-width: 0;
+            color: var(--ink);
+            font-size: 0.92rem;
+            font-weight: 700;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-review-card-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            min-width: 32px;
+            min-height: 30px;
+            padding: 0 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(15, 118, 110, 0.22);
+            background: rgba(20, 184, 166, 0.12);
+            color: rgb(15 118 110);
+            font-size: 0.88rem;
+            font-weight: 800;
+        }
+
+        .all-settings-review-card[data-tone="warn"] .all-settings-review-card-count {
+            border-color: rgba(198, 111, 50, 0.24);
+            background: rgba(198, 111, 50, 0.12);
+            color: rgb(154 77 26);
+        }
+
+        .all-settings-review-card[data-tone="error"] .all-settings-review-card-count {
+            border-color: rgba(190, 24, 93, 0.2);
+            background: rgba(244, 63, 94, 0.12);
+            color: rgb(190 24 93);
+        }
+
+        .all-settings-review-card-body {
+            min-width: 0;
+            color: var(--muted);
+            font-size: 0.84rem;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-review-card-queue {
+            display: grid;
+            gap: 7px;
+            min-width: 0;
+        }
+
+        .all-settings-review-card-entry {
+            display: grid;
+            gap: 5px;
+            min-width: 0;
+            padding: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 8px;
+            background: rgba(248, 250, 252, 0.78);
+        }
+
+        .all-settings-review-card-entry-key {
+            min-width: 0;
+            color: var(--ink);
+            font-size: 0.78rem;
+            font-weight: 700;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-review-card-entry-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            min-width: 0;
+        }
+
+        .all-settings-review-card-pill,
+        .all-settings-review-card-path,
+        .all-settings-review-card-reason,
+        .all-settings-review-card-empty,
+        .all-settings-review-card-more {
+            min-width: 0;
+            color: var(--muted);
+            font-size: 0.72rem;
+            line-height: 1.3;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-review-card-pill {
+            flex: 0 1 auto;
+            padding: 2px 6px;
+            border: 1px solid rgba(15, 118, 110, 0.16);
+            border-radius: 999px;
+            background: rgba(20, 184, 166, 0.08);
+            color: rgb(15 118 110);
+            font-weight: 700;
+        }
+
+        .all-settings-review-card-reason {
+            display: block;
+        }
+
+        .all-settings-review-card-empty,
+        .all-settings-review-card-more {
+            display: block;
+            padding: 8px;
+            border: 1px dashed rgba(148, 163, 184, 0.36);
+            border-radius: 8px;
+            background: rgba(248, 250, 252, 0.6);
+        }
+
+        .all-settings-review-card-action {
+            align-self: end;
+            min-width: 0;
+            color: rgb(15 118 110);
+            font-size: 0.78rem;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-review-card:disabled .all-settings-review-card-action {
+            color: var(--ink-soft);
+        }
+
+        .all-settings-review-success {
+            display: grid;
+            gap: 10px;
+            min-width: 0;
+            padding: 14px;
+            border: 1px solid rgba(15, 118, 110, 0.18);
+            border-radius: 8px;
+            background: rgba(240, 253, 250, 0.72);
+        }
+
+        .all-settings-review-success-title {
+            min-width: 0;
+            color: var(--ink);
+            font-size: 0.96rem;
+            font-weight: 800;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-review-success-body {
+            min-width: 0;
+            color: var(--muted);
+            font-size: 0.84rem;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-review-success-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .all-settings-review-success-action {
+            min-width: 0;
+            white-space: normal;
+        }
+
+        .all-settings-list-head,
+        .all-settings-list-row {
+            display: grid;
+            grid-template-columns:
+                minmax(220px, 1.6fr)
+                minmax(160px, 1fr);
+            gap: 14px;
+            align-items: center;
+        }
+
+        .all-settings-list-head {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line-soft);
+            color: var(--ink-soft);
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .all-settings-list {
+            display: grid;
+        }
+
+        .all-settings-list-row-shell {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 2.75rem;
+            align-items: stretch;
+            min-width: 0;
+            border-bottom: 1px solid var(--line-soft);
+            transition: background-color 160ms ease;
+        }
+
+        .all-settings-list-row-shell:last-child {
+            border-bottom: 0;
+        }
+
+        .all-settings-list-row-shell:hover,
+        .all-settings-list-row-shell:focus-within,
+        .all-settings-list-row-shell.is-selected {
+            background: rgba(15, 118, 110, 0.08);
+        }
+
+        .all-settings-row-help-link {
+            align-self: center;
+            justify-self: center;
+        }
+
+        .all-settings-row-help-link.is-unavailable {
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .all-settings-list-budget {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 14px;
+            border-top: 1px solid var(--line-soft);
+            background: rgba(15, 118, 110, 0.05);
+        }
+
+        .all-settings-list-budget[hidden] {
+            display: none;
+        }
+
+        .all-settings-list-budget-count {
+            min-width: 0;
+            color: var(--muted);
+            font-size: 0.84rem;
+            line-height: 1.45;
+        }
+
+        .all-settings-list-budget-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .all-settings-list-budget-toggle {
+            min-width: 0;
+            white-space: normal;
+        }
+
+        .all-settings-list-row {
+            width: 100%;
+            min-height: 58px;
+            padding: 12px 14px;
+            border: 0;
+            border-bottom: 0;
+            background: transparent;
+            color: inherit;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 160ms ease;
+        }
+
+        .all-settings-list-row:hover,
+        .all-settings-list-row:focus-visible,
+        .all-settings-list-row.is-selected {
+            background: transparent;
+        }
+
+        .all-settings-list-row.is-selected {
+            box-shadow: inset 4px 0 0 rgb(15 118 110);
+        }
+
+        .all-settings-list-cell {
+            min-width: 0;
+            color: var(--muted);
+            font-size: 0.86rem;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-list-cell--setting {
+            display: grid;
+            gap: 8px;
+            color: var(--ink);
+        }
+
+        .all-settings-list-setting-key {
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
+            font-size: 0.84rem;
+            font-weight: 600;
+        }
+
+        .all-settings-list-cell--value {
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
+            font-size: 0.8rem;
+        }
+
+        .all-settings-list-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .all-settings-list-badge,
+        .all-settings-list-state {
+            display: inline-flex;
+            align-items: center;
+            min-width: 0;
+            min-height: 24px;
+            padding: 0 8px;
+            border-radius: 999px;
+            border: 1px solid var(--line-soft);
+            background: rgba(148, 163, 184, 0.12);
+            color: var(--muted);
+            font-size: 0.74rem;
+            font-weight: 700;
+            line-height: 1.2;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-list-badge[data-settings-entry-state-badge="configured"],
+        .all-settings-list-state[data-state="configured"] {
+            border-color: rgba(15, 118, 110, 0.22);
+            background: rgba(20, 184, 166, 0.12);
+            color: rgb(15 118 110);
+        }
+
+        .all-settings-list-badge[data-settings-entry-category-badge] {
+            border-color: rgba(59, 130, 246, 0.18);
+            background: rgba(59, 130, 246, 0.08);
+            color: rgb(37 99 235);
+        }
+
+        .all-settings-list-badge[data-settings-entry-source] {
+            border-color: rgba(99, 102, 241, 0.2);
+            background: rgba(99, 102, 241, 0.08);
+            color: rgb(79 70 229);
+        }
+
+        .all-settings-list-badge.has-attention {
+            border-color: rgba(245, 158, 11, 0.3);
+            background: rgba(245, 158, 11, 0.12);
+            color: rgb(180 83 9);
+        }
+
+        .all-settings-detail {
+            display: grid;
+            gap: 14px;
+            width: 100%;
+            max-width: 1040px;
+            padding: 16px;
+        }
+
+        .all-settings-detail-head {
+            display: grid;
+            gap: 12px;
+        }
+
+        .all-settings-detail-key {
+            color: var(--ink);
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
+            font-size: 0.96rem;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-detail-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .all-settings-detail-badge {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            border: 1px solid var(--line-soft);
+            border-radius: 999px;
+            padding: 0 9px;
+            background: rgba(148, 163, 184, 0.12);
+            color: var(--muted);
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .all-settings-detail-badge[data-tone="configured"],
+        .all-settings-detail-badge[data-tone="accent"] {
+            border-color: rgba(15, 118, 110, 0.22);
+            background: rgba(20, 184, 166, 0.12);
+            color: rgb(15 118 110);
+        }
+
+        .all-settings-detail-badge[data-tone="warn"] {
+            border-color: rgba(198, 111, 50, 0.24);
+            background: rgba(198, 111, 50, 0.1);
+            color: rgb(154 77 26);
+        }
+
+        .all-settings-detail-badge[data-tone="error"] {
+            border-color: rgba(190, 24, 93, 0.2);
+            background: rgba(244, 63, 94, 0.1);
+            color: rgb(190 24 93);
+        }
+
+        .all-settings-detail-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .all-settings-detail-meta {
+            display: grid;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .all-settings-detail-meta > div {
+            display: grid;
+            grid-template-columns: minmax(110px, 0.42fr) minmax(0, 1fr);
+            gap: 10px;
+            align-items: baseline;
+        }
+
+        .all-settings-detail-meta dt {
+            color: var(--ink-soft);
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .all-settings-detail-meta dd {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.84rem;
+        }
+
+        .all-settings-detail-current {
+            display: grid;
+            gap: 6px;
+        }
+
+        .all-settings-detail-current pre {
+            max-height: 220px;
+            overflow: auto;
+            margin: 0;
+            border: 1px solid var(--line-soft);
+            border-radius: 14px;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.04);
+            color: var(--ink);
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
+            font-size: 0.78rem;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .all-settings-detail-validation {
+            border-radius: 14px;
+            padding: 12px;
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        .all-settings-detail-validation--ok {
+            border: 1px solid rgba(15, 118, 110, 0.18);
+            background: rgba(20, 184, 166, 0.08);
+            color: rgb(15 118 110);
+        }
+
+        .all-settings-detail-validation--error {
+            display: grid;
+            gap: 8px;
+            border: 1px solid rgba(190, 24, 93, 0.18);
+            background: rgba(244, 63, 94, 0.08);
+            color: rgb(190 24 93);
+        }
+
+        .all-settings-detail-issues {
+            display: grid;
+            gap: 6px;
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .all-settings-detail-issues li {
+            display: grid;
+            gap: 2px;
+        }
+
+        .all-settings-detail-issues span {
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
+            font-size: 0.76rem;
+        }
+
+        .all-settings-detail-editor {
+            min-width: 0;
+        }
+
+        .all-settings-detail-editor .wizard-shell-card {
+            border-radius: 14px;
+            background: var(--raised-surface-bg);
+        }
+
+        .all-settings-detail-raw-editor,
+        .all-settings-detail-preference {
+            display: grid;
+            gap: 12px;
+        }

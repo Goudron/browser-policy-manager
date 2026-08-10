@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-operate-local-documentation-assistant" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>Den Dokumentationsassistenten in BPM 0.9.3 betreiben</title>
+  <title>Den Dokumentationsassistenten in BPM 0.9.4 betreiben</title>
   <shortdesc>Prüfen Sie die veröffentlichte Grenze des Schulungshinweises, ohne BPM oder die deterministische Suche vom Chat abhängig zu machen.</shortdesc>
   <taskbody>
-    <prereq><p>Verwenden Sie einen unterstützten BPM-0.9.3-Quellcode-Checkout und die Grundressourcen aus <xref keyref="topic.admin-reference-minimum-system-requirements"/>.</p></prereq>
+    <prereq><p>Verwenden Sie einen unterstützten BPM-0.9.4-Quellcode-Checkout und die Grundressourcen aus <xref keyref="topic.admin-reference-minimum-system-requirements"/>.</p></prereq>
     <context><p>In dieser Version ist der Chat nur eine lokalisierte Leseroberfläche. Er startet oder installiert kein Modell, ruft keine Dokumentation ab, verwendet keinen E5-Index, erzeugt keine Antwort, zeigt keine Zitate und kontaktiert keine externen Quellen. Die deterministische Dokumentationssuche bleibt getrennt und verfügbar.</p></context>
     <steps>
-      <step><cmd>Starten Sie BPM mit dem normalen unterstützten Quellcode-Workflow.</cmd><info><p>Fügen Sie dem Start von BPM in 0.9.3 keine Modell-, Index-, Embedding- oder Anbieter-Konfiguration hinzu.</p></info></step>
+      <step><cmd>Starten Sie BPM mit dem normalen unterstützten Quellcode-Workflow.</cmd><info><p>Fügen Sie dem Start von BPM in 0.9.4 keine Modell-, Index-, Embedding- oder Anbieter-Konfiguration hinzu.</p></info></step>
       <step><cmd>Öffnen Sie das Dokumentationsportal in der Sprache des Lesers.</cmd><info><p>Prüfen Sie, dass sich der Assistent unten rechts öffnen lässt und die normalen Suchsteuerelemente unverändert bleiben.</p></info></step>
       <step><cmd>Senden Sie eine Frage zu BPM.</cmd><info><p>Im Transkript muss der lokalisierte Hinweis erscheinen, dass die Schulung des lokalen Modells läuft und die Funktion in einer späteren Version verfügbar wird.</p></info></step>
       <step><cmd>Senden Sie eine themenfremde Frage.</cmd><info><p>Es wird derselbe Hinweis erwartet; der Chat ist in dieser Version kein allgemeiner Assistent.</p></info></step>
       <step><cmd>Ermitteln Sie die aktuelle Antwort mit der deterministischen Dokumentationssuche.</cmd><info><p>Suche, Filter, Navigation und Ergebnisreihenfolge bleiben der unterstützte Informationsweg.</p></info></step>
     </steps>
     <result><p>Der Assistent zeigt den lokalisierten Schulungshinweis; BPM und die deterministische Suche bleiben unabhängig nutzbar.</p></result>
-    <postreq><p>Installieren Sie für 0.9.3 kein Modell und erstellen Sie keine RAG-Generation. Melden Sie abweichenden Hinweis, Gebietsschema oder Suchgrenze als Dokumentationsfehler.</p></postreq>
+    <postreq><p>Installieren Sie für 0.9.4 kein Modell und erstellen Sie keine RAG-Generation. Melden Sie abweichenden Hinweis, Gebietsschema oder Suchgrenze als Dokumentationsfehler.</p></postreq>
   </taskbody>
   <related-links><link keyref="topic.admin-reference-minimum-system-requirements"/><link keyref="topic.admin-task-gate-control-product-startup"/></related-links>
 </task>

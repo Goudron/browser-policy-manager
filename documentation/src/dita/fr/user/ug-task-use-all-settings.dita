@@ -2,10 +2,10 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-all-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Utiliser « Tous les paramètres »</title>
-  <shortdesc>Ouvrez « Tous les paramètres » pour un profil enregistré lorsque vous avez besoin d’un contrôle visuel complet au-delà du flux de travail guidé.</shortdesc>
+  <shortdesc>Ouvrez « <uicontrol>Tous les paramètres</uicontrol> » pour un profil enregistré lorsque vous avez besoin d’un contrôle visuel complet au-delà du flux de travail guidé.</shortdesc>
   <taskbody>
-    <prereq><p>Un profil enregistré existe. Les nouveaux brouillons non enregistrés doivent être enregistrés avant que Tous les paramètres puisse s'ouvrir.</p></prereq>
-    <context><p>Tous les paramètres est l'éditeur visuel complet des politiques Firefox et connu Préférences gérées. Il s'ouvre dans Revue afin que les éléments d'attention soient visibles avant une navigation large dans le catalogue.</p>
+    <prereq><p>Un profil enregistré existe. Les nouveaux brouillons non enregistrés doivent être enregistrés avant que <uicontrol>Tous les paramètres</uicontrol> puisse s'ouvrir.</p></prereq>
+    <context><p><uicontrol>Tous les paramètres</uicontrol> est l'éditeur visuel complet des politiques Firefox et connu <uicontrol>Préférences gérées</uicontrol>. Il s'ouvre dans <uicontrol>Revue</uicontrol> afin que les éléments d'attention soient visibles avant une navigation large dans le catalogue.</p>
       <fig id="screenshot-all-settings-review">
         <title>Mode « Revue » dans « Tous les paramètres »</title>
         <image keyref="screenshot.all-settings-review" placement="break" height="150mm" align="center">
@@ -14,13 +14,13 @@
       </fig>
     </context>
     <steps>
-      <step><cmd>Ouvrez le profil enregistré depuis la bibliothèque.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Choisissez la surface de l'éditeur Tous les paramètres.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Confirmez que les paramètres Révision, Configuré et Catalogue sont disponibles.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Utilisez le mode qui correspond à la tâche : Vérifier pour attirer l'attention, Configuré pour les valeurs appliquées ou Catalogue pour chaque paramètre pris en charge.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
+      <step><cmd>Ouvrez le profil enregistré depuis la bibliothèque.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez la surface de l'éditeur <uicontrol>Tous les paramètres</uicontrol>.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Confirmez que les paramètres Révision, Configuré et <uicontrol>Catalogue</uicontrol> sont disponibles.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Utilisez le mode qui correspond à la tâche : Vérifier pour attirer l'attention, Configuré pour les valeurs appliquées ou <uicontrol>Catalogue</uicontrol> pour chaque paramètre pris en charge.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>Le profil enregistré est ouvert dans Tous les paramètres avec le mode correct disponible.</p></result>
-    <postreq><p>Récupération : si Tous les paramètres n'est pas disponible, enregistrez d'abord le brouillon guidé ou rouvrez un profil enregistré à partir de la bibliothèque.</p></postreq>
+    <result><p>Le profil enregistré est ouvert dans <uicontrol>Tous les paramètres</uicontrol> avec le mode correct disponible.</p></result>
+    <postreq><p>Récupération : si <uicontrol>Tous les paramètres</uicontrol> n'est pas disponible, enregistrez d'abord le brouillon guidé ou rouvrez un profil enregistré à partir de la bibliothèque.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

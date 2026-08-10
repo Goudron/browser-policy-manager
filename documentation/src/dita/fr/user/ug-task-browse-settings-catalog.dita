@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-browse-settings-catalog" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Parcourir le catalogue des paramètres</title>
-  <shortdesc>Utilisez Catalogue pour parcourir toutes les stratégies prises en charge et les préférences gérées connues pour le schéma sélectionné.</shortdesc>
+  <shortdesc>Utilisez <uicontrol>Catalogue</uicontrol> pour parcourir toutes les stratégies prises en charge et les préférences gérées connues pour le schéma sélectionné.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez un profil enregistré dans Tous les paramètres.</p></prereq>
-    <context><p>Catalogue est l'inventaire visuel complet. Il inclut des paramètres configurés et disponibles tout en conservant des contrôles avancés derrière les divulgations délibérées.</p></context>
+    <prereq><p>Ouvrez un profil enregistré dans <uicontrol>Tous les paramètres</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Catalogue</uicontrol> est l'inventaire visuel complet. Il inclut des paramètres configurés et disponibles tout en conservant des contrôles avancés derrière les divulgations délibérées.</p></context>
     <steps>
-      <step><cmd>Passez à Catalogue.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Parcourez les catégories pour connaître les stratégies prises en charge et les Préférences gérées connues.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Utilisez les fiches de catégorie ou effectuez une recherche pour affiner l'inventaire.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Passez à <uicontrol>Catalogue</uicontrol>.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Parcourez les catégories pour connaître les stratégies prises en charge et les <uicontrol>Préférences gérées</uicontrol> connues.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Utilisez les fiches de catégorie ou effectuez une recherche pour affiner l'inventaire.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Sélectionnez un paramètre avant d'appliquer, de modifier ou de réinitialiser une valeur.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Vous pouvez trouver les stratégies prises en charge et les préférences connues sans utiliser au préalable le JSON brut.</p></result>

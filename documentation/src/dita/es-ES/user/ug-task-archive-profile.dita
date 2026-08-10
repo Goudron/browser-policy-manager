@@ -4,7 +4,7 @@
   <title>Archivar un perfil activo</title>
   <shortdesc>Mueve un perfil activo fuera de la lista activa normal sin eliminarlo permanentemente.</shortdesc>
   <taskbody>
-    <prereq><p>El perfil está activo, visible en la Biblioteca y ya no es necesario para los flujos de trabajo normales de edición o exportación.</p></prereq>
+    <prereq><p>El perfil está activo, visible en la <uicontrol>Biblioteca</uicontrol> y ya no es necesario para los flujos de trabajo normales de edición o exportación.</p></prereq>
     <context><p>El archivado es reversible. Mantiene el perfil disponible a través de filtros archivados o de todo el ciclo de vida.</p></context>
     <steps>
       <step><cmd>Confirme el nombre de la fila, el esquema, el estado de validación y la hora de actualización.</cmd><info><p>Resultado esperado: sabe exactamente qué perfil cambiará el estado del ciclo de vida.</p></info></step>
