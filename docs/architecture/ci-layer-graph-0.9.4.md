@@ -22,14 +22,14 @@ network-dependent AMO check remains manual in `firefox-live-amo.yml`.
 | --- | --- | --- | --- |
 | `lint` | no test layer | `make lint`, `make typecheck`, `make architecture` | Static/type/import failure belongs to the changed Python or configuration owner. |
 | `base-runtime` | package base-runtime smoke | Base `pip install .`, `pip check`, `make release-boundary` | Delivery-boundary or installed-runtime failure belongs to package/release assembly. |
-| `unit-tests` | `unit` product tests | `make test-unit` | `.coverage.unit` is an input to `coverage`. |
-| `integration-tests` | `integration` product tests without `db` | `make test-integration` | `.coverage.integration` is an input to `coverage`; database-marked tests are not selected here. |
-| `postgres-integration` | all product `db` integration tests | `make test-postgres-integration` against the disposable service | `.coverage.postgres` is an input to `coverage`; migration/engine failure belongs to the database contour. |
-| `contract-tests` | product `contract` tests | `make test-contract` | `.coverage.contract` is an input to `coverage`. |
+| `unit-tests` | `unit` product tests | `make test-unit` | A failure belongs to the unit owner. |
+| `integration-tests` | `integration` product tests without `db` | `make test-integration` | Database-marked tests are not selected here. |
+| `postgres-integration` | all product `db` integration tests | `make test-postgres-integration` against the disposable service | Migration/engine failure belongs to the database contour. |
+| `contract-tests` | product `contract` tests | `make test-contract` | A failure belongs to the contract owner. |
 | `documentation-coverage` | documentation `unit` and `contract` tests | `make docs-coverage`, then the complementary `make test-docs` partition | Its independent 100% documentation report is retained as `documentation-coverage-artifacts`; the two commands have disjoint test selections. |
 | `frontend-tests` | native JavaScript contract/integration tests | `make test-frontend-coverage` | Node coverage output and a failing test identify the JavaScript owner. |
 | `chromium-tests` | product and documentation `browser` tests | `make test-browser`, `make test-docs-browser` with one matching Chrome-for-Testing/ChromeDriver pair | Sanitized browser failure artifacts are retained. |
-| `coverage` | no tests | download `python-coverage-*`, then `make coverage-report` | Combines the four Python owner artifacts and reports the current app floor. |
+| `coverage` | no tests | download `python-coverage-*`, then `make coverage-report` | Combines the two declared strict-coverage owner artifacts and reports the current app floor. |
 | `required-gates` | no tests | waits for the required results | Makes the complete required dependency set visible as one terminal status. |
 
 `live` is intentionally outside the normal PR owner set. It is owned by the
@@ -41,10 +41,12 @@ deterministic required CI result.
 ```text
 lint
  ├── base-runtime ───────────────────────────────────────────────┐
- ├── unit-tests ────── .coverage.unit ───────────────┐           │
- ├── integration-tests ─ .coverage.integration ──────┤           │
- ├── postgres-integration ─ .coverage.postgres ──────┼─ coverage ┤
- ├── contract-tests ─── .coverage.contract ──────────┘           │
+ ├── unit-tests ─────────────────────────────────────────────────┤
+ ├── integration-tests ──────────────────────────────────────────┤
+ ├── postgres-integration ───────────────────────────────────────┤
+ ├── contract-tests ─────────────────────────────────────────────┤
+ ├── release-implementation-coverage ─ .coverage.release-implementation ─┐
+ ├── ai-incubation-tests ───────────── .coverage.ai-incubation ──────────┼─ coverage
  ├── documentation-coverage ─ documentation report ─────────────┤
  ├── frontend-tests ─ native JS result ──────────────────────────┤
  └── chromium-tests ─ browser failure artifacts ─────────────────┘

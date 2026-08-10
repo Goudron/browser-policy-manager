@@ -237,7 +237,11 @@ jobs:
         with:
           name: python-coverage-ai-incubation
           path: .coverage.ai-incubation
-          if-no-files-found: warn
+          # Coverage.py writes a hidden data file.  v6 excludes hidden files
+          # unless this is explicit, which would leave the aggregate gate with
+          # no input despite a successful owner test.
+          include-hidden-files: true
+          if-no-files-found: error
           retention-days: 14
 
   release-implementation-coverage:
@@ -271,7 +275,10 @@ jobs:
         with:
           name: python-coverage-release-implementation
           path: .coverage.release-implementation
-          if-no-files-found: warn
+          # See the opt-in owner above: this hidden Coverage.py data file is a
+          # required input to the aggregate coverage gate.
+          include-hidden-files: true
+          if-no-files-found: error
           retention-days: 14
 
   dependency-audit:

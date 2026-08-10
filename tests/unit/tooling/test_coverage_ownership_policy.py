@@ -123,4 +123,6 @@ def test_coverage_artifacts_are_isolated_and_uploaded_by_their_owners() -> None:
     assert "PYTEST_COVERAGE_ARGS: --cov=app" not in workflow
     assert "python-coverage-ai-incubation" in workflow
     assert "python-coverage-release-implementation" in workflow
+    assert workflow.count("include-hidden-files: true") >= 2
+    assert workflow.count("if-no-files-found: error") >= 2
     assert "release-implementation-coverage" in workflow

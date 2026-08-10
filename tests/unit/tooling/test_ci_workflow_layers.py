@@ -38,6 +38,15 @@ def _joined_run_commands(job: dict[str, object]) -> str:
     return "\n".join(_run_commands(job))
 
 
+def _named_step(job: dict[str, object], name: str) -> dict[str, object]:
+    steps = job.get("steps", [])
+    assert isinstance(steps, list)
+    for step in steps:
+        if isinstance(step, dict) and step.get("name") == name:
+            return step
+    raise AssertionError(f"Missing workflow step: {name}")
+
+
 def _needs(job: dict[str, object]) -> set[str]:
     value = job.get("needs", [])
     if isinstance(value, str):
@@ -140,6 +149,19 @@ def test_ci_workflow_has_visible_dependency_and_artifact_flow() -> None:
     assert "actions/download-artifact@v8" in source
     assert "make coverage-report" in _joined_run_commands(jobs["coverage"])
     assert "pytest" not in _joined_run_commands(jobs["coverage"])
+
+    for owner, step_name in (
+        ("ai-incubation-tests", "Upload opt-in AI coverage data"),
+        (
+            "release-implementation-coverage",
+            "Upload release implementation coverage data",
+        ),
+    ):
+        artifact_step = _named_step(jobs[owner], step_name)
+        settings = artifact_step.get("with")
+        assert isinstance(settings, dict)
+        assert settings["include-hidden-files"] is True
+        assert settings["if-no-files-found"] == "error"
 
 
 def test_ci_proves_clean_package_artifacts_without_ai_dependencies() -> None:
