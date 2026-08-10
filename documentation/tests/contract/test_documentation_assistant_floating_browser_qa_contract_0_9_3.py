@@ -31,6 +31,7 @@ def test_m12b_07_browser_evidence_covers_persistence_failures_and_safe_boundarie
         "test_documentation_floating_assistant_release_qa_matrix_for_all_locales",
         "test_documentation_floating_assistant_install_failure_stays_locale_safe",
         "test_documentation_floating_assistant_ships_local_only_without_external_sources_control",
+        "test_documentation_header_preferences_persist_between_bpm_and_portal",
         "DOCUMENTATION_LOCALES",
         "Grounded en BPM answer.",
         "Long answer 7:",
@@ -44,5 +45,13 @@ def test_m12b_07_browser_evidence_covers_persistence_failures_and_safe_boundarie
     ):
         assert required in source
 
+    persistence_test_name = "test_documentation_header_preferences_persist_between_bpm_and_portal"
+    persistence_test = source.split(f"def {persistence_test_name}", maxsplit=1)[1].split(
+        "\ndef ", maxsplit=1
+    )[0]
+    allowed_theme_read = "window.localStorage.getItem('bpm-theme-mode')"
+    assert persistence_test.count(allowed_theme_read) == 1
+
+    source_without_allowed_theme_read = source.replace(allowed_theme_read, "")
     for forbidden in ("brave.com", "https://api.search.brave.com", "localStorage", "innerHTML"):
-        assert forbidden not in source
+        assert forbidden not in source_without_allowed_theme_read

@@ -1373,45 +1373,36 @@ def test_documentation_floating_assistant_install_failure_stays_locale_safe(
             assistant_status_path = f"/api/documentation-assistant/status?locale={locale}"
             model_status_path = f"/api/local-model?locale={locale}"
             install_path = "/api/local-model/install"
-            assert calls
-            assert all(
-                (
-                    call["method"] == "GET"
-                    and call["path"]
-                    in {
-                        assistant_status_path,
-                        model_status_path,
-                    }
-                )
-                or (call["method"] == "POST" and call["path"] == install_path)
-                for call in calls
-            )
-            install_calls = [
-                call for call in calls if call["method"] == "POST" and call["path"] == install_path
-            ]
-            assert len(install_calls) == 1
-            assert json.loads(install_calls[0]["body"]) == {
-                "api_version": 1,
-                "locale": locale,
-                "csrf_token": "c" * 24,
-                "confirm_install": True,
+            portal_index_call = {
+                "method": "GET",
+                "path": f"../search/{locale}/index.json",
+                "body": "",
             }
-            install_index = calls.index(install_calls[0])
-            assert any(
-                call["method"] == "GET" and call["path"] == assistant_status_path
-                for call in calls[:install_index]
-            )
-            assert any(
-                call["method"] == "GET" and call["path"] == model_status_path
-                for call in calls[:install_index]
-            )
-            assert any(
-                call["method"] == "GET" and call["path"] == model_status_path
-                for call in calls[install_index + 1 :]
-            )
-            assert all(
-                "search" not in call["path"] and "brave" not in call["path"] for call in calls
-            )
+            non_assistant_calls = [call for call in calls if not call["path"].startswith("/api/")]
+            # The portal search script can complete its already-started local index load after the
+            # mock is installed.  It is not assistant traffic, so permit only this exact static
+            # same-locale resource (and never a search or external assistant endpoint).
+            assert all(call == portal_index_call for call in non_assistant_calls)
+            assert len(non_assistant_calls) <= 1
+            assistant_calls = [call for call in calls if call["path"].startswith("/api/")]
+            assert assistant_calls == [
+                {"method": "GET", "path": assistant_status_path, "body": ""},
+                {"method": "GET", "path": model_status_path, "body": ""},
+                {
+                    "method": "POST",
+                    "path": install_path,
+                    "body": json.dumps(
+                        {
+                            "api_version": 1,
+                            "locale": locale,
+                            "csrf_token": "c" * 24,
+                            "confirm_install": True,
+                        },
+                        separators=(",", ":"),
+                    ),
+                },
+                {"method": "GET", "path": model_status_path, "body": ""},
+            ]
         finally:
             _close_chromium_driver(driver)
 
