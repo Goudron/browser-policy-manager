@@ -92,17 +92,33 @@ _SOURCE_SHAPES: dict[str, tuple[str, set[str]]] = {
     ),
 }
 _ALEMBIC_VERSION_MINIMUM_LENGTH = 128
+_DEFAULT_ALEMBIC_URL = "sqlite:///./data/bpm.db"
 
 
 # Read the URL ONLY from alembic.ini / injected Config
 # (tests set it via set_main_option).
 def get_url() -> str:
-    url = config.get_main_option("sqlalchemy.url")
+    """Resolve the target database from the same explicit setting as BPM."""
+    configured_url = config.get_main_option("sqlalchemy.url")
+    runtime_url = os.environ.get("BPM_DATABASE_URL")
+    # Tests and recovery tooling intentionally inject a non-default Config URL
+    # while their process has a separate BPM runtime database. That explicit
+    # Config target must win; the checked-in default instead follows BPM's
+    # runtime setting when an operator provides one.
+    url = (
+        configured_url
+        if configured_url and configured_url != _DEFAULT_ALEMBIC_URL
+        else runtime_url or configured_url
+    )
     if not url:
-        # Last resort: environment variable for local runs.
+        # Retained only for a deliberately injected Alembic-only configuration.
         url = os.environ.get("ALEMBIC_SQLALCHEMY_URL", "")
     if not url:
         raise RuntimeError("SQLAlchemy URL is not configured for Alembic")
+    if url.startswith("sqlite+aiosqlite://"):
+        return url.replace("sqlite+aiosqlite://", "sqlite://", 1)
+    if url.startswith("postgresql+asyncpg://"):
+        return url.replace("postgresql+asyncpg://", "postgresql+psycopg://", 1)
     return url
 
 

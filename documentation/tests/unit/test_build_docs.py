@@ -1146,6 +1146,7 @@ def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
                 "candidate_path_layout": "{locale}/{filename}",
                 "dita_format": "html5",
                 "pdf_renderer": "chromium",
+                "page_number_overlay_renderer": "native-pdf",
                 "ui_footer_year": 2026,
                 "source_maps": ["user-guide.ditamap", "administrator-guide.ditamap"],
                 "development_cache": {
@@ -1186,7 +1187,10 @@ def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
         print_path.write_text("<html><body>print</body></html>", encoding="utf-8")
         return print_path
 
-    def fake_render_pdf(_source: Path, target: Path, _env: dict[str, str]) -> None:
+    chromium_renders: list[Path] = []
+
+    def fake_render_pdf(source: Path, target: Path, _env: dict[str, str]) -> None:
+        chromium_renders.append(source)
         target.write_bytes(_fake_pdf_payload())
 
     monkeypatch.setattr(build_docs, "_run_pdf", fake_run_pdf)
@@ -1223,6 +1227,7 @@ def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
     progress = capsys.readouterr().out
     assert progress.count("DITA HTML5 cache=bypassed") == 12
     assert progress.count("Chromium PDF cache=bypassed") == 12
+    assert len(chromium_renders) == 24
     assert "cache lookup" not in progress
 
 
@@ -1631,13 +1636,24 @@ def test_pdf_footer_text_matches_ui_identity_for_russian_and_other_locales() -> 
 
 
 def test_pdf_page_number_overlay_leaves_only_title_page_unnumbered(tmp_path: Path) -> None:
-    overlay = build_docs._write_pdf_page_number_overlay(tmp_path, 4).read_text(encoding="utf-8")
+    overlay = build_docs._write_pdf_page_number_overlay(tmp_path, 4)
+    page_count, destinations, links = build_docs._pdf_navigation_model_without_destinations(overlay)
+    pages = build_docs._pdf_bbox_pages(overlay)
 
-    assert overlay.count('class="bpm-pdf-page-overlay"') == 4
-    assert overlay.count('class="bpm-pdf-page-overlay__number"') == 3
-    assert ">1<" not in overlay
-    for page in (2, 3, 4):
-        assert f">{page}<" in overlay
+    assert page_count == 4
+    assert destinations == {}
+    assert links == set()
+    assert [word.text for word in build_docs._pdf_page_words(pages[0])] == []
+    for page_number, page in enumerate(pages[1:], start=2):
+        words = build_docs._pdf_page_words(page)
+        assert [word.text for word in words] == [str(page_number)]
+        word = words[0]
+        width = float(page.get("width", "0"))
+        height = float(page.get("height", "0"))
+        assert float(word.get("yMin", "0")) > height - 40
+        assert (
+            abs((float(word.get("xMin", "0")) + float(word.get("xMax", "0"))) / 2 - width / 2) < 1
+        )
 
 
 def test_pdf_positioned_line_text_does_not_invent_a_cjk_space() -> None:

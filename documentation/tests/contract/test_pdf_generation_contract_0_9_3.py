@@ -37,6 +37,7 @@ def test_m14_08_pdf_generation_contract_covers_every_required_pdf() -> None:
     assert contract["candidate_path_layout"] == "{locale}/{filename}"
     assert contract["dita_format"] == "html5"
     assert contract["pdf_renderer"] == "chromium"
+    assert contract["page_number_overlay_renderer"] == "native-pdf"
     assert contract["ui_footer_year"] == 2026
     assert contract["source_maps"] == ["user-guide.ditamap", "administrator-guide.ditamap"]
     assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]

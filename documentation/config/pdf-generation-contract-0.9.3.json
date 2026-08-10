@@ -7,6 +7,7 @@
   "candidate_path_layout": "{locale}/{filename}",
   "dita_format": "html5",
   "pdf_renderer": "chromium",
+  "page_number_overlay_renderer": "native-pdf",
   "ui_footer_year": 2026,
   "source_maps": [
     "user-guide.ditamap",

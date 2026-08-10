@@ -34,6 +34,11 @@ PDF_FIGURE_CAPTION_PREFIXES = {
 PDF_USER_GUIDE_FIGURE_COUNT = 6
 PDF_CACHE_SCHEMA_VERSION = 1
 PDF_CACHE_MANIFEST = "cache-entry.json"
+PDF_A4_WIDTH_POINTS = 595.276
+PDF_A4_HEIGHT_POINTS = 841.89
+PDF_PAGE_NUMBER_FONT_SIZE = 9
+PDF_PAGE_NUMBER_BASELINE = 22.677
+PDF_HELVETICA_DIGIT_WIDTH = 556
 
 
 def _run(command: list[str], env: dict[str, str]) -> None:
@@ -153,6 +158,8 @@ def _pdf_generation_policy() -> dict[str, Any]:
         raise BuildError("PDF generation contract DITA format is invalid")
     if policy.get("pdf_renderer") != "chromium":
         raise BuildError("PDF generation contract renderer is invalid")
+    if policy.get("page_number_overlay_renderer") != "native-pdf":
+        raise BuildError("PDF page-number overlay renderer is invalid")
     if not isinstance(policy.get("ui_footer_year"), int) or policy["ui_footer_year"] < 2025:
         raise BuildError("PDF generation contract UI footer year is invalid")
     expected_maps = [map_name for _guide_id, map_name in PDF_GUIDE_MAPS]
@@ -1196,28 +1203,76 @@ def _render_pdf_with_chromium(source: Path, target: Path, env: dict[str, str]) -
 
 
 def _write_pdf_page_number_overlay(output_root: Path, total_pages: int) -> Path:
-    """Write one A4 overlay page per PDF page, leaving the title page blank."""
+    """Write one deterministic A4 PDF overlay per page, leaving the title blank.
+
+    Chromium remains responsible for the two HTML/CSS passes that establish
+    pagination and linked contents. This overlay contains ASCII digits only,
+    so a small native PDF avoids a third browser launch for every guide.
+    """
 
     if total_pages < 2:
         raise BuildError("a BPM PDF guide must have a title page and at least one content page")
-    overlay_path = output_root / ".bpm-page-number-overlay.html"
-    pages = ['<div class="bpm-pdf-page-overlay"></div>']
-    pages.extend(
-        '<div class="bpm-pdf-page-overlay">'
-        f'<span class="bpm-pdf-page-overlay__number">{page}</span></div>'
-        for page in range(2, total_pages + 1)
+    overlay_path = output_root / ".bpm-page-number-overlay.pdf"
+    page_object_numbers = [4 + 2 * index for index in range(total_pages)]
+    content_object_numbers = [number + 1 for number in page_object_numbers]
+    objects: dict[int, bytes] = {
+        1: b"<< /Type /Catalog /Pages 2 0 R >>",
+        2: (
+            b"<< /Type /Pages /Kids ["
+            + b" ".join(f"{number} 0 R".encode("ascii") for number in page_object_numbers)
+            + f"] /Count {total_pages} >>".encode("ascii")
+        ),
+        3: b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    }
+    for page_number, (page_object, content_object) in enumerate(
+        zip(page_object_numbers, content_object_numbers, strict=True),
+        start=1,
+    ):
+        objects[page_object] = (
+            b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 "
+            + f"{PDF_A4_WIDTH_POINTS:.3f} {PDF_A4_HEIGHT_POINTS:.3f}".encode("ascii")
+            + b"] /Resources << /Font << /F1 3 0 R >> >> /Contents "
+            + f"{content_object} 0 R >>".encode("ascii")
+        )
+        if page_number == 1:
+            content = b""
+        else:
+            text = str(page_number)
+            text_width = len(text) * PDF_HELVETICA_DIGIT_WIDTH / 1000 * PDF_PAGE_NUMBER_FONT_SIZE
+            x_position = (PDF_A4_WIDTH_POINTS - text_width) / 2
+            content = (
+                b"q\n0.2 0.254902 0.333333 rg\nBT\n/F1 "
+                + str(PDF_PAGE_NUMBER_FONT_SIZE).encode("ascii")
+                + b" Tf\n1 0 0 1 "
+                + f"{x_position:.3f} {PDF_PAGE_NUMBER_BASELINE:.3f}".encode("ascii")
+                + b" Tm\n("
+                + text.encode("ascii")
+                + b") Tj\nET\nQ\n"
+            )
+        objects[content_object] = (
+            f"<< /Length {len(content)} >>\nstream\n".encode("ascii") + content + b"endstream"
+        )
+
+    payload = bytearray(b"%PDF-1.4\n%\xe2\xe3\xcf\xd3\n")
+    offsets = [0]
+    for object_number in range(1, max(objects) + 1):
+        offsets.append(len(payload))
+        payload.extend(f"{object_number} 0 obj\n".encode("ascii"))
+        payload.extend(objects[object_number])
+        payload.extend(b"\nendobj\n")
+    xref_offset = len(payload)
+    payload.extend(f"xref\n0 {len(offsets)}\n".encode("ascii"))
+    payload.extend(b"0000000000 65535 f \n")
+    for offset in offsets[1:]:
+        payload.extend(f"{offset:010d} 00000 n \n".encode("ascii"))
+    payload.extend(
+        f"trailer\n<< /Size {len(offsets)} /Root 1 0 R >>\nstartxref\n{xref_offset}\n%%EOF\n".encode(
+            "ascii"
+        )
     )
-    overlay_path.write_text(
-        '<!doctype html>\n<html><head><meta charset="utf-8"><style>'
-        "@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0}"
-        ".bpm-pdf-page-overlay{position:relative;width:210mm;height:296.9mm;"
-        "break-after:page;overflow:hidden}"
-        ".bpm-pdf-page-overlay:last-child{break-after:auto}"
-        ".bpm-pdf-page-overlay__number{position:absolute;bottom:8mm;left:0;right:0;"
-        "color:#334155;font:9pt Arial,sans-serif;text-align:center}"
-        "</style></head><body>" + "".join(pages) + "</body></html>\n",
-        encoding="utf-8",
-    )
+    overlay_path.write_bytes(payload)
+    if not payload.startswith(b"%PDF-") or not payload.endswith(b"%%EOF\n"):
+        raise BuildError("generated PDF page-number overlay is incomplete")
     return overlay_path
 
 
@@ -1686,9 +1741,7 @@ def build_pdf_tree(destination: Path, *, use_cache: bool = True) -> None:
                             f"PDF pagination changed between passes for {locale}/{guide_id}: "
                             f"draft={draft_page_count}, final={final_page_count}"
                         )
-                    overlay_source = _write_pdf_page_number_overlay(output, final_page_count)
-                    overlay_pdf = output / f".{guide_id}-page-number-overlay.pdf"
-                    _render_pdf_with_chromium(overlay_source, overlay_pdf, env)
+                    overlay_pdf = _write_pdf_page_number_overlay(output, final_page_count)
                     overlay_page_count, _overlay_destinations, _overlay_links = (
                         _pdf_navigation_model_without_destinations(overlay_pdf)
                     )
