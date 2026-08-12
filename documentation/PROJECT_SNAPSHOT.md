@@ -1,7 +1,7 @@
 # BPM Product Documentation Workspace Snapshot
 
 Updated: 2026-08-09
-Target BPM version: `0.9.4`
+Target BPM version: `0.9.5`
 
 ## Current State
 
@@ -29,6 +29,7 @@ site/PDF output as current implementation ownership.
 | DITA, maps, and locale source | `documentation/src/dita/`, `documentation/config/`, relevant `documentation/runbooks/` file | exact topic/locale contract |
 | Runtime portal boundary | `app/documentation/router.py`, `app/documentation/assistant_contracts.py` | `tests/contract/docs/general/test_product_documentation_context_guide.py` |
 | Ownership/release boundary | `docs/architecture/current-system-map.md`, `tests/fixtures/current_artifact_owners_0_9_4.json` | `tests/contract/docs/general/test_current_artifact_ownership.py` |
+| Firefox schema handoff | `docs/architecture/schema-channel-surface-inventory-0.9.5.md`, `docs/firefox-schema-update-runbook.md` | `tests/contract/docs/schema/test_firefox_schema_lifecycle_catalog_contract.py`, `make docs-validate` |
 | Snapshot generation | `documentation/tools/generate_subsystem_snapshot.py` | `documentation/tests/unit/test_generate_subsystem_snapshot.py`, `documentation/tests/contract/test_documentation_subsystem_snapshot.py` |
 
 ## Commands Available Now

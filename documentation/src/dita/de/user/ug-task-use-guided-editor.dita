@@ -12,6 +12,7 @@
         <alt>Der geführte Editor zeigt die Schrittnavigation und den Validierungsstatus eines gespeicherten Profils.</alt>
         </image>
       </fig>
+      <p>Öffnen Sie für ein gespeichertes Profil die Schema-Konvertierungsprüfung erst nach der Entscheidung zum Kanalwechsel: Sichern Sie ungespeicherte Arbeit, wählen Sie ein anderes unterstütztes Ziel und verwenden Sie vor dem ausdrücklichen Anwenden die schreibgeschützte Vorschau.</p>
     </context>
     <steps>
       <step><cmd>Bestätigen Sie in Schritt 1 Name, Schemakanal, Szenario, Startvorgabe und CIS-Ebene.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>

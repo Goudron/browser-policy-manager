@@ -10,6 +10,7 @@ import pytest
 
 from tools.provision_firefox_live_browsers import (
     ProvisioningError,
+    available_channels,
     installation_root,
     load_spec,
     provision,
@@ -29,12 +30,17 @@ def _write_executable(path: Path, output: str) -> None:
     path.chmod(0o755)
 
 
-def _archive_fixture(tmp_path: Path) -> tuple[Path, Path]:
+def _archive_fixture(
+    tmp_path: Path,
+    *,
+    firefox_archive_name: str = "firefox.tar.xz",
+    firefox_archive_mode: str = "w:xz",
+) -> tuple[Path, Path]:
     firefox_tree = tmp_path / "firefox-source" / "firefox"
     firefox_tree.mkdir(parents=True)
     _write_executable(firefox_tree / "firefox", "Mozilla Firefox 153.0.1")
-    firefox_archive = tmp_path / "firefox.tar.xz"
-    with tarfile.open(firefox_archive, "w:xz") as archive:
+    firefox_archive = tmp_path / firefox_archive_name
+    with tarfile.open(firefox_archive, firefox_archive_mode) as archive:
         archive.add(firefox_tree, arcname="firefox")
 
     geckodriver = tmp_path / "geckodriver"
@@ -45,8 +51,17 @@ def _archive_fixture(tmp_path: Path) -> tuple[Path, Path]:
     return firefox_archive, geckodriver_archive
 
 
-def _fixture_manifest(tmp_path: Path) -> Path:
-    firefox_archive, geckodriver_archive = _archive_fixture(tmp_path)
+def _fixture_manifest(
+    tmp_path: Path,
+    *,
+    firefox_archive_name: str = "firefox.tar.xz",
+    firefox_archive_mode: str = "w:xz",
+) -> Path:
+    firefox_archive, geckodriver_archive = _archive_fixture(
+        tmp_path,
+        firefox_archive_name=firefox_archive_name,
+        firefox_archive_mode=firefox_archive_mode,
+    )
     payload = {
         "schema_version": 1,
         "platforms": {
@@ -73,14 +88,22 @@ def _fixture_manifest(tmp_path: Path) -> Path:
     return manifest
 
 
-def test_pinned_manifest_covers_exact_release_and_both_esr_channels() -> None:
+def test_pinned_manifest_covers_exact_release_and_three_esr_channels() -> None:
     payload = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     firefox = payload["platforms"]["linux-x86_64"]["firefox"]
 
     assert {channel: firefox[channel]["version"] for channel in firefox} == {
-        "release": "153.0.1",
+        "release": "153.0.3",
         "esr153": "153.0esr",
         "esr140": "140.13.0esr",
+        "esr115": "115.38.0esr",
+    }
+    assert firefox["esr115"] == {
+        "version": "115.38.0esr",
+        "url": "https://archive.mozilla.org/pub/firefox/releases/115.38.0esr/"
+        "linux-x86_64/en-US/firefox-115.38.0esr.tar.bz2",
+        "sha256": "24ad694f543b251482f62b6313f1e10bdfafa3279a2aec8aae6042c0b3eed530",
+        "archive": "firefox-115.38.0esr.tar.bz2",
     }
     for entry in [*firefox.values(), payload["platforms"]["linux-x86_64"]["geckodriver"]]:
         assert entry["url"].startswith("https://")
@@ -137,3 +160,27 @@ def test_provisioning_discards_a_corrupt_cache_entry_before_extraction(
 
     assert "Discarding corrupt cached Firefox archive" in capsys.readouterr().out
     assert hashlib.sha256(cache_path.read_bytes()).hexdigest() == spec.firefox.sha256
+
+
+def test_provisioning_accepts_pinned_mozilla_bzip2_firefox_archives(tmp_path: Path) -> None:
+    manifest = _fixture_manifest(
+        tmp_path,
+        firefox_archive_name="firefox.tar.bz2",
+        firefox_archive_mode="w:bz2",
+    )
+    spec = load_spec(manifest, channel="release", platform_name="linux-x86_64")
+
+    installed, provenance = provision(tmp_path / "browsers", spec)
+
+    assert (installed / "firefox" / "firefox").is_file()
+    assert provenance["firefox"]["actual_version"] == "Mozilla Firefox 153.0.1"
+
+
+def test_available_channels_retains_manifest_order_for_all_channel_setup(tmp_path: Path) -> None:
+    manifest = _fixture_manifest(tmp_path)
+    payload = json.loads(manifest.read_text(encoding="utf-8"))
+    firefox = payload["platforms"]["linux-x86_64"]["firefox"]
+    firefox["esr115"] = firefox["release"]
+    manifest.write_text(json.dumps(payload), encoding="utf-8")
+
+    assert available_channels(manifest, platform_name="linux-x86_64") == ("release", "esr115")

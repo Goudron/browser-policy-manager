@@ -328,7 +328,7 @@ test("URL, review, and workspace helpers retain every lifecycle and filtering br
     }
     const form = { name: "Original", description: "Description", schemaVersion: "release-153" };
     assert.deepEqual(workspace.buildUpdatePayload(form, { A: true }, { score: 1 }), {
-        description: "Description", schema_version: "release-153", flags: { A: true }, compliance: { score: 1 },
+        description: "Description", flags: { A: true }, compliance: { score: 1 },
     });
     assert.deepEqual(workspace.buildCreatePayload(form, { A: true }, { score: 1 }), {
         name: "Original", description: "Description", schema_version: "release-153", flags: { A: true }, compliance: { score: 1 },

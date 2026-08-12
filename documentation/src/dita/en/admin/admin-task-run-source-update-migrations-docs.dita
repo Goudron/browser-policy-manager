@@ -5,14 +5,14 @@
   <shortdesc>Apply database migrations and verify the updated BPM source deployment after the source revision changes.</shortdesc>
   <taskbody>
     <prereq><p>The checkout and dependencies have been refreshed successfully, and the database backup evidence was collected while BPM was stopped.</p></prereq>
-    <context><p>Updates may introduce database migrations. BPM documents forward migration with <codeph>alembic upgrade head</codeph>; it does not promise automatic downgrade or safe schema rollback.</p></context>
+    <context><p>Updates may introduce database migrations. BPM documents forward migration with <codeph>alembic upgrade head</codeph>; it does not promise automatic downgrade or safe schema rollback. A supported older ESR is not migrated automatically. Only when a future candidate actually retires an ESR can its declared immediate successor be migrated by the reviewed Alembic upgrade, after backup and read-only preflight gates.</p></context>
     <steps>
-      <step><cmd>Apply database migrations to the intended database.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Apply database migrations to the intended database only after the approved upgrade preflight is complete.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
-]]></codeblock><p>Use the actual deployment value for <codeph>BPM_DATABASE_URL</codeph>. Stop immediately if migration output is unclear or fails.</p></info></step>
+]]></codeblock><p>Use the actual deployment value for <codeph>BPM_DATABASE_URL</codeph>. For a retired-ESR upgrade, stop BPM and other writers, create and restore-check a native backup in a distinct clean candidate, then complete the database-specific read-only preflight before this command. Stop immediately if migration output is unclear or fails.</p></info></step>
       <step><cmd>Start the updated BPM process and verify its current interface.</cmd><info><p>Check health and readiness, then open the <uicontrol>Library</uicontrol> route. If documentation is required for the deployment, confirm that <codeph>/help/</codeph> reports a ready installed artifact rather than a missing or incompatible state.</p></info></step>
-      <step><cmd>Stop on migration or runtime verification failures.</cmd><info><note type="warning">After a migration has run, do not assume Git checkout rollback is enough. Do not run <codeph>alembic downgrade</codeph> unless a reviewed release note explicitly says it is supported for the exact revision pair. Use the pre-update database backup as the safe recovery baseline when rollback is required.</note></info></step>
+      <step><cmd>Stop on migration or runtime verification failures.</cmd><info><note type="warning">After a migration has run, do not assume Git checkout rollback is enough. Do not run <codeph>alembic downgrade</codeph> for a retired-ESR migration. Restore the verified pre-upgrade backup into a new clean candidate, inspect it read-only, and rerun the reviewed upgrade there; never repair an ambiguous or partial candidate in place.</note></info></step>
     </steps>
     <result><p>The updated source revision has completed migrations and runtime verification, or the update has stopped at a named failure point.</p></result>
     <postreq><p>Start BPM and run the post-update verification topic before handing the instance back to users or integrators.</p></postreq>

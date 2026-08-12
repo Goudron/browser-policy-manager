@@ -61,7 +61,7 @@ def _contract() -> dict[str, Any]:
     contract = _read_json(DELIVERY_CONTRACT)
     if (
         contract.get("schema_version") != 1
-        or contract.get("backlog_item") != "BPM094-M11-05"
+        or contract.get("backlog_item") != "BPM095-M8-05"
         or contract.get("target_bpm_version") != build_docs._product_version()
         or contract.get("candidate_root") != "documentation/build/pdf"
         or contract.get("delivery_root") != "distributions/documentation"

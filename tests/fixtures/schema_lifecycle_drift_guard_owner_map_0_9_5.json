@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "owner": "BPM095-M7-03",
+  "active_surfaces": {
+    "runtime_catalog": "app/core/schema_channels.py",
+    "lifecycle_contract": "docs/architecture/firefox-schema-lifecycle-catalog-contract-0.9.5.json",
+    "schema_targets": "tools/firefox_schema_targets.json",
+    "input_manifest": "tools/firefox_schema_inputs_manifest_0_9_4.json",
+    "conversion_contract": "docs/architecture/firefox-pairwise-profile-conversion-contract-0.9.5.json",
+    "policy_documentation_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+    "cis_documentation_inventory": "docs/architecture/cis-documentation-inventory-0.9.0.json",
+    "cis_mappings": "app/compliance/firefox/cis/mappings.yaml"
+  },
+  "literal_scan_files": [
+    "app/api/validation.py",
+    "app/static/profiles_catalogs.js",
+    "app/static/profiles_shared.js",
+    "app/static/profiles_utils.js"
+  ],
+  "historical_or_migration_literal_exceptions": [
+    "alembic/versions/20260721_upgrade_profiles_to_firefox153_dual_esr.py",
+    "alembic/versions/20260804_alembic_owns_profile_schema_and_data.py",
+    "docs/architecture/firefox-153-dual-esr-schema-contract-0.9.2.md"
+  ]
+}

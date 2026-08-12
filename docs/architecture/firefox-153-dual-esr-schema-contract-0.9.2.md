@@ -1,6 +1,8 @@
 # Firefox 153 Dual-ESR Schema Contract (BPM 0.9.2)
 
-Status: active
+Status: historical architecture evidence. Its current lifecycle interpretation
+is preserved or superseded only as listed by
+[`firefox-schema-lifecycle-catalog-contract-0.9.5.md`](firefox-schema-lifecycle-catalog-contract-0.9.5.md).
 
 ## Purpose
 

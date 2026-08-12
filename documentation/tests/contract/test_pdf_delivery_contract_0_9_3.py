@@ -1,4 +1,4 @@
-"""Contract guard for the BPM 0.9.4 PDF delivery promotion."""
+"""Contract guard for the BPM 0.9.5 PDF delivery promotion."""
 
 from __future__ import annotations
 
@@ -18,9 +18,9 @@ pytestmark = pytest.mark.docs_contract
 def test_m14_09_contract_requires_a_versioned_atomic_pdf_delivery() -> None:
     contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
 
-    assert contract["contract_id"] == "bpm-pdf-delivery-0.9.4"
-    assert contract["backlog_item"] == "BPM094-M11-05"
-    assert contract["target_bpm_version"] == "0.9.4"
+    assert contract["contract_id"] == "bpm-pdf-delivery-0.9.5"
+    assert contract["backlog_item"] == "BPM095-M8-05"
+    assert contract["target_bpm_version"] == "0.9.5"
     assert contract["candidate_root"] == "documentation/build/pdf"
     assert contract["delivery_root"] == "distributions/documentation"
     assert contract["delivery_directory"] == "{bpm_version}"

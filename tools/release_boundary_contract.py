@@ -1,4 +1,4 @@
-"""Verify the BPM 0.9.4 release/incubation/development supply boundary."""
+"""Verify the BPM 0.9.5 release/incubation/development supply boundary."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-MANIFEST_PATH = Path(__file__).with_name("release_boundary_manifest_0_9_4.json")
+MANIFEST_PATH = Path(__file__).with_name("release_boundary_manifest_0_9_5.json")
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 REQUIRED_CATEGORIES = {
@@ -52,7 +52,7 @@ def _requirement_names(values: list[str]) -> set[str]:
 def _load_manifest() -> dict[str, Any]:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     assert manifest["schema_version"] == 1
-    assert manifest["target_version"] == "0.9.4"
+    assert manifest["target_version"] == "0.9.5"
     assert set(manifest["categories"]) == REQUIRED_CATEGORIES
     for category in manifest["categories"].values():
         assert set(category) == REQUIRED_SECTIONS

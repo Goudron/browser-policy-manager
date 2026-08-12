@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-firefox-schema" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Choisir un canal de schéma Firefox</title>
-  <shortdesc>Choisissez Firefox Release 153, Firefox ESR 153.0 ou Firefox ESR 140.13 avant d'importer, de valider ou de modifier un profil.</shortdesc>
+  <shortdesc>Choisissez Firefox Release 153, Firefox ESR 153.0, Firefox ESR 140.13 ou Firefox ESR 115.38 avant d'importer, de valider ou de modifier un profil.</shortdesc>
   <taskbody>
     <prereq><p>Démarrez cette tâche avant de créer un profil, d'importer policies.json ou de valider un document JSON brut.</p></prereq>
-    <context><p>Le canal de schéma détermine quelles politiques Firefox BPM peut valider et quels contrôles sont affichés comme pris en charge. Release 153 et ESR 153.0 comprennent des contrôles actuels comme AIControls et VisualSearchEnabled ; ESR 140.13 reste un canal de support étendu distinct. BPM ne migre pas automatiquement les profils entre canaux ESR.</p></context>
+    <context><p>Le canal de schéma détermine quelles politiques Firefox BPM peut valider et quels contrôles sont affichés comme pris en charge. Release 153 et ESR 153.0 comprennent des contrôles actuels comme AIControls et VisualSearchEnabled ; ESR 140.13 reste un canal de support étendu distinct. ESR 115.38 est pris en charge pour des besoins critiques limités de systèmes anciens, sans prolonger le support de l’éditeur du système d’exploitation ; réexaminez cette limite le 2027-03-01. BPM ne migre pas automatiquement les profils entre canaux ESR pris en charge.</p></context>
     <steps>
-      <step><cmd>Comparez le parc de navigateurs cible avec les canaux pris en charge : Release 153, ESR 153.0 et ESR 140.13.</cmd><info><p>Résultat attendu : le canal de schéma sélectionné reste visible et intentionnel.</p></info></step>
-      <step><cmd>Choisissez ESR 140.13 ou ESR 153.0 pour le déploiement Extended Support Release pris en charge correspondant.</cmd><info><p>Résultat attendu : le canal de schéma sélectionné reste visible et intentionnel.</p></info></step>
+      <step><cmd>Comparez le parc de navigateurs cible avec les canaux pris en charge : Release 153, ESR 153.0, ESR 140.13 et ESR 115.38.</cmd><info><p>Résultat attendu : le canal de schéma sélectionné reste visible et intentionnel.</p></info></step>
+      <step><cmd>Choisissez ESR 115.38, ESR 140.13 ou ESR 153.0 pour le déploiement Extended Support Release pris en charge correspondant.</cmd><info><p>Résultat attendu : le canal de schéma sélectionné reste visible et intentionnel.</p></info></step>
       <step><cmd>Choisissez Release 153 ou ESR 153.0 lorsque le profil requiert des contrôles actuels, y compris les politiques d’IA et de recherche visuelle prises en charge.</cmd><info><p>Résultat attendu : le canal de schéma sélectionné reste visible et intentionnel.</p></info></step>
       <step><cmd>Validez après avoir choisi le canal et avant d'enregistrer, d'exporter ou de transférer.</cmd><info><note type="warning">La validation peut passer de valide à invalide lorsque le canal de schéma change. Confirmez la chaîne avant de sauvegarder ou d'exporter.</note></info></step>
     </steps>
     <result><p>Le profil utilise le canal de schéma qui correspond au déploiement Firefox prévu.</p></result>
-    <postreq><p>Récupération : si la validation signale des paramètres non pris en charge, indisponibles, obsolètes ou inconnus, confirmez le canal de schéma avant de modifier les valeurs de stratégie. Le passage d’ESR 140.13 à ESR 153.0 exige une décision explicite sur le canal cible et une revue.</p></postreq>
+    <postreq><p>Récupération : si la validation signale des paramètres non pris en charge, indisponibles, obsolètes ou inconnus, confirmez le canal de schéma avant de modifier les valeurs de stratégie. Tout passage entre des artefacts actuels distincts, y compris ESR 115.38, ESR 140.13, ESR 153.0 et Release 153, exige un choix explicite de la cible et un nouvel aperçu. Une conversion bloquée, obsolète, non valide ou échouée laisse le profil enregistré inchangé.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

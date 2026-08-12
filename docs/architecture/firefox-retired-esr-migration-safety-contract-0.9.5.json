@@ -1,0 +1,656 @@
+{
+  "$schema": "schemas/firefox-retired-esr-migration-contract-v1.schema.json",
+  "schema_version": 1,
+  "contract_id": "bpm095-firefox-retired-esr-migration-safety",
+  "target_bpm_version": "0.9.5",
+  "status": "normative-target-preimplementation",
+  "dependencies": {
+    "lifecycle_catalog": {
+      "contract_id": "bpm095-firefox-schema-lifecycle-catalog",
+      "schema_version": 1,
+      "path": "docs/architecture/firefox-schema-lifecycle-catalog-contract-0.9.5.json"
+    },
+    "conversion_contract": {
+      "contract_id": "bpm095-firefox-pairwise-profile-conversion",
+      "schema_version": 1,
+      "path": "docs/architecture/firefox-pairwise-profile-conversion-contract-0.9.5.json"
+    },
+    "database_upgrade_contract": {
+      "contract_version": 2,
+      "path": "docs/architecture/database-upgrade-matrix-0.9.4.json"
+    }
+  },
+  "canonical_identity": {
+    "canonical_json": "RFC8785-JCS",
+    "hash_algorithm": "SHA-256",
+    "digest_encoding": "lowercase-hex",
+    "transition_manifest_domain": "bpm-retired-esr-transition-manifest:v1\n",
+    "total_proof_domain": "bpm-retired-esr-total-proof:v1\n",
+    "database_snapshot_domain": "bpm-retired-esr-database-snapshot:v1\n",
+    "preflight_evidence_domain": "bpm-retired-esr-preflight-evidence:v1\n"
+  },
+  "ownership": {
+    "sole_writer": "versioned-alembic-retirement-revision",
+    "write_phase": "explicit-offline-upgrade",
+    "preflight_owner": "versioned-read-only-retirement-preflight",
+    "forbidden_write_paths": [
+      "application-startup",
+      "request-handler",
+      "profile-list-or-get",
+      "conversion-preview",
+      "ui-rendering"
+    ],
+    "unupgraded_runtime_behavior": {
+      "readiness": "fail-closed-before-serving-profile-routes",
+      "code": "schema_channel_retired_requires_migration",
+      "mutation": "none"
+    }
+  },
+  "successor_selection": {
+    "source_family": "esr",
+    "selection": "explicit-declared-immediate-newer-supported-esr",
+    "comparison_key": "numeric-line-number",
+    "target_cardinality": 1,
+    "forbid_inference_from": [
+      "product-default",
+      "latest-esr-recommendation",
+      "tuple-or-declaration-order",
+      "lexical-artifact-id",
+      "maximum-version",
+      "stored-profile-samples"
+    ],
+    "reject": [
+      "missing-successor",
+      "ambiguous-successor",
+      "same-or-older-line",
+      "family-mismatch",
+      "unsupported-target",
+      "skip-over-supported-intermediate-esr",
+      "cycle"
+    ]
+  },
+  "retirement_promotion_gate": {
+    "required_order": [
+      "catalog-diff-valid",
+      "successor-valid",
+      "exact-artifacts-available",
+      "total-convertibility-complete",
+      "immutable-transition-manifest-valid",
+      "versioned-alembic-revision-present",
+      "native-backup-restored-and-verified",
+      "database-preflight-complete",
+      "guarded-transaction-recheck",
+      "single-transaction-apply",
+      "postconditions-complete"
+    ],
+    "support_removal_allowed_only_after": "total-convertibility-complete",
+    "migration_revision_creation_allowed_only_after": "total-convertibility-complete",
+    "sample_profiles_are_total_proof": false,
+    "fail_before_mutation": true
+  },
+  "total_convertibility": {
+    "quantification": "every-instance-valid-under-exact-source-validation-schema",
+    "approved_methods": [
+      "schema-containment",
+      "complete-recipe-partition"
+    ],
+    "schema_containment_requires": [
+      "exact-source-and-target-artifact-identities",
+      "exact-normalized-validation-schema-digests",
+      "source-valid-implies-target-valid-for-unchanged-document",
+      "semantic-equivalence-for-every-source-policy-value-shape",
+      "complete-dynamic-key-array-and-empty-container-domain",
+      "machine-checkable-proof-artifact"
+    ],
+    "complete_recipe_partition_requires": [
+      "exact-source-and-target-artifact-identities",
+      "exact-immutable-recipe-registry-identity",
+      "exhaustive-source-schema-domain-partition",
+      "pairwise-disjoint-recipe-predicates",
+      "lossless-evidence-for-every-partition",
+      "complete-source-and-target-atom-accounting",
+      "target-validation-for-every-output-domain",
+      "machine-checkable-proof-artifact"
+    ],
+    "forbidden_substitutes": [
+      "current-database-profile-scan",
+      "sample-profile-success",
+      "policy-id-subset-comparison",
+      "schema-defaults",
+      "best-effort-conversion",
+      "manual-conversion-applicability"
+    ],
+    "complete_status_requires": {
+      "exact_artifacts_bound": true,
+      "uncovered_schema_locations": 0,
+      "blockers": 0
+    }
+  },
+  "preflight": {
+    "mode": "read-only-before-transaction",
+    "required_static_bindings": [
+      "previous-and-candidate-catalog-digests",
+      "transition-manifest-digest",
+      "exact-source-and-target-artifacts",
+      "total-proof-artifact-digest",
+      "conversion-contract-version",
+      "immutable-recipe-registry-identity",
+      "exact-alembic-source-and-target-revisions"
+    ],
+    "required_database_evidence": [
+      "database-identity-digest-and-engine-version",
+      "single-known-source-stamp-and-head",
+      "expected-profiles-shape",
+      "no-active-writers",
+      "decodable-json-for-every-affected-row",
+      "complete-plan-without-blockers-for-every-affected-row",
+      "affected-count-and-canonical-snapshot-digest",
+      "native-backup-sha256",
+      "separate-restore-check-identity",
+      "restored-integrity-stamp-shape-and-row-count-parity",
+      "sufficient-space-connectivity-and-privilege"
+    ],
+    "stale_if_changed": [
+      "catalog",
+      "artifact-or-schema-identity",
+      "recipe-registry",
+      "alembic-revision",
+      "database-identity",
+      "database-stamp",
+      "affected-count",
+      "profile-revision-document-compliance-or-metadata",
+      "backup-or-restore-evidence"
+    ],
+    "privacy": {
+      "evidence_may_contain": [
+        "aggregate-counts",
+        "artifact-identifiers",
+        "database-identity-digest",
+        "canonical-row-set-digest",
+        "backup-and-manifest-digests",
+        "locale-neutral-codes"
+      ],
+      "logs_must_omit": [
+        "policy-values",
+        "policy-ids-and-json-pointers",
+        "profile-ids-names-and-descriptions",
+        "compliance-values-and-notes",
+        "credentials-and-database-url",
+        "full-document-plan-and-row-digests"
+      ]
+    }
+  },
+  "atomic_apply": {
+    "transaction_scope": "all-affected-profiles-plus-alembic-version-stamp",
+    "writer": "one-versioned-alembic-revision",
+    "affected_scope": "all-stored-profiles-on-exact-retired-source-artifact-including-archived",
+    "guarded_recheck_before_first_write": [
+      "transition-manifest-digest",
+      "database-stamp-and-shape",
+      "affected-count-and-snapshot-digest",
+      "per-profile-revision-and-conversion-plan-identity",
+      "source-and-target-schema-identities",
+      "recipe-registry-identity",
+      "zero-conversion-blockers"
+    ],
+    "application_write_fields": [
+      "schema_version",
+      "flags",
+      "compliance",
+      "revision"
+    ],
+    "database_managed_fields": [
+      "updated_at"
+    ],
+    "preserved_fields": [
+      "id",
+      "name",
+      "name_casefold",
+      "description",
+      "created_at",
+      "deleted_at"
+    ],
+    "revision_increment": 1,
+    "updated_at_rule": "one-database-managed-transaction-value-for-affected-rows-only",
+    "compliance_dispositions": [
+      "absent",
+      "preserved-verified",
+      "recomputed",
+      "invalidated-preserved"
+    ],
+    "target_validation": "mandatory-for-every-affected-result-before-write",
+    "commit_count": 1,
+    "on_any_error": "rollback-entire-revision-and-preserve-source-stamp",
+    "partial_success_reportable": false
+  },
+  "idempotency_and_interruption": {
+    "already_target_rows": "unchanged-including-revision-and-updated-at",
+    "zero_source_rows": "valid-no-profile-write-still-stamp-revision",
+    "already_applied_revision": "alembic-no-op",
+    "already_applied_outcome_code": "retirement_already_applied",
+    "retry_before_commit": "rollback-then-restore-verified-backup-to-new-clean-candidate",
+    "retry_after_commit": "alembic-no-op-after-read-only-postcondition-verification",
+    "ambiguous_commit_result": "read-only-stamp-and-postcondition-inspection-before-any-recovery",
+    "partial_or_mixed_state": "block-and-restore-verified-backup-to-new-clean-candidate",
+    "in_place_retry_of_failed_candidate": false
+  },
+  "downgrade": {
+    "policy": "unsupported-restore-verified-backup-only",
+    "code": "retirement_downgrade_unsupported",
+    "downgrade_writes_allowed": false,
+    "restore_target": "new-clean-candidate",
+    "automatic_database_replacement": false
+  },
+  "engine_evidence": {
+    "sqlite": {
+      "required": true,
+      "status": "planned-m6-executable-evidence",
+      "native_backup": "sqlite-online-backup-or-dot-backup",
+      "restore_check": "distinct-absolute-path-with-integrity-check",
+      "transaction_boundary": "explicit-write-transaction-covering-all-profile-updates-and-stamp",
+      "failure_injections": [
+        "before-first-write",
+        "after-first-affected-row-before-commit",
+        "immediately-before-commit",
+        "connection-interruption"
+      ],
+      "required_assertions": [
+        "source-and-backup-unchanged",
+        "failed-candidate-source-stamp-and-all-rows-unchanged",
+        "no-partial-profile-revisions-or-timestamps",
+        "clean-restored-retry-reaches-target-stamp",
+        "second-upgrade-is-no-op"
+      ],
+      "local_gate": "make test-db-recovery"
+    },
+    "postgresql": {
+      "required": true,
+      "status": "planned-m6-executable-evidence",
+      "native_backup": "pg_dump-custom-serializable-deferrable",
+      "restore_check": "pg_restore-exit-on-error-single-transaction-to-isolated-database",
+      "transaction_boundary": "one-postgresql-transaction-with-affected-row-lock-and-alembic-stamp",
+      "failure_injections": [
+        "before-first-write",
+        "after-first-affected-row-before-commit",
+        "immediately-before-commit",
+        "connection-interruption"
+      ],
+      "required_assertions": [
+        "source-and-backup-unchanged",
+        "failed-candidate-source-stamp-and-all-rows-unchanged",
+        "no-partial-profile-revisions-or-timestamps",
+        "clean-restored-retry-reaches-target-stamp",
+        "second-upgrade-is-no-op"
+      ],
+      "ci_gate": "make test-postgres-integration"
+    }
+  },
+  "failure_semantics": [
+    {
+      "code": "retirement_successor_missing",
+      "stage": "static-gate",
+      "mutation": "none",
+      "recovery": "correct-candidate-catalog-and-regenerate-manifest"
+    },
+    {
+      "code": "retirement_successor_not_immediate",
+      "stage": "static-gate",
+      "mutation": "none",
+      "recovery": "declare-the-immediate-newer-supported-esr"
+    },
+    {
+      "code": "retirement_successor_family_mismatch",
+      "stage": "static-gate",
+      "mutation": "none",
+      "recovery": "declare-one-supported-esr-successor"
+    },
+    {
+      "code": "retirement_total_convertibility_unproven",
+      "stage": "static-gate",
+      "mutation": "none",
+      "recovery": "complete-schema-wide-lossless-proof-before-retirement"
+    },
+    {
+      "code": "retirement_manifest_stale",
+      "stage": "preflight",
+      "mutation": "none",
+      "recovery": "regenerate-review-and-rebind-transition-manifest"
+    },
+    {
+      "code": "retirement_manifest_identity_mismatch",
+      "stage": "preflight",
+      "mutation": "none",
+      "recovery": "restore-exact-reviewed-artifacts-and-rerun-preflight"
+    },
+    {
+      "code": "retirement_backup_unverified",
+      "stage": "preflight",
+      "mutation": "none",
+      "recovery": "create-checksum-restore-and-verify-native-backup"
+    },
+    {
+      "code": "retirement_preflight_stale",
+      "stage": "transaction-recheck",
+      "mutation": "none",
+      "recovery": "discard-evidence-and-rerun-read-only-preflight"
+    },
+    {
+      "code": "conversion_source_schema_missing",
+      "stage": "preflight",
+      "mutation": "none",
+      "recovery": "restore-the-exact-migration-owned-source-schema-artifact"
+    },
+    {
+      "code": "conversion_target_schema_missing",
+      "stage": "preflight",
+      "mutation": "none",
+      "recovery": "restore-the-exact-migration-owned-target-schema-artifact"
+    },
+    {
+      "code": "conversion_source_invalid",
+      "stage": "preflight",
+      "mutation": "none",
+      "recovery": "stop-retirement-and-repair-or-quarantine-invalid-source-data"
+    },
+    {
+      "code": "conversion_recipe_registry_stale",
+      "stage": "preflight",
+      "mutation": "none",
+      "recovery": "restore-the-exact-reviewed-migration-owned-registry"
+    },
+    {
+      "code": "conversion_plan_blocked",
+      "stage": "preflight",
+      "mutation": "none",
+      "recovery": "repair-source-or-complete-owned-conversion-evidence"
+    },
+    {
+      "code": "retirement_transaction_failed",
+      "stage": "transaction",
+      "mutation": "none",
+      "recovery": "retain-failed-candidate-and-retry-from-verified-backup"
+    },
+    {
+      "code": "retirement_partial_state_detected",
+      "stage": "recovery-inspection",
+      "mutation": "none",
+      "recovery": "block-in-place-retry-and-restore-new-clean-candidate"
+    },
+    {
+      "code": "retirement_downgrade_unsupported",
+      "stage": "downgrade",
+      "mutation": "none",
+      "recovery": "restore-verified-pre-upgrade-backup-to-new-clean-candidate"
+    }
+  ],
+  "fixtures": {
+    "synthetic_esr115_to_esr140": {
+      "fixture_id": "synthetic-esr115-to-esr140-gate",
+      "manifest": {
+        "kind": "retired-esr-transition-manifest",
+        "contract_version": 1,
+        "transition_id": "fixture-retire-esr115-to-esr140",
+        "evidence_scope": "synthetic-contract-only",
+        "previous_catalog_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+        "candidate_catalog_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+        "source": {
+          "family": "esr",
+          "line_id": "esr-115",
+          "line_number": 115,
+          "artifact_id": "esr-115.38",
+          "schema_bundle_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+          "validation_schema_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+        },
+        "target": {
+          "family": "esr",
+          "line_id": "esr-140",
+          "line_number": 140,
+          "artifact_id": "esr-140.13",
+          "schema_bundle_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+          "validation_schema_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+        },
+        "candidate_supported_esr_lines": [
+          {
+            "line_id": "esr-140",
+            "line_number": 140,
+            "artifact_id": "esr-140.13"
+          },
+          {
+            "line_id": "esr-153",
+            "line_number": 153,
+            "artifact_id": "esr-153.0"
+          }
+        ],
+        "declared_successor_line_id": "esr-140",
+        "conversion_contract_version": 1,
+        "recipe_registry_version": 1,
+        "recipe_registry_digest": "7777777777777777777777777777777777777777777777777777777777777777",
+        "total_proof_artifact_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+        "alembic_source_revision": "fixture_before_esr115_retirement",
+        "alembic_target_revision": "fixture_retire_esr115_to_esr140",
+        "manifest_digest": "48af8cb6a5b18ee98a866cb6ac5b349fa361c7b6439101d779d77e7dc3768ec1"
+      },
+      "total_proof": {
+        "status": "complete",
+        "method": "schema-containment",
+        "evidence_scope": "synthetic-contract-only",
+        "exact_artifacts_bound": true,
+        "source_schema_domain": "synthetic-domain",
+        "proof_artifact_digest": "8888888888888888888888888888888888888888888888888888888888888888",
+        "uncovered_schema_locations": [],
+        "blockers": []
+      },
+      "preflight": {
+        "status": "complete-contract-simulation",
+        "manifest_digest": "48af8cb6a5b18ee98a866cb6ac5b349fa361c7b6439101d779d77e7dc3768ec1",
+        "engine": "sqlite",
+        "database_snapshot_digest": "9999999999999999999999999999999999999999999999999999999999999999",
+        "source_stamp": "fixture_before_esr115_retirement",
+        "target_stamp": "fixture_retire_esr115_to_esr140",
+        "profile_count": 3,
+        "affected_source_count": 2,
+        "planned_count": 2,
+        "blocked_count": 0,
+        "already_target_count": 1,
+        "no_active_writers": true,
+        "backup": {
+          "status": "verified-native-restore",
+          "backup_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "restore_identity_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "integrity": "pass",
+          "source_stamp": "fixture_before_esr115_retirement",
+          "restored_stamp": "fixture_before_esr115_retirement",
+          "source_profile_count": 3,
+          "restored_profile_count": 3
+        },
+        "preflight_digest": "4cb2193cb8996ded20f4fd575972541010746b1de2be00133d9428cbe372075d"
+      },
+      "expected": {
+        "decision": "pass-contract-fixture-only",
+        "production_promotable": false,
+        "mutation": "none",
+        "code": null
+      }
+    },
+    "required_esr140_to_esr153": {
+      "fixture_id": "required-current-esr140-to-esr153",
+      "manifest": {
+        "kind": "retired-esr-transition-manifest",
+        "contract_version": 1,
+        "transition_id": "required-retire-esr140-to-esr153",
+        "evidence_scope": "current-exact-artifacts",
+        "previous_catalog_digest": "3a4d94f070e6e6f9f4ce0b2f31e5e74e56f470f9cb90b79ec3ec1887fdcbda50",
+        "candidate_catalog_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "source": {
+          "family": "esr",
+          "line_id": "esr-140",
+          "line_number": 140,
+          "artifact_id": "esr-140.13",
+          "schema_bundle_sha256": "9dd77157022cf463b2c0cce2a168527b2809e9647ada369583b9e459732c26d4",
+          "validation_schema_sha256": "930803d175d7f4942d7101812a9cece1325026d0787760676c8dda8ada07f6cd"
+        },
+        "target": {
+          "family": "esr",
+          "line_id": "esr-153",
+          "line_number": 153,
+          "artifact_id": "esr-153.0",
+          "schema_bundle_sha256": "afd71b67bd0483756803ad8b03f3571507f3cee69160142f8fff12cabde00d80",
+          "validation_schema_sha256": "bcdf1f2cd349f81c1bc8b1e1bffda69422d88e95c2203e8957987825486a42a2"
+        },
+        "candidate_supported_esr_lines": [
+          {
+            "line_id": "esr-115",
+            "line_number": 115,
+            "artifact_id": "esr-115.38"
+          },
+          {
+            "line_id": "esr-153",
+            "line_number": 153,
+            "artifact_id": "esr-153.0"
+          }
+        ],
+        "declared_successor_line_id": "esr-153",
+        "conversion_contract_version": 1,
+        "recipe_registry_version": 1,
+        "recipe_registry_digest": "1d4b572f358a7ff9f7e23beb5a2a27104cec4c2d3451ad8a49099cf8665113a6",
+        "total_proof_artifact_digest": "3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb",
+        "alembic_source_revision": "20260804_add_profile_name_casefold",
+        "alembic_target_revision": null,
+        "manifest_digest": "ca3263df5fb37ae04a98e613616e843d117bec56146cb774afb31a98961e7cf0"
+      },
+      "total_proof": {
+        "status": "complete",
+        "method": "schema-containment",
+        "evidence_scope": "production-exact-artifacts",
+        "exact_artifacts_bound": true,
+        "source_schema_domain": "all-valid-instances",
+        "proof_artifact_digest": "3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb",
+        "uncovered_schema_locations": [],
+        "blockers": []
+      },
+      "preflight": {
+        "status": "not-run-m6-03-migration-pending",
+        "manifest_digest": "ca3263df5fb37ae04a98e613616e843d117bec56146cb774afb31a98961e7cf0",
+        "engine": null,
+        "database_snapshot_digest": null,
+        "source_stamp": null,
+        "target_stamp": null,
+        "profile_count": 0,
+        "affected_source_count": 0,
+        "planned_count": 0,
+        "blocked_count": 0,
+        "already_target_count": 0,
+        "no_active_writers": null,
+        "backup": {
+          "status": "not-required-m6-03-migration-pending",
+          "backup_sha256": null,
+          "restore_identity_digest": null,
+          "integrity": "not-run",
+          "source_stamp": null,
+          "restored_stamp": null,
+          "source_profile_count": 0,
+          "restored_profile_count": 0
+        },
+        "preflight_digest": "8c0e95a05a9a02de2cb271cadfe9ba4831e2ac0ccc40f28eda17e32d38c8e32a"
+      },
+      "expected": {
+        "decision": "m6-02-proof-complete-m6-03-pending",
+        "production_promotable": false,
+        "mutation": "none",
+        "code": null
+      }
+    },
+    "negative_vectors": [
+      {
+        "vector_id": "missing-successor",
+        "base_fixture_id": "synthetic-esr115-to-esr140-gate",
+        "mutation": "remove-declared-successor",
+        "expected_stage": "static-gate",
+        "expected_code": "retirement_successor_missing",
+        "expected_mutation": "none",
+        "required_observation": "no-migration-revision-or-database-preflight"
+      },
+      {
+        "vector_id": "skip-supported-intermediate",
+        "base_fixture_id": "synthetic-esr115-to-esr140-gate",
+        "mutation": "target-esr153-while-esr140-supported",
+        "expected_stage": "static-gate",
+        "expected_code": "retirement_successor_not_immediate",
+        "expected_mutation": "none",
+        "required_observation": "candidate-catalog-remains-unpromoted"
+      },
+      {
+        "vector_id": "incomplete-total-proof",
+        "base_fixture_id": "required-current-esr140-to-esr153",
+        "mutation": "retain-uncovered-source-schema-root",
+        "expected_stage": "static-gate",
+        "expected_code": "retirement_total_convertibility_unproven",
+        "expected_mutation": "none",
+        "required_observation": "profile-samples-cannot-open-gate"
+      },
+      {
+        "vector_id": "stale-transition-manifest",
+        "base_fixture_id": "synthetic-esr115-to-esr140-gate",
+        "mutation": "change-candidate-catalog-after-manifest-digest",
+        "expected_stage": "preflight",
+        "expected_code": "retirement_manifest_stale",
+        "expected_mutation": "none",
+        "required_observation": "preflight-evidence-not-created"
+      },
+      {
+        "vector_id": "mismatched-transition-manifest",
+        "base_fixture_id": "synthetic-esr115-to-esr140-gate",
+        "mutation": "substitute-target-schema-or-recipe-registry-digest",
+        "expected_stage": "preflight",
+        "expected_code": "retirement_manifest_identity_mismatch",
+        "expected_mutation": "none",
+        "required_observation": "exact-reviewed-artifacts-required"
+      },
+      {
+        "vector_id": "partial-failure",
+        "base_fixture_id": "synthetic-esr115-to-esr140-gate",
+        "mutation": "raise-after-first-affected-row-before-commit",
+        "expected_stage": "transaction",
+        "expected_code": "retirement_transaction_failed",
+        "expected_mutation": "none",
+        "required_observation": "all-profile-fields-timestamps-and-source-stamp-rolled-back"
+      },
+      {
+        "vector_id": "interrupted-before-commit",
+        "base_fixture_id": "synthetic-esr115-to-esr140-gate",
+        "mutation": "interrupt-connection-immediately-before-commit",
+        "expected_stage": "transaction",
+        "expected_code": "retirement_transaction_failed",
+        "expected_mutation": "none",
+        "required_observation": "retry-uses-new-candidate-restored-from-verified-backup"
+      },
+      {
+        "vector_id": "already-migrated",
+        "base_fixture_id": "synthetic-esr115-to-esr140-gate",
+        "mutation": "rerun-after-target-stamp-and-zero-source-rows",
+        "expected_stage": "idempotency",
+        "expected_code": "retirement_already_applied",
+        "expected_mutation": "no-op",
+        "required_observation": "target-rows-revisions-and-updated-at-unchanged"
+      },
+      {
+        "vector_id": "partial-state-before-retry",
+        "base_fixture_id": "synthetic-esr115-to-esr140-gate",
+        "mutation": "source-stamp-with-mixed-source-target-row-state",
+        "expected_stage": "recovery-inspection",
+        "expected_code": "retirement_partial_state_detected",
+        "expected_mutation": "none",
+        "required_observation": "in-place-retry-blocked"
+      },
+      {
+        "vector_id": "rollback-or-downgrade",
+        "base_fixture_id": "synthetic-esr115-to-esr140-gate",
+        "mutation": "invoke-alembic-downgrade-across-retirement",
+        "expected_stage": "downgrade",
+        "expected_code": "retirement_downgrade_unsupported",
+        "expected_mutation": "none",
+        "required_observation": "verified-backup-restore-is-only-supported-recovery"
+      }
+    ]
+  }
+}

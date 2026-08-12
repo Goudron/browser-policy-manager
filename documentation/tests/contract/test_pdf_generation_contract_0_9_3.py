@@ -32,7 +32,7 @@ def test_m14_08_pdf_generation_contract_covers_every_required_pdf() -> None:
     contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
 
     assert contract["backlog_item"] == "BPM093-M14-08"
-    assert contract["target_bpm_version"] == "0.9.4"
+    assert contract["target_bpm_version"] == "0.9.5"
     assert contract["candidate_root"] == "documentation/build/pdf"
     assert contract["candidate_path_layout"] == "{locale}/{filename}"
     assert contract["dita_format"] == "html5"

@@ -155,8 +155,23 @@ def test_changed_path_resolution_and_git_discovery(
             SimpleNamespace(returncode=0, stdout="docs/architecture/contract.md\n", stderr=""),
         )
     )
-    monkeypatch.setattr(sources.subprocess, "run", lambda *_args, **_kwargs: next(responses))
+    commands: list[list[str]] = []
+
+    def run(command: list[str], **_kwargs: object) -> SimpleNamespace:
+        commands.append(command)
+        return next(responses)
+
+    monkeypatch.setattr(sources.subprocess, "run", run)
     assert sources._git_changed_paths() == [untracked, changed]
+    assert commands[0] == [
+        "git",
+        "diff",
+        "--name-only",
+        "--diff-filter=ACMRTUXB",
+        "--",
+        "documentation",
+        "docs/architecture",
+    ]
     assert sources._changed_paths(["documentation/topic.dita", str(changed)]) == [changed]
     monkeypatch.setattr(sources, "_git_changed_paths", lambda: [])
     assert sources._changed_paths([]) == []

@@ -176,7 +176,7 @@
             schemaChannelsCatalog,
             defaultSchemaVersion: typeof schemaChannelsCatalog.default_channel === "string"
                 ? schemaChannelsCatalog.default_channel
-                : "esr-140.13",
+                : "",
             wizardPreferenceSections,
             wizardKnownPreferences,
             wizardKnownPreferenceIndex: Object.fromEntries(

@@ -237,17 +237,61 @@ def _extract_policy_value_node(policy_name: str, snippet: str | None) -> Any:
     return values[0] if values else None
 
 
-def load_linux_policy_examples(path: Path) -> dict[str, Any]:
+_V5_12_LINUX_EXAMPLE_REPAIRS = {
+    '    "DisplayMenuBar": "always", "never", "default-on", "default-off",': (
+        '    "DisplayMenuBar": "always" | "never" | "default-on" | "default-off",'
+    ),
+    '    "OverrideFirstRunPage": "http://example.org".': (
+        '    "OverrideFirstRunPage": "http://example.org",'
+    ),
+    '    "UseSystemPrintDialog": true | false.,': '    "UseSystemPrintDialog": true | false,',
+}
+
+
+def _repair_v5_12_linux_examples(raw: str) -> str:
+    """Repair the three syntax typos in the pinned Mozilla v5.12 example file.
+
+    The v5.12 Markdown policy sections for DisplayMenuBar, OverrideFirstRunPage,
+    and UseSystemPrintDialog are the authoritative same-tag evidence for these
+    values.  This is deliberately source-tag-gated and exact-match-only: a
+    modified upstream artifact fails rather than receiving a broad best-effort
+    repair.  Its raw bytes remain checksum-pinned by the M3-01 manifest.
+    """
+    repaired = raw
+    for upstream, replacement in _V5_12_LINUX_EXAMPLE_REPAIRS.items():
+        occurrences = repaired.count(upstream)
+        if occurrences != 1:
+            raise RuntimeError(
+                "Pinned Mozilla v5.12 Linux example no longer matches its authoritative repair"
+            )
+        repaired = repaired.replace(upstream, replacement)
+    return repaired
+
+
+def load_linux_policy_examples(path: Path, *, source_tag: str | None = None) -> dict[str, Any]:
     """Load the official Linux example policies file and return the policies mapping."""
     if not path.is_file():
+        if source_tag == "mozilla-policy-templates-v5.12":
+            raise RuntimeError(
+                "Pinned Mozilla v5.12 Linux example is required for ESR 115 generation"
+            )
         return {}
 
-    data = _try_parse_json_like(path.read_text(encoding="utf-8"))
+    raw = path.read_text(encoding="utf-8")
+    if source_tag == "mozilla-policy-templates-v5.12":
+        raw = _repair_v5_12_linux_examples(raw)
+    data = _try_parse_json_like(raw)
     if not isinstance(data, dict):
+        if source_tag == "mozilla-policy-templates-v5.12":
+            raise RuntimeError(
+                "Pinned Mozilla v5.12 Linux example remains unparseable after repair"
+            )
         return {}
 
     policies = data.get("policies")
     if not isinstance(policies, dict):
+        if source_tag == "mozilla-policy-templates-v5.12":
+            raise RuntimeError("Pinned Mozilla v5.12 Linux example has no policies mapping")
         return {}
 
     return policies

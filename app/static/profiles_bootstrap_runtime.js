@@ -21,6 +21,7 @@
             createRuntime,
             jsonEditorRuntime,
             createDirtyRouteGuard,
+            createConversionReview,
         } = components;
         const {
             t,
@@ -147,6 +148,25 @@
         });
 
         startRuntime();
+
+        const conversionReview = createConversionReview({
+            documentRef,
+            windowRef,
+            schemaChannelsCatalog: core.schemaChannelsCatalog,
+            dependencies: {
+                t,
+                formatSchemaLabel: utils.formatSchemaLabel,
+                previewProfileConversion: data.previewProfileConversion,
+                applyProfileConversion: data.applyProfileConversion,
+                loadProfile: core.loadProfile,
+                saveCurrent: core.saveCurrent,
+                currentSnapshotState: core.currentSnapshotState,
+            },
+            state: {
+                getCurrentProfile,
+            },
+        });
+        conversionReview.start();
     }
 
     export {

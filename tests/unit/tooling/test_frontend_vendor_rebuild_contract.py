@@ -15,7 +15,7 @@ def test_frontend_vendor_has_npm_lockfile_for_ci_rebuilds():
     }
     assert package_lock["packages"][""]["devDependencies"] == {
         "@cyclonedx/cyclonedx-npm": "6.0.0",
-        "esbuild": "0.28.1",
+        "esbuild": "0.28.2",
     }
 
 

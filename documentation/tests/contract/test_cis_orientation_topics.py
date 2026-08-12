@@ -163,6 +163,7 @@ def test_english_cis_orientation_covers_selection_scope_and_benchmark_facts() ->
         inventory["benchmark"]["upstream_name"],
         inventory["benchmark"]["upstream_version"],
         inventory["benchmark"]["exact_release_date"],
+        "Firefox ESR 115.38",
         "Firefox ESR 140.13",
         "Firefox Release 153",
         "Level 1",
@@ -171,8 +172,10 @@ def test_english_cis_orientation_covers_selection_scope_and_benchmark_facts() ->
         "53 mapped recommendations",
         "55 recommendation records",
         "two unresolved records",
+        "cis-l1.esr-115.38",
         "cis-l1.esr-140.13",
         "cis-l1.release-153",
+        "cis-l2.esr-115.38",
         "cis-l2.esr-140.13",
         "cis-l2.release-153",
         "manual review",
@@ -248,9 +251,39 @@ def test_english_cis_orientation_covers_selection_scope_and_benchmark_facts() ->
     ):
         assert required.casefold() in text.casefold()
 
-    assert starter_presets["basic_corporate"]["variants"][4]["policy_top_level_count"] == 43
-    assert starter_presets["classroom_kiosk"]["variants"][4]["policy_top_level_count"] == 45
-    assert starter_presets["soc_hard"]["variants"][4]["policy_top_level_count"] == 45
+    expected_l2_counts = {
+        "basic_corporate": {
+            "esr-115.38": 42,
+            "esr-140.13": 43,
+            "esr-153.0": 43,
+            "release-153": 43,
+        },
+        "classroom_kiosk": {
+            "esr-115.38": 44,
+            "esr-140.13": 45,
+            "esr-153.0": 45,
+            "release-153": 45,
+        },
+        "soc_hard": {
+            "esr-115.38": 43,
+            "esr-140.13": 45,
+            "esr-153.0": 45,
+            "release-153": 45,
+        },
+    }
+    variant_counts = {
+        (starter_id, variant["layer_id"], variant["schema_channel"]): variant[
+            "policy_top_level_count"
+        ]
+        for starter_id in expected_l2_counts
+        for variant in starter_presets[starter_id]["variants"]
+        if variant["layer_id"] == "cis_l2"
+    }
+    assert variant_counts == {
+        (starter_id, "cis_l2", channel): count
+        for starter_id, expected in expected_l2_counts.items()
+        for channel, count in expected.items()
+    }
     assert inventory["merge_contract"]["decision_types"] == [
         "added_from_cis",
         "already_satisfied",

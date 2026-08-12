@@ -19,3 +19,18 @@ def test_manual_policy_controls_catalog_uses_schema_enum_for_https_only_mode():
     assert https_only["control_kind"] == "enum-select"
     assert https_only["enum_values"] == ["allowed", "disallowed", "enabled", "force_enabled"]
     assert https_only["target"] == "policy:HttpsOnlyMode"
+
+
+def test_manual_policy_controls_catalog_omits_post_115_controls_for_esr_115():
+    catalog = get_manual_policy_controls_catalog("esr-115.38")
+    policy_ids = {item["policy_id"] for group in catalog["groups"] for item in group["items"]}
+
+    assert "HttpsOnlyMode" not in policy_ids
+
+
+def test_manual_policy_controls_catalog_exposes_supported_channel_availability():
+    catalog = get_manual_policy_controls_catalog()
+    lockdown_items = catalog["groups_by_id"]["privacy_lockdown"]["items"]
+    https_only = next(item for item in lockdown_items if item["policy_id"] == "HttpsOnlyMode")
+
+    assert https_only["available_schema_versions"] == ["release-153", "esr-153.0", "esr-140.13"]

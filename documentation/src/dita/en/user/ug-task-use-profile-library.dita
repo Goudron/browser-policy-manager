@@ -5,7 +5,7 @@
   <shortdesc>Open the <uicontrol>Library</uicontrol> and use its counts, status, and row actions as the starting point for saved profile work.</shortdesc>
   <taskbody>
     <prereq><p>BPM is open and you are working with saved profile records, not an unsaved editor draft.</p></prereq>
-    <context><p>The <uicontrol>Library</uicontrol> lists saved profiles and shows filtered and total counts so you know whether filters or search are hiding rows. Its action grid comes first; the filter row is immediately above the profile table.</p>
+    <context><p>The <uicontrol>Library</uicontrol> lists saved profiles and shows filtered and total counts so you know whether filters or search are hiding rows. Its action grid comes first; the filter row is immediately above the profile table. An active saved ESR 115.38 or ESR 140.13 profile can offer a review update to the latest ESR, ESR 153.0. Opening that recommendation only opens a preview and does not change the profile; Release 153, ESR 153.0, unknown, retired, inactive, and unsaved profiles receive no invented recommendation.</p>
       <fig id="screenshot-library-overview">
         <title>Library overview</title>
         <image keyref="screenshot.library-overview" placement="break" scalefit="yes" align="center">
@@ -16,7 +16,7 @@
     <steps>
       <step><cmd>Open the <uicontrol>Library</uicontrol>.</cmd><info><p>Expected result: the <uicontrol>Library</uicontrol> loads profile rows, or an empty-state message if no saved profiles exist.</p></info></step>
       <step><cmd>Use the action grid to refresh the list, start a new draft, open Compare, or import policies.json.</cmd><info><p>These actions appear before the filters and table.</p></info></step>
-      <step><cmd>Set search, schema, profile-state, validation, and sort filters directly above the table; then read the filtered and total counts before using a row action.</cmd><info><note type="warning">A row action applies to that saved profile, not to a temporary editor draft.</note></info></step>
+      <step><cmd>Set search, schema, profile-state, validation, and sort filters directly above the table; then read the filtered and total counts before using a row action.</cmd><info><note type="warning">A row action applies to that saved profile, not to a temporary editor draft. A recommended ESR update is not an automatic change: review its preview and explicitly confirm an applicable result.</note></info></step>
     </steps>
     <result><p>You can identify the active <uicontrol>Library</uicontrol> view and choose the next profile action without losing context.</p></result>
     <postreq><p>Recovery: if rows do not load or an action status remains failed, refresh the <uicontrol>Library</uicontrol> and then use the <uicontrol>Library</uicontrol> troubleshooting topic.</p></postreq>

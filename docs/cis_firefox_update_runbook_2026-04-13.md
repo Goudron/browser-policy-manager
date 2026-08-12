@@ -59,6 +59,11 @@ Include `--json` for machine-readable output or `--validate-targets` to scan for
 ./.venv/bin/python tools/cis_firefox/generate_presets.py
 ```
 
+The check output must include both L1 and L2 for every supported Firefox schema
+channel. Treat a missing channel, incomplete mapping matrix, empty layer, or
+schema-validation failure as a release blocker; do not publish an unavailable
+CIS selector for an otherwise supported product schema.
+
 ## 7. Run tests
 
 ```

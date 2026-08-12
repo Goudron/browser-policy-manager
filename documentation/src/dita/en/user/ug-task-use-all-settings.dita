@@ -20,7 +20,7 @@
       <step><cmd>Use the mode that matches the task: <uicontrol>Review</uicontrol> for attention, <uicontrol>Configured</uicontrol> for applied values, or <uicontrol>Catalog</uicontrol> for every supported setting.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>The saved profile is open in <uicontrol>All settings</uicontrol> with the correct mode available.</p></result>
-    <postreq><p>Recovery: if <uicontrol>All settings</uicontrol> is unavailable, save the Guided draft first or reopen a saved profile from the <uicontrol>Library</uicontrol>.</p></postreq>
+    <postreq><p>Recovery: if <uicontrol>All settings</uicontrol> is unavailable, save the Guided draft first or reopen a saved profile from the <uicontrol>Library</uicontrol>. When changing schema, do not overwrite unsaved settings: save, discard deliberately, or cancel, then choose a target and read its conversion preview. A blocker means choose another target or resolve the issue; it does not remove settings.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

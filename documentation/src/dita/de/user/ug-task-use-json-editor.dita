@@ -12,6 +12,7 @@
           <alt>JSON-Editor zeigt bearbeitbare Firefox-Richtlinien im JSON-Format für ein gespeichertes Profil.</alt>
         </image>
       </fig>
+      <p>Speichern oder verwerfen Sie Änderungen im <uicontrol>JSON-Editor</uicontrol> bewusst, bevor Sie die Schema-Konvertierungsprüfung öffnen. Die Vorschau überschreibt nie lokale Browseränderungen; eine veraltete Vorschau muss neu angefordert werden.</p>
     </context>
     <steps>
       <step><cmd>Öffnen Sie das gespeicherte Profil aus der <uicontrol>Bibliothek</uicontrol> oder einem anderen Editor.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>

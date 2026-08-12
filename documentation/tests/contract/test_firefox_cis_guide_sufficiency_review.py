@@ -88,7 +88,7 @@ def test_firefox_baseline_and_representative_policy_facts_match_generated_source
     by_id = {policy["policy_id"]: policy for policy in inventory["policies"]}
 
     assert baseline == {
-        "channels": ["esr-140.13", "esr-153.0", "release-153"],
+        "channels": ["esr-115.38", "esr-140.13", "esr-153.0", "release-153"],
         "policy_count": inventory["summary"]["policy_union_count"],
         "all_channels_count": inventory["summary"]["policy_scope_counts"]["both"],
         "partial_channels_count": inventory["summary"]["policy_scope_counts"]["partial"],
@@ -127,6 +127,7 @@ def test_managed_preference_sample_and_cis_l2_mapping_agree() -> None:
     assert target["value"] == {"Status": "locked", "Type": "boolean", "Value": True}
     assert recommendation["level"] == 2
     assert recommendation["generated_layers"] == [
+        "cis-l2.esr-115.38",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153",

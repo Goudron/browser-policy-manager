@@ -9,9 +9,9 @@
     <steps>
       <step><cmd>确认活动数据<uicontrol>库</uicontrol> URL 和工作目录。</cmd><info><p>记录 <codeph>BPM_DATABASE_URL</codeph>、当前目录、源版本以及进程是否从 Linux 文件系统或 <codeph>/mnt/c</codeph> 运行。不要假设两个 shell 指向同一个 <codeph>data/bpm.db</codeph>。</p></info></step>
   <step><cmd>在打开存储文件之前检查迁移和配置文件 API 证据。</cmd><info><p>重点重新运行：<codeph>alembic upgrade head</codeph>，然后是 <codeph>curl -fsS http://127.0.0.1:8000/api/profiles?limit=50</codeph>。如果 API 返回预期的配置文件，则症状可能是过滤器、生命周期或浏览器状态。</p></info></step>
-  <step><cmd>在破坏性恢复之前验证备份证据。</cmd><info><p>检查 <codeph>mkdir -p backups</codeph>、<codeph>cp data/bpm.db backups/bpm-pre-update.db</codeph> 和 <codeph>sha256sum backups/bpm-pre-update.db</codeph> 记录。将关键的 <codeph>policies.json</codeph> 配置文件的导出保留为单独的证据。</p></info></step>
+  <step><cmd>在破坏性恢复之前验证备份证据。</cmd><info><p>检查 <codeph>mkdir -p backups</codeph>、<codeph>cp data/bpm.db backups/bpm-pre-update.db</codeph> 和 <codeph>sha256sum backups/bpm-pre-update.db</codeph> 记录。对于已退役 ESR 升级，还要证明原生备份可还原到单独的干净候选环境，并在任何写入程序运行之前完成该候选环境的只读预检。将关键的 <codeph>policies.json</codeph> 配置文件的导出保留为单独的证据。</p></info></step>
   <step><cmd>避免直接数据<uicontrol>库</uicontrol>行编辑。</cmd><info><p>请勿将 SQLite 行、生成的工件或架构缓存文件作为例行恢复进行编辑。请改用记录的配置文件存档、恢复、导入、导出或从源更新过程。</p></info></step>
-  <step><cmd>当恢复不安全时使用存储证据升级。</cmd><info><p>包括数据<uicontrol>库</uicontrol> URL、文件路径、校验和、迁移命令、API 响应和备份/导出证据。</p><note type="warning">如果不存在经过验证的故障前备份，则在删除或替换 <codeph>data/bpm.db</codeph> 之前停止； BPM 不提供时间点恢复。</note></info></step>
+  <step><cmd>当恢复不安全时使用存储证据升级。</cmd><info><p>包括数据<uicontrol>库</uicontrol> URL、文件路径、校验和、迁移命令、API 响应和备份/导出证据。</p><note type="warning">如果不存在经过验证的故障前备份，则在删除或替换 <codeph>data/bpm.db</codeph> 之前停止； BPM 不提供时间点恢复。对于中断或部分完成的已退役 ESR 升级，保留失败候选环境以供诊断，并将已验证的备份还原到新的干净候选环境；不要原地修复或降级失败的数据库。</note></info></step>
     </steps>
     <result><p>操作员具有存储诊断功能，可保留用户数据并将数据<uicontrol>库</uicontrol>状态与 UI 或过滤器症状分开。</p></result>
     <postreq><p>存储稳定后，重新运行运行状况/就绪状态和受影响最小的 API 工作流程。</p></postreq>

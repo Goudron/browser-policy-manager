@@ -12,6 +12,7 @@
           <alt>Alle Einstellungen zeigt die Überprüfungsliste, die konfigurierten Einstellungen und den Einstellungsdetailbereich auf einem schmalen Bildschirm an.</alt>
         </image>
       </fig>
+      <p>Beim Schemawechsel überschreiben Sie keine ungespeicherten Einstellungen: Speichern Sie, verwerfen Sie bewusst oder brechen Sie ab, wählen Sie dann ein Ziel und lesen Sie dessen Konvertierungsvorschau. Ein Blocker entfernt keine Einstellungen.</p>
     </context>
     <steps>
       <step><cmd>Öffnen Sie das gespeicherte Profil aus der <uicontrol>Bibliothek</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>

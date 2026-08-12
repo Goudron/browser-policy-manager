@@ -16,6 +16,7 @@ PROFILE_READ_FIELDS = {
     "deleted_at",
     "is_deleted",
     "validation_state",
+    "recommendation",
 }
 
 

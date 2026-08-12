@@ -12,6 +12,7 @@
           <alt>Bibliothek mit gespeicherten Profilzeilen, Zählungen und Profilaktionen.</alt>
         </image>
       </fig>
+      <p>Ein aktives gespeichertes ESR-115.38- oder ESR-140.13-Profil kann eine Überprüfung zur Aktualisierung auf das neueste ESR, ESR 153.0, anbieten. Das Öffnen dieser Empfehlung öffnet nur die schreibgeschützte Vorschau und ändert das Profil nicht; Release 153, ESR 153.0, unbekannte, stillgelegte, inaktive und nicht gespeicherte Profile erhalten keine erfundene Empfehlung. Eine anwendbare Vorschau muss ausdrücklich bestätigt werden.</p>
     </context>
     <steps>
       <step><cmd>Öffnen Sie die <uicontrol>Bibliothek</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Die <uicontrol>Bibliothek</uicontrol> lädt Profilzeilen oder eine leere Statusmeldung, wenn keine gespeicherten Profile vorhanden sind.</p></info></step>

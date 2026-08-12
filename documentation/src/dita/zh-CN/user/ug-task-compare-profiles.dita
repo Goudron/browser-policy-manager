@@ -12,6 +12,7 @@
           <alt>比较视图显示选择用于并排审查的两个已保存配置文件。</alt>
         </image>
       </fig>
+      <p>比较为只读。它可以让您返回已保存活动配置档案的转换预览，但绝不会确认或应用转换。</p>
     </context>
     <steps>
       <step><cmd>在<uicontrol>库</uicontrol>中选择“<uicontrol>比较配置档案设置</uicontrol>”操作。</cmd><info><p>预期结果：BPM 在新的浏览器标签页中打开比较界面。</p></info></step>

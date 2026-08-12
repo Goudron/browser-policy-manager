@@ -101,6 +101,22 @@
                 padding: 14px;
             }
 
+            .schema-conversion-review-heading,
+            .schema-conversion-review-actions {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .schema-conversion-review-heading .button-base,
+            .schema-conversion-review-actions .button-base {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .schema-conversion-review-summary {
+                grid-template-columns: 1fr;
+            }
+
             .app-hero,
             .panel-card {
                 padding: 18px;

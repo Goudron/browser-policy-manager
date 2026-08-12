@@ -10,11 +10,17 @@
       <step><cmd>提交所选模式通道的成功验证请求。</cmd><info><p>请求示例：带有 JSON <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/release-153</codeph>。响应示例：<codeph>200 {"ok":true,"profile":"release-153"}</codeph>。</p></info></step>
       <step><cmd>即使 HTTP 状态为 <codeph>200</codeph>，也将 <codeph>ok=false</codeph> 视为失败的门。</cmd><info><p>请求示例：带有 JSON <codeph>{"document":123}</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/release-153</codeph>。响应示例：<codeph>200 {"ok":false,"profile":"release-153","detail":"Expected object with policy mappings","error":"Expected object with policy mappings"}</codeph>。检查响应正文，而不是单独检查 HTTP 状态。</p></info></step>
       <step><cmd>将格式错误的规范 Firefox 文档错误作为请求形状故障进行处理。</cmd><info><p>请求示例：带有 JSON <codeph>{"document":{"policies":[]}}</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/release-153</codeph>。错误示例：<codeph>400</codeph>，其中 <codeph>detail.message="Firefox policies.json validation failed"</codeph> 和 <codeph>detail.issues[].path</codeph> 指向 <codeph>policies</codeph>。</p></info></step>
-      <step><cmd>在信任验证结果之前拒绝不受支持的模式通道。</cmd><info><p>请求示例：带有 JSON <codeph>{"document":{"policies":{"DisableTelemetry":true}}}</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/beta-999</codeph>。错误示例：带有详细信息文本 <codeph>Unknown profile 'beta-999'</codeph> 的 <codeph>404</codeph>。已注册但不可用的架构返回 <codeph>503</codeph>。</p></info></step>
+      <step><cmd>在信任验证结果之前拒绝不受支持的模式通道。</cmd><info><p>请求示例：带有 JSON <codeph>{"document":{"policies":{"DisableTelemetry":true}}}</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/beta-999</codeph>。错误示例：<codeph>422</codeph>，详细消息为 <codeph>Schema channel is not available</codeph>，代码为 <codeph>schema_channel_unknown</codeph>。已注册但不可用的架构返回 <codeph>503</codeph>。</p></info></step>
       <step><cmd>将策略验证失败映射到可操作的审核者反馈。</cmd><info><p>请求示例：带有 JSON <codeph>{"document":{"policies":{"Proxy":{"Mode":"bogus"}}}}</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/release-153</codeph>。错误示例：带有 <codeph>detail.message="Policy validation failed"</codeph> 的 <codeph>422</codeph> 和问题字段 <codeph>policy</codeph>、<codeph>path</codeph> 和 <codeph>message</codeph>。</p></info></step>
       <step><cmd>在集成产品中记录验证决策。</cmd><info><note type="warning">验证只是一个模式和策略形状的门。它不部署 Firefox、证明运行时执行、验证调用者身份、保留配置文件修订或提供幂等密钥。在外部存储通道、候选文档哈希、响应状态、<codeph>ok</codeph> 值、结构化问题和审阅者决策。</note></info></step>
     </steps>
     <result><p>集成可以阻止不安全的候选 <codeph>policies.json</codeph> 切换，并保留成功和失败决策的结构化证据。</p></result>
+    <example id="a-validate-policies-document"><title>完整的 Firefox policies.json 文档</title><p><codeph>document</codeph> 中的值是完整的 Firefox 文档，绝不是 BPM <codeph>flags</codeph>：</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
     <postreq><p>如果验证成功，则使用相同的模式通道和记录的候选哈希继续导入、配置文件更新或导出切换。</p></postreq>
   </taskbody>
   <related-links>

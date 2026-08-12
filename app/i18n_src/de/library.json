@@ -82,5 +82,8 @@
     "profiles.clone_name_required": "Geben Sie einen Klonnamen ein.",
     "profiles.clone_name_duplicate": "Ein Profil mit diesem Namen existiert bereits.",
     "profiles.clone_source_value": "Basierend auf {name}",
-    "profiles.clone_source_unknown": "dieses Profil"
+    "profiles.clone_source_unknown": "dieses Profil",
+    "profiles.schema_conversion_recommendation_action": "Aktualisierung auf {target_schema} prüfen",
+    "profiles.schema_conversion_recommendation_consequence": "Öffnet eine Migrationsvorschau von {source_schema} nach {target_schema}. Ihr Profil wird erst nach Prüfung und Bestätigung geändert.",
+    "profiles.schema_conversion_recommendation_accessible_name": "Vorschau der Schemamigration von {source_schema} nach {target_schema} prüfen"
 }

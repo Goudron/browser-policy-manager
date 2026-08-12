@@ -3,7 +3,11 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
-from app.compliance.firefox.cis.generation import build_cis_layer
+from app.compliance.firefox.cis.generation import (
+    CIS_SCHEMA_UNAVAILABLE_REASON,
+    build_cis_layer,
+    cis_layer_availability,
+)
 from app.compliance.firefox.cis.merge import merge_base_with_cis_layer
 from app.compliance.firefox.cis.validation import BASE_DIR as CIS_BASE_DIR
 from app.compliance.firefox.cis.validation import load_yaml_file
@@ -32,6 +36,16 @@ CIS_LAYER_OPTIONS: dict[str, dict[str, Any]] = {
         "label_key": "profiles.wizard_cis_l2_title",
         "summary_key": "profiles.wizard_cis_l2_summary",
     },
+}
+
+_ESR_115_PRESET_POLICY_EXCLUSIONS = frozenset({"FirefoxSuggest", "HttpsOnlyMode"})
+_ESR_115_PRESET_NESTED_EXCLUSIONS: dict[str, frozenset[str]] = {
+    "EnableTrackingProtection": frozenset(
+        {"BaselineExceptions", "Category", "ConvenienceExceptions", "SuspectedFingerprinting"}
+    ),
+    "FirefoxHome": frozenset({"SponsoredStories", "Stories"}),
+    "Permissions": frozenset({"ScreenShare", "VirtualReality"}),
+    "UserMessaging": frozenset({"FirefoxLabs"}),
 }
 
 _LOCKED_ENTERPRISE_HOME: dict[str, Any] = {
@@ -340,6 +354,8 @@ def _collect_managed_policy_keys() -> list[str]:
         for policy_values in preset.get("policy_values", {}).values():
             keys.update(policy_values.keys())
     for schema_version in SUPPORTED_POLICY_CHANNELS:
+        if not cis_layer_availability(schema_version)["available"]:
+            continue
         for level in (1, 2):
             keys.update(build_cis_layer(level, schema_version).policies.keys())
     keys.update({"Homepage", "Proxy"})
@@ -371,6 +387,14 @@ def _resolve_policy_values_for_channel(
             resolved[policy_id] = _resolve_schema_enabled_value(policy_id, schema_version)
         else:
             resolved[policy_id] = deepcopy(value)
+    if schema_version == "esr-115.38":
+        for policy_id in _ESR_115_PRESET_POLICY_EXCLUSIONS:
+            resolved.pop(policy_id, None)
+        for policy_id, excluded_fields in _ESR_115_PRESET_NESTED_EXCLUSIONS.items():
+            value = resolved.get(policy_id)
+            if isinstance(value, dict):
+                for field in excluded_fields:
+                    value.pop(field, None)
     return resolved
 
 
@@ -407,10 +431,26 @@ def get_wizard_starter_catalog(*, include_compliance: bool = True) -> dict[str, 
         }
     }
 
+    compliance_layers = deepcopy(CIS_LAYER_OPTIONS)
+    for layer_key, layer in compliance_layers.items():
+        if layer_key == CIS_LAYER_NONE:
+            layer["available_schema_versions"] = list(SUPPORTED_POLICY_CHANNELS)
+            continue
+        layer["available_schema_versions"] = [
+            schema_version
+            for schema_version in SUPPORTED_POLICY_CHANNELS
+            if cis_layer_availability(schema_version)["available"]
+        ]
+        layer["unavailable_reason_codes"] = {
+            schema_version: CIS_SCHEMA_UNAVAILABLE_REASON
+            for schema_version in SUPPORTED_POLICY_CHANNELS
+            if not cis_layer_availability(schema_version)["available"]
+        }
+
     catalog = {
         "managed_policy_keys": _collect_managed_policy_keys(),
         "presets": resolved_presets,
-        "compliance_layers": deepcopy(CIS_LAYER_OPTIONS),
+        "compliance_layers": compliance_layers,
         "compliance_metadata": _load_cis_benchmark_metadata(),
         "quick_policy_enabled_values": quick_policy_enabled_values,
     }
@@ -455,6 +495,7 @@ def _build_compliance_presets() -> dict[str, dict[str, dict[str, Any]]]:
     cis_layers = {
         (schema_version, level): build_cis_layer(level, schema_version)
         for schema_version in SUPPORTED_POLICY_CHANNELS
+        if cis_layer_availability(schema_version)["available"]
         for level in (1, 2)
     }
 
@@ -469,6 +510,14 @@ def _build_compliance_presets() -> dict[str, dict[str, dict[str, Any]]]:
                         "policy_values": deepcopy(base_document),
                         "summary": {},
                         "review_required": 0,
+                    }
+                    continue
+
+                availability = cis_layer_availability(schema_version)
+                if not availability["available"]:
+                    schema_variants[schema_version] = {
+                        "available": False,
+                        "reason_code": availability["reason_code"],
                     }
                     continue
 
@@ -527,6 +576,13 @@ def get_wizard_starter_compliance_snapshot(
             "policy_values": deepcopy(base_document),
             "summary": {},
             "review_required": 0,
+        }
+
+    availability = cis_layer_availability(schema_version)
+    if not availability["available"]:
+        return {
+            "available": False,
+            "reason_code": availability["reason_code"],
         }
 
     layer_config = CIS_LAYER_OPTIONS[layer_key]

@@ -41,7 +41,7 @@ def _profile_read(**overrides):
     return SimpleNamespace(**base)
 
 
-def test_validate_profile_policies_or_422_returns_early_without_flags(monkeypatch):
+def test_validate_profile_policies_or_422_checks_channel_without_flags(monkeypatch):
     called = {"validated": False}
 
     monkeypatch.setattr(
@@ -56,7 +56,7 @@ def test_validate_profile_policies_or_422_returns_early_without_flags(monkeypatc
         flags={},
     )
 
-    assert called["validated"] is False
+    assert called["validated"] is True
 
 
 def test_validate_profile_policies_or_422_returns_422_with_issues(monkeypatch):

@@ -5,7 +5,7 @@
   <shortdesc>Open the dedicated Compare surface in a new tab before selecting two saved profiles.</shortdesc>
   <taskbody>
     <prereq><p>The <uicontrol>Library</uicontrol> is open and at least two saved profiles exist.</p></prereq>
-    <context><p>Compare is a dedicated saved-profile surface. It keeps the current language and theme and does not replace the <uicontrol>Library</uicontrol> tab.</p>
+    <context><p>Compare is a dedicated saved-profile surface. It keeps the current language and theme and does not replace the <uicontrol>Library</uicontrol> tab. It is read-only: comparison can lead you back to a conversion preview for a saved active profile, but it never confirms or applies a conversion.</p>
       <fig id="screenshot-compare-profiles">
         <title>Profile comparison surface</title>
         <image keyref="screenshot.compare-profiles" placement="break" scalefit="yes" align="center">

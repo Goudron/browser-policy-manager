@@ -5,7 +5,7 @@
   <shortdesc>Wenden Sie Datenbankmigrationen an und prüfen Sie die aktualisierte BPM-Quellbereitstellung nach einer Änderung der Quellrevision.</shortdesc>
   <taskbody>
     <prereq><p>Das Auschecken und die Abhängigkeiten wurden erfolgreich aktualisiert und die Datenbanksicherungsnachweise wurden gesammelt, während BPM gestoppt wurde.</p></prereq>
-    <context><p>Aktualisierungen können Datenbankmigrationen enthalten. BPM dokumentiert die Vorwärtsmigration mit <codeph>alembic upgrade head</codeph>; ein automatisches Downgrade oder sicheres Schema-Rollback wird nicht zugesagt.</p></context>
+    <context><p>Aktualisierungen können Datenbankmigrationen enthalten. BPM dokumentiert die Vorwärtsmigration mit <codeph>alembic upgrade head</codeph>; ein automatisches Downgrade oder sicheres Schema-Rollback wird nicht zugesagt. Ein unterstütztes älteres ESR wird nicht automatisch migriert. Erst wenn ein zukünftiger Kandidat ein ESR tatsächlich stilllegt, kann dessen erklärter unmittelbarer Nachfolger nach Backup und schreibgeschützter Vorprüfung durch das geprüfte Alembic-Upgrade migriert werden.</p></context>
     <steps>
       <step><cmd>Datenbankmigrationen auf die vorgesehene Datenbank anwenden.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"

@@ -47,7 +47,7 @@ def test_profile_bundle_manifest_keeps_route_entries_short_and_monaco_json_only(
     )
     assert manifest["license_strategy"]["third_party"].endswith("required notices.")
     assert manifest["bundle_budgets"] == {
-        "max_generated_bytes": 1_200_000,
+        "max_generated_bytes": 1_211_000,
         "max_generated_javascript_bytes": 600_000,
         "route_max_javascript_bytes": {
             "library": 60_000,

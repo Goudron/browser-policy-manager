@@ -5,7 +5,11 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
-from app.core.schema_channels import SCHEMA_FILENAMES
+from app.core.schema_channels import (
+    SCHEMA_FILENAMES,
+    SchemaChannelError,
+    require_supported_schema_channel,
+)
 from app.models.policy_schema import PolicyBranch, PolicyDefinition, PolicySchema
 from app.services.firefox_policy_ui_registry import (
     get_policy_ui_sections,
@@ -26,8 +30,9 @@ class UnknownPolicyChannelError(ValueError):
 
 def _get_schema_path(channel: str) -> Path:
     try:
+        require_supported_schema_channel(channel)
         filename = CHANNEL_TO_FILENAME[channel]
-    except KeyError as exc:
+    except (KeyError, SchemaChannelError) as exc:
         raise UnknownPolicyChannelError(f"Unknown policy channel: {channel!r}") from exc
 
     path = SCHEMAS_DIR / filename

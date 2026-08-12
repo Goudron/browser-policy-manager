@@ -7,7 +7,7 @@
     <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败的操作表明当前工作流程无法安全地继续。</p></prereq>
     <context><p>架构不匹配通常意味着某个 Firefox 通道中存在某项设置，但在所选通道中不可用、已弃用或形状不同。</p></context>
     <steps>
-      <step><cmd>确认配置档案是否面向 ESR 140.13、ESR 153.0 或 Release 153。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
+      <step><cmd>确认配置档案是否面向 ESR 115.38、ESR 140.13、ESR 153.0 或 Release 153。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>标识该通道中不可用、不受支持、已弃用或依赖于架构的设置。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>选择是否切换架构通道或删除/更改预期 Firefox 目标的受影响设置。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>在渠道或设置决定后重新验证和审查出口准备情况。</cmd><info><note type="warning">仅通过 BPM 界面重试；不要在应用程序外修改配置文件数据。</note></info></step>

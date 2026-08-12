@@ -77,6 +77,8 @@
     "include_glob": "app/static/profiles_modules/**",
     "modules": [
       "app/static/profiles_modules/compare_state.mjs",
+      "app/static/profiles_modules/conversion_recommendation.mjs",
+      "app/static/profiles_modules/conversion_review.mjs",
       "app/static/profiles_modules/dirty_route_guard.mjs",
       "app/static/profiles_modules/policy_document.mjs",
       "app/static/profiles_modules/preference_values.mjs",

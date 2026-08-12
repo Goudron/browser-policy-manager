@@ -5,7 +5,12 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from app.core.schema_channels import SCHEMA_FILENAMES, get_schema_channel
+from app.core.schema_channels import (
+    SCHEMA_FILENAMES,
+    SchemaChannelError,
+    get_schema_channel,
+    require_supported_schema_channel,
+)
 
 
 class SchemaNotFoundError(RuntimeError):
@@ -99,10 +104,10 @@ def load_schema(profile: str, *, allow_stub_fallback: bool = False) -> dict[str,
     Stub fallback is opt-in so application code does not silently validate against
     an incomplete schema when bundled assets are missing or packaging regresses.
     """
-    if profile not in _PROFILE_FILES:
-        raise UnsupportedProfileError(
-            f"Unsupported profile '{profile}'. Supported: {', '.join(_PROFILE_FILES)}"
-        )
+    try:
+        require_supported_schema_channel(profile)
+    except SchemaChannelError as exc:
+        raise UnsupportedProfileError(f"Unsupported profile '{profile}': {exc}") from exc
 
     bundled_policy_path = _bundled_policy_schema_path(profile)
 

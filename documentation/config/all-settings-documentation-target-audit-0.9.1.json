@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_id": "bpm-all-settings-documentation-target-audit-0.9.1",
   "backlog_item": "BPM091-M9-01",
-  "target_bpm_version": "0.9.1",
+  "target_bpm_version": "0.9.5",
   "status": "accepted",
   "audited_sources": {
     "row_inventory": "app/static/profiles_settings_inventory.js",
@@ -15,8 +15,8 @@
   "coverage": {
     "firefox_policies": {
       "inventory_count": 121,
-      "both_channel_count": 112,
-      "partial_channel_count": 9,
+      "both_channel_count": 97,
+      "partial_channel_count": 24,
       "expected_target_pattern": "policy:{exact_policy_id}",
       "generated_target_count": 121,
       "current_disposition": "linked",

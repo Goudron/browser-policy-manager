@@ -5,7 +5,7 @@ from pathlib import Path
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 POLICY_PATH = REPOSITORY_ROOT / "tests" / "coverage-ownership-0.9.4.json"
-RELEASE_BOUNDARY_PATH = REPOSITORY_ROOT / "tools" / "release_boundary_manifest_0_9_4.json"
+RELEASE_BOUNDARY_PATH = REPOSITORY_ROOT / "tools" / "release_boundary_manifest_0_9_5.json"
 
 
 def _policy() -> dict[str, object]:

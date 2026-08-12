@@ -268,6 +268,13 @@ def test_help_route_serves_packaged_locale_pages_assets_and_manifest(
     assert 'lang="ru"' in page.text
     assert page.headers["content-type"].startswith("text/html; charset=utf-8")
     assert page.headers["content-security-policy"] == DOCUMENTATION_HTML_CSP
+    served_manifest = manifest.json()
+    served_target_map = target_map.json()
+    current_version = get_settings().APP_VERSION
+    artifact = served_manifest["artifact"]
+    assert artifact["bpm_version"] == current_version
+    assert artifact["documentation_version"] == current_version
+    assert served_target_map["bpm_version"] == current_version
 
     for response, content_type in (
         (css, "text/css; charset=utf-8"),
@@ -501,7 +508,7 @@ def test_help_route_reports_stale_and_incomplete_artifact_states(
     _write_packaged_site(tmp_path)
     manifest_path = tmp_path / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    manifest["artifact"]["bpm_version"] = "0.8.0"
+    manifest["artifact"]["bpm_version"] = "0.9.4"
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
 
     with _client_with_docs(tmp_path, monkeypatch) as client:
@@ -966,7 +973,7 @@ def test_documentation_artifact_dispositions_match_help_status_states(tmp_path: 
     manifest = _read_manifest(tmp_path)
     artifact = manifest["artifact"]
     assert isinstance(artifact, dict)
-    artifact["documentation_version"] = "0.0.0"
+    artifact["documentation_version"] = "0.9.4"
     _write_manifest(tmp_path, manifest)
     assert (
         docs_manifest.resolve_documentation_artifact_disposition(tmp_path)

@@ -3,17 +3,21 @@ from __future__ import annotations
 import json
 
 from app.compliance.firefox.cis.generation import (
+    CIS_AVAILABLE_SCHEMA_CHANNELS,
+    CIS_SCHEMA_UNAVAILABLE_REASON,
     GENERATED_DIR,
     _apply_target,
     _set_nested,
     build_all_cis_layers,
     build_cis_layer,
+    cis_layer_availability,
     write_generated_layers,
 )
 from app.core.policy_validation import (
     load_policy_schema_for_channel,
     validate_profile_policies_or_raise,
 )
+from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS
 
 
 def test_cis_level_2_includes_level_1_recommendations() -> None:
@@ -29,6 +33,23 @@ def test_cis_layers_validate_against_supported_firefox_schemas() -> None:
     for layer in build_all_cis_layers():
         schema = load_policy_schema_for_channel(layer.schema_channel)
         validate_profile_policies_or_raise(layer.policies, schema)
+
+
+def test_cis_layers_are_available_for_every_supported_schema_channel() -> None:
+    assert CIS_AVAILABLE_SCHEMA_CHANNELS == frozenset(SUPPORTED_SCHEMA_CHANNELS)
+    for channel in SUPPORTED_SCHEMA_CHANNELS:
+        assert cis_layer_availability(channel) == {"available": True}
+        l1 = build_cis_layer(1, channel)
+        l2 = build_cis_layer(2, channel)
+        assert len(l1.recommendation_ids) == 49
+        assert len(l2.recommendation_ids) == 53
+        assert l1.policies
+        assert l2.policies
+
+    assert cis_layer_availability("unknown-channel") == {
+        "available": False,
+        "reason_code": CIS_SCHEMA_UNAVAILABLE_REASON,
+    }
 
 
 def test_cis_generated_layers_include_policy_and_preference_targets() -> None:
@@ -49,6 +70,8 @@ def test_write_generated_layers_creates_deterministic_json_documents(tmp_path) -
     written = write_generated_layers(output_dir=tmp_path)
 
     assert [path.name for path in written] == [
+        "cis_l1.esr-115.38.json",
+        "cis_l2.esr-115.38.json",
         "cis_l1.esr-140.13.json",
         "cis_l2.esr-140.13.json",
         "cis_l1.esr-153.0.json",

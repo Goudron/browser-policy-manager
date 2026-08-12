@@ -640,6 +640,28 @@
             renderSearchReviewSummary(sourceState.data);
             renderAiReviewSummary(sourceState.data);
             renderMountedSchemaPolicies(sourceState.data, !sourceState.ok, channelData);
+            syncManualPolicyControls(channelData);
+        }
+
+        function syncManualPolicyControls(channelData) {
+            const supportedPolicyIds = new Set();
+
+            Object.values(channelData?.steps || {}).forEach((stepData) => {
+                ["recommended", "additional", "raw_fallback"].forEach((bucket) => {
+                    (Array.isArray(stepData?.[bucket]) ? stepData[bucket] : []).forEach((item) => {
+                        if (item?.id) supportedPolicyIds.add(item.id);
+                    });
+                });
+            });
+
+            documentRef.querySelectorAll("[data-schema-policy-control]").forEach((control) => {
+                const available = supportedPolicyIds.has(control.dataset.schemaPolicyControl || "");
+                control.hidden = !available;
+                control.setAttribute("aria-hidden", available ? "false" : "true");
+                control.querySelectorAll("input, select, button").forEach((input) => {
+                    input.disabled = !available;
+                });
+            });
         }
 
         function getWizardSchemaPolicyItem(policyId, channelData, preferredStep = null) {

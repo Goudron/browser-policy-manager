@@ -12,6 +12,7 @@
           <alt>Editor JSON que muestra las políticas editables de Firefox JSON para un perfil guardado.</alt>
         </image>
       </fig>
+      <p>Guarde o descarte deliberadamente los cambios del editor JSON antes de abrir la revisión de conversión del esquema. La vista previa nunca sobrescribe cambios locales del navegador; debe solicitarse de nuevo una vista previa obsoleta.</p>
     </context>
     <steps>
       <step><cmd>Abra el perfil guardado desde la <uicontrol>Biblioteca</uicontrol> u otro editor.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>

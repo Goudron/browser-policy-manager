@@ -172,16 +172,17 @@ def test_browser_smoke_primary_routes_render_in_ru_and_zh_cn():
                 _close_chromium_driver(driver)
 
 
-def test_browser_guided_schema_selector_offers_and_switches_three_channels():
+def test_browser_guided_schema_selector_offers_and_switches_four_channels():
     by = pytest.importorskip("selenium.webdriver.common.by")
     ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
     select_module = pytest.importorskip("selenium.webdriver.support.select")
     ui = pytest.importorskip("selenium.webdriver.support.ui")
 
     expected_channels = (
-        ("esr-140.13", "ESR 140.13"),
-        ("esr-153.0", "ESR 153.0"),
         ("release-153", "Release 153"),
+        ("esr-153.0", "ESR 153.0"),
+        ("esr-140.13", "ESR 140.13"),
+        ("esr-115.38", "ESR 115.38"),
     )
 
     with run_test_app_server() as base_url:

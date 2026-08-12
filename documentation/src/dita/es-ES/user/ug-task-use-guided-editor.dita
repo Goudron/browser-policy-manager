@@ -12,6 +12,7 @@
           <alt>Editor guiado que muestra el estado de validación y navegación de pasos para un perfil guardado.</alt>
         </image>
       </fig>
+      <p>Para un perfil guardado, abra la revisión de conversión del esquema solo después de decidir cambiar de canal: preserve el trabajo sin guardar, elija otro destino compatible y use la vista previa de solo lectura antes de cualquier aplicación explícita.</p>
     </context>
     <steps>
       <step><cmd>En el paso 1, confirme el nombre, el canal de esquema, el escenario, el ajuste inicial y la capa CIS.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>

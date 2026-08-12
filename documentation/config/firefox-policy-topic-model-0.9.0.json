@@ -76,7 +76,7 @@
   ],
   "channel_support_model": {
     "channel_scope_values": ["both", "partial", "release-only", "esr-only"],
-    "supported_channels": ["esr-140.13", "esr-153.0", "release-153"],
+    "supported_channels": ["esr-115.38", "esr-140.13", "esr-153.0", "release-153"],
     "per_channel_required_fields": [
       "value_type",
       "min_version",

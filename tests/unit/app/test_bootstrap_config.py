@@ -23,7 +23,7 @@ def test_settings_version_matches_pyproject():
     pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
     settings = config_module.Settings()
 
-    assert pyproject["project"]["version"] == "0.9.4"
+    assert pyproject["project"]["version"] == "0.9.5"
     assert settings.APP_VERSION == pyproject["project"]["version"]
 
 

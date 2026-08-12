@@ -1,10 +1,12 @@
 from app.core.policy_validation import validate_profile_payload_with_schema
+from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS
 from app.models.policy_schema import PolicyDefinition
 from app.web import firefox_starter_presets as starter_module
 from app.web.firefox_starter_presets import (
     _resolve_schema_enabled_value,
     build_wizard_starter_document,
     get_wizard_starter_catalog,
+    get_wizard_starter_compliance_snapshot,
 )
 
 
@@ -15,7 +17,7 @@ def test_wizard_starter_catalog_is_schema_aware():
         catalog["presets"]
     )
     assert "DisablePocket" in catalog["managed_policy_keys"]
-    for schema_version in ("esr-140.13", "esr-153.0", "release-153"):
+    for schema_version in SUPPORTED_SCHEMA_CHANNELS:
         assert (
             catalog["presets"]["basic_corporate"]["policy_values"][schema_version]["DisablePocket"]
             is True
@@ -38,7 +40,7 @@ def test_wizard_starter_catalog_handles_missing_cis_benchmark_metadata(monkeypat
 
 def test_wizard_starter_catalog_exposes_cis_merged_variants():
     catalog = get_wizard_starter_catalog()
-    for schema_version in ("esr-140.13", "esr-153.0", "release-153"):
+    for schema_version in SUPPORTED_SCHEMA_CHANNELS:
         merged = catalog["compliance_merged_presets"]["basic_corporate"]["cis_l2"][schema_version]
         policies = merged["policy_values"]
 
@@ -69,10 +71,23 @@ def test_wizard_starter_catalog_exposes_cis_merged_variants():
         assert keep_current["policy_values"] == {}
 
 
+def test_cis_catalog_exposes_both_layers_for_every_supported_schema_channel():
+    catalog = get_wizard_starter_catalog(include_compliance=False)
+    for layer_key in ("cis_l1", "cis_l2"):
+        layer = catalog["compliance_layers"][layer_key]
+        assert set(layer["available_schema_versions"]) == set(SUPPORTED_SCHEMA_CHANNELS)
+        assert layer["unavailable_reason_codes"] == {}
+    snapshot = get_wizard_starter_compliance_snapshot("basic_corporate", "esr-115.38", "cis_l2")
+    assert snapshot is not None
+    assert snapshot["policy_values"]["DisableTelemetry"] is True
+    assert snapshot["policy_values"]["DisableFirefoxAccounts"] is True
+    assert snapshot["summary"]["added_from_cis"] > 0
+
+
 def test_wizard_starter_presets_validate_for_all_supported_schema_channels():
     catalog = get_wizard_starter_catalog()
 
-    for schema_version in ("esr-140.13", "esr-153.0", "release-153"):
+    for schema_version in SUPPORTED_SCHEMA_CHANNELS:
         for starter_key in catalog["presets"]:
             document = build_wizard_starter_document(starter_key, schema_version)
             validate_profile_payload_with_schema(
@@ -96,6 +111,28 @@ def test_wizard_starter_presets_validate_for_all_supported_schema_channels():
     assert soc_esr["DisablePocket"] is True
     assert soc_esr_153["DisablePocket"] is True
     assert soc_release["DisablePocket"] is True
+
+
+def test_esr_115_starter_presets_apply_only_explicitly_reviewed_shapes():
+    catalog = get_wizard_starter_catalog()
+
+    for starter_key in catalog["presets"]:
+        document = build_wizard_starter_document(starter_key, "esr-115.38")
+        validate_profile_payload_with_schema(
+            {
+                "name": f"{starter_key}-esr-115.38",
+                "channel": "esr-115.38",
+                "policies": document,
+            }
+        )
+
+    hardened = build_wizard_starter_document("soc_hard", "esr-115.38")
+    assert "HttpsOnlyMode" not in hardened
+    assert "FirefoxSuggest" not in hardened
+    assert "Category" not in hardened["EnableTrackingProtection"]
+    assert "ScreenShare" not in hardened["Permissions"]
+    assert "Stories" not in hardened["FirefoxHome"]
+    assert "FirefoxLabs" not in hardened["UserMessaging"]
 
 
 def test_wizard_starter_presets_include_operational_baseline_controls():

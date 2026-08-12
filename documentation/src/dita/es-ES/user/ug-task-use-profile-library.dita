@@ -12,6 +12,7 @@
           <alt>Biblioteca que muestra filas de perfil guardadas, recuentos y acciones de perfil.</alt>
         </image>
       </fig>
+      <p>Un perfil ESR 115.38 o ESR 140.13 activo y guardado puede ofrecer una actualización para revisar al ESR más reciente, ESR 153.0. Abrir la recomendación solo abre la vista previa de solo lectura y no cambia el perfil; Release 153, ESR 153.0 y los perfiles desconocidos, retirados, inactivos o no guardados no reciben una recomendación inventada. Una vista previa aplicable debe confirmarse explícitamente.</p>
     </context>
     <steps>
       <step><cmd>Abra la biblioteca.</cmd><info><p>Resultado esperado: la biblioteca carga filas de perfil o un mensaje de estado vacío si no existen perfiles guardados.</p></info></step>

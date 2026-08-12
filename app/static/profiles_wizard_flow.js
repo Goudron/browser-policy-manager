@@ -681,6 +681,18 @@
             return t("profiles.wizard_cis_none_title");
         }
 
+        function isComplianceLayerAvailable(layerKey, schemaVersion) {
+            if (layerKey === "none") return true;
+            const layer = complianceLayers[layerKey] || {};
+            const available = layer.available_schema_versions;
+            return !Array.isArray(available) || available.includes(schemaVersion);
+        }
+
+        function complianceUnavailableReason(layerKey, schemaVersion) {
+            const layer = complianceLayers[layerKey] || {};
+            return layer.unavailable_reason_codes?.[schemaVersion] || "cis_benchmark_not_validated_for_schema";
+        }
+
         function getMergedStarterPolicyValues(starterKey, schemaVersion, complianceLayerKey = wizardComplianceLayer) {
             const starterVariants = complianceMergedPresets?.[starterKey] || {};
             const layerVariants = starterVariants[complianceLayerKey] || starterVariants.none || {};
@@ -693,6 +705,9 @@
 
         async function loadComplianceSelection(starterKey, schemaVersion, layerKey) {
             if (layerKey === "none" || starterKey === "keep_current") return;
+            if (!isComplianceLayerAvailable(layerKey, schemaVersion)) {
+                throw new Error(complianceUnavailableReason(layerKey, schemaVersion));
+            }
             const starterVariants = complianceMergedPresets[starterKey] || {};
             const layerVariants = starterVariants[layerKey] || {};
             if (layerVariants[schemaVersion]) return;
@@ -722,6 +737,16 @@
             const schemaVersion = documentRef.getElementById("profile-type").value
                 || wizardSchemaEl.value
                 || defaultSchemaVersion;
+            if (!isComplianceLayerAvailable(layerKey, schemaVersion)) {
+                setStatus(
+                    t("profiles.error_wizard_starter").replace(
+                        "{detail}",
+                        complianceUnavailableReason(layerKey, schemaVersion),
+                    ),
+                    "error",
+                );
+                return false;
+            }
             try {
                 await loadComplianceSelection(starterKey, schemaVersion, layerKey);
                 return true;
@@ -1292,9 +1317,14 @@
             });
             wizardCisLayerButtons.forEach((button) => {
                 const isActive = button.dataset.cisLayerKey === wizardComplianceLayer;
-                const isDisabled = wizardStarter === "keep_current" && button.dataset.cisLayerKey !== "none";
+                const schemaVersion = documentRef.getElementById("profile-type")?.value
+                    || wizardSchemaEl?.value
+                    || defaultSchemaVersion;
+                const isDisabled = (wizardStarter === "keep_current" && button.dataset.cisLayerKey !== "none")
+                    || !isComplianceLayerAvailable(button.dataset.cisLayerKey, schemaVersion);
                 button.classList.toggle("wizard-starter-card--active", isActive);
                 button.disabled = isDisabled;
+                button.setAttribute("aria-disabled", isDisabled ? "true" : "false");
                 button.setAttribute("aria-pressed", isActive ? "true" : "false");
             });
             updateWizardScenarioUi();
@@ -1613,9 +1643,22 @@
 
         async function setWizardComplianceLayer(nextLayer, options = {}) {
             const requestedLayer = complianceLayers[nextLayer] !== undefined ? nextLayer : "none";
-            const layer = wizardStarter === "keep_current" && requestedLayer !== "none" && !options.allowKeepCurrent
+            const schemaVersion = documentRef.getElementById("profile-type")?.value
+                || wizardSchemaEl?.value
+                || defaultSchemaVersion;
+            const layer = (wizardStarter === "keep_current" && requestedLayer !== "none" && !options.allowKeepCurrent)
+                || !isComplianceLayerAvailable(requestedLayer, schemaVersion)
                 ? "none"
                 : requestedLayer;
+            if (requestedLayer !== "none" && layer === "none" && !options.skipApply) {
+                setStatus(
+                    t("profiles.error_wizard_starter").replace(
+                        "{detail}",
+                        complianceUnavailableReason(requestedLayer, schemaVersion),
+                    ),
+                    "error",
+                );
+            }
             const loadSequence = ++complianceLoadSequence;
             if (!options.skipApply && !(await ensureActiveComplianceSelection(wizardStarter, layer))) {
                 return;
@@ -1836,11 +1879,11 @@
                 const parsed = fromEditorValue(editor.getValue(), documentRef.getElementById("mode").value);
                 const normalized = parsed && typeof parsed === "object" ? parsed : {};
                 wizardPolicyInputs.forEach((input) => {
-                    input.disabled = false;
+                    input.disabled = input.closest("[data-schema-policy-control]")?.hidden === true;
                     input.checked = normalized[input.dataset.policyKey] === true;
                 });
                 wizardPolicySelectInputs.forEach((input) => {
-                    input.disabled = false;
+                    input.disabled = input.closest("[data-schema-policy-control]")?.hidden === true;
                     const policyKey = input.dataset.policySelectKey;
                     const currentValue = policyKey ? normalized[policyKey] : "";
                     input.value = currentValue == null ? "" : String(currentValue);

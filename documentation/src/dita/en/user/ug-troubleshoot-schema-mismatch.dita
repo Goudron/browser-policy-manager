@@ -7,10 +7,10 @@
     <prereq><p>A visible BPM status, validation message, browser warning, or failed action indicates that the current workflow cannot safely continue.</p></prereq>
     <context><p>Schema mismatch usually means a setting exists in one Firefox channel but is unavailable, deprecated, or shaped differently in the selected channel.</p></context>
     <steps>
-      <step><cmd>Confirm whether the profile targets ESR 140.13, ESR 153.0, or Release 153.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Confirm whether the profile targets ESR 115.38, ESR 140.13, ESR 153.0, or Release 153.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Identify the setting that is unavailable, unsupported, deprecated, or schema-dependent in that channel.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
-      <step><cmd>Choose whether to switch the schema channel or remove/change the affected setting for the intended Firefox target.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
-      <step><cmd>Revalidate and review export readiness after the channel or setting decision.</cmd><info><note type="warning">Retry only from the BPM interface; do not change profile data outside the application.</note></info></step>
+      <step><cmd>Choose whether to switch the schema channel or remove/change the affected setting for the intended Firefox target.</cmd><info><p>For a channel move, choose a distinct current artifact and request a fresh read-only preview. Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Revalidate and review export readiness after the channel or setting decision.</cmd><info><note type="warning">A blocked, stale, invalid, or failed preview/apply leaves the profile unchanged. Resolve the visible blocker or choose another target, then request a new preview; do not change profile data outside the application.</note></info></step>
     </steps>
     <result><p>The profile targets the intended Firefox channel and no longer hides a schema-dependent mismatch.</p></result>
     <postreq><p>If the error repeats, stop the workflow and contact support with the visible message, profile name, schema channel, and current page.</p></postreq>

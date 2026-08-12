@@ -214,6 +214,49 @@ code-block checks, page-fitting screenshots, and the successful
 `make docs-install-dev` handoff. A future epic may scope the review to affected
 guides only, but it must record why each untouched guide is unaffected.
 
+### Documentation preflight and heavy-build order
+
+When creating a backlog that changes maintained documentation, the documentation-update milestone
+must contain an explicit **preflight task before any site or PDF build task**. The preflight task
+must inventory the complete changed English topic set and every localized peer, then validate all
+source-derived owners that can otherwise fail late in a six-locale build. At minimum it must cover:
+
+- DITA structure, complete `{"policies": {...}}` examples, links, metadata, locale parity, native
+  headings, technical `codeph` literals, and the affected screenshot disposition;
+- current OpenAPI/API-inventory status codes, operation/topic counts, public examples, and runtime
+  schema/channel facts;
+- Firefox/CIS inventories, generated-source inputs, four-channel/layer counts, search facets,
+  aliases, contextual-help targets, manifests, and localized search labels;
+- all source-bound delivery/layout/version contracts, generated snapshot inputs, and the owner
+  commands needed to refresh those artifacts.
+
+The preflight acceptance must list its exact source/contract commands and require every failure to
+be resolved **before** a site or PDF candidate is built. A focused preflight may regenerate an
+owner artifact or snapshot when its source is complete; it must then rerun that artifact's exact
+contract. It must not hand-edit generated site, search, skeleton, snapshot, package, or PDF output.
+
+After the preflight is green, backlog tasks must use this single heavy-build sequence:
+
+1. Finish all English and locale source edits, generated-source refreshes, and the bounded
+   preflight contracts.
+2. Run one owner site build and verify its atomic publication, manifest, navigation, search, and
+   contextual-help outputs. If it fails, diagnose and fix the responsible source or contract; do
+   not start a second build until that focused preflight is green again.
+3. Run one owner PDF build, then PDF verification, visual review, reproducibility, and atomic
+   delivery. Do not retry a full PDF build merely because a later release contract fails; first
+   determine whether the defect changes PDF source or only a non-PDF owner.
+4. Run one authoritative documentation release gate after every affected source, generated owner,
+   site, and PDF artifact is current. If it finds drift, return to the smallest responsible
+   preflight owner, repair it, and rerun only the invalidated heavy stage plus this final gate.
+5. Run package verification and `make docs-install-dev` only after the release gate is green.
+
+Do not schedule site/PDF/reproducibility builds as independent exploratory tasks that can run before
+the preflight or overlap each other. The backlog must name the invalidation boundary for every
+heavy artifact: a source change that affects DITA/site search must rebuild the site; a source,
+print, locale, or PDF-contract change must rebuild the PDFs; a test-only, API-inventory, snapshot,
+or non-PDF contract correction must not trigger a blind PDF rebuild. Long owner commands still need
+flushed phase/locale/guide completed-total progress, candidate quarantine, and atomic promotion.
+
 ### Maintainer `make dev` documentation handoff
 
 When a task changes product-documentation source, documentation build tooling, generated portal

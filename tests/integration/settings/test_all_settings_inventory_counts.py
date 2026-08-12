@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from app.core.schema_channels import CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL
+from app.core.schema_channels import CURRENT_RELEASE_SCHEMA_CHANNEL, LATEST_ESR_SCHEMA_CHANNEL
 from tests.support import (
     build_all_settings_inventory_counts,
     build_corporate_cis_l2_profile_fixture,
@@ -10,7 +10,7 @@ from tests.support import (
 
 
 @pytest.mark.parametrize(
-    "schema_version", (CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL)
+    "schema_version", (LATEST_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL)
 )
 def test_all_settings_inventory_counts_cover_supported_channel_catalogs(schema_version):
     counts = build_all_settings_inventory_counts(schema_version=schema_version, flags={})
@@ -28,7 +28,7 @@ def test_all_settings_inventory_counts_cover_supported_channel_catalogs(schema_v
 
 def test_release_inventory_does_not_drop_below_current_esr_surface():
     esr_counts = build_all_settings_inventory_counts(
-        schema_version=CURRENT_ESR_SCHEMA_CHANNEL,
+        schema_version=LATEST_ESR_SCHEMA_CHANNEL,
         flags={},
     )
     release_counts = build_all_settings_inventory_counts(
@@ -42,7 +42,7 @@ def test_release_inventory_does_not_drop_below_current_esr_surface():
 
 
 @pytest.mark.parametrize(
-    "schema_version", (CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL)
+    "schema_version", (LATEST_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL)
 )
 def test_all_settings_inventory_counts_heavy_corporate_cis_profile(schema_version):
     fixture = build_corporate_cis_l2_profile_fixture(schema_version=schema_version)

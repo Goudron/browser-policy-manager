@@ -29,7 +29,7 @@
     },
     "firefox_channel": {
       "label": "Firefox channel",
-      "values": ["esr-140.13", "esr-153.0", "release-153"]
+      "values": ["esr-115.38", "esr-140.13", "esr-153.0", "release-153"]
     },
     "policy_category": {
       "label": "Firefox policy category",

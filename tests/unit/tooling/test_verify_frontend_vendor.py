@@ -14,7 +14,7 @@ def test_frontend_vendor_lock_tracks_expected_packages_and_assets():
 
     assert lock["packages"] == {
         "monaco-editor": "0.56.0",
-        "esbuild": "0.28.1",
+        "esbuild": "0.28.2",
         "dompurify": "3.4.13",
         "marked": "14.0.0",
     }

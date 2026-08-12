@@ -280,6 +280,26 @@
         return await res.json();
     }
 
+    async function previewProfileConversion(id, targetArtifactId, fetchImpl = fetch) {
+        const res = await fetchImpl(`/api/profiles/${id}/conversion-preview`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ target_artifact_id: targetArtifactId }),
+        });
+        if (!res.ok) throw await profileRequestError(res);
+        return await res.json();
+    }
+
+    async function applyProfileConversion(id, payload, fetchImpl = fetch) {
+        const res = await fetchImpl(`/api/profiles/${id}/conversion-apply`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw await profileRequestError(res);
+        return await res.json();
+    }
+
     async function resetProfilesLibrary(fetchImpl = fetch) {
         const res = await fetchImpl("/api/profiles/reset", { method: "DELETE" });
         if (!res.ok) throw new Error(await readError(res));
@@ -317,6 +337,8 @@
         softDeleteProfile,
         hardDeleteProfile,
         restoreProfile,
+        previewProfileConversion,
+        applyProfileConversion,
         resetProfilesLibrary,
         validateFlags,
     };

@@ -5,7 +5,7 @@ import builtins
 from dataclasses import dataclass
 from typing import Any, cast
 
-from sqlalchemy import and_, asc, case, delete, desc, func, select, true
+from sqlalchemy import and_, asc, case, delete, desc, func, select, true, update
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import ColumnElement
@@ -14,11 +14,36 @@ from app.core.policy_validation import (
     PolicyValidationError,
     validate_profile_payload_with_schema,
 )
+from app.core.profile_conversion_planner import (
+    ComplianceReplanner,
+    ConversionPlanningContext,
+    ConversionPlanningError,
+    plan_profile_conversion,
+)
+from app.core.profile_recommendation import profile_conversion_recommendation
+from app.core.schema_channels import require_supported_schema_channel
 from app.models.profile import Profile
-from app.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
+from app.schemas.profile import (
+    ConversionApplyRequest,
+    ProfileCreate,
+    ProfileRead,
+    ProfileRecommendation,
+    ProfileUpdate,
+)
 
 SortField = str  # "created_at" | "updated_at" | "name" | "schema_version" | "id"
 SortOrder = str  # "asc" | "desc"
+
+
+def _profile_recommendation_read_model(profile: Profile) -> ProfileRecommendation | None:
+    """Validate the pure catalog projection before exposing the API DTO."""
+
+    recommendation = profile_conversion_recommendation(
+        schema_version=profile.schema_version,
+        revision=profile.revision,
+        is_active=profile.deleted_at is None,
+    )
+    return ProfileRecommendation.model_validate(recommendation) if recommendation else None
 
 
 @dataclass(frozen=True, slots=True)
@@ -81,6 +106,36 @@ class ProfilePageResult:
     lifecycle: ProfileLifecycleStats
     pagination: ProfilePagination
     query_metadata: ProfileQueryMetadata
+
+
+class ConversionApplyFailure(ValueError):
+    """A value-free apply failure that the HTTP boundary maps to M2-04."""
+
+    def __init__(
+        self,
+        code: str,
+        *,
+        current_revision: int | None = None,
+        source_artifact_id: str | None = None,
+    ) -> None:
+        super().__init__(code)
+        self.code = code
+        self.current_revision = current_revision
+        self.source_artifact_id = source_artifact_id
+
+
+class ProfileSchemaChangeRequiresConversion(ValueError):
+    """Raised when a generic profile write attempts to change its schema channel."""
+
+
+@dataclass(frozen=True, slots=True)
+class ConversionApplyOutcome:
+    """Server-derived evidence for one uncommitted conversion write."""
+
+    plan: dict[str, Any]
+    source_revision: int
+    result_revision: int
+    updated_at_changed: bool
 
 
 class ProfileService:
@@ -227,7 +282,8 @@ class ProfileService:
                     validation_state
                     if validation_state is not None
                     else ProfileService._validation_state(profile)
-                )
+                ),
+                "recommendation": _profile_recommendation_read_model(profile),
             }
         )
 
@@ -414,6 +470,216 @@ class ProfileService:
         return ProfileService._as_read_model(entity) if entity else None
 
     @staticmethod
+    async def get_conversion_preview_source(
+        session: AsyncSession,
+        profile_id: int,
+    ) -> Profile | None:
+        """Load one stored profile for M4 conversion planning without a write boundary.
+
+        The preview route deliberately receives the ORM object only through this
+        narrow service read.  ``no_autoflush`` prevents a future caller's
+        pending state from turning the planning SELECT into an accidental
+        persistence boundary; this method itself performs no assignment,
+        flush, refresh, commit, or rollback.
+        """
+        with session.no_autoflush:
+            result = await session.scalars(select(Profile).where(Profile.id == profile_id))
+            return result.first()
+
+    @staticmethod
+    def conversion_planning_context(
+        profile: Profile,
+        *,
+        compliance_replanner: ComplianceReplanner | None = None,
+    ) -> ConversionPlanningContext:
+        """Build the one digest-bearing context from persisted profile fields.
+
+        Preview and apply must use this exact projection.  In particular,
+        ``updated_at`` is included because a normal profile write invalidates a
+        preview even if its policy document happens to be unchanged.
+        """
+        return ConversionPlanningContext(
+            profile_id=profile.id,
+            revision=profile.revision,
+            lifecycle_state="active" if profile.deleted_at is None else "deleted",
+            metadata={
+                "name": profile.name,
+                "description": profile.description,
+                "created_at": profile.created_at.isoformat(),
+                "updated_at": profile.updated_at.isoformat(),
+                "deleted_at": (
+                    profile.deleted_at.isoformat() if profile.deleted_at is not None else None
+                ),
+            },
+            compliance=profile.compliance,
+            compliance_replanner=compliance_replanner,
+        )
+
+    @staticmethod
+    async def apply_conversion(
+        session: AsyncSession,
+        profile_id: int,
+        request: ConversionApplyRequest,
+        *,
+        compliance_replanner: ComplianceReplanner | None = None,
+    ) -> ConversionApplyOutcome:
+        """Replan and conditionally write one current conversion without committing.
+
+        The caller owns the surrounding transaction.  ``FOR UPDATE`` protects
+        PostgreSQL's read/replan/write sequence; SQLite deliberately ignores
+        that clause, so the API starts its transaction with ``BEGIN IMMEDIATE``
+        and this conditional write remains the final cross-dialect guard.
+        """
+        with session.no_autoflush:
+            result = await session.scalars(
+                select(Profile).where(Profile.id == profile_id).with_for_update()
+            )
+            profile = result.first()
+
+        if profile is None:
+            raise ConversionApplyFailure("conversion_profile_not_found")
+        if request.profile_id != profile_id:
+            raise ConversionApplyFailure(
+                "conversion_source_identity_stale",
+                current_revision=profile.revision,
+            )
+        if profile.deleted_at is not None:
+            raise ConversionApplyFailure(
+                "conversion_source_not_active",
+                current_revision=profile.revision,
+            )
+        if profile.revision != request.expected_revision:
+            raise ConversionApplyFailure(
+                "conversion_revision_stale",
+                current_revision=profile.revision,
+            )
+
+        try:
+            planning = plan_profile_conversion(
+                {"policies": profile.flags},
+                source_artifact_id=profile.schema_version,
+                target_artifact_id=request.target_artifact_id,
+                context=ProfileService.conversion_planning_context(
+                    profile,
+                    compliance_replanner=compliance_replanner,
+                ),
+            )
+        except ConversionPlanningError as exc:
+            raise ConversionApplyFailure(
+                exc.code,
+                current_revision=profile.revision,
+                source_artifact_id=profile.schema_version,
+            ) from exc
+
+        plan = planning.plan
+        ProfileService._assert_conversion_apply_identities(request, plan)
+
+        compatibility = plan["compatibility"]
+        target_validation = plan["target_validation"]
+        if (
+            not isinstance(compatibility, dict)
+            or compatibility.get("applicable") is not True
+            or not isinstance(target_validation, dict)
+            or target_validation.get("status") != "valid"
+        ):
+            raise ConversionApplyFailure(
+                "conversion_plan_blocked",
+                current_revision=profile.revision,
+            )
+
+        candidate_document = planning.candidate_document
+        candidate_policies = candidate_document.get("policies")
+        candidate_compliance = planning.candidate_compliance
+        if not isinstance(candidate_policies, dict) or (
+            candidate_compliance is not None and not isinstance(candidate_compliance, dict)
+        ):
+            # The pure planner promises this shape for a valid target.  An
+            # internal violation must never be converted into a partial write.
+            raise RuntimeError("conversion planner returned an invalid persistence candidate")
+
+        before_updated_at = profile.updated_at
+        write = (
+            update(Profile)
+            .where(
+                Profile.id == profile_id,
+                Profile.revision == request.expected_revision,
+                Profile.deleted_at.is_(None),
+            )
+            .values(
+                schema_version=request.target_artifact_id,
+                flags=candidate_policies,
+                compliance=candidate_compliance,
+                revision=request.expected_revision + 1,
+            )
+            .returning(Profile.revision, Profile.updated_at)
+        )
+        written = (await session.execute(write)).one_or_none()
+        if written is None:
+            # A conditional write is required even with a PostgreSQL row lock:
+            # it is the portable final proof that no concurrent apply can win
+            # twice.  The API transaction rolls this failure back unchanged.
+            raise ConversionApplyFailure("conversion_revision_stale")
+
+        result_revision, updated_at = written
+        if result_revision != request.expected_revision + 1:
+            raise RuntimeError("conversion write did not advance exactly one revision")
+        return ConversionApplyOutcome(
+            plan=plan,
+            source_revision=request.expected_revision,
+            result_revision=result_revision,
+            updated_at_changed=updated_at != before_updated_at,
+        )
+
+    @staticmethod
+    def _assert_conversion_apply_identities(
+        request: ConversionApplyRequest,
+        plan: dict[str, Any],
+    ) -> None:
+        """Fail closed unless the current plan is the exact confirmed preview."""
+        profile = plan.get("profile")
+        source = plan.get("source")
+        target = plan.get("target")
+        registry = plan.get("recipe_registry")
+        if not all(isinstance(value, dict) for value in (profile, source, target, registry)):
+            raise RuntimeError("conversion planner returned an invalid identity projection")
+        assert isinstance(profile, dict)
+        assert isinstance(source, dict)
+        assert isinstance(target, dict)
+        assert isinstance(registry, dict)
+
+        source_artifact = source.get("artifact")
+        target_artifact = target.get("artifact")
+        if not isinstance(source_artifact, dict) or not isinstance(target_artifact, dict):
+            raise RuntimeError("conversion planner returned an invalid artifact identity")
+
+        if (
+            request.source.line_id != source_artifact.get("line_id")
+            or request.source.artifact_id != source_artifact.get("artifact_id")
+            or request.target.line_id != target_artifact.get("line_id")
+            or request.target.artifact_id != target_artifact.get("artifact_id")
+            or request.target_artifact_id != request.target.artifact_id
+            or request.source_validation_schema_sha256
+            != source_artifact.get("validation_schema_sha256")
+            or request.target_validation_schema_sha256
+            != target_artifact.get("validation_schema_sha256")
+        ):
+            raise ConversionApplyFailure("conversion_schema_identity_stale")
+
+        if (
+            request.source_document_digest != source.get("document_digest")
+            or request.source_compliance_digest != source.get("compliance_digest")
+            or request.source_metadata_digest != profile.get("metadata_digest")
+        ):
+            raise ConversionApplyFailure("conversion_source_identity_stale")
+
+        if request.recipe_registry_version != registry.get(
+            "registry_version"
+        ) or request.recipe_registry_digest != registry.get("registry_digest"):
+            raise ConversionApplyFailure("conversion_recipe_registry_stale")
+        if request.plan_digest != plan.get("plan_digest"):
+            raise ConversionApplyFailure("conversion_plan_stale")
+
+    @staticmethod
     async def count(
         session: AsyncSession,
         *,
@@ -436,6 +702,7 @@ class ProfileService:
 
     @staticmethod
     async def create(session: AsyncSession, data: ProfileCreate) -> ProfileRead:
+        require_supported_schema_channel(data.schema_version)
         entity = Profile(
             name=data.name,
             description=data.description,
@@ -463,7 +730,9 @@ class ProfileService:
         if "description" in fields_to_update:
             entity.description = data.description
         if "schema_version" in fields_to_update and data.schema_version is not None:
-            entity.schema_version = data.schema_version
+            require_supported_schema_channel(data.schema_version)
+            if data.schema_version != entity.schema_version:
+                raise ProfileSchemaChangeRequiresConversion("profile_schema_conversion_required")
         if "flags" in fields_to_update and data.flags is not None:
             entity.flags = data.flags
         if "compliance" in fields_to_update:

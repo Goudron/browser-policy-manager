@@ -26,7 +26,7 @@ def test_artifact_policy_separates_committed_generated_built_and_shipped_materia
         (DOCUMENTATION_ROOT / "config/artifact-policy.json").read_text(encoding="utf-8")
     )
 
-    assert policy["target_bpm_version"] == "0.9.4"
+    assert policy["target_bpm_version"] == "0.9.5"
     assert policy["commit_policy"] == {
         "reviewed_sources": "commit",
         "localized_screenshots": "commit-after-review",
@@ -50,8 +50,8 @@ def test_generated_build_and_distribution_paths_are_ignored_but_sources_are_not(
     for ignored in (
         "src/generated/probe.dita",
         "build/site/en/index.html",
-        "dist/bpm-documentation-0.9.4.tar.gz",
-        "dist/bpm-documentation-0.9.4.tar.gz.sha256",
+        "dist/bpm-documentation-0.9.5.tar.gz",
+        "dist/bpm-documentation-0.9.5.tar.gz.sha256",
     ):
         assert _ignored(f"documentation/{ignored}"), ignored
     assert _ignored("app/documentation/site/")

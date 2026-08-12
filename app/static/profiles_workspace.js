@@ -441,6 +441,26 @@
             return workspaceState.buildCreatePayload(form, parsedFlags, compliancePayload, options);
         }
 
+        function buildCompliancePayload(complianceInfo, persistedCompliance = null) {
+            // A conversion apply may persist an evidence envelope which is not
+            // a wizard-owned editable CIS selection.  A normal editor save
+            // must carry that exact disposition forward rather than reducing
+            // it to the wizard's display projection.
+            if (persistedCompliance?.status === "current" || persistedCompliance?.status === "invalidated") {
+                return persistedCompliance;
+            }
+            return complianceInfo.layer && complianceInfo.layer !== "none"
+                ? {
+                    framework: "cis",
+                    benchmark_id: complianceInfo.benchmark_id || "cis-firefox-esr-gpo",
+                    benchmark_version: complianceInfo.benchmark_version || "1.0.0",
+                    layer: complianceInfo.layer,
+                    summary: complianceInfo.summary || {},
+                    decisions: complianceInfo.decisions || [],
+                }
+                : null;
+        }
+
         function buildConflictCopyName(form) {
             const sourceName = form.name || getCurrentProfile()?.name || t("profiles.conflict_copy_source_fallback");
             const revision = saveConflictState?.expectedRevision || getCurrentProfile()?.revision || "";
@@ -748,6 +768,7 @@
             stateBadgeEl.textContent = t("profiles.badge_draft");
             stateBadgeEl.className = "state-chip state-chip--draft";
             nameInput.disabled = false;
+            documentRef.getElementById("profile-type").disabled = false;
             nameHintEl.textContent = t("profiles.name_hint");
             setWorkspaceHelper(
                 t("profiles.helper_no_selection_title"),
@@ -834,6 +855,7 @@
             nameInput.value = profile.name || "";
             descriptionInput.value = profile.description || "";
             documentRef.getElementById("profile-type").value = profile.schema_version || defaultSchemaVersion;
+            documentRef.getElementById("profile-type").disabled = true;
             nameInput.disabled = true;
             nameHintEl.textContent = t("profiles.name_locked");
             setValidationPreview(t("profiles.selection_active_status"), "success");
@@ -912,6 +934,7 @@
             nameInput.value = clonedName;
             descriptionInput.value = sourceProfile?.description || "";
             documentRef.getElementById("profile-type").value = sourceProfile?.schema_version || defaultSchemaVersion;
+            documentRef.getElementById("profile-type").disabled = false;
             nameHintEl.textContent = t("profiles.name_hint");
             setWorkspaceHelper(
                 t("profiles.helper_clone_title").replace("{name}", sourceName),
@@ -1112,8 +1135,10 @@
                 if (announceLoaded) {
                     setStatus(t("profiles.status_profile_loaded").replace("{name}", profile.name), "success");
                 }
+                return profile;
             } catch (e) {
                 setStatus(t("profiles.error_load").replace("{detail}", e.message || e), "error");
+                return null;
             }
         }
 
@@ -1178,16 +1203,10 @@
                 const complianceInfo = typeof getWizardComplianceMergeInfo === "function"
                     ? getWizardComplianceMergeInfo()
                     : { layer: "none" };
-                const compliancePayload = complianceInfo.layer && complianceInfo.layer !== "none"
-                    ? {
-                        framework: "cis",
-                        benchmark_id: complianceInfo.benchmark_id || "cis-firefox-esr-gpo",
-                        benchmark_version: complianceInfo.benchmark_version || "1.0.0",
-                        layer: complianceInfo.layer,
-                        summary: complianceInfo.summary || {},
-                        decisions: complianceInfo.decisions || [],
-                    }
-                    : null;
+                const compliancePayload = buildCompliancePayload(
+                    complianceInfo,
+                    getCurrentId() ? getCurrentProfile()?.compliance || null : null,
+                );
 
                 if (!getCurrentId() && !form.name) {
                     setBusyState(false);
@@ -1256,16 +1275,10 @@
                 const complianceInfo = typeof getWizardComplianceMergeInfo === "function"
                     ? getWizardComplianceMergeInfo()
                     : { layer: "none" };
-                const compliancePayload = complianceInfo.layer && complianceInfo.layer !== "none"
-                    ? {
-                        framework: "cis",
-                        benchmark_id: complianceInfo.benchmark_id || "cis-firefox-esr-gpo",
-                        benchmark_version: complianceInfo.benchmark_version || "1.0.0",
-                        layer: complianceInfo.layer,
-                        summary: complianceInfo.summary || {},
-                        decisions: complianceInfo.decisions || [],
-                    }
-                    : null;
+                const compliancePayload = buildCompliancePayload(
+                    complianceInfo,
+                    getCurrentProfile()?.compliance || null,
+                );
                 const copyName = buildConflictCopyName(form);
                 const copyPayload = buildCreatePayload(form, parsedFlags, compliancePayload, { name: copyName });
                 const created = await createProfile(copyPayload);

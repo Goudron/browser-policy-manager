@@ -5,7 +5,7 @@
   <shortdesc>在源修订版本更改后，应用数据<uicontrol>库</uicontrol>迁移并验证更新后的 BPM 源部署。</shortdesc>
   <taskbody>
     <prereq><p>签出和依赖项已成功刷新，并且在 BPM 停止时收集了数据<uicontrol>库</uicontrol>备份证据。</p></prereq>
-    <context><p>更新可能会引入数据<uicontrol>库</uicontrol>迁移。BPM 记录了使用 <codeph>alembic upgrade head</codeph> 进行正向迁移；不承诺自动降级或安全的架构回滚。</p></context>
+    <context><p>更新可能会引入数据<uicontrol>库</uicontrol>迁移。BPM 记录了使用 <codeph>alembic upgrade head</codeph> 进行正向迁移；不承诺自动降级或安全的架构回滚。受支持的较旧 ESR 不会自动迁移。只有未来候选版本实际退役某个 ESR 时，才能在备份和只读预检之后，通过经过审查的 Alembic 升级将其声明的直接后继版本迁移。</p></context>
     <steps>
       <step><cmd>将数据<uicontrol>库</uicontrol>迁移应用到目标数据<uicontrol>库</uicontrol>。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"

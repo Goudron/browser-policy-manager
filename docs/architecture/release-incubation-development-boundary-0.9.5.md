@@ -1,6 +1,6 @@
-# BPM 0.9.4 Release, Incubation, And Development Boundary
+# BPM 0.9.5 Release, Incubation, And Development Boundary
 
-`tools/release_boundary_manifest_0_9_4.json` is the authoritative, machine-checked
+`tools/release_boundary_manifest_0_9_5.json` is the authoritative, machine-checked
 classification of BPM modules, direct dependencies, Make commands, test fixtures,
 and test contours. It distinguishes the default release delivery from optional AI
 incubation, development tooling, and the separately optional PostgreSQL integration.

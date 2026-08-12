@@ -4,6 +4,7 @@ from typing import Any
 
 from app.compliance.firefox.cis.validation import BASE_DIR, load_yaml_file
 from app.core.policy_validation import validate_profile_policies_for_channel
+from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS
 
 
 def _build_policy_from_target(target: dict[str, Any]) -> dict[str, Any] | None:
@@ -30,6 +31,7 @@ def test_cis_mapping_targets_validate_against_declared_schema_channels() -> None
     mapping_doc = load_yaml_file(BASE_DIR / "mappings.yaml")
     mappings = mapping_doc.get("mappings", [])
     errors: list[str] = []
+    valid_target_counts = {channel: 0 for channel in SUPPORTED_SCHEMA_CHANNELS}
 
     for mapping in mappings:
         if not isinstance(mapping, dict):
@@ -42,9 +44,15 @@ def test_cis_mapping_targets_validate_against_declared_schema_channels() -> None
             if not policy_doc:
                 continue
             schema_channels = target.get("schema_channels") or {}
+            if set(schema_channels) != set(SUPPORTED_SCHEMA_CHANNELS):
+                errors.append(
+                    f"{rec_id} -> declared schema matrix {sorted(schema_channels)} does not "
+                    f"match supported channels {sorted(SUPPORTED_SCHEMA_CHANNELS)}"
+                )
             for channel, status in schema_channels.items():
                 if status != "valid":
                     continue
+                valid_target_counts[channel] += 1
                 issues = validate_profile_policies_for_channel(policy_doc, channel)
                 if issues:
                     errors.append(
@@ -53,3 +61,4 @@ def test_cis_mapping_targets_validate_against_declared_schema_channels() -> None
                     )
 
     assert not errors, "Invalid CIS mapping targets detected:\n" + "\n".join(errors)
+    assert valid_target_counts == {channel: 53 for channel in SUPPORTED_SCHEMA_CHANNELS}

@@ -65,6 +65,11 @@ def test_semantic_ui_contract_is_global_scoped_and_owned() -> None:
         "profiles.locale_system"
         in contract["scoped_catalog_keys"]["user/ug-task-change-interface-language.dita"]
     )
+    assert "profiles.nav_library" in contract["ambiguous_exclusions"]
+    assert (
+        "profiles.nav_library"
+        in contract["scoped_catalog_keys"]["user/ug-task-use-profile-library.dita"]
+    )
     assert set(contract["excluded_elements"]) >= {
         "title",
         "navtitle",
@@ -79,6 +84,7 @@ def test_semantic_ui_contract_is_global_scoped_and_owned() -> None:
 def test_registered_catalog_ui_names_are_never_bare_in_maintained_prose() -> None:
     contract = _json(CONTRACT)
     excluded = set(contract["excluded_elements"])
+    ambiguous = set(contract["ambiguous_exclusions"])
     findings: list[tuple[str, str, str, str]] = []
 
     for locale in LOCALES:
@@ -88,6 +94,8 @@ def test_registered_catalog_ui_names_are_never_bare_in_maintained_prose() -> Non
             root = ET.parse(path).getroot()
             global_text = "\n".join(_outside_text(root, excluded))
             for key in contract["global_catalog_keys"]:
+                if key in ambiguous:
+                    continue
                 value = catalog[key]
                 if _matches(global_text, value, locale=locale):
                     findings.append((locale, relative, key, value))

@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from app.models.profile import Base, Profile
 from app.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
-from app.services.profile_service import ProfileService
+from app.services.profile_service import ProfileSchemaChangeRequiresConversion, ProfileService
 from tests.sync_session_adapter import SyncSessionAdapter
 
 
@@ -17,7 +17,7 @@ def _mk_create_payload() -> ProfileCreate:
     return ProfileCreate(
         name=f"UPD-{u}",
         description="Original description",
-        schema_version="esr-140.12",
+        schema_version="esr-140.13",
         flags={"DisableTelemetry": True},
         compliance={"framework": "cis", "layer": "cis_l1"},
     )
@@ -37,15 +37,14 @@ def service_session() -> SyncSessionAdapter:
 
 
 @pytest.mark.anyio
-async def test_update_all_mutable_fields_and_read_back(service_session: SyncSessionAdapter):
-    """Hit all field assignments in ProfileService.update (desc/schema/flags/compliance)."""
+async def test_update_all_editable_fields_and_read_back(service_session: SyncSessionAdapter):
+    """Generic updates retain their persisted channel and update ordinary editable fields."""
     created = await ProfileService.create(service_session, _mk_create_payload())
     await service_session.commit()
     profile_id = created.id
 
     patch = ProfileUpdate(
         description="Changed description",
-        schema_version="release-152",
         flags={"DisableTelemetry": False, "DisablePrivateBrowsing": True},
         compliance={"framework": "cis", "layer": "cis_l2"},
     )
@@ -54,10 +53,17 @@ async def test_update_all_mutable_fields_and_read_back(service_session: SyncSess
     await service_session.commit()
     assert updated is not None
     assert updated.description == "Changed description"
-    assert updated.schema_version == "release-152"
+    assert updated.schema_version == "esr-140.13"
     assert updated.flags.get("DisableTelemetry") is False
     assert updated.flags.get("DisablePrivateBrowsing") is True
     assert updated.compliance == {"framework": "cis", "layer": "cis_l2"}
+
+    with pytest.raises(ProfileSchemaChangeRequiresConversion):
+        await ProfileService.update(
+            service_session,
+            profile_id,
+            ProfileUpdate(schema_version="release-153"),
+        )
 
     cleared = await ProfileService.update(
         service_session,

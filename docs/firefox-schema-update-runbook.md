@@ -2,8 +2,9 @@
 
 This runbook turns the Firefox schema bump into a repeatable release task instead of a one-off migration.
 
-Use it when BPM needs to refresh its supported Firefox Release/ESR schema matrix. A matrix may
-contain one Release channel and one or more concurrently supported ESR channels.
+Use it when BPM needs to add, retain, refresh, or retire a supported Firefox Release/ESR schema
+artifact. A matrix may contain one Release channel and one or more concurrently supported ESR
+lines. This is a lifecycle procedure, not a version-string replacement procedure.
 
 Current product surfaces are the profile library, Guided editor, All settings, and JSON editor. Do
 not reintroduce a separate advanced editor route, template, redirect, or JavaScript bundle during a
@@ -12,54 +13,91 @@ policy/preference coverage, but it must stay inside Guided review / All settings
 
 ## Inputs You Need Before Editing
 
-Collect the Firefox source tag and one row for every target channel first:
+Collect official Mozilla support evidence, the Firefox source tag, and one row for every previous
+and candidate channel before editing:
 
 1. Mozilla `policy-templates` tag, for example `v7.10`.
 2. Firefox channel type and version, for example `Release 153`, `ESR 153.0`, or `ESR 140.13`.
 3. BPM channel string and output filename for that version.
-4. Explicit persisted-profile migration destination for every previously supported channel.
+4. Stable line identity, exact artifact identity, support state, lifecycle role, and selector role.
+5. Explicit same-line refresh mapping or retirement successor for each changed persisted artifact.
 
-Keep one support-and-migration table for the whole change. For example, the Firefox 153 transition
-supports a Release channel and two ESR channels:
+The source evidence must be official and reviewable: Mozilla product-details/support material for
+the support state and end/recheck date, and the official `mozilla/policy-templates` release metadata
+for each source tag. Browser binaries, generated schemas, labels, the largest version number, and a
+previous BPM file are not support evidence.
+
+Keep one previous-versus-candidate lifecycle matrix for the whole change. It must classify every
+stable line as **added**, **retained**, **refreshed** (same stable line, new exact artifact), or
+**retired**, and it must separately identify the latest ESR, product default, default Release, and
+each retirement successor. For the BPM 0.9.5 four-channel example:
 
 | Field | Example |
 |---|---|
 | Firefox 153 source tag | `mozilla-policy-templates-v8.0` |
 | Release channel | `release-153` |
 | Release version/file | `153.0` / `app/schemas/policies/firefox-release-153.json` |
-| Current ESR channel | `esr-153.0` |
-| Current ESR version/file | `153.0` / `app/schemas/policies/firefox-esr-153.0.json` |
-| Previous ESR channel | `esr-140.13` |
-| Previous ESR version/file | `140.13` / `app/schemas/policies/firefox-esr-140.13.json` |
-| Migration map | `release-152 → release-153`; `esr-140.12 → esr-140.13` |
+| Latest ESR / product default | `esr-153.0` / `app/schemas/policies/firefox-esr-153.0.json` |
+| Retained older ESR | `esr-140.13` / `app/schemas/policies/firefox-esr-140.13.json` |
+| Retained legacy-OS ESR | `esr-115.38` / `app/schemas/policies/firefox-esr-115.38.json` |
+| Latest-ESR recommendations | `esr-115` and `esr-140` → `esr-153` (explicit user preview only) |
+| Prospective retirement chain | `esr-115` → `esr-140` → `esr-153` (Alembic only after retirement) |
 
-If this table is not clear up front, stop and resolve it first. Do not infer an ESR migration from
-the highest version: a concurrently supported ESR remains a separate target channel.
+If this matrix is not clear up front, stop and resolve it first. Do not infer an ESR migration from
+the highest version, catalog order, product default, or recommendation target: a concurrently
+supported ESR remains a separate target channel and profile conversion is an explicit user action.
+
+### Lifecycle-role rules
+
+- **Added** lines require independently generated source/checksum evidence and complete wiring, but
+  do not authorize a write to any existing profile.
+- **Retained** lines remain selectable and must retain their exact artifact/source evidence.
+- **Refreshed** lines require an explicit old-artifact to new-artifact mapping on the same stable
+  line; they are not a retirement and must not be confused with a newer ESR successor.
+- **Retired** ESR lines require exactly one explicit, supported, immediate numerically newer ESR
+  successor. Release is never an ESR successor.
+- The only latest ESR is a lifecycle role. It may be the product default and recommendation target,
+  but neither role authorizes automatic migration.
+
+The active authority is the machine-readable Firefox schema lifecycle catalog contract. Its
+Markdown companion explains the roles, ordering, recommendation, and successor meanings. Treat
+the catalog, not a tuple position or label, as the lifecycle source of truth.
 
 ## Source Artifacts
 
-BPM currently builds bundled schemas from two Mozilla inputs for every source tag:
+BPM builds bundled schemas from two Mozilla inputs for every source tag. Their exact raw URLs,
+byte sizes, SHA-256 digests, Mozilla release attribution, and MPL-2.0 attribution are declared in
+`tools/firefox_schema_inputs_manifest_0_9_4.json`; this input manifest is independent from browser
+patch evidence and the schema-target manifest.
 
 1. The versioned `docs/index.md` policy-template document:
    `data/upstream/policy-templates/<mozilla-tag>/policy-templates.md`
-2. The Linux example policy snapshot from the official release zip:
+2. The Linux example policy snapshot from the official release-tag raw file:
    `data/upstream/policy-templates/<mozilla-tag>/linux-policies.json`
 
 Recommended workflow:
 
-1. Download `docs/index.md` from the exact Mozilla release tag named in the support matrix.
-2. Download the Mozilla release zip for the target tag.
-3. Extract `docs/index.md` and `linux/policies.json` and save them as:
+1. Review the Mozilla release metadata and update the declarative input manifest with the exact
+   release tag, raw file URLs, byte sizes, SHA-256 digests, and license/provenance fields.
+2. Run `make provision-firefox-schema-inputs`. It downloads only manifest-pinned inputs, verifies
+   size and checksum before atomic cache placement, retries transient failures a bounded number of
+   times, and quarantines an invalid cache entry before replacement.
+3. For an offline generation/review machine, run
+   `python tools/provision_firefox_schema_inputs.py --offline`; it reuses only valid cached inputs
+   and fails without a network fallback when an input is absent or invalid.
+4. Use the cache paths
    `data/upstream/policy-templates/<mozilla-tag>/policy-templates.md` and
-   `data/upstream/policy-templates/<mozilla-tag>/linux-policies.json`
+   `data/upstream/policy-templates/<mozilla-tag>/linux-policies.json` only after that verification.
 
-The release zip is the authoritative source for the example policy payloads used by the converter.
+The manifest-pinned raw `linux/policies.json` input is the authoritative example policy payload for
+the converter. Do not infer its content, tag, or provenance from a Firefox browser patch.
 
 Before downloading, confirm the release metadata from the official Mozilla GitHub release page or
-API. The release name must explicitly cover the target Firefox support matrix. Record the zip
-checksum in the execution notes so a later regeneration can identify the exact input. The `data/`
-tree is a local, Git-ignored converter cache; the committed/reviewed outputs are the bundled schemas
-and the code/tests that identify their upstream source.
+API. The release name must explicitly cover the target Firefox support matrix. Record or review the
+manifest's raw-input sizes and SHA-256 digests in the execution notes so a later regeneration can
+identify the exact inputs. The `data/` tree is a local, Git-ignored converter cache; the
+committed/reviewed outputs are the bundled schemas and the code/tests that identify their upstream
+source.
 
 Mozilla release notes and the rendered legacy docs page can move at different speeds. Compare the
 release notes with the generated diff. If Mozilla announces a new field but it is absent from both
@@ -79,10 +117,13 @@ comment and test name. Do not start product-documentation updates until this gat
 
 ## Files That Must Move Together
 
-Treat the following as one unit of change:
+Treat the following as one unit of change when their owned surface is affected:
 
 - `app/core/schema_channels.py`
-- `alembic/env.py` and the new immutable revision in `alembic/versions/`
+- lifecycle catalog, transition-plan, total-proof, and retirement-safety contracts under
+  `docs/architecture/`
+- `alembic/env.py` and a new immutable revision in `alembic/versions/` **only for an approved
+  actual retirement**
 - `app/schemas/policies/firefox-*.json`
 - `README.md`
 - `tools/convert_policies_from_upstream_lib/common.py`
@@ -104,20 +145,59 @@ Treat the following as one unit of change:
 - `tests/integration/firefox/test_firefox_manual_policy_controls.py`
 - `tests/unit/firefox/test_firefox_settings_catalog_builders.py`
 - `tests/contract/ui/localization/test_web_profiles_page.py`
-- `tests/integration/db/test_migrations.py`
+- `tests/integration/db/test_migrations.py` and retirement-owner/materializer tests when lifecycle
+  state changes
 - `tests/integration/locale/test_ru_locale_quality.py` and
   `tests/fixtures/locale_contracts/visible_english_allowlists.json` when a new policy label contains
   a preserved Latin technical/product term
 - `.github/workflows/ci.yml`
 - `README.md`
-- `alembic/versions/*.py` for the schema-version migration
+- `alembic/versions/*.py` only for the approved retirement migration
 
-If one of these still references a retired channel or omits a supported matrix channel, the bump is
-not finished.
+If one of these omits a supported matrix channel, retains an actually retired runtime artifact, or
+claims a migration that has not passed the retirement gate, the bump is not finished.
 
 ## Update Sequence
 
-### 1. Update the central channel constants
+### 1. Plan and review the lifecycle transition without mutation
+
+Compare explicit previous and candidate catalog snapshots. Run the maintained schema-lifecycle
+dry-run in its default **read-only** mode and retain its value-free plan: phases, changed lines,
+added/retained/refreshed/retired classifications, exact artifacts, successor mappings, blockers,
+and terminal result. A dry-run may inspect an explicitly selected disposable or
+backup-verified database for aggregate affected-profile counts, but it must not write profiles,
+stamp Alembic, alter the active catalog, or create an installed revision.
+
+Use two explicit reviewed snapshots; the command does not infer either side from the runtime
+catalog. The default does not create a database engine or inspect profile rows:
+
+```bash
+make schema-lifecycle-dry-run \
+  PREVIOUS_LIFECYCLE_CATALOG=docs/architecture/firefox-schema-lifecycle-catalog-contract-previous.json \
+  CANDIDATE_LIFECYCLE_CATALOG=docs/architecture/firefox-schema-lifecycle-catalog-contract-candidate.json \
+  RETIREMENT_TOTAL_PROOF=docs/architecture/firefox-esr-140.13-to-esr-153.0-retirement-total-proof-0.9.5.json
+```
+
+The report has flushed `phase`/`channel` completed/total progress and a deterministic terminal
+JSON record. It identifies the cache as unused/not-written, prints only line/artifact mappings and
+aggregate counts, and never includes policy values, profile identifiers, connection URLs, or
+backup secrets. An optional count requires both an explicit database URL and an explicit
+`disposable` or `verified-backup` scope; SQLite must use a URI opened with `mode=ro`, and a
+`verified-backup` count also requires reviewed native-backup evidence. A count observation is not
+a migration preflight and cannot authorize activation.
+
+For every directed pair of supported artifacts, preserve the pairwise conversion contract: preview
+is read-only, apply is explicit and atomic, and each source atom is unchanged, an approved exact
+transformation, or a blocker. The full directed pair matrix is evidence for manual conversion; it
+does not replace the retirement proof.
+
+For a proposed retirement, validate the lifecycle plan before schema or database work. It must
+reject absent, ambiguous, non-ESR, non-newer, unsupported, unbundled, cyclic, or skipped
+successors. An ESR 115 retirement selects ESR 140 while ESR 140 remains supported; it cannot jump
+to ESR 153. An ESR 140 retirement selects ESR 153 only when ESR 140 is actually removed from the
+candidate catalog.
+
+### 2. Update the central channel constants
 
 Start in `app/core/schema_channels.py`.
 
@@ -131,7 +211,7 @@ Update:
 
 This file is the product-level source of truth. UI, API, loaders, and validation should derive supported channels from here.
 
-### 2. Update converter defaults
+### 3. Update converter defaults
 
 Adjust the declarative build targets in:
 
@@ -149,7 +229,7 @@ Do not use a broad version-string replacement for historical policy metadata. Ex
 must keep their real `x-bpm-min-version` and compatibility provenance even when the active channel
 moves forward.
 
-## 3. Generate the new bundled schemas
+### 4. Generate the new bundled schemas
 
 Run the converter through the committed target manifest. The manifest is the explicit audit record
 for every generated output and prevents a second ESR from being silently derived by file copy.
@@ -165,18 +245,28 @@ For a matrix with more than one ESR, extend the converter contract and invoke it
 generated from its own explicit channel/version row. Do not create an additional ESR schema by
 copying or relabeling another generated JSON file.
 
-Then remove only retired bundled schema files from `app/schemas/policies/`.
+Do not remove a bundled artifact merely because a newer artifact exists. Remove a schema file only
+in the coordinated candidate that retires its exact artifact, after the transition plan, proof, and
+future Alembic activation gates below are ready. Retain every artifact named by the current support
+matrix.
 
-Do not keep retired Release / ESR files around. Retain a previous ESR file only when it is named in
-the declared current support matrix.
-
-## 4. Sanity-check the generated schemas before wiring them in
+### 5. Sanity-check the generated schemas before wiring them in
 
 Check the metadata directly in the JSON files:
 
 ```bash
 for schema in app/schemas/policies/firefox-*.json; do
-  jq '.["x-bpm-channel"], .["x-bpm-version"], .["x-bpm-source"]' "$schema"
+  jq '{
+    channel: .["x-bpm-channel"],
+    artifact_id: .["x-bpm-artifact-id"],
+    line_id: .["x-bpm-line-id"],
+    artifact_version: .["x-bpm-version"],
+    firefox_line: .["x-bpm-firefox-line"],
+    firefox_version: .["x-bpm-firefox-version"],
+    source: .["x-bpm-source"],
+    source_provenance: .["x-bpm-source-provenance"],
+    generator: .["x-bpm-generator"]
+  }' "$schema"
 done
 
 jq '.properties.ExtensionSettings.additionalProperties.properties.allowed_types.items.enum' \
@@ -193,25 +283,29 @@ Minimum expectations:
 - Release channel matches the intended `release-*` value.
 - ESR channel matches the intended `esr-*` value.
 - versions match the intended Firefox numbers exactly
+- exact artifact identity, stable line identity, Firefox line, and observed
+  Firefox patch/version remain distinct; do not derive one from another
 - `x-bpm-source` matches the Mozilla release tag you actually used
+- `x-bpm-source-provenance` exactly records the M3-01 manifest's upstream tag,
+  release attribution, license, raw URLs, byte lengths, and SHA-256 inputs;
+  `x-bpm-generator` identifies the owner command that emitted the bundle
 - `ExtensionSettings.allowed_types` still contains expected upstream values such as `sitepermission`
 - every item in the nested-policy completeness checklist is present only on its intended channels
 
 If these checks fail, do not continue into app changes yet.
 
-## 5. Migrate the product to the new channels
+### 6. Wire the candidate catalog, conversion, UI, and drift owners
 
 After the bundled JSON is correct:
 
-1. Remove old channel references from the product code.
-2. Add an Alembic migration that rewrites persisted `profiles.schema_version` values from the old channel strings to the new ones. Its `down_revision` must be the current Alembic head, which may be newer than the previous schema migration.
-3. Add or update migration tests for every retained source shape and for the two-engine
-   integration contract. Run the migration only against a disposable candidate after a verified
-   backup; `alembic upgrade head` is the sole schema and stored-channel upgrade path. Never add a
-   startup, request-time, or ad-hoc backfill path.
-4. Update documentation and UI labels to the complete new Release/ESR support matrix.
+1. Update active owned surfaces from the lifecycle catalog; do not replace channel literals
+   mechanically or infer roles from an ordered list.
+2. Update or add pairwise conversion fixtures for every affected source/target artifact direction.
+   A blocked conversion remains blocked and visible; it must never discard, coerce, default, or
+   silently relabel policy data.
+3. Update documentation and UI labels to the complete new Release/ESR support matrix.
    In `README.md`, refresh the Supported Firefox Schemas table, examples that carry a `schema_version`, and any prose that names the active Release / ESR versions.
-5. Update every active locale catalog when Release / ESR labels, schema-channel copy, policy names,
+4. Update every active locale catalog when Release / ESR labels, schema-channel copy, policy names,
    or schema-related UI strings change. Edit `app/i18n_src/<locale>/*.json`, then rebuild generated
    `app/i18n/*.json` with `make build-locale-catalogs`. The generated runtime catalogs
    `app/i18n/en.json`, `app/i18n/ru.json`, `app/i18n/de.json`, `app/i18n/zh-CN.json`,
@@ -219,10 +313,52 @@ After the bundled JSON is correct:
    source segment; follow `docs/locale_update_runbook_2026-06-01.md`, the global glossary, and the
    placeholder rules. If new or changed Mozilla/Firefox terms enter the UI, verify terminology
    against Pontoon/SUMO evidence and update the glossary or locale audit notes before release.
-6. Update the legacy guard so the previous release strings are banned outside the explicit immutable
-   migration and its focused migration fixtures.
+5. Update CIS source/mapping/generation evidence for every supported exact schema channel. A
+   missing, empty, invalid, or unreviewed CIS layer blocks the candidate; do not publish an
+   unavailable compliance selector for a supported product schema. Follow
+   `docs/cis_firefox_update_runbook_2026-04-13.md` and its provenance and restricted-content rules.
+6. Update the legacy guard so retired strings are banned outside explicit immutable migration
+   material, focused fixtures, and historical evidence. A retained older ESR is not legacy merely
+   because a newer ESR exists.
 
-### Documentation drift gate
+### 7. Retirement: prove first, materialize only for a future candidate
+
+Retirement has a stricter path than addition or refresh. Before any database mutation, bind exact
+source/target bundle hashes, normalized-validator hashes, the immutable recipe registry, the
+previous/candidate catalog digests, and the exact immediate successor in one reviewable transition
+manifest. Then complete **total convertibility** for every source-schema-valid document shape:
+schema containment with semantic evidence, or an exhaustive, non-overlapping set of approved
+lossless recipes. A sampled profile set, successful preview, a policy-name comparison, or an
+upstream version label is never a substitute. Any uncovered path yields
+`retirement_total_convertibility_unproven` and mutation remains `none`.
+
+The M6 ESR 140.13 → ESR 153.0 exact-artifact containment proof is the required production example:
+it is complete but it does **not** retire ESR 140 while that line remains supported. Its
+candidate-only materializer may render a deterministic, reviewable future Alembic-compatible
+artifact, but it must reject the active catalog, must not install a revision in the active graph,
+and must not write a profile. Do not create a premature current migration.
+
+At the actual removal of ESR 140 from the candidate catalog, the approved transition must
+automatically migrate every stored exact ESR 140 artifact to ESR 153 through the single immutable
+Alembic revision. That is the only automatic ESR 140 → ESR 153 migration. It is forbidden while
+ESR 140 is supported, and it is forbidden in startup, readiness, request handling, GET/list,
+validation, preview, UI rendering, or an ad-hoc backfill. Runtime inference, silent loss,
+implicit defaults, and best-effort conversion are prohibited.
+
+Before activation, stop BPM and all other writers, create a native backup, and prove restoration in
+a distinct clean candidate. Perform the database-specific preflight read-only, then recheck the
+snapshot under the migration lock before its first write. `alembic upgrade head` is the sole schema and stored-channel upgrade path. The revision changes only the reviewed channel, target-valid
+flags, compliance disposition, revision, and database-owned transaction timestamp; it includes
+archived rows, preserves unaffected data byte-for-byte, stamps and converts in one transaction, and
+does not support downgrade. Recovery is restore into a new clean candidate, never in-place repair.
+
+Require the full interruption/idempotency/rollback matrix on both engines. SQLite evidence runs
+through `make test-db-recovery`; PostgreSQL evidence is mandatory through
+`make test-postgres-integration`. A missing disposable PostgreSQL service is a failed required gate,
+not permission to substitute SQLite evidence. Future activation is incomplete until native
+PostgreSQL backup/restore and transaction evidence are current for the actual candidate.
+
+### 8. Documentation drift gate
 
 Treat Firefox schema documentation as part of the schema bump, not as a later cleanup:
 
@@ -271,7 +407,7 @@ Treat Firefox schema documentation as part of the schema bump, not as a later cl
 Important: only the immutable migration and its focused migration fixtures should keep references to
 the previous channels.
 
-### Schema-generated policy labels
+### 9. Schema-generated policy labels
 
 Every new schema policy can create a runtime key such as
 `profiles.shell_policy_<normalized_policy_name>`. Handle these keys before running the broad locale
@@ -294,7 +430,7 @@ Run the maintained locale contract after registering the generated key:
 make test-locale-contract
 ```
 
-## 6. Audit BPM UI impact from the new policy docs
+### 10. Audit BPM UI impact from the new policy docs
 
 Do this as a deliberate product pass, not as a side effect of schema generation:
 
@@ -340,7 +476,7 @@ Record the reason for any important placement choice in the PR description or ch
 line is enough, for example: "Kept `PolicyName` in All settings only because it is a nested
 environment-specific control."
 
-## 7. Update the tests that lock the release
+### 11. Update the tests that lock the release
 
 Expected test touch points:
 
@@ -349,8 +485,16 @@ Expected test touch points:
 - `tests/integration/schema/test_schema_validation.py`
   Checks bundled metadata, source tag, and a few smoke invariants.
   Prevents old channel strings and source tags from leaking back in.
-- `tests/integration/db/test_migrations.py`
-  Verifies old DB rows are upgraded to the new schema channel values.
+- `tests/unit/schema/contracts/test_lifecycle_transition_plan.py`
+  Verifies added/retained/refreshed/retired rows and immediate-successor rejection cases.
+- `tests/unit/schema/contracts/test_retirement_convertibility_preflight.py` and
+  `tests/contract/docs/schema/test_firefox_retirement_total_proof.py`
+  Verify exact-artifact total-convertibility evidence and strict no-sample proof behavior.
+- `tests/integration/db/test_retirement_owner_v1.py` and
+  `tests/integration/db/test_retirement_revision_materializer_v1.py`
+  Verify candidate-only materialization, backup-gated atomic retirement ownership, rollback, and
+  idempotency on the supported database contours. They do not authorize an active migration while
+  the source ESR remains supported.
 - `tests/contract/ui/localization/test_web_profiles_page.py`
   Verifies the Library remains read-only and visible UI/header text reflects the current supported
   versions.
@@ -373,7 +517,7 @@ Expected test touch points:
 
 If CI has a legacy guard step, update it in `.github/workflows/ci.yml` in the same commit.
 
-## 8. Verification commands
+### 12. Verification commands
 
 Run the focused checks first:
 
@@ -387,6 +531,25 @@ byte-identical bundled JSON. It does not fetch an upstream schema or contact Moz
 
 If the schema bump changes Firefox/Mozilla terminology or locale-maintenance documentation, also run
 `make test-locale-contract`.
+
+Run the lifecycle and conversion evidence that applies to the candidate before a broad gate:
+
+```bash
+make verify-firefox-schema-matrix
+make verify-firefox-conversion-matrix
+make test-db-recovery
+```
+
+For a retirement candidate, the reviewed dry-run must complete read-only before any backup or
+Alembic activation. Then run `make test-postgres-integration`; its required PostgreSQL service and
+recovery evidence are not optional. Do not present a candidate-only materializer test as a current
+production migration.
+
+Run `make test-firefox-live` only after the matrix, conversion, database, CIS, locale, and product
+contracts pass. Live Firefox evidence is separately pinned per channel and must name the exact
+browser/geckodriver versions, checksums, runtime observations, skips, and artifacts. For the current
+four-channel matrix, execute the Release 153, ESR 153, ESR 140, and ESR 115 contours independently;
+never substitute a floating/latest browser or reuse one channel's binary evidence for another.
 
 For fast visual smoke, run the compact Chromium/Selenium layer:
 
@@ -415,11 +578,16 @@ the same local socket/browser requirements as `make test-ui`.
 Recommended gate order:
 
 1. `make test-firefox-schema-contract`
-2. focused converter, offline schema-workflow, CIS-generation, and placement tests
-3. `make test-locale-contract` when any visible version or policy term changed
-4. `make lint` and `make typecheck`
-5. `make test-ui` outside the sandbox
-6. `make test-release` outside the sandbox
+2. `make verify-firefox-schema-matrix`, `make verify-firefox-conversion-matrix`, focused offline
+   schema-workflow, lifecycle, total-proof, CIS-generation, and placement tests
+3. `make test-db-recovery`, then `make test-postgres-integration` for retirement evidence
+4. `make test-locale-contract` when any visible version or policy term changed
+5. affected documentation/help/search gates and `make docs-release-check` when documentation
+   artifacts changed
+6. `make lint` and `make typecheck`
+7. `make test-ui` outside the sandbox when the UI surface changed
+8. `make test-firefox-live` for the independently pinned affected channels
+9. `make test-release` outside the sandbox
 
 Do not solve a large-list browser timeout by increasing Selenium waits first. Profile lists validate
 many documents and must use the cached validator for their schema channel rather than recompiling a
@@ -439,10 +607,23 @@ If the schema bump touched product wiring heavily, also review the profiles page
 
 Before calling the bump finished, confirm all of the following:
 
-- new bundled schema files exist and old ones are removed
+- new bundled schema files exist; an old file is removed only when its exact artifact is retired
+  by the approved candidate, while every retained supported artifact remains bundled
+- official Mozilla support and policy-template release evidence is recorded for every candidate row
+- previous/candidate lifecycle matrix names every added, retained, refreshed, and retired line,
+  latest ESR, product/default Release roles, and exact immediate successor where retirement occurs
 - `app/core/schema_channels.py` matches the complete new Release/ESR support matrix
 - schema metadata points to the correct Mozilla tag
-- Alembic migration upgrades stored `schema_version` values
+- every schema is independently generated from its own manifest-pinned raw sources, byte sizes, and
+  SHA-256 digests; no browser patch, copied bundle, or label substitutes for that provenance
+- all supported directed conversion pairs have current positive/negative evidence and retain
+  explicit preview/apply semantics
+- retirement has a complete exact-artifact source-schema-wide proof or is blocked with no mutation;
+  profile samples never satisfy this requirement
+- a candidate-only retirement artifact is neither installed nor activated while its source ESR is
+  supported
+- at actual ESR 140 removal, the immutable Alembic revision automatically migrates exact ESR 140
+  profiles to ESR 153 in one transaction after backup/preflight gates pass
 - application startup verifies the exact Alembic head without writing; legacy rows are changed only
   by the reviewed migration while GET `/profiles` remains read-only
 - UI audit completed for newly added/changed policies
@@ -452,7 +633,11 @@ Before calling the bump finished, confirm all of the following:
 - every new schema-backed policy is visible through All settings for supported channels
 - important new policies are either intentionally promoted into Guided, intentionally kept in All settings only, or explicitly left JSON-only/raw with a reason
 - starter presets reviewed against changed policy semantics
-- tests for schema channels, metadata, legacy guards, and migrations are green
+- CIS source/mapping/layer generation has valid evidence for every supported exact schema channel
+- tests for schema channels, metadata, lifecycle plans, pairwise conversions, legacy guards, and
+  retirement materialization are green
+- native backup/restore, rollback, interruption, idempotency, and atomicity evidence is green on
+  SQLite and PostgreSQL for any retirement candidate
 - fast Chromium/Selenium smoke is green when the bump touches route handoff, editor wiring, import flow, or visible locale copy
 - locale parity, runtime i18n, and visible-English allowlist tests are green
 - new schema-generated policy-label keys are present in catalog order, all six override catalogs,
@@ -469,6 +654,8 @@ Before calling the bump finished, confirm all of the following:
 - `README.md` mentions the current supported Release / ESR versions
 - the final documentation artifact has been installed with `make docs-install-dev` after the last
   documentation change, ready for the maintainer's `make dev`
+- live browser evidence is current and independently pinned/checksummed for every affected channel;
+  a release gate covers all four current channels
 
 ## Common Failure Modes
 
@@ -487,7 +674,14 @@ Before calling the bump finished, confirm all of the following:
 - Reusing Selenium element handles across asynchronous locale rerenders, producing stale-element
   failures unrelated to product behavior.
 - Broadly replacing version numbers inside historical policy compatibility metadata.
-- Regenerating the bundled schema but forgetting the Alembic migration.
+- Treating an older but supported ESR as retired, then generating or activating an Alembic revision.
+- Regenerating the bundled schema and creating a premature current Alembic migration instead of a
+  candidate-only artifact for a future actual retirement.
+- Choosing a retirement target from `max()`, a default, a recommendation, tuple order, or a manual
+  conversion result instead of the declared immediate successor.
+- Treating sample profiles, a passing preview, or a policy-name diff as total convertibility.
+- Writing/normalizing a retired channel at runtime or dropping an unconvertible policy silently.
+- Accepting SQLite-only recovery evidence when PostgreSQL is required.
 - Keeping old filenames or source tags in tests and CI guards.
 - Removing a declared supported ESR schema, or leaving a retired schema JSON file in
   `app/schemas/policies/`, which makes the support matrix ambiguous.

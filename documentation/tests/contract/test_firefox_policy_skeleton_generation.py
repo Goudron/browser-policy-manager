@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -63,10 +64,11 @@ def test_generated_policy_skeleton_inventory_covers_every_supported_policy_once(
     assert index["channel_differences_backlog_item"] == "BPM090-M5-05"
     assert index["schema_refresh_runbook_backlog_item"] == "BPM090-M5-08"
     assert index["provenance_review_backlog_item"] == "BPM090-M5-09"
-    assert index["target_bpm_version"] == "0.9.0"
+    assert index["target_bpm_version"] == "0.9.5"
+    assert index["refresh_backlog_item"] == "BPM095-M8-04"
     assert index["generated_by"] == "documentation/tools/generate_firefox_policy_skeletons.py"
     assert index["policy_count"] == len(policies) == 121
-    assert index["example_count"] == sum(len(policy["channels"]) for policy in policies) == 354
+    assert index["example_count"] == sum(len(policy["channels"]) for policy in policies) == 451
     assert {entry["policy_id"] for entry in generated} == expected_ids
     assert len({entry["doc_id"] for entry in generated}) == len(expected_ids)
     assert len({entry["path"] for entry in generated}) == len(expected_ids)
@@ -80,6 +82,20 @@ def test_generated_policy_skeleton_inventory_covers_every_supported_policy_once(
         )
         assert (REPOSITORY_ROOT / entry["path"]).is_file()
         assert len(entry["examples"]) == len(policy["channels"])
+
+
+def test_skeleton_owner_check_reports_artifact_progress_without_writing_source() -> None:
+    completed = subprocess.run(
+        [sys.executable, str(MODULE_PATH), "--check"],
+        cwd=REPOSITORY_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert completed.returncode == 0, completed.stdout + completed.stderr
+    assert "phase=render; completed=0/125" in completed.stdout
+    assert "phase=check; completed=125/125" in completed.stdout
 
 
 def test_generated_policy_skeleton_map_is_stable_and_keyed() -> None:
@@ -202,15 +218,16 @@ def test_policy_provenance_review_records_approved_sources_and_forbidden_claims(
     assert provenance["reuse_mode"] == "generated-facts"
     assert provenance["allowed_publication_policy"] == source_family["publication_policy"]
     assert {record["source_version_or_revision"] for record in provenance["source_records"]} == {
+        "mozilla-policy-templates-v5.12",
         "mozilla-policy-templates-v7.12",
         "mozilla-policy-templates-v8.0",
     }
     assert provenance["summary"] == {
-        "both_channels": 112,
-        "changed_definitions": 3,
+        "both_channels": 97,
+        "changed_definitions": 8,
         "esr_only": 0,
-        "example_count": 354,
-        "partial": 9,
+        "example_count": 451,
+        "partial": 24,
         "policy_count": 121,
         "release_only": 0,
     }
@@ -268,8 +285,8 @@ def test_each_generated_policy_topic_carries_source_version_and_license_metadata
             "generated-facts",
             "MPL-2.0",
             "BPM is not affiliated with or endorsed by Mozilla.",
-            "BPM090-M2-03",
-            "0.9.0",
+            "BPM095-M8-04",
+            "0.9.5",
         ):
             assert required in provenance_text
 
@@ -303,18 +320,18 @@ def test_generated_policy_topics_reject_unreviewed_mozilla_prose_and_unsupported
             assert forbidden.casefold() not in topic_text.casefold()
 
 
-def test_partial_policy_topics_retain_esr_140_13_absence() -> None:
+def test_partial_policy_topics_retain_exact_four_channel_absence_badges() -> None:
     index = _index()
     partial = [
         entry for entry in index["policies"] if entry["channel_support"]["scope"] == "partial"
     ]
-    assert len(partial) == 9
+    assert len(partial) == 24
     for entry in partial:
         assert entry["channel_support"]["release_supported"] is True
         assert entry["channel_support"]["esr_supported"] is True
         topic_text = (POLICIES_ROOT / f"{entry['doc_id']}.dita").read_text(encoding="utf-8")
         assert 'outputclass="channel-support-badge channel-scope-partial"' in topic_text
-        assert "absent from Firefox ESR 140.13" in topic_text
+        assert "absent from Firefox ESR" in topic_text
 
 
 def test_each_generated_policy_example_validates_against_its_declared_channel() -> None:

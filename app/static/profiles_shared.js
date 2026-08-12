@@ -408,7 +408,7 @@
             readFormStateRef = fn || (() => ({
                 name: "",
                 description: null,
-                schemaVersion: "esr-140.13",
+                schemaVersion: defaultSchemaVersion,
             }));
         }
 

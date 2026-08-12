@@ -7,7 +7,28 @@ def test_wizard_schema_shell_catalog_exposes_steps_and_channels():
     catalog = get_wizard_schema_shell_catalog()
 
     assert [step["step"] for step in catalog["steps"]] == [2, 3, 4, 5, 6, 7, 8]
-    assert set(catalog["channels"]) == {"esr-140.13", "esr-153.0", "release-153"}
+    assert set(catalog["channels"]) == {
+        "esr-115.38",
+        "esr-140.13",
+        "esr-153.0",
+        "release-153",
+    }
+
+
+def test_esr_115_shell_contains_its_exact_97_policy_catalog_without_post_115_controls():
+    catalog = get_wizard_schema_shell_catalog()
+    esr_115 = catalog["channels"]["esr-115.38"]
+    policy_ids = {
+        item["id"]
+        for step in esr_115["steps"].values()
+        for bucket in ("recommended", "additional", "raw_fallback")
+        for item in step[bucket]
+    }
+
+    assert len(policy_ids) == 97
+    assert "HttpsOnlyMode" not in policy_ids
+    assert "AIControls" not in policy_ids
+    assert "VisualSearchEnabled" not in policy_ids
 
 
 def test_wizard_schema_shell_catalog_groups_real_policies_into_step_buckets():

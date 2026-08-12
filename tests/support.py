@@ -24,9 +24,9 @@ from sqlalchemy.orm import sessionmaker
 
 from alembic import command
 from app.core.schema_channels import (
-    CURRENT_ESR_SCHEMA_CHANNEL,
     CURRENT_RELEASE_SCHEMA_CHANNEL,
     DEFAULT_SCHEMA_CHANNEL,
+    LATEST_ESR_SCHEMA_CHANNEL,
 )
 from app.db import DatabaseRuntime, get_session
 from app.models.profile import Base
@@ -232,10 +232,9 @@ def build_all_settings_inventory_counts(
     """Mirror the All settings list inventory for test expectations."""
 
     source_flags = flags or {}
-    preferences = (
-        source_flags.get("Preferences")
-        if isinstance(source_flags.get("Preferences"), Mapping)
-        else {}
+    preferences_value = source_flags.get("Preferences")
+    preferences: Mapping[str, Any] = (
+        preferences_value if isinstance(preferences_value, Mapping) else {}
     )
     wizard_preferences_catalog = get_wizard_preferences_catalog()
     wizard_schema_shell_catalog = get_wizard_schema_shell_catalog(wizard_preferences_catalog)
@@ -633,7 +632,7 @@ def build_corporate_cis_l2_profile_fixture(
 
 def build_corporate_cis_l2_profile_fixtures() -> tuple[EnterpriseProfileFixture, ...]:
     return (
-        build_corporate_cis_l2_profile_fixture(schema_version=CURRENT_ESR_SCHEMA_CHANNEL),
+        build_corporate_cis_l2_profile_fixture(schema_version=LATEST_ESR_SCHEMA_CHANNEL),
         build_corporate_cis_l2_profile_fixture(schema_version=CURRENT_RELEASE_SCHEMA_CHANNEL),
     )
 

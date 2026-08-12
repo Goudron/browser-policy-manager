@@ -66,7 +66,7 @@ def test_load_policy_schema_for_channel_uses_shared_loader(monkeypatch):
 
 
 def test_load_policy_schema_for_channel_rejects_unknown_channel():
-    with pytest.raises(ValueError, match="Unsupported channel"):
+    with pytest.raises(ValueError, match="Unknown schema channel"):
         validation.load_policy_schema_for_channel("beta-999")
 
 

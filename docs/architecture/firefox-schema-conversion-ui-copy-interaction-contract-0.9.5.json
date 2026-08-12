@@ -1,0 +1,625 @@
+{
+  "$schema": "./schemas/firefox-schema-conversion-ui-interaction-contract-v1.schema.json",
+  "schema_version": 1,
+  "contract_id": "bpm095-firefox-schema-conversion-ui-interactions",
+  "target_bpm_version": "0.9.5",
+  "status": "normative-target-preimplementation",
+  "dependencies": {
+    "ui_copy": "ui-copy-classification-contract-0.9.2.md",
+    "lifecycle": "firefox-schema-lifecycle-catalog-contract-0.9.5.json",
+    "conversion": "firefox-pairwise-profile-conversion-contract-0.9.5.json",
+    "retirement": "firefox-retired-esr-migration-safety-contract-0.9.5.json"
+  },
+  "classification_inheritance": {
+    "active_contract": "ui-copy-classification-contract-0.9.2.md",
+    "primary_dispositions": ["essential", "safety-accessibility"],
+    "inline_safety_wins": true,
+    "supersedes": []
+  },
+  "surface_owners": [
+    {
+      "owner_id": "library-owner",
+      "surface": "library",
+      "source_owners": [
+        "app/templates/profiles/_page_library_workspace.html",
+        "app/static/profiles_library_bootstrap.js"
+      ],
+      "role": "Compact eligible-profile recommendation and side-effect-free entry to preview; filtering and pagination must not duplicate the action.",
+      "may_apply": false
+    },
+    {
+      "owner_id": "compare-owner",
+      "surface": "compare",
+      "source_owners": [
+        "app/templates/profiles/_page_compare_workspace.html",
+        "app/static/profiles_compare.js"
+      ],
+      "role": "Read-only profile comparison may link an authorized profile to preview; it never owns confirmation or apply.",
+      "may_apply": false
+    },
+    {
+      "owner_id": "guided-owner",
+      "surface": "guided",
+      "source_owners": [
+        "app/templates/profiles/_guided_shell.html",
+        "app/templates/profiles/_page_editor_chrome.html",
+        "app/static/profiles_wizard_flow.js"
+      ],
+      "role": "Preserve Guided unsaved-work state and hand off a saved active profile to shared conversion review.",
+      "may_apply": false
+    },
+    {
+      "owner_id": "settings-owner",
+      "surface": "settings",
+      "source_owners": [
+        "app/templates/profiles/_page_settings_workspace.html",
+        "app/templates/profiles/_page_editor_chrome.html",
+        "app/static/profiles_settings_search.js"
+      ],
+      "role": "Preserve All settings unsaved-work and focus state and hand off a saved active profile to shared conversion review.",
+      "may_apply": false
+    },
+    {
+      "owner_id": "json-owner",
+      "surface": "json",
+      "source_owners": [
+        "app/templates/profiles/_page_json_workspace.html",
+        "app/templates/profiles/_page_editor_chrome.html",
+        "app/static/profiles_runtime_json_editor.js"
+      ],
+      "role": "Preserve Monaco dirty/validation state and hand off a saved active profile to shared conversion review.",
+      "may_apply": false
+    },
+    {
+      "owner_id": "shared-review-owner",
+      "surface": "shared-review",
+      "source_owners": [
+        "planned:M5 shared route-owned conversion review component",
+        "app/web/profiles_context.py"
+      ],
+      "role": "One future review owner renders target selection, preview, blockers, confirmation, apply, success, and recovery for the five existing surfaces; it is not a sixth editor.",
+      "may_apply": true
+    }
+  ],
+  "locale_owners": [
+    {"locale": "en", "owner": "project-maintainer", "catalog_namespaces": ["common", "library", "wizard", "settings", "json"], "status": "english-source-planned"},
+    {"locale": "ru", "owner": "project-maintainer", "catalog_namespaces": ["common", "library", "wizard", "settings", "json"], "status": "human-reviewed-translation-planned"},
+    {"locale": "de", "owner": "project-maintainer", "catalog_namespaces": ["common", "library", "wizard", "settings", "json"], "status": "human-reviewed-translation-planned"},
+    {"locale": "zh-CN", "owner": "project-maintainer", "catalog_namespaces": ["common", "library", "wizard", "settings", "json"], "status": "human-reviewed-translation-planned"},
+    {"locale": "fr", "owner": "project-maintainer", "catalog_namespaces": ["common", "library", "wizard", "settings", "json"], "status": "human-reviewed-translation-planned"},
+    {"locale": "es-ES", "owner": "project-maintainer", "catalog_namespaces": ["common", "library", "wizard", "settings", "json"], "status": "human-reviewed-translation-planned"}
+  ],
+  "help_link_policy": {
+    "inline_copy_may_be_replaced": false,
+    "new_target_authorized": false,
+    "existing_surface_targets": {
+      "library": "topic:ug-task-use-profile-library",
+      "compare": "topic:ug-task-compare-profiles",
+      "guided": "topic:ug-task-use-guided-editor",
+      "settings": "topic:ug-task-use-all-settings",
+      "json": "topic:ug-task-use-json-editor"
+    },
+    "new_link_requirements": [
+      "explicit-source-key-owner",
+      "stable-manifest-target-id",
+      "six-locale-destination",
+      "localized-accessible-name",
+      "keyboard-reachable",
+      "local-action-copy-retained"
+    ]
+  },
+  "interaction_states": [
+    {
+      "state_id": "schema-conversion.older-esr-recommendation",
+      "group": "recommendation",
+      "surface_owner_ids": ["library-owner", "guided-owner", "settings-owner", "json-owner"],
+      "trigger": "An active saved profile is on supported older ESR line esr-115 or esr-140; resolve the catalog recommendation target to exact latest supported artifact esr-153.0.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_recommendation_action",
+        "primary_label": "Review update to {target_schema}",
+        "consequence_key": "profiles.schema_conversion_recommendation_consequence",
+        "local_consequence": "This opens a conversion preview from {source_schema} to {target_schema}. Your profile will not change until you review and confirm.",
+        "classification": "essential"
+      },
+      "error_codes": [],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_recommendation_accessible_name",
+        "description_key": "profiles.schema_conversion_recommendation_consequence",
+        "live_region": "none",
+        "focus_behavior": "Keep row or profile-context focus after eligibility refresh; activation moves focus to the shared review heading.",
+        "keyboard_behavior": "Use a native button or link in normal tab order; Enter and Space follow native semantics."
+      },
+      "confirmation": {"required": false, "danger_class": "none", "apply_enabled": false},
+      "recovery_action": "Dismiss or return to the originating surface without mutation.",
+      "telemetry": {"event": "schema_conversion_recommendation_opened", "allowed_fields": ["source_line_id", "target_line_id", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.recommendation-not-eligible",
+      "group": "recommendation",
+      "surface_owner_ids": ["library-owner", "guided-owner", "settings-owner", "json-owner"],
+      "trigger": "The profile is Release, latest ESR, unknown, retired, unsaved, archived/deleted, or otherwise not an active saved supported older-ESR profile.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_recommendation_not_available",
+        "primary_label": "No ESR update recommendation",
+        "consequence_key": "profiles.schema_conversion_recommendation_not_available_reason",
+        "local_consequence": "Do not render a recommendation action. Preserve the profile's truthful current channel or its separate recovery state.",
+        "classification": "essential"
+      },
+      "error_codes": ["schema_channel_unknown", "schema_channel_retired_requires_migration", "conversion_source_not_active"],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_recommendation_not_available",
+        "description_key": "profiles.schema_conversion_recommendation_not_available_reason",
+        "live_region": "none",
+        "focus_behavior": "Removing an obsolete recommendation must not move focus; if it held focus, move focus to the profile context heading.",
+        "keyboard_behavior": "No disabled recommendation control is inserted into the tab order."
+      },
+      "confirmation": {"required": false, "danger_class": "none", "apply_enabled": false},
+      "recovery_action": "Use the state-specific recovery contract; do not infer a recommendation target.",
+      "telemetry": {"event": null, "allowed_fields": [], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.manual-target-selection",
+      "group": "selection",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "An authorized user opens manual conversion for an active saved profile and selects any distinct supported/selectable exact artifact.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_target_label",
+        "primary_label": "Target schema",
+        "consequence_key": "profiles.schema_conversion_target_consequence",
+        "local_consequence": "Choosing a target prepares a new preview. It does not change the saved profile.",
+        "classification": "essential"
+      },
+      "error_codes": ["conversion_target_identical"],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_target_accessible_name",
+        "description_key": "profiles.schema_conversion_target_consequence",
+        "live_region": "polite-status",
+        "focus_behavior": "Keep focus on the selector while its status region announces preview refresh; never focus a newly inserted option.",
+        "keyboard_behavior": "Use a labeled native select or equivalent listbox with current selection and full keyboard operation."
+      },
+      "confirmation": {"required": false, "danger_class": "none", "apply_enabled": false},
+      "recovery_action": "Choose a distinct supported target or cancel review.",
+      "telemetry": {"event": "schema_conversion_target_selected", "allowed_fields": ["source_artifact_id", "target_artifact_id", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.preview-pending",
+      "group": "preview",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "A preview request is in flight for the current saved revision and exact target.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_preview_pending",
+        "primary_label": "Preparing conversion preview",
+        "consequence_key": "profiles.schema_conversion_preview_pending_consequence",
+        "local_consequence": "The saved profile is unchanged while compatibility and target validation are checked.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": [],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_preview_pending",
+        "description_key": "profiles.schema_conversion_preview_pending_consequence",
+        "live_region": "polite-status",
+        "focus_behavior": "Keep focus on the initiating control; mark the review region busy without repeatedly announcing progress.",
+        "keyboard_behavior": "Disable duplicate preview and apply activation; keep Cancel available."
+      },
+      "confirmation": {"required": false, "danger_class": "none", "apply_enabled": false},
+      "recovery_action": "Cancel the request or wait for one terminal preview state; cancellation performs no write.",
+      "telemetry": {"event": "schema_conversion_preview_started", "allowed_fields": ["pair_id", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.preview-available",
+      "group": "preview",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "Preview returned applicable=true, target validation valid, and zero blockers for the exact current revision and identities.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_preview_available",
+        "primary_label": "Conversion preview ready",
+        "consequence_key": "profiles.schema_conversion_preview_available_consequence",
+        "local_consequence": "Review unchanged, transformed, warning, and compliance counts before confirming {source_schema} to {target_schema}.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": [],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_preview_available",
+        "description_key": "profiles.schema_conversion_preview_available_consequence",
+        "live_region": "polite-status",
+        "focus_behavior": "Move focus to the preview summary heading only when the user opened review; target changes keep selector focus.",
+        "keyboard_behavior": "Counts and expandable details have semantic headings and native disclosure controls; confirmation follows them in tab order."
+      },
+      "confirmation": {"required": true, "danger_class": "explicit-state-change", "apply_enabled": true},
+      "recovery_action": "Change target, cancel without mutation, or continue to explicit confirmation.",
+      "telemetry": {"event": "schema_conversion_preview_completed", "allowed_fields": ["pair_id", "compatibility_status", "aggregate_counts", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.preview-blocked",
+      "group": "preview",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "Preview is diagnostic but applicable=false because one or more policy atoms, compliance facts, or target validation outcomes are blocked.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_preview_blocked",
+        "primary_label": "Conversion cannot be applied",
+        "consequence_key": "profiles.schema_conversion_preview_blocked_consequence",
+        "local_consequence": "The preview found {blocker_count} blocker(s). The saved profile is unchanged; resolve every blocker or choose another target.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": ["conversion_plan_blocked"],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_preview_blocked",
+        "description_key": "profiles.schema_conversion_preview_blocked_consequence",
+        "live_region": "assertive-alert",
+        "focus_behavior": "Move focus to the blocker summary; each disclosed blocker is reachable without exposing values in DOM attributes.",
+        "keyboard_behavior": "Apply is disabled and references the blocker explanation; target selection, retry preview, and cancel remain operable."
+      },
+      "confirmation": {"required": false, "danger_class": "blocked", "apply_enabled": false},
+      "recovery_action": "Resolve source policy issues or choose another supported target, then request a new preview.",
+      "telemetry": {"event": "schema_conversion_preview_blocked", "allowed_fields": ["pair_id", "blocker_count", "reason_codes", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.preview-unavailable",
+      "group": "preview",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "Preview cannot be produced because the operation or exact artifact is temporarily unavailable; this includes the planned ESR 115 artifact before M3 promotion.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_preview_unavailable",
+        "primary_label": "Conversion preview unavailable",
+        "consequence_key": "profiles.schema_conversion_preview_unavailable_consequence",
+        "local_consequence": "No profile changes were made. Retry only after the exact source and target schema artifacts are available.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": ["conversion_source_schema_missing", "conversion_target_schema_missing"],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_preview_unavailable",
+        "description_key": "profiles.schema_conversion_preview_unavailable_consequence",
+        "live_region": "assertive-alert",
+        "focus_behavior": "Move focus to the unavailable summary and keep Retry, target selection, and Cancel next in logical order.",
+        "keyboard_behavior": "Do not expose confirmation or Apply; Retry is a native button."
+      },
+      "confirmation": {"required": false, "danger_class": "blocked", "apply_enabled": false},
+      "recovery_action": "Retry preview after artifact recovery, choose another target, or cancel.",
+      "telemetry": {"event": "schema_conversion_preview_unavailable", "allowed_fields": ["pair_id", "error_code", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.unsaved-work-decision",
+      "group": "confirmation",
+      "surface_owner_ids": ["guided-owner", "settings-owner", "json-owner", "shared-review-owner"],
+      "trigger": "Guided, All settings, or JSON/Monaco has browser-local unsaved work before preview or apply.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_unsaved_title",
+        "primary_label": "Save or discard changes first",
+        "consequence_key": "profiles.schema_conversion_unsaved_consequence",
+        "local_consequence": "Conversion uses the saved profile revision. Choose Save and continue, Discard and continue, or Cancel; unsaved work is never overwritten silently.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": [],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_unsaved_title",
+        "description_key": "profiles.schema_conversion_unsaved_consequence",
+        "live_region": "assertive-alert",
+        "focus_behavior": "Trap focus only inside a modal decision; focus Cancel initially and restore focus to the opener on cancel.",
+        "keyboard_behavior": "Three explicitly named buttons are keyboard operable; Escape equals Cancel and performs no mutation."
+      },
+      "confirmation": {"required": true, "danger_class": "explicit-state-change", "apply_enabled": false},
+      "recovery_action": "Save and obtain a fresh preview, discard and obtain a fresh preview, or cancel.",
+      "telemetry": {"event": "schema_conversion_unsaved_decision_shown", "allowed_fields": ["surface_id", "outcome"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.confirmation-ready",
+      "group": "confirmation",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "The exact applicable preview remains current, the source is active and saved, and the user reaches the final action.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_apply_action",
+        "primary_label": "Convert to {target_schema}",
+        "consequence_key": "profiles.schema_conversion_apply_consequence",
+        "local_consequence": "This updates the saved schema, policy document, compliance disposition, and revision using the reviewed plan. Name, description, creation time, and archive state are preserved.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": [],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_apply_accessible_name",
+        "description_key": "profiles.schema_conversion_apply_consequence",
+        "live_region": "none",
+        "focus_behavior": "Focus the confirmation heading when opened; place Cancel before Apply in tab order and restore opener focus on cancel.",
+        "keyboard_behavior": "Apply requires one explicit activation; Enter on unrelated controls must not submit it."
+      },
+      "confirmation": {"required": true, "danger_class": "explicit-state-change", "apply_enabled": true},
+      "recovery_action": "Cancel without mutation or return to preview and choose another target.",
+      "telemetry": {"event": "schema_conversion_confirmation_shown", "allowed_fields": ["pair_id", "compatibility_status", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.apply-in-progress",
+      "group": "apply",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "One explicitly confirmed apply request is in flight.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_apply_in_progress",
+        "primary_label": "Converting profile",
+        "consequence_key": "profiles.schema_conversion_apply_in_progress_consequence",
+        "local_consequence": "Wait for the server's atomic result. Do not close the review or submit the conversion again.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": [],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_apply_in_progress",
+        "description_key": "profiles.schema_conversion_apply_in_progress_consequence",
+        "live_region": "polite-status",
+        "focus_behavior": "Keep focus on the disabled Apply control or move it to the progress heading if the control is removed; announce once.",
+        "keyboard_behavior": "Disable target selection, Cancel, close, and duplicate Apply until a terminal result; browser navigation uses the product's existing unload guard."
+      },
+      "confirmation": {"required": true, "danger_class": "explicit-state-change", "apply_enabled": false},
+      "recovery_action": "Wait for success or a recoverable failure; do not infer success from timeout or navigation.",
+      "telemetry": {"event": "schema_conversion_apply_started", "allowed_fields": ["pair_id", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.apply-success",
+      "group": "success",
+      "surface_owner_ids": ["shared-review-owner", "library-owner", "guided-owner", "settings-owner", "json-owner"],
+      "trigger": "Apply returns status=applied and the exact saved target revision is reloaded.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_success",
+        "primary_label": "Profile converted to {target_schema}",
+        "consequence_key": "profiles.schema_conversion_success_consequence",
+        "local_consequence": "Revision {result_revision} is saved and validated for {target_schema}. Reloaded profile state is now authoritative.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": [],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_success",
+        "description_key": "profiles.schema_conversion_success_consequence",
+        "live_region": "polite-status",
+        "focus_behavior": "Move focus to the success heading, then offer Return to profile as the next action; restore surface focus after return.",
+        "keyboard_behavior": "Return to profile is a native link or button; no automatic redirect steals focus."
+      },
+      "confirmation": {"required": false, "danger_class": "none", "apply_enabled": false},
+      "recovery_action": "Return to the originating surface and use the exact reloaded saved state.",
+      "telemetry": {"event": "schema_conversion_apply_succeeded", "allowed_fields": ["pair_id", "compliance_disposition", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.stale-revision",
+      "group": "recovery",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "Apply fails with conversion_revision_stale because another save changed the profile revision.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_revision_stale",
+        "primary_label": "Profile changed since this preview",
+        "consequence_key": "profiles.schema_conversion_revision_stale_consequence",
+        "local_consequence": "Nothing was converted. Reload the saved profile and create a new preview before applying.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": ["conversion_revision_stale"],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_revision_stale",
+        "description_key": "profiles.schema_conversion_revision_stale_consequence",
+        "live_region": "assertive-alert",
+        "focus_behavior": "Move focus to the stale-state heading; Fresh preview is the next action.",
+        "keyboard_behavior": "Old Apply remains unavailable; Fresh preview and Cancel are native controls."
+      },
+      "confirmation": {"required": false, "danger_class": "blocked", "apply_enabled": false},
+      "recovery_action": "Reload current saved state and request a fresh preview; never resubmit the stale digest.",
+      "telemetry": {"event": "schema_conversion_apply_stale", "allowed_fields": ["pair_id", "error_code", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.plan-or-validation-changed",
+      "group": "recovery",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "The source identity, rederived plan, schema identity, or recipe registry differs from the reviewed preview.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_plan_changed",
+        "primary_label": "Conversion plan changed",
+        "consequence_key": "profiles.schema_conversion_plan_changed_consequence",
+        "local_consequence": "Nothing was converted. Create a fresh preview and review its validation, policy, and compliance results before confirming again.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": ["conversion_source_identity_stale", "conversion_plan_stale", "conversion_schema_identity_stale", "conversion_recipe_registry_stale"],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_plan_changed",
+        "description_key": "profiles.schema_conversion_plan_changed_consequence",
+        "live_region": "assertive-alert",
+        "focus_behavior": "Move focus to the changed-plan heading; invalidate and remove the old confirmation from the accessibility tree.",
+        "keyboard_behavior": "Fresh preview is the primary native action; stale Apply cannot be focused."
+      },
+      "confirmation": {"required": false, "danger_class": "blocked", "apply_enabled": false},
+      "recovery_action": "Request and review a fresh preview using current identities.",
+      "telemetry": {"event": "schema_conversion_plan_changed", "allowed_fields": ["pair_id", "error_code", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.source-not-active",
+      "group": "recovery",
+      "surface_owner_ids": ["library-owner", "shared-review-owner"],
+      "trigger": "Manual preview/apply addresses a missing profile or a profile that is archived, deleted, or otherwise not active.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_source_not_active",
+        "primary_label": "Conversion requires an active profile",
+        "consequence_key": "profiles.schema_conversion_source_not_active_consequence",
+        "local_consequence": "No profile changes were made. Restore the archived profile first, or return to the Library if it no longer exists.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": ["conversion_profile_not_found", "conversion_source_not_active"],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_source_not_active",
+        "description_key": "profiles.schema_conversion_source_not_active_consequence",
+        "live_region": "assertive-alert",
+        "focus_behavior": "Move focus to the state heading and place Restore profile or Return to Library next.",
+        "keyboard_behavior": "Do not render Apply; recovery uses existing lifecycle controls with their own confirmation."
+      },
+      "confirmation": {"required": false, "danger_class": "blocked", "apply_enabled": false},
+      "recovery_action": "Restore an archived profile through its existing lifecycle flow, then create a new preview; a missing/deleted profile returns to Library.",
+      "telemetry": {"event": "schema_conversion_source_not_active", "allowed_fields": ["error_code", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.target-unavailable",
+      "group": "recovery",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "The chosen target is unknown, retired, unsupported/unavailable, or its exact schema artifact cannot be loaded.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_target_unavailable",
+        "primary_label": "Target schema unavailable",
+        "consequence_key": "profiles.schema_conversion_target_unavailable_consequence",
+        "local_consequence": "No profile changes were made. Choose a currently supported available target and create a new preview.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": ["schema_channel_unknown", "schema_channel_retired", "conversion_target_unsupported", "conversion_target_schema_missing"],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_target_unavailable",
+        "description_key": "profiles.schema_conversion_target_unavailable_consequence",
+        "live_region": "assertive-alert",
+        "focus_behavior": "Move focus to the target error, associate it with the selector, then return focus to the selector on correction.",
+        "keyboard_behavior": "Apply is absent; supported target options and Cancel remain keyboard operable."
+      },
+      "confirmation": {"required": false, "danger_class": "blocked", "apply_enabled": false},
+      "recovery_action": "Refresh the catalog and select a supported available exact target, then request a new preview.",
+      "telemetry": {"event": "schema_conversion_target_unavailable", "allowed_fields": ["target_artifact_id", "error_code", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.source-invalid",
+      "group": "recovery",
+      "surface_owner_ids": ["shared-review-owner", "guided-owner", "settings-owner", "json-owner"],
+      "trigger": "The saved source document is invalid, its channel is unknown/retired, or its exact schema artifact is missing.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_source_invalid",
+        "primary_label": "Source profile cannot be converted",
+        "consequence_key": "profiles.schema_conversion_source_invalid_consequence",
+        "local_consequence": "No profile changes were made. Resolve the reported source validation or schema recovery condition before requesting another preview.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": ["schema_channel_unknown", "schema_channel_retired_requires_migration", "conversion_source_invalid", "conversion_source_schema_missing"],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_source_invalid",
+        "description_key": "profiles.schema_conversion_source_invalid_consequence",
+        "live_region": "assertive-alert",
+        "focus_behavior": "Move focus to the source error summary; validation recovery or operator guidance follows in logical order.",
+        "keyboard_behavior": "Apply remains unavailable; links back to validation use the existing focus-target contract."
+      },
+      "confirmation": {"required": false, "danger_class": "blocked", "apply_enabled": false},
+      "recovery_action": "Fix and save source validation errors, recover the exact source artifact, or follow operator upgrade guidance for a retired channel; then preview again.",
+      "telemetry": {"event": "schema_conversion_source_invalid", "allowed_fields": ["source_artifact_id", "error_code", "aggregate_issue_count", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.apply-failed-retry",
+      "group": "recovery",
+      "surface_owner_ids": ["shared-review-owner"],
+      "trigger": "Apply validation, persistence, flush, or commit fails and the API guarantees mutation=none.",
+      "copy": {
+        "primary_key": "profiles.schema_conversion_apply_failed",
+        "primary_label": "Conversion was not saved",
+        "consequence_key": "profiles.schema_conversion_apply_failed_consequence",
+        "local_consequence": "The conversion failed and no profile changes were committed. Reload the profile and create a fresh preview before retrying.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": ["conversion_apply_failed"],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_conversion_apply_failed",
+        "description_key": "profiles.schema_conversion_apply_failed_consequence",
+        "live_region": "assertive-alert",
+        "focus_behavior": "Move focus to the failure heading; Fresh preview is the next action and old Apply is removed.",
+        "keyboard_behavior": "Fresh preview and Cancel are native controls; no automatic retry."
+      },
+      "confirmation": {"required": false, "danger_class": "blocked", "apply_enabled": false},
+      "recovery_action": "Reload authoritative saved state and request a fresh preview; retry only after reviewing it.",
+      "telemetry": {"event": "schema_conversion_apply_failed", "allowed_fields": ["pair_id", "error_code", "surface_id"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    },
+    {
+      "state_id": "schema-conversion.retirement-operator-boundary",
+      "group": "retirement-boundary",
+      "surface_owner_ids": ["library-owner", "guided-owner", "settings-owner", "json-owner"],
+      "trigger": "Readiness or a profile route is blocked because stored profiles require the Alembic-owned retired-ESR upgrade; this state is admin/upgrade guidance, never a manual recommendation.",
+      "copy": {
+        "primary_key": "profiles.schema_retirement_upgrade_required",
+        "primary_label": "Database upgrade required for retired ESR profiles",
+        "consequence_key": "profiles.schema_retirement_upgrade_required_consequence",
+        "local_consequence": "Profile routes remain read-only and unavailable until an administrator completes the verified backup, preflight, and database upgrade. Do not convert profiles manually.",
+        "classification": "safety-accessibility"
+      },
+      "error_codes": [
+        "schema_channel_retired_requires_migration",
+        "retirement_successor_missing",
+        "retirement_successor_not_immediate",
+        "retirement_successor_family_mismatch",
+        "retirement_total_convertibility_unproven",
+        "retirement_manifest_stale",
+        "retirement_manifest_identity_mismatch",
+        "retirement_backup_unverified",
+        "retirement_preflight_stale",
+        "conversion_source_schema_missing",
+        "conversion_target_schema_missing",
+        "conversion_source_invalid",
+        "conversion_recipe_registry_stale",
+        "conversion_plan_blocked",
+        "retirement_transaction_failed",
+        "retirement_partial_state_detected",
+        "retirement_downgrade_unsupported"
+      ],
+      "accessibility": {
+        "accessible_name_key": "profiles.schema_retirement_upgrade_required",
+        "description_key": "profiles.schema_retirement_upgrade_required_consequence",
+        "live_region": "assertive-alert",
+        "focus_behavior": "On an operator-facing blocked route, focus the upgrade-required heading once; do not render profile-level conversion controls.",
+        "keyboard_behavior": "Any operator documentation action is a manifest-owned keyboard-reachable link; local consequence and recovery remain inline."
+      },
+      "confirmation": {"required": false, "danger_class": "operator-only", "apply_enabled": false},
+      "recovery_action": "Administrator follows the M6 native-backup and read-only-preflight runbook; partial or failed candidates are never repaired or retried in place.",
+      "telemetry": {"event": "schema_retirement_upgrade_blocked", "allowed_fields": ["source_line_id", "target_line_id", "error_code", "stage"], "privacy_profile": "conversion-ui-no-enterprise-data-v1"}
+    }
+  ],
+  "error_code_coverage": {
+    "manual_conversion": [
+      "conversion_profile_not_found",
+      "conversion_source_not_active",
+      "schema_channel_unknown",
+      "schema_channel_retired_requires_migration",
+      "schema_channel_retired",
+      "conversion_target_unsupported",
+      "conversion_target_identical",
+      "conversion_source_invalid",
+      "conversion_source_schema_missing",
+      "conversion_target_schema_missing",
+      "conversion_revision_stale",
+      "conversion_source_identity_stale",
+      "conversion_plan_stale",
+      "conversion_schema_identity_stale",
+      "conversion_recipe_registry_stale",
+      "conversion_plan_blocked",
+      "conversion_apply_failed"
+    ],
+    "retirement_operator_boundary": [
+      "schema_channel_retired_requires_migration",
+      "retirement_successor_missing",
+      "retirement_successor_not_immediate",
+      "retirement_successor_family_mismatch",
+      "retirement_total_convertibility_unproven",
+      "retirement_manifest_stale",
+      "retirement_manifest_identity_mismatch",
+      "retirement_backup_unverified",
+      "retirement_preflight_stale",
+      "conversion_source_schema_missing",
+      "conversion_target_schema_missing",
+      "conversion_source_invalid",
+      "conversion_recipe_registry_stale",
+      "conversion_plan_blocked",
+      "retirement_transaction_failed",
+      "retirement_partial_state_detected",
+      "retirement_downgrade_unsupported"
+    ]
+  },
+  "privacy_contract": {
+    "forbidden_in_urls_or_telemetry": [
+      "policy_values",
+      "policy_presence",
+      "policy_ids",
+      "json_pointers",
+      "dynamic_keys",
+      "profile_id",
+      "profile_name_or_description",
+      "compliance_values_or_notes",
+      "plan_or_document_digests",
+      "localized_copy"
+    ],
+    "allowed_telemetry": [
+      "locale-neutral-outcome-code",
+      "exact-source-and-target-artifact-id",
+      "surface-id",
+      "aggregate-counts"
+    ],
+    "localized_text_sent_to_server": false,
+    "raw_values_rendered_from_plan": false
+  }
+}

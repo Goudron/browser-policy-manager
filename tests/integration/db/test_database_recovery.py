@@ -7,6 +7,7 @@ import os
 import shutil
 import sqlite3
 import subprocess
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -15,7 +16,9 @@ from sqlalchemy import create_engine, event, inspect, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.engine.url import make_url
 
+import app.core.schema_channels as schema_channels
 from alembic import command
+from app.core.schema_channels import SCHEMA_CHANNEL_CATALOG
 from app.db import EXPECTED_DATABASE_REVISION, DatabaseReadinessError, DatabaseRuntime
 from app.main import create_app
 from tools.database_upgrade_recovery import (
@@ -64,6 +67,49 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _profile_snapshot(path: Path) -> tuple[tuple[object, ...], str]:
+    engine = create_engine(f"sqlite:///{path}", future=True)
+    try:
+        with engine.connect() as connection:
+            row = connection.execute(
+                text(
+                    "SELECT name, name_casefold, description, schema_version, flags, compliance, "
+                    "revision, created_at, updated_at, deleted_at FROM profiles "
+                    "ORDER BY id"
+                )
+            ).one()
+            revision = connection.execute(
+                text("SELECT version_num FROM alembic_version")
+            ).scalar_one()
+            return row, revision
+    finally:
+        engine.dispose()
+
+
+def _insert_head_profile(path: Path, *, schema_version: str) -> None:
+    engine = create_engine(f"sqlite:///{path}", future=True)
+    try:
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    "INSERT INTO profiles (name, name_casefold, description, schema_version, flags, "
+                    "compliance, revision) VALUES (:name, :name_casefold, :description, "
+                    ":schema_version, :flags, :compliance, :revision)"
+                ),
+                {
+                    "name": "m6-readiness-profile",
+                    "name_casefold": "m6-readiness-profile",
+                    "description": "M6 runtime ownership fixture",
+                    "schema_version": schema_version,
+                    "flags": "{}",
+                    "compliance": None,
+                    "revision": 7,
+                },
+            )
+    finally:
+        engine.dispose()
+
+
 async def _assert_app_refuses(path: Path, match: str) -> None:
     runtime = DatabaseRuntime(database_url=f"sqlite+aiosqlite:///{path}", echo=False)
     app = create_app(database_runtime=runtime)
@@ -93,6 +139,43 @@ def test_application_refuses_empty_and_head_stamped_partial_databases(tmp_path: 
     finally:
         connection.close()
     asyncio.run(_assert_app_refuses(partial, "partial/incompatible"))
+
+
+def test_startup_is_read_only_and_retired_rows_require_the_offline_alembic_upgrade(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    path = tmp_path / "retired-channel-unupgraded.db"
+    command.upgrade(_config(path), "head")
+    _insert_head_profile(path, schema_version="esr-140.13")
+    before = _profile_snapshot(path)
+
+    async def verify_current_head_without_mutation() -> None:
+        runtime = DatabaseRuntime(database_url=f"sqlite+aiosqlite:///{path}", echo=False)
+        try:
+            await runtime.init()
+            await runtime.verify_release_schema()
+            assert runtime.schema_ready is True
+        finally:
+            await runtime.dispose()
+
+    asyncio.run(verify_current_head_without_mutation())
+    assert _profile_snapshot(path) == before
+
+    source = next(
+        channel for channel in SCHEMA_CHANNEL_CATALOG if channel.artifact_id == "esr-140.13"
+    )
+    retired = replace(source, support_state="retired", selectable=False)
+    monkeypatch.setattr(
+        schema_channels,
+        "SCHEMA_CHANNEL_CATALOG",
+        tuple(
+            retired if channel.artifact_id == retired.artifact_id else channel
+            for channel in SCHEMA_CHANNEL_CATALOG
+        ),
+    )
+    asyncio.run(_assert_app_refuses(path, "schema_channel_retired_requires_migration"))
+    assert _profile_snapshot(path) == before
 
 
 def test_failed_upgrade_keeps_backup_and_retry_starts_from_clean_candidate(tmp_path: Path):

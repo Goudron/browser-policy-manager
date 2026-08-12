@@ -62,6 +62,14 @@
                     data-i18n="profiles.validate">
                     {{ tr("profiles.validate") }}
                 </button>
+                {% if has_initial_profile and not initial_profile.is_deleted %}
+                <button id="schema-conversion-review-open"
+                    type="button"
+                    class="button-base ghost-button"
+                    data-i18n="profiles.schema_conversion_open">
+                    {{ tr("profiles.schema_conversion_open") }}
+                </button>
+                {% endif %}
                 {% set context_help_icon_target = "validation" %}
                 {% set context_help_icon_label_key = "profiles.help_validation" %}
                 {% include "profiles/_context_help_icon.html" %}
@@ -87,7 +95,7 @@
                     <label>
                         <div class="field-label mb-1" data-i18n="profiles.schema_label">{{ tr("profiles.schema_label") }}</div>
                         <select id="profile-type" class="soft-input w-full rounded-2xl px-3 py-3 text-sm"
-                            title="{{ tr('profiles.schema_label') }}">
+                            title="{{ tr('profiles.schema_label') }}"{% if has_initial_profile %} disabled{% endif %}>
                             {% for option in schema_channels_catalog.options %}
                             <option value="{{ option.value }}" data-schema-channel-label="{{ option.value }}" data-i18n="{{ option.i18n_key }}" {% if option.value == initial_schema_value %}selected{% endif %}>{{ option.label }}</option>
                             {% endfor %}
@@ -161,3 +169,10 @@
         </div>
     </div>
 </section>
+
+<section
+    id="schema-conversion-review"
+    class="schema-conversion-review panel-card surface-panel"
+    aria-labelledby="schema-conversion-review-title"
+    aria-busy="false"
+    hidden></section>

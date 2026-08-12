@@ -2,6 +2,10 @@ import { utils } from "./profiles_utils.js";
 import * as platform from "./profiles_platform.js";
 import * as data from "./profiles_data.js";
 import { create as createShared } from "./profiles_shared.js";
+import {
+    buildLibraryConversionRecommendationMarkup,
+    resolveLibraryConversionRecommendation,
+} from "./profiles_modules/conversion_recommendation.mjs";
 
     function start({
         documentRef = document,
@@ -362,6 +366,24 @@ import { create as createShared } from "./profiles_shared.js";
                 const cloneInputId = `library-clone-name-input-${profile.id}`;
                 const cloneStatusId = `library-clone-name-status-${profile.id}`;
                 const defaultCloneName = buildDefaultCloneName(profile);
+                const recommendation = resolveLibraryConversionRecommendation(profile);
+                const sourceSchema = recommendation
+                    ? formatSchemaLabel(recommendation.source.artifact_id)
+                    : "";
+                const targetSchema = recommendation
+                    ? formatSchemaLabel(recommendation.target.artifact_id)
+                    : "";
+                const recommendationMarkup = recommendation
+                    ? buildLibraryConversionRecommendationMarkup({
+                        profile,
+                        recommendation,
+                        sourceSchema,
+                        targetSchema,
+                        origin: windowRef.location.origin,
+                        escapeHtml,
+                        t,
+                    })
+                    : "";
 
                 li.innerHTML = `
                     <div class="library-row-grid profile-list-button">
@@ -378,6 +400,7 @@ import { create as createShared } from "./profiles_shared.js";
                         <div class="library-row-facts">
                             <div class="library-row-meta" data-label="${escapeHtml(t("profiles.library_column_schema"))}">
                                 <div class="library-row-meta-primary">${formatSchemaLabel(profile.schema_version)}</div>
+                                ${recommendationMarkup}
                             </div>
 
                             <div class="library-row-status-wrap" data-label="${escapeHtml(t("profiles.library_column_status"))}">

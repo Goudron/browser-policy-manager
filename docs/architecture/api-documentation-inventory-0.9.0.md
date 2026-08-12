@@ -11,8 +11,8 @@ programmatic HTTP operation, its request and response contract, known errors and
 planned locale-independent DITA topic ID. It is checked against the generated OpenAPI 3.1 schema
 and focused API contracts.
 
-The generated schema currently contains 21 operations: 15 programmatic/service operations and six
-HTML product routes tagged `web`. Only the 15 programmatic/service operations are integration API
+The generated schema currently contains 23 operations: 17 programmatic/service operations and six
+HTML product routes tagged `web`. All 17 programmatic/service operations are integration API
 coverage. The six HTML routes remain product UI navigation and must not be presented as a stable
 machine-integration API.
 
@@ -28,13 +28,15 @@ machine-integration API.
 | `API-PROFILE-003` | `GET` | `/api/profiles/{profile_id}` | Read one active or explicitly included archived profile. | Integer `profile_id`; optional `include_deleted`. | `200 ProfileRead`. | `404` missing/not-visible profile; `422` invalid path/query input. | `admin-task-sync-profile-lifecycle` |
 | `API-PROFILE-004` | `POST` | `/api/profiles` | Create a profile from BPM's normalized profile model. | JSON `ProfileCreate`. | `201 ProfileRead`. | `400` invalid/unknown schema; `409` duplicate name; `422` request or policy validation. | `admin-task-sync-profile-lifecycle` |
 | `API-PROFILE-005` | `PATCH` | `/api/profiles/{profile_id}` | Partially update description, schema, normalized flags, compliance metadata, or expected revision. | Integer `profile_id`; JSON `ProfileUpdate`. | `200 ProfileRead` with incremented revision after a material update. | `400` invalid schema/profile; `404` missing or archived profile; `409` stale `expected_revision`; `422` request or policy validation. | `admin-task-sync-profile-lifecycle` |
+| `API-PROFILE-010` | `POST` | `/api/profiles/{profile_id}/conversion-preview` | Build a value-free, read-only conversion plan for one current stored active profile and a caller-selected exact target artifact. | Integer `profile_id`; JSON `ConversionPreviewRequest` with only `target_artifact_id`. | `200 ConversionPreviewResponse`; an available but blocked plan remains `200` with `compatibility.applicable=false`. | `404` missing source; `409` inactive or retired source; `422` invalid/identical/unsupported target or source; `503` missing exact artifact. Every error has the conversion detail envelope and `mutation=none`. | `admin-task-use-reusable-api-examples` |
+| `API-PROFILE-011` | `POST` | `/api/profiles/{profile_id}/conversion-apply` | Atomically rederive and apply one explicitly confirmed, current preview. | Integer `profile_id`; JSON `ConversionApplyRequest` with the reviewed revision, exact source/target identities, and digests. | `200 ConversionApplyResponse` with `status="applied"`, incremented result revision, target validation, compliance disposition, and field accounting. | `404` missing source; `409` stale, blocked, inactive, or retired source; `422` invalid request/precondition; `500` transaction failure; `503` missing exact artifact. Every error has `mutation=none`; stale-identity errors require a fresh preview. | `admin-task-use-reusable-api-examples` |
 | `API-PROFILE-006` | `DELETE` | `/api/profiles/{profile_id}` | Soft-delete/archive a profile. | Integer `profile_id`. | `204` empty response. | `404` missing profile; `422` invalid path input. | `admin-task-manage-profile-retirement` |
 | `API-PROFILE-007` | `POST` | `/api/profiles/{profile_id}/restore` | Restore an archived profile. | Integer `profile_id`. | `200 ProfileRead`. | `404` profile cannot be restored/found; `422` invalid path input. | `admin-task-manage-profile-retirement` |
 | `API-PROFILE-008` | `DELETE` | `/api/profiles/{profile_id}/hard` | Permanently delete one active or archived profile. | Integer `profile_id`. | `204` empty response. | `404` missing profile; `422` invalid path input. | `admin-task-manage-profile-retirement` |
 | `API-PROFILE-009` | `DELETE` | `/api/profiles/reset` | Permanently delete every profile in the Library. | None; no confirmation token. | `200 {"deleted":int}`. | No application error currently declared; database failures use framework handling. | `admin-task-manage-profile-retirement` |
 | `API-FF-001` | `POST` | `/api/profiles/import/firefox/policies.json` | Validate a canonical Firefox document and create a normalized BPM profile. | JSON `FirefoxPoliciesJsonImportRequest` or multipart import fields. | `201 ProfileRead`. | `400` malformed JSON/document/schema; `409` duplicate name; `415` unsupported media type; `422` request/policy validation. | `admin-task-import-firefox-policies-json` |
 | `API-FF-002` | `GET` | `/api/export/profiles/{profile_id}/firefox/policies.json` | Render a BPM profile as canonical Firefox Enterprise `policies.json`. | Integer `profile_id`; export query parameters. | `200 application/json`; optional attachment header and indentation. | `404` missing/not-visible profile; `422` invalid path/query input. | `admin-task-export-firefox-policies-json` |
-| `API-VAL-001` | `POST` | `/api/validate/{profile}` | Validate a canonical Firefox document or compatibility policy mapping against a supported channel. | Channel path `profile`; JSON `ValidationRequest`. | `200 {"ok":true,"profile":...}`; a non-object document returns `200` with `ok=false`. | `400` malformed canonical document/profile validation; `404` unknown channel; `422` request/policy validation; `503` registered schema unavailable. | `admin-task-validate-firefox-policies-json` |
+| `API-VAL-001` | `POST` | `/api/validate/{profile}` | Validate a canonical Firefox document or compatibility policy mapping against a supported channel. | Channel path `profile`; JSON `ValidationRequest`. | `200 {"ok":true,"profile":...}`; a non-object document returns `200` with `ok=false`. | `400` malformed canonical document/profile validation; `422` unknown channel, request, or policy validation; `503` registered schema unavailable. | `admin-task-validate-firefox-policies-json` |
 
 ## Query Parameter Inventory
 
@@ -65,6 +67,10 @@ the framework `422` validation response.
 | `ProfileCreate` | Required `name`; optional `description`, `schema_version`, normalized policy `flags`, and opaque `compliance`. | This is BPM's internal normalized profile boundary, not a full Firefox `policies.json` document. Name is limited to 255 characters. | `admin-concept-api-conventions` |
 | `ProfileUpdate` | Optional `description`, `schema_version`, `flags`, `compliance`, and `expected_revision`. | Profile name is immutable through PATCH. `expected_revision` is the only optimistic-concurrency guard. | `admin-concept-api-conventions` |
 | `ProfileRead` | Create fields plus `id`, `revision`, timestamps, `deleted_at`, `is_deleted`, and `validation_state`. | Datetimes are JSON-serialized by FastAPI/Pydantic; no separate response version field exists. | `admin-concept-api-conventions` |
+| `ConversionPreviewRequest` | Only `target_artifact_id`, the exact selectable target artifact. | The client cannot submit a source document, candidate policy document, compliance candidate, recipe, or localized message. | `admin-task-use-reusable-api-examples` |
+| `ConversionPreviewResponse` | Value-free source/target artifact identities and digests, compatibility counts, item classifications, target validation, compliance disposition, warnings/blockers, and plan digest. | Preview is read-only; available does not mean applicable. Raw policy and compliance values are excluded. | `admin-task-use-reusable-api-examples` |
+| `ConversionApplyRequest` | Exact source/target line and artifact identities, expected revision, plan/source/schema/registry identities, and digests. | It is a confirmation of a preview, not a client-provided conversion candidate. | `admin-task-use-reusable-api-examples` |
+| `ConversionApplyResponse` | Applied source/target identities, source/result revision, value-free result digests, target validation, compliance disposition, and field accounting. | The server rederives the plan and writes atomically; it preserves profile identity/name/description and never accepts raw candidates. | `admin-task-use-reusable-api-examples` |
 | `FirefoxPoliciesJsonImportRequest` | `name`, optional description/channel/compliance, and full `document` containing top-level `policies`. | JSON and multipart have different wire representations; multipart `compliance` is a JSON-encoded string. | `admin-task-import-firefox-policies-json` |
 | Multipart Firefox import | Required `file` in OpenAPI; runtime also accepts `document`; optional name, description, channel, and JSON-string compliance. | The runtime `document` alias is tested but the current multipart OpenAPI schema declares only `file`. This drift must be explained or corrected before guide publication. | `admin-task-import-firefox-policies-json` |
 | `ValidationRequest` | Required free-form `document`. Canonical shape is `{"policies":{...}}`. | A plain policy mapping remains accepted for internal compatibility and is not the preferred external integration shape. | `admin-task-validate-firefox-policies-json` |
@@ -79,10 +85,11 @@ the framework `422` validation response.
 | `201` | Profile created directly or through Firefox document import. | Store returned `id` and `revision`; do not infer identity from name alone. |
 | `204` | Archive or permanent delete completed with no response body. | Do not parse JSON from the response. |
 | `400` | Invalid schema channel, malformed JSON/canonical document, or profile validation failure. | Inspect whether `detail` is text or an object; do not assume one envelope. |
-| `404` | Missing profile, excluded archived profile, or unknown validation channel. | Decide whether `include_deleted` or restore is appropriate before retrying. |
+| `404` | Missing profile or excluded archived profile. | Decide whether `include_deleted` or restore is appropriate before retrying. |
 | `409` | Duplicate profile name or stale `expected_revision`. | Name conflict and concurrent update require different recovery flows. |
+| `500` | A conversion apply transaction failed. | The conversion detail reports `mutation=none`; reload authoritative state and create a fresh preview rather than retrying an old apply. |
 | `415` | Firefox import used an unsupported content type. | Send `application/json` or `multipart/form-data`. |
-| `422` | FastAPI request validation or Firefox policy/schema validation. | Distinguish framework validation lists from BPM `issues` objects. |
+| `422` | FastAPI request validation, an unknown validation channel, or Firefox policy/schema validation. | Distinguish framework validation lists from BPM `issues` objects; an unknown channel returns the locale-neutral `schema_channel_unknown` code. |
 | `503` | Supported validation channel is registered but its schema cannot be loaded. | Treat as service/schema availability, not an invalid user document. |
 
 ## OpenAPI HTML Routes: Not Integration API
@@ -121,6 +128,9 @@ Administrator/DevOps API integration sections as machine endpoints.
   request/correlation ID.
 - Only PATCH supports optimistic concurrency through optional `expected_revision`; create, import,
   delete, restore, reset, and export have no equivalent precondition token or ETag.
+- Schema conversion has a separate two-step concurrency boundary: preview is read-only, while apply
+  accepts only the current reviewed identity/digest fields and rederives policy/compliance data on
+  the server. It is not a bulk conversion API and cannot be used for retired-ESR migration.
 - There is no bulk profile CRUD/export endpoint. List pagination is offset/limit and total counts
   require the separate stats operation.
 - Profile CRUD exposes BPM's normalized `flags` and opaque `compliance`, while import/export uses
@@ -138,7 +148,7 @@ adding security, concurrency, versioning, or bulk semantics under this epic.
 
 ## Audit Result
 
-- 15 programmatic/service OpenAPI operations map to 13 planned primary DITA operation topics.
+- 17 programmatic/service OpenAPI operations map to seven planned primary DITA operation topics.
 - Six OpenAPI `web` operations are explicitly assigned to the User Guide rather than integration
   consumers.
 - Generated schema UIs, schema/asset routes excluded from OpenAPI, internal Python helpers,

@@ -218,19 +218,19 @@ def infer_schema_from_example_value(value: Any) -> dict[str, Any]:
         }
 
     if isinstance(value, list):
-        schema: dict[str, Any] = {"type": "array"}
+        array_schema: dict[str, Any] = {"type": "array"}
         if not value:
-            return schema
+            return array_schema
 
         item_schemas = [infer_schema_from_example_value(item) for item in value]
         merged_items = _merge_array_item_schemas(item_schemas)
         if merged_items is not None:
-            schema["items"] = merged_items
+            array_schema["items"] = merged_items
 
         if all(not isinstance(item, (list, dict)) and not _is_enum_wrapper(item) for item in value):
-            schema["default"] = value
+            array_schema["default"] = value
 
-        return schema
+        return array_schema
 
     return {
         "type": infer_value_type_from_python(value),

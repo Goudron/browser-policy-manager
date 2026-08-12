@@ -82,5 +82,8 @@
     "profiles.clone_name_required": "请输入克隆名称。",
     "profiles.clone_name_duplicate": "已存在同名配置档案。",
     "profiles.clone_source_value": "开启 {name}",
-    "profiles.clone_source_unknown": "此 配置档案"
+    "profiles.clone_source_unknown": "此 配置档案",
+    "profiles.schema_conversion_recommendation_action": "查看更新到 {target_schema}",
+    "profiles.schema_conversion_recommendation_consequence": "打开从 {source_schema} 到 {target_schema} 的转换预览。在查看并确认前，配置档案不会更改。",
+    "profiles.schema_conversion_recommendation_accessible_name": "查看从 {source_schema} 到 {target_schema} 的架构转换预览"
 }

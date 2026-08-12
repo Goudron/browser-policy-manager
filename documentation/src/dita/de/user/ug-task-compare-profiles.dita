@@ -12,6 +12,7 @@
           <alt>Vergleichsansicht mit zwei gespeicherten Profilen, die für die Gegenüberstellung ausgewählt wurden.</alt>
         </image>
       </fig>
+      <p>Der Vergleich ist schreibgeschützt. Er kann zu einer Konvertierungsvorschau für ein gespeichertes aktives Profil zurückführen, bestätigt oder wendet eine Konvertierung jedoch niemals an.</p>
     </context>
     <steps>
       <step><cmd>Wählen Sie in der <uicontrol>Bibliothek</uicontrol> die Aktion „<uicontrol>Profileinstellungen vergleichen</uicontrol>“.</cmd><info><p>Erwartetes Ergebnis: BPM öffnet die Vergleichsoberfläche in einer neuen Browser-Registerkarte.</p></info></step>

@@ -744,3 +744,34 @@
             border-color: rgba(110, 231, 183, 0.34);
             color: #ffffff;
         }
+
+        html[data-theme="dark"] .library-conversion-recommendation,
+        html[data-theme="dark"] .schema-conversion-review-summary > div,
+        html[data-theme="dark"] .schema-conversion-review-status,
+        html[data-theme="dark"] .schema-conversion-review-details,
+        html[data-theme="dark"] .schema-conversion-review-confirmation {
+            border-color: rgba(45, 212, 191, 0.28);
+            background: rgba(15, 118, 110, 0.14);
+        }
+
+        html[data-theme="dark"] .library-conversion-recommendation-action {
+            color: #99f6e4;
+        }
+
+        html[data-theme="dark"] .library-conversion-recommendation-consequence,
+        html[data-theme="dark"] .schema-conversion-review-summary span,
+        html[data-theme="dark"] .schema-conversion-review-status span,
+        html[data-theme="dark"] .schema-conversion-review-list {
+            color: #cbd5e1;
+        }
+
+        @media (forced-colors: active) {
+            .library-conversion-recommendation,
+            .schema-conversion-review-summary > div,
+            .schema-conversion-review-status,
+            .schema-conversion-review-details,
+            .schema-conversion-review-confirmation {
+                border-color: CanvasText;
+                background: Canvas;
+            }
+        }

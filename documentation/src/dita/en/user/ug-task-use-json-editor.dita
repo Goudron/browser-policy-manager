@@ -20,7 +20,7 @@
       <step><cmd>Use <uicontrol>JSON editor</uicontrol> only when exact raw document control is needed.</cmd><info><note type="warning">Saving raw JSON can change the canonical BPM profile. Validate syntax and policy values before saving.</note></info></step>
     </steps>
     <result><p>The current profile is visible as editable Firefox policies.json content.</p></result>
-    <postreq><p>Recovery: if the route cannot open, save the profile first or return to <uicontrol>All settings</uicontrol> for visual editing.</p></postreq>
+    <postreq><p>Recovery: if the route cannot open, save the profile first or return to <uicontrol>All settings</uicontrol> for visual editing. Save or deliberately discard JSON-editor changes before opening schema conversion review; preview never overwrites browser-local edits, and a stale preview must be requested again.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-when-to-use-json-editor"/>

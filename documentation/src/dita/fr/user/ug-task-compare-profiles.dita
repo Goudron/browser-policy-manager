@@ -12,6 +12,7 @@
           <alt>Vue comparative montrant deux profils enregistrés sélectionnés pour un examen côte à côte.</alt>
         </image>
       </fig>
+      <p>La comparaison est en lecture seule. Elle peut vous ramener à l’aperçu de conversion d’un profil actif enregistré, mais ne confirme ni n’applique jamais une conversion.</p>
     </context>
     <steps>
       <step><cmd>Choisissez l'action « <uicontrol>Comparer les paramètres des profils</uicontrol> » dans la <uicontrol>Bibliothèque</uicontrol>.</cmd><info><p>Résultat attendu : BPM ouvre l'interface de comparaison dans un nouvel onglet de navigateur.</p></info></step>

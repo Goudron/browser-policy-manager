@@ -562,6 +562,16 @@
       ],
       "focused_rerun": "make test-docs-contract"
     },
+    "bpm_0_9_5_editorial_pdf_release": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_documentation_editorial_pdf_release_review_0_9_5.py"],
+      "fixtures": [
+        "documentation/config/documentation-editorial-pdf-release-review-0.9.5.json",
+        "documentation/config/pdf-generation-contract-0.9.3.json",
+        "documentation/config/pdf-delivery-contract-0.9.3.json"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_editorial_pdf_release_review_0_9_5.py"
+    },
     "test_estate_inventory": {
       "primary_suite": "contract",
       "path_globs": [

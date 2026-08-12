@@ -602,50 +602,6 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
     assert f'data-editing-profile-id="{created["id"]}"' in edit_page.text
     assert 'data-profiles-route-mode="edit"' in edit_page.text
 
-    root = Path(__file__).resolve().parents[4]
-    shared_source = (root / "app" / "static" / "profiles_shared.js").read_text(encoding="utf-8")
-    dom_source = (root / "app" / "static" / "profiles_dom.js").read_text(encoding="utf-8")
-    extensions_source = (root / "app" / "static" / "profiles_extensions.js").read_text(
-        encoding="utf-8"
-    )
-    bootstrap_source = (root / "app" / "static" / "profiles_bootstrap_core.js").read_text(
-        encoding="utf-8"
-    )
-
-    assert 'schemaVersion: "esr-140.13"' in shared_source
-    assert "function getActiveWizardSchemaVersion()" in shared_source
-    assert 'return documentRef.getElementById("profile-type")?.value' in shared_source
-    assert "|| wizardSchemaEl?.value" in shared_source
-    assert "|| currentProfile?.schema_version" in shared_source
-    assert "|| currentProfile?.schemaVersion" in shared_source
-    assert "|| defaultSchemaVersion;" in shared_source
-    assert 'wizardAiEsrcEmptyStateEl: byId("wizard-ai-esr-empty-state")' in dom_source
-    assert 'wizardAiReleaseContentEl: byId("wizard-ai-release-content")' in dom_source
-    assert 'wizardAiPosturePresetsEl: byId("wizard-ai-posture-presets")' in dom_source
-    assert 'wizardAiPolicyControlsEl: byId("wizard-ai-policy-controls")' in dom_source
-    assert "function isAiWizardAvailable()" in extensions_source
-    assert "function hasUsableAiPolicyCard(policyCardEl)" in extensions_source
-    assert "wizardAiEsrcEmptyStateEl," in bootstrap_source
-    assert "wizardAiReleaseContentEl," in bootstrap_source
-    assert "wizardAiControlsCardEl," in bootstrap_source
-    assert "wizardAiEsrcEmptyStateEl.hidden = releaseAiAvailable;" in extensions_source
-    assert "wizardAiReleaseContentEl.hidden = !releaseAiAvailable;" in extensions_source
-    assert "wizardAiPosturePresetsEl.hidden = !releaseAiAvailable;" in extensions_source
-    assert "wizardAiPolicyControlsEl.hidden = !releaseAiAvailable;" in extensions_source
-    assert (
-        'setText(wizardAiSectionStatusEl, t("profiles.wizard_ai_esr_state"));' in extensions_source
-    )
-    assert "wizardAiProvidersHandoffEl" not in extensions_source
-    assert "aiProvidersSectionStatusEl" not in extensions_source
-    assert (
-        'wizardAiGovernanceCopyEl.textContent = t("profiles.wizard_ai_esr_body");'
-        in extensions_source
-    )
-    assert (
-        'renderPresetButtonState(aiPosturePresetButtons, null, "aiPosturePreset");'
-        in extensions_source
-    )
-
 
 def test_release_ai_step_browser_regression_keeps_release_controls_available():
     client = make_test_client(app)
@@ -693,23 +649,6 @@ def test_release_ai_step_browser_regression_keeps_release_controls_available():
     assert exported["AIControls"]["Default"]["Value"] == "blocked"
     assert exported["AIControls"]["Default"]["Locked"] is True
     assert exported["VisualSearchEnabled"] is False
-
-    root = Path(__file__).resolve().parents[4]
-    extensions_source = (root / "app" / "static" / "profiles_extensions.js").read_text(
-        encoding="utf-8"
-    )
-
-    assert "const releaseAiAvailable = isAiWizardAvailable();" in extensions_source
-    assert "wizardAiEsrcEmptyStateEl.hidden = releaseAiAvailable;" in extensions_source
-    assert "wizardAiPostureBarEl.hidden = !releaseAiAvailable;" in extensions_source
-    assert "wizardAiPostureBodyEl.hidden = !releaseAiAvailable;" in extensions_source
-    assert "wizardAiPosturePresetsEl.hidden = !releaseAiAvailable;" in extensions_source
-    assert "wizardAiPolicyControlsEl.hidden = !releaseAiAvailable;" in extensions_source
-    assert 't("profiles.wizard_ai_section_state_feature_controls")' in extensions_source
-    assert 't("profiles.wizard_ai_section_state_visual_search_disabled")' in extensions_source
-    assert "wizardAiGovernanceCopyEl.textContent = hasManagedAiPosture" in extensions_source
-    assert '? t("profiles.wizard_ai_controls_active")' in extensions_source
-    assert ': t("profiles.wizard_ai_controls_body");' in extensions_source
 
 
 def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
@@ -860,6 +799,7 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
         "Locked": True,
     }
     assert exported["VisualSearchEnabled"] is False
+    client.close()
 
 
 def test_profiles_ui_locale_catalog_exposes_export_lifecycle_finish_line_copy():

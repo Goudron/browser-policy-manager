@@ -260,7 +260,7 @@ def test_profile_route_assets_catalogs_and_security_follow_route_tables(
     }
     expected_catalogs = {
         "library": {"schema-channels-catalog"},
-        "compare": set(),
+        "compare": {"schema-channels-catalog"},
         "new": {
             "wizard-starter-catalog",
             "wizard-settings-catalog",

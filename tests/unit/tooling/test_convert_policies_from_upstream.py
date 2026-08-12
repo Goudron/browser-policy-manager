@@ -5,6 +5,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 
 def _load_module():
     module_path = (
@@ -577,7 +579,7 @@ def test_extract_required_property_names_ignores_only_required_to_phrasing():
     assert required_names == set()
 
 
-def test_schema_target_manifest_declares_three_independent_outputs():
+def test_schema_target_manifest_declares_four_independent_outputs_with_esr115_provenance():
     module = _load_module()
 
     targets = module.load_schema_build_targets()
@@ -586,8 +588,71 @@ def test_schema_target_manifest_declares_three_independent_outputs():
         ("release-153", "153.0", "mozilla-policy-templates-v8.0"),
         ("esr-153.0", "153.0", "mozilla-policy-templates-v8.0"),
         ("esr-140.13", "140.13", "mozilla-policy-templates-v7.12"),
+        ("esr-115.38", "115.38", "mozilla-policy-templates-v5.12"),
     ]
-    assert len({target.output for target in targets}) == 3
+    assert len({target.output for target in targets}) == 4
+
+    esr115 = next(target for target in targets if target.channel == "esr-115.38")
+    assert esr115.output.as_posix().endswith("app/schemas/policies/firefox-esr-115.38.json")
+    assert esr115.schema_metadata == {
+        "artifact_id": "esr-115.38",
+        "line_id": "esr-115",
+        "firefox_line": 115,
+        "firefox_version": "115.38.0esr",
+        "ui_label": "ESR 115.38",
+        "source_provenance": {
+            "source_tag": "mozilla-policy-templates-v5.12",
+            "upstream_tag": "v5.12",
+            "upstream_release_url": "https://github.com/mozilla/policy-templates/releases/tag/v5.12",
+            "license_spdx": "MPL-2.0",
+            "license_url": "https://www.mozilla.org/MPL/2.0/",
+            "inputs": {
+                "policy-templates.md": {
+                    "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v5.12/docs/index.md",
+                    "bytes": 180619,
+                    "sha256": "ce84a587dabc8e995e93206866e8d8ab3c9cf8423bb7dfbe74f20b9b28aaac42",
+                },
+                "linux-policies.json": {
+                    "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v5.12/linux/policies.json",
+                    "bytes": 11922,
+                    "sha256": "da9caaefe75f7f5e54694bccda8a044e62f034dbd5889bcf1595bb08d6a04347",
+                },
+            },
+        },
+        "generator": {
+            "identity": "bpm-firefox-policy-schema-converter/v1",
+            "entrypoint": "tools/convert_policies_from_upstream.py",
+        },
+    }
+
+
+def test_v5_12_linux_example_repair_is_exactly_gated_and_preserves_values(tmp_path: Path):
+    module = _load_module()
+    raw = """{
+  "policies": {
+    "DisplayMenuBar": "always", "never", "default-on", "default-off",
+    "OverrideFirstRunPage": "http://example.org".
+    "UseSystemPrintDialog": true | false.,
+  }
+}"""
+
+    repaired = module._repair_v5_12_linux_examples(raw)
+    parsed = module._try_parse_json_like(repaired)
+
+    assert parsed == {
+        "policies": {
+            "DisplayMenuBar": {"__bpm_enum__": ["always", "never", "default-on", "default-off"]},
+            "OverrideFirstRunPage": "http://example.org",
+            "UseSystemPrintDialog": {"__bpm_enum__": [True, False]},
+        }
+    }
+    with pytest.raises(RuntimeError, match="no longer matches"):
+        module._repair_v5_12_linux_examples(raw.replace("UseSystemPrintDialog", "Changed"))
+    with pytest.raises(RuntimeError, match="is required"):
+        module.load_linux_policy_examples(
+            tmp_path / "missing-linux-policies.json",
+            source_tag="mozilla-policy-templates-v5.12",
+        )
 
 
 def test_generate_schema_targets_parses_markdown_and_applies_firefox_153_bridge(tmp_path: Path):

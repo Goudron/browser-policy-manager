@@ -666,8 +666,8 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert search_payload["index_kind"] == "dita-document-corpus-v1"
     assert search_payload["allowlisted_cross_locale_fields"] == ["identifiers"]
     assert search_payload["normalization"]["unicode_form"] == "NFKC"
-    assert search_payload["normalization"]["alias_group_count"] == 5
-    assert search_payload["normalization"]["query_fixture_count"] == 3
+    assert search_payload["normalization"]["alias_group_count"] == 6
+    assert search_payload["normalization"]["query_fixture_count"] == 4
     assert search_payload["domain_ranking"] == {
         "preserved_sources": [
             "identifiers",
@@ -884,7 +884,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert manifest["ui_target_map"]["sha256"] == build_docs._file_sha256(
         tmp_path / "ui-target-map.json"
     )
-    assert len(target_map["targets"]) == 523
+    assert len(target_map["targets"]) == 525
     assert "policy:AIControls" in target_map["targets"]
     assert "known-preference:network.IDN_show_punycode" in target_map["targets"]
     assert "capability:CAP-SET-001" in target_map["targets"]
@@ -895,7 +895,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
         for target_id, target in target_map["targets"].items()
         if target_id.startswith("api-operation:")
     }
-    assert len(api_targets) == 15
+    assert len(api_targets) == 17
     assert all(target["topic_id"].startswith("admin-") for target in api_targets.values())
     assert all(target["topic_id"] in manifest["topics"] for target in api_targets.values())
     assert "topic:api-integration-guide" not in target_map["targets"]
@@ -1118,7 +1118,7 @@ def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
         json.dumps(
             {
                 "schema_version": 1,
-                "target_bpm_version": "0.9.4",
+                "target_bpm_version": "0.9.5",
                 "locales": list(build_docs.LOCALES),
                 "guides": [
                     {

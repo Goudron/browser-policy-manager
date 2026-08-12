@@ -179,6 +179,45 @@ PROGRAMMATIC_OPERATIONS: tuple[OperationContract, ...] = (
         documented_statuses=("200", "400", "404", "409", "422"),
     ),
     OperationContract(
+        api_id="API-PROFILE-010",
+        method="POST",
+        path="/api/profiles/{profile_id}/conversion-preview",
+        operation_id="preview_profile_conversion_api_profiles__profile_id__conversion_preview_post",
+        tags=("profiles",),
+        guide_topics=("admin-task-use-reusable-api-examples",),
+        inventory_topic="admin-task-use-reusable-api-examples",
+        parameters=(("profile_id", "path", True, "integer", None, None, None),),
+        request=(("application/json", ()),),
+        responses=(
+            ("200", ("application/json",), ("ConversionPreviewResponse",)),
+            ("404", ("application/json",), ("ConversionPreviewErrorEnvelope",)),
+            ("409", ("application/json",), ("ConversionPreviewErrorEnvelope",)),
+            ("422", ("application/json",), ("ConversionPreviewErrorEnvelope",)),
+            ("503", ("application/json",), ("ConversionPreviewErrorEnvelope",)),
+        ),
+        documented_statuses=("200", "404", "409", "422", "503"),
+    ),
+    OperationContract(
+        api_id="API-PROFILE-011",
+        method="POST",
+        path="/api/profiles/{profile_id}/conversion-apply",
+        operation_id="apply_profile_conversion_api_profiles__profile_id__conversion_apply_post",
+        tags=("profiles",),
+        guide_topics=("admin-task-use-reusable-api-examples",),
+        inventory_topic="admin-task-use-reusable-api-examples",
+        parameters=(("profile_id", "path", True, "integer", None, None, None),),
+        request=(("application/json", ("ConversionLineArtifactReference",)),),
+        responses=(
+            ("200", ("application/json",), ("ConversionApplyResponse",)),
+            ("404", ("application/json",), ("ConversionApplyErrorEnvelope",)),
+            ("409", ("application/json",), ("ConversionApplyErrorEnvelope",)),
+            ("422", ("application/json",), ("ConversionApplyErrorEnvelope",)),
+            ("500", ("application/json",), ("ConversionApplyErrorEnvelope",)),
+            ("503", ("application/json",), ("ConversionApplyErrorEnvelope",)),
+        ),
+        documented_statuses=("200", "404", "409", "422", "500", "503"),
+    ),
+    OperationContract(
         api_id="API-PROFILE-006",
         method="DELETE",
         path="/api/profiles/{profile_id}",
@@ -388,7 +427,7 @@ EXPECTED_MODEL_FIELDS = {
         "properties": {
             "name": ("string", None, None, 255),
             "description": ("anyOf:string|null", None, None, None),
-            "schema_version": ("string", "esr-140.13", None, 50),
+            "schema_version": ("string", "esr-153.0", None, 50),
             "flags": ("object", None, None, None),
             "compliance": ("anyOf:object|null", None, None, None),
         },
@@ -408,7 +447,7 @@ EXPECTED_MODEL_FIELDS = {
         "properties": {
             "name": ("string", None, None, 255),
             "description": ("anyOf:string|null", None, None, None),
-            "schema_version": ("string", "esr-140.13", None, 50),
+            "schema_version": ("string", "esr-153.0", None, 50),
             "flags": ("object", None, None, None),
             "compliance": ("anyOf:object|null", None, None, None),
             "id": ("integer", None, None, None),
@@ -418,6 +457,7 @@ EXPECTED_MODEL_FIELDS = {
             "deleted_at": ("anyOf:string|null", None, None, None),
             "is_deleted": ("boolean", None, None, None),
             "validation_state": ("string", "not_validated", None, None),
+            "recommendation": ("anyOf:ref:ProfileRecommendation|null", None, None, None),
         },
     },
     "ValidationRequest": {
@@ -620,7 +660,7 @@ def test_openapi_examples_match_documented_copyable_examples_boundary() -> None:
     assert import_schema["example"] == {
         "name": "Workstation baseline",
         "description": "Imported from Firefox policies.json",
-        "schema_version": "esr-140.13",
+        "schema_version": "esr-153.0",
         "document": {
             "policies": {
                 "DisableTelemetry": True,

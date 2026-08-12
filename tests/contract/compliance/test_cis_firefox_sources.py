@@ -52,10 +52,15 @@ def test_cis_coverage_report_counts_current_dataset() -> None:
     }
     assert benchmark["by_level"] == {"L1": 51, "L2": 4}
     assert benchmark["schema_compatibility"] == {
+        "esr-115.38:valid": 53,
         "esr-140.13:valid": 53,
         "esr-153.0:valid": 53,
         "release-153:valid": 53,
     }
+    source = load_benchmarks()[0]
+    assert source["tested_by_cis_against"] == (
+        "Mozilla Firefox 115.10 ESR on Windows 11 Release 23H2"
+    )
 
 
 def test_cis_sources_have_expected_files() -> None:

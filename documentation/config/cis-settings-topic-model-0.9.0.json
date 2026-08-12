@@ -209,7 +209,7 @@
   },
   "automation_model": {
     "assessment_values": ["automated"],
-    "supported_schema_channels": ["esr-140.13", "esr-153.0", "release-153"],
+    "supported_schema_channels": ["esr-115.38", "esr-140.13", "esr-153.0", "release-153"],
     "supported_levels": [1, 2],
     "generated_layer_fields": [
       "layer_id",

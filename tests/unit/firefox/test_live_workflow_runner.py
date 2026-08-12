@@ -101,6 +101,7 @@ def test_runner_writes_terminal_channel_summary_without_external_scope(
     summary = json.loads((artifacts / "run-summary.json").read_text(encoding="utf-8"))
     assert summary["status"] == "passed"
     assert summary["channel"] == "release"
+    assert summary["matrix_position"] == {"current": 1, "total": 1}
     assert summary["result_counts"] == {
         "total": 0,
         "passed": 0,
@@ -113,6 +114,74 @@ def test_runner_writes_terminal_channel_summary_without_external_scope(
         == "local loopback policy fixtures after provisioning; AMO excluded"
     )
     assert (artifacts / "versions.json").is_file()
+
+
+def test_runner_retains_preflight_failure_diagnostic_artifacts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(live_runner, "host_platform", lambda: "linux-x86_64")
+    monkeypatch.setattr(live_runner, "load_spec", lambda *args, **kwargs: object())
+
+    def fail_verify(*_args, **_kwargs):
+        raise live_runner.ProvisioningError("missing verified esr115 installation")
+
+    monkeypatch.setattr(live_runner, "verify_installation", fail_verify)
+    artifacts = tmp_path / "artifacts"
+
+    assert (
+        live_runner.run_channel(
+            channel="esr115",
+            artifact_dir=artifacts,
+            timeout_seconds=12,
+            provision_root=tmp_path / "provisioned",
+            manifest_path=tmp_path / "manifest.json",
+            matrix_position=(4, 4),
+        )
+        == 1
+    )
+
+    summary = json.loads((artifacts / "run-summary.json").read_text(encoding="utf-8"))
+    assert summary["status"] == "provisioning_failed"
+    assert summary["matrix_position"] == {"current": 4, "total": 4}
+    assert "missing verified esr115 installation" in summary["diagnostic"]
+    assert (artifacts / "pytest.log").is_file()
+
+
+def test_four_channel_runner_continues_after_a_failed_channel(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    calls: list[tuple[str, tuple[int, int]]] = []
+
+    def fake_run_channel(*, channel: str, artifact_dir: Path, matrix_position, **_kwargs) -> int:
+        calls.append((channel, matrix_position))
+        artifact_dir.mkdir(parents=True)
+        status = "failed" if channel == "esr140" else "passed"
+        (artifact_dir / "run-summary.json").write_text(
+            json.dumps({"status": status}), encoding="utf-8"
+        )
+        return 1 if status == "failed" else 0
+
+    monkeypatch.setattr(live_runner, "run_channel", fake_run_channel)
+    artifacts = tmp_path / "matrix"
+
+    assert (
+        live_runner.run_channels(
+            channels=live_runner.CHANNELS,
+            artifact_dir=artifacts,
+            timeout_seconds=12,
+        )
+        == 1
+    )
+
+    assert calls == [
+        ("release", (1, 4)),
+        ("esr153", (2, 4)),
+        ("esr140", (3, 4)),
+        ("esr115", (4, 4)),
+    ]
+    matrix = json.loads((artifacts / "matrix-summary.json").read_text(encoding="utf-8"))
+    assert matrix["completed_channels"] == 4
+    assert matrix["status"] == "failed"
 
 
 def test_runner_rejects_unknown_channel_before_writing_artifacts(tmp_path: Path) -> None:
@@ -130,6 +199,9 @@ def test_make_target_runs_the_timeout_bounded_workflow_runner() -> None:
     assert "firefox-live-workflow:" in source
     assert "tools/run_firefox_live_workflow.py $(FIREFOX_CHANNEL)" in source
     assert "--timeout-seconds $(FIREFOX_LIVE_TIMEOUT_SECONDS)" in source
+    assert "firefox-live-four-channel-workflow:" in source
+    assert "tools/provision_firefox_live_browsers.py all" in source
+    assert "tools/run_firefox_live_workflow.py all" in source
 
 
 def test_streamed_runner_enforces_timeout_when_pytest_writes_no_output(tmp_path: Path) -> None:

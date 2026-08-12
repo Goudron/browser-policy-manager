@@ -12,6 +12,7 @@
           <alt>Vista de comparación que muestra dos perfiles guardados seleccionados para revisión en paralelo.</alt>
         </image>
       </fig>
+      <p>La comparación es de solo lectura. Puede devolverle a la vista previa de conversión de un perfil activo guardado, pero nunca confirma ni aplica una conversión.</p>
     </context>
     <steps>
       <step><cmd>Elija la acción «<uicontrol>Comparar ajustes de perfiles</uicontrol>» en la <uicontrol>Biblioteca</uicontrol>.</cmd><info><p>Resultado esperado: BPM abre la interfaz de comparación en una nueva pestaña del navegador.</p></info></step>

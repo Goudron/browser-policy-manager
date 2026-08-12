@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from app.core.policy_validation import validate_profile_payload_with_schema
-from app.core.schema_channels import CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL
+from app.core.schema_channels import CURRENT_RELEASE_SCHEMA_CHANNEL, LATEST_ESR_SCHEMA_CHANNEL
 from app.main import app
 from tests.support import (
     build_corporate_cis_l2_profile_fixture,
@@ -13,7 +13,7 @@ from tests.support import (
 
 
 @pytest.mark.parametrize(
-    "schema_version", (CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL)
+    "schema_version", (LATEST_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL)
 )
 def test_corporate_cis_l2_fixture_builds_heavy_profile_for_supported_channels(schema_version):
     fixture = build_corporate_cis_l2_profile_fixture(schema_version=schema_version)
@@ -58,7 +58,7 @@ def test_corporate_cis_l2_fixture_collection_covers_esr_and_release():
     fixtures = build_corporate_cis_l2_profile_fixtures()
 
     assert [fixture.schema_version for fixture in fixtures] == [
-        CURRENT_ESR_SCHEMA_CHANNEL,
+        LATEST_ESR_SCHEMA_CHANNEL,
         CURRENT_RELEASE_SCHEMA_CHANNEL,
     ]
     assert all(fixture.compliance["layer"] == "cis_l2" for fixture in fixtures)

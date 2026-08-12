@@ -13,6 +13,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -29,6 +30,7 @@ mappings:
     value: []
     merge_rule: empty_allowlist_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -46,6 +48,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -62,6 +65,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -87,6 +91,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -103,6 +108,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -119,6 +125,7 @@ mappings:
     value: reject-tracker-and-partition-foreign
     merge_rule: cookie_behavior_rank
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -135,6 +142,7 @@ mappings:
     value: reject-tracker-and-partition-foreign
     merge_rule: cookie_behavior_rank
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -151,6 +159,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -167,6 +176,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -182,6 +192,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -207,6 +218,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -224,6 +236,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -240,6 +253,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -256,6 +270,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -274,6 +289,7 @@ mappings:
       Type: boolean
     merge_rule: preference_locked_value
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -292,6 +308,7 @@ mappings:
       Type: boolean
     merge_rule: preference_locked_value
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -310,6 +327,7 @@ mappings:
       Type: boolean
     merge_rule: preference_locked_value
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -328,6 +346,7 @@ mappings:
       Type: boolean
     merge_rule: preference_locked_value
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -346,6 +365,7 @@ mappings:
       Type: boolean
     merge_rule: preference_locked_value
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -364,6 +384,7 @@ mappings:
       Type: boolean
     merge_rule: preference_locked_value
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -382,6 +403,7 @@ mappings:
       Type: boolean
     merge_rule: preference_locked_value
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -400,6 +422,7 @@ mappings:
       Type: boolean
     merge_rule: preference_locked_value
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -418,6 +441,7 @@ mappings:
       Type: boolean
     merge_rule: preference_locked_value
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -436,6 +460,7 @@ mappings:
       Type: boolean
     merge_rule: preference_locked_value
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -452,6 +477,7 @@ mappings:
     value: none
     merge_rule: proxy_mode_rank
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -469,6 +495,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -485,6 +512,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -501,6 +529,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -517,6 +546,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -533,6 +563,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -549,6 +580,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -565,6 +597,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -581,6 +614,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -596,6 +630,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -613,6 +648,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -628,6 +664,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -643,6 +680,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -658,6 +696,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -673,6 +712,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -688,6 +728,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -703,6 +744,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -718,6 +760,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -733,6 +776,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -748,6 +792,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -765,6 +810,7 @@ mappings:
     value: true
     merge_rule: boolean_true_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -780,6 +826,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -797,6 +844,7 @@ mappings:
     value: tls1.3
     merge_rule: tls_version_max_rank
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -812,6 +860,7 @@ mappings:
     value: tls1.2
     merge_rule: tls_version_min_rank
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -827,6 +876,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -842,6 +892,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -857,6 +908,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid
@@ -872,6 +924,7 @@ mappings:
     value: false
     merge_rule: boolean_false_is_stricter
     schema_channels:
+      esr-115.38: valid
       esr-140.13: valid
       esr-153.0: valid
       release-153: valid

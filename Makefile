@@ -1,13 +1,15 @@
-.PHONY: run dev ai-extra-check ai-model-install-dev ai-rag-install-dev ai-runtime-install-dev ai-web-sources-check-dev dependency-audit package-smoke test test-ai-incubation test-ai-incubation-coverage coverage-release-implementation test-browser test-contract test-fast test-frontend test-frontend-coverage test-integration test-live test-profile-pure-modules test-release test-ui test-unit test-unit-pilot test-unit-xdist test-firefox-live firefox-live-workflow test-firefox-live-amo test-locale-contract test-firefox-schema-contract test-firefox-schema-workflow test-db-integration test-db-recovery test-postgres-integration postgres-ci-evidence setup-firefox-live-browsers verify-firefox-live-browsers provision-firefox-schema-inputs setup-docs-toolchain test-docs test-docs-contract test-docs-ui test-docs-ui-contract test-docs-browser codex-snapshot docs-snapshot docs-fast-check docs-coverage docs-release-check docs-release-handoff docs-validate docs-build docs-install-dev docs-reproducibility-check docs-package docs-package-verify docs-pdf-build docs-pdf-verify docs-pdf-deliver docs-pdf-delivery-verify coverage coverage-report fmt lint typecheck architecture pre-commit-check release-boundary quality repo-health profile-performance profile-performance-gate profile-performance-release-gate locale-inventory locale-quality build-locale-catalogs check-locale-catalogs build-profiles-css check-profiles-css build-profile-frontend-bundles verify-profile-frontend-vendor verify-frontend-vendor rebuild-frontend-vendor local-chromium-ui-audit clean-local-artifacts
+.PHONY: run dev ai-extra-check ai-model-install-dev ai-rag-install-dev ai-runtime-install-dev ai-web-sources-check-dev dependency-audit package-smoke test test-ai-incubation test-ai-incubation-coverage coverage-release-implementation test-browser test-contract test-fast test-frontend test-frontend-coverage test-integration test-live test-profile-pure-modules test-profile-conversion-ux test-release test-ui test-unit test-unit-pilot test-unit-xdist test-firefox-live firefox-live-workflow firefox-live-four-channel-workflow test-firefox-live-amo test-locale-contract test-firefox-schema-contract test-firefox-schema-workflow verify-firefox-schema-matrix verify-firefox-conversion-matrix schema-lifecycle-dry-run test-db-integration test-db-recovery test-postgres-integration postgres-ci-evidence setup-firefox-live-browsers verify-firefox-live-browsers provision-firefox-schema-inputs setup-docs-toolchain test-docs test-docs-contract test-docs-ui test-docs-ui-contract test-docs-browser codex-snapshot docs-snapshot docs-fast-check docs-coverage docs-release-check docs-release-handoff docs-validate docs-build docs-install-dev docs-reproducibility-check docs-package docs-package-verify docs-pdf-build docs-pdf-verify docs-pdf-deliver docs-pdf-delivery-verify coverage coverage-report fmt lint typecheck architecture pre-commit-check release-boundary quality repo-health profile-performance profile-performance-gate profile-performance-release-gate locale-inventory locale-quality build-locale-catalogs check-locale-catalogs build-profiles-css check-profiles-css build-profile-frontend-bundles verify-profile-frontend-vendor verify-frontend-vendor rebuild-frontend-vendor local-chromium-ui-audit clean-local-artifacts
 
 PYTEST ?= $(if $(wildcard .venv/bin/pytest),.venv/bin/pytest,pytest)
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python)
 MYPY ?= $(if $(wildcard .venv/bin/mypy),.venv/bin/mypy,mypy)
 RUFF ?= $(if $(wildcard .venv/bin/ruff),.venv/bin/ruff,ruff)
 IMPORT_LINTER ?= $(if $(wildcard .venv/bin/lint-imports),.venv/bin/lint-imports,lint-imports)
+TYPECHECK_PATHS ?= app migration_support tools/run_profile_conversion_ux_smoke.py tools/schema_lifecycle_dry_run.py tools/verify_firefox_conversion_matrix.py tools/verify_firefox_schema_matrix.py documentation/tests/contract/test_documentation_editorial_pdf_release_review_0_9_5.py
 FIREFOX_CHANNEL ?= release
 FIREFOX_LIVE_TIMEOUT_SECONDS ?= 1200
 FIREFOX_LIVE_ARTIFACT_DIR ?= artifacts/firefox-live/$(FIREFOX_CHANNEL)
+FIREFOX_LIVE_FOUR_CHANNEL_ARTIFACT_DIR ?= artifacts/firefox-live
 FIREFOX_LIVE_AMO_ARTIFACT_DIR ?= artifacts/firefox-live-amo/$(FIREFOX_CHANNEL)
 DOCS_TOOLCHAIN_OFFLINE ?= 0
 AI_MODEL_LOCALE ?= en
@@ -19,6 +21,8 @@ COVERAGE_REPORT_DIR ?= artifacts/coverage/python
 COVERAGE_DATA_FILE := $(COVERAGE_REPORT_DIR)/.coverage
 COVERAGE_XML := $(COVERAGE_REPORT_DIR)/coverage.xml
 COVERAGE_HTML := $(COVERAGE_REPORT_DIR)/html
+COVERAGE_RELEASE_IMPLEMENTATION_DATA_FILE := $(COVERAGE_REPORT_DIR)/.coverage.release-implementation
+COVERAGE_AI_INCUBATION_DATA_FILE := $(COVERAGE_REPORT_DIR)/.coverage.ai-incubation
 COVERAGE_FAIL_UNDER ?= 100
 FRONTEND_COVERAGE_REPORT_DIR ?= artifacts/coverage/frontend
 RELEASE_IMPLEMENTATION_COVERAGE_TARGETS := \
@@ -209,6 +213,10 @@ test-firefox-live:
 firefox-live-workflow:
 	$(PYTHON) tools/run_firefox_live_workflow.py $(FIREFOX_CHANNEL) --artifact-dir "$(FIREFOX_LIVE_ARTIFACT_DIR)" --timeout-seconds $(FIREFOX_LIVE_TIMEOUT_SECONDS)
 
+firefox-live-four-channel-workflow:
+	$(PYTHON) tools/provision_firefox_live_browsers.py all
+	$(PYTHON) tools/run_firefox_live_workflow.py all --artifact-dir "$(FIREFOX_LIVE_FOUR_CHANNEL_ARTIFACT_DIR)" --timeout-seconds $(FIREFOX_LIVE_TIMEOUT_SECONDS)
+
 test-firefox-live-amo:
 	@mkdir -p "$(CURDIR)/artifacts/firefox-live-amo-work"
 	BPM_FIREFOX_CHANNEL=$(FIREFOX_CHANNEL) BPM_FIREFOX_LIVE_ARTIFACT_DIR=$(FIREFOX_LIVE_AMO_ARTIFACT_DIR) $(PYTEST) -o addopts= -q tests/live/firefox/test_extension_settings_amo.py -m "firefox_live_amo" -rs --basetemp "$(CURDIR)/artifacts/firefox-live-amo-work/$(FIREFOX_CHANNEL)"
@@ -217,16 +225,26 @@ test-locale-contract:
 	$(PYTEST) -o addopts= -q tests/integration/locale/test_locale_catalogs.py tests/integration/locale/test_locale_visible_english_allowlists.py tests/contract/ui/localization/test_ui_runtime_i18n_contract.py tests/contract/ui/localization/test_ui_locale_glossary.py tests/contract/ui/localization/test_all_settings_search_filter_i18n.py tests/contract/ui/localization/test_runtime_count_i18n.py tests/contract/ui/localization/test_chromium_locale_smoke_matrix_contract.py tests/contract/ui/localization/test_locale_viewport_overflow_contract.py tests/contract/ui/localization/test_locale_switching_regression_contract.py tests/contract/ui/localization/test_localized_import_edit_export_workflow_contract.py tests/contract/ui/localization/test_web_profiles_page.py tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py
 
 test-firefox-schema-contract:
-	$(PYTEST) -o addopts= -q tests/unit/schema/contracts/test_schema_channels.py tests/integration/schema/test_schema_validation.py tests/integration/schema/test_firefox_schema_workflow_offline.py tests/integration/db/test_migrations.py tests/integration/firefox/test_firefox_wizard_shell.py tests/contract/ui/localization/test_web_profiles_page.py tests/integration/locale/test_locale_catalogs.py tests/contract/ui/localization/test_ui_runtime_i18n_contract.py tests/integration/locale/test_locale_visible_english_allowlists.py
+	$(PYTEST) -o addopts= -q tests/unit/schema/contracts/test_schema_channels.py tests/contract/schema/test_schema_lifecycle_drift_guards.py tests/integration/schema/test_schema_validation.py tests/integration/schema/test_firefox_schema_workflow_offline.py tests/integration/db/test_migrations.py tests/integration/firefox/test_firefox_wizard_shell.py tests/contract/ui/localization/test_web_profiles_page.py tests/integration/locale/test_locale_catalogs.py tests/contract/ui/localization/test_ui_runtime_i18n_contract.py tests/integration/locale/test_locale_visible_english_allowlists.py
 
 test-firefox-schema-workflow:
 	$(PYTEST) -o addopts= -q tests/integration/schema/test_firefox_schema_workflow_offline.py
+
+verify-firefox-schema-matrix:
+	$(PYTHON) tools/verify_firefox_schema_matrix.py
+
+verify-firefox-conversion-matrix:
+	$(PYTHON) tools/verify_firefox_conversion_matrix.py
+
+schema-lifecycle-dry-run:
+	@test -n "$(PREVIOUS_LIFECYCLE_CATALOG)" && test -n "$(CANDIDATE_LIFECYCLE_CATALOG)" || { echo "Set PREVIOUS_LIFECYCLE_CATALOG and CANDIDATE_LIFECYCLE_CATALOG to explicit reviewed snapshots."; exit 2; }
+	$(PYTHON) tools/schema_lifecycle_dry_run.py --previous-catalog "$(PREVIOUS_LIFECYCLE_CATALOG)" --candidate-catalog "$(CANDIDATE_LIFECYCLE_CATALOG)" $(if $(RETIREMENT_TOTAL_PROOF),--total-proof "$(RETIREMENT_TOTAL_PROOF)")
 
 test-db-integration:
 	$(PYTEST) -o addopts= -q tests/integration/db/test_database_integration.py
 
 test-db-recovery:
-	$(PYTEST) -o addopts= -q tests/integration/db/test_database_recovery.py
+	$(PYTEST) -o addopts= -q tests/integration/db/test_database_recovery.py tests/integration/db/test_retirement_owner_v1.py tests/integration/db/test_retirement_revision_materializer_v1.py
 
 test-postgres-integration:
 	BPM_REQUIRE_POSTGRES=1 BPM_REQUIRE_POSTGRES_RECOVERY=1 $(PYTEST) -o addopts= -q $(PYTEST_COVERAGE_ARGS) tests/integration/db
@@ -348,7 +366,16 @@ docs-pdf-delivery-verify:
 
 coverage:
 	@mkdir -p "$(COVERAGE_REPORT_DIR)"
-	COVERAGE_FILE=$(COVERAGE_DATA_FILE) $(PYTEST) --cov=app --cov-branch --cov-report=term-missing --cov-report=xml:$(COVERAGE_XML) --cov-report=html:$(COVERAGE_HTML) --cov-fail-under=$(COVERAGE_FAIL_UNDER)
+	@echo "Running isolated Python coverage policy (surface 1/2): release implementation boundary"
+	COVERAGE_FILE=$(COVERAGE_RELEASE_IMPLEMENTATION_DATA_FILE) $(MAKE) --no-print-directory coverage-release-implementation
+	@echo "Python coverage policy progress: completed 1/2 surfaces"
+	@echo "Running isolated Python coverage policy (surface 2/2): optional AI implementation boundary"
+	COVERAGE_FILE=$(COVERAGE_AI_INCUBATION_DATA_FILE) $(MAKE) --no-print-directory test-ai-incubation-coverage
+	@echo "Python coverage policy progress: completed 2/2 surfaces; combining strict owners"
+	COVERAGE_FILE=$(COVERAGE_DATA_FILE) $(PYTHON) -m coverage combine $(COVERAGE_REPORT_DIR)
+	COVERAGE_FILE=$(COVERAGE_DATA_FILE) $(PYTHON) -m coverage report --show-missing --fail-under=$(COVERAGE_FAIL_UNDER)
+	COVERAGE_FILE=$(COVERAGE_DATA_FILE) $(PYTHON) -m coverage xml -o $(COVERAGE_XML)
+	COVERAGE_FILE=$(COVERAGE_DATA_FILE) $(PYTHON) -m coverage html -d $(COVERAGE_HTML)
 	@echo "HTML coverage report: file://$$(pwd)/$(COVERAGE_HTML)/index.html"
 
 coverage-report:
@@ -367,7 +394,7 @@ lint:
 	$(RUFF) check .
 
 typecheck:
-	$(MYPY) app
+	$(MYPY) --explicit-package-bases $(TYPECHECK_PATHS)
 
 architecture:
 	$(IMPORT_LINTER) --config pyproject.toml --no-cache
@@ -428,7 +455,10 @@ frontend-profile-graph:
 	$(PYTHON) tools/check_frontend_profile_graph.py
 
 test-profile-pure-modules:
-	node --test --test-timeout=10000 --experimental-test-isolation=process tests/javascript/integration/profiles/profile_pure_modules.test.js
+	node --test --test-timeout=10000 --experimental-test-isolation=process tests/javascript/integration/profiles/profile_pure_modules.test.js tests/javascript/integration/profiles/profile_library_recommendation.test.js tests/javascript/integration/profiles/profile_conversion_review.test.js
+
+test-profile-conversion-ux:
+	$(PYTHON) tools/run_profile_conversion_ux_smoke.py --artifact-dir "$(CURDIR)/artifacts/profile-conversion-ux"
 
 check-frontend-test-fixtures:
 	$(PYTHON) tests/javascript/fixtures/generate_frontend_fixtures.py --check

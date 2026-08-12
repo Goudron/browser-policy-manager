@@ -38,9 +38,9 @@ def _delivery_contract(path: Path) -> None:
         json.dumps(
             {
                 "schema_version": 1,
-                "contract_id": "bpm-pdf-delivery-0.9.4",
-                "backlog_item": "BPM094-M11-05",
-                "target_bpm_version": "0.9.4",
+                "contract_id": "bpm-pdf-delivery-0.9.5",
+                "backlog_item": "BPM095-M8-05",
+                "target_bpm_version": "0.9.5",
                 "candidate_root": "documentation/build/pdf",
                 "delivery_root": "distributions/documentation",
                 "delivery_directory": "{bpm_version}",
@@ -59,6 +59,7 @@ def _delivery_contract(path: Path) -> None:
 def test_promote_pdf_delivery_replaces_only_the_target_version_atomically(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    monkeypatch.setattr(deliver_pdfs.build_docs, "_product_version", lambda: "0.9.5")
     candidate = tmp_path / "candidate"
     for locale in deliver_pdfs.build_docs.LOCALES:
         for guide_id, _map_name in deliver_pdfs.build_docs.PDF_GUIDE_MAPS:
@@ -78,7 +79,7 @@ def test_promote_pdf_delivery_replaces_only_the_target_version_atomically(
     contract = tmp_path / "delivery-contract.json"
     _delivery_contract(contract)
     delivery_root = tmp_path / "distributions/documentation"
-    previous = delivery_root / "0.9.4"
+    previous = delivery_root / "0.9.5"
     previous.mkdir(parents=True)
     (previous / "obsolete.txt").write_text("obsolete", encoding="utf-8")
     monkeypatch.setattr(deliver_pdfs, "DELIVERY_CONTRACT", contract)
@@ -86,11 +87,10 @@ def test_promote_pdf_delivery_replaces_only_the_target_version_atomically(
     monkeypatch.setattr(deliver_pdfs.build_docs, "PDF_BUILD_ROOT", candidate)
     monkeypatch.setattr(deliver_pdfs.build_docs, "validate_pdf_tree", lambda _root: None)
     monkeypatch.setattr(deliver_pdfs.build_docs, "_pdf_layout", _layout)
-    monkeypatch.setattr(deliver_pdfs.build_docs, "_product_version", lambda: "0.9.4")
 
     deliver_pdfs.promote_delivery()
 
-    promoted = delivery_root / "0.9.4"
+    promoted = delivery_root / "0.9.5"
     assert not (promoted / "obsolete.txt").exists()
     assert len(list(promoted.rglob("*.pdf"))) == 12
     assert {path.name for path in promoted.iterdir() if path.is_file()} == {
@@ -104,6 +104,7 @@ def test_promote_pdf_delivery_replaces_only_the_target_version_atomically(
 def test_delivery_verification_rejects_an_unexpected_file(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    monkeypatch.setattr(deliver_pdfs.build_docs, "_product_version", lambda: "0.9.5")
     candidate = tmp_path / "candidate"
     destination = tmp_path / "delivery"
     for locale in deliver_pdfs.build_docs.LOCALES:
@@ -127,7 +128,6 @@ def test_delivery_verification_rejects_an_unexpected_file(
     monkeypatch.setattr(deliver_pdfs.build_docs, "PDF_BUILD_ROOT", candidate)
     monkeypatch.setattr(deliver_pdfs.build_docs, "validate_pdf_tree", lambda _root: None)
     monkeypatch.setattr(deliver_pdfs.build_docs, "_pdf_layout", _layout)
-    monkeypatch.setattr(deliver_pdfs.build_docs, "_product_version", lambda: "0.9.4")
 
     deliver_pdfs.build_delivery_tree(destination)
     (destination / "unexpected.txt").write_text("not allowed", encoding="utf-8")

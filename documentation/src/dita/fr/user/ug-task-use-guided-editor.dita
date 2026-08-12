@@ -12,6 +12,7 @@
           <alt>Éditeur guidé affichant l'état de navigation et de validation des étapes pour un profil enregistré.</alt>
         </image>
       </fig>
+      <p>Pour un profil enregistré, n’ouvrez la revue de conversion du schéma qu’après avoir décidé de changer de canal : préservez le travail non enregistré, choisissez une autre cible prise en charge et utilisez l’aperçu en lecture seule avant toute application explicite.</p>
     </context>
     <steps>
       <step><cmd>Dans l’étape 1, confirmez le nom, le canal de schéma, le scénario, le préréglage de démarrage et la couche CIS.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
