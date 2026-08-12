@@ -3,7 +3,7 @@
 Generated only by `make docs-snapshot` (`documentation/tools/generate_subsystem_snapshot.py`); do not edit manually.
 It has no Git, local-machine, generated-artifact, or report input.
 Target BPM version: `0.9.5`
-Declared source digest: `c20f0120f070956cf08fea4312f35740644e5c4c83f15e3fa072bf155f509c1c`
+Declared source digest: `df1f6a1b1d951a074dde54e85a6537476554402e3af7bdbe56ee778ff858df6c`
 
 ## Declared Source Owners
 

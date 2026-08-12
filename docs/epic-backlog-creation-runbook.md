@@ -369,7 +369,9 @@ Every backlog must end with a final quality milestone. Include tasks for:
     release procedures include documentation drift gates when the epic changed those areas.
 12. Create a git commit for the completed epic.
 13. Push the reviewed commit to its configured remote branch and monitor every triggered required
-    CI workflow until it reaches a terminal state; report the result.
+    CI workflow until it is green. Diagnose and repair every direct, actionable failure, create a
+    normal follow-up commit, push it without force, and repeat the required-CI loop. A successful
+    push or a failed workflow is not backlog completion.
 
 The coverage task must explicitly say that falling below 100% is not accepted as "known debt" for
 the epic. Either add focused tests, shrink untested dead code, or document and remove unreachable
@@ -395,14 +397,23 @@ If Make targets change in a future epic, update this runbook and the backlog tog
 
 After the reviewed epic commit is created, the assistant pushes it to the configured remote branch
 with a regular non-force push and monitors every required GitHub Actions workflow triggered by that
-push until its terminal state. The handoff records the commit SHA, remote branch, workflow URLs,
-and each job result. The assistant must not force-push, rewrite history, create a tag or release,
-open a pull request, or push unrelated local changes.
+push until it is green. The handoff records the commit SHA, remote branch, workflow URLs, and each
+job result. The assistant must not force-push, rewrite history, create a tag or release, open a
+pull request, or push unrelated local changes.
 
-If the remote is unavailable, credentials are missing, the remote branch has advanced, a protected
-branch rejects the push, or any required workflow fails, stop the release handoff and report the
-exact condition. Do not retry a rejected push, bypass branch protection, or continue after a failed
-workflow without explicit user direction.
+For every required workflow failure, inspect its failing job and logs, distinguish a direct,
+actionable repository failure from an external or permission blocker, and repair direct failures.
+Run the narrowest relevant local verification, then create a normal follow-up commit and regular
+non-force push; monitor the complete newly triggered required-CI set and repeat until it is green.
+Do not amend a commit that has already been pushed, because that would require a prohibited history
+rewrite. A push, a terminal failed job, or a partial green workflow set is never a successful
+handoff.
+
+Stop only when the remote is unavailable, credentials are missing, the remote branch has advanced,
+a protected branch rejects the push, or a required failure is genuinely external or non-actionable
+from the repository. Report the exact blocker, its job/log evidence, and why no safe repository
+repair is available. Do not retry a rejected push, bypass branch protection, force-push, create a
+tag or release, or open a pull request merely to work around the blocker.
 
 ## Approval Protocol
 
@@ -465,7 +476,8 @@ Before calling a new backlog ready, confirm:
 - Selenium/browser UI verification notes require immediate sandbox escalation, without a sandboxed
   trial run;
 - final milestone verifies documentation-update completion and includes changelog entry, git commit,
-  automatic non-force push, and terminal required-CI results;
+  automatic non-force push, and the post-push repair loop through a fully green required-CI set (or
+  an evidenced remote, permission, or external non-actionable blocker);
 - final milestone verifies README has no version-specific release notes, active-target marker, or
   planned/completion placeholder; README updates are limited to durable current-state product facts;
 - final milestone verifies maintained runbooks and docs index include documentation drift gates for

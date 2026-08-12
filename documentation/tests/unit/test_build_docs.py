@@ -516,6 +516,15 @@ def test_generated_compatibility_versions_follow_the_product_version(
 ) -> None:
     product_version = "9.8.7"
     monkeypatch.setattr(build_docs, "_product_version", lambda: product_version)
+    read_json_file = build_docs._catalog._read_json_file
+
+    def read_json_with_coherent_product_contract(path: Path) -> dict[str, object]:
+        contract = read_json_file(path)
+        if path == build_docs.ALL_SETTINGS_HELP_TARGET_MAP:
+            return {**contract, "target_bpm_version": product_version}
+        return contract
+
+    monkeypatch.setattr(build_docs, "_read_json_file", read_json_with_coherent_product_contract)
     _minimal_site(tmp_path)
     build_docs.apply_portal_shell(tmp_path)
     build_docs.generate_manifest_files(tmp_path)
