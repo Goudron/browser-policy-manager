@@ -14,6 +14,26 @@ from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS
 
 GENERATED_DIR = BASE_DIR / "generated"
 
+# CIS Firefox ESR GPO Benchmark 1.0.0 was tested by CIS against Firefox
+# 115.10 ESR.  Every mapped target is independently validated against each
+# exact bundled schema before these explicit artifact identities are approved.
+# Keep this set explicit: adding a future schema channel must fail closed until
+# its complete mapping matrix and generated layers are reviewed.
+CIS_SCHEMA_UNAVAILABLE_REASON = "cis_benchmark_not_validated_for_schema"
+CIS_AVAILABLE_SCHEMA_CHANNELS = frozenset({"release-153", "esr-153.0", "esr-140.13", "esr-115.38"})
+
+
+class CisLayerUnavailableError(ValueError):
+    """Raised when no exact benchmark mapping evidence exists for a channel."""
+
+
+def cis_layer_availability(schema_channel: str) -> dict[str, str | bool]:
+    """Return the fail-closed CIS availability disposition for one artifact."""
+
+    if schema_channel in CIS_AVAILABLE_SCHEMA_CHANNELS:
+        return {"available": True}
+    return {"available": False, "reason_code": CIS_SCHEMA_UNAVAILABLE_REASON}
+
 
 @dataclass(frozen=True)
 class GeneratedCisLayer:
@@ -45,6 +65,10 @@ def build_cis_layer(
 ) -> GeneratedCisLayer:
     if level not in {1, 2}:
         raise ValueError("CIS level must be 1 or 2")
+
+    availability = cis_layer_availability(schema_channel)
+    if not availability["available"]:
+        raise CisLayerUnavailableError(str(availability["reason_code"]))
 
     resolved_benchmark_id = benchmark_id or "cis-firefox-esr-gpo"
     benchmark_entry = find_benchmark(
@@ -130,6 +154,7 @@ def build_all_cis_layers(
             upstream_version=upstream_version,
         )
         for schema_channel in schema_channels
+        if cis_layer_availability(schema_channel)["available"]
         for level in (1, 2)
     ]
 
@@ -147,11 +172,12 @@ def write_generated_layers(
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
-    for layer in build_all_cis_layers(
+    layers = build_all_cis_layers(
         base_dir=base_dir,
         benchmark_id=benchmark_id,
         upstream_version=upstream_version,
-    ):
+    )
+    for layer in sorted(layers, key=lambda item: (item.schema_channel, item.level)):
         path = output_dir / f"cis_l{layer.level}.{layer.schema_channel}.json"
         path.write_text(
             json.dumps(layer.to_document(), indent=2, sort_keys=True) + "\n",

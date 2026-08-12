@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://browser-policy-manager.local/contracts/firefox-schema-conversion-ui-interaction-contract-v1.schema.json",
+  "title": "Firefox schema conversion UI interaction contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "target_bpm_version",
+    "status",
+    "dependencies",
+    "classification_inheritance",
+    "surface_owners",
+    "locale_owners",
+    "help_link_policy",
+    "interaction_states",
+    "error_code_coverage",
+    "privacy_contract"
+  ],
+  "properties": {
+    "$schema": {"type": "string", "format": "uri"},
+    "schema_version": {"const": 1},
+    "contract_id": {"const": "bpm095-firefox-schema-conversion-ui-interactions"},
+    "target_bpm_version": {"const": "0.9.5"},
+    "status": {"const": "normative-target-preimplementation"},
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ui_copy", "lifecycle", "conversion", "retirement"],
+      "properties": {
+        "ui_copy": {"type": "string", "pattern": "ui-copy-classification-contract-0\\.9\\.2\\.md$"},
+        "lifecycle": {"type": "string", "pattern": "firefox-schema-lifecycle-catalog-contract-0\\.9\\.5\\.json$"},
+        "conversion": {"type": "string", "pattern": "firefox-pairwise-profile-conversion-contract-0\\.9\\.5\\.json$"},
+        "retirement": {"type": "string", "pattern": "firefox-retired-esr-migration-safety-contract-0\\.9\\.5\\.json$"}
+      }
+    },
+    "classification_inheritance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active_contract", "primary_dispositions", "inline_safety_wins", "supersedes"],
+      "properties": {
+        "active_contract": {"type": "string"},
+        "primary_dispositions": {
+          "type": "array",
+          "prefixItems": [{"const": "essential"}, {"const": "safety-accessibility"}],
+          "items": false
+        },
+        "inline_safety_wins": {"const": true},
+        "supersedes": {"type": "array", "maxItems": 0}
+      }
+    },
+    "surface_owners": {
+      "type": "array",
+      "minItems": 6,
+      "items": {"$ref": "#/$defs/surfaceOwner"}
+    },
+    "locale_owners": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {"$ref": "#/$defs/localeOwner"}
+    },
+    "help_link_policy": {"$ref": "#/$defs/helpLinkPolicy"},
+    "interaction_states": {
+      "type": "array",
+      "minItems": 18,
+      "items": {"$ref": "#/$defs/interactionState"}
+    },
+    "error_code_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manual_conversion", "retirement_operator_boundary"],
+      "properties": {
+        "manual_conversion": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "retirement_operator_boundary": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "privacy_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["forbidden_in_urls_or_telemetry", "allowed_telemetry", "localized_text_sent_to_server", "raw_values_rendered_from_plan"],
+      "properties": {
+        "forbidden_in_urls_or_telemetry": {"type": "array", "minItems": 8, "items": {"type": "string"}, "uniqueItems": true},
+        "allowed_telemetry": {"type": "array", "minItems": 3, "items": {"type": "string"}, "uniqueItems": true},
+        "localized_text_sent_to_server": {"const": false},
+        "raw_values_rendered_from_plan": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "surfaceOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner_id", "surface", "source_owners", "role", "may_apply"],
+      "properties": {
+        "owner_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+        "surface": {"enum": ["library", "compare", "guided", "settings", "json", "shared-review"]},
+        "source_owners": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}, "uniqueItems": true},
+        "role": {"$ref": "#/$defs/nonEmptyString"},
+        "may_apply": {"type": "boolean"}
+      }
+    },
+    "localeOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["locale", "owner", "catalog_namespaces", "status"],
+      "properties": {
+        "locale": {"enum": ["en", "ru", "de", "zh-CN", "fr", "es-ES"]},
+        "owner": {"const": "project-maintainer"},
+        "catalog_namespaces": {"type": "array", "minItems": 1, "items": {"enum": ["common", "library", "wizard", "settings", "json"]}, "uniqueItems": true},
+        "status": {"enum": ["english-source-planned", "human-reviewed-translation-planned"]}
+      }
+    },
+    "helpLinkPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inline_copy_may_be_replaced", "new_target_authorized", "existing_surface_targets", "new_link_requirements"],
+      "properties": {
+        "inline_copy_may_be_replaced": {"const": false},
+        "new_target_authorized": {"const": false},
+        "existing_surface_targets": {"type": "object", "minProperties": 5, "additionalProperties": {"type": "string", "pattern": "^topic:"}},
+        "new_link_requirements": {"type": "array", "minItems": 5, "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "copy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_key", "primary_label", "consequence_key", "local_consequence", "classification"],
+      "properties": {
+        "primary_key": {"type": "string", "pattern": "^profiles\\."},
+        "primary_label": {"$ref": "#/$defs/nonEmptyString"},
+        "consequence_key": {"type": "string", "pattern": "^profiles\\."},
+        "local_consequence": {"$ref": "#/$defs/nonEmptyString"},
+        "classification": {"enum": ["essential", "safety-accessibility"]}
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accessible_name_key", "description_key", "live_region", "focus_behavior", "keyboard_behavior"],
+      "properties": {
+        "accessible_name_key": {"type": "string", "pattern": "^profiles\\."},
+        "description_key": {"type": "string", "pattern": "^profiles\\."},
+        "live_region": {"enum": ["none", "polite-status", "assertive-alert"]},
+        "focus_behavior": {"$ref": "#/$defs/nonEmptyString"},
+        "keyboard_behavior": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "confirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "danger_class", "apply_enabled"],
+      "properties": {
+        "required": {"type": "boolean"},
+        "danger_class": {"enum": ["none", "explicit-state-change", "blocked", "operator-only"]},
+        "apply_enabled": {"type": "boolean"}
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event", "allowed_fields", "privacy_profile"],
+      "properties": {
+        "event": {"type": ["string", "null"]},
+        "allowed_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "privacy_profile": {"const": "conversion-ui-no-enterprise-data-v1"}
+      }
+    },
+    "interactionState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state_id", "group", "surface_owner_ids", "trigger", "copy", "error_codes", "accessibility", "confirmation", "recovery_action", "telemetry"],
+      "properties": {
+        "state_id": {"type": "string", "pattern": "^schema-conversion\\.[a-z0-9-]+$"},
+        "group": {"enum": ["recommendation", "selection", "preview", "confirmation", "apply", "success", "recovery", "retirement-boundary"]},
+        "surface_owner_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"}, "uniqueItems": true},
+        "trigger": {"$ref": "#/$defs/nonEmptyString"},
+        "copy": {"$ref": "#/$defs/copy"},
+        "error_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "accessibility": {"$ref": "#/$defs/accessibility"},
+        "confirmation": {"$ref": "#/$defs/confirmation"},
+        "recovery_action": {"$ref": "#/$defs/nonEmptyString"},
+        "telemetry": {"$ref": "#/$defs/telemetry"}
+      }
+    }
+  }
+}

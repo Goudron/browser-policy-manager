@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "inventory_id": "bpm095-firefox-schema-lifecycle-documentation-impact",
+  "backlog_item": "BPM095-M8-01",
+  "target_bpm_version": "0.9.5",
+  "status": "accepted-authoring-inventory",
+  "scope": {
+    "source_locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "guide_families": [
+      "user-guide",
+      "firefox-policy-guide",
+      "cis-settings-guide",
+      "administrator-guide"
+    ],
+    "authoring_sources": [
+      "documentation/src/dita/{locale}/",
+      "README.md",
+      "docs/architecture/"
+    ],
+    "derived_consumer_boundaries": [
+      "documentation/src/dita/{locale}/maps/",
+      "documentation/config/all-settings-help-target-map-0.9.1.json",
+      "documentation/config/user-guide-screenshot-matrix-0.9.1.json",
+      "documentation/build/",
+      "documentation/dist/",
+      "documentation/reports/",
+      "app/documentation/site/"
+    ],
+    "generation_policy": "M8-01 records source and derived-consumer ownership only. M8-02 and M8-03 author reader content; M8-04 is the only task that refreshes maps, manifests, search, help targets, or approved screenshots. Generated output is never hand-edited."
+  },
+  "audience_owners": [
+    {"owner_id": "user", "audience": "User", "primary_guide": "user-guide"},
+    {"owner_id": "firefox-policy", "audience": "Firefox Policy reader", "primary_guide": "firefox-policy-guide"},
+    {"owner_id": "cis", "audience": "CIS reader", "primary_guide": "cis-settings-guide"},
+    {"owner_id": "administrator-devops", "audience": "Administrator/DevOps operator", "primary_guide": "administrator-guide"},
+    {"owner_id": "api", "audience": "API integrator", "primary_guide": "administrator-guide"},
+    {"owner_id": "support-troubleshooting", "audience": "Support/troubleshooting reader", "primary_guide": "administrator-guide"}
+  ],
+  "delivered_behaviors": [
+    {
+      "behavior_id": "four-channel-selection-and-esr115-caveat",
+      "audience_owner": "user",
+      "authoring_task": "BPM095-M8-02",
+      "source_paths": [
+        "documentation/src/dita/en/user/ug-task-choose-profile-identity-schema.dita",
+        "documentation/src/dita/en/user/ug-concept-schema-aware-behavior.dita",
+        "documentation/src/dita/en/user/ug-task-choose-firefox-schema.dita"
+      ],
+      "required_reader_boundary": "Describe all four supported artifacts, state that ESR 115 serves organizations with legacy systems without extending operating-system vendor support, and direct selection before validation, editing, import, or export."
+    },
+    {
+      "behavior_id": "four-channel-policy-availability",
+      "audience_owner": "firefox-policy",
+      "authoring_task": "BPM095-M8-02",
+      "source_paths": [
+        "documentation/src/dita/en/firefox/fx-concept-release-esr-differences.dita",
+        "documentation/src/dita/en/firefox/fx-concept-policy-selection.dita"
+      ],
+      "required_reader_boundary": "Use the lifecycle catalog and policy-disposition audit for exact availability; do not infer policy support from a channel label or treat independently generated ESR artifacts as aliases."
+    },
+    {
+      "behavior_id": "cis-four-channel-layers-and-presets",
+      "audience_owner": "cis",
+      "authoring_task": "BPM095-M8-02",
+      "source_paths": [
+        "documentation/src/dita/en/cis/cis-concept-levels-channels-layers.dita",
+        "documentation/src/dita/en/cis/cis-task-select-cis-baseline.dita"
+      ],
+      "required_reader_boundary": "State the actual per-channel generated-layer availability and retain the existing no-certification, no-endorsement, and manual-review boundaries."
+    },
+    {
+      "behavior_id": "manual-pairwise-conversion",
+      "audience_owner": "user",
+      "authoring_task": "BPM095-M8-02",
+      "source_paths": [
+        "documentation/src/dita/en/user/ug-task-use-profile-library.dita",
+        "documentation/src/dita/en/user/ug-task-use-guided-editor.dita",
+        "documentation/src/dita/en/user/ug-task-use-all-settings.dita",
+        "documentation/src/dita/en/user/ug-task-use-json-editor.dita",
+        "documentation/src/dita/en/user/ug-task-compare-profiles.dita"
+      ],
+      "required_reader_boundary": "Explain selection, read-only preview, blocker result, explicit confirmation, atomic apply, and no-silent-loss behavior without exposing plan digests, raw policy values, or internal recipe details."
+    },
+    {
+      "behavior_id": "latest-esr-recommendation",
+      "audience_owner": "user",
+      "authoring_task": "BPM095-M8-02",
+      "source_paths": ["documentation/src/dita/en/user/ug-task-use-profile-library.dita"],
+      "required_reader_boundary": "An active saved ESR 115 or ESR 140 profile can be recommended to ESR 153; recommendation and opening preview do not write, and Release/latest/unknown/retired/inactive profiles do not receive an invented action."
+    },
+    {
+      "behavior_id": "conversion-api",
+      "audience_owner": "api",
+      "authoring_task": "BPM095-M8-02",
+      "source_paths": [
+        "documentation/src/dita/en/admin/admin-concept-api-conventions.dita",
+        "documentation/src/dita/en/admin/admin-task-use-reusable-api-examples.dita",
+        "docs/architecture/api-documentation-inventory-0.9.0.md"
+      ],
+      "required_reader_boundary": "Document only the shipped preview/apply operations and exact policies.json envelopes; preview is read-only and apply requires the current reviewed revision, while locale-neutral error codes are not localized prose."
+    },
+    {
+      "behavior_id": "retired-esr-successor-migration",
+      "audience_owner": "administrator-devops",
+      "authoring_task": "BPM095-M8-02",
+      "source_paths": [
+        "documentation/src/dita/en/admin/admin-task-manage-profile-retirement.dita",
+        "documentation/src/dita/en/admin/admin-task-run-source-update-migrations-docs.dita"
+      ],
+      "required_reader_boundary": "A supported older ESR is not migrated automatically. Only an actual future retirement can use its declared immediate successor through a backup-gated Alembic upgrade; the current ESR 140 candidate materializer is not an operator action."
+    },
+    {
+      "behavior_id": "conversion-and-retirement-recovery",
+      "audience_owner": "support-troubleshooting",
+      "authoring_task": "BPM095-M8-02",
+      "source_paths": [
+        "documentation/src/dita/en/user/ug-troubleshoot-schema-mismatch.dita",
+        "documentation/src/dita/en/admin/admin-troubleshoot-database-storage.dita",
+        "documentation/src/dita/en/admin/admin-troubleshoot-import-export-failures.dita"
+      ],
+      "required_reader_boundary": "Blocked, stale, invalid, and failed manual conversion leaves the profile unchanged and needs a fresh preview; interrupted or partial retired-ESR migration requires verified-backup recovery in a new clean candidate, never in-place repair or downgrade."
+    }
+  ],
+  "consumer_impacts": [
+    {
+      "impact_id": "schema-inventory",
+      "audience_owner": "firefox-policy",
+      "status": "refresh-in-M8-04",
+      "owner_sources": [
+        "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+        "docs/architecture/firefox-policy-documentation-inventory-0.9.0.md",
+        "tools/build_firefox_policy_documentation_inventory.py"
+      ],
+      "reason": "The maintained inventory still derives a three-channel summary and must be rebuilt from the four-channel catalog before publication data is refreshed."
+    },
+    {
+      "impact_id": "search",
+      "audience_owner": "user",
+      "status": "refresh-in-M8-04",
+      "owner_sources": [
+        "documentation/src/dita/{locale}/maps/",
+        "documentation/config/search-corpus-and-results-0.9.0.json"
+      ],
+      "reason": "New or changed topics need locale-equivalent aliases and deterministic search regeneration only after reviewed source content exists."
+    },
+    {
+      "impact_id": "contextual-help",
+      "audience_owner": "user",
+      "status": "review-in-M8-04",
+      "owner_sources": ["documentation/config/all-settings-help-target-map-0.9.1.json"],
+      "reason": "Existing manifest-owned editor targets remain valid; M8-04 must verify whether conversion entry/review requires a new stable target, and no generic link may replace local consequence or recovery copy."
+    },
+    {
+      "impact_id": "screenshots",
+      "audience_owner": "user",
+      "status": "review-in-M8-04",
+      "owner_sources": ["documentation/config/user-guide-screenshot-matrix-0.9.1.json"],
+      "reason": "The approved matrix contains no pre-authorized conversion-review scenario. M8-04 may refresh only affected approved rows; any new scenario requires explicit backlog approval and six-locale caption/alt-text ownership."
+    }
+  ],
+  "guide_dispositions": [
+    {
+      "guide_id": "user-guide",
+      "status": "affected",
+      "reason": "Channel selection, recommendation, manual conversion, and schema-mismatch recovery change reader-visible workflows."
+    },
+    {
+      "guide_id": "firefox-policy-guide",
+      "status": "affected",
+      "reason": "The supported-channel matrix and policy availability now include independently generated ESR 115."
+    },
+    {
+      "guide_id": "cis-settings-guide",
+      "status": "affected",
+      "reason": "CIS layer/preset channel availability must remain exact across the four supported artifacts."
+    },
+    {
+      "guide_id": "administrator-guide",
+      "status": "affected",
+      "reason": "API conversion operations and the backup-gated retirement/recovery boundary belong to administrator and integrator readers."
+    }
+  ],
+  "stale_three_channel_dispositions": [
+    {
+      "path": "README.md",
+      "disposition": "update-in-BPM095-M8-06",
+      "reason": "Durable supported-channel facts must include ESR 115 without adding release-plan prose."
+    },
+    {
+      "path": "documentation/src/dita/en/user/ug-task-choose-profile-identity-schema.dita",
+      "disposition": "update-in-BPM095-M8-02-and-localize-in-M8-03",
+      "reason": "The schema choice lists only three artifacts."
+    },
+    {
+      "path": "documentation/src/dita/en/user/ug-concept-schema-aware-behavior.dita",
+      "disposition": "update-in-BPM095-M8-02-and-localize-in-M8-03",
+      "reason": "The supported-channel explanation and policy comparison list only three artifacts."
+    },
+    {
+      "path": "documentation/src/dita/en/user/ug-task-choose-firefox-schema.dita",
+      "disposition": "update-in-BPM095-M8-02-and-localize-in-M8-03",
+      "reason": "The task excludes ESR 115 from schema choice and recovery."
+    },
+    {
+      "path": "documentation/src/dita/en/user/ug-troubleshoot-schema-mismatch.dita",
+      "disposition": "update-in-BPM095-M8-02-and-localize-in-M8-03",
+      "reason": "The troubleshooting decision lists only three artifacts."
+    },
+    {
+      "path": "documentation/src/dita/en/firefox/fx-concept-release-esr-differences.dita",
+      "disposition": "update-in-BPM095-M8-02-and-localize-in-M8-03",
+      "reason": "The Firefox guide claims a three-channel current matrix and omits current recommendation semantics."
+    },
+    {
+      "path": "documentation/src/dita/en/cis/cis-concept-levels-channels-layers.dita",
+      "disposition": "update-in-BPM095-M8-02-and-localize-in-M8-03",
+      "reason": "The CIS channel/layer statement is three-channel and has stale availability facts."
+    },
+    {
+      "path": "documentation/src/dita/en/cis/cis-task-select-cis-baseline.dita",
+      "disposition": "update-in-BPM095-M8-02-and-localize-in-M8-03",
+      "reason": "The prerequisite and selection procedure list only three artifacts."
+    },
+    {
+      "path": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.md",
+      "disposition": "regenerate-in-BPM095-M8-04",
+      "reason": "The maintained inventory explicitly derives a three-bundle active-schema summary."
+    },
+    {
+      "path": "docs/architecture/firefox-153-dual-esr-schema-contract-0.9.2.md",
+      "disposition": "already-historical-with-current-successor-link",
+      "reason": "Its historical status and link to the four-channel lifecycle contract preserve traceability without making it an active source of product facts."
+    }
+  ]
+}

@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.9.5
+
+Status: **Release candidate; implementation, documentation delivery, and final quality review are complete. Reviewed commit and CI handoff remain.**
+
+### Changed
+- Moved the active BPM product and package version surfaces to `0.9.5`.
+- Applied the approved M1 refreshes: `build==1.5.0`, optional-AI `numpy>=2.5.2`,
+  `esbuild` 0.28.2, and the documentation-toolchain `packaging==26.3` lock.
+- Refreshed the checksum-pinned Firefox Release live-test archive to 153.0.3.
+- Added Firefox ESR 115.38 to the supported Release 153, ESR 153.0, and ESR 140.13
+  schema matrix. CIS availability is now evaluated by exact schema channel and does not invent a
+  compliance result where the benchmark is unavailable.
+- Added explicit, no-silent-loss profile conversion: BPM can recommend ESR 153.0 for supported
+  older ESR profiles, create a read-only preview, and apply only an explicitly confirmed,
+  current eligible plan. A blocked, stale, invalid, or failed conversion leaves the profile
+  unchanged.
+- Added the reviewed ESR 140.13-to-ESR 153.0 total-convertibility proof and candidate-only
+  retirement materializer. ESR 140.13 remains supported, so no retirement migration is installed
+  in the active Alembic graph.
+
+### Documentation
+- Updated all four guide families in English, Russian, German, Simplified Chinese, French, and
+  Spanish for the four-channel lifecycle, conversion, CIS availability, API, and recovery
+  boundaries.
+- Completed the verified documentation release handoff: six-locale site validation, the two-guide
+  PDF set, reproducibility and delivery checks, package verification, and installation of the
+  BPM 0.9.5 documentation artifact.
+
 ## 0.9.4
 
 Status: **Release-readiness evidence accepted; reviewed commit and CI handoff remain.**

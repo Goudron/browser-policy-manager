@@ -17,7 +17,6 @@ from app.core.locales import (
     resolve_target_locale_code,
 )
 from app.core.schema_channels import (
-    HEADER_SCHEMA_CHANNEL_VALUES,
     SCHEMA_CHANNELS,
     SCHEMA_FILENAMES,
     build_schema_channels_catalog,
@@ -52,7 +51,7 @@ _PROFILE_FRONTEND_ROUTE_MODES = frozenset({"library", "compare", "new", "edit", 
 # receives the artifacts that its template and entrypoint can consume.
 _ROUTE_CATALOG_KEYS: dict[str, tuple[str, ...]] = {
     "library": ("schema_channels_catalog",),
-    "compare": ("wizard_preferences_catalog",),
+    "compare": ("wizard_preferences_catalog", "schema_channels_catalog"),
     "new": (
         "wizard_settings_catalog",
         "wizard_preferences_catalog",
@@ -479,11 +478,20 @@ def build_profiles_page_context(
             channel.value: tr(channel.i18n_key, channel.label) for channel in SCHEMA_CHANNELS
         }
     )
-    schema_options = cast(list[dict[str, str]], schema_channels_catalog["options"])
-    header_schema_options = sorted(
-        schema_options,
-        key=lambda option: HEADER_SCHEMA_CHANNEL_VALUES.index(option["value"]),
+    schema_options = cast(list[dict[str, object]], schema_channels_catalog["options"])
+    initial_schema_version = (
+        editing_profile_initial.get("schema_version")
+        if isinstance(editing_profile_initial, dict)
+        else editing_profile_schema_version
     )
+    active_schema_version = (
+        initial_schema_version
+        if isinstance(initial_schema_version, str) and initial_schema_version in SCHEMA_FILENAMES
+        else schema_channels_catalog["default_channel"]
+    )
+    # The runtime lifecycle catalog has already applied the contract's public
+    # header order; do not recreate ordering from a second tuple here.
+    header_schema_options = list(schema_options)
 
     context: dict[str, object] = {
         "title": title,
@@ -496,6 +504,7 @@ def build_profiles_page_context(
         "editing_profile_id": editing_profile_id,
         "editing_profile_schema_version": editing_profile_schema_version,
         "editing_profile_initial": editing_profile_initial,
+        "active_schema_version": active_schema_version,
         "include_deleted": include_deleted,
         "return_url": return_url,
         "focus_target": focus_target,

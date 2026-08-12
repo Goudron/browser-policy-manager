@@ -236,7 +236,7 @@ def test_english_api_topics_cover_audience_patterns_and_current_api_boundaries()
     inventory = " ".join(API_INVENTORY_PATH.read_text(encoding="utf-8").split())
     text = "\n".join("".join(_topic_root("en", topic_id).itertext()) for topic_id in TOPICS)
 
-    assert "15 programmatic/service operations" in inventory
+    assert "17 programmatic/service operations" in inventory
     assert "six HTML product routes" in inventory
 
     for required in (
@@ -357,6 +357,16 @@ def test_english_api_topics_cover_audience_patterns_and_current_api_boundaries()
         "API-PROFILE-007",
         "API-PROFILE-008",
         "API-PROFILE-009",
+        "API-PROFILE-010",
+        "API-PROFILE-011",
+        "/api/profiles/{profile_id}/conversion-preview",
+        "/api/profiles/{profile_id}/conversion-apply",
+        "ConversionPreviewRequest",
+        "ConversionPreviewResponse",
+        "ConversionApplyRequest",
+        "ConversionApplyResponse",
+        "mutation=none",
+        "retry_preview_required",
         "GET $BPM_BASE_URL/api/profiles?q=corp",
         "GET $BPM_BASE_URL/api/profiles/stats?q=corp",
         "GET $BPM_BASE_URL/api/profiles/42?include_deleted=false",
@@ -400,7 +410,8 @@ def test_english_api_topics_cover_audience_patterns_and_current_api_boundaries()
         '{"document":{"policies":{"Proxy":{"Mode":"bogus"}}}}',
         "Expected object with policy mappings",
         "Firefox policies.json validation failed",
-        "Unknown profile 'beta-999'",
+        "Schema channel is not available",
+        "schema_channel_unknown",
         "A registered but unavailable schema returns 503",
         "HTTP status alone",
         "plain policy mapping",
@@ -591,8 +602,11 @@ def test_validation_gate_documented_examples_execute_against_api_test_app() -> N
             "/api/validate/beta-999",
             json={"document": {"policies": {"DisableTelemetry": True}}},
         )
-        assert unknown_channel_response.status_code == 404, unknown_channel_response.text
-        assert unknown_channel_response.json()["detail"] == "Unknown profile 'beta-999'"
+        assert unknown_channel_response.status_code == 422, unknown_channel_response.text
+        assert unknown_channel_response.json()["detail"] == {
+            "message": "Schema channel is not available",
+            "code": "schema_channel_unknown",
+        }
 
         policy_failure_response = client.post(
             "/api/validate/release-153",

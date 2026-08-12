@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm095-firefox-schema-lifecycle-catalog",
+  "target_bpm_version": "0.9.5",
+  "status": "active-runtime-catalog",
+  "provenance_verified_on": "2026-08-10",
+  "implementation": {
+    "phase": "m3-03-runtime-wired",
+    "current_runtime_artifact_ids": [
+      "release-153",
+      "esr-153.0",
+      "esr-140.13",
+      "esr-115.38"
+    ],
+    "generated_artifact_ids": [
+      "release-153",
+      "esr-153.0",
+      "esr-140.13",
+      "esr-115.38"
+    ]
+  },
+  "ordering": {
+    "family_order": [
+      "release",
+      "esr"
+    ],
+    "esr_direction": "descending-line-then-artifact-version",
+    "public_orders": {
+      "selector": [
+        "release-153",
+        "esr-153.0",
+        "esr-140.13",
+        "esr-115.38"
+      ],
+      "header": [
+        "release-153",
+        "esr-153.0",
+        "esr-140.13",
+        "esr-115.38"
+      ]
+    }
+  },
+  "api_behavior": {
+    "catalog_visibility": {
+      "supported": "listed",
+      "retired": "not-listed",
+      "unknown": "not-listed"
+    },
+    "write_target_errors": {
+      "unknown": {
+        "status": 422,
+        "code": "schema_channel_unknown"
+      },
+      "retired": {
+        "status": 422,
+        "code": "schema_channel_retired"
+      }
+    },
+    "stored_profile_errors": {
+      "unknown": {
+        "status": 409,
+        "code": "schema_channel_unknown"
+      },
+      "retired": {
+        "status": 409,
+        "code": "schema_channel_retired_requires_migration"
+      }
+    }
+  },
+  "serialization": {
+    "catalog_version": 1,
+    "legacy_top_level_fields": [
+      "supported_channels",
+      "default_channel",
+      "default_release_channel",
+      "esr_channels",
+      "default_label",
+      "labels",
+      "filenames",
+      "mozilla_versions",
+      "sources",
+      "options"
+    ],
+    "added_top_level_fields": [
+      "catalog_version",
+      "latest_esr_channel",
+      "selector_channels",
+      "header_channels"
+    ],
+    "option_fields": [
+      "value",
+      "label",
+      "i18n_key",
+      "line_id",
+      "artifact_id",
+      "family",
+      "support_state",
+      "selectable",
+      "is_latest_esr",
+      "is_product_default",
+      "is_default_release",
+      "recommendation_target"
+    ]
+  },
+  "channels": [
+    {
+      "line_id": "release-153",
+      "artifact_id": "release-153",
+      "channel_id": "release-153",
+      "family": "release",
+      "line_number": 153,
+      "artifact_version": "153.0",
+      "label": "Release 153",
+      "i18n_key": "profiles.firefox_schema_release_153",
+      "support": {
+        "state": "supported",
+        "browser_version_field": "LATEST_FIREFOX_VERSION",
+        "browser_version": "153.0.3",
+        "evidence_urls": [
+          "https://product-details.mozilla.org/1.0/firefox_versions.json"
+        ],
+        "verified_on": "2026-08-10",
+        "end": {
+          "kind": "not-announced",
+          "value": null
+        },
+        "recheck_on": "2026-09-10"
+      },
+      "selectable": true,
+      "roles": {
+        "latest_esr": false,
+        "product_default": false,
+        "default_release": true
+      },
+      "recommendation_target_line_id": null,
+      "retirement_successor_line_id": null,
+      "source": {
+        "source_tag": "mozilla-policy-templates-v8.0",
+        "upstream_tag": "v8.0",
+        "documentation_input": {
+          "local_path": "data/upstream/policy-templates/v8.0/policy-templates.md",
+          "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v8.0/docs/index.md",
+          "sha256": "2e00f3bf14ce2e90b96d9697700c493cc3688fb95aed2af49a000a5b62ef0bc1"
+        },
+        "linux_policies_input": {
+          "local_path": "data/upstream/policy-templates/v8.0/linux-policies.json",
+          "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v8.0/linux/policies.json",
+          "sha256": "cadcd2052e4c449d68be760234c1eebc2916cb89319d9a4f1b71788504747fac"
+        },
+        "output_path": "app/schemas/policies/firefox-release-153.json",
+        "filename": "firefox-release-153.json"
+      }
+    },
+    {
+      "line_id": "esr-153",
+      "artifact_id": "esr-153.0",
+      "channel_id": "esr-153.0",
+      "family": "esr",
+      "line_number": 153,
+      "artifact_version": "153.0",
+      "label": "ESR 153.0",
+      "i18n_key": "profiles.firefox_schema_esr_153_0",
+      "support": {
+        "state": "supported",
+        "browser_version_field": "FIREFOX_ESR_NEXT",
+        "browser_version": "153.0esr",
+        "evidence_urls": [
+          "https://product-details.mozilla.org/1.0/firefox_versions.json"
+        ],
+        "verified_on": "2026-08-10",
+        "end": {
+          "kind": "not-announced",
+          "value": null
+        },
+        "recheck_on": "2026-09-10"
+      },
+      "selectable": true,
+      "roles": {
+        "latest_esr": true,
+        "product_default": true,
+        "default_release": false
+      },
+      "recommendation_target_line_id": null,
+      "retirement_successor_line_id": null,
+      "source": {
+        "source_tag": "mozilla-policy-templates-v8.0",
+        "upstream_tag": "v8.0",
+        "documentation_input": {
+          "local_path": "data/upstream/policy-templates/v8.0/policy-templates.md",
+          "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v8.0/docs/index.md",
+          "sha256": "2e00f3bf14ce2e90b96d9697700c493cc3688fb95aed2af49a000a5b62ef0bc1"
+        },
+        "linux_policies_input": {
+          "local_path": "data/upstream/policy-templates/v8.0/linux-policies.json",
+          "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v8.0/linux/policies.json",
+          "sha256": "cadcd2052e4c449d68be760234c1eebc2916cb89319d9a4f1b71788504747fac"
+        },
+        "output_path": "app/schemas/policies/firefox-esr-153.0.json",
+        "filename": "firefox-esr-153.0.json"
+      }
+    },
+    {
+      "line_id": "esr-140",
+      "artifact_id": "esr-140.13",
+      "channel_id": "esr-140.13",
+      "family": "esr",
+      "line_number": 140,
+      "artifact_version": "140.13",
+      "label": "ESR 140.13",
+      "i18n_key": "profiles.firefox_schema_esr_140_13",
+      "support": {
+        "state": "supported",
+        "browser_version_field": "FIREFOX_ESR",
+        "browser_version": "140.13.0esr",
+        "evidence_urls": [
+          "https://product-details.mozilla.org/1.0/firefox_versions.json"
+        ],
+        "verified_on": "2026-08-10",
+        "end": {
+          "kind": "not-announced",
+          "value": null
+        },
+        "recheck_on": "2026-09-10"
+      },
+      "selectable": true,
+      "roles": {
+        "latest_esr": false,
+        "product_default": false,
+        "default_release": false
+      },
+      "recommendation_target_line_id": "esr-153",
+      "retirement_successor_line_id": "esr-153",
+      "source": {
+        "source_tag": "mozilla-policy-templates-v7.12",
+        "upstream_tag": "v7.12",
+        "documentation_input": {
+          "local_path": "data/upstream/policy-templates/v7.12/policy-templates.md",
+          "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v7.12/docs/index.md",
+          "sha256": "cebeacfdff92699c53d1fa7ab3b9db76fb2dae4362e3dd929165be1da79e265b"
+        },
+        "linux_policies_input": {
+          "local_path": "data/upstream/policy-templates/v7.12/linux-policies.json",
+          "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v7.12/linux/policies.json",
+          "sha256": "5a180e55c6838e6d359ce2223e8e41294ab5ebde439347cf4c08bab459f39e5c"
+        },
+        "output_path": "app/schemas/policies/firefox-esr-140.13.json",
+        "filename": "firefox-esr-140.13.json"
+      }
+    },
+    {
+      "line_id": "esr-115",
+      "artifact_id": "esr-115.38",
+      "channel_id": "esr-115.38",
+      "family": "esr",
+      "line_number": 115,
+      "artifact_version": "115.38",
+      "label": "ESR 115.38",
+      "i18n_key": "profiles.firefox_schema_esr_115_38",
+      "support": {
+        "state": "supported",
+        "browser_version_field": "FIREFOX_ESR115",
+        "browser_version": "115.38.0esr",
+        "evidence_urls": [
+          "https://product-details.mozilla.org/1.0/firefox_versions.json",
+          "https://support.mozilla.org/en-US/kb/firefox-users-windows-7-8-and-81-moving-extended-support",
+          "https://support.mozilla.org/en-US/kb/firefox-users-macos-1012-1013-1014-moving-to-extended-support"
+        ],
+        "verified_on": "2026-08-10",
+        "end": {
+          "kind": "month",
+          "value": "2027-03"
+        },
+        "recheck_on": "2027-03-01",
+        "caveat": "Limited legacy-OS critical-security support; Mozilla will re-evaluate after March 2027."
+      },
+      "selectable": true,
+      "roles": {
+        "latest_esr": false,
+        "product_default": false,
+        "default_release": false
+      },
+      "recommendation_target_line_id": "esr-153",
+      "retirement_successor_line_id": "esr-140",
+      "source": {
+        "source_tag": "mozilla-policy-templates-v5.12",
+        "upstream_tag": "v5.12",
+        "documentation_input": {
+          "local_path": "data/upstream/policy-templates/v5.12/policy-templates.md",
+          "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v5.12/docs/index.md",
+          "sha256": "ce84a587dabc8e995e93206866e8d8ab3c9cf8423bb7dfbe74f20b9b28aaac42"
+        },
+        "linux_policies_input": {
+          "local_path": "data/upstream/policy-templates/v5.12/linux-policies.json",
+          "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v5.12/linux/policies.json",
+          "sha256": "da9caaefe75f7f5e54694bccda8a044e62f034dbd5889bcf1595bb08d6a04347"
+        },
+        "output_path": "app/schemas/policies/firefox-esr-115.38.json",
+        "filename": "firefox-esr-115.38.json"
+      }
+    }
+  ]
+}

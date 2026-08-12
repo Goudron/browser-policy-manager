@@ -786,8 +786,10 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "Landing page",
         },
         "firefox_channel": {
-            "esr-140.12": "Firefox ESR 140.12",
-            "release-152": "Firefox Release 152",
+            "esr-115.38": "Firefox ESR 115.38",
+            "esr-140.13": "Firefox ESR 140.13",
+            "esr-153.0": "Firefox ESR 153.0",
+            "release-153": "Firefox Release 153",
         },
         "policy_category": {
             "advanced": "Advanced",
@@ -832,8 +834,10 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "Начальная страница",
         },
         "firefox_channel": {
-            "esr-140.12": "Firefox ESR 140.12",
-            "release-152": "Firefox Release 152",
+            "esr-115.38": "Firefox ESR 115.38",
+            "esr-140.13": "Firefox ESR 140.13",
+            "esr-153.0": "Firefox ESR 153.0",
+            "release-153": "Firefox Release 153",
         },
         "policy_category": {
             "advanced": "Расширенные настройки",
@@ -878,8 +882,10 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "Startseite",
         },
         "firefox_channel": {
-            "esr-140.12": "Firefox ESR 140.12",
-            "release-152": "Firefox Release 152",
+            "esr-115.38": "Firefox ESR 115.38",
+            "esr-140.13": "Firefox ESR 140.13",
+            "esr-153.0": "Firefox ESR 153.0",
+            "release-153": "Firefox Release 153",
         },
         "policy_category": {
             "advanced": "Erweiterte Einstellungen",
@@ -924,8 +930,10 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "首页",
         },
         "firefox_channel": {
-            "esr-140.12": "Firefox ESR 140.12",
-            "release-152": "Firefox Release 152",
+            "esr-115.38": "Firefox ESR 115.38",
+            "esr-140.13": "Firefox ESR 140.13",
+            "esr-153.0": "Firefox ESR 153.0",
+            "release-153": "Firefox Release 153",
         },
         "policy_category": {
             "advanced": "高级设置",
@@ -970,8 +978,10 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "Page d’accueil",
         },
         "firefox_channel": {
-            "esr-140.12": "Firefox ESR 140.12",
-            "release-152": "Firefox Release 152",
+            "esr-115.38": "Firefox ESR 115.38",
+            "esr-140.13": "Firefox ESR 140.13",
+            "esr-153.0": "Firefox ESR 153.0",
+            "release-153": "Firefox Release 153",
         },
         "policy_category": {
             "advanced": "Paramètres avancés",
@@ -1016,8 +1026,10 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "Página inicial",
         },
         "firefox_channel": {
-            "esr-140.12": "Firefox ESR 140.12",
-            "release-152": "Firefox Release 152",
+            "esr-115.38": "Firefox ESR 115.38",
+            "esr-140.13": "Firefox ESR 140.13",
+            "esr-153.0": "Firefox ESR 153.0",
+            "release-153": "Firefox Release 153",
         },
         "policy_category": {
             "advanced": "Ajustes avanzados",

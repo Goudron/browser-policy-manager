@@ -164,6 +164,26 @@ def test_ci_workflow_has_visible_dependency_and_artifact_flow() -> None:
         assert settings["if-no-files-found"] == "error"
 
 
+def test_ci_provisions_checksum_pinned_schema_inputs_for_each_offline_consumer() -> None:
+    jobs = _workflow_jobs()
+
+    for owner in ("unit-tests", "integration-tests", "contract-tests"):
+        provision_step = _named_step(
+            jobs[owner], "Provision checksum-pinned offline Firefox schema inputs"
+        )
+        assert provision_step["run"] == "make provision-firefox-schema-inputs"
+
+
+def test_documentation_owner_installs_its_pdf_navigation_verifier() -> None:
+    job = _workflow_jobs()["documentation-coverage"]
+
+    install_step = _named_step(job, "Install documentation PDF verification tools")
+    assert (
+        install_step["run"]
+        == "sudo apt-get update\nsudo apt-get install --yes qpdf poppler-utils\n"
+    )
+
+
 def test_ci_proves_clean_package_artifacts_without_ai_dependencies() -> None:
     source = _workflow_source("ci.yml")
 

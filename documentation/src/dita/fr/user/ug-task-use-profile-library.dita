@@ -12,6 +12,7 @@
           <alt>Bibliothèque affichant les lignes de profil enregistrées, les décomptes et les actions de profil.</alt>
         </image>
       </fig>
+      <p>Un profil ESR 115.38 ou ESR 140.13 actif et enregistré peut proposer une mise à jour à examiner vers le dernier ESR, ESR 153.0. Ouvrir cette recommandation n’ouvre qu’un aperçu en lecture seule et ne modifie pas le profil ; Release 153, ESR 153.0, les profils inconnus, retirés, inactifs ou non enregistrés ne reçoivent aucune recommandation inventée. Un aperçu applicable doit être confirmé explicitement.</p>
     </context>
     <steps>
       <step><cmd>Ouvrez la bibliothèque.</cmd><info><p>Résultat attendu : la bibliothèque charge les lignes de profil ou un message d'état vide si aucun profil enregistré n'existe.</p></info></step>

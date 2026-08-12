@@ -15,8 +15,10 @@ from packaging.requirements import Requirement
 from packaging.utils import canonicalize_name
 
 from app.core.config import Settings
+from app.main import create_app
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
+TARGET_VERSION = "0.9.5"
 
 
 def _project_version() -> str:
@@ -72,7 +74,11 @@ def _build_release_artifacts(tmp_path: Path) -> tuple[Path, Path]:
 def test_current_version_metadata_is_single_source_of_truth():
     version = _project_version()
 
+    assert version == TARGET_VERSION
     assert Settings().APP_VERSION == version
+    app = create_app()
+    assert app.version == version
+    assert app.openapi()["info"]["version"] == version
     assert (REPO_ROOT / "README.md").is_file()
     assert (
         (REPO_ROOT / "docs" / "docs-index.md")
@@ -98,6 +104,7 @@ def test_release_artifacts_and_installed_runtime_match_project_metadata(tmp_path
         metadata = archive.extractfile(pkg_info)
         assert metadata is not None
         assert _distribution_metadata_version(metadata.read()) == version
+        assert any(member.name.endswith(f"-{version}/PKG-INFO") for member in archive.getmembers())
 
     with zipfile.ZipFile(wheel) as archive:
         metadata_name = next(
@@ -105,6 +112,7 @@ def test_release_artifacts_and_installed_runtime_match_project_metadata(tmp_path
         )
         metadata = archive.read(metadata_name)
         assert _distribution_metadata_version(metadata) == version
+        assert f"browser_policy_manager-{version}.dist-info/METADATA" == metadata_name
         requirements = _distribution_requirements(metadata)
         for distribution in ("numpy", "onnxruntime", "tokenizers"):
             matching = [

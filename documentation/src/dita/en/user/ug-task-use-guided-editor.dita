@@ -22,7 +22,7 @@
       <step><cmd>Finish in Step 6, <uicontrol>Review &amp; export</uicontrol>, to validate, save, and download the reviewed profile.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
     </steps>
     <result><p>You can explain where each guided setting belongs and continue from the correct step.</p></result>
-    <postreq><p>Recovery: if you land in the wrong area, use the stepper or search instead of changing unrelated controls.</p></postreq>
+    <postreq><p>Recovery: if you land in the wrong area, use the stepper or search instead of changing unrelated controls. For a saved profile, open schema conversion review only after you decide to change channel: preserve unsaved work first, choose a distinct supported target, and use the read-only preview before any explicit apply.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-guided-settings"/>

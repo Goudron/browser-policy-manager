@@ -5,7 +5,7 @@
   <shortdesc>Appliquez les migrations de base de données et vérifiez le déploiement BPM depuis la source après un changement de révision.</shortdesc>
   <taskbody>
     <prereq><p>L'extraction et les dépendances ont été actualisées avec succès et les preuves de sauvegarde de la base de données ont été collectées alors que BPM était arrêté.</p></prereq>
-    <context><p>Les mises à jour peuvent introduire des migrations de base de données. BPM documente la migration vers l’avant avec <codeph>alembic upgrade head</codeph> ; aucune rétrogradation automatique ni restauration sûre du schéma n’est garantie.</p></context>
+    <context><p>Les mises à jour peuvent introduire des migrations de base de données. BPM documente la migration vers l’avant avec <codeph>alembic upgrade head</codeph> ; aucune rétrogradation automatique ni restauration sûre du schéma n’est garantie. Un ESR ancien pris en charge n’est pas migré automatiquement. Ce n’est que lorsqu’un candidat futur retire réellement un ESR que son successeur immédiat déclaré peut être migré par la mise à niveau Alembic révisée, après sauvegarde et précontrôle en lecture seule.</p></context>
     <steps>
       <step><cmd>Appliquez les migrations de base de données à la base de données souhaitée.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"

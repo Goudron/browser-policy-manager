@@ -114,6 +114,16 @@ def test_firefox_live_target_delegates_to_live_marker_expression():
     assert "-rs" in body
 
 
+def test_makefile_declares_four_channel_firefox_live_owner_target():
+    source = _makefile_source()
+    body = _target_body(source, "firefox-live-four-channel-workflow")
+
+    assert "firefox-live-four-channel-workflow" in source.splitlines()[0]
+    assert "tools/provision_firefox_live_browsers.py all" in body
+    assert "tools/run_firefox_live_workflow.py all" in body
+    assert "$(FIREFOX_LIVE_FOUR_CHANNEL_ARTIFACT_DIR)" in body
+
+
 def test_makefile_declares_firefox_live_amo_canary_target():
     source = _makefile_source()
     body = _target_body(source, "test-firefox-live-amo")
@@ -172,12 +182,28 @@ def test_makefile_declares_offline_firefox_schema_workflow_target():
     assert "tests/integration/schema/test_firefox_schema_workflow_offline.py" in body
 
 
+def test_makefile_declares_four_channel_schema_release_gate():
+    body = _target_body(_makefile_source(), "verify-firefox-schema-matrix")
+
+    assert "verify-firefox-schema-matrix" in _makefile_source().splitlines()[0]
+    assert "tools/verify_firefox_schema_matrix.py" in body
+
+
+def test_makefile_declares_directed_firefox_conversion_matrix_gate():
+    body = _target_body(_makefile_source(), "verify-firefox-conversion-matrix")
+
+    assert "verify-firefox-conversion-matrix" in _makefile_source().splitlines()[0]
+    assert "tools/verify_firefox_conversion_matrix.py" in body
+
+
 def test_makefile_declares_quality_targets():
     source = _makefile_source()
 
     assert "typecheck" in source.splitlines()[0]
     assert "quality" in source.splitlines()[0]
-    assert "$(MYPY) app" in _target_body(source, "typecheck")
+    assert "$(MYPY) --explicit-package-bases $(TYPECHECK_PATHS)" in _target_body(
+        source, "typecheck"
+    )
     assert "quality: lint typecheck architecture test-fast" in source
 
 
@@ -260,6 +286,16 @@ def test_mandatory_ci_layer_targets_can_emit_coverage_without_changing_ownership
     evidence = _target_body(source, "postgres-ci-evidence")
     assert "BPM_REQUIRE_POSTGRES=1" in evidence
     assert "tools/report_postgres_ci_evidence.py" in evidence
+
+    coverage = _target_body(source, "coverage")
+    assert "surface 1/2" in coverage
+    assert "surface 2/2" in coverage
+    assert "completed 1/2 surfaces" in coverage
+    assert "completed 2/2 surfaces" in coverage
+    assert "coverage-release-implementation" in coverage
+    assert "test-ai-incubation-coverage" in coverage
+    assert "coverage combine $(COVERAGE_REPORT_DIR)" in coverage
+    assert "--cov=app" not in coverage
 
     report = _target_body(source, "coverage-report")
     assert "coverage combine $(COVERAGE_DATA_DIR)" in report

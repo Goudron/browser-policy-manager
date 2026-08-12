@@ -45,11 +45,28 @@
     "migrations": {
       "authoritative_paths": [
         "alembic/versions/",
-        "docs/architecture/database-upgrade-matrix-0.9.4.json",
-        "tests/fixtures/database_upgrade/golden_profiles_0_9_4.json"
+        "docs/architecture/database-upgrade-matrix-0.9.5.json",
+        "tests/fixtures/database_upgrade/golden_profiles_0_9_5.json"
       ],
       "historical_paths": [
+        "docs/architecture/database-upgrade-matrix-0.9.4.json",
+        "docs/architecture/database-upgrade-matrix-0.9.4.md",
+        "tests/fixtures/database_upgrade/golden_profiles_0_9_4.json",
         "docs/archive/2026-q2/"
+      ]
+    },
+    "schema_lifecycle": {
+      "authoritative_paths": [
+        "app/core/schema_channels.py",
+        "app/core/lifecycle_transition_plan.py",
+        "app/core/retirement_convertibility_preflight.py",
+        "app/core/profile_conversion_planner.py",
+        "migration_support/retirement_owner_v1.py",
+        "tools/schema_lifecycle_dry_run.py",
+        "docs/architecture/schema-channel-surface-inventory-0.9.5.md"
+      ],
+      "historical_paths": [
+        "docs/architecture/firefox-153-dual-esr-schema-contract-0.9.2.md"
       ]
     },
     "documentation_history": {

@@ -84,6 +84,11 @@ ARCHITECTURE_ENTRY_POINTS = (
     "documentation-assistant-presentation-0.9.3.md",
     "documentation-assistant-resource-state-0.9.3.md",
     "documentation-assistant-web-mode-0.9.3.md",
+    "schema-channel-surface-inventory-0.9.5.md",
+    "firefox-schema-lifecycle-catalog-contract-0.9.5.md",
+    "firefox-pairwise-profile-conversion-contract-0.9.5.md",
+    "firefox-schema-conversion-ui-copy-interaction-contract-0.9.5.md",
+    "firefox-retired-esr-migration-safety-contract-0.9.5.md",
 )
 DOCUMENTATION_COMMANDS = (
     "make docs-snapshot",

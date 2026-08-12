@@ -12,6 +12,7 @@
           <alt>JSON 编辑器 显示已保存配置文件的可编辑 Firefox 策略 JSON。</alt>
         </image>
       </fig>
+      <p>在打开架构转换复核前，请保存或明确放弃 <uicontrol>JSON 编辑器</uicontrol> 更改。预览绝不会覆盖浏览器本地更改；过期预览必须重新请求。</p>
     </context>
     <steps>
       <step><cmd>从<uicontrol>库</uicontrol>或其他编辑器中打开保存的配置文件。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>

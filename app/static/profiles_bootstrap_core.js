@@ -136,6 +136,7 @@
             searchEnginePresets,
             wizardSchemaShellCatalog,
             allSettingsCategoryCatalog,
+            schemaChannelsCatalog,
             starterPresets,
             complianceLayers,
             complianceMergedPresets,
@@ -1095,6 +1096,7 @@
             ...wizardFlow,
             ...workspace,
             ...review,
+            schemaChannelsCatalog,
             setSyncWizardNetworkFromEditor: (fn) => {
                 syncWizardNetworkFromEditorRef = fn || (() => {});
             },

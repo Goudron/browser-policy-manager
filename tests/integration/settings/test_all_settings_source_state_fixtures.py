@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from app.core.schema_channels import CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL
+from app.core.schema_channels import CURRENT_RELEASE_SCHEMA_CHANNEL, LATEST_ESR_SCHEMA_CHANNEL
 from app.web.firefox_preferences import get_wizard_preferences_catalog
 from app.web.firefox_wizard_shell import get_wizard_schema_shell_catalog
 from tests.support import (
@@ -43,7 +43,7 @@ def _decision_by_path(
 
 
 @pytest.mark.parametrize(
-    "schema_version", (CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL)
+    "schema_version", (LATEST_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL)
 )
 def test_all_settings_source_state_regression_fixtures_cover_required_cases(schema_version):
     fixtures = build_all_settings_source_state_regression_fixtures(schema_version=schema_version)

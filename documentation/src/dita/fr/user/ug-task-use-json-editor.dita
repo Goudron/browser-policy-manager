@@ -12,6 +12,7 @@
           <alt>Éditeur JSON affichant les politiques Firefox modifiables JSON pour un profil enregistré.</alt>
         </image>
       </fig>
+      <p>Enregistrez ou abandonnez délibérément les modifications de l’éditeur JSON avant d’ouvrir la revue de conversion du schéma. L’aperçu n’écrase jamais les modifications locales du navigateur ; un aperçu obsolète doit être demandé de nouveau.</p>
     </context>
     <steps>
       <step><cmd>Ouvrez le profil enregistré depuis la bibliothèque ou un autre éditeur.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>

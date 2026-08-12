@@ -2346,5 +2346,33 @@
       "x-bpm-description-key": "policy.DefaultSerialGuardSetting",
       "x-bpm-min-version": "1.0"
     }
+  },
+  "x-bpm-artifact-id": "esr-140.13",
+  "x-bpm-line-id": "esr-140",
+  "x-bpm-firefox-line": 140,
+  "x-bpm-firefox-version": "140.13.0esr",
+  "x-bpm-ui-label": "ESR 140.13",
+  "x-bpm-source-provenance": {
+    "source_tag": "mozilla-policy-templates-v7.12",
+    "upstream_tag": "v7.12",
+    "upstream_release_url": "https://github.com/mozilla/policy-templates/releases/tag/v7.12",
+    "license_spdx": "MPL-2.0",
+    "license_url": "https://www.mozilla.org/MPL/2.0/",
+    "inputs": {
+      "policy-templates.md": {
+        "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v7.12/docs/index.md",
+        "bytes": 228056,
+        "sha256": "cebeacfdff92699c53d1fa7ab3b9db76fb2dae4362e3dd929165be1da79e265b"
+      },
+      "linux-policies.json": {
+        "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v7.12/linux/policies.json",
+        "bytes": 14038,
+        "sha256": "5a180e55c6838e6d359ce2223e8e41294ab5ebde439347cf4c08bab459f39e5c"
+      }
+    }
+  },
+  "x-bpm-generator": {
+    "identity": "bpm-firefox-policy-schema-converter/v1",
+    "entrypoint": "tools/convert_policies_from_upstream.py"
   }
 }

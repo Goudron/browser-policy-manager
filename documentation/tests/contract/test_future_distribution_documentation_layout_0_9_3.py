@@ -18,7 +18,7 @@ def test_m14_07_layout_keeps_the_pdf_delivery_scope_safe_after_promotion() -> No
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
 
     assert contract["backlog_item"] == "BPM093-M14-07"
-    assert contract["target_bpm_version"] == "0.9.4"
+    assert contract["target_bpm_version"] == "0.9.5"
     assert contract["status"] == "implemented-and-delivered"
     assert contract["delivery_root"] == "distributions/documentation"
     assert contract["release_directory"] == "{bpm_version}"
@@ -56,8 +56,10 @@ def test_m14_07_layout_keeps_the_pdf_delivery_scope_safe_after_promotion() -> No
     # the active handoff target may also be present locally.
     version_names = {path.name for path in version_directories}
     assert set(contract["tracked_release_versions"]) <= version_names
+    assert contract["preserved_handoff_versions"] == ["0.9.4"]
     assert contract["handoff_target_version"] == contract["target_bpm_version"]
     assert contract["target_bpm_version"] not in contract["tracked_release_versions"]
     assert version_names - set(contract["tracked_release_versions"]) <= {
-        contract["handoff_target_version"]
+        *contract["preserved_handoff_versions"],
+        contract["handoff_target_version"],
     }

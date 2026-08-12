@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-firefox-schema" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>选择火狐浏览器架构通道</title>
-  <shortdesc>在导入、验证或编辑配置文件之前，选择 Firefox Release 153、Firefox ESR 153.0 或 Firefox ESR 140.13。</shortdesc>
+  <shortdesc>在导入、验证或编辑配置文件之前，选择 Firefox Release 153、Firefox ESR 153.0、Firefox ESR 140.13 或 Firefox ESR 115.38。</shortdesc>
   <taskbody>
     <prereq><p>在创建配置文件、导入 policies.json 或验证原始 JSON 文档之前启动此任务。</p></prereq>
-    <context><p>架构通道决定 BPM 可以验证哪些 Firefox 策略以及哪些控件显示为受支持。Release 153 和 ESR 153.0 包含 AIControls、VisualSearchEnabled 等当前控制项；ESR 140.13 仍是独立支持的长期支持通道。BPM 不会在 ESR 通道之间自动迁移配置文件。</p></context>
+    <context><p>架构通道决定 BPM 可以验证哪些 Firefox 策略以及哪些控件显示为受支持。Release 153 和 ESR 153.0 包含 AIControls、VisualSearchEnabled 等当前控制项；ESR 140.13 仍是独立支持的长期支持通道。ESR 115.38 为旧版操作系统的有限关键安全需求提供独立支持，并不延长操作系统供应商支持；请在 2027-03-01 重新检查该边界。BPM 不会在受支持的 ESR 通道之间自动迁移配置档案。</p></context>
     <steps>
-      <step><cmd>将目标浏览器群与支持的通道进行比较：Release 153、ESR 153.0 和 ESR 140.13。</cmd><info><p>预期结果：所选架构通道保持可见且明确。</p></info></step>
-      <step><cmd>为相应的受支持 Extended Support Release 部署选择 ESR 140.13 或 ESR 153.0。</cmd><info><p>预期结果：所选架构通道保持可见且明确。</p></info></step>
+      <step><cmd>将目标浏览器群与支持的通道进行比较：Release 153、ESR 153.0、ESR 140.13 和 ESR 115.38。</cmd><info><p>预期结果：所选架构通道保持可见且明确。</p></info></step>
+      <step><cmd>为相应的受支持 Extended Support Release 部署选择 ESR 115.38、ESR 140.13 或 ESR 153.0。</cmd><info><p>预期结果：所选架构通道保持可见且明确。</p></info></step>
       <step><cmd>当配置文件需要当前控制项（包括受支持的 AI 和视觉搜索策略）时，选择 Release 153 或 ESR 153.0。</cmd><info><p>预期结果：所选架构通道保持可见且明确。</p></info></step>
       <step><cmd>选择通道后、保存、导出或切换前进行验证。</cmd><info><note type="warning">验证可以从有效更改为无效。保存或导出之前确认通道。</note></info></step>
     </steps>
     <result><p>配置文件使用与预期 Firefox 部署相匹配的架构通道。</p></result>
-    <postreq><p>恢复：如果验证报告设置不受支持、不可用、已弃用或未知，请在编辑策略值之前确认架构通道。从 ESR 140.13 切换到 ESR 153.0 需要明确选择目标通道并进行复核。</p></postreq>
+    <postreq><p>恢复：如果验证报告设置不受支持、不可用、已弃用或未知，请在编辑策略值之前确认架构通道。在不同当前工件之间的任何切换（包括 ESR 115.38、ESR 140.13、ESR 153.0 和 Release 153）均需明确选择目标并获取新预览。被阻止、过期、无效或失败的转换不会更改已保存的配置档案。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

@@ -15,7 +15,6 @@ from pathlib import Path
 import pytest
 
 from app.core.schema_channels import (
-    CURRENT_ESR_SCHEMA_CHANNEL,
     CURRENT_RELEASE_SCHEMA_CHANNEL,
     SCHEMA_FILENAMES,
     SCHEMA_MOZILLA_VERSIONS,
@@ -91,7 +90,7 @@ def test_firefox_153_channels_include_new_policy_templates_entries(channel):
 
 
 def test_esr_140_13_preserves_the_frozen_policy_surface():
-    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_ESR_SCHEMA_CHANNEL]
+    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES["esr-140.13"]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
     assert "DisableRemoteSettingsAndAcceptSecurityConsequences" not in schema["properties"]

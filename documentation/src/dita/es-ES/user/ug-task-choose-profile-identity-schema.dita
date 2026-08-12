@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Confirme que está editando el borrador del perfil deseado.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Introduzca un nombre de perfil claro.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
-      <step><cmd>Elija el canal de esquema de Firefox: ESR 140.13, ESR 153.0 o Release 153.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Elija el canal de esquema de Firefox: Release 153, ESR 153.0, ESR 140.13 o ESR 115.38.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente. ESR 115.38 sirve a la seguridad crítica limitada de sistemas heredados y no amplía el soporte del proveedor; BPM volverá a comprobar este límite el 2027-03-01.</p></info></step>
       <step><cmd>Revise si el canal seleccionado cambia los controles visibles antes de continuar.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
     <result><p>El borrador guiado tiene una identidad y un canal de esquema estables.</p></result>

@@ -48,6 +48,15 @@ def test_current_artifact_owners_are_complete_existing_and_nonoverlapping() -> N
     assert owner_paths["documentation_history"] == {"docs/docs-index.md", "docs/docs-manifest.json"}
     assert owner_paths["release"].isdisjoint(historical_paths)
     assert "documentation/buildlib/" in owner_paths["documentation_build"]
+    assert owner_paths["schema_lifecycle"] == {
+        "app/core/schema_channels.py",
+        "app/core/lifecycle_transition_plan.py",
+        "app/core/retirement_convertibility_preflight.py",
+        "app/core/profile_conversion_planner.py",
+        "migration_support/retirement_owner_v1.py",
+        "tools/schema_lifecycle_dry_run.py",
+        "docs/architecture/schema-channel-surface-inventory-0.9.5.md",
+    }
 
 
 def test_current_release_and_documentation_artifacts_derive_one_version() -> None:

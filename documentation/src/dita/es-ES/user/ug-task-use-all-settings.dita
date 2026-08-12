@@ -12,6 +12,7 @@
           <alt>Todos los ajustes muestra la lista de revisión, los ajustes configurados y el panel de detalles de ajustes en una pantalla estrecha.</alt>
         </image>
       </fig>
+      <p>Al cambiar el esquema, no sobrescriba ajustes sin guardar: guárdelos, descártelos deliberadamente o cancele; después elija un destino y lea su vista previa de conversión. Un bloqueo no elimina ajustes.</p>
     </context>
     <steps>
       <step><cmd>Abra el perfil guardado de la <uicontrol>Biblioteca</uicontrol>.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>

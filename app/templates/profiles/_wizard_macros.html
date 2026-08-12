@@ -28,7 +28,7 @@
 {% macro render_manual_policy_controls(items) -%}
     {%- for item in items %}
         {%- if item.control_kind == "enum-select" %}
-        <div class="wizard-toggle wizard-toggle--select" data-settings-target="{{ item.target }}">
+        <div class="wizard-toggle wizard-toggle--select" data-settings-target="{{ item.target }}" data-schema-policy-control="{{ item.policy_id }}"{% if active_schema_version not in item.available_schema_versions %} hidden aria-hidden="true"{% endif %}>
             <div>
                 <div class="wizard-toggle-title" data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.policy_id) }}</div>
             </div>
@@ -40,7 +40,7 @@
             </select>
         </div>
         {%- else %}
-        <label class="wizard-toggle" data-settings-target="{{ item.target }}">
+        <label class="wizard-toggle" data-settings-target="{{ item.target }}" data-schema-policy-control="{{ item.policy_id }}"{% if active_schema_version not in item.available_schema_versions %} hidden aria-hidden="true"{% endif %}>
             <input type="checkbox" data-policy-key="{{ item.policy_id }}" />
             <div>
                 <div class="wizard-toggle-title" data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.policy_id) }}</div>

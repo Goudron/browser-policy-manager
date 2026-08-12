@@ -5,7 +5,7 @@
       <shortdesc>对当前 BPM API 工作流程使用语言中立的请求模式、环境模板、可复制的 curl 命令、多部分示例和紧凑的 Python 断言。</shortdesc>
       <taskbody>
         <prereq><p>为测试中的 BPM 实例设置 <codeph>BPM_BASE_URL</codeph>。请勿将凭据、租户名称、个人主机名、私有主机或生产配置文件 ID 放入可重用示例中； BPM 目前没有记录 API 身份验证。</p></prereq>
-        <context><p>此任务涵盖 <codeph>API-HEALTH-001</codeph>、<codeph>API-HEALTH-002</codeph>、<codeph>API-PROFILE-001</codeph>、<codeph>API-PROFILE-003</codeph>、<codeph>API-PROFILE-004</codeph>、<codeph>API-PROFILE-005</codeph>、<codeph>API-FF-001</codeph>、<codeph>API-VAL-001</codeph> 和 <codeph>API-FF-002</codeph>。这些示例有意使用 <codeph>$BPM_BASE_URL</codeph>、合成名称、<codeph>release-153</codeph>、响应断言和一次性固定装置 ID，而不是特定于环境的主机或机密。</p></context>
+        <context><p>此任务涵盖 <codeph>API-HEALTH-001</codeph>、<codeph>API-HEALTH-002</codeph>、<codeph>API-PROFILE-001</codeph>、<codeph>API-PROFILE-003</codeph>、<codeph>API-PROFILE-004</codeph>、<codeph>API-PROFILE-005</codeph>、<codeph>API-FF-001</codeph>、<codeph>API-VAL-001</codeph> 和 <codeph>API-FF-002</codeph>。这些示例有意使用 <codeph>$BPM_BASE_URL</codeph>、合成名称、<codeph>release-153</codeph>、响应断言和一次性固定装置 ID，而不是特定于环境的主机或机密。</p><p>对于架构转换，请通过 <codeph>API-PROFILE-010</codeph> 创建只读预览，并通过 <codeph>API-PROFILE-011</codeph> 应用已确认的当前计划；必要时重新通过 <codeph>API-PROFILE-010</codeph> 获取预览，并且只对该当前可应用计划使用 <codeph>API-PROFILE-011</codeph>。</p></context>
         <steps>
           <step><cmd>在复制curl 请求之前创建可重用的环境模板。</cmd><info><p>请求示例：<codeph>export BPM_BASE_URL="${BPM_BASE_URL:?set BPM_BASE_URL first}"</codeph>。响应示例：shell 为整个运行保留一个基本 URL、架构通道、合成配置文件名称和可选导入路径。错误示例：当缺少所需值时，shell 退出赋值。</p><codeblock outputclass="language-bash"><![CDATA[
 # .env.devops-example.template
@@ -89,7 +89,7 @@ exported.raise_for_status()
 assert exported.json() == {"policies": payload["document"]["policies"]}
 ]]></codeblock><note type="warning">将响应状态、配置文件 ID、修订、模式通道、导出的文档哈希和断言结果保留在外部证据中。请勿将真实主机名、机密、API 密钥、机密值或生产标识符复制到文档示例中。</note></info></step>
         </steps>
-        <result><p>集成产品具有可重用的curl 和Python 示例，这些示例可以安全复制、独立于部署主机、与当前BPM API 行为同步，并与显式响应断言相关联。</p></result>
+        <result><p>转换使用以下技术合约：<codeph>POST /api/profiles/{profile_id}/conversion-preview</codeph>、<codeph>ConversionPreviewRequest</codeph>、<codeph>ConversionPreviewResponse</codeph>、<codeph>target_artifact_id</codeph>、<codeph>target_validation</codeph>、<codeph>POST /api/profiles/{profile_id}/conversion-apply</codeph>、<codeph>ConversionApplyRequest</codeph>、<codeph>ConversionApplyResponse</codeph>、<codeph>mutation=none</codeph> 和 <codeph>retry_preview_required</codeph>。预览为只读，明确确认后才会原子地应用。</p><p>转换响应可以返回 <codeph>200</codeph>、<codeph>404</codeph>、<codeph>409</codeph>、<codeph>422</codeph>、<codeph>500</codeph> 或 <codeph>503</codeph>；确认前请检查 <codeph>compatibility</codeph> 和 <codeph>blockers</codeph>。</p><p>集成产品具有可重用的curl 和Python 示例，这些示例可以安全复制、独立于部署主机、与当前BPM API 行为同步，并与显式响应断言相关联。</p></result>
         <postreq><p>在构建完整的外部控制产品工作流程时，将这些示例与拉取/列出/读取、应用前验证、导入-审核-导出和失败审核操作手册结合起来。</p></postreq>
       </taskbody>
       <related-links>

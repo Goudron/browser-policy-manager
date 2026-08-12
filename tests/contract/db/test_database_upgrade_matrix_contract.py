@@ -14,9 +14,9 @@ from app.core.policy_validation import validate_profile_policies_for_channel
 from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNEL_SET
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-MATRIX_PATH = REPO_ROOT / "docs" / "architecture" / "database-upgrade-matrix-0.9.4.json"
-RUNBOOK_PATH = REPO_ROOT / "docs" / "architecture" / "database-upgrade-matrix-0.9.4.md"
-FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "database_upgrade" / "golden_profiles_0_9_4.json"
+MATRIX_PATH = REPO_ROOT / "docs" / "architecture" / "database-upgrade-matrix-0.9.5.json"
+RUNBOOK_PATH = REPO_ROOT / "docs" / "architecture" / "database-upgrade-matrix-0.9.5.md"
+FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "database_upgrade" / "golden_profiles_0_9_5.json"
 ALEMBIC_ENV_PATH = REPO_ROOT / "alembic" / "env.py"
 
 
@@ -155,6 +155,27 @@ def test_upgrade_matrix_declares_fail_closed_preflight_and_owned_evidence_gaps()
     assert recovery["ci_gate"] == "make test-postgres-integration"
     assert "explicit maintainer action" in recovery["promotion_boundary"]
     assert "unsupported" in recovery["downgrade_policy"]
+
+    candidate = matrix["candidate_only_retirement"]
+    assert candidate == {
+        "transition": "esr-140.13-to-esr-153.0",
+        "status": "blocked-current-catalog-still-supported",
+        "materializer": "migration_support/retirement_revision_materializer_v1.py",
+        "active_graph_changed": False,
+        "observed_head_revision": matrix["observed_head_revision"],
+        "immutable_proof_digest": (
+            "3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb"
+        ),
+        "sqlite_evidence": "candidate-artifact-real-alembic-upgrade-pass",
+        "postgresql_evidence": "pending-m6-remediation-r3",
+        "activation_conditions": [
+            "ESR 140.13 is retired in the reviewed candidate lifecycle catalog",
+            "the materialized manifest binds the exact previous and candidate catalog digests",
+            "the generated revision is deliberately installed and the active graph/matrix owners are updated together",
+            "native backup restore evidence and no-active-writer attestation are supplied to Alembic",
+            "the real PostgreSQL candidate matrix passes before release promotion",
+        ],
+    }
 
     unsupported_ids = {source["id"] for source in matrix["unsupported_sources"]}
     assert {

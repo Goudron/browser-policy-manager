@@ -5,6 +5,8 @@ PROFILE_API_OPERATIONS = {
     "/api/profiles/stats": {"get": "200"},
     "/api/profiles/reset": {"delete": "200"},
     "/api/profiles/{profile_id}": {"get": "200", "patch": "200", "delete": "204"},
+    "/api/profiles/{profile_id}/conversion-preview": {"post": "200"},
+    "/api/profiles/{profile_id}/conversion-apply": {"post": "200"},
     "/api/profiles/{profile_id}/hard": {"delete": "204"},
     "/api/profiles/{profile_id}/restore": {"post": "200"},
     "/api/profiles/import/firefox/policies.json": {"post": "201"},
@@ -75,6 +77,7 @@ def test_openapi_profile_read_response_keeps_all_public_profile_fields():
         "deleted_at",
         "is_deleted",
         "validation_state",
+        "recommendation",
     }
 
 

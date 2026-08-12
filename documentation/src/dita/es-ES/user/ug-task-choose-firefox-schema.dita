@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-firefox-schema" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Elegir un canal de esquema de Firefox</title>
-  <shortdesc>Elija Firefox Release 153, Firefox ESR 153.0 o Firefox ESR 140.13 antes de importar, validar o editar un perfil.</shortdesc>
+  <shortdesc>Elija Firefox Release 153, Firefox ESR 153.0, Firefox ESR 140.13 o Firefox ESR 115.38 antes de importar, validar o editar un perfil.</shortdesc>
   <taskbody>
     <prereq><p>Inicie esta tarea antes de crear un perfil, importar policies.json o validar un documento JSON sin formato.</p></prereq>
-    <context><p>El canal de esquema determina qué políticas de Firefox puede validar BPM y qué controles se muestran como compatibles. Release 153 y ESR 153.0 incluyen controles actuales como AIControls y VisualSearchEnabled; ESR 140.13 sigue siendo un canal de soporte prolongado independiente. BPM no migra perfiles automáticamente entre canales ESR.</p></context>
+    <context><p>El canal de esquema determina qué políticas de Firefox puede validar BPM y qué controles se muestran como compatibles. Release 153 y ESR 153.0 incluyen controles actuales como AIControls y VisualSearchEnabled; ESR 140.13 sigue siendo un canal de soporte prolongado independiente. ESR 115.38 se admite para necesidades críticas limitadas de seguridad de sistemas heredados, pero no amplía el soporte del proveedor del sistema operativo; vuelva a comprobar este límite el 2027-03-01. BPM no migra perfiles automáticamente entre canales ESR admitidos.</p></context>
     <steps>
-      <step><cmd>Compare la flota de navegadores de destino con los canales admitidos: Release 153, ESR 153.0 y ESR 140.13.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
-      <step><cmd>Elija ESR 140.13 o ESR 153.0 para la implementación de Extended Support Release compatible correspondiente.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
+      <step><cmd>Compare la flota de navegadores de destino con los canales admitidos: Release 153, ESR 153.0, ESR 140.13 y ESR 115.38.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
+      <step><cmd>Elija ESR 115.38, ESR 140.13 o ESR 153.0 para la implementación de Extended Support Release compatible correspondiente.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
       <step><cmd>Elija Release 153 o ESR 153.0 cuando el perfil necesite controles actuales, incluidas las políticas de IA y búsqueda visual compatibles.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
       <step><cmd>Validar después de elegir el canal y antes de guardar, exportar o transferir.</cmd><info><note type="warning">La validación puede cambiar de válida a no válida cuando cambia el canal del esquema. Confirme el canal antes de guardar o exportar.</note></info></step>
     </steps>
     <result><p>El perfil utiliza el canal de esquema que coincide con la implementación prevista de Firefox.</p></result>
-    <postreq><p>Recuperación: si la validación informa configuraciones no compatibles, no disponibles, obsoletas o desconocidas, confirme el canal del esquema antes de editar los valores de la política. El paso de ESR 140.13 a ESR 153.0 requiere una decisión explícita sobre el canal de destino y una revisión.</p></postreq>
+    <postreq><p>Recuperación: si la validación informa configuraciones no compatibles, no disponibles, obsoletas o desconocidas, confirme el canal del esquema antes de editar los valores de la política. Todo cambio entre artefactos actuales distintos, incluidos ESR 115.38, ESR 140.13, ESR 153.0 y Release 153, requiere elegir expresamente el destino y obtener una vista previa nueva. Una conversión bloqueada, obsoleta, no válida o fallida deja el perfil guardado sin cambios.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

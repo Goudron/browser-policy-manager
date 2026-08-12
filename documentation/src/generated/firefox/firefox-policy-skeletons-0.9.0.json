@@ -2,7 +2,7 @@
   "backlog_item": "BPM090-M5-02",
   "channel_differences_backlog_item": "BPM090-M5-05",
   "example_backlog_item": "BPM090-M5-04",
-  "example_count": 354,
+  "example_count": 451,
   "generated_by": "documentation/tools/generate_firefox_policy_skeletons.py",
   "map": "documentation/src/generated/firefox/firefox-policy-skeletons.ditamap",
   "policies": [
@@ -15,12 +15,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-3rdparty",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "3rdparty": {
+                "Extensions": {}
+              }
+            }
+          },
+          "id": "fx-policy-3rdparty-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -141,12 +159,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-AllowedDomainsForApps",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "AllowedDomainsForApps": "managedfirefox.com,example.com"
+            }
+          },
+          "id": "fx-policy-AllowedDomainsForApps-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -197,12 +231,12 @@
       "policy_id": "AllowedDomainsForApps"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -269,12 +303,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-AppAutoUpdate",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "AppAutoUpdate": true
+            }
+          },
+          "id": "fx-policy-AppAutoUpdate-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -333,12 +383,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-AppUpdatePin",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "AppUpdatePin": "106."
+            }
+          },
+          "id": "fx-policy-AppUpdatePin-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -397,12 +463,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-AppUpdateURL",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "AppUpdateURL": "https://yoursite.com"
+            }
+          },
+          "id": "fx-policy-AppUpdateURL-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -461,12 +543,33 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Authentication",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Authentication": {
+                "SPNEGO": [
+                  "mydomain.com",
+                  "https://myotherdomain.com"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Authentication-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -532,12 +635,12 @@
       "policy_id": "Authentication"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -596,12 +699,12 @@
       "policy_id": "AutofillAddressEnabled"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -668,12 +771,32 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-AutoLaunchProtocolsFromOrigins",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "AutoLaunchProtocolsFromOrigins": [
+                {
+                  "protocol": "zoommtg"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-AutoLaunchProtocolsFromOrigins-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -744,12 +867,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-BackgroundAppUpdate",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "BackgroundAppUpdate": true
+            }
+          },
+          "id": "fx-policy-BackgroundAppUpdate-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -808,12 +947,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-BlockAboutAddons",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "BlockAboutAddons": true
+            }
+          },
+          "id": "fx-policy-BlockAboutAddons-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -872,12 +1027,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-BlockAboutConfig",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "BlockAboutConfig": true
+            }
+          },
+          "id": "fx-policy-BlockAboutConfig-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -936,12 +1107,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-BlockAboutProfiles",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "BlockAboutProfiles": true
+            }
+          },
+          "id": "fx-policy-BlockAboutProfiles-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1000,12 +1187,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-BlockAboutSupport",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "BlockAboutSupport": true
+            }
+          },
+          "id": "fx-policy-BlockAboutSupport-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1064,12 +1267,33 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Bookmarks",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Bookmarks": [
+                {
+                  "Title": "Example",
+                  "URL": "https://example.com"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-Bookmarks-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1195,12 +1419,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-CaptivePortal",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "CaptivePortal": true
+            }
+          },
+          "id": "fx-policy-CaptivePortal-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1259,12 +1499,33 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Certificates",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Certificates": {
+                "Install": [
+                  "cert1.der",
+                  "/home/username/cert2.pem"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Certificates-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1338,12 +1599,34 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Containers",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Containers": {
+                "Default": [
+                  {
+                    "name": "My container"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Containers-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1412,12 +1695,12 @@
       "policy_id": "Containers"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -1490,12 +1773,32 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Cookies",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Cookies": {
+                "Allow": [
+                  "http://example.org/"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Cookies-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1566,12 +1869,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DefaultDownloadDirectory",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DefaultDownloadDirectory": "${home}/Downloads"
+            }
+          },
+          "id": "fx-policy-DefaultDownloadDirectory-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1622,12 +1941,12 @@
       "policy_id": "DefaultDownloadDirectory"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -1694,12 +2013,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableAppUpdate",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableAppUpdate": true
+            }
+          },
+          "id": "fx-policy-DisableAppUpdate-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1758,12 +2093,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableBuiltinPDFViewer",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableBuiltinPDFViewer": true
+            }
+          },
+          "id": "fx-policy-DisableBuiltinPDFViewer-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1822,12 +2173,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisabledCiphers",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisabledCiphers": {}
+            }
+          },
+          "id": "fx-policy-DisabledCiphers-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1886,12 +2253,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableDefaultBrowserAgent",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableDefaultBrowserAgent": true
+            }
+          },
+          "id": "fx-policy-DisableDefaultBrowserAgent-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -1950,12 +2333,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableDeveloperTools",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableDeveloperTools": true
+            }
+          },
+          "id": "fx-policy-DisableDeveloperTools-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2006,12 +2405,12 @@
       "policy_id": "DisableDeveloperTools"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -2078,12 +2477,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableFeedbackCommands",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableFeedbackCommands": true
+            }
+          },
+          "id": "fx-policy-DisableFeedbackCommands-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2142,12 +2557,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableFirefoxAccounts",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableFirefoxAccounts": true
+            }
+          },
+          "id": "fx-policy-DisableFirefoxAccounts-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2206,12 +2637,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableFirefoxScreenshots",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableFirefoxScreenshots": true
+            }
+          },
+          "id": "fx-policy-DisableFirefoxScreenshots-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2270,12 +2717,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableFirefoxStudies",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableFirefoxStudies": true
+            }
+          },
+          "id": "fx-policy-DisableFirefoxStudies-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2334,12 +2797,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableForgetButton",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableForgetButton": true
+            }
+          },
+          "id": "fx-policy-DisableForgetButton-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2398,12 +2877,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableFormHistory",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableFormHistory": true
+            }
+          },
+          "id": "fx-policy-DisableFormHistory-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2462,12 +2957,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableMasterPasswordCreation",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableMasterPasswordCreation": true
+            }
+          },
+          "id": "fx-policy-DisableMasterPasswordCreation-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2526,12 +3037,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisablePasswordReveal",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisablePasswordReveal": true
+            }
+          },
+          "id": "fx-policy-DisablePasswordReveal-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2590,12 +3117,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisablePocket",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisablePocket": true
+            }
+          },
+          "id": "fx-policy-DisablePocket-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2654,12 +3197,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisablePrivateBrowsing",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisablePrivateBrowsing": true
+            }
+          },
+          "id": "fx-policy-DisablePrivateBrowsing-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2718,12 +3277,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableProfileImport",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableProfileImport": true
+            }
+          },
+          "id": "fx-policy-DisableProfileImport-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2782,12 +3357,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableProfileRefresh",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableProfileRefresh": true
+            }
+          },
+          "id": "fx-policy-DisableProfileRefresh-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -2942,12 +3533,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableSafeMode",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableSafeMode": true
+            }
+          },
+          "id": "fx-policy-DisableSafeMode-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3006,12 +3613,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableSecurityBypass",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableSecurityBypass": {
+                "InvalidCertificate": true
+              }
+            }
+          },
+          "id": "fx-policy-DisableSecurityBypass-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3076,12 +3701,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableSetDesktopBackground",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableSetDesktopBackground": true
+            }
+          },
+          "id": "fx-policy-DisableSetDesktopBackground-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3140,12 +3781,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableSystemAddonUpdate",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableSystemAddonUpdate": true
+            }
+          },
+          "id": "fx-policy-DisableSystemAddonUpdate-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3204,12 +3861,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableTelemetry",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableTelemetry": true
+            }
+          },
+          "id": "fx-policy-DisableTelemetry-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3268,12 +3941,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisableThirdPartyModuleBlocking",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisableThirdPartyModuleBlocking": {}
+            }
+          },
+          "id": "fx-policy-DisableThirdPartyModuleBlocking-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3332,12 +4021,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisplayBookmarksToolbar",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisplayBookmarksToolbar": "always"
+            }
+          },
+          "id": "fx-policy-DisplayBookmarksToolbar-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3396,12 +4101,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DisplayMenuBar",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DisplayMenuBar": "always"
+            }
+          },
+          "id": "fx-policy-DisplayMenuBar-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3460,12 +4181,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DNSOverHTTPS",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DNSOverHTTPS": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-DNSOverHTTPS-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3530,12 +4269,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DontCheckDefaultBrowser",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DontCheckDefaultBrowser": true
+            }
+          },
+          "id": "fx-policy-DontCheckDefaultBrowser-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3594,12 +4349,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-DownloadDirectory",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "DownloadDirectory": "${home}/Downloads"
+            }
+          },
+          "id": "fx-policy-DownloadDirectory-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3652,18 +4423,36 @@
     {
       "channel_scope": "both",
       "channel_support": {
-        "definition_changed_across_channels": false,
+        "definition_changed_across_channels": true,
         "esr_supported": true,
         "release_supported": true,
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-EnableTrackingProtection",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "EnableTrackingProtection": {
+                "Value": true
+              }
+            }
+          },
+          "id": "fx-policy-EnableTrackingProtection-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3728,12 +4517,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-EncryptedMediaExtensions",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "EncryptedMediaExtensions": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-EncryptedMediaExtensions-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3798,12 +4605,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-EnterprisePoliciesEnabled",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "EnterprisePoliciesEnabled": {}
+            }
+          },
+          "id": "fx-policy-EnterprisePoliciesEnabled-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3862,12 +4685,32 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-ExemptDomainFileTypePairsFromFileTypeDownloadWarnings",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "ExemptDomainFileTypePairsFromFileTypeDownloadWarnings": [
+                {
+                  "file_extension": "jnlp"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-ExemptDomainFileTypePairsFromFileTypeDownloadWarnings-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -3938,12 +4781,33 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Extensions",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Extensions": {
+                "Install": [
+                  "https://addons.mozilla.org/firefox/downloads/somefile.xpi",
+                  "//path/to/xpi"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Extensions-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4017,12 +4881,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-ExtensionSettings",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "ExtensionSettings": {}
+            }
+          },
+          "id": "fx-policy-ExtensionSettings-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4081,12 +4961,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-ExtensionUpdate",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "ExtensionUpdate": true
+            }
+          },
+          "id": "fx-policy-ExtensionUpdate-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4139,18 +5035,36 @@
     {
       "channel_scope": "both",
       "channel_support": {
-        "definition_changed_across_channels": false,
+        "definition_changed_across_channels": true,
         "esr_supported": true,
         "release_supported": true,
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-FirefoxHome",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "FirefoxHome": {
+                "Search": true
+              }
+            }
+          },
+          "id": "fx-policy-FirefoxHome-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4207,12 +5121,12 @@
       "policy_id": "FirefoxHome"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -4337,12 +5251,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-GoToIntranetSiteForSingleWordEntryInAddressBar",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "GoToIntranetSiteForSingleWordEntryInAddressBar": true
+            }
+          },
+          "id": "fx-policy-GoToIntranetSiteForSingleWordEntryInAddressBar-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4401,12 +5331,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Handlers",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Handlers": {
+                "mimeTypes": {}
+              }
+            }
+          },
+          "id": "fx-policy-Handlers-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4471,12 +5419,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-HardwareAcceleration",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "HardwareAcceleration": true
+            }
+          },
+          "id": "fx-policy-HardwareAcceleration-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4535,12 +5499,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Homepage",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Homepage": {
+                "URL": "http://example.com/"
+              }
+            }
+          },
+          "id": "fx-policy-Homepage-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4597,12 +5579,12 @@
       "policy_id": "Homepage"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -4670,12 +5652,12 @@
       "policy_id": "HttpAllowlist"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -4742,12 +5724,33 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-InstallAddonsPermission",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "InstallAddonsPermission": {
+                "Allow": [
+                  "http://example.org/",
+                  "http://example.edu/"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-InstallAddonsPermission-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4869,12 +5872,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-LegacyProfiles",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "LegacyProfiles": {}
+            }
+          },
+          "id": "fx-policy-LegacyProfiles-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4933,12 +5952,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-LegacySameSiteCookieBehaviorEnabled",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "LegacySameSiteCookieBehaviorEnabled": true
+            }
+          },
+          "id": "fx-policy-LegacySameSiteCookieBehaviorEnabled-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -4997,12 +6032,31 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-LegacySameSiteCookieBehaviorEnabledForDomainList",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "LegacySameSiteCookieBehaviorEnabledForDomainList": [
+                "example.org",
+                "example.edu"
+              ]
+            }
+          },
+          "id": "fx-policy-LegacySameSiteCookieBehaviorEnabledForDomainList-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5070,12 +6124,31 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-LocalFileLinks",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "LocalFileLinks": [
+                "http://example.org/",
+                "http://example.edu/"
+              ]
+            }
+          },
+          "id": "fx-policy-LocalFileLinks-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5195,12 +6268,32 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-ManagedBookmarks",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "ManagedBookmarks": [
+                {
+                  "toplevel_name": "My managed bookmarks folder"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-ManagedBookmarks-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5271,12 +6364,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-ManualAppUpdateOnly",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "ManualAppUpdateOnly": true
+            }
+          },
+          "id": "fx-policy-ManualAppUpdateOnly-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5327,12 +6436,12 @@
       "policy_id": "ManualAppUpdateOnly"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -5399,12 +6508,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-NetworkPrediction",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "NetworkPrediction": true
+            }
+          },
+          "id": "fx-policy-NetworkPrediction-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5463,12 +6588,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-NewTabPage",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "NewTabPage": true
+            }
+          },
+          "id": "fx-policy-NewTabPage-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5527,12 +6668,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-NoDefaultBookmarks",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "NoDefaultBookmarks": true
+            }
+          },
+          "id": "fx-policy-NoDefaultBookmarks-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5591,12 +6748,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-OfferToSaveLogins",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "OfferToSaveLogins": true
+            }
+          },
+          "id": "fx-policy-OfferToSaveLogins-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5655,12 +6828,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-OfferToSaveLoginsDefault",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "OfferToSaveLoginsDefault": true
+            }
+          },
+          "id": "fx-policy-OfferToSaveLoginsDefault-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5719,12 +6908,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-OverrideFirstRunPage",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "OverrideFirstRunPage": "http://example.org"
+            }
+          },
+          "id": "fx-policy-OverrideFirstRunPage-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5783,12 +6988,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-OverridePostUpdatePage",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "OverridePostUpdatePage": "http://example.org"
+            }
+          },
+          "id": "fx-policy-OverridePostUpdatePage-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5847,12 +7068,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-PasswordManagerEnabled",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "PasswordManagerEnabled": true
+            }
+          },
+          "id": "fx-policy-PasswordManagerEnabled-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5911,12 +7148,31 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-PasswordManagerExceptions",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "PasswordManagerExceptions": [
+                "https://example.org",
+                "https://example.edu"
+              ]
+            }
+          },
+          "id": "fx-policy-PasswordManagerExceptions-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -5984,12 +7240,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-PDFjs",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "PDFjs": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-PDFjs-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6048,18 +7322,41 @@
     {
       "channel_scope": "both",
       "channel_support": {
-        "definition_changed_across_channels": false,
+        "definition_changed_across_channels": true,
         "esr_supported": true,
         "release_supported": true,
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Permissions",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Permissions": {
+                "Camera": {
+                  "Allow": [
+                    "https://example.org",
+                    "https://example.org:1234"
+                  ]
+                }
+              }
+            }
+          },
+          "id": "fx-policy-Permissions-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6139,12 +7436,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-PictureInPicture",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "PictureInPicture": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-PictureInPicture-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6209,12 +7524,33 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-PopupBlocking",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "PopupBlocking": {
+                "Allow": [
+                  "http://example.org/",
+                  "http://example.edu/"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-PopupBlocking-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6280,12 +7616,12 @@
       "policy_id": "PopupBlocking"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -6352,12 +7688,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Preferences",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Preferences": {}
+            }
+          },
+          "id": "fx-policy-Preferences-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6416,12 +7768,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-PrimaryPassword",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "PrimaryPassword": true
+            }
+          },
+          "id": "fx-policy-PrimaryPassword-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6472,12 +7840,12 @@
       "policy_id": "PrimaryPassword"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -6536,12 +7904,12 @@
       "policy_id": "PrintingEnabled"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -6608,12 +7976,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-PromptForDownloadLocation",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "PromptForDownloadLocation": true
+            }
+          },
+          "id": "fx-policy-PromptForDownloadLocation-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6672,12 +8056,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-Proxy",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "Proxy": {
+                "Mode": "none"
+              }
+            }
+          },
+          "id": "fx-policy-Proxy-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6742,12 +8144,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-RequestedLocales",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "RequestedLocales": "de,en-US"
+            }
+          },
+          "id": "fx-policy-RequestedLocales-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6800,18 +8218,36 @@
     {
       "channel_scope": "both",
       "channel_support": {
-        "definition_changed_across_channels": false,
+        "definition_changed_across_channels": true,
         "esr_supported": true,
         "release_supported": true,
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-SanitizeOnShutdown",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "SanitizeOnShutdown": {
+                "Cache": true
+              }
+            }
+          },
+          "id": "fx-policy-SanitizeOnShutdown-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6876,12 +8312,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-SearchBar",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "SearchBar": "unified"
+            }
+          },
+          "id": "fx-policy-SearchBar-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -6940,12 +8392,35 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-SearchEngines",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "SearchEngines": {
+                "Add": [
+                  {
+                    "Name": "example",
+                    "URLTemplate": "https://search.example.invalid/?q={searchTerms}"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-SearchEngines-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7025,12 +8500,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-SearchSuggestEnabled",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "SearchSuggestEnabled": true
+            }
+          },
+          "id": "fx-policy-SearchSuggestEnabled-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7089,12 +8580,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-SecurityDevices",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "SecurityDevices": {
+                "Add": {}
+              }
+            }
+          },
+          "id": "fx-policy-SecurityDevices-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7159,12 +8668,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-ShowHomeButton",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "ShowHomeButton": true
+            }
+          },
+          "id": "fx-policy-ShowHomeButton-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7215,12 +8740,12 @@
       "policy_id": "ShowHomeButton"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -7287,12 +8812,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-SSLVersionMax",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "SSLVersionMax": "tls1"
+            }
+          },
+          "id": "fx-policy-SSLVersionMax-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7351,12 +8892,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-SSLVersionMin",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "SSLVersionMin": "tls1"
+            }
+          },
+          "id": "fx-policy-SSLVersionMin-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7415,12 +8972,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-StartDownloadsInTempDirectory",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "StartDownloadsInTempDirectory": true
+            }
+          },
+          "id": "fx-policy-StartDownloadsInTempDirectory-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7479,12 +9052,30 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-SupportMenu",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "SupportMenu": {
+                "Title": "Support Menu"
+              }
+            }
+          },
+          "id": "fx-policy-SupportMenu-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7541,12 +9132,12 @@
       "policy_id": "SupportMenu"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channel_support": {
         "definition_changed_across_channels": false,
         "esr_supported": true,
         "release_supported": true,
-        "scope": "both",
+        "scope": "partial",
         "supported_channels": [
           "release-153",
           "esr-140.13",
@@ -7607,18 +9198,36 @@
     {
       "channel_scope": "both",
       "channel_support": {
-        "definition_changed_across_channels": false,
+        "definition_changed_across_channels": true,
         "esr_supported": true,
         "release_supported": true,
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-UserMessaging",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "UserMessaging": {
+                "ExtensionRecommendations": true
+              }
+            }
+          },
+          "id": "fx-policy-UserMessaging-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7683,12 +9292,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-UseSystemPrintDialog",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "UseSystemPrintDialog": true
+            }
+          },
+          "id": "fx-policy-UseSystemPrintDialog-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7795,12 +9420,32 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-WebsiteFilter",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "WebsiteFilter": {
+                "Block": [
+                  "<all_urls>"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-WebsiteFilter-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7871,12 +9516,28 @@
         "scope": "both",
         "supported_channels": [
           "release-153",
+          "esr-115.38",
           "esr-140.13",
           "esr-153.0"
         ]
       },
       "doc_id": "fx-policy-WindowsSSO",
       "examples": [
+        {
+          "channel": "esr-115.38",
+          "document": {
+            "policies": {
+              "WindowsSSO": true
+            }
+          },
+          "id": "fx-policy-WindowsSSO-esr-115.38",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v5.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
         {
           "channel": "esr-140.13",
           "document": {
@@ -7977,11 +9638,12 @@
   ],
   "policy_count": 121,
   "provenance_review_backlog_item": "BPM090-M5-09",
+  "refresh_backlog_item": "BPM095-M8-04",
   "schema_refresh_runbook_backlog_item": "BPM090-M5-08",
   "schema_version": 1,
   "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
-  "source_inventory_sha256": "2c3d2bce9e8e7833b783ea68450849db30d508d93d1aecf529c16b1bf5ce183c",
+  "source_inventory_sha256": "04f7ace3ac83f4e81ba33ba87503ae3bebf25fb0cee326a92bea42c5e9c6c4da",
   "source_model": "documentation/config/firefox-policy-topic-model-0.9.0.json",
-  "source_model_sha256": "6075ed5e429ef91290b95cf60d5e80b906c628ac7b1ae283d673833d390e7bbf",
-  "target_bpm_version": "0.9.0"
+  "source_model_sha256": "4ac449b77a2d3d7839fb239b74cdf29203ebbf841d36940465ffa8515710bbba",
+  "target_bpm_version": "0.9.5"
 }

@@ -939,3 +939,101 @@
             margin-top: 20px;
             padding-bottom: 10px;
         }
+
+        .schema-conversion-review {
+            display: grid;
+            gap: 16px;
+            min-width: 0;
+            scroll-margin-top: 24px;
+        }
+
+        .schema-conversion-review[hidden] {
+            display: none;
+        }
+
+        .schema-conversion-review-heading,
+        .schema-conversion-review-summary,
+        .schema-conversion-review-actions {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .schema-conversion-review-heading > *,
+        .schema-conversion-review-summary > * {
+            min-width: 0;
+        }
+
+        .schema-conversion-review-summary {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .schema-conversion-review-summary > div,
+        .schema-conversion-review-status,
+        .schema-conversion-review-details,
+        .schema-conversion-review-confirmation {
+            display: grid;
+            gap: 5px;
+            min-width: 0;
+            padding: 12px 14px;
+            border: 1px solid rgba(15, 118, 110, 0.2);
+            border-radius: 14px;
+            background: rgba(240, 253, 250, 0.68);
+        }
+
+        .schema-conversion-review-summary span,
+        .schema-conversion-review-status span {
+            color: var(--muted);
+            font-size: 0.82rem;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .schema-conversion-review-summary strong,
+        .schema-conversion-review-status strong,
+        .schema-conversion-review-details h3 {
+            color: var(--ink);
+            overflow-wrap: anywhere;
+        }
+
+        .schema-conversion-review-status[role="alert"] {
+            border-color: var(--status-warn-border);
+            background: var(--status-warn-bg);
+            color: var(--status-warn-text);
+        }
+
+        .schema-conversion-review-list {
+            display: grid;
+            gap: 5px;
+            margin: 0;
+            padding-inline-start: 1.2rem;
+            color: var(--muted);
+            font-size: 0.86rem;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .schema-conversion-review-confirmation label {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            color: var(--ink);
+            font-weight: 650;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .schema-conversion-review-confirmation input {
+            flex: 0 0 auto;
+            margin-top: 0.18rem;
+            accent-color: #0f766e;
+        }
+
+        .schema-conversion-review .button-base {
+            min-height: var(--compact-control-target);
+            white-space: normal;
+            text-align: center;
+        }

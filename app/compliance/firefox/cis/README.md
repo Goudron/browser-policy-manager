@@ -11,6 +11,10 @@ The initial baseline target is:
 - release window `2024-07`
 
 The exact release date is confirmed from the official CIS PDF as `2024-07-19`.
+The source registry also records that CIS tested this benchmark against Mozilla
+Firefox 115.10 ESR on Windows 11 23H2. BPM retains that benchmark provenance and
+separately validates every mapped target and generated layer against each exact
+supported schema artifact.
 
 ## Files
 
@@ -25,6 +29,11 @@ The source recommendation file contains the curated recommendation skeleton from
 ## Update Workflow
 
 Follow the update runbook in `docs/cis_firefox_update_runbook_2026-04-13.md`. Keep older benchmark files in the repo and register new versions in `sources.yaml` with `is_default` set on the current version.
+
+Every mapped target must declare every supported schema channel explicitly. A
+new channel remains fail-closed until all targets and the complete L1/L2 layers
+validate against its bundled schema and the deterministic generated artifacts
+are committed.
 
 ## Licensing Boundary
 

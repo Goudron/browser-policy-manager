@@ -12,6 +12,7 @@
           <alt>所有设置 在窄屏幕上显示审阅列表、配置的设置和设置详细信息面板。</alt>
         </image>
       </fig>
+      <p>更改架构时不要覆盖未保存的设置：保存、明确丢弃或取消，然后选择目标并阅读其转换预览。阻止项不会删除设置。</p>
     </context>
     <steps>
       <step><cmd>从<uicontrol>库</uicontrol>中打开保存的配置文件。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>

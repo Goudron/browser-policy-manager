@@ -1,0 +1,641 @@
+{
+  "$schema": "schemas/firefox-profile-conversion-contract-v1.schema.json",
+  "schema_version": 1,
+  "contract_id": "bpm095-firefox-pairwise-profile-conversion",
+  "target_bpm_version": "0.9.5",
+  "status": "active-m4-06-directed-matrix-gate",
+  "implementation": {
+    "planner": {
+      "status": "implemented",
+      "module": "app/core/profile_conversion_planner.py",
+      "directed_pairs": "all-supported-non-self-pairs"
+    },
+    "recipes": "BPM095-M4-02-active-empty-production-registry",
+    "preview_api": "BPM095-M4-03-read-only-preview-api",
+    "apply": "BPM095-M4-04-atomic-apply",
+    "matrix_gate": {
+      "status": "implemented",
+      "command": "make verify-firefox-conversion-matrix",
+      "tool": "tools/verify_firefox_conversion_matrix.py",
+      "report": "deterministic-value-free-json"
+    }
+  },
+  "lifecycle_catalog": {
+    "contract_id": "bpm095-firefox-schema-lifecycle-catalog",
+    "schema_version": 1,
+    "path": "docs/architecture/firefox-schema-lifecycle-catalog-contract-0.9.5.json"
+  },
+  "canonical_identity": {
+    "canonical_json": "RFC8785-JCS",
+    "hash_algorithm": "SHA-256",
+    "digest_encoding": "lowercase-hex",
+    "document_domain": "bpm-policy-document:v1\n",
+    "compliance_domain": "bpm-profile-compliance:v1\n",
+    "metadata_domain": "bpm-profile-metadata:v1\n",
+    "plan_domain": "bpm-profile-conversion-plan:v1\n",
+    "plan_projection": {
+      "include": [
+        "kind",
+        "contract_version",
+        "profile",
+        "source",
+        "target",
+        "recipe_registry",
+        "compatibility",
+        "entries",
+        "target_validation",
+        "compliance",
+        "warnings",
+        "blockers"
+      ],
+      "exclude": [
+        "plan_digest",
+        "generated_at",
+        "localized_message",
+        "raw_policy_values",
+        "raw_compliance_values"
+      ],
+      "array_order": "contract-defined-stable-sort"
+    }
+  },
+  "classifications": [
+    "unchanged",
+    "transformed",
+    "blocked"
+  ],
+  "transform_registry_contract": {
+    "registry_id": "firefox-profile-conversion",
+    "versioning": "immutable-positive-integer-and-content-digest",
+    "selection": "exactly-one-match-or-block",
+    "predicates": [
+      "exact-source-line-id",
+      "exact-source-artifact-id",
+      "exact-source-validation-schema-sha256",
+      "exact-target-line-id",
+      "exact-target-artifact-id",
+      "exact-target-validation-schema-sha256",
+      "exact-rfc6901-source-path-pattern",
+      "exact-json-input-shape"
+    ],
+    "evidence": [
+      "reversible-transform-and-round-trip-fixtures",
+      "or-reviewed-semantic-equivalence-proof",
+      "target-schema-validation-fixtures",
+      "nested-and-dynamic-key-coverage-fixtures"
+    ],
+    "determinism": "pure-total-on-declared-domain",
+    "target_validation": "mandatory-after-transform",
+    "production_disposition": {
+      "code": "no-production-recipe-after-four-channel-diff-audit",
+      "production_recipe_count": 0,
+      "evidence": "docs/architecture/firefox-esr-115-policy-disposition-audit-0.9.5.json",
+      "all_pair_source_only_policy_counts": {
+        "release-153--to--esr-153.0": 0,
+        "release-153--to--esr-140.13": 9,
+        "release-153--to--esr-115.38": 24,
+        "esr-153.0--to--release-153": 0,
+        "esr-153.0--to--esr-140.13": 9,
+        "esr-153.0--to--esr-115.38": 24,
+        "esr-140.13--to--release-153": 0,
+        "esr-140.13--to--esr-153.0": 0,
+        "esr-140.13--to--esr-115.38": 15,
+        "esr-115.38--to--release-153": 0,
+        "esr-115.38--to--esr-153.0": 0,
+        "esr-115.38--to--esr-140.13": 0
+      }
+    },
+    "forbidden_behaviors": [
+      "drop",
+      "best-effort",
+      "implicit-default",
+      "implicit-coercion",
+      "first-match-wins",
+      "network-or-clock-input",
+      "locale-dependent-output"
+    ]
+  },
+  "profile_field_accounting": {
+    "stored_fields": [
+      "id",
+      "name",
+      "name_casefold",
+      "description",
+      "schema_version",
+      "flags",
+      "compliance",
+      "revision",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "manual_eligibility": "active-profile-only",
+    "application_write_fields": [
+      "schema_version",
+      "flags",
+      "compliance",
+      "revision"
+    ],
+    "database_managed_fields": [
+      "updated_at"
+    ],
+    "preserved_fields": [
+      "id",
+      "name",
+      "name_casefold",
+      "description",
+      "created_at",
+      "deleted_at"
+    ],
+    "derived_read_fields": [
+      "is_deleted",
+      "validation_state"
+    ],
+    "revision_increment": 1
+  },
+  "compliance_contract": {
+    "dispositions": [
+      "absent",
+      "preserved-verified",
+      "recomputed",
+      "invalidated-preserved"
+    ],
+    "non_null_fallback": "invalidated-preserved",
+    "claim_rule": "no-target-bound-proof-means-no-current-claim",
+    "leaf_accounting": "every-source-leaf-preserved-transformed-or-blocked",
+    "preserve_requires": [
+      "recognized-versioned-envelope",
+      "exact-source-and-target-artifact-binding",
+      "exact-target-cis-artifact-proof",
+      "complete-source-leaf-accounting"
+    ],
+    "recompute_requires": [
+      "recognized-versioned-envelope",
+      "exact-target-cis-artifact",
+      "recompute-from-final-target-document",
+      "complete-user-note-and-exception-accounting",
+      "target-schema-validation"
+    ],
+    "invalidated_envelope_required_fields": [
+      "schema_version",
+      "status",
+      "reason_code",
+      "source_artifact_id",
+      "target_artifact_id",
+      "source_compliance_digest",
+      "current_claims",
+      "preserved_source"
+    ]
+  },
+  "api_contract": {
+    "preview_operation": "POST /api/profiles/{profile_id}/conversion-preview",
+    "apply_operation": "POST /api/profiles/{profile_id}/conversion-apply",
+    "codes_are_locale_neutral": true,
+    "raw_values_in_plan": false,
+    "openapi_change": "additive-new-operations",
+    "profile_update_schema_version": "deprecated-for-converting-existing-policy-data"
+  },
+  "pair_matrix": [
+    {
+      "pair_id": "release-153--to--esr-153.0",
+      "source_line_id": "release-153",
+      "source_artifact_id": "release-153",
+      "target_line_id": "esr-153",
+      "target_artifact_id": "esr-153.0",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "release-153--to--esr-140.13",
+      "source_line_id": "release-153",
+      "source_artifact_id": "release-153",
+      "target_line_id": "esr-140",
+      "target_artifact_id": "esr-140.13",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "release-153--to--esr-115.38",
+      "source_line_id": "release-153",
+      "source_artifact_id": "release-153",
+      "target_line_id": "esr-115",
+      "target_artifact_id": "esr-115.38",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "esr-153.0--to--release-153",
+      "source_line_id": "esr-153",
+      "source_artifact_id": "esr-153.0",
+      "target_line_id": "release-153",
+      "target_artifact_id": "release-153",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "esr-153.0--to--esr-140.13",
+      "source_line_id": "esr-153",
+      "source_artifact_id": "esr-153.0",
+      "target_line_id": "esr-140",
+      "target_artifact_id": "esr-140.13",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "esr-153.0--to--esr-115.38",
+      "source_line_id": "esr-153",
+      "source_artifact_id": "esr-153.0",
+      "target_line_id": "esr-115",
+      "target_artifact_id": "esr-115.38",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "esr-140.13--to--release-153",
+      "source_line_id": "esr-140",
+      "source_artifact_id": "esr-140.13",
+      "target_line_id": "release-153",
+      "target_artifact_id": "release-153",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "esr-140.13--to--esr-153.0",
+      "source_line_id": "esr-140",
+      "source_artifact_id": "esr-140.13",
+      "target_line_id": "esr-153",
+      "target_artifact_id": "esr-153.0",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "esr-140.13--to--esr-115.38",
+      "source_line_id": "esr-140",
+      "source_artifact_id": "esr-140.13",
+      "target_line_id": "esr-115",
+      "target_artifact_id": "esr-115.38",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "esr-115.38--to--release-153",
+      "source_line_id": "esr-115",
+      "source_artifact_id": "esr-115.38",
+      "target_line_id": "release-153",
+      "target_artifact_id": "release-153",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "esr-115.38--to--esr-153.0",
+      "source_line_id": "esr-115",
+      "source_artifact_id": "esr-115.38",
+      "target_line_id": "esr-153",
+      "target_artifact_id": "esr-153.0",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    },
+    {
+      "pair_id": "esr-115.38--to--esr-140.13",
+      "source_line_id": "esr-115",
+      "source_artifact_id": "esr-115.38",
+      "target_line_id": "esr-140",
+      "target_artifact_id": "esr-140.13",
+      "required": true,
+      "artifact_availability": "current",
+      "runtime_status": "planner-runtime-active-empty-production-registry"
+    }
+  ],
+  "failure_semantics": [
+    {
+      "condition": "profile does not exist",
+      "code": "conversion_profile_not_found",
+      "http_status": 404,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "source profile is deleted or otherwise not active",
+      "code": "conversion_source_not_active",
+      "http_status": 409,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "stored source channel is unknown",
+      "code": "schema_channel_unknown",
+      "http_status": 409,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "stored source channel is retired and requires migration",
+      "code": "schema_channel_retired_requires_migration",
+      "http_status": 409,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "target channel is unknown",
+      "code": "schema_channel_unknown",
+      "http_status": 422,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "target channel is known but retired",
+      "code": "schema_channel_retired",
+      "http_status": 422,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "target channel is known but unsupported or unavailable",
+      "code": "conversion_target_unsupported",
+      "http_status": 422,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "target exact artifact equals source exact artifact",
+      "code": "conversion_target_identical",
+      "http_status": 422,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "source policies do not validate under the exact stored source artifact",
+      "code": "conversion_source_invalid",
+      "http_status": 422,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "exact source schema artifact is missing or unreadable",
+      "code": "conversion_source_schema_missing",
+      "http_status": 503,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "exact target schema artifact is missing or unreadable",
+      "code": "conversion_target_schema_missing",
+      "http_status": 503,
+      "stage": "both",
+      "mutation": "none"
+    },
+    {
+      "condition": "apply expected revision differs from current profile revision",
+      "code": "conversion_revision_stale",
+      "http_status": 409,
+      "stage": "apply",
+      "mutation": "none"
+    },
+    {
+      "condition": "current document, compliance, or metadata digest differs from apply request",
+      "code": "conversion_source_identity_stale",
+      "http_status": 409,
+      "stage": "apply",
+      "mutation": "none"
+    },
+    {
+      "condition": "rederived plan digest differs from requested preview digest",
+      "code": "conversion_plan_stale",
+      "http_status": 409,
+      "stage": "apply",
+      "mutation": "none"
+    },
+    {
+      "condition": "source or target schema identity differs from apply request",
+      "code": "conversion_schema_identity_stale",
+      "http_status": 409,
+      "stage": "apply",
+      "mutation": "none"
+    },
+    {
+      "condition": "transform registry identity differs from apply request",
+      "code": "conversion_recipe_registry_stale",
+      "http_status": 409,
+      "stage": "apply",
+      "mutation": "none"
+    },
+    {
+      "condition": "rederived conversion plan contains one or more blockers",
+      "code": "conversion_plan_blocked",
+      "http_status": 409,
+      "stage": "apply",
+      "mutation": "none"
+    },
+    {
+      "condition": "apply validation, persistence, flush, or commit fails before successful commit",
+      "code": "conversion_apply_failed",
+      "http_status": 500,
+      "stage": "apply",
+      "mutation": "none"
+    }
+  ],
+  "examples": {
+    "plan": {
+      "kind": "profile-conversion-plan",
+      "contract_version": 1,
+      "profile": {
+        "id": 42,
+        "revision": 7,
+        "lifecycle_state": "active",
+        "metadata_digest": "5c9cb875043459c1a411dae253939e20e6625620890a5cb27ccb3a5954bef269"
+      },
+      "source": {
+        "artifact": {
+          "line_id": "release-153",
+          "artifact_id": "release-153",
+          "channel_id": "release-153",
+          "artifact_version": "153.0",
+          "source_tag": "mozilla-policy-templates-v8.0",
+          "schema_bundle_sha256": "4251b7a1263775465315bdc5d39148243ae30e8a3311449b751735be5299cf7f",
+          "validation_schema_sha256": "613ff1d7bf8133ff3f498011b9b8d56348887b0dcf97990a6c400442589fe3cc"
+        },
+        "document_digest": "50befaf73d33250eaba6b7b0ebb8e9737a62fccad4bb2c15e4a7baa4125057a0",
+        "compliance_digest": "14bde2f5c8f7200ecce7f5a0f938e117d666391f8d348a5e2404b4cfd9e23dfb"
+      },
+      "target": {
+        "artifact": {
+          "line_id": "esr-153",
+          "artifact_id": "esr-153.0",
+          "channel_id": "esr-153.0",
+          "artifact_version": "153.0",
+          "source_tag": "mozilla-policy-templates-v8.0",
+          "schema_bundle_sha256": "afd71b67bd0483756803ad8b03f3571507f3cee69160142f8fff12cabde00d80",
+          "validation_schema_sha256": "bcdf1f2cd349f81c1bc8b1e1bffda69422d88e95c2203e8957987825486a42a2"
+        },
+        "candidate_document_digest": "50befaf73d33250eaba6b7b0ebb8e9737a62fccad4bb2c15e4a7baa4125057a0"
+      },
+      "recipe_registry": {
+        "registry_id": "firefox-profile-conversion",
+        "registry_version": 1,
+        "registry_digest": "1d4b572f358a7ff9f7e23beb5a2a27104cec4c2d3451ad8a49099cf8665113a6",
+        "recipes": []
+      },
+      "compatibility": {
+        "status": "compatible-unchanged",
+        "applicable": true,
+        "counts": {
+          "source_atoms": 1,
+          "target_atoms": 1,
+          "unchanged_byte": 0,
+          "unchanged_semantic": 1,
+          "transformed": 0,
+          "blocked": 0,
+          "warnings": 1,
+          "blockers": 0
+        }
+      },
+      "entries": [
+        {
+          "entry_id": "6d36293f24fd54bdd6e449a687dd84c27ef254d08d450495d6112117f4f00845",
+          "policy_id": "DisableTelemetry",
+          "source_paths": [
+            "/policies/DisableTelemetry"
+          ],
+          "target_paths": [
+            "/policies/DisableTelemetry"
+          ],
+          "classification": "unchanged",
+          "unchanged_kind": "semantic-equivalent",
+          "recipe": null,
+          "evidence_digest": "2597a97896870fdc5983c60ef27bfe31236ef5daf38b0bc2b2e27f8960aa651b",
+          "reason_code": "policy_semantic_equivalence_verified",
+          "source_subtree_digest": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "target_subtree_digest": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        }
+      ],
+      "target_validation": {
+        "status": "valid",
+        "validated_document_digest": "50befaf73d33250eaba6b7b0ebb8e9737a62fccad4bb2c15e4a7baa4125057a0",
+        "validation_schema_sha256": "bcdf1f2cd349f81c1bc8b1e1bffda69422d88e95c2203e8957987825486a42a2",
+        "issues": []
+      },
+      "compliance": {
+        "disposition": "absent",
+        "reason_code": "compliance_absent",
+        "source_digest": "14bde2f5c8f7200ecce7f5a0f938e117d666391f8d348a5e2404b4cfd9e23dfb",
+        "target_digest": "14bde2f5c8f7200ecce7f5a0f938e117d666391f8d348a5e2404b4cfd9e23dfb",
+        "target_claims_current": false,
+        "target_cis_artifact_digest": null,
+        "accounted_source_paths": []
+      },
+      "warnings": [
+        {
+          "code": "semantic_equivalence_evidence_used",
+          "policy_id": "DisableTelemetry",
+          "paths": [
+            "/policies/DisableTelemetry"
+          ]
+        }
+      ],
+      "blockers": [],
+      "plan_digest": "35c6087f31797b126871ae614565fce1b325d41e5f0b05190f6dc93abb11664c"
+    },
+    "apply_request": {
+      "kind": "profile-conversion-apply-request",
+      "contract_version": 1,
+      "profile_id": 42,
+      "expected_revision": 7,
+      "source": {
+        "line_id": "release-153",
+        "artifact_id": "release-153"
+      },
+      "target": {
+        "line_id": "esr-153",
+        "artifact_id": "esr-153.0"
+      },
+      "target_artifact_id": "esr-153.0",
+      "plan_digest": "35c6087f31797b126871ae614565fce1b325d41e5f0b05190f6dc93abb11664c",
+      "source_document_digest": "50befaf73d33250eaba6b7b0ebb8e9737a62fccad4bb2c15e4a7baa4125057a0",
+      "source_compliance_digest": "14bde2f5c8f7200ecce7f5a0f938e117d666391f8d348a5e2404b4cfd9e23dfb",
+      "source_metadata_digest": "5c9cb875043459c1a411dae253939e20e6625620890a5cb27ccb3a5954bef269",
+      "source_validation_schema_sha256": "613ff1d7bf8133ff3f498011b9b8d56348887b0dcf97990a6c400442589fe3cc",
+      "target_validation_schema_sha256": "bcdf1f2cd349f81c1bc8b1e1bffda69422d88e95c2203e8957987825486a42a2",
+      "recipe_registry_version": 1,
+      "recipe_registry_digest": "1d4b572f358a7ff9f7e23beb5a2a27104cec4c2d3451ad8a49099cf8665113a6"
+    },
+    "result": {
+      "kind": "profile-conversion-result",
+      "contract_version": 1,
+      "status": "applied",
+      "profile_id": 42,
+      "source_revision": 7,
+      "result_revision": 8,
+      "source": {
+        "line_id": "release-153",
+        "artifact_id": "release-153"
+      },
+      "target": {
+        "line_id": "esr-153",
+        "artifact_id": "esr-153.0"
+      },
+      "plan_digest": "35c6087f31797b126871ae614565fce1b325d41e5f0b05190f6dc93abb11664c",
+      "result_document_digest": "50befaf73d33250eaba6b7b0ebb8e9737a62fccad4bb2c15e4a7baa4125057a0",
+      "result_compliance_digest": "14bde2f5c8f7200ecce7f5a0f938e117d666391f8d348a5e2404b4cfd9e23dfb",
+      "compliance": {
+        "disposition": "absent",
+        "reason_code": "compliance_absent",
+        "source_digest": "14bde2f5c8f7200ecce7f5a0f938e117d666391f8d348a5e2404b4cfd9e23dfb",
+        "target_digest": "14bde2f5c8f7200ecce7f5a0f938e117d666391f8d348a5e2404b4cfd9e23dfb",
+        "target_claims_current": false,
+        "target_cis_artifact_digest": null,
+        "accounted_source_paths": []
+      },
+      "target_validation": {
+        "status": "valid",
+        "validated_document_digest": "50befaf73d33250eaba6b7b0ebb8e9737a62fccad4bb2c15e4a7baa4125057a0",
+        "validation_schema_sha256": "bcdf1f2cd349f81c1bc8b1e1bffda69422d88e95c2203e8957987825486a42a2",
+        "issues": []
+      },
+      "field_accounting": {
+        "application_write_fields": [
+          "schema_version",
+          "flags",
+          "compliance",
+          "revision"
+        ],
+        "database_managed_fields": [
+          "updated_at"
+        ],
+        "preserved_fields": [
+          "id",
+          "name",
+          "name_casefold",
+          "description",
+          "created_at",
+          "deleted_at"
+        ],
+        "updated_at_changed": true
+      }
+    },
+    "error": {
+      "kind": "profile-conversion-error",
+      "contract_version": 1,
+      "code": "conversion_plan_blocked",
+      "http_status": 409,
+      "profile_id": 42,
+      "expected_revision": 7,
+      "current_revision": 7,
+      "plan_digest": "35c6087f31797b126871ae614565fce1b325d41e5f0b05190f6dc93abb11664c",
+      "retry_preview_required": false,
+      "mutation": "none",
+      "parameters": {
+        "blocker_count": 1
+      }
+    }
+  }
+}

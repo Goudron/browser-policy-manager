@@ -17,7 +17,10 @@ from typing import Any
 from jsonschema import FormatChecker, ValidationError
 from jsonschema.validators import validator_for
 
-from app.core.schema_channels import DEFAULT_RELEASE_SCHEMA_CHANNEL
+from app.core.schema_channels import (
+    DEFAULT_RELEASE_SCHEMA_CHANNEL,
+    require_supported_schema_channel,
+)
 from app.core.schemas_loader import SchemaNotFoundError, UnsupportedProfileError, load_schema
 
 JsonSchema = dict[str, Any]
@@ -45,6 +48,7 @@ class PolicyValidationError(ValueError):
 
 def load_policy_schema_for_channel(channel: str) -> JsonSchema:
     """Load the JSON Schema used to validate policies for the given channel."""
+    require_supported_schema_channel(channel)
     try:
         return load_schema(channel)
     except UnsupportedProfileError as exc:
@@ -101,9 +105,16 @@ def _schema_artifact_identity(schema: JsonSchema) -> str:
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
-def _validator_for_channel(channel: str) -> Any:
-    schema = load_policy_schema_for_channel(channel)
-    key = (channel, _schema_artifact_identity(schema))
+def _validator_for_schema(schema: JsonSchema) -> Any:
+    """Return the bounded validator for one immutable normalized schema.
+
+    Planner callers already hold an exact schema object rather than a channel
+    string.  Giving that path the same content-addressed cache as the
+    channel-based helpers prevents an N-pair conversion matrix from compiling
+    the same immutable validator once per preview.
+    """
+
+    key = ("schema", _schema_artifact_identity(schema))
     validator = _compiled_validators.get(key)
     if validator is not None:
         return validator
@@ -117,9 +128,29 @@ def _validator_for_channel(channel: str) -> Any:
     return validator
 
 
+def _validator_for_channel(channel: str) -> Any:
+    return _validator_for_schema(load_policy_schema_for_channel(channel))
+
+
 def clear_policy_validator_cache() -> None:
     """Clear cached compiled validators used by channel-based validation helpers."""
     _compiled_validators.clear()
+
+
+def clear_policy_validation_caches() -> None:
+    """Clear parsed-schema and compiled-validator caches for isolated verification."""
+
+    clear_policy_validator_cache()
+    load_schema.cache_clear()
+
+
+def policy_validation_cache_stats() -> dict[str, int]:
+    """Return bounded cache facts without exposing schema or policy values."""
+
+    return {
+        "schema_loader_misses": load_schema.cache_info().misses,
+        "validator_cache_entries": len(_compiled_validators),
+    }
 
 
 def _extend_error_path(error: ValidationError) -> list[str | int]:
@@ -181,7 +212,7 @@ def validate_profile_policies(
     Returns list of issues (empty list means "valid").
     """
 
-    return _validate_with_validator(profile_policies, _build_validator(schema))
+    return _validate_with_validator(profile_policies, _validator_for_schema(schema))
 
 
 def validate_profile_policies_for_channel(

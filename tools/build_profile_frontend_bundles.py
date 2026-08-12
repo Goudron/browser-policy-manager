@@ -54,7 +54,10 @@ MONACO_ASSETS = (
     "/static/vendor/profiles_monaco.js",
 )
 BUNDLE_BUDGETS = {
-    "max_generated_bytes": 1_200_000,
+    # The shared conversion review is carried by the three editor routes and
+    # its checksum-locked source maps. Keep the cap tight while admitting the
+    # reviewed M5 UI state machine rather than silently disabling a guard.
+    "max_generated_bytes": 1_211_000,
     "max_generated_javascript_bytes": 600_000,
     "route_max_javascript_bytes": {
         "library": 60_000,

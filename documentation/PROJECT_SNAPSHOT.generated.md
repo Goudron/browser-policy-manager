@@ -2,8 +2,8 @@
 
 Generated only by `make docs-snapshot` (`documentation/tools/generate_subsystem_snapshot.py`); do not edit manually.
 It has no Git, local-machine, generated-artifact, or report input.
-Target BPM version: `0.9.4`
-Declared source digest: `9d56a7995bd4c998650bf8ab14db41ae0ac6ed1a69627c577034e7ab4ca62c6b`
+Target BPM version: `0.9.5`
+Declared source digest: `df1f6a1b1d951a074dde54e85a6537476554402e3af7bdbe56ee778ff858df6c`
 
 ## Declared Source Owners
 
@@ -28,6 +28,11 @@ Declared source digest: `9d56a7995bd4c998650bf8ab14db41ae0ac6ed1a69627c577034e7a
   - `docs/architecture/documentation-assistant-presentation-0.9.3.md`
   - `docs/architecture/documentation-assistant-resource-state-0.9.3.md`
   - `docs/architecture/documentation-assistant-web-mode-0.9.3.md`
+  - `docs/architecture/schema-channel-surface-inventory-0.9.5.md`
+  - `docs/architecture/firefox-schema-lifecycle-catalog-contract-0.9.5.md`
+  - `docs/architecture/firefox-pairwise-profile-conversion-contract-0.9.5.md`
+  - `docs/architecture/firefox-schema-conversion-ui-copy-interaction-contract-0.9.5.md`
+  - `docs/architecture/firefox-retired-esr-migration-safety-contract-0.9.5.md`
 
 ## Commands
 

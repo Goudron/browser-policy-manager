@@ -51,6 +51,7 @@ def test_search_alias_groups_are_reviewed_for_all_six_locales() -> None:
         "api-validation",
         "cis-baseline",
         "json-import-export",
+        "firefox-esr-lifecycle-and-conversion",
     }
     for alias_group in config["alias_groups"]:
         assert set(alias_group["terms"]) == locales

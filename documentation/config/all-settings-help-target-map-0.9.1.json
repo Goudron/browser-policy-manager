@@ -2,12 +2,12 @@
   "schema_version": 1,
   "contract_id": "bpm-all-settings-help-target-map-0.9.1",
   "backlog_item": "BPM091-M9-02",
-  "target_bpm_version": "0.9.1",
+  "target_bpm_version": "0.9.5",
   "status": "accepted",
   "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
   "policy_targets": {
     "target_pattern": "policy:{exact_policy_id}",
-    "coverage": "Exact union of Release 153, ESR 153.0, and ESR 140.13 policy IDs.",
+    "coverage": "Exact union of Release 153, ESR 153.0, ESR 140.13, and ESR 115.38 policy IDs from the active lifecycle catalog.",
     "channel_rule": "Release-only policies retain a target; channel availability remains inventory and row-state metadata.",
     "deprecated_rule": "A deprecated policy retains its exact target while it remains in either current channel inventory.",
     "removed_rule": "A policy removed from both current channel inventories must not retain a generated target."

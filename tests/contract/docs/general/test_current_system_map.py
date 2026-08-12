@@ -18,7 +18,7 @@ def _contract() -> dict[str, object]:
 
 def test_system_map_contract_references_existing_owned_paths_and_commands():
     contract = _contract()
-    assert contract["version"] == "0.9.4"
+    assert contract["version"] == "0.9.5"
 
     paths = contract["paths"]
     assert isinstance(paths, list)
@@ -52,3 +52,12 @@ def test_system_map_keeps_release_docs_and_incubation_boundaries_explicit():
     assert isinstance(excluded_boundaries, list)
     assert "app/static/vendor/" in excluded_boundaries
     assert "app/compliance/firefox/cis/generated/" in excluded_boundaries
+
+
+def test_system_map_uses_the_current_four_channel_live_and_conversion_owners():
+    map_text = MAP_PATH.read_text(encoding="utf-8")
+
+    assert "FIREFOX_CHANNEL=<release|esr153|esr140|esr115>" in map_text
+    assert "make firefox-live-four-channel-workflow" in map_text
+    assert "app/static/profiles_modules/conversion_recommendation.mjs" in map_text
+    assert "app/static/profiles_modules/conversion_review.mjs" in map_text

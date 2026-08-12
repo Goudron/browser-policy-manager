@@ -31,7 +31,7 @@ named as a release blocker.
 | Production-readiness boundaries | Covered | 4 topics describe current source-run readiness and explicitly defer unsupported HA/reverse-proxy/production-hardening claims. |
 | Firefox schema documentation | Covered | 120 policy IDs, 62 managed preferences, and 8 Release-only policies are inventoried and gated. |
 | CIS settings documentation | Covered | 55 recommendation records: 53 publishable topics and 2 provenance-only non-publishable records. |
-| API operation inventory | Covered | 15 integration operations and 6 web routes are reconciled against current OpenAPI. |
+| API operation inventory | Covered | 17 integration operations and 6 web routes are reconciled against current OpenAPI. |
 | Locale parity | Covered | All five guide families ship DITA peers for `en`, `ru`, `de`, `zh-CN`, `fr`, and `es-ES`; compact fallback prose is not accepted. |
 | Localized screenshots | **Release blocker** | Screenshot fixture exists, but complete locale-specific capture/review and `make docs-screenshots-check` are not complete. |
 | Manifest and UI target map | Covered | Five guide families, six locales, manifest schema, UI target map, runtime route, and header/contextual/deep-link contracts are gated. |
@@ -62,4 +62,3 @@ Full non-browser documentation release rerun:
 ```bash
 make docs-release-check
 ```
-

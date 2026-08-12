@@ -155,7 +155,15 @@ def _resolve_changed_path(value: str) -> Path:
 def _git_changed_paths() -> list[Path]:
     paths: list[Path] = []
     commands = (
-        ["git", "diff", "--name-only", "--", "documentation", "docs/architecture"],
+        [
+            "git",
+            "diff",
+            "--name-only",
+            "--diff-filter=ACMRTUXB",
+            "--",
+            "documentation",
+            "docs/architecture",
+        ],
         [
             "git",
             "ls-files",

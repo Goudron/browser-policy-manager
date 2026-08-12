@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Bestätigen Sie, dass Sie den beabsichtigten Profilentwurf bearbeiten.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Geben Sie einen eindeutigen Profilnamen ein.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Wählen Sie den Firefox-Schemakanal: ESR 140.13, ESR 153.0 oder Release 153.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Wählen Sie den Firefox-Schemakanal: Release 153, ESR 153.0, ESR 140.13 oder ESR 115.38.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent. ESR 115.38 dient begrenzter kritischer Sicherheitsunterstützung für Altsysteme und verlängert nicht die Unterstützung des Betriebssystemherstellers. BPM prüft diese Grenze am 2027-03-01 erneut.</p></info></step>
       <step><cmd>Überprüfen Sie, ob der ausgewählte Kanal die sichtbaren Steuerelemente ändert, bevor Sie fortfahren.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
     <result><p>Der geführte Entwurf verfügt über einen stabilen Identitäts- und Schemakanal.</p></result>

@@ -57,6 +57,38 @@ def test_import_firefox_policies_json_creates_profile_and_round_trips_export():
     assert set(export_response.json()) == {"policies"}
 
 
+def test_import_edit_export_preserves_schema_valid_esr_115_values():
+    document = {
+        "policies": {
+            "DisableTelemetry": True,
+            "EnableTrackingProtection": {"EmailTracking": True},
+            "FirefoxHome": {"TopSites": False},
+        }
+    }
+    payload = _import_payload("ESR 115 round trip")
+    payload["schema_version"] = "esr-115.38"
+    payload["document"] = document
+
+    with make_test_client() as client:
+        imported = client.post("/api/profiles/import/firefox/policies.json", json=payload)
+        assert imported.status_code == status.HTTP_201_CREATED, imported.text
+        profile = imported.json()
+
+        edited = client.patch(
+            f"/api/profiles/{profile['id']}",
+            json={
+                "flags": {**document["policies"], "BlockAboutConfig": True},
+                "expected_revision": profile["revision"],
+            },
+        )
+        assert edited.status_code == status.HTTP_200_OK, edited.text
+
+        exported = client.get(f"/api/export/profiles/{profile['id']}/firefox/policies.json")
+
+    assert exported.status_code == status.HTTP_200_OK
+    assert exported.json() == {"policies": {**document["policies"], "BlockAboutConfig": True}}
+
+
 def test_import_firefox_policies_json_accepts_multipart_file_upload():
     document = {
         "policies": {
@@ -291,7 +323,9 @@ def test_import_firefox_policies_json_rejects_unknown_schema_channel():
     with make_test_client() as client:
         response = client.post("/api/profiles/import/firefox/policies.json", json=payload)
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     detail = response.json()["detail"]
-    assert detail["message"] == "Profile validation failed"
-    assert "Unsupported channel" in detail["error"]
+    assert detail == {
+        "message": "Schema channel is not available",
+        "code": "schema_channel_unknown",
+    }

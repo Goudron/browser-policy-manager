@@ -12,6 +12,7 @@
           <alt>Tous les paramètres affichant la liste de révision, les paramètres configurés et le panneau de détails des paramètres sur un écran étroit.</alt>
         </image>
       </fig>
+      <p>Lors d’un changement de schéma, n’écrasez pas les paramètres non enregistrés : enregistrez-les, ignorez-les délibérément ou annulez, puis choisissez une cible et lisez son aperçu de conversion. Un bloqueur ne supprime aucun paramètre.</p>
     </context>
     <steps>
       <step><cmd>Ouvrez le profil enregistré depuis la bibliothèque.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>

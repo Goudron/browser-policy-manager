@@ -77,6 +77,7 @@ def test_cis_documentation_inventory_targets_firefox_documentation_ids():
     assert all(
         target["schema_channels"]
         == {
+            "esr-115.38": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid",
@@ -90,12 +91,30 @@ def test_cis_documentation_inventory_covers_layers_presets_and_merge_contract():
     layers = inventory["generated_layers"]
     expected_layers = build_all_cis_layers()
 
-    assert len(layers) == 6
+    assert len(layers) == 8
     assert {(entry["level"], entry["schema_channel"]) for entry in layers} == {
         (layer.level, layer.schema_channel) for layer in expected_layers
     }
-    assert sorted(entry["recommendation_count"] for entry in layers) == [49, 49, 49, 53, 53, 53]
-    assert sorted(entry["policy_top_level_count"] for entry in layers) == [30, 30, 30, 33, 33, 33]
+    assert sorted(entry["recommendation_count"] for entry in layers) == [
+        49,
+        49,
+        49,
+        49,
+        53,
+        53,
+        53,
+        53,
+    ]
+    assert sorted(entry["policy_top_level_count"] for entry in layers) == [
+        30,
+        30,
+        30,
+        30,
+        33,
+        33,
+        33,
+        33,
+    ]
     assert {entry["starter_id"] for entry in inventory["starter_presets"]} == {
         "blank",
         "keep_current",
@@ -103,7 +122,7 @@ def test_cis_documentation_inventory_covers_layers_presets_and_merge_contract():
         "classroom_kiosk",
         "soc_hard",
     }
-    assert all(len(entry["variants"]) == 9 for entry in inventory["starter_presets"])
+    assert all(len(entry["variants"]) == 12 for entry in inventory["starter_presets"])
     assert len(inventory["manual_review_paths"]) == 9
     assert len(inventory["merge_contract"]["decision_types"]) == 6
     assert inventory["exception_contract"]["persisted_exception_model"] is False

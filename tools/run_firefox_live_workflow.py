@@ -44,7 +44,8 @@ except ModuleNotFoundError:  # pragma: no cover - exercised by the Make command,
     )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CHANNELS = ("release", "esr153", "esr140")
+CHANNELS = ("release", "esr153", "esr140", "esr115")
+ALL_CHANNELS = "all"
 LIVE_TEST_PATHS = (
     "tests/live/firefox/test_policy_scenarios.py",
     "tests/live/firefox/test_persisted_profile_e2e.py",
@@ -107,6 +108,31 @@ def _junit_result_counts(junit_path: Path) -> dict[str, int]:
         else:
             counts["passed"] += 1
     return counts
+
+
+def _junit_policy_runtime_observations(junit_path: Path) -> dict[str, list[str]]:
+    """Record each deterministic policy/runtime assertion outcome by test identity."""
+
+    observations = {"passed": [], "failed": [], "errors": [], "skipped": []}
+    if not junit_path.is_file():
+        return observations
+    try:
+        root = element_tree.parse(junit_path).getroot()
+    except element_tree.ParseError:
+        return observations
+    for case in root.iter("testcase"):
+        scenario = "::".join(
+            part for part in (case.get("classname", ""), case.get("name", "")) if part
+        )
+        if case.find("failure") is not None:
+            observations["failed"].append(scenario)
+        elif case.find("error") is not None:
+            observations["errors"].append(scenario)
+        elif case.find("skipped") is not None:
+            observations["skipped"].append(scenario)
+        else:
+            observations["passed"].append(scenario)
+    return observations
 
 
 def _write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -210,15 +236,28 @@ def _append_github_summary(summary: dict[str, Any]) -> None:
         return
     status = summary["status"]
     failed = summary["failed_scenarios"]
+    versions = summary.get("versions") or {}
+    firefox = versions.get("firefox", {})
+    geckodriver = versions.get("geckodriver", {})
+    counts = summary.get("result_counts", {})
     lines = [
         f"## Firefox deterministic live: `{summary['channel']}`",
         "",
         f"- Status: **{status}**",
         f"- Duration: {summary['duration_seconds']:.1f}s",
-        f"- Firefox: `{summary['versions']['firefox']['actual_version']}`",
-        f"- geckodriver: `{summary['versions']['geckodriver']['actual_version']}`",
+        f"- Matrix channel: {summary['matrix_position']['current']}/"
+        f"{summary['matrix_position']['total']}",
+        f"- Firefox: `{firefox.get('actual_version', '<unavailable>')}` "
+        f"(SHA-256 `{firefox.get('sha256', '<unavailable>')}`)",
+        f"- geckodriver: `{geckodriver.get('actual_version', '<unavailable>')}` "
+        f"(SHA-256 `{geckodriver.get('sha256', '<unavailable>')}`)",
+        f"- Deterministic policy/runtime scenarios: {counts.get('passed', 0)}/"
+        f"{counts.get('total', 0)} passed; {counts.get('skipped', 0)} skipped.",
         "- Scope: provisioned local Firefox policy tests only; AMO is excluded.",
+        f"- Artifacts: `{summary['artifact_dir']}`",
     ]
+    if diagnostic := summary.get("diagnostic"):
+        lines.append(f"- Diagnostic: `{diagnostic}`")
     if failed:
         lines.extend(["- Failed scenarios:", *[f"  - `{scenario}`" for scenario in failed]])
     with Path(target).open("a", encoding="utf-8") as stream:
@@ -232,6 +271,7 @@ def run_channel(
     timeout_seconds: int,
     provision_root: Path = DEFAULT_ROOT,
     manifest_path: Path = DEFAULT_MANIFEST,
+    matrix_position: tuple[int, int] = (1, 1),
 ) -> int:
     if channel not in CHANNELS:
         raise ValueError(
@@ -239,60 +279,175 @@ def run_channel(
         )
     if timeout_seconds < 1:
         raise ValueError("timeout_seconds must be positive")
+    current_channel, total_channels = matrix_position
+    if not 1 <= current_channel <= total_channels:
+        raise ValueError("matrix_position must satisfy 1 <= current <= total")
 
     artifact_dir.mkdir(parents=True, exist_ok=True)
     junit_path = artifact_dir / "junit.xml"
     log_path = artifact_dir / "pytest.log"
     pytest_work_dir = artifact_dir / ".pytest-work"
     shutil.rmtree(pytest_work_dir, ignore_errors=True)
-    _progress(f"Firefox live [{channel}] phase 1/3: verifying immutable provisioned install")
-    spec = load_spec(manifest_path.resolve(), channel=channel, platform_name=host_platform())
-    versions = verify_installation(provision_root.resolve(), spec)
-    _write_json(artifact_dir / "versions.json", versions)
-
-    _progress(f"Firefox live [{channel}] phase 2/3: running local deterministic scenarios")
+    _progress(
+        f"Firefox live [{channel}] channel {current_channel}/{total_channels} phase 1/3: "
+        "verifying immutable provisioned install"
+    )
     started = time.monotonic()
     try:
-        return_code, timed_out = _run_streamed(
-            _pytest_command(junit_path, pytest_work_dir),
-            timeout_seconds=timeout_seconds,
-            log_path=log_path,
-            progress_label=channel,
+        spec = load_spec(manifest_path.resolve(), channel=channel, platform_name=host_platform())
+        versions = verify_installation(provision_root.resolve(), spec)
+    except (ProvisioningError, OSError) as error:
+        diagnostic = _safe_log(f"Firefox provisioning verification failed: {error}")
+        _write_json(
+            artifact_dir / "run-summary.json",
+            {
+                "schema_version": 1,
+                "channel": channel,
+                "matrix_position": {"current": current_channel, "total": total_channels},
+                "status": "provisioning_failed",
+                "exit_code": 1,
+                "timed_out": False,
+                "duration_seconds": round(time.monotonic() - started, 3),
+                "scenario_scope": list(LIVE_TEST_PATHS),
+                "result_counts": _junit_result_counts(junit_path),
+                "policy_runtime_observations": _junit_policy_runtime_observations(junit_path),
+                "failed_scenarios": [],
+                "versions": {},
+                "failure_artifacts": "failures",
+                "artifact_dir": str(artifact_dir),
+                "network_scope": "local loopback policy fixtures after provisioning; AMO excluded",
+                "diagnostic": diagnostic,
+            },
         )
+        log_path.write_text(diagnostic + "\n", encoding="utf-8")
+        summary = json.loads((artifact_dir / "run-summary.json").read_text(encoding="utf-8"))
+        _append_github_summary(summary)
+        _progress(
+            f"Firefox live [{channel}] channel {current_channel}/{total_channels} phase 3/3: "
+            f"provisioning_failed; summary {artifact_dir / 'run-summary.json'}"
+        )
+        return 1
+    _write_json(artifact_dir / "versions.json", versions)
+
+    _progress(
+        f"Firefox live [{channel}] channel {current_channel}/{total_channels} phase 2/3: "
+        "running local deterministic scenarios"
+    )
+    try:
+        try:
+            return_code, timed_out = _run_streamed(
+                _pytest_command(junit_path, pytest_work_dir),
+                timeout_seconds=timeout_seconds,
+                log_path=log_path,
+                progress_label=channel,
+            )
+            diagnostic = None
+        except OSError as error:
+            return_code, timed_out = 1, False
+            diagnostic = _safe_log(f"Firefox live test runner failed: {error}")
+            log_path.write_text(diagnostic + "\n", encoding="utf-8")
     finally:
         shutil.rmtree(pytest_work_dir, ignore_errors=True)
     duration = time.monotonic() - started
     failed = _failed_scenarios(junit_path)
     result_counts = _junit_result_counts(junit_path)
     status = (
-        "passed" if return_code == 0 and not timed_out else "timed_out" if timed_out else "failed"
+        "runner_failed"
+        if diagnostic
+        else (
+            "passed"
+            if return_code == 0 and not timed_out
+            else "timed_out"
+            if timed_out
+            else "failed"
+        )
     )
     summary: dict[str, Any] = {
         "schema_version": 1,
         "channel": channel,
+        "matrix_position": {"current": current_channel, "total": total_channels},
         "status": status,
         "exit_code": return_code,
         "timed_out": timed_out,
         "duration_seconds": round(duration, 3),
         "scenario_scope": list(LIVE_TEST_PATHS),
         "result_counts": result_counts,
+        "policy_runtime_observations": _junit_policy_runtime_observations(junit_path),
         "failed_scenarios": failed,
         "versions": versions,
         "failure_artifacts": "failures",
+        "artifact_dir": str(artifact_dir),
         "network_scope": "local loopback policy fixtures after provisioning; AMO excluded",
     }
+    if diagnostic:
+        summary["diagnostic"] = diagnostic
     _write_json(artifact_dir / "run-summary.json", summary)
     _append_github_summary(summary)
     _progress(
-        f"Firefox live [{channel}] phase 3/3: {status}; "
+        f"Firefox live [{channel}] channel {current_channel}/{total_channels} phase 3/3: "
+        f"{status}; "
         f"duration {duration:.1f}s; summary {artifact_dir / 'run-summary.json'}"
+    )
+    return 0 if status == "passed" else 1
+
+
+def run_channels(
+    *,
+    channels: tuple[str, ...],
+    artifact_dir: Path,
+    timeout_seconds: int,
+    provision_root: Path = DEFAULT_ROOT,
+    manifest_path: Path = DEFAULT_MANIFEST,
+) -> int:
+    """Run independently provisioned deterministic channels and retain every result."""
+
+    if not channels:
+        raise ValueError("channels must not be empty")
+    unknown = sorted(set(channels) - set(CHANNELS))
+    if unknown:
+        raise ValueError(
+            f"Unsupported Firefox live channel(s) {', '.join(unknown)}; "
+            f"expected only {', '.join(CHANNELS)}"
+        )
+
+    artifact_dir.mkdir(parents=True, exist_ok=True)
+    results: list[dict[str, Any]] = []
+    for index, channel in enumerate(channels, start=1):
+        _progress(f"Firefox live matrix: starting [{channel}] channel {index}/{len(channels)}")
+        exit_code = run_channel(
+            channel=channel,
+            artifact_dir=artifact_dir / channel,
+            timeout_seconds=timeout_seconds,
+            provision_root=provision_root,
+            manifest_path=manifest_path,
+            matrix_position=(index, len(channels)),
+        )
+        summary = json.loads(
+            (artifact_dir / channel / "run-summary.json").read_text(encoding="utf-8")
+        )
+        results.append({"channel": channel, "exit_code": exit_code, "status": summary["status"]})
+    status = "passed" if all(result["exit_code"] == 0 for result in results) else "failed"
+    _write_json(
+        artifact_dir / "matrix-summary.json",
+        {
+            "schema_version": 1,
+            "channels": list(channels),
+            "completed_channels": len(results),
+            "total_channels": len(channels),
+            "status": status,
+            "results": results,
+        },
+    )
+    _progress(
+        f"Firefox live matrix: completed {len(results)}/{len(channels)} channels; {status}; "
+        f"summary {artifact_dir / 'matrix-summary.json'}"
     )
     return 0 if status == "passed" else 1
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("channel", choices=CHANNELS)
+    parser.add_argument("channel", choices=(*CHANNELS, ALL_CHANNELS))
     parser.add_argument("--artifact-dir", type=Path, required=True)
     parser.add_argument("--timeout-seconds", type=int, default=DEFAULT_TIMEOUT_SECONDS)
     parser.add_argument("--provision-root", type=Path, default=DEFAULT_ROOT)
@@ -303,6 +458,14 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     try:
+        if args.channel == ALL_CHANNELS:
+            return run_channels(
+                channels=CHANNELS,
+                artifact_dir=args.artifact_dir.resolve(),
+                timeout_seconds=args.timeout_seconds,
+                provision_root=args.provision_root,
+                manifest_path=args.manifest,
+            )
         return run_channel(
             channel=args.channel,
             artifact_dir=args.artifact_dir.resolve(),

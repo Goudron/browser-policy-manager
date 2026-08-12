@@ -440,6 +440,15 @@ commit and monitor every required workflow.
 | `BPM094-M12-09` | Create the reviewed BPM 0.9.4 epic commit. | Review scope/status/diff, exclude local/generated/unrelated changes, and commit the completed approved epic without tagging or releasing. | GPT-5.6 Terra | High | Working tree contains only reviewed BPM094 changes; tests/evidence are current; commit message names `0.9.4`; commit SHA is reported; no unrelated user work is included. |
 | `BPM094-M12-10` | Push normally and monitor required CI to terminal state. | Push the reviewed commit to the configured branch with no force/history rewrite and observe every triggered required workflow. | GPT-5.6 Terra | High | Commit SHA, remote branch, workflow URLs, and every job result are reported; no tag/release/PR is created; rejected push, advanced remote, credential failure, protection failure, or failed workflow stops handoff for explicit maintainer direction. |
 
+## Milestone 12A: Post-Handoff Operational Corrections
+
+Goal: close verified 0.9.4 operational defects found while installing and exercising the reviewed local release, without weakening released behavior or release gates.
+
+| ID | Task | Essence | Model | Minimal reasoning | Acceptance |
+| --- | --- | --- | --- | --- | --- |
+| `BPM094-M12A-01` | Align Alembic CLI target selection with BPM runtime storage. | **Implemented 2026-08-10.** The default CLI target is `data/bpm.db`; `BPM_DATABASE_URL` applies when the Config retains that default, while an explicitly injected Config still wins for tests and recovery. | GPT-5.6 Terra | High | Direct CLI and disposable runtime-target integration checks passed; async SQLite/PostgreSQL URLs are converted to Alembic-safe sync URLs and injected Config targets retain priority. |
+| `BPM094-M12A-02` | Remove the redundant Chromium PDF page-number render. | **Implemented 2026-08-10.** Retained the two Chromium pagination passes and replaced the third page-number render with a deterministic native A4 PDF overlay applied by qpdf. | GPT-5.6 Sol | Extra High | Focused PDF contracts passed; candidate and delivery verification passed; independent cold reproducibility passed for 13/13 files with 24/24 cache-bypassed stages; package SHA-256 is `c020c89f51d355fbf536c0f18fae3fb7308259151ffbc7cbb6da88396afb272d`. |
+
 ## Suggested Execution Order
 
 1. Complete M1 version/dependency anchors.
@@ -454,6 +463,7 @@ commit and monitor every required workflow.
 10. Build mandatory CI, supply-chain, packaging, and coverage gates in M10.
 11. Complete product documentation, PDF usability, localization review, technical documentation, and maintainer handoff in M11 after the remaining delivered behavior is stable.
 12. Execute M12 final gates, commit, normal push, and terminal CI monitoring.
+13. Execute approved M12A operational corrections sequentially, then rerun their owning release checks before a follow-up commit/push.
 
 Within a milestone, follow task ID order unless an acceptance condition explicitly requires a later
 task's fixture. Do not begin frontend bulk conversion before M2 characterization, database-dependent

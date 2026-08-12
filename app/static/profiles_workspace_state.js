@@ -80,7 +80,6 @@
     function buildUpdatePayload(form, parsedFlags, compliancePayload, expectedRevisionPayload = {}) {
         return {
             description: form.description,
-            schema_version: form.schemaVersion,
             flags: parsedFlags,
             compliance: compliancePayload,
             ...expectedRevisionPayload,

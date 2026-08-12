@@ -205,7 +205,11 @@ def test_troubleshooting_examples_execute_representative_api_diagnostics() -> No
             "/api/validate/beta-999",
             json={"document": {"policies": {"DisableTelemetry": True}}},
         )
-        assert unknown_profile.status_code == 404
+        assert unknown_profile.status_code == 422
+        assert unknown_profile.json()["detail"] == {
+            "message": "Schema channel is not available",
+            "code": "schema_channel_unknown",
+        }
 
         duplicate_name = "docs-troubleshoot-duplicate"
         first = client.post(

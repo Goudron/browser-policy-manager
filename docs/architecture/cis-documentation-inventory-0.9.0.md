@@ -103,7 +103,7 @@ The Guided starter catalog exposes five starting states:
 - `classroom_kiosk`;
 - `soc_hard`.
 
-For each starter the inventory records `none`, `cis_l1`, and `cis_l2` variants on both supported
+For each starter the inventory records `none`, `cis_l1`, and `cis_l2` variants on all four supported
 schema channels, including top-level policy count, decision count, summary, and review-required
 count without duplicating the full generated policy documents.
 
@@ -124,7 +124,7 @@ auditable exception record.
   policy/preference cross-links.
 - The two recommendations without supported targets are explicitly non-publishable provenance-only
   records rather than silent coverage gaps.
-- Both levels, both schema channels, four committed generated layers, five starter states, merge
+- Both levels, all four schema channels, eight committed generated layers, five starter states, merge
   decisions, merge rules, manual-review paths, and the missing exception model have bounded
   documentation ownership.
 - The deterministic builder fails on dirty CIS source validation, unknown target cross-links,

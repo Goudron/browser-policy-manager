@@ -12,8 +12,11 @@ def test_get_schema_or_404_unknown_profile():
     with pytest.raises(HTTPException) as excinfo:
         validation_module._get_schema_or_404("beta-999")
 
-    assert excinfo.value.status_code == 404
-    assert "Unknown profile" in str(excinfo.value.detail)
+    assert excinfo.value.status_code == 422
+    assert excinfo.value.detail == {
+        "message": "Schema channel is not available",
+        "code": "schema_channel_unknown",
+    }
 
 
 def test_get_schema_or_404_loads_supported_profile(monkeypatch):

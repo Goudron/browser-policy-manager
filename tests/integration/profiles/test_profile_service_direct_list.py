@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import uuid
+from dataclasses import replace
 
 import pytest
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.models.profile import Base
+import app.core.schema_channels as schema_channels
+from app.core.schema_channels import SCHEMA_CHANNEL_CATALOG
+from app.models.profile import Base, Profile
 from app.schemas.profile import ProfileCreate
 from app.services.profile_service import ProfileQuery, ProfileService
 from tests.sync_session_adapter import SyncSessionAdapter
@@ -39,13 +42,13 @@ def service_session() -> SyncSessionAdapter:
 async def test_service_list_filters_sort_and_pagination_direct(service_session: SyncSessionAdapter):
     """Exercise ProfileService.list directly (schema_version/sort/limit/offset and q branch)."""
     for i in range(4):
-        await ProfileService.create(service_session, _mk("esr-140.12", name_prefix=f"SVC-{i}"))
+        await ProfileService.create(service_session, _mk("esr-140.13", name_prefix=f"SVC-{i}"))
     await service_session.commit()
 
     items = await ProfileService.list(
         service_session,
         q=None,
-        schema_version="esr-140.12",
+        schema_version="esr-140.13",
         sort="name",
         order="asc",
         limit=2,
@@ -57,7 +60,7 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
     items2 = await ProfileService.list(
         service_session,
         q=None,
-        schema_version="esr-140.12",
+        schema_version="esr-140.13",
         sort="updated_at",
         order="desc",
         limit=1,
@@ -78,9 +81,84 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
 
     filtered_count = await ProfileService.count(
         service_session,
-        schema_version="esr-140.12",
+        schema_version="esr-140.13",
     )
     assert filtered_count == 4
+
+
+@pytest.mark.anyio
+async def test_profile_read_recommendation_is_read_only_and_legacy_unknown_is_safe(
+    service_session: SyncSessionAdapter,
+):
+    older = await ProfileService.create(service_session, _mk("esr-140.13", "REC-Older", flags={}))
+    archived = await ProfileService.create(
+        service_session, _mk("esr-115.38", "REC-Archived", flags={})
+    )
+    assert await ProfileService.soft_delete(service_session, archived.id)
+    legacy = Profile(
+        name=f"REC-Legacy-{uuid.uuid4().hex[:6]}",
+        schema_version="legacy-unbundled",
+        flags={},
+    )
+    service_session.add(legacy)
+    await service_session.flush()
+    before_revision = legacy.revision
+    before_schema_version = legacy.schema_version
+
+    page = await ProfileService.page(service_session, lifecycle="all", sort="id", order="asc")
+    by_id = {item.id: item for item in page.items}
+
+    assert by_id[older.id].recommendation is not None
+    assert by_id[older.id].recommendation.target.artifact_id == "esr-153.0"
+    assert by_id[archived.id].recommendation is None
+    assert by_id[legacy.id].recommendation is None
+    assert legacy.revision == before_revision
+    assert legacy.schema_version == before_schema_version
+
+
+@pytest.mark.anyio
+async def test_retired_profile_list_and_get_preserve_stored_channel_without_a_runtime_write(
+    service_session: SyncSessionAdapter,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    """Runtime reads may expose legacy evidence but can never repair a retired row."""
+    profile = await ProfileService.create(
+        service_session,
+        _mk("esr-140.13", "RETIRED-Runtime", flags={"DisableTelemetry": True}),
+    )
+    await service_session.commit()
+    source = next(
+        channel for channel in SCHEMA_CHANNEL_CATALOG if channel.artifact_id == "esr-140.13"
+    )
+    retired = replace(source, support_state="retired", selectable=False)
+    monkeypatch.setattr(
+        schema_channels,
+        "SCHEMA_CHANNEL_CATALOG",
+        tuple(
+            retired if channel.artifact_id == retired.artifact_id else channel
+            for channel in SCHEMA_CHANNEL_CATALOG
+        ),
+    )
+    statements: list[str] = []
+
+    def record_statement(*args) -> None:
+        statements.append(str(args[2]).lstrip().upper())
+
+    engine = service_session._session.get_bind()
+    event.listen(engine, "before_cursor_execute", record_statement)
+    try:
+        listed = await ProfileService.list(service_session, lifecycle="all")
+        fetched = await ProfileService.get(service_session, profile.id)
+    finally:
+        event.remove(engine, "before_cursor_execute", record_statement)
+
+    assert [item.id for item in listed] == [profile.id]
+    assert fetched is not None
+    assert fetched.schema_version == profile.schema_version == "esr-140.13"
+    assert fetched.revision == profile.revision == 1
+    assert fetched.recommendation is None
+    assert statements
+    assert all(statement.startswith(("SELECT", "PRAGMA")) for statement in statements)
 
 
 @pytest.mark.anyio
@@ -92,7 +170,7 @@ async def test_service_list_name_query_is_case_insensitive_for_cyrillic(
         ProfileCreate(
             name="Базовый Корпоративный Профиль",
             description="Unicode search",
-            schema_version="esr-140.12",
+            schema_version="esr-140.13",
             flags={"DisableTelemetry": True},
         ),
     )
@@ -118,7 +196,7 @@ async def test_service_list_name_query_treats_empty_and_whitespace_as_no_filter(
         ProfileCreate(
             name="Базовый Корпоративный Профиль",
             description="Whitespace query",
-            schema_version="esr-140.12",
+            schema_version="esr-140.13",
             flags={"DisableTelemetry": True},
         ),
     )
@@ -327,9 +405,15 @@ async def test_validation_state_filter_validates_each_candidate_once_and_carries
             flags={},
         ),
     )
-    await ProfileService.create(
-        service_session,
-        _mk("unknown-channel", "UNKNOWN-ONE", flags={"DisableTelemetry": True}),
+    # Model the retained legacy-row condition through the explicit test-only
+    # persistence boundary. Production creation must continue to fail closed.
+    service_session.add(
+        Profile(
+            name=f"UNKNOWN-ONE-{uuid.uuid4().hex[:6]}",
+            description="Legacy unknown channel row",
+            schema_version="unknown-channel",
+            flags={"DisableTelemetry": True},
+        )
     )
     await service_session.commit()
 

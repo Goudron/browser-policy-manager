@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 
 from app.core.schema_channels import (
-    CURRENT_ESR_SCHEMA_CHANNEL,
     CURRENT_RELEASE_SCHEMA_CHANNEL,
     SUPPORTED_SCHEMA_CHANNELS,
 )
@@ -23,6 +24,34 @@ PARTIAL_POLICIES = {
     "VisualSearchEnabled",
     "XSLTEnabled",
 }
+ALL_CHANNEL_PARTIAL_POLICIES = PARTIAL_POLICIES | {
+    "AllowFileSelectionDialogs",
+    "AutofillAddressEnabled",
+    "AutofillCreditCardEnabled",
+    "ContentAnalysis",
+    "DefaultSerialGuardSetting",
+    "DisableEncryptedClientHello",
+    "FirefoxSuggest",
+    "HttpAllowlist",
+    "HttpsOnlyMode",
+    "MicrosoftEntraSSO",
+    "PostQuantumKeyAgreementEnabled",
+    "PrintingEnabled",
+    "PrivateBrowsingModeAvailability",
+    "SkipTermsOfUse",
+    "TranslateEnabled",
+}
+CHANGED_ACROSS_ALL_CHANNELS = {
+    "Cookies",
+    "EnableTrackingProtection",
+    "ExtensionSettings",
+    "FirefoxHome",
+    "Homepage",
+    "Permissions",
+    "SanitizeOnShutdown",
+    "UserMessaging",
+}
+ESR_140_DOCUMENTATION_BASELINE = "esr-140.13"
 
 
 def _maintained_inventory() -> dict[str, object]:
@@ -38,6 +67,8 @@ def test_firefox_policy_documentation_inventory_is_current_and_complete():
 
     assert inventory == build_inventory()
     assert inventory["schema_version"] == 1
+    assert inventory["backlog_item"] == "BPM095-M8-04"
+    assert inventory["generated_for_bpm"] == "0.9.5"
 
     policies = inventory["policies"]
     assert isinstance(policies, list)
@@ -47,6 +78,20 @@ def test_firefox_policy_documentation_inventory_is_current_and_complete():
     assert all(entry["doc_id"] == f"fx-policy-{entry['policy_id']}" for entry in policies)
     assert all(entry["ui_target"] == f"policy:{entry['policy_id']}" for entry in policies)
 
+    channels = inventory["channels"]
+    assert {channel for channel, record in channels.items() if record["is_default"]} == {
+        "esr-153.0"
+    }
+    assert {channel for channel, record in channels.items() if record["is_product_default"]} == {
+        "esr-153.0"
+    }
+    assert {channel for channel, record in channels.items() if record["is_latest_esr"]} == {
+        "esr-153.0"
+    }
+    assert {channel for channel, record in channels.items() if record["is_default_release"]} == {
+        "release-153"
+    }
+
 
 def test_firefox_policy_documentation_inventory_records_channel_differences():
     inventory = _maintained_inventory()
@@ -55,7 +100,7 @@ def test_firefox_policy_documentation_inventory_records_channel_differences():
     schema_ids = {
         channel: set(load_policy_schema(channel).policies) for channel in SUPPORTED_SCHEMA_CHANNELS
     }
-    esr_ids = schema_ids[CURRENT_ESR_SCHEMA_CHANNEL]
+    esr_ids = schema_ids[ESR_140_DOCUMENTATION_BASELINE]
     release_ids = schema_ids[CURRENT_RELEASE_SCHEMA_CHANNEL]
 
     assert release_ids - esr_ids == PARTIAL_POLICIES
@@ -63,13 +108,13 @@ def test_firefox_policy_documentation_inventory_records_channel_differences():
     assert set(by_id) == esr_ids | release_ids
     assert {
         policy_id for policy_id, entry in by_id.items() if entry["channel_scope"] == "partial"
-    } == PARTIAL_POLICIES
+    } == ALL_CHANNEL_PARTIAL_POLICIES
     assert {
         entry["policy_id"] for entry in policies if entry["definition_changed_across_channels"]
-    } == {"Cookies", "ExtensionSettings", "Homepage"}
+    } == CHANGED_ACROSS_ALL_CHANNELS
     assert inventory["summary"]["policy_scope_counts"] == {
-        "both": 112,
-        "partial": 9,
+        "both": 97,
+        "partial": 24,
     }
 
     for policy_id, entry in by_id.items():
@@ -120,11 +165,29 @@ def test_firefox_policy_documentation_inventory_summary_is_active():
     ).read_text(encoding="utf-8")
 
     for required in (
-        "112 policies in ESR 140.13",
-        "Nine policies are unavailable in ESR 140.13",
-        "`Cookies`, `ExtensionSettings`, and `Homepage` have changed",
-        "62 managed preferences",
-        "`ui.support_level=fallback`",
+        "Four current policy/channel badges derive from one lifecycle catalog",
+        "ESR 115.38 and ESR 140.13 remain",
+        "97 policies occur in all four",
+        "62 known managed preferences",
+        "do not edit manually",
         "--check",
     ):
         assert required in summary
+
+
+def test_inventory_owner_check_reports_four_channel_and_artifact_progress() -> None:
+    completed = subprocess.run(
+        [sys.executable, "tools/build_firefox_policy_documentation_inventory.py", "--check"],
+        cwd=doc_path_from_index(
+            "architecture/firefox-policy-documentation-inventory-0.9.0.json"
+        ).parents[2],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert completed.returncode == 0, completed.stdout + completed.stderr
+    assert "phase=channels; completed=0/6" in completed.stdout
+    for channel in ("release-153", "esr-153.0", "esr-140.13", "esr-115.38"):
+        assert f"channel={channel}" in completed.stdout
+    assert "artifact=summary; completed=6/6" in completed.stdout

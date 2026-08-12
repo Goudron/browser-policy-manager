@@ -1,14 +1,55 @@
 {
-  "backlog_item": "BPM090-M2-03",
+  "backlog_item": "BPM095-M8-04",
   "channels": {
+    "esr-115.38": {
+      "artifact_id": "esr-115.38",
+      "family": "esr",
+      "filename": "firefox-esr-115.38.json",
+      "is_default": false,
+      "is_default_release": false,
+      "is_latest_esr": false,
+      "is_product_default": false,
+      "label": "ESR 115.38",
+      "line_id": "esr-115",
+      "line_number": 115,
+      "mozilla_version": "115.38",
+      "policy_count": 97,
+      "recommendation_target_line_id": "esr-153",
+      "retirement_successor_line_id": "esr-140",
+      "schema_source": "mozilla-policy-templates-v5.12",
+      "schema_version": "115.38",
+      "selectable": true,
+      "support_state": "supported",
+      "type_counts": {
+        "array": 7,
+        "boolean": 46,
+        "object": 31,
+        "string": 13
+      },
+      "ui_support_counts": {
+        "fallback": 54,
+        "mapped": 43
+      }
+    },
     "esr-140.13": {
+      "artifact_id": "esr-140.13",
       "family": "esr",
       "filename": "firefox-esr-140.13.json",
-      "is_default": true,
+      "is_default": false,
+      "is_default_release": false,
+      "is_latest_esr": false,
+      "is_product_default": false,
+      "label": "ESR 140.13",
+      "line_id": "esr-140",
+      "line_number": 140,
       "mozilla_version": "140.13",
       "policy_count": 112,
+      "recommendation_target_line_id": "esr-153",
+      "retirement_successor_line_id": "esr-153",
       "schema_source": "mozilla-policy-templates-v7.12",
       "schema_version": "140.13",
+      "selectable": true,
+      "support_state": "supported",
       "type_counts": {
         "array": 8,
         "boolean": 55,
@@ -22,13 +63,24 @@
       }
     },
     "esr-153.0": {
+      "artifact_id": "esr-153.0",
       "family": "esr",
       "filename": "firefox-esr-153.0.json",
-      "is_default": false,
+      "is_default": true,
+      "is_default_release": false,
+      "is_latest_esr": true,
+      "is_product_default": true,
+      "label": "ESR 153.0",
+      "line_id": "esr-153",
+      "line_number": 153,
       "mozilla_version": "153.0",
       "policy_count": 121,
+      "recommendation_target_line_id": null,
+      "retirement_successor_line_id": null,
       "schema_source": "mozilla-policy-templates-v8.0",
       "schema_version": "153.0",
+      "selectable": true,
+      "support_state": "supported",
       "type_counts": {
         "array": 8,
         "boolean": 60,
@@ -42,13 +94,24 @@
       }
     },
     "release-153": {
+      "artifact_id": "release-153",
       "family": "release",
       "filename": "firefox-release-153.json",
       "is_default": false,
+      "is_default_release": true,
+      "is_latest_esr": false,
+      "is_product_default": false,
+      "label": "Release 153",
+      "line_id": "release-153",
+      "line_number": 153,
       "mozilla_version": "153.0",
       "policy_count": 121,
+      "recommendation_target_line_id": null,
+      "retirement_successor_line_id": null,
       "schema_source": "mozilla-policy-templates-v8.0",
       "schema_version": "153.0",
+      "selectable": true,
+      "support_state": "supported",
       "type_counts": {
         "array": 8,
         "boolean": 60,
@@ -62,7 +125,7 @@
       }
     }
   },
-  "generated_for_bpm": "0.9.0",
+  "generated_for_bpm": "0.9.5",
   "managed_preferences": [
     {
       "can_autofill": false,
@@ -939,6 +1002,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.3rdparty",
+          "max_version": null,
+          "min_version": "68.0",
+          "schema_sha256": "813eb68aa15043109bbfd6b4fa526e168596042b16df81c63457d4b445709240",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "third_party",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1042,6 +1122,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.AllowedDomainsForApps",
+          "max_version": null,
+          "min_version": "89.0",
+          "schema_sha256": "9b1c9bdc2aba4516327de53332b993999c45d1f861db96630e9c91b037a2ceb7",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "text"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1100,7 +1197,7 @@
       "ui_target": "policy:AllowedDomainsForApps"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -1162,6 +1259,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.AppAutoUpdate",
+          "max_version": null,
+          "min_version": "75.0",
+          "schema_sha256": "63b20a79f34179f992e9558412100b616c36756bbf9f985edd18d079cec04ede",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "updates",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1222,6 +1336,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.AppUpdatePin",
+          "max_version": null,
+          "min_version": "102.0",
+          "schema_sha256": "ce47b4de29567a11a12224e24aa12cb17152e8f7111df7c3df171f89769ca898",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "text"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1282,6 +1413,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.AppUpdateURL",
+          "max_version": null,
+          "min_version": "62.0",
+          "schema_sha256": "8a86504aca7cd3c9e6704319fbd3e085bbd742aec591fa42acb229411c000ac1",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "updates",
+            "support_level": "mapped",
+            "widget": "text"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1342,6 +1490,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Authentication",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "21709ad5b84913c003b071c22531879c1e009290e0906482a2abff927b0b34be",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "network_access",
+            "subsection": "authentication",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1400,7 +1565,7 @@
       "ui_target": "policy:Authentication"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -1460,7 +1625,7 @@
       "ui_target": "policy:AutofillAddressEnabled"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -1522,6 +1687,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.AutoLaunchProtocolsFromOrigins",
+          "max_version": null,
+          "min_version": "90.0",
+          "schema_sha256": "8624675ed0d82d05d1d0f66e2f7efe67148c055c1008161a0b2cff7b92644c12",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "network_access",
+            "subsection": "protocol_handlers",
+            "support_level": "fallback",
+            "widget": "array-of-objects"
+          },
+          "value_type": "array"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1582,6 +1764,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.BackgroundAppUpdate",
+          "max_version": null,
+          "min_version": "90.0",
+          "schema_sha256": "2f3b94320719833a69fb0c7f8f17af292100e2a571b551e44a41ec671a840efc",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "updates",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1642,6 +1841,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.BlockAboutAddons",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "8a6bf16b5892e64861c7ec02f4d5bac331c0b672eddda62495d5b352b29ebf4e",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "lockdown",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1702,6 +1918,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.BlockAboutConfig",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "70c3c5c96d034bf11739165eb3a699af688a5441085f9902fdb18aef5e23124c",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "lockdown",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1762,6 +1995,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.BlockAboutProfiles",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "bb95d0cd888c28af56b99e8164e4d0bfda53a45dd16fec589d1bb3e57d282cc2",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "lockdown",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1822,6 +2072,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.BlockAboutSupport",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "efc0e099fc115c8d7cb882b914920006e77250b49056d3edf7956ae621edc617",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "lockdown",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1882,6 +2149,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Bookmarks",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "27d073b3ed6b01000707d52d9efec6cee7b8ad4c6cc47dae9a837cde31426f29",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "bookmarks",
+            "support_level": "mapped",
+            "widget": "array-of-objects"
+          },
+          "value_type": "array"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -1985,6 +2269,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.CaptivePortal",
+          "max_version": null,
+          "min_version": "67.0",
+          "schema_sha256": "0a91e1e2e0c6c67e1d9ac55bf6cf210e37a49913e76d941a0a1d46839cf71dea",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "network_access",
+            "subsection": "network",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2045,6 +2346,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Certificates",
+          "max_version": null,
+          "min_version": null,
+          "schema_sha256": "e3db76f2c5f1b42022fac02768b99c535f8f9afd741a0e6801c0836ccda4b6cc",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "network_access",
+            "subsection": "certificates",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2105,6 +2423,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Containers",
+          "max_version": null,
+          "min_version": "113.0",
+          "schema_sha256": "c63ee860fad4108c8cc249491fe84639cf551c19d247f97cdd71d2bcc37fce85",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "containers",
+            "support_level": "fallback",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2163,7 +2498,7 @@
       "ui_target": "policy:Containers"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -2225,6 +2560,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Cookies",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "7341a52c107755b6a34b351ff8bd5dccce09764b7f24342260cece51b70c35bf",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "cookies",
+            "support_level": "fallback",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2285,6 +2637,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DefaultDownloadDirectory",
+          "max_version": null,
+          "min_version": "68.0",
+          "schema_sha256": "79b0e396c5f94ba9c325e4d4b0fde5e288c2d54f89356582a2c505a9198fff34",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "text"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2343,7 +2712,7 @@
       "ui_target": "policy:DefaultDownloadDirectory"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -2405,6 +2774,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableAppUpdate",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "6deeee4475bb24d79569118c5c74b14c953e9f8bc4e23ace58e0b4f3121fbc1d",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "updates",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2465,6 +2851,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableBuiltinPDFViewer",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "a26eabe7437eef7fa6f233cbfbb107ce6def017cc0c699d2497da71038fe044a",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "lockdown",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2525,6 +2928,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisabledCiphers",
+          "max_version": null,
+          "min_version": "76.0",
+          "schema_sha256": "fe6d743978a66cf73bfc75b7d996df45451745438981f5993ae805b604849de6",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": true,
+            "section": "extensions_integrations",
+            "subsection": "security",
+            "support_level": "fallback",
+            "widget": "dictionary"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2585,6 +3005,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableDefaultBrowserAgent",
+          "max_version": null,
+          "min_version": "75.0",
+          "schema_sha256": "a5945e9d850132d4796bc931ca8441e7635d28c386569c6eeb6a6f847994b8af",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2645,6 +3082,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableDeveloperTools",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "d11e4704e62f6a6b922d6dae35b427855bcecef7b45f01d6bc9906cabd1db002",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "lockdown",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2703,7 +3157,7 @@
       "ui_target": "policy:DisableDeveloperTools"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -2765,6 +3219,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableFeedbackCommands",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "f2e838fe3cd79902c1ff347e5a5216b622bfbb7237b33bdd1446253e96a3d260",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "lockdown",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2825,6 +3296,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableFirefoxAccounts",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "fd6c98f47834a817f1a65797d24b0726ed5803644730d9de2adfa22d06073bc2",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "sync",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2885,6 +3373,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableFirefoxScreenshots",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "9e7a647677f2342d92962fbd86f358db66da25039ec92f5419c36e7e64e1d27f",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "search",
+            "subsection": "search_ui",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -2945,6 +3450,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableFirefoxStudies",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "e40ad6178d83adf776d91d1c73e4f0ff6ac1af650d13fbd8083ecd1b916e23ce",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "data_collection",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3005,6 +3527,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableForgetButton",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "70affd791c14d8a61a53aa84f5b0ae7ec5ebdc9a53dd6a2a30be7c1cd813ea5c",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "history",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3065,6 +3604,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableFormHistory",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "2f4af44d42cb7b323ea82c8a1fe6b1fa0f410ac36e18c4ab5bcdb9e618fb7ba1",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "forms",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3125,6 +3681,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableMasterPasswordCreation",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "598627d009c77e46f85aaa2fcf56829b205d2620f2c339787e941263491651ea",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "passwords",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3185,6 +3758,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisablePasswordReveal",
+          "max_version": null,
+          "min_version": "71.0",
+          "schema_sha256": "10f6b3ed354767cfc62c60431d3c144547b78f8a1cc8a1eeec9e92bc55c772a5",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "passwords",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3245,6 +3835,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisablePocket",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "31fb4b1c87315a743054d5d4b2445f2f9b9560465ca349307e62cd9b3d2abbb3",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "home_startup",
+            "subsection": "firefox_home",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3305,6 +3912,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisablePrivateBrowsing",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "f3fa8d187017c6e253e871bca712c4781728272bf89a584bf59d700b5ec69b3d",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "history",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3365,6 +3989,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableProfileImport",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "039868be83f26e14d18e62f3aa88a63ad510159509a1822f13ed9aa4120405c6",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "startup",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3425,6 +4066,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableProfileRefresh",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "733b93b61629ca698eeb20451fa0eac3c8f210793fb2d88e0c5c6b4c910b4fd6",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3571,6 +4229,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableSafeMode",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "d68b2e6f5f5525f921d7ad6b22ad7f19975f1252766b152c5891ada6f7fbbae3",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3631,6 +4306,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableSecurityBypass",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "925d95c3284a9c894b4df810f335e4ff0c21493c6526488a3bae6a9f9a686fdb",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "lockdown",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3691,6 +4383,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableSetDesktopBackground",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "1c3a7081de455593ce2ee085d03ca15a61e803fb84039cdb7ecc45b120969e87",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3751,6 +4460,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableSystemAddonUpdate",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "b078d359c9474a60a33611bb7ae7a0c301067d3c872dc61e887afe573badcfa8",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "updates",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3811,6 +4537,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableTelemetry",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "3a77bbf60ebe6faa789b27f9faf6f046bca1b2e04557661b644a450656e77c79",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "data_collection",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3871,6 +4614,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisableThirdPartyModuleBlocking",
+          "max_version": null,
+          "min_version": "110.0",
+          "schema_sha256": "55b74891979f3651a5d12e4d925d43a09e530b4f7bfa3e7a6a40981f0f971832",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": true,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "dictionary"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3931,6 +4691,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisplayBookmarksToolbar",
+          "max_version": null,
+          "min_version": "109.0",
+          "schema_sha256": "a9ddbad2d2092ce9f96ba7782cd73c0c1e4799145c2cd3d4f3b78975e1738ed6",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "appearance",
+            "support_level": "fallback",
+            "widget": "enum-select"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -3991,6 +4768,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DisplayMenuBar",
+          "max_version": null,
+          "min_version": "73.0",
+          "schema_sha256": "9f768dc90727b61bb8ca8348c3a1a1fe6884118ea3157b3a4d9ec52ab4c834fa",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "appearance",
+            "support_level": "fallback",
+            "widget": "enum-select"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4051,6 +4845,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DNSOverHTTPS",
+          "max_version": null,
+          "min_version": "63.0",
+          "schema_sha256": "b9486757361f49f40a6ed5ffb397554780c83008d62e86a4dd5d7c0ab442c070",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "network_access",
+            "subsection": "dns_over_https",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4111,6 +4922,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DontCheckDefaultBrowser",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "e3f3740b4474375a9aaca34b0a057fd375f85df210a8a6ad7bb2998fb83eb89e",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "startup",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4171,6 +4999,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DownloadDirectory",
+          "max_version": null,
+          "min_version": "68.0",
+          "schema_sha256": "7227aafa3632919f87b86625fb84a789d8039e4460d0e0a3462e3ca6fb581abd",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "downloads",
+            "support_level": "fallback",
+            "widget": "text"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4231,6 +5076,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.EnableTrackingProtection",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "a15eadcc45ad39f367b49ef811d885eb69453c9e3132bd2b0dbffb3b05660493",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "tracking",
+            "support_level": "fallback",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4283,7 +5145,7 @@
           "value_type": "object"
         }
       },
-      "definition_changed_across_channels": false,
+      "definition_changed_across_channels": true,
       "doc_id": "fx-policy-EnableTrackingProtection",
       "policy_id": "EnableTrackingProtection",
       "ui_target": "policy:EnableTrackingProtection"
@@ -4291,6 +5153,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.EncryptedMediaExtensions",
+          "max_version": null,
+          "min_version": "77.0",
+          "schema_sha256": "be1971ec32ca742c395c8e3c5f9ec4223513fbde80d7e4c14ed2117760e9b3c5",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "security",
+            "support_level": "fallback",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4351,6 +5230,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.EnterprisePoliciesEnabled",
+          "max_version": null,
+          "min_version": "63.0",
+          "schema_sha256": "c7b041337dfc8cdc5f02c3ab3e7c150898fb045225d4666c96f4aff5e8861b93",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": true,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "dictionary"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4411,6 +5307,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.ExemptDomainFileTypePairsFromFileTypeDownloadWarnings",
+          "max_version": null,
+          "min_version": "102.0",
+          "schema_sha256": "123498257d020a30ce201db880958a3e8474f41d37c35f36711eccd49e15c2a0",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "downloads",
+            "support_level": "fallback",
+            "widget": "array-of-objects"
+          },
+          "value_type": "array"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4471,6 +5384,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Extensions",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "139ed15180747efc893d6a85aab7d84539252f649fcc7876d0cc3716c3335058",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "extensions_legacy",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4531,6 +5461,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.ExtensionSettings",
+          "max_version": null,
+          "min_version": "69.0",
+          "schema_sha256": "4062ac5a4f04d786db8289d7254c7f2c8b35dfb847153b48f94f059a6703809e",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": true,
+            "section": "extensions_integrations",
+            "subsection": "extensions",
+            "support_level": "mapped",
+            "widget": "dictionary"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4591,6 +5538,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.ExtensionUpdate",
+          "max_version": null,
+          "min_version": "67.0",
+          "schema_sha256": "e2498f6bedf931d32d8fd4f7c7eab191f633b1e9d8b6722f4b695a73f3381430",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4651,6 +5615,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.FirefoxHome",
+          "max_version": null,
+          "min_version": "68.0",
+          "schema_sha256": "31f9a8203fcf7b738608f53565677ed3ba468797adc51acfa76c178799ce4755",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "home_startup",
+            "subsection": "firefox_home",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4703,13 +5684,13 @@
           "value_type": "object"
         }
       },
-      "definition_changed_across_channels": false,
+      "definition_changed_across_channels": true,
       "doc_id": "fx-policy-FirefoxHome",
       "policy_id": "FirefoxHome",
       "ui_target": "policy:FirefoxHome"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -4814,6 +5795,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.GoToIntranetSiteForSingleWordEntryInAddressBar",
+          "max_version": null,
+          "min_version": "104.0",
+          "schema_sha256": "443ee7ee510c3cd9881ce1d6cce30335a02b78a78b7e0b3be0998e44f4583836",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4874,6 +5872,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Handlers",
+          "max_version": null,
+          "min_version": "78.0",
+          "schema_sha256": "27955a2325fd1b6b129266cc6008704432869a73b2f75025a44e0c8d91cef187",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "protocol_handlers",
+            "support_level": "fallback",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4934,6 +5949,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.HardwareAcceleration",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "663c4a8488cae33e231501b0a37e81b58a30b43ab741ca54fed7e82f1226ee18",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "performance",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -4994,6 +6026,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Homepage",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "966128ef45b65e81eec975c81247cf3c8bb85fc4f53f294d9cb464b3d6424f26",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "home_startup",
+            "subsection": "homepage",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5052,7 +6101,7 @@
       "ui_target": "policy:Homepage"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -5112,7 +6161,7 @@
       "ui_target": "policy:HttpAllowlist"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -5174,6 +6223,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.InstallAddonsPermission",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "8b3c637a7e25cfa00c9427db6122230224697d3368b728f348620aafdec994bf",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "extensions",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5277,6 +6343,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.LegacyProfiles",
+          "max_version": null,
+          "min_version": "70.0",
+          "schema_sha256": "85e83e3ebb76c43aa69de598aba87af9d180391c1418f53ea0cb3aea1bb70de7",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": true,
+            "section": "extensions_integrations",
+            "subsection": "profiles",
+            "support_level": "fallback",
+            "widget": "dictionary"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5337,6 +6420,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.LegacySameSiteCookieBehaviorEnabled",
+          "max_version": null,
+          "min_version": "96.0",
+          "schema_sha256": "8e8be53a35fce939ede0424e72013702672ccc23a6d7f412a32cf7539ee5553e",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5397,6 +6497,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.LegacySameSiteCookieBehaviorEnabledForDomainList",
+          "max_version": null,
+          "min_version": "96.0",
+          "schema_sha256": "d1e4e3f2d8043bf38ff5e617da4f9e76cfb3f52fa8d94cec7f8af58458204f16",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "list"
+          },
+          "value_type": "array"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5457,6 +6574,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.LocalFileLinks",
+          "max_version": null,
+          "min_version": "68.0",
+          "schema_sha256": "47a8dbccc60510aab1d85f3616861fa308fba03f8972c2efc39851e48998dcec",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "content_filtering",
+            "support_level": "fallback",
+            "widget": "list"
+          },
+          "value_type": "array"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5560,6 +6694,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.ManagedBookmarks",
+          "max_version": null,
+          "min_version": "83.0",
+          "schema_sha256": "e2260e1156e8dac0593c0a4f4d1c04307863c1ebbe016c68803224256f906a8c",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "bookmarks",
+            "support_level": "mapped",
+            "widget": "array-of-objects"
+          },
+          "value_type": "array"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5620,6 +6771,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.ManualAppUpdateOnly",
+          "max_version": null,
+          "min_version": "87.0",
+          "schema_sha256": "7ee7c0bae4385ca4bcc6e215cfe7b6a82198ae831732fbaa1d4562d2d03291f5",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5678,7 +6846,7 @@
       "ui_target": "policy:ManualAppUpdateOnly"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -5740,6 +6908,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.NetworkPrediction",
+          "max_version": null,
+          "min_version": "67.0",
+          "schema_sha256": "6855dda69b450f0dfed94fe269f233eb3b12ad5da3c7d75102b893d46ec6c7ec",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "network_privacy",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5800,6 +6985,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.NewTabPage",
+          "max_version": null,
+          "min_version": "68.0",
+          "schema_sha256": "5eb3e6014b64bcd7610f7891a1e0b0238fec5d1dde77ebadc2e31ad5fc475351",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "home_startup",
+            "subsection": "new_tab",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5860,6 +7062,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.NoDefaultBookmarks",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "3761a733328d96760f5cfa278973e93548430e4ad3066868048d30805549feca",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "home_startup",
+            "subsection": "homepage",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5920,6 +7139,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.OfferToSaveLogins",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "5bac44da55f4f9f459ac9d8110a95cbb3311c33d018eba6e85ed45649ef56513",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "passwords",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -5980,6 +7216,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.OfferToSaveLoginsDefault",
+          "max_version": null,
+          "min_version": "70.0",
+          "schema_sha256": "dd99b91bcaad27b25683ac2d69c768e2130bd1fbe43344b5959863eb5033d752",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "passwords",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6040,6 +7293,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.OverrideFirstRunPage",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "10d7df435a869132f88e2789b5d2fe0b4d30fb8162652acddfbc5348e57ba255",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "startup",
+            "support_level": "fallback",
+            "widget": "text"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6100,6 +7370,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.OverridePostUpdatePage",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "175ce56fcd1fe98e7d13e87c2c1086ae9ff2af86cdb3ba4a4d1b8420cd57c94d",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "startup",
+            "support_level": "fallback",
+            "widget": "text"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6160,6 +7447,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.PasswordManagerEnabled",
+          "max_version": null,
+          "min_version": "70.0",
+          "schema_sha256": "51e23ff2172a4d70950071ef0bc82db1302186c9ceb5adcf75ccd363d194a565",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "passwords",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6220,6 +7524,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.PasswordManagerExceptions",
+          "max_version": null,
+          "min_version": "101.0",
+          "schema_sha256": "337b134624f98a78264f665603ef3fced65cf1a55d46076f755bbc92410fd4a7",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "passwords",
+            "support_level": "fallback",
+            "widget": "list"
+          },
+          "value_type": "array"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6280,6 +7601,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.PDFjs",
+          "max_version": null,
+          "min_version": "77.0",
+          "schema_sha256": "920a1e646f08fd2d29e87c9c302c6710993c46ed57f1857133fe071217908afc",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "security",
+            "support_level": "fallback",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6340,6 +7678,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Permissions",
+          "max_version": null,
+          "min_version": "62.0",
+          "schema_sha256": "5a7b5677faaf344903ed42d4d8be7ab6436d962f98d23f4eadd93f717d46cbe5",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "permissions",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6392,7 +7747,7 @@
           "value_type": "object"
         }
       },
-      "definition_changed_across_channels": false,
+      "definition_changed_across_channels": true,
       "doc_id": "fx-policy-Permissions",
       "policy_id": "Permissions",
       "ui_target": "policy:Permissions"
@@ -6400,6 +7755,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.PictureInPicture",
+          "max_version": null,
+          "min_version": "78.0",
+          "schema_sha256": "7f611e03056fcfbed79d2cc93c439a57b41c72777dbb8cdd12ee662cdb1c9126",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "surfaces",
+            "support_level": "fallback",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6460,6 +7832,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.PopupBlocking",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "1a00701e574e23910d90bd2578bc2578ed26adc2fd0049b86ec140f8344561e9",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "permissions",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6518,7 +7907,7 @@
       "ui_target": "policy:PopupBlocking"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -6580,6 +7969,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Preferences",
+          "max_version": null,
+          "min_version": "81.0",
+          "schema_sha256": "962ef0394c6a143995fe74686860072801d78e0e612ae92e1c1ad4ec3fad71a7",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": true,
+            "section": "advanced",
+            "subsection": "preferences",
+            "support_level": "mapped",
+            "widget": "dictionary"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6640,6 +8046,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.PrimaryPassword",
+          "max_version": null,
+          "min_version": "79.0",
+          "schema_sha256": "dac5ddaeda8218a9a066cb69e5425c6c0bc225ebdaf893e8114c3a7ed968aaa7",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "passwords",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6698,7 +8121,7 @@
       "ui_target": "policy:PrimaryPassword"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -6758,7 +8181,7 @@
       "ui_target": "policy:PrintingEnabled"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -6820,6 +8243,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.PromptForDownloadLocation",
+          "max_version": null,
+          "min_version": "68.0",
+          "schema_sha256": "59fa6f74d7ec243106314c42e80f8c8e7fa6643c616c311e1a08f5a197f0ba54",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "downloads",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6880,6 +8320,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.Proxy",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "72747e42d1c2f07b12718f932eb51c1cc0fa94682941a6d89564fd41f381c686",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "network_access",
+            "subsection": "proxy",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -6940,6 +8397,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.RequestedLocales",
+          "max_version": null,
+          "min_version": "64.0",
+          "schema_sha256": "0ac049b378bef72abb8f6a68c1a73e0335ecbb74db0e33bb6d7ce211e37b0115",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "language",
+            "support_level": "mapped",
+            "widget": "branch"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7000,6 +8474,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.SanitizeOnShutdown",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "2a54fc071c1f282d9f4b759a44aabf58586f6f49cabe4d87495fa28da0e77bc0",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "privacy_security",
+            "subsection": "history",
+            "support_level": "mapped",
+            "widget": "branch"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7052,7 +8543,7 @@
           "value_type": "object"
         }
       },
-      "definition_changed_across_channels": false,
+      "definition_changed_across_channels": true,
       "doc_id": "fx-policy-SanitizeOnShutdown",
       "policy_id": "SanitizeOnShutdown",
       "ui_target": "policy:SanitizeOnShutdown"
@@ -7060,6 +8551,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.SearchBar",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "f5dd9c8773ed35aea703a300d146b9604b5ba26e9cb87618d2b551beef670279",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "search",
+            "subsection": "search_ui",
+            "support_level": "mapped",
+            "widget": "enum-select"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7120,6 +8628,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.SearchEngines",
+          "max_version": null,
+          "min_version": null,
+          "schema_sha256": "7e93c1279786023133bc56eec43fda01d9225d800690b328f855ff20042a89f4",
+          "ui": {
+            "complexity": "basic",
+            "preserve_unknown_fields": false,
+            "section": "search",
+            "subsection": "engines",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7180,6 +8705,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.SearchSuggestEnabled",
+          "max_version": null,
+          "min_version": "68.0",
+          "schema_sha256": "51169263bc42b9386d3875347135374d9e8742593462ed4bdf4ea8aebfb10eef",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7240,6 +8782,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.SecurityDevices",
+          "max_version": null,
+          "min_version": "64.0",
+          "schema_sha256": "39b42715b70370776d1aa3dba430d9db19c7b85bc5560877f4b58f138cd3dd7c",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": true,
+            "section": "network_access",
+            "subsection": "certificates",
+            "support_level": "fallback",
+            "widget": "dictionary"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7300,6 +8859,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.ShowHomeButton",
+          "max_version": null,
+          "min_version": "88.0",
+          "schema_sha256": "b70f033c0709fd10dfc93639791721ff13c35860897a2fff52d2ad14018fb47b",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "appearance",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7358,7 +8934,7 @@
       "ui_target": "policy:ShowHomeButton"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -7420,6 +8996,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.SSLVersionMax",
+          "max_version": null,
+          "min_version": "66.0",
+          "schema_sha256": "4112bcbd0650f7a196e084093a398f34a2192ac7af553356085f1e7cf1137d51",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "network_access",
+            "subsection": "tls",
+            "support_level": "fallback",
+            "widget": "enum-select"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7480,6 +9073,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.SSLVersionMin",
+          "max_version": null,
+          "min_version": "66.0",
+          "schema_sha256": "f1b60f22df55c002f0d380d96ad9fcae4f06dd8885bef2cd9449f64487fc4c93",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "network_access",
+            "subsection": "tls",
+            "support_level": "fallback",
+            "widget": "enum-select"
+          },
+          "value_type": "string"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7540,6 +9150,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.StartDownloadsInTempDirectory",
+          "max_version": null,
+          "min_version": "102.0",
+          "schema_sha256": "52036d67adf65703e188b42721126e4e1cf5c4527b58cb88040f2c4d4448bcb5",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "browser_behavior",
+            "subsection": "downloads",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7600,6 +9227,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.SupportMenu",
+          "max_version": null,
+          "min_version": "68.0",
+          "schema_sha256": "10ead8cb5c8c01a64e6509607a8d0e43802cd6a16e9696a0ce495a6ec896f3f0",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "network_access",
+            "subsection": "support",
+            "support_level": "fallback",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7658,7 +9302,7 @@
       "ui_target": "policy:SupportMenu"
     },
     {
-      "channel_scope": "both",
+      "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
           "categories": [],
@@ -7720,6 +9364,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.UserMessaging",
+          "max_version": null,
+          "min_version": "75.0",
+          "schema_sha256": "9006d80c5ab7bc5e7751a21927fdffa4e5a1da849bd61982c32fdc9791a609c0",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "home_startup",
+            "subsection": "user_messaging",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7772,7 +9433,7 @@
           "value_type": "object"
         }
       },
-      "definition_changed_across_channels": false,
+      "definition_changed_across_channels": true,
       "doc_id": "fx-policy-UserMessaging",
       "policy_id": "UserMessaging",
       "ui_target": "policy:UserMessaging"
@@ -7780,6 +9441,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.UseSystemPrintDialog",
+          "max_version": null,
+          "min_version": "102.0",
+          "schema_sha256": "0239f2c6e0636161d5c3a6ed23be8121b8b30116612c43857323d723d61410df",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7883,6 +9561,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.WebsiteFilter",
+          "max_version": null,
+          "min_version": "60.0",
+          "schema_sha256": "78b541619b9571ddb77afb609c8725bd37a6124377e1d4a8a075715abb2d0aab",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "extensions_integrations",
+            "subsection": "content_filtering",
+            "support_level": "mapped",
+            "widget": "object-card"
+          },
+          "value_type": "object"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -7943,6 +9638,23 @@
     {
       "channel_scope": "both",
       "channels": {
+        "esr-115.38": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.WindowsSSO",
+          "max_version": null,
+          "min_version": "91.0",
+          "schema_sha256": "c1b56b9df313ee188fadc46542ac338521c3d4ff43b3b1c6d49e5e47928bd1fb",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "network_access",
+            "subsection": "authentication",
+            "support_level": "mapped",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        },
         "esr-140.13": {
           "categories": [],
           "deprecated": false,
@@ -8052,7 +9764,7 @@
   },
   "schema_version": 1,
   "summary": {
-    "definition_changed_across_channels_count": 3,
+    "definition_changed_across_channels_count": 8,
     "managed_preference_count": 62,
     "managed_preference_section_counts": {
       "general": 11,
@@ -8062,8 +9774,8 @@
       "sync": 8
     },
     "policy_scope_counts": {
-      "both": 112,
-      "partial": 9
+      "both": 97,
+      "partial": 24
     },
     "policy_union_count": 121
   }

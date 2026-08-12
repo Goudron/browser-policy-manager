@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Confirm that you are editing the intended profile draft.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Enter a clear profile name.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Choose the Firefox schema channel: ESR 140.13, ESR 153.0, or Release 153.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Choose the Firefox schema channel: Release 153, ESR 153.0, ESR 140.13, or ESR 115.38.</cmd><info><p>Expected result: the Guided profile remains consistent. ESR 115.38 is for organizations that still need its limited legacy-operating-system critical-security support; it does not extend operating-system vendor support. BPM rechecks that support boundary on 2027-03-01.</p></info></step>
       <step><cmd>Review whether the selected channel changes the visible controls before continuing.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
     </steps>
     <result><p>The Guided draft has a stable identity and schema channel.</p></result>

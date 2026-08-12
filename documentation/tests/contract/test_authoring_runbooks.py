@@ -93,6 +93,13 @@ def test_epic_documentation_update_runbook_requires_editorial_and_pdf_review() -
         "SUMO",
         "CJK glyph",
         "page-fitting screenshots",
+        "Documentation preflight and heavy-build order",
+        "preflight task before any site or PDF build task",
+        "Firefox/CIS inventories",
+        "one owner site build",
+        "one owner PDF build",
+        "one authoritative documentation release gate",
+        "must not trigger a blind PDF rebuild",
     ):
         assert required in backlog
 

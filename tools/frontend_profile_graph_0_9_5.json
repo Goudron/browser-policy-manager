@@ -1,9 +1,11 @@
 {
-  "version": "0.9.4",
+  "version": "0.9.5",
   "owner": "profile frontend",
   "execution_model": "route-specific native ESM entry bundles use direct module imports with no profile global bridge",
   "pure_module_sources": [
     "profiles_modules/compare_state.mjs",
+    "profiles_modules/conversion_recommendation.mjs",
+    "profiles_modules/conversion_review.mjs",
     "profiles_modules/dirty_route_guard.mjs",
     "profiles_modules/policy_document.mjs",
     "profiles_modules/preference_values.mjs",

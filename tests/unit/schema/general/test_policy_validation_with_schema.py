@@ -10,10 +10,7 @@ from app.core.policy_validation import (
     validate_profile_policies_or_raise,
     validate_profile_policies_or_raise_for_channel,
 )
-from app.core.schema_channels import (
-    CURRENT_ESR_SCHEMA_CHANNEL,
-    SUPPORTED_SCHEMA_CHANNELS,
-)
+from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS
 
 
 def _schema(channel: str = "release-153"):
@@ -96,7 +93,7 @@ def test_esr_140_13_rejects_extension_allowed_permissions():
     with pytest.raises(PolicyValidationError):
         validate_profile_policies_or_raise_for_channel(
             {"ExtensionSettings": {"*": {"allowed_permissions": ["tabs"]}}},
-            CURRENT_ESR_SCHEMA_CHANNEL,
+            "esr-140.13",
         )
 
 

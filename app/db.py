@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import cast
 
 from fastapi import Request
-from sqlalchemy import inspect, text
+from sqlalchemy import bindparam, inspect, text
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
@@ -17,6 +17,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
+from app.core import schema_channels
 from app.core.config import Settings, get_settings
 
 EXPECTED_DATABASE_REVISION = "20260804_add_profile_name_casefold"
@@ -47,6 +48,32 @@ class DatabaseReadinessError(RuntimeError):
     """The configured database is not an exact, application-readable BPM head."""
 
 
+def _assert_no_retired_profile_channels(connection: Connection) -> None:
+    """Reject an unupgraded retirement before any application route can read it.
+
+    A retirement successor is migration data, not a runtime default. This
+    checks only explicitly retired exact artifacts with one ``SELECT``; it
+    never assigns an ORM field, normalizes a legacy value, or writes state.
+    """
+    retired_artifact_ids = schema_channels.retired_schema_channel_artifact_ids()
+    if not retired_artifact_ids:
+        return
+    statement = text(
+        "SELECT DISTINCT schema_version FROM profiles WHERE schema_version IN :retired_artifact_ids"
+    ).bindparams(bindparam("retired_artifact_ids", expanding=True))
+    retired_profile_exists = connection.execute(
+        statement,
+        {"retired_artifact_ids": retired_artifact_ids},
+    ).first()
+    if retired_profile_exists is not None:
+        raise DatabaseReadinessError(
+            "schema_channel_retired_requires_migration: configured database contains profiles "
+            "on a retired Firefox schema channel; stop BPM and all other writers, verify a "
+            "native backup/restore, then run the approved Alembic upgrade. Runtime startup, "
+            "requests, and UI rendering never migrate or remap retired profiles."
+        )
+
+
 def _assert_release_schema_ready(connection: Connection) -> None:
     """Validate the release schema without mutating or attempting to repair it."""
     inspector = inspect(connection)
@@ -58,25 +85,30 @@ def _assert_release_schema_ready(connection: Connection) -> None:
         )
     if "profiles" not in tables or "policies" in tables:
         raise DatabaseReadinessError(
-            "Database profile tables do not match the BPM 0.9.4 release schema"
+            "Database profile tables do not match the BPM 0.9.5 release schema"
         )
+
+    # Prefer retirement-specific guidance over a generic head-stamp error
+    # when the minimum safe profile column is present.
+    columns = {column["name"] for column in inspector.get_columns("profiles")}
+    if "schema_version" in columns:
+        _assert_no_retired_profile_channels(connection)
 
     revisions = connection.execute(text("SELECT version_num FROM alembic_version")).scalars().all()
     if revisions != [EXPECTED_DATABASE_REVISION]:
         raise DatabaseReadinessError(
-            "Database revision is not the BPM 0.9.4 head; run the documented verified-backup "
+            "Database revision is not the BPM 0.9.5 head; run the documented verified-backup "
             "candidate upgrade before starting BPM"
         )
 
-    columns = {column["name"] for column in inspector.get_columns("profiles")}
     if columns != EXPECTED_PROFILE_COLUMNS:
         raise DatabaseReadinessError(
-            "Database is stamped at BPM 0.9.4 head but has a partial/incompatible profile shape"
+            "Database is stamped at BPM 0.9.5 head but has a partial/incompatible profile shape"
         )
     indexes = {index["name"] for index in inspector.get_indexes("profiles")}
     if not EXPECTED_PROFILE_INDEXES <= indexes:
         raise DatabaseReadinessError(
-            "Database is stamped at BPM 0.9.4 head but is missing required profile indexes"
+            "Database is stamped at BPM 0.9.5 head but is missing required profile indexes"
         )
 
 

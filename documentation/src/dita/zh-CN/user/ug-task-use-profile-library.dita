@@ -12,6 +12,7 @@
           <alt>显示保存的配置文件行、计数和配置文件操作的库。</alt>
         </image>
       </fig>
+      <p>活动的已保存 ESR 115.38 或 ESR 140.13 配置档案可以提供更新到最新 ESR（ESR 153.0）的复核建议。打开建议只会打开只读预览，不会更改配置档案；Release 153、ESR 153.0、未知、已退役、非活动和未保存的配置档案不会获得虚构建议。只有适用的预览才能被明确确认。</p>
     </context>
     <steps>
       <step><cmd>打开<uicontrol>库</uicontrol>。</cmd><info><p>预期结果：<uicontrol>库</uicontrol>加载配置文件行，或者如果不存在已保存的配置文件，则显示空状态消息。</p></info></step>

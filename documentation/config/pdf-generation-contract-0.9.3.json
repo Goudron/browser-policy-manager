@@ -2,11 +2,12 @@
   "schema_version": 1,
   "contract_id": "bpm-pdf-generation-0.9.3",
   "backlog_item": "BPM093-M14-08",
-  "target_bpm_version": "0.9.4",
+  "target_bpm_version": "0.9.5",
   "candidate_root": "documentation/build/pdf",
   "candidate_path_layout": "{locale}/{filename}",
   "dita_format": "html5",
   "pdf_renderer": "chromium",
+  "page_number_overlay_renderer": "native-pdf",
   "ui_footer_year": 2026,
   "source_maps": [
     "user-guide.ditamap",

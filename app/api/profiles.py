@@ -5,22 +5,43 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.profile_conversion_compliance import recompute_pinned_cis_compliance
 from app.core.policy_validation import (
     PolicyValidationError,
     validate_profile_payload_with_schema,
 )
-from app.core.schema_channels import DEFAULT_SCHEMA_CHANNEL
+from app.core.profile_conversion_planner import (
+    ConversionPlanningError,
+    plan_profile_conversion,
+)
+from app.core.schema_channels import DEFAULT_SCHEMA_CHANNEL, SchemaChannelError, get_schema_channel
 from app.db import get_session
-from app.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
+from app.schemas.profile import (
+    ConversionApplyErrorEnvelope,
+    ConversionApplyRequest,
+    ConversionApplyResponse,
+    ConversionPreviewErrorEnvelope,
+    ConversionPreviewRequest,
+    ConversionPreviewResponse,
+    ProfileCreate,
+    ProfileRead,
+    ProfileUpdate,
+)
 from app.services.firefox_policy_import import (
     FirefoxPoliciesDocumentValidationError,
     FirefoxPoliciesImportError,
     validate_firefox_policies_document,
 )
-from app.services.profile_service import ProfilePageResult, ProfileService
+from app.services.profile_service import (
+    ConversionApplyFailure,
+    ConversionApplyOutcome,
+    ProfilePageResult,
+    ProfileService,
+)
 
 router = APIRouter(prefix="/api/profiles", tags=["profiles"])
 
@@ -190,9 +211,6 @@ def _validate_profile_policies_or_422(
     `schema_version` corresponds to the channel ("esr‑140", "release‑145"),
     `flags` is interpreted as a mapping of Firefox policy_id -> value.
     """
-    if not flags:
-        return
-
     payload = {
         "name": name,
         "channel": schema_version,
@@ -201,6 +219,11 @@ def _validate_profile_policies_or_422(
 
     try:
         validate_profile_payload_with_schema(payload)
+    except SchemaChannelError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail={"message": "Schema channel is not available", "code": exc.code},
+        ) from exc
     except PolicyValidationError as exc:
         issues_payload = [
             {
@@ -378,6 +401,19 @@ async def _update_profile_core(
         normalized_payload_data["compliance"] = payload_data["compliance"]
     normalized_payload = ProfileUpdate.model_validate(normalized_payload_data)
 
+    if (
+        "schema_version" in payload_data
+        and normalized_payload.schema_version is not None
+        and normalized_payload.schema_version != current.schema_version
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail={
+                "message": "Schema conversion preview is required for channel changes",
+                "code": "profile_schema_conversion_required",
+            },
+        )
+
     if validate_policies:
         new_schema_version = normalized_payload.schema_version or current.schema_version
         new_flags = (
@@ -537,6 +573,294 @@ async def create_profile(
     )
 
 
+def _conversion_preview_error(
+    *,
+    code: str,
+    http_status: int,
+    profile_id: int | None,
+    expected_revision: int | None = None,
+    current_revision: int | None = None,
+    plan_digest: str | None = None,
+    retry_preview_required: bool = False,
+    parameters: dict[str, str | int | bool | None] | None = None,
+) -> HTTPException:
+    """Return the M2-04 value-free, no-mutation error envelope."""
+    return HTTPException(
+        status_code=http_status,
+        detail={
+            "kind": "profile-conversion-error",
+            "contract_version": 1,
+            "code": code,
+            "http_status": http_status,
+            "profile_id": profile_id,
+            "expected_revision": expected_revision,
+            "current_revision": current_revision,
+            "plan_digest": plan_digest,
+            "retry_preview_required": retry_preview_required,
+            "mutation": "none",
+            "parameters": parameters or {},
+        },
+    )
+
+
+def _conversion_preview_status(
+    code: str,
+    *,
+    source_artifact_id: str,
+) -> int:
+    """Map planner preconditions to the exact M2-04 preview statuses."""
+    if code == "conversion_source_not_active":
+        return status.HTTP_409_CONFLICT
+    if code == "schema_channel_unknown":
+        return (
+            status.HTTP_409_CONFLICT
+            if get_schema_channel(source_artifact_id) is None
+            else status.HTTP_422_UNPROCESSABLE_CONTENT
+        )
+    if code == "schema_channel_retired_requires_migration":
+        return status.HTTP_409_CONFLICT
+    if code in {"conversion_source_schema_missing", "conversion_target_schema_missing"}:
+        return status.HTTP_503_SERVICE_UNAVAILABLE
+    return status.HTTP_422_UNPROCESSABLE_CONTENT
+
+
+async def _conversion_preview_core(
+    profile_id: int,
+    payload: ConversionPreviewRequest,
+    session: AsyncSession,
+) -> ConversionPreviewResponse:
+    """Derive a preview solely from the currently stored profile state.
+
+    This is intentionally a read service boundary: it loads exactly one source
+    profile, passes server-owned policy/compliance/context to the pure planner,
+    and returns its value-free public projection.  It never commits, flushes,
+    refreshes, assigns ORM state, or accepts a caller-authored source document.
+    """
+    profile = await ProfileService.get_conversion_preview_source(session, profile_id)
+    if profile is None:
+        raise _conversion_preview_error(
+            code="conversion_profile_not_found",
+            http_status=status.HTTP_404_NOT_FOUND,
+            profile_id=profile_id,
+        )
+    if profile.deleted_at is not None:
+        raise _conversion_preview_error(
+            code="conversion_source_not_active",
+            http_status=status.HTTP_409_CONFLICT,
+            profile_id=profile_id,
+            current_revision=profile.revision,
+        )
+
+    try:
+        result = plan_profile_conversion(
+            {"policies": profile.flags},
+            source_artifact_id=profile.schema_version,
+            target_artifact_id=payload.target_artifact_id,
+            context=ProfileService.conversion_planning_context(
+                profile,
+                compliance_replanner=recompute_pinned_cis_compliance,
+            ),
+        )
+    except ConversionPlanningError as exc:
+        raise _conversion_preview_error(
+            code=exc.code,
+            http_status=_conversion_preview_status(
+                exc.code,
+                source_artifact_id=profile.schema_version,
+            ),
+            profile_id=profile.id,
+            current_revision=profile.revision,
+            parameters={"target_artifact_id": payload.target_artifact_id},
+        ) from exc
+
+    # M4-03 availability means the exact artifacts could be planned.  It is
+    # intentionally independent from compatibility.applicable, which remains
+    # false for a safely returned blocked candidate.
+    return ConversionPreviewResponse.model_validate({"available": True, **result.plan})
+
+
+async def _read_conversion_preview_request(
+    request: Request,
+    *,
+    profile_id: int,
+) -> ConversionPreviewRequest:
+    """Parse the narrow preview request without reflecting rejected raw input.
+
+    FastAPI's default request-validation body includes an ``input`` echo.  That
+    is unsuitable here because callers must not be able to make a policy value
+    appear in a conversion error.  The target-only DTO is therefore parsed at
+    this API boundary and failures use the same value-free error envelope.
+    """
+    try:
+        data = await request.json()
+        if not isinstance(data, dict):
+            raise ValueError
+        return ConversionPreviewRequest.model_validate(data)
+    except json.JSONDecodeError, ValidationError, ValueError:
+        raise _conversion_preview_error(
+            code="conversion_preview_request_invalid",
+            http_status=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            profile_id=profile_id,
+        ) from None
+
+
+def _conversion_apply_status(code: str, *, source_artifact_id: str) -> int:
+    """Map apply preconditions to the immutable M2-04 status vocabulary."""
+    if code == "conversion_profile_not_found":
+        return status.HTTP_404_NOT_FOUND
+    if code in {
+        "conversion_source_not_active",
+        "schema_channel_retired_requires_migration",
+        "conversion_revision_stale",
+        "conversion_source_identity_stale",
+        "conversion_plan_stale",
+        "conversion_schema_identity_stale",
+        "conversion_recipe_registry_stale",
+        "conversion_plan_blocked",
+    }:
+        return status.HTTP_409_CONFLICT
+    if code == "conversion_apply_failed":
+        return status.HTTP_500_INTERNAL_SERVER_ERROR
+    return _conversion_preview_status(code, source_artifact_id=source_artifact_id)
+
+
+def _conversion_apply_retry_preview_required(code: str) -> bool:
+    return code in {
+        "conversion_revision_stale",
+        "conversion_source_identity_stale",
+        "conversion_plan_stale",
+        "conversion_schema_identity_stale",
+        "conversion_recipe_registry_stale",
+    }
+
+
+async def _read_conversion_apply_request(
+    request: Request,
+    *,
+    profile_id: int,
+) -> ConversionApplyRequest:
+    """Parse a confirmation without reflecting rejected profile data."""
+    try:
+        data = await request.json()
+        if not isinstance(data, dict):
+            raise ValueError
+        return ConversionApplyRequest.model_validate(data)
+    except json.JSONDecodeError, ValidationError, ValueError:
+        raise _conversion_preview_error(
+            code="conversion_apply_request_invalid",
+            http_status=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            profile_id=profile_id,
+        ) from None
+
+
+def _conversion_apply_request_example() -> dict[str, object]:
+    """Return the reviewed OpenAPI example without relying on Pydantic's union config type."""
+    config = ConversionApplyRequest.model_config
+    if not isinstance(config, dict):
+        raise RuntimeError("conversion apply schema configuration is invalid")
+    schema_extra = config.get("json_schema_extra")
+    if not isinstance(schema_extra, dict):
+        raise RuntimeError("conversion apply schema example is missing")
+    example = schema_extra.get("example")
+    if not isinstance(example, dict):
+        raise RuntimeError("conversion apply schema example is invalid")
+    return dict(example)
+
+
+async def _conversion_apply_in_transaction(
+    session: AsyncSession,
+    *,
+    profile_id: int,
+    payload: ConversionApplyRequest,
+) -> ConversionApplyOutcome:
+    """Own the API transaction while leaving the domain service commit-free."""
+    dialect_name = session.get_bind().dialect.name
+    if dialect_name == "sqlite":
+        # A deferred SQLite read transaction can fail while upgrading to a
+        # writer if two applies derive their plans at once.  Taking the write
+        # reservation before the read serializes replan/write, and the service
+        # conditional UPDATE still proves revision ownership on every dialect.
+        if session.in_transaction():
+            raise RuntimeError("conversion apply requires a fresh API session transaction")
+        try:
+            await session.execute(text("BEGIN IMMEDIATE"))
+            outcome = await ProfileService.apply_conversion(
+                session,
+                profile_id,
+                payload,
+                compliance_replanner=recompute_pinned_cis_compliance,
+            )
+            await session.commit()
+            return outcome
+        except BaseException:
+            if session.in_transaction():
+                await session.rollback()
+            raise
+
+    async with session.begin():
+        return await ProfileService.apply_conversion(
+            session,
+            profile_id,
+            payload,
+            compliance_replanner=recompute_pinned_cis_compliance,
+        )
+
+
+def _conversion_apply_response(outcome: ConversionApplyOutcome) -> ConversionApplyResponse:
+    plan = outcome.plan
+    source = plan["source"]
+    target = plan["target"]
+    profile = plan["profile"]
+    assert isinstance(source, dict)
+    assert isinstance(target, dict)
+    assert isinstance(profile, dict)
+    source_artifact = source["artifact"]
+    target_artifact = target["artifact"]
+    assert isinstance(source_artifact, dict)
+    assert isinstance(target_artifact, dict)
+    return ConversionApplyResponse.model_validate(
+        {
+            "kind": "profile-conversion-result",
+            "contract_version": 1,
+            "status": "applied",
+            "profile_id": profile["id"],
+            "source_revision": outcome.source_revision,
+            "result_revision": outcome.result_revision,
+            "source": {
+                "line_id": source_artifact["line_id"],
+                "artifact_id": source_artifact["artifact_id"],
+            },
+            "target": {
+                "line_id": target_artifact["line_id"],
+                "artifact_id": target_artifact["artifact_id"],
+            },
+            "plan_digest": plan["plan_digest"],
+            "result_document_digest": target["candidate_document_digest"],
+            "result_compliance_digest": plan["compliance"]["target_digest"],
+            "compliance": plan["compliance"],
+            "target_validation": plan["target_validation"],
+            "field_accounting": {
+                "application_write_fields": [
+                    "schema_version",
+                    "flags",
+                    "compliance",
+                    "revision",
+                ],
+                "database_managed_fields": ["updated_at"],
+                "preserved_fields": [
+                    "id",
+                    "name",
+                    "name_casefold",
+                    "description",
+                    "created_at",
+                    "deleted_at",
+                ],
+                "updated_at_changed": outcome.updated_at_changed,
+            },
+        }
+    )
+
+
 @router.post(
     "/import/firefox/policies.json",
     response_model=ProfileRead,
@@ -637,6 +961,11 @@ async def import_firefox_policies_json(
                 ],
             },
         ) from exc
+    except SchemaChannelError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail={"message": "Schema channel is not available", "code": exc.code},
+        ) from exc
     except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -658,6 +987,145 @@ async def import_firefox_policies_json(
         validate_policies=False,
         conflict_detail="Profile with this name already exists",
     )
+
+
+@router.post(
+    "/{profile_id}/conversion-preview",
+    response_model=ConversionPreviewResponse,
+    summary="Preview Firefox schema conversion",
+    description=(
+        "Build a deterministic, value-free conversion plan from the current stored profile and "
+        "one caller-selected target artifact. This operation never writes the profile. A blocked "
+        "but available plan is returned as HTTP 200 with compatibility.applicable=false."
+    ),
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "model": ConversionPreviewErrorEnvelope,
+            "description": "The source profile does not exist.",
+        },
+        status.HTTP_409_CONFLICT: {
+            "model": ConversionPreviewErrorEnvelope,
+            "description": "The source is inactive or cannot be manually converted.",
+        },
+        status.HTTP_422_UNPROCESSABLE_CONTENT: {
+            "model": ConversionPreviewErrorEnvelope,
+            "description": "The target or source precondition is invalid.",
+        },
+        status.HTTP_503_SERVICE_UNAVAILABLE: {
+            "model": ConversionPreviewErrorEnvelope,
+            "description": "An exact required schema artifact is unavailable.",
+        },
+    },
+    openapi_extra={
+        "requestBody": {
+            "required": True,
+            "content": {
+                "application/json": {
+                    "schema": ConversionPreviewRequest.model_json_schema(),
+                    "example": {"target_artifact_id": "esr-153.0"},
+                }
+            },
+        }
+    },
+)
+async def preview_profile_conversion(
+    profile_id: int,
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> ConversionPreviewResponse:
+    payload = await _read_conversion_preview_request(request, profile_id=profile_id)
+    return await _conversion_preview_core(profile_id, payload, session)
+
+
+@router.post(
+    "/{profile_id}/conversion-apply",
+    response_model=ConversionApplyResponse,
+    summary="Apply Firefox schema conversion",
+    description=(
+        "Atomically rederive and apply one exact, current conversion preview. The request binds "
+        "only digests and schema/registry identities; policy and compliance candidates are always "
+        "derived again on the server."
+    ),
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "model": ConversionApplyErrorEnvelope,
+            "description": "The source profile does not exist.",
+        },
+        status.HTTP_409_CONFLICT: {
+            "model": ConversionApplyErrorEnvelope,
+            "description": "The preview is stale, blocked, or its active source changed.",
+        },
+        status.HTTP_422_UNPROCESSABLE_CONTENT: {
+            "model": ConversionApplyErrorEnvelope,
+            "description": "The apply request or current conversion precondition is invalid.",
+        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "model": ConversionApplyErrorEnvelope,
+            "description": "The transaction failed and no conversion was committed.",
+        },
+        status.HTTP_503_SERVICE_UNAVAILABLE: {
+            "model": ConversionApplyErrorEnvelope,
+            "description": "An exact required schema artifact is unavailable.",
+        },
+    },
+    openapi_extra={
+        "requestBody": {
+            "required": True,
+            "content": {
+                "application/json": {
+                    "schema": ConversionApplyRequest.model_json_schema(),
+                    "example": _conversion_apply_request_example(),
+                }
+            },
+        }
+    },
+)
+async def apply_profile_conversion(
+    profile_id: int,
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> ConversionApplyResponse:
+    payload = await _read_conversion_apply_request(request, profile_id=profile_id)
+    try:
+        outcome = await _conversion_apply_in_transaction(
+            session,
+            profile_id=profile_id,
+            payload=payload,
+        )
+    except ConversionApplyFailure as exc:
+        code = exc.code
+        raise _conversion_preview_error(
+            code=code,
+            http_status=_conversion_apply_status(
+                code,
+                source_artifact_id=exc.source_artifact_id or payload.source.artifact_id,
+            ),
+            profile_id=profile_id,
+            expected_revision=payload.expected_revision,
+            current_revision=exc.current_revision,
+            plan_digest=payload.plan_digest,
+            retry_preview_required=_conversion_apply_retry_preview_required(code),
+        ) from exc
+    except (SQLAlchemyError, RuntimeError) as exc:
+        raise _conversion_preview_error(
+            code="conversion_apply_failed",
+            http_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            profile_id=profile_id,
+            expected_revision=payload.expected_revision,
+            plan_digest=payload.plan_digest,
+        ) from exc
+    except Exception as exc:
+        # Planner/adapter defects are never allowed to escape as a partial
+        # mutation or an unstructured server response. The transaction helper
+        # has rolled the session back before this boundary observes the error.
+        raise _conversion_preview_error(
+            code="conversion_apply_failed",
+            http_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            profile_id=profile_id,
+            expected_revision=payload.expected_revision,
+            plan_digest=payload.plan_digest,
+        ) from exc
+    return _conversion_apply_response(outcome)
 
 
 @router.patch("/{profile_id}", response_model=ProfileRead, summary="Update profile")

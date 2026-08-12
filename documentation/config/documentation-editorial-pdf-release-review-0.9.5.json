@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "review_id": "bpm-0.9.5-editorial-pdf-release-review",
+  "backlog_item": "BPM095-M8-05",
+  "target_bpm_version": "0.9.5",
+  "release_blocking": true,
+  "status": "accepted",
+  "reviewed_at": "2026-08-12",
+  "reviewer": "BPM 0.9.5 product-documentation editorial and PDF release review",
+  "reviewed_source": {
+    "source_fingerprint": "693801a8ae9a56a484c5670f5c2d82380908c2ae8aaf0254a61621a152b7cd32",
+    "source_revision": "6ea9010a1e35df45d091543a8ea95ceb380600c6",
+    "changed_physical_topic_files": {
+      "user": 54,
+      "admin": 48,
+      "firefox": 12,
+      "cis": 12
+    },
+    "guide_map_changes": 0,
+    "generated_artifacts_are_not_hand_edited": true
+  },
+  "topic_authority_review": {
+    "coverage_rule": "The BPM095-M8-01 impact inventory was reviewed against all four affected guide maps. Every reader-visible lifecycle, conversion, support-boundary, recovery, and API change has one audience owner; Firefox and CIS changes are also covered by the User Guide's referenced workflows rather than by an invented standalone PDF.",
+    "user": {
+      "product_authorities": [
+        "docs/architecture/firefox-schema-lifecycle-documentation-impact-inventory-0.9.5.json",
+        "documentation/tests/contract/test_current_schema_documentation.py",
+        "documentation/tests/contract/test_user_guide_import_export_topics.py"
+      ],
+      "locale_authority": "app/i18n/{en,ru,de,zh-CN,fr,es-ES}.json"
+    },
+    "admin": {
+      "product_authorities": [
+        "docs/architecture/firefox-schema-lifecycle-documentation-impact-inventory-0.9.5.json",
+        "documentation/tests/contract/test_api_integration_topics.py",
+        "documentation/tests/contract/test_administrator_guide_scope.py"
+      ],
+      "locale_authority": "app/i18n/{en,ru,de,zh-CN,fr,es-ES}.json"
+    },
+    "firefox": {
+      "product_authorities": [
+        "docs/architecture/firefox-schema-lifecycle-documentation-impact-inventory-0.9.5.json",
+        "documentation/tests/contract/test_firefox_policy_topic_model.py"
+      ],
+      "locale_authority": "app/i18n/{en,ru,de,zh-CN,fr,es-ES}.json"
+    },
+    "cis": {
+      "product_authorities": [
+        "docs/architecture/firefox-schema-lifecycle-documentation-impact-inventory-0.9.5.json",
+        "documentation/tests/contract/test_cis_topic_model.py"
+      ],
+      "locale_authority": "app/i18n/{en,ru,de,zh-CN,fr,es-ES}.json"
+    }
+  },
+  "editorial_review": {
+    "runbook": "documentation/runbooks/documentation-update-for-future-epics.md",
+    "maps_reviewed": [
+      "documentation/src/dita/en/maps/user-guide.ditamap",
+      "documentation/src/dita/en/maps/firefox-policy-guide.ditamap",
+      "documentation/src/dita/en/maps/cis-settings-guide.ditamap",
+      "documentation/src/dita/en/maps/administrator-guide.ditamap"
+    ],
+    "english_style": "Reviewed affected English headings, procedures, expected results, warnings, recovery copy, API explanations, and support boundaries for concise Microsoft-style reader language and one-action procedural steps.",
+    "completeness_and_exclusions": "Reviewed ESR 115 purpose/caveat, four-channel choice, latest-ESR recommendation, manual preview/apply, failure recovery, policy availability, CIS channel availability, API envelopes, and retirement recovery. No maintainer workflow, CI instruction, raw internal recipe, secret, private host, or future capability is presented as reader-visible behavior.",
+    "bpm_ui_and_mozilla_terminology": "BPM UI labels are checked against app/i18n locale catalogs. Firefox UI and support-prose evidence follows documentation/config/locale-terminology-authority-0.9.1.json: Mozilla Pontoon lookup template https://pontoon.mozilla.org/{locale}/firefox/all-resources/?search={source_term}; Mozilla SUMO lookup template https://support.mozilla.org/{locale}/kb/{article_slug}.",
+    "dita_and_site_ownership": "DITA source remains the only hand-authored input. documentation/tools/build_docs.py and documentation/buildlib own the regenerated HTML site, navigation, search, PDF candidate, and manifests; no generated output was hand-edited."
+  },
+  "locale_reviews": {
+    "en": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]},
+    "ru": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]},
+    "de": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]},
+    "zh-CN": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]},
+    "fr": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]},
+    "es-ES": {"state": "reviewed", "reviewed_topic_families": ["user", "admin", "firefox", "cis"]}
+  },
+  "screenshot_review": {
+    "approved_boundary": "0 new/36 reused",
+    "source_matrix": "documentation/config/user-guide-screenshot-matrix-0.9.1.json",
+    "new_rows": 0,
+    "reused_rows": 36,
+    "reason": "The approved matrix contains no pre-authorized conversion-review scenario. The feature changes text and workflows, not an approved screenshot state or its printable geometry; adding a conversion screenshot would require explicit backlog approval and six-locale caption/alt-text ownership.",
+    "pdf_spotcheck": "A reused User Guide figure was visually inspected at printable scale. Its localized caption, image bounds, readable UI, and adjacent numbered procedure fit without clipping."
+  },
+  "pdf_scope": {
+    "included_guides": ["user", "admin"],
+    "excluded_standalone_guides": ["firefox", "cis"],
+    "exclusion_reason": "The maintained PDF generation contract has exactly User and Administrator source maps. Firefox Policy and CIS are affected and were reviewed in DITA/site and as referenced User Guide workflows, but no separate Firefox or CIS PDF artifact exists in the delivery contract."
+  },
+  "pdf_visual_reviews": [
+    {"locale": "en", "guide": "user", "artifact": "documentation/build/pdf/en/browser-policy-manager-user-guide-en-0.9.5.pdf", "sha256": "1cb9429ccb2b01d717f4fbbcbbdd2fac89b498f66e94d4b2fa089c639ae1136c", "page_count": 105},
+    {"locale": "en", "guide": "admin", "artifact": "documentation/build/pdf/en/browser-policy-manager-administrator-guide-en-0.9.5.pdf", "sha256": "c3bfa117d156425e7cfed34dad0fdaacfa9ee369dcefe4b77f723bead0a11b2b", "page_count": 81},
+    {"locale": "ru", "guide": "user", "artifact": "documentation/build/pdf/ru/browser-policy-manager-user-guide-ru-0.9.5.pdf", "sha256": "d2ea0f264b401a42a259bd7fa4dff2a966e53bdc669721f0a30756af6e4e7625", "page_count": 108},
+    {"locale": "ru", "guide": "admin", "artifact": "documentation/build/pdf/ru/browser-policy-manager-administrator-guide-ru-0.9.5.pdf", "sha256": "61916e7dcb0e9d5544db489c9beedcfe5b3ac678e7ba30994526383c74b600b3", "page_count": 99},
+    {"locale": "de", "guide": "user", "artifact": "documentation/build/pdf/de/browser-policy-manager-user-guide-de-0.9.5.pdf", "sha256": "a12bd85997d07f54badf3ab08dbfaa773343a073e3bce8548aea1751e4b1c3d0", "page_count": 107},
+    {"locale": "de", "guide": "admin", "artifact": "documentation/build/pdf/de/browser-policy-manager-administrator-guide-de-0.9.5.pdf", "sha256": "3d35002a9cef90f072e4954322badc2ebf81a8e516c3854c6cbeca8421dfce8f", "page_count": 97},
+    {"locale": "zh-CN", "guide": "user", "artifact": "documentation/build/pdf/zh-CN/browser-policy-manager-user-guide-zh-CN-0.9.5.pdf", "sha256": "3836929ce185e002b31f8f4605ed7a9373c75cdeee83432731cfbe39df3b2149", "page_count": 104},
+    {"locale": "zh-CN", "guide": "admin", "artifact": "documentation/build/pdf/zh-CN/browser-policy-manager-administrator-guide-zh-CN-0.9.5.pdf", "sha256": "7fdfa304f7d409e3dd076f23e279ad816a46d73a461f65ede3e9866a452d7a84", "page_count": 69},
+    {"locale": "fr", "guide": "user", "artifact": "documentation/build/pdf/fr/browser-policy-manager-user-guide-fr-0.9.5.pdf", "sha256": "66a4cfba9d563351fcc7c9b3edc6b4171da04934b37e4fa23472869a750c8019", "page_count": 107},
+    {"locale": "fr", "guide": "admin", "artifact": "documentation/build/pdf/fr/browser-policy-manager-administrator-guide-fr-0.9.5.pdf", "sha256": "530af0e3db2498bfd389518d3f8c647d1d98db94a3ad656bef5d88588d6816ae", "page_count": 95},
+    {"locale": "es-ES", "guide": "user", "artifact": "documentation/build/pdf/es-ES/browser-policy-manager-user-guide-es-ES-0.9.5.pdf", "sha256": "e8d299453327fed6eeeeb97304f928839b3e4f3ce29d7f79789cfc124d26926d", "page_count": 106},
+    {"locale": "es-ES", "guide": "admin", "artifact": "documentation/build/pdf/es-ES/browser-policy-manager-administrator-guide-es-ES-0.9.5.pdf", "sha256": "1fdb4e3d0453e57a5d070f367e80a1cc0d6855afc800caa0aa6f6169be356cfb", "page_count": 97}
+  ],
+  "visual_checks": {
+    "title_page_page_count_and_footer": "passed: six localized titles, exact page totals, footer year/copyright placement, and no title-page sequence number were checked by the binary verifier and representative visual inspection.",
+    "contents_page_numbers_and_linked_navigation": "passed by binary verifier and EN/zh-CN contents-page visual inspection.",
+    "ui_control_and_admonition_formatting": "passed: representative User Guide workflow and warning rendering were visually checked.",
+    "code_and_cjk_layout": "passed: EN Administrator inline API literals/codeblock and zh-CN User/Admin prose, inline paths, identifiers, JSON literals, and codeblocks were visually checked for legibility, wrapping, baseline alignment, and overlap.",
+    "caption_visibility": "passed: a representative reused figure and localized caption fit within the printable page area.",
+    "guide_wide_figure_numbering": "passed: every User Guide retains the localized sequence 1 through 6",
+    "metadata_and_binary_integrity": "passed: all 12 A4 PDFs report localized titles, fixed metadata timestamps, expected page totals, manifest SHA-256 values, and qpdf syntax integrity."
+  },
+  "blocking_findings": [],
+  "automated_evidence": {
+    "focused_m8_contracts": "passed: post-remediation docs-fast-check for de/zh-CN/fr/es-ES API topics and 9 focused PDF generation, future-layout, and delivery contracts",
+    "dita_and_site_validation": "passed: final make docs-build completed source validation, DITA HTML5 6/6, portal assembly, and atomic site promotion",
+    "pdf_build": "passed: one controlled make docs-pdf-build completed 24/24 locale-guide phases and atomic candidate promotion",
+    "pdf_binary_verification": "passed: make docs-pdf-verify; qpdf --check and pdfinfo metadata review covered all 12 PDFs",
+    "pdf_independent_reproducibility": "passed: cache-bypassed isolated rerun completed 24/24 locale-guide phases and matched all 12 PDFs plus manifest (13 files)",
+    "pdf_delivery": "passed: make docs-pdf-deliver atomically promoted distributions/documentation/0.9.5 and make docs-pdf-delivery-verify accepted it",
+    "docs_release_check": "passed: final make docs-release-check completed after this evidence record was installed; all 1,001 selected documentation contracts passed",
+    "docs_install_dev": "passed: make docs-install-dev installed the BPM 0.9.5 documentation artifact after the final documentation change; this task did not start make dev"
+  },
+  "final_sign_off": {
+    "state": "accepted",
+    "reason": "All affected guide maps, six locale review records, DITA/site ownership outputs, twelve delivery-contract PDFs, visual risk checks, metadata, reproducibility, and atomic delivery evidence are accepted."
+  }
+}

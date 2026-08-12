@@ -28,7 +28,7 @@ export function getWorkflowLifecycleState({ dirty, invalid, currentId, currentPr
 }
 
 export function buildUpdatePayload(form, parsedFlags, compliancePayload, expectedRevisionPayload = {}) {
-    return { description: form.description, schema_version: form.schemaVersion, flags: parsedFlags, compliance: compliancePayload, ...expectedRevisionPayload };
+    return { description: form.description, flags: parsedFlags, compliance: compliancePayload, ...expectedRevisionPayload };
 }
 
 export function buildCreatePayload(form, parsedFlags, compliancePayload, { name = form.name } = {}) {

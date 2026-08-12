@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@cyclonedx/cyclonedx-npm": "6.0.0",
-    "esbuild": "0.28.1"
+    "esbuild": "0.28.2"
   },
   "overrides": {
     "dompurify": "3.4.13"

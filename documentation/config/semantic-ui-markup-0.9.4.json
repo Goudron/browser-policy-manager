@@ -64,6 +64,7 @@
     "user/ug-task-search-all-settings.dita": ["profiles.settings_mode_review", "profiles.settings_mode_configured", "profiles.settings_mode_catalog"],
     "user/ug-task-use-advanced-schema-controls.dita": ["profiles.settings_mode_catalog"],
     "user/ug-task-use-all-settings.dita": ["profiles.settings_mode_review", "profiles.settings_mode_configured", "profiles.settings_mode_catalog"],
+    "user/ug-task-use-profile-library.dita": ["profiles.nav_library"],
     "user/ug-task-change-interface-theme.dita": ["profiles.theme_system", "profiles.theme_light", "profiles.theme_dark"],
     "user/ug-task-change-interface-language.dita": [
       "profiles.locale_option_en",
@@ -92,6 +93,7 @@
   },
   "ambiguous_exclusions": [
     "profiles.library_action_export",
+    "profiles.nav_library",
     "profiles.nav_overview",
     "profiles.nav_details",
     "profiles.theme_label",

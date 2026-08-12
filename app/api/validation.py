@@ -10,7 +10,7 @@ from app.core.policy_validation import (
     load_policy_schema_for_channel,
     validate_profile_policies_or_raise,
 )
-from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNEL_SET
+from app.core.schema_channels import SchemaChannelError, require_supported_schema_channel
 from app.services.firefox_policy_import import (
     FirefoxPoliciesDocumentValidationError,
     FirefoxPoliciesImportError,
@@ -40,16 +40,16 @@ class ValidationRequest(BaseModel):
     )
 
 
-# Supported profiles are aligned with the bundled internal policy schemas.
-_SUPPORTED_PROFILES: set[str] = set(SUPPORTED_SCHEMA_CHANNEL_SET)
-
-
 def _get_schema_or_404(profile: str) -> dict[str, Any]:
-    """Return schema JSON for the given profile or raise 404 if it is unknown."""
-    if profile not in _SUPPORTED_PROFILES:
-        raise HTTPException(status_code=404, detail=f"Unknown profile '{profile}'")
+    """Return a supported bundled schema or the lifecycle's fail-closed error."""
     try:
+        require_supported_schema_channel(profile)
         return load_policy_schema_for_channel(profile)
+    except SchemaChannelError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail={"message": "Schema channel is not available", "code": exc.code},
+        ) from exc
     except ValueError as exc:
         raise HTTPException(
             status_code=503,
@@ -63,7 +63,7 @@ async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str
     Validate a policy document for the given profile.
 
     Request example:
-        POST /api/validate/release-152
+        POST /api/validate/release-153
         {
           "document": {
             "policies": {
@@ -74,12 +74,12 @@ async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str
         }
 
     Successful response:
-        { "ok": true, "profile": "release-152" }
+        { "ok": true, "profile": "release-153" }
 
     Validation error response:
         {
           "ok": false,
-          "profile": "release-152",
+          "profile": "release-153",
           "detail": "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]",
           "error":  "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]"
         }

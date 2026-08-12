@@ -6,7 +6,12 @@
       "source_tag": "mozilla-policy-templates-v8.0",
       "documentation_input": "data/upstream/policy-templates/v8.0/policy-templates.md",
       "linux_policies_input": "data/upstream/policy-templates/v8.0/linux-policies.json",
-      "output": "app/schemas/policies/firefox-release-153.json"
+      "output": "app/schemas/policies/firefox-release-153.json",
+      "artifact_id": "release-153",
+      "line_id": "release-153",
+      "firefox_line": "153",
+      "firefox_version": "153.0.3",
+      "ui_label": "Release 153"
     },
     {
       "channel": "esr-153.0",
@@ -14,7 +19,12 @@
       "source_tag": "mozilla-policy-templates-v8.0",
       "documentation_input": "data/upstream/policy-templates/v8.0/policy-templates.md",
       "linux_policies_input": "data/upstream/policy-templates/v8.0/linux-policies.json",
-      "output": "app/schemas/policies/firefox-esr-153.0.json"
+      "output": "app/schemas/policies/firefox-esr-153.0.json",
+      "artifact_id": "esr-153.0",
+      "line_id": "esr-153",
+      "firefox_line": "153",
+      "firefox_version": "153.0esr",
+      "ui_label": "ESR 153.0"
     },
     {
       "channel": "esr-140.13",
@@ -22,7 +32,25 @@
       "source_tag": "mozilla-policy-templates-v7.12",
       "documentation_input": "data/upstream/policy-templates/v7.12/policy-templates.md",
       "linux_policies_input": "data/upstream/policy-templates/v7.12/linux-policies.json",
-      "output": "app/schemas/policies/firefox-esr-140.13.json"
+      "output": "app/schemas/policies/firefox-esr-140.13.json",
+      "artifact_id": "esr-140.13",
+      "line_id": "esr-140",
+      "firefox_line": "140",
+      "firefox_version": "140.13.0esr",
+      "ui_label": "ESR 140.13"
+    },
+    {
+      "channel": "esr-115.38",
+      "version": "115.38",
+      "source_tag": "mozilla-policy-templates-v5.12",
+      "documentation_input": "data/upstream/policy-templates/v5.12/policy-templates.md",
+      "linux_policies_input": "data/upstream/policy-templates/v5.12/linux-policies.json",
+      "output": "app/schemas/policies/firefox-esr-115.38.json",
+      "artifact_id": "esr-115.38",
+      "line_id": "esr-115",
+      "firefox_line": "115",
+      "firefox_version": "115.38.0esr",
+      "ui_label": "ESR 115.38"
     }
   ]
 }

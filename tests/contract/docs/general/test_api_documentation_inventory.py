@@ -46,9 +46,9 @@ def test_api_documentation_inventory_matches_openapi_operations():
     ]
     integration_openapi, web_openapi = _openapi_operations()
 
-    assert len(api_rows) == 15
-    assert len({row["operation"] for row in api_rows}) == 15
-    assert len({row["topic"] for row in api_rows}) == 6
+    assert len(api_rows) == 17
+    assert len({row["operation"] for row in api_rows}) == 17
+    assert len({row["topic"] for row in api_rows}) == 7
     assert {(row["method"], row["path"]) for row in api_rows} == integration_openapi
 
     assert len(web_rows) == 6

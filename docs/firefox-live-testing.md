@@ -11,7 +11,9 @@ not drive the BPM `/profiles` UI, wizard flow, or Chromium product audit path.
 - Every test creates its own temporary Firefox profile.
 - The harness reuses a checksum-verified, immutable Firefox installation under `.bpm-test-browsers/`.
 - Each run clones that installation before writing `distribution/policies.json`; it never writes
-  into the verified installation.
+  into the verified installation. Firefox ESR 115 is a separate browser binary
+  from the ESR 115 policy-template source (`v5.12`) used by schema generation;
+  the template tag is not a browser version or live-browser download.
 - Your normal Firefox profile and settings are not reused.
 
 ## Project-local sandbox
@@ -56,18 +58,22 @@ make setup-firefox-live-browsers
 
 The helper downloads exact Linux x86-64 archives, verifies their SHA-256 values in a temporary
 staging directory, checks the extracted executable versions, and only then atomically promotes a
-channel-specific immutable install. The pinned Release pair is Firefox `153.0.1` with geckodriver
-`0.37.1`.
+channel-specific immutable install. It prints flushed `phase/channel` progress, including the
+real completed/total channel count when invoked with `FIREFOX_CHANNEL=all`. The exact URLs and
+SHA-256 values remain manifest-owned; it never resolves a floating `latest` artifact.
 
 To install the ESR sandbox instead, pass the channel through Make:
 
 ```bash
-make setup-firefox-live-browsers FIREFOX_CHANNEL=esr153
+make setup-firefox-live-browsers FIREFOX_CHANNEL=esr115
 ```
 
-The supported channels are `release` (Firefox `153.0.1`), `esr153` (Firefox `153.0esr`), and
-`esr140` (Firefox `140.13.0esr`), all with geckodriver `0.37.1`. Verify a provisioned channel
-before a rerun:
+The supported deterministic channels are `release` (Firefox `153.0.3`), `esr153` (Firefox
+`153.0esr`), `esr140` (Firefox `140.13.0esr`), and `esr115` (Firefox `115.38.0esr`), all paired
+with geckodriver `0.37.1`. ESR 115 uses Mozilla's immutable
+`firefox-115.38.0esr.tar.bz2` archive; its manifest SHA-256 is
+`24ad694f543b251482f62b6313f1e10bdfafa3279a2aec8aae6042c0b3eed530`.
+Verify a provisioned channel before a rerun:
 
 ```bash
 make verify-firefox-live-browsers FIREFOX_CHANNEL=esr153
@@ -91,6 +97,17 @@ use:
 ```bash
 make firefox-live-workflow FIREFOX_CHANNEL=release
 ```
+
+To provision and run each independently pinned deterministic channel in sequence, retaining a
+per-channel `versions.json`, `run-summary.json`, JUnit result, safe pytest log, skipped-scenario
+count, and failure artifacts, use:
+
+```bash
+make firefox-live-four-channel-workflow
+```
+
+This all-channel target reports Release 153, ESR 153, ESR 140, and ESR 115 as channels `1/4`
+through `4/4`; one failed channel does not suppress the retained summaries for later channels.
 
 ## AMO canary
 
@@ -137,7 +154,8 @@ These scenarios intentionally focus on the Firefox policy engine itself:
   Does not run live Firefox suites.
 - `.github/workflows/firefox-live.yml`
   Runs the deterministic local suite weekly and by manual dispatch when `run_live_tests`
-  is set to `RUN`, separately for `release`, `esr153`, and `esr140`.
+  is set to `RUN`, separately for `release`, `esr153`, `esr140`, and `esr115`.
 - `.github/workflows/firefox-live-amo.yml`
   Runs the separate AMO canary suite only by manual dispatch when
-  `run_live_tests` is set to `RUN`, separately for the same three channels.
+  `run_live_tests` is set to `RUN`, separately for `release`, `esr153`, and `esr140`.
+  AMO remains external to the four-channel deterministic policy gate.

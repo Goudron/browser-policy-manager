@@ -32,6 +32,7 @@ import { create as createPreferenceViews } from "./profiles_preferences_views.js
 import { create as createRuntime } from "./profiles_runtime.js";
 import * as jsonEditorRuntime from "./profiles_runtime_json_editor.js";
 import { create as createDirtyRouteGuard } from "./profiles_runtime_dirty_guard.js";
+import { create as createConversionReview } from "./profiles_modules/conversion_review.mjs";
 
     const WIZARD_REVIEW_FILTERS = [
         { value: "changed", key: "profiles.wizard_review_filter_changed", fallback: "Changed" },
@@ -422,6 +423,7 @@ import { create as createDirtyRouteGuard } from "./profiles_runtime_dirty_guard.
                 createRuntime,
                 jsonEditorRuntime,
                 createDirtyRouteGuard,
+                createConversionReview,
             },
         });
     }

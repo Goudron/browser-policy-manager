@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-firefox-schema" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Einen Firefox-Schemakanal auswählen</title>
-  <shortdesc>Wählen Sie Firefox Release 153, Firefox ESR 153.0 oder Firefox ESR 140.13, bevor Sie ein Profil importieren, validieren oder bearbeiten.</shortdesc>
+  <shortdesc>Wählen Sie Firefox Release 153, Firefox ESR 153.0, Firefox ESR 140.13 oder Firefox ESR 115.38, bevor Sie ein Profil importieren, validieren oder bearbeiten.</shortdesc>
   <taskbody>
     <prereq><p>Starten Sie diese Aufgabe, bevor Sie ein Profil erstellen, policies.json importieren oder ein JSON-Rohdokument validieren.</p></prereq>
-    <context><p>Der Schemakanal bestimmt, welche Firefox-Richtlinien BPM validieren kann und welche Steuerelemente als unterstützt angezeigt werden. Release 153 und ESR 153.0 enthalten aktuelle Steuerelemente wie AIControls und VisualSearchEnabled; ESR 140.13 bleibt ein eigener unterstützter Langzeitkanal. BPM migriert Profile nicht automatisch zwischen ESR-Kanälen.</p></context>
+    <context><p>Der Schemakanal bestimmt, welche Firefox-Richtlinien BPM validieren kann und welche Steuerelemente als unterstützt angezeigt werden. Release 153 und ESR 153.0 enthalten aktuelle Steuerelemente wie AIControls und VisualSearchEnabled; ESR 140.13 bleibt ein eigener unterstützter Langzeitkanal. ESR 115.38 wird für begrenzte kritische Sicherheitsanforderungen von Altsystemen unterstützt, verlängert aber nicht die Unterstützung des Betriebssystemherstellers; prüfen Sie diese Grenze am 2027-03-01 erneut. BPM migriert Profile nicht automatisch zwischen unterstützten ESR-Kanälen.</p></context>
     <steps>
-      <step><cmd>Vergleichen Sie die Zielbrowserflotte mit den unterstützten Kanälen: Release 153, ESR 153.0 und ESR 140.13.</cmd><info><p>Erwartetes Ergebnis: Der ausgewählte Schemakanal bleibt sichtbar und beabsichtigt.</p></info></step>
-      <step><cmd>Wählen Sie ESR 140.13 oder ESR 153.0 für die passende unterstützte Extended-Support-Release-Bereitstellung.</cmd><info><p>Erwartetes Ergebnis: Der ausgewählte Schemakanal bleibt sichtbar und beabsichtigt.</p></info></step>
+      <step><cmd>Vergleichen Sie die Zielbrowserflotte mit den unterstützten Kanälen: Release 153, ESR 153.0, ESR 140.13 und ESR 115.38.</cmd><info><p>Erwartetes Ergebnis: Der ausgewählte Schemakanal bleibt sichtbar und beabsichtigt.</p></info></step>
+      <step><cmd>Wählen Sie ESR 115.38, ESR 140.13 oder ESR 153.0 für die passende unterstützte Extended-Support-Release-Bereitstellung.</cmd><info><p>Erwartetes Ergebnis: Der ausgewählte Schemakanal bleibt sichtbar und beabsichtigt.</p></info></step>
       <step><cmd>Wählen Sie Release 153 oder ESR 153.0, wenn das Profil aktuelle Steuerelemente einschließlich unterstützter AI- und visueller Suchrichtlinien benötigt.</cmd><info><p>Erwartetes Ergebnis: Der ausgewählte Schemakanal bleibt sichtbar und beabsichtigt.</p></info></step>
       <step><cmd>Validieren Sie nach der Auswahl des Kanals und vor dem Speichern, Exportieren oder Übergeben.</cmd><info><note type="warning">Die Validierung kann von gültig zu ungültig wechseln, wenn sich der Schemakanal ändert. Bestätigen Sie den Kanal, bevor Sie ihn speichern oder exportieren.</note></info></step>
     </steps>
     <result><p>Das Profil verwendet den Schemakanal, der der beabsichtigten Firefox-Bereitstellung entspricht.</p></result>
-    <postreq><p>Wiederherstellung: Wenn die Validierung nicht unterstützte, nicht verfügbare, veraltete oder unbekannte Einstellungen meldet, bestätigen Sie den Schemakanal, bevor Sie Richtlinienwerte bearbeiten. Für den Wechsel von ESR 140.13 zu ESR 153.0 sind eine ausdrückliche Zielkanalentscheidung und eine Prüfung erforderlich.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn die Validierung nicht unterstützte, nicht verfügbare, veraltete oder unbekannte Einstellungen meldet, bestätigen Sie den Schemakanal, bevor Sie Richtlinienwerte bearbeiten. Jeder Wechsel zwischen unterschiedlichen aktuellen Artefakten, einschließlich ESR 115.38, ESR 140.13, ESR 153.0 und Release 153, verlangt eine ausdrückliche Zielentscheidung und eine neue Vorschau. Eine blockierte, veraltete, ungültige oder fehlgeschlagene Konvertierung lässt das gespeicherte Profil unverändert.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

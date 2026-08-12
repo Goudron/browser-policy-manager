@@ -1775,7 +1775,7 @@ def _all_settings_help_target_contract() -> dict[str, Any]:
     contract = _read_json_file(ALL_SETTINGS_HELP_TARGET_MAP)
     if contract.get("schema_version") != 1:
         raise BuildError("unsupported All Settings help target map contract schema")
-    if contract.get("target_bpm_version") != "0.9.1":
+    if contract.get("target_bpm_version") != _product_version():
         raise BuildError("All Settings help target map contract has the wrong BPM version")
     return contract
 

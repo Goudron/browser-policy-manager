@@ -245,6 +245,29 @@
             text-transform: uppercase;
         }
 
+        .library-conversion-recommendation {
+            display: grid;
+            gap: 4px;
+            max-width: 100%;
+            margin-top: 8px;
+        }
+
+        .library-conversion-recommendation-action {
+            color: var(--accent-deep);
+            font-size: 0.78rem;
+            font-weight: 700;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+        }
+
+        .library-conversion-recommendation-consequence {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.74rem;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+        }
+
         .library-row-meta-secondary {
             color: var(--muted);
             font-size: 0.82rem;
@@ -820,4 +843,44 @@
 
         html[data-theme="dark"] [class~="hover:text-slate-900"]:hover {
             color: #f8fafc !important;
+        }
+
+        .library-conversion-recommendation {
+            display: grid;
+            gap: 5px;
+            min-width: 0;
+            margin-top: 10px;
+            padding: 9px 10px;
+            border: 1px solid rgba(15, 118, 110, 0.24);
+            border-radius: 12px;
+            background: rgba(240, 253, 250, 0.78);
+        }
+
+        .library-conversion-recommendation-action {
+            display: inline-flex;
+            align-items: center;
+            min-height: 32px;
+            width: fit-content;
+            max-width: 100%;
+            color: #0f766e;
+            font-size: 0.78rem;
+            font-weight: 750;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+            text-decoration-thickness: 1.5px;
+            text-underline-offset: 0.16em;
+        }
+
+        .library-conversion-recommendation-action:focus-visible {
+            outline: var(--focus-ring-width) solid var(--focus-ring-color);
+            outline-offset: 3px;
+            border-radius: 5px;
+        }
+
+        .library-conversion-recommendation-consequence {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.76rem;
+            line-height: 1.48;
+            overflow-wrap: anywhere;
         }

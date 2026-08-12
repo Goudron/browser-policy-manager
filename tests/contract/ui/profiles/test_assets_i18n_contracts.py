@@ -20,7 +20,8 @@ def test_profiles_header_shows_supported_firefox_channels_on_a_separate_explanat
         "Supported Firefox schemas:",
         "Release 153,",
         "ESR 153.0,",
-        "ESR 140.13",
+        "ESR 140.13,",
+        "ESR 115.38",
     ]
     assert counter is not None
     assert counter.find("strong", id="workspace-profile-count", recursive=False) is not None
@@ -38,7 +39,7 @@ def test_profiles_header_uses_the_approved_russian_three_schema_wording():
 
     assert versions is not None
     assert versions.get_text(" ", strip=True).replace(" ,", ",") == (
-        "Поддерживаемые схемы Firefox: релиз 153, ESR 153.0, ESR 140.13"
+        "Поддерживаемые схемы Firefox: релиз 153, ESR 153.0, ESR 140.13, ESR 115.38"
     )
 
 
@@ -63,12 +64,13 @@ def test_profiles_header_uses_comma_separated_schema_lists_without_css_separator
                         "profiles.firefox_schema_release_153",
                         "profiles.firefox_schema_esr_153_0",
                         "profiles.firefox_schema_esr_140_13",
+                        "profiles.firefox_schema_esr_115_38",
                     )
                 ),
             )
         )
 
-        assert expected.count(",") == 2
+        assert expected.count(",") == 3
 
 
 def test_profiles_theme_color_matches_the_product_light_surface():
@@ -81,6 +83,21 @@ def test_profiles_theme_color_matches_the_product_light_surface():
     assert '<meta name="theme-color" content="#edf2f7"' in response.text
     assert 'resolvedTheme === "dark" ? "#07111a" : "#edf2f7"' in head_bootstrap
     assert 'resolvedTheme === "dark" ? "#07111a" : "#edf2f7"' in platform
+
+
+def test_schema_conversion_surfaces_have_owned_responsive_focus_and_theme_styles():
+    css = (REPO_ROOT / "app" / "static" / "profiles.css").read_text(encoding="utf-8")
+
+    for selector in (
+        ".library-conversion-recommendation",
+        ".library-conversion-recommendation-action:focus-visible",
+        ".schema-conversion-review-summary",
+        '.schema-conversion-review-status[role="alert"]',
+        'html[data-theme="dark"] .schema-conversion-review-status',
+        "@media (forced-colors: active)",
+        "@media (max-width: 820px)",
+    ):
+        assert selector in css
 
 
 def test_json_profile_route_uses_local_monaco_assets():
@@ -156,6 +173,47 @@ def test_existing_profile_routes_embed_initial_profile_payload():
     assert soup.find(id="current-meta").get_text(strip=True).startswith("#")
 
 
+def test_esr_115_profile_is_selectable_and_schema_scoped_across_editor_surfaces():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(
+            name="ESR 115 editor surface contract",
+            schema_version="esr-115.38",
+            flags={"DisableTelemetry": True},
+        ),
+    )
+    profile_id = create_response.json()["id"]
+
+    library = client.get("/profiles")
+    compare = client.get("/profiles/compare")
+    guided = client.get(f"/profiles/{profile_id}/edit")
+    settings = client.get(f"/profiles/{profile_id}/settings")
+    json_editor = client.get(f"/profiles/{profile_id}/json")
+
+    for response in (library, compare, guided, settings, json_editor):
+        assert response.status_code == 200
+        assert 'data-firefox-channel="esr-115.38"' in response.text
+        assert "ESR 115.38" in response.text
+
+    assert '<option value="esr-115.38"' in library.text
+    assert 'id="schema-channels-catalog"' in compare.text
+    assert '"schema_version": "esr-115.38"' in guided.text
+    shell_catalog = json.loads(
+        BeautifulSoup(guided.text, "html.parser").find(id="wizard-schema-shell-catalog").get_text()
+    )
+    esr_115_policy_ids = {
+        item["id"]
+        for step in shell_catalog["channels"]["esr-115.38"]["steps"].values()
+        for bucket in ("recommended", "additional", "raw_fallback")
+        for item in step[bucket]
+    }
+    assert len(esr_115_policy_ids) == 97
+    assert "HttpsOnlyMode" not in esr_115_policy_ids
+    assert 'id="settings-schema-shell-step-2"' in settings.text
+    assert 'id="editor"' in json_editor.text
+
+
 def test_profiles_library_page_uses_library_only_assets():
     client = make_test_client(app)
 
@@ -200,6 +258,7 @@ def test_profiles_compare_page_uses_compare_only_assets():
         '<script type="module" src="/static/profiles_bundles/profile-compare.js?v=' in response.text
     )
     assert '<script id="compare-preferences-catalog" type="application/json">' in response.text
+    assert 'id="schema-channels-catalog"' in response.text
     assert '<link rel="stylesheet" href="/static/vendor/profiles_monaco.css?v=' not in response.text
     assert '<script src="/static/vendor/profiles_monaco.js?v=' not in response.text
     assert '<script src="/static/profiles_library_bootstrap.js?v=' not in response.text
@@ -358,6 +417,15 @@ def test_profiles_compare_selector_options_split_name_schema_and_timestamp_contr
     )
     assert 'class="compare-selected-profile mt-3"' in template
     assert 'class="mt-3 compact-counter"' not in template
+
+
+def test_compare_schema_labels_use_the_read_only_catalog_and_active_locale_contract():
+    compare_shell = template_source("_compare_shell.html")
+    utils_source = static_source("profiles_utils.js")
+
+    assert 'id="schema-channels-catalog"' in compare_shell
+    assert "catalog.options.find((option) => option?.value === value)" in utils_source
+    assert "window.__BPM_INITIAL_LOCALE__" in utils_source
 
 
 def test_profiles_compare_selector_results_are_bounded_scroll_containers_contract():

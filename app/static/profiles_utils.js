@@ -10,7 +10,7 @@
     const utils = {
         getDefaultSchemaVersion(documentRef = document) {
             const catalog = readSchemaChannelsCatalog(documentRef);
-            return typeof catalog.default_channel === "string" ? catalog.default_channel : "esr-140.13";
+            return typeof catalog.default_channel === "string" ? catalog.default_channel : "";
         },
 
         humanizeIdentifier(value) {
@@ -196,6 +196,16 @@
             if (localizedOption?.textContent) return localizedOption.textContent.trim();
             const catalog = readSchemaChannelsCatalog();
             const labels = catalog && typeof catalog.labels === "object" ? catalog.labels : {};
+            const catalogOption = Array.isArray(catalog?.options)
+                ? catalog.options.find((option) => option?.value === value)
+                : null;
+            const localizedCatalog = window.__BPM_INITIAL_LOCALE__;
+            const localizedLabel = catalogOption?.i18n_key
+                && localizedCatalog
+                && typeof localizedCatalog[catalogOption.i18n_key] === "string"
+                ? localizedCatalog[catalogOption.i18n_key]
+                : "";
+            if (localizedLabel) return localizedLabel;
             return labels[value] || value || utils.getDefaultSchemaVersion();
         },
     };

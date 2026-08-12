@@ -214,6 +214,49 @@ code-block checks, page-fitting screenshots, and the successful
 `make docs-install-dev` handoff. A future epic may scope the review to affected
 guides only, but it must record why each untouched guide is unaffected.
 
+### Documentation preflight and heavy-build order
+
+When creating a backlog that changes maintained documentation, the documentation-update milestone
+must contain an explicit **preflight task before any site or PDF build task**. The preflight task
+must inventory the complete changed English topic set and every localized peer, then validate all
+source-derived owners that can otherwise fail late in a six-locale build. At minimum it must cover:
+
+- DITA structure, complete `{"policies": {...}}` examples, links, metadata, locale parity, native
+  headings, technical `codeph` literals, and the affected screenshot disposition;
+- current OpenAPI/API-inventory status codes, operation/topic counts, public examples, and runtime
+  schema/channel facts;
+- Firefox/CIS inventories, generated-source inputs, four-channel/layer counts, search facets,
+  aliases, contextual-help targets, manifests, and localized search labels;
+- all source-bound delivery/layout/version contracts, generated snapshot inputs, and the owner
+  commands needed to refresh those artifacts.
+
+The preflight acceptance must list its exact source/contract commands and require every failure to
+be resolved **before** a site or PDF candidate is built. A focused preflight may regenerate an
+owner artifact or snapshot when its source is complete; it must then rerun that artifact's exact
+contract. It must not hand-edit generated site, search, skeleton, snapshot, package, or PDF output.
+
+After the preflight is green, backlog tasks must use this single heavy-build sequence:
+
+1. Finish all English and locale source edits, generated-source refreshes, and the bounded
+   preflight contracts.
+2. Run one owner site build and verify its atomic publication, manifest, navigation, search, and
+   contextual-help outputs. If it fails, diagnose and fix the responsible source or contract; do
+   not start a second build until that focused preflight is green again.
+3. Run one owner PDF build, then PDF verification, visual review, reproducibility, and atomic
+   delivery. Do not retry a full PDF build merely because a later release contract fails; first
+   determine whether the defect changes PDF source or only a non-PDF owner.
+4. Run one authoritative documentation release gate after every affected source, generated owner,
+   site, and PDF artifact is current. If it finds drift, return to the smallest responsible
+   preflight owner, repair it, and rerun only the invalidated heavy stage plus this final gate.
+5. Run package verification and `make docs-install-dev` only after the release gate is green.
+
+Do not schedule site/PDF/reproducibility builds as independent exploratory tasks that can run before
+the preflight or overlap each other. The backlog must name the invalidation boundary for every
+heavy artifact: a source change that affects DITA/site search must rebuild the site; a source,
+print, locale, or PDF-contract change must rebuild the PDFs; a test-only, API-inventory, snapshot,
+or non-PDF contract correction must not trigger a blind PDF rebuild. Long owner commands still need
+flushed phase/locale/guide completed-total progress, candidate quarantine, and atomic promotion.
+
 ### Maintainer `make dev` documentation handoff
 
 When a task changes product-documentation source, documentation build tooling, generated portal
@@ -326,7 +369,9 @@ Every backlog must end with a final quality milestone. Include tasks for:
     release procedures include documentation drift gates when the epic changed those areas.
 12. Create a git commit for the completed epic.
 13. Push the reviewed commit to its configured remote branch and monitor every triggered required
-    CI workflow until it reaches a terminal state; report the result.
+    CI workflow until it is green. Diagnose and repair every direct, actionable failure, create a
+    normal follow-up commit, push it without force, and repeat the required-CI loop. A successful
+    push or a failed workflow is not backlog completion.
 
 The coverage task must explicitly say that falling below 100% is not accepted as "known debt" for
 the epic. Either add focused tests, shrink untested dead code, or document and remove unreachable
@@ -352,14 +397,23 @@ If Make targets change in a future epic, update this runbook and the backlog tog
 
 After the reviewed epic commit is created, the assistant pushes it to the configured remote branch
 with a regular non-force push and monitors every required GitHub Actions workflow triggered by that
-push until its terminal state. The handoff records the commit SHA, remote branch, workflow URLs,
-and each job result. The assistant must not force-push, rewrite history, create a tag or release,
-open a pull request, or push unrelated local changes.
+push until it is green. The handoff records the commit SHA, remote branch, workflow URLs, and each
+job result. The assistant must not force-push, rewrite history, create a tag or release, open a
+pull request, or push unrelated local changes.
 
-If the remote is unavailable, credentials are missing, the remote branch has advanced, a protected
-branch rejects the push, or any required workflow fails, stop the release handoff and report the
-exact condition. Do not retry a rejected push, bypass branch protection, or continue after a failed
-workflow without explicit user direction.
+For every required workflow failure, inspect its failing job and logs, distinguish a direct,
+actionable repository failure from an external or permission blocker, and repair direct failures.
+Run the narrowest relevant local verification, then create a normal follow-up commit and regular
+non-force push; monitor the complete newly triggered required-CI set and repeat until it is green.
+Do not amend a commit that has already been pushed, because that would require a prohibited history
+rewrite. A push, a terminal failed job, or a partial green workflow set is never a successful
+handoff.
+
+Stop only when the remote is unavailable, credentials are missing, the remote branch has advanced,
+a protected branch rejects the push, or a required failure is genuinely external or non-actionable
+from the repository. Report the exact blocker, its job/log evidence, and why no safe repository
+repair is available. Do not retry a rejected push, bypass branch protection, force-push, create a
+tag or release, or open a pull request merely to work around the blocker.
 
 ## Approval Protocol
 
@@ -422,7 +476,8 @@ Before calling a new backlog ready, confirm:
 - Selenium/browser UI verification notes require immediate sandbox escalation, without a sandboxed
   trial run;
 - final milestone verifies documentation-update completion and includes changelog entry, git commit,
-  automatic non-force push, and terminal required-CI results;
+  automatic non-force push, and the post-push repair loop through a fully green required-CI set (or
+  an evidenced remote, permission, or external non-actionable blocker);
 - final milestone verifies README has no version-specific release notes, active-target marker, or
   planned/completion placeholder; README updates are limited to durable current-state product facts;
 - final milestone verifies maintained runbooks and docs index include documentation drift gates for

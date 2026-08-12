@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST = ROOT / "tools" / "frontend_profile_graph_0_9_4.json"
+MANIFEST = ROOT / "tools" / "frontend_profile_graph_0_9_5.json"
 STATIC = ROOT / "app" / "static"
 TEMPLATE = ROOT / "app" / "templates" / "profiles" / "_page_route_assets.html"
 

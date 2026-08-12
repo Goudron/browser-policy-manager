@@ -490,7 +490,8 @@ def _index_content(
         "channel_differences_backlog_item": "BPM090-M5-05",
         "schema_refresh_runbook_backlog_item": "BPM090-M5-08",
         "provenance_review_backlog_item": "BPM090-M5-09",
-        "target_bpm_version": "0.9.0",
+        "target_bpm_version": inventory["generated_for_bpm"],
+        "refresh_backlog_item": inventory["backlog_item"],
         "generated_by": GENERATOR_NAME,
         "source_inventory": str(inventory_path.relative_to(REPOSITORY_ROOT)),
         "source_inventory_sha256": _sha256(inventory_path),
@@ -534,7 +535,8 @@ def _channel_differences_content(
         "backlog_item": "BPM090-M5-05",
         "schema_refresh_runbook_backlog_item": "BPM090-M5-08",
         "provenance_review_backlog_item": "BPM090-M5-09",
-        "target_bpm_version": "0.9.0",
+        "target_bpm_version": inventory["generated_for_bpm"],
+        "refresh_backlog_item": inventory["backlog_item"],
         "generated_by": GENERATOR_NAME,
         "source_inventory": str(inventory_path.relative_to(REPOSITORY_ROOT)),
         "source_inventory_sha256": _sha256(inventory_path),
@@ -637,7 +639,8 @@ def _provenance_review_content(
     payload = {
         "schema_version": 1,
         "backlog_item": "BPM090-M5-09",
-        "target_bpm_version": "0.9.0",
+        "target_bpm_version": inventory["generated_for_bpm"],
+        "refresh_backlog_item": inventory["backlog_item"],
         "generated_by": GENERATOR_NAME,
         "source_inventory": str(inventory_path.relative_to(REPOSITORY_ROOT)),
         "source_inventory_sha256": _sha256(inventory_path),
@@ -757,13 +760,68 @@ def generate(
     return written
 
 
+def check_generated_files(
+    inventory_path: Path = DEFAULT_INVENTORY,
+    model_path: Path = DEFAULT_MODEL,
+    output_root: Path = DEFAULT_OUTPUT,
+) -> list[Path]:
+    """Return stale/missing generated paths without changing generator-owned source."""
+    files = build_generated_files(inventory_path, model_path, output_root)
+    expected = {generated.path for generated in files}
+    stale = [
+        path
+        for path in (
+            sorted(output_root.glob("*.ditamap"))
+            + sorted(output_root.glob("*.json"))
+            + sorted((output_root / POLICIES_DIRNAME).glob("*.dita"))
+        )
+        if path not in expected
+    ]
+    for generated in files:
+        if (
+            not generated.path.is_file()
+            or generated.path.read_text(encoding="utf-8") != generated.content
+        ):
+            stale.append(generated.path)
+    return sorted(set(stale))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--inventory", type=Path, default=DEFAULT_INVENTORY)
     parser.add_argument("--model", type=Path, default=DEFAULT_MODEL)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--check", action="store_true", help="Report stale generated source without writing it."
+    )
     args = parser.parse_args()
-    written = generate(args.inventory.resolve(), args.model.resolve(), args.output.resolve())
+    inventory_path = args.inventory.resolve()
+    model_path = args.model.resolve()
+    output_root = args.output.resolve()
+    total = len(build_generated_files(inventory_path, model_path, output_root))
+    print(f"firefox-policy-skeletons: phase=render; completed=0/{total}", flush=True)
+    if args.check:
+        stale = check_generated_files(inventory_path, model_path, output_root)
+        for completed, artifact in enumerate(stale, start=1):
+            print(
+                f"firefox-policy-skeletons: artifact={artifact.relative_to(REPOSITORY_ROOT)}; "
+                f"completed={completed}/{len(stale)}",
+                flush=True,
+            )
+        if stale:
+            print(f"Firefox policy skeletons are stale: {len(stale)} artifact(s)", flush=True)
+            return 1
+        print(f"firefox-policy-skeletons: phase=check; completed={total}/{total}", flush=True)
+        print("Firefox policy skeletons are current", flush=True)
+        return 0
+
+    written = generate(inventory_path, model_path, output_root)
+    for completed, artifact in enumerate(written, start=1):
+        print(
+            f"firefox-policy-skeletons: artifact={artifact.relative_to(REPOSITORY_ROOT)}; "
+            f"completed={completed}/{total}",
+            flush=True,
+        )
     print(
         f"Generated {len(written)} Firefox policy skeleton artifact(s) in {args.output}", flush=True
     )

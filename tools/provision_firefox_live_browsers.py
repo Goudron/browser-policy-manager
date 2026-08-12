@@ -27,6 +27,7 @@ from urllib.request import urlopen
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_ROOT / "tools" / "firefox_live_browsers_manifest_0_9_4.json"
 DEFAULT_ROOT = REPO_ROOT / ".bpm-test-browsers"
+ALL_CHANNELS = "all"
 CHUNK_SIZE = 1024 * 1024
 PROGRESS_INTERVAL = 8 * CHUNK_SIZE
 
@@ -89,7 +90,7 @@ def _archive_spec(label: str, payload: dict[str, Any], context: str) -> ArchiveS
     )
 
 
-def load_spec(manifest_path: Path, *, channel: str, platform_name: str) -> ProvisionSpec:
+def _platform_payload(manifest_path: Path, *, platform_name: str) -> dict[str, Any]:
     try:
         payload = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
@@ -101,7 +102,21 @@ def load_spec(manifest_path: Path, *, channel: str, platform_name: str) -> Provi
     platforms = payload.get("platforms")
     if not isinstance(platforms, dict) or not isinstance(platforms.get(platform_name), dict):
         raise ProvisioningError(f"Manifest has no platform entry for {platform_name!r}")
-    platform_payload = platforms[platform_name]
+    return platforms[platform_name]
+
+
+def available_channels(manifest_path: Path, *, platform_name: str) -> tuple[str, ...]:
+    """Return the manifest-declared channels in reviewed manifest order."""
+
+    platform_payload = _platform_payload(manifest_path, platform_name=platform_name)
+    firefox_entries = platform_payload.get("firefox")
+    if not isinstance(firefox_entries, dict) or not firefox_entries:
+        raise ProvisioningError(f"Manifest platform {platform_name!r} has no Firefox entries")
+    return tuple(firefox_entries)
+
+
+def load_spec(manifest_path: Path, *, channel: str, platform_name: str) -> ProvisionSpec:
+    platform_payload = _platform_payload(manifest_path, platform_name=platform_name)
     firefox_entries = platform_payload.get("firefox")
     if not isinstance(firefox_entries, dict) or not isinstance(firefox_entries.get(channel), dict):
         supported = sorted(firefox_entries) if isinstance(firefox_entries, dict) else []
@@ -187,7 +202,18 @@ def _download_verified_archive(root: Path, spec: ArchiveSpec) -> Path:
     return cache_path
 
 
-def _extract_archive(archive_path: Path, *, target: Path, mode: str) -> None:
+def _extract_archive(archive_path: Path, *, target: Path) -> None:
+    if archive_path.name.endswith(".tar.xz"):
+        mode = "r:xz"
+    elif archive_path.name.endswith(".tar.bz2"):
+        mode = "r:bz2"
+    elif archive_path.name.endswith(".tar.gz"):
+        mode = "r:gz"
+    else:
+        raise ProvisioningError(
+            f"Unsupported verified archive format for {archive_path.name}; expected .tar.xz, "
+            ".tar.bz2, or .tar.gz"
+        )
     with tarfile.open(archive_path, mode) as archive:
         archive.extractall(target, filter="data")
 
@@ -305,10 +331,10 @@ def provision(
     staging = Path(tempfile.mkdtemp(prefix=f".{spec.installation_id}.staging-", dir=target.parent))
     try:
         _progress(f"Extracting verified Firefox into isolated staging: {staging}")
-        _extract_archive(firefox_archive, target=staging, mode="r:xz")
+        _extract_archive(firefox_archive, target=staging)
         _progress("Extracting verified geckodriver into isolated staging")
         (staging / "geckodriver").mkdir()
-        _extract_archive(geckodriver_archive, target=staging / "geckodriver", mode="r:gz")
+        _extract_archive(geckodriver_archive, target=staging / "geckodriver")
         firefox_actual = _binary_version(
             staging / "firefox" / "firefox", spec.firefox.version, "Firefox"
         )
@@ -345,7 +371,12 @@ def provision(
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("channel", nargs="?", default="release", help="release, esr153, or esr140")
+    parser.add_argument(
+        "channel",
+        nargs="?",
+        default="release",
+        help="one manifest channel, or all for every independently pinned channel",
+    )
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--root", type=Path, default=DEFAULT_ROOT)
     parser.add_argument("--platform", dest="platform_name", default=None)
@@ -364,25 +395,45 @@ def _parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     try:
-        spec = load_spec(
-            args.manifest.resolve(),
-            channel=args.channel,
-            platform_name=args.platform_name or host_platform(),
-        )
+        manifest_path = args.manifest.resolve()
+        platform_name = args.platform_name or host_platform()
         root = args.root.resolve()
-        if args.verify:
-            provenance = verify_installation(root, spec)
-            target = installation_root(root, spec)
-            _progress(f"Verified isolated installation: {target}")
-        else:
-            target, provenance = provision(root, spec, force=args.force)
-        _progress(f"Firefox: {provenance['firefox']['actual_version']}")
-        _progress(f"geckodriver: {provenance['geckodriver']['actual_version']}")
+        channels = (
+            available_channels(manifest_path, platform_name=platform_name)
+            if args.channel == ALL_CHANNELS
+            else (args.channel,)
+        )
+        completed: list[dict[str, Any]] = []
+        for index, channel in enumerate(channels, start=1):
+            _progress(
+                f"Firefox provisioning phase 1/2 [{channel}] channel {index}/{len(channels)}: "
+                "loading pinned manifest entry"
+            )
+            spec = load_spec(
+                manifest_path,
+                channel=channel,
+                platform_name=platform_name,
+            )
+            if args.verify:
+                provenance = verify_installation(root, spec)
+                target = installation_root(root, spec)
+                action = "verified"
+            else:
+                target, provenance = provision(root, spec, force=args.force)
+                action = "provisioned"
+            completed.append({"installation": str(target), **provenance})
+            _progress(
+                f"Firefox provisioning phase 2/2 [{channel}] completed channel "
+                f"{index}/{len(channels)}: {action}; Firefox "
+                f"{provenance['firefox']['actual_version']}; geckodriver "
+                f"{provenance['geckodriver']['actual_version']}"
+            )
         _progress("Policy roots: cloned per test run; cached installations remain immutable.")
         if args.json:
-            print(
-                json.dumps({"installation": str(target), **provenance}, sort_keys=True), flush=True
+            payload: dict[str, Any] = (
+                completed[0] if len(completed) == 1 else {"installations": completed}
             )
+            print(json.dumps(payload, sort_keys=True), flush=True)
     except ProvisioningError as error:
         print(f"Firefox provisioning failed: {error}", file=sys.stderr, flush=True)
         return 2

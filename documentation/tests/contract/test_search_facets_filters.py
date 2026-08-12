@@ -54,10 +54,15 @@ def test_search_facets_contract_is_static_localized_and_non_ai() -> None:
         "administrator-guide",
     ]
     assert facets["firefox_channel"]["values"] == [
+        "esr-115.38",
         "esr-140.13",
         "esr-153.0",
         "release-153",
     ]
+    for locale in build_docs.LOCALES:
+        labels = build_docs._localized_search_facet_fields(locale, contract)["firefox_channel"]
+        assert labels["value_labels"]["esr-115.38"] == "Firefox ESR 115.38"
+        assert set(labels["value_labels"]) == set(facets["firefox_channel"]["values"])
     assert "ai_smart" in facets["policy_category"]["values"]
     assert facets["cis_level"]["values"] == ["level-1", "level-2"]
     assert facets["api_area"]["values"] == [

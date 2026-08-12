@@ -35,6 +35,26 @@ def test_active_locale_catalogs_match_source_keys_and_placeholders():
         assert placeholder_mismatches == {}
 
 
+def test_schema_conversion_copy_is_owned_by_all_six_locale_catalogs():
+    en_catalog = _load_catalog("en")
+    conversion_keys = [
+        key
+        for key in en_catalog
+        if key.startswith("profiles.schema_conversion_")
+        or key.startswith("profiles.schema_retirement_")
+    ]
+
+    assert conversion_keys
+    assert "profiles.schema_conversion_recommendation_accessible_name" in conversion_keys
+    assert "profiles.schema_conversion_apply_consequence" in conversion_keys
+    assert "profiles.schema_retirement_upgrade_required_consequence" in conversion_keys
+
+    for locale in ("ru", "de", "zh-CN", "fr", "es-ES"):
+        catalog = _load_catalog(locale)
+        assert {key: catalog[key] for key in conversion_keys}
+        assert all(catalog[key] != en_catalog[key] for key in conversion_keys)
+
+
 def test_active_locale_catalogs_keep_footer_identity_invariant():
     expected_owner = {
         "ru": "Валерий Ледовской",

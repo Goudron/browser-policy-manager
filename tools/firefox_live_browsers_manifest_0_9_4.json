@@ -6,10 +6,10 @@
     "linux-x86_64": {
       "firefox": {
         "release": {
-          "version": "153.0.1",
-          "url": "https://archive.mozilla.org/pub/firefox/releases/153.0.1/linux-x86_64/en-US/firefox-153.0.1.tar.xz",
-          "sha256": "05fb58905a90ce717c36a2ba5af0bbdc4d0e8b0eed6f50469030774c8c85b8eb",
-          "archive": "firefox-153.0.1.tar.xz"
+          "version": "153.0.3",
+          "url": "https://archive.mozilla.org/pub/firefox/releases/153.0.3/linux-x86_64/en-US/firefox-153.0.3.tar.xz",
+          "sha256": "22b312280900bfb174b685ece32c7b3c6d72e7f8e53d6d30f21ac41a8dc500a2",
+          "archive": "firefox-153.0.3.tar.xz"
         },
         "esr153": {
           "version": "153.0esr",
@@ -22,6 +22,12 @@
           "url": "https://archive.mozilla.org/pub/firefox/releases/140.13.0esr/linux-x86_64/en-US/firefox-140.13.0esr.tar.xz",
           "sha256": "866d7e5f94abe93132e02a0db72da32b6e133905fcbea6afa417a96d496021da",
           "archive": "firefox-140.13.0esr.tar.xz"
+        },
+        "esr115": {
+          "version": "115.38.0esr",
+          "url": "https://archive.mozilla.org/pub/firefox/releases/115.38.0esr/linux-x86_64/en-US/firefox-115.38.0esr.tar.bz2",
+          "sha256": "24ad694f543b251482f62b6313f1e10bdfafa3279a2aec8aae6042c0b3eed530",
+          "archive": "firefox-115.38.0esr.tar.bz2"
         }
       },
       "geckodriver": {

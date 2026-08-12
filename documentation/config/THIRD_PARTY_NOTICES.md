@@ -12,7 +12,7 @@ published documentation artifact. Upstream archives retain their bundled license
 | iniconfig | 2.3.0 | MIT | PyPI |
 | jsonschema | 4.26.0 | MIT | PyPI |
 | jsonschema-specifications | 2025.9.1 | MIT | PyPI |
-| packaging | 26.2 | Apache-2.0 OR BSD-2-Clause | PyPI |
+| packaging | 26.3 | Apache-2.0 OR BSD-2-Clause | PyPI |
 | pluggy | 1.6.0 | MIT | PyPI |
 | Pygments | 2.20.0 | BSD-2-Clause | PyPI |
 | pytest | 9.0.3 | MIT | PyPI |

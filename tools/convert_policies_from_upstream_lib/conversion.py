@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
@@ -195,6 +196,7 @@ def schema_to_json_schema(
     version: str,
     source: str,
     policies: list[SchemaPolicyDefinition],
+    schema_metadata: Mapping[str, Any] | None = None,
 ) -> dict:
     """Convert a list of SchemaPolicyDefinition to a raw JSON Schema bundle."""
     title_channel = str(channel or "Firefox").replace("-", " ").title()
@@ -202,7 +204,7 @@ def schema_to_json_schema(
     if version:
         title = f"{title} {version}"
 
-    return {
+    schema = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": title,
         "type": "object",
@@ -212,6 +214,19 @@ def schema_to_json_schema(
         "x-bpm-source": source,
         "properties": {p.id: _policy_definition_to_json_schema(p) for p in policies},
     }
+    if schema_metadata is not None:
+        schema.update(
+            {
+                "x-bpm-artifact-id": schema_metadata["artifact_id"],
+                "x-bpm-line-id": schema_metadata["line_id"],
+                "x-bpm-firefox-line": schema_metadata["firefox_line"],
+                "x-bpm-firefox-version": schema_metadata["firefox_version"],
+                "x-bpm-ui-label": schema_metadata["ui_label"],
+                "x-bpm-source-provenance": schema_metadata["source_provenance"],
+                "x-bpm-generator": schema_metadata["generator"],
+            }
+        )
+    return schema
 
 
 def _version_at_least(version: str, minimum: str) -> bool:

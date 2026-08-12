@@ -1,0 +1,1226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://browser-policy-manager.invalid/contracts/firefox-retired-esr-migration-v1.schema.json",
+  "title": "BPM Firefox retired ESR migration safety contract version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "contract_id",
+    "target_bpm_version",
+    "status",
+    "dependencies",
+    "canonical_identity",
+    "ownership",
+    "successor_selection",
+    "retirement_promotion_gate",
+    "total_convertibility",
+    "preflight",
+    "atomic_apply",
+    "idempotency_and_interruption",
+    "downgrade",
+    "engine_evidence",
+    "failure_semantics",
+    "fixtures"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "schemas/firefox-retired-esr-migration-contract-v1.schema.json"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "contract_id": {
+      "const": "bpm095-firefox-retired-esr-migration-safety"
+    },
+    "target_bpm_version": {
+      "const": "0.9.5"
+    },
+    "status": {
+      "const": "normative-target-preimplementation"
+    },
+    "dependencies": {
+      "$ref": "#/$defs/dependencies"
+    },
+    "canonical_identity": {
+      "$ref": "#/$defs/canonicalIdentity"
+    },
+    "ownership": {
+      "$ref": "#/$defs/ownership"
+    },
+    "successor_selection": {
+      "$ref": "#/$defs/successorSelection"
+    },
+    "retirement_promotion_gate": {
+      "$ref": "#/$defs/promotionGate"
+    },
+    "total_convertibility": {
+      "$ref": "#/$defs/totalConvertibilityRule"
+    },
+    "preflight": {
+      "$ref": "#/$defs/preflightRule"
+    },
+    "atomic_apply": {
+      "$ref": "#/$defs/atomicApply"
+    },
+    "idempotency_and_interruption": {
+      "$ref": "#/$defs/idempotency"
+    },
+    "downgrade": {
+      "$ref": "#/$defs/downgrade"
+    },
+    "engine_evidence": {
+      "$ref": "#/$defs/engineEvidenceMatrix"
+    },
+    "failure_semantics": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/failureSemantic"
+      }
+    },
+    "fixtures": {
+      "$ref": "#/$defs/fixtures"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableSha256": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/sha256"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullableString": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stringList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "repositoryPath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)+$"
+    },
+    "contractDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_id",
+        "schema_version",
+        "path"
+      ],
+      "properties": {
+        "contract_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "path": {
+          "$ref": "#/$defs/repositoryPath"
+        }
+      }
+    },
+    "databaseDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "path"
+      ],
+      "properties": {
+        "contract_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "path": {
+          "$ref": "#/$defs/repositoryPath"
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lifecycle_catalog",
+        "conversion_contract",
+        "database_upgrade_contract"
+      ],
+      "properties": {
+        "lifecycle_catalog": {
+          "$ref": "#/$defs/contractDependency"
+        },
+        "conversion_contract": {
+          "$ref": "#/$defs/contractDependency"
+        },
+        "database_upgrade_contract": {
+          "$ref": "#/$defs/databaseDependency"
+        }
+      }
+    },
+    "canonicalIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_json",
+        "hash_algorithm",
+        "digest_encoding",
+        "transition_manifest_domain",
+        "total_proof_domain",
+        "database_snapshot_domain",
+        "preflight_evidence_domain"
+      ],
+      "properties": {
+        "canonical_json": {
+          "const": "RFC8785-JCS"
+        },
+        "hash_algorithm": {
+          "const": "SHA-256"
+        },
+        "digest_encoding": {
+          "const": "lowercase-hex"
+        },
+        "transition_manifest_domain": {
+          "const": "bpm-retired-esr-transition-manifest:v1\n"
+        },
+        "total_proof_domain": {
+          "const": "bpm-retired-esr-total-proof:v1\n"
+        },
+        "database_snapshot_domain": {
+          "const": "bpm-retired-esr-database-snapshot:v1\n"
+        },
+        "preflight_evidence_domain": {
+          "const": "bpm-retired-esr-preflight-evidence:v1\n"
+        }
+      }
+    },
+    "ownership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sole_writer",
+        "write_phase",
+        "preflight_owner",
+        "forbidden_write_paths",
+        "unupgraded_runtime_behavior"
+      ],
+      "properties": {
+        "sole_writer": {
+          "const": "versioned-alembic-retirement-revision"
+        },
+        "write_phase": {
+          "const": "explicit-offline-upgrade"
+        },
+        "preflight_owner": {
+          "const": "versioned-read-only-retirement-preflight"
+        },
+        "forbidden_write_paths": {
+          "$ref": "#/$defs/stringList"
+        },
+        "unupgraded_runtime_behavior": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "readiness",
+            "code",
+            "mutation"
+          ],
+          "properties": {
+            "readiness": {
+              "const": "fail-closed-before-serving-profile-routes"
+            },
+            "code": {
+              "const": "schema_channel_retired_requires_migration"
+            },
+            "mutation": {
+              "const": "none"
+            }
+          }
+        }
+      }
+    },
+    "successorSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_family",
+        "selection",
+        "comparison_key",
+        "target_cardinality",
+        "forbid_inference_from",
+        "reject"
+      ],
+      "properties": {
+        "source_family": {
+          "const": "esr"
+        },
+        "selection": {
+          "const": "explicit-declared-immediate-newer-supported-esr"
+        },
+        "comparison_key": {
+          "const": "numeric-line-number"
+        },
+        "target_cardinality": {
+          "const": 1
+        },
+        "forbid_inference_from": {
+          "$ref": "#/$defs/stringList"
+        },
+        "reject": {
+          "$ref": "#/$defs/stringList"
+        }
+      }
+    },
+    "promotionGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_order",
+        "support_removal_allowed_only_after",
+        "migration_revision_creation_allowed_only_after",
+        "sample_profiles_are_total_proof",
+        "fail_before_mutation"
+      ],
+      "properties": {
+        "required_order": {
+          "$ref": "#/$defs/stringList"
+        },
+        "support_removal_allowed_only_after": {
+          "const": "total-convertibility-complete"
+        },
+        "migration_revision_creation_allowed_only_after": {
+          "const": "total-convertibility-complete"
+        },
+        "sample_profiles_are_total_proof": {
+          "const": false
+        },
+        "fail_before_mutation": {
+          "const": true
+        }
+      }
+    },
+    "totalConvertibilityRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quantification",
+        "approved_methods",
+        "schema_containment_requires",
+        "complete_recipe_partition_requires",
+        "forbidden_substitutes",
+        "complete_status_requires"
+      ],
+      "properties": {
+        "quantification": {
+          "const": "every-instance-valid-under-exact-source-validation-schema"
+        },
+        "approved_methods": {
+          "type": "array",
+          "const": [
+            "schema-containment",
+            "complete-recipe-partition"
+          ]
+        },
+        "schema_containment_requires": {
+          "$ref": "#/$defs/stringList"
+        },
+        "complete_recipe_partition_requires": {
+          "$ref": "#/$defs/stringList"
+        },
+        "forbidden_substitutes": {
+          "$ref": "#/$defs/stringList"
+        },
+        "complete_status_requires": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "exact_artifacts_bound",
+            "uncovered_schema_locations",
+            "blockers"
+          ],
+          "properties": {
+            "exact_artifacts_bound": {
+              "const": true
+            },
+            "uncovered_schema_locations": {
+              "const": 0
+            },
+            "blockers": {
+              "const": 0
+            }
+          }
+        }
+      }
+    },
+    "preflightRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "required_static_bindings",
+        "required_database_evidence",
+        "stale_if_changed",
+        "privacy"
+      ],
+      "properties": {
+        "mode": {
+          "const": "read-only-before-transaction"
+        },
+        "required_static_bindings": {
+          "$ref": "#/$defs/stringList"
+        },
+        "required_database_evidence": {
+          "$ref": "#/$defs/stringList"
+        },
+        "stale_if_changed": {
+          "$ref": "#/$defs/stringList"
+        },
+        "privacy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "evidence_may_contain",
+            "logs_must_omit"
+          ],
+          "properties": {
+            "evidence_may_contain": {
+              "$ref": "#/$defs/stringList"
+            },
+            "logs_must_omit": {
+              "$ref": "#/$defs/stringList"
+            }
+          }
+        }
+      }
+    },
+    "atomicApply": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transaction_scope",
+        "writer",
+        "affected_scope",
+        "guarded_recheck_before_first_write",
+        "application_write_fields",
+        "database_managed_fields",
+        "preserved_fields",
+        "revision_increment",
+        "updated_at_rule",
+        "compliance_dispositions",
+        "target_validation",
+        "commit_count",
+        "on_any_error",
+        "partial_success_reportable"
+      ],
+      "properties": {
+        "transaction_scope": {
+          "const": "all-affected-profiles-plus-alembic-version-stamp"
+        },
+        "writer": {
+          "const": "one-versioned-alembic-revision"
+        },
+        "affected_scope": {
+          "const": "all-stored-profiles-on-exact-retired-source-artifact-including-archived"
+        },
+        "guarded_recheck_before_first_write": {
+          "$ref": "#/$defs/stringList"
+        },
+        "application_write_fields": {
+          "$ref": "#/$defs/stringList"
+        },
+        "database_managed_fields": {
+          "$ref": "#/$defs/stringList"
+        },
+        "preserved_fields": {
+          "$ref": "#/$defs/stringList"
+        },
+        "revision_increment": {
+          "const": 1
+        },
+        "updated_at_rule": {
+          "const": "one-database-managed-transaction-value-for-affected-rows-only"
+        },
+        "compliance_dispositions": {
+          "$ref": "#/$defs/stringList"
+        },
+        "target_validation": {
+          "const": "mandatory-for-every-affected-result-before-write"
+        },
+        "commit_count": {
+          "const": 1
+        },
+        "on_any_error": {
+          "const": "rollback-entire-revision-and-preserve-source-stamp"
+        },
+        "partial_success_reportable": {
+          "const": false
+        }
+      }
+    },
+    "idempotency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "already_target_rows",
+        "zero_source_rows",
+        "already_applied_revision",
+        "already_applied_outcome_code",
+        "retry_before_commit",
+        "retry_after_commit",
+        "ambiguous_commit_result",
+        "partial_or_mixed_state",
+        "in_place_retry_of_failed_candidate"
+      ],
+      "properties": {
+        "already_target_rows": {
+          "type": "string"
+        },
+        "zero_source_rows": {
+          "type": "string"
+        },
+        "already_applied_revision": {
+          "const": "alembic-no-op"
+        },
+        "already_applied_outcome_code": {
+          "const": "retirement_already_applied"
+        },
+        "retry_before_commit": {
+          "type": "string"
+        },
+        "retry_after_commit": {
+          "type": "string"
+        },
+        "ambiguous_commit_result": {
+          "type": "string"
+        },
+        "partial_or_mixed_state": {
+          "type": "string"
+        },
+        "in_place_retry_of_failed_candidate": {
+          "const": false
+        }
+      }
+    },
+    "downgrade": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "code",
+        "downgrade_writes_allowed",
+        "restore_target",
+        "automatic_database_replacement"
+      ],
+      "properties": {
+        "policy": {
+          "const": "unsupported-restore-verified-backup-only"
+        },
+        "code": {
+          "const": "retirement_downgrade_unsupported"
+        },
+        "downgrade_writes_allowed": {
+          "const": false
+        },
+        "restore_target": {
+          "const": "new-clean-candidate"
+        },
+        "automatic_database_replacement": {
+          "const": false
+        }
+      }
+    },
+    "engineEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "status",
+        "native_backup",
+        "restore_check",
+        "transaction_boundary",
+        "failure_injections",
+        "required_assertions"
+      ],
+      "properties": {
+        "required": {
+          "const": true
+        },
+        "status": {
+          "const": "planned-m6-executable-evidence"
+        },
+        "native_backup": {
+          "type": "string",
+          "minLength": 1
+        },
+        "restore_check": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transaction_boundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "failure_injections": {
+          "$ref": "#/$defs/stringList"
+        },
+        "required_assertions": {
+          "$ref": "#/$defs/stringList"
+        },
+        "local_gate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ci_gate": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "local_gate"
+          ],
+          "not": {
+            "required": [
+              "ci_gate"
+            ]
+          }
+        },
+        {
+          "required": [
+            "ci_gate"
+          ],
+          "not": {
+            "required": [
+              "local_gate"
+            ]
+          }
+        }
+      ]
+    },
+    "engineEvidenceMatrix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sqlite",
+        "postgresql"
+      ],
+      "properties": {
+        "sqlite": {
+          "$ref": "#/$defs/engineEvidence"
+        },
+        "postgresql": {
+          "$ref": "#/$defs/engineEvidence"
+        }
+      }
+    },
+    "failureSemantic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "stage",
+        "mutation",
+        "recovery"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^(retirement|conversion|schema_channel)_[a-z0-9_]+$"
+        },
+        "stage": {
+          "enum": [
+            "static-gate",
+            "preflight",
+            "transaction-recheck",
+            "transaction",
+            "recovery-inspection",
+            "downgrade"
+          ]
+        },
+        "mutation": {
+          "const": "none"
+        },
+        "recovery": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "artifactIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "line_id",
+        "line_number",
+        "artifact_id",
+        "schema_bundle_sha256",
+        "validation_schema_sha256"
+      ],
+      "properties": {
+        "family": {
+          "const": "esr"
+        },
+        "line_id": {
+          "type": "string",
+          "pattern": "^esr-[1-9][0-9]*$"
+        },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^esr-[1-9][0-9]*\\.[0-9]+$"
+        },
+        "schema_bundle_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "validation_schema_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "supportedLine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "line_id",
+        "line_number",
+        "artifact_id"
+      ],
+      "properties": {
+        "line_id": {
+          "type": "string",
+          "pattern": "^esr-[1-9][0-9]*$"
+        },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^esr-[1-9][0-9]*\\.[0-9]+$"
+        }
+      }
+    },
+    "transitionManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "contract_version",
+        "transition_id",
+        "evidence_scope",
+        "previous_catalog_digest",
+        "candidate_catalog_digest",
+        "source",
+        "target",
+        "candidate_supported_esr_lines",
+        "declared_successor_line_id",
+        "conversion_contract_version",
+        "recipe_registry_version",
+        "recipe_registry_digest",
+        "total_proof_artifact_digest",
+        "alembic_source_revision",
+        "alembic_target_revision",
+        "manifest_digest"
+      ],
+      "properties": {
+        "kind": {
+          "const": "retired-esr-transition-manifest"
+        },
+        "contract_version": {
+          "const": 1
+        },
+        "transition_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]+$"
+        },
+        "evidence_scope": {
+          "enum": [
+            "synthetic-contract-only",
+            "current-exact-artifacts",
+            "production-exact-artifacts"
+          ]
+        },
+        "previous_catalog_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "candidate_catalog_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source": {
+          "$ref": "#/$defs/artifactIdentity"
+        },
+        "target": {
+          "$ref": "#/$defs/artifactIdentity"
+        },
+        "candidate_supported_esr_lines": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/supportedLine"
+          }
+        },
+        "declared_successor_line_id": {
+          "type": "string",
+          "pattern": "^esr-[1-9][0-9]*$"
+        },
+        "conversion_contract_version": {
+          "const": 1
+        },
+        "recipe_registry_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "recipe_registry_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "total_proof_artifact_digest": {
+          "$ref": "#/$defs/nullableSha256"
+        },
+        "alembic_source_revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alembic_target_revision": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "manifest_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "uncoveredLocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_pointer",
+        "reason_code"
+      ],
+      "properties": {
+        "schema_pointer": {
+          "type": "string"
+        },
+        "reason_code": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        }
+      }
+    },
+    "totalProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "method",
+        "evidence_scope",
+        "exact_artifacts_bound",
+        "source_schema_domain",
+        "proof_artifact_digest",
+        "uncovered_schema_locations",
+        "blockers"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "complete",
+            "incomplete"
+          ]
+        },
+        "method": {
+          "enum": [
+            "schema-containment",
+            "complete-recipe-partition",
+            "none"
+          ]
+        },
+        "evidence_scope": {
+          "enum": [
+            "synthetic-contract-only",
+            "current-exact-artifacts",
+            "production-exact-artifacts"
+          ]
+        },
+        "exact_artifacts_bound": {
+          "type": "boolean"
+        },
+        "source_schema_domain": {
+          "enum": [
+            "all-valid-instances",
+            "synthetic-domain",
+            "uncovered"
+          ]
+        },
+        "proof_artifact_digest": {
+          "$ref": "#/$defs/nullableSha256"
+        },
+        "uncovered_schema_locations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/uncoveredLocation"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "complete"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "method": {
+                "enum": [
+                  "schema-containment",
+                  "complete-recipe-partition"
+                ]
+              },
+              "exact_artifacts_bound": {
+                "const": true
+              },
+              "proof_artifact_digest": {
+                "$ref": "#/$defs/sha256"
+              },
+              "uncovered_schema_locations": {
+                "maxItems": 0
+              },
+              "blockers": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "incomplete"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "blockers": {
+                "minItems": 1
+              },
+              "uncovered_schema_locations": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "backupEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "backup_sha256",
+        "restore_identity_digest",
+        "integrity",
+        "source_stamp",
+        "restored_stamp",
+        "source_profile_count",
+        "restored_profile_count"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "verified-native-restore",
+            "not-required-static-gate-blocked",
+            "not-required-m6-03-migration-pending"
+          ]
+        },
+        "backup_sha256": {
+          "$ref": "#/$defs/nullableSha256"
+        },
+        "restore_identity_digest": {
+          "$ref": "#/$defs/nullableSha256"
+        },
+        "integrity": {
+          "enum": [
+            "pass",
+            "not-run"
+          ]
+        },
+        "source_stamp": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "restored_stamp": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "source_profile_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "restored_profile_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "preflightFixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "manifest_digest",
+        "engine",
+        "database_snapshot_digest",
+        "source_stamp",
+        "target_stamp",
+        "profile_count",
+        "affected_source_count",
+        "planned_count",
+        "blocked_count",
+        "already_target_count",
+        "no_active_writers",
+        "backup",
+        "preflight_digest"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "complete-contract-simulation",
+            "complete-production",
+            "not-run-static-gate-blocked",
+            "not-run-m6-03-migration-pending"
+          ]
+        },
+        "manifest_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "engine": {
+          "enum": [
+            "sqlite",
+            "postgresql",
+            null
+          ]
+        },
+        "database_snapshot_digest": {
+          "$ref": "#/$defs/nullableSha256"
+        },
+        "source_stamp": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "target_stamp": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "profile_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "affected_source_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "planned_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blocked_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "already_target_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "no_active_writers": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "backup": {
+          "$ref": "#/$defs/backupEvidence"
+        },
+        "preflight_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "fixtureExpected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "production_promotable",
+        "mutation",
+        "code"
+      ],
+      "properties": {
+        "decision": {
+          "enum": [
+            "pass-contract-fixture-only",
+            "pass-production",
+            "block-before-mutation",
+            "m6-02-proof-complete-m6-03-pending"
+          ]
+        },
+        "production_promotable": {
+          "type": "boolean"
+        },
+        "mutation": {
+          "const": "none"
+        },
+        "code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-z0-9_]+$"
+        }
+      }
+    },
+    "transitionFixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fixture_id",
+        "manifest",
+        "total_proof",
+        "preflight",
+        "expected"
+      ],
+      "properties": {
+        "fixture_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]+$"
+        },
+        "manifest": {
+          "$ref": "#/$defs/transitionManifest"
+        },
+        "total_proof": {
+          "$ref": "#/$defs/totalProof"
+        },
+        "preflight": {
+          "$ref": "#/$defs/preflightFixture"
+        },
+        "expected": {
+          "$ref": "#/$defs/fixtureExpected"
+        }
+      }
+    },
+    "negativeVector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vector_id",
+        "base_fixture_id",
+        "mutation",
+        "expected_stage",
+        "expected_code",
+        "expected_mutation",
+        "required_observation"
+      ],
+      "properties": {
+        "vector_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]+$"
+        },
+        "base_fixture_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]+$"
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_stage": {
+          "enum": [
+            "static-gate",
+            "preflight",
+            "transaction-recheck",
+            "transaction",
+            "idempotency",
+            "recovery-inspection",
+            "downgrade"
+          ]
+        },
+        "expected_code": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "expected_mutation": {
+          "enum": [
+            "none",
+            "no-op"
+          ]
+        },
+        "required_observation": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "fixtures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "synthetic_esr115_to_esr140",
+        "required_esr140_to_esr153",
+        "negative_vectors"
+      ],
+      "properties": {
+        "synthetic_esr115_to_esr140": {
+          "$ref": "#/$defs/transitionFixture"
+        },
+        "required_esr140_to_esr153": {
+          "$ref": "#/$defs/transitionFixture"
+        },
+        "negative_vectors": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/negativeVector"
+          }
+        }
+      }
+    }
+  }
+}

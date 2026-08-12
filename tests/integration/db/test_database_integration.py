@@ -23,8 +23,8 @@ from app.services.firefox_policy_export import render_firefox_policies_document
 from app.services.profile_service import ProfileService
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-MATRIX_PATH = REPO_ROOT / "docs" / "architecture" / "database-upgrade-matrix-0.9.4.json"
-FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "database_upgrade" / "golden_profiles_0_9_4.json"
+MATRIX_PATH = REPO_ROOT / "docs" / "architecture" / "database-upgrade-matrix-0.9.5.json"
+FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "database_upgrade" / "golden_profiles_0_9_5.json"
 HEAD_REVISION = "20260804_add_profile_name_casefold"
 _TEMPORARY_POSTGRES_DATABASE = re.compile(r"^bpm_m4_05(?:_[a-z0-9]+)*$")
 

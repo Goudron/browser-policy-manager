@@ -157,7 +157,11 @@ def test_epic_backlog_creation_runbook_defines_versioned_backlog_contract():
         "regular non-force push",
         "monitors every required GitHub Actions workflow",
         "must not force-push, rewrite history, create a tag or release",
-        "continue after a failed workflow without explicit user direction.",
+        "Diagnose and repair every direct, actionable failure",
+        "repeat until it is green",
+        "A successful push or a failed workflow is not backlog completion.",
+        "Do not amend a commit that has already been pushed",
+        "external or non-actionable from the repository",
         "Show exactly one next task with its ID, essence, acceptance, minimum model, and minimal reasoning.",
         "Do not start executing a backlog task just because the backlog exists.",
     }

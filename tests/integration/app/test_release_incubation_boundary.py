@@ -9,13 +9,13 @@ from pathlib import Path
 from tools import release_boundary_contract
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-MANIFEST_PATH = REPO_ROOT / "tools" / "release_boundary_manifest_0_9_4.json"
+MANIFEST_PATH = REPO_ROOT / "tools" / "release_boundary_manifest_0_9_5.json"
 
 
 def test_boundary_manifest_classifies_every_declared_delivery_extra() -> None:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 
-    assert manifest["target_version"] == "0.9.4"
+    assert manifest["target_version"] == "0.9.5"
     assert set(manifest["categories"]) == {
         "default_release",
         "optional_incubation",

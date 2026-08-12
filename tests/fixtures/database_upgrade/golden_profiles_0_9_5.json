@@ -1,0 +1,576 @@
+{
+  "fixture_version": 1,
+  "product_version": "0.9.5",
+  "matrix": "docs/architecture/database-upgrade-matrix-0.9.5.json",
+  "head_profile_fields": [
+    "id",
+    "name",
+    "description",
+    "schema_version",
+    "flags",
+    "compliance",
+    "revision",
+    "created_at",
+    "updated_at",
+    "deleted_at"
+  ],
+  "required_dimensions": [
+    "active",
+    "archived",
+    "compliance",
+    "esr-channel",
+    "invalid",
+    "release-channel",
+    "revision",
+    "supported-current-channel",
+    "unsupported-channel",
+    "valid"
+  ],
+  "scenarios": [
+    {
+      "id": "fresh-empty",
+      "source_ids": [
+        "fresh-empty"
+      ],
+      "cases": []
+    },
+    {
+      "id": "from-initial",
+      "source_ids": [
+        "legacy-5cb73fdb68ed",
+        "canonical-20251022"
+      ],
+      "cases": [
+        {
+          "id": "initial-active-release-valid",
+          "dimensions": [
+            "active",
+            "release-channel",
+            "valid"
+          ],
+          "policy_validity": "valid",
+          "channel_disposition": "migrate-same-family",
+          "source": {
+            "id": 101,
+            "name": "initial-release-valid",
+            "description": "Nested valid policy data from the first schema",
+            "schema_version": "release-148",
+            "flags": {
+              "DisableTelemetry": true,
+              "Proxy": {
+                "Mode": "none"
+              }
+            },
+            "owner": "legacy-owner",
+            "created_at": "2025-10-22T08:30:00+00:00",
+            "updated_at": "2025-10-23T09:45:00+00:00"
+          },
+          "expected_head": {
+            "id": 101,
+            "name": "initial-release-valid",
+            "description": "Nested valid policy data from the first schema",
+            "schema_version": "release-153",
+            "flags": {
+              "DisableTelemetry": true,
+              "Proxy": {
+                "Mode": "none"
+              }
+            },
+            "compliance": null,
+            "revision": 1,
+            "created_at": "2025-10-22T08:30:00+00:00",
+            "updated_at": "2025-10-23T09:45:00+00:00",
+            "deleted_at": null
+          }
+        },
+        {
+          "id": "initial-active-esr-invalid",
+          "dimensions": [
+            "active",
+            "esr-channel",
+            "invalid"
+          ],
+          "policy_validity": "invalid",
+          "channel_disposition": "migrate-same-family",
+          "source": {
+            "id": 102,
+            "name": "initial-esr-invalid",
+            "description": "A storable policy document that remains semantically invalid",
+            "schema_version": "esr-140.8",
+            "flags": {
+              "DisableTelemetry": "yes"
+            },
+            "owner": null,
+            "created_at": "2025-10-24T10:00:00+00:00",
+            "updated_at": "2025-10-24T10:00:00+00:00"
+          },
+          "expected_head": {
+            "id": 102,
+            "name": "initial-esr-invalid",
+            "description": "A storable policy document that remains semantically invalid",
+            "schema_version": "esr-140.13",
+            "flags": {
+              "DisableTelemetry": "yes"
+            },
+            "compliance": null,
+            "revision": 1,
+            "created_at": "2025-10-24T10:00:00+00:00",
+            "updated_at": "2025-10-24T10:00:00+00:00",
+            "deleted_at": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "from-deleted-at",
+      "source_ids": [
+        "legacy-20251026",
+        "canonical-20251026"
+      ],
+      "cases": [
+        {
+          "id": "deleted-at-archived-release",
+          "dimensions": [
+            "archived",
+            "release-channel",
+            "valid"
+          ],
+          "policy_validity": "valid",
+          "channel_disposition": "migrate-same-family",
+          "source": {
+            "id": 201,
+            "name": "archived-release",
+            "description": null,
+            "schema_version": "release-148",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "owner": "archive-owner",
+            "created_at": "2025-10-26T12:00:00+00:00",
+            "updated_at": "2025-10-27T12:00:00+00:00",
+            "deleted_at": "2025-10-28T12:00:00+00:00"
+          },
+          "expected_head": {
+            "id": 201,
+            "name": "archived-release",
+            "description": null,
+            "schema_version": "release-153",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "compliance": null,
+            "revision": 1,
+            "created_at": "2025-10-26T12:00:00+00:00",
+            "updated_at": "2025-10-27T12:00:00+00:00",
+            "deleted_at": "2025-10-28T12:00:00+00:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "from-normalized",
+      "source_ids": [
+        "legacy-20260323",
+        "canonical-20260323"
+      ],
+      "cases": [
+        {
+          "id": "normalized-compliance-revision",
+          "dimensions": [
+            "active",
+            "compliance",
+            "release-channel",
+            "revision",
+            "valid"
+          ],
+          "policy_validity": "valid",
+          "channel_disposition": "migrate-same-family",
+          "source": {
+            "id": 301,
+            "name": "normalized-compliance",
+            "description": "Existing optional compliance payload and optimistic revision",
+            "schema_version": "release-149",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "compliance": {
+              "benchmark": "CIS Firefox Benchmark",
+              "level": 2,
+              "decisions": {
+                "DisableTelemetry": "enforce"
+              }
+            },
+            "revision": 7,
+            "owner": "owner-removed-at-head",
+            "created_at": "2026-03-23T11:00:00+00:00",
+            "updated_at": "2026-03-24T12:00:00+00:00",
+            "deleted_at": null
+          },
+          "expected_head": {
+            "id": 301,
+            "name": "normalized-compliance",
+            "description": "Existing optional compliance payload and optimistic revision",
+            "schema_version": "release-153",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "compliance": {
+              "benchmark": "CIS Firefox Benchmark",
+              "level": 2,
+              "decisions": {
+                "DisableTelemetry": "enforce"
+              }
+            },
+            "revision": 7,
+            "created_at": "2026-03-23T11:00:00+00:00",
+            "updated_at": "2026-03-24T12:00:00+00:00",
+            "deleted_at": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "from-firefox-149",
+      "source_ids": [
+        "canonical-20260330"
+      ],
+      "cases": [
+        {
+          "id": "firefox-149-esr",
+          "dimensions": [
+            "active",
+            "esr-channel",
+            "valid"
+          ],
+          "policy_validity": "valid",
+          "channel_disposition": "migrate-same-family",
+          "source": {
+            "id": 401,
+            "name": "firefox-149-esr",
+            "description": null,
+            "schema_version": "esr-140.9",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "revision": 2,
+            "owner": null,
+            "created_at": "2026-03-30T12:00:00+00:00",
+            "updated_at": "2026-03-30T12:00:00+00:00",
+            "deleted_at": null
+          },
+          "expected_head": {
+            "id": 401,
+            "name": "firefox-149-esr",
+            "description": null,
+            "schema_version": "esr-140.13",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "compliance": null,
+            "revision": 2,
+            "created_at": "2026-03-30T12:00:00+00:00",
+            "updated_at": "2026-03-30T12:00:00+00:00",
+            "deleted_at": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "from-firefox-150",
+      "source_ids": [
+        "canonical-20260423"
+      ],
+      "cases": [
+        {
+          "id": "firefox-150-invalid-release",
+          "dimensions": [
+            "active",
+            "invalid",
+            "release-channel"
+          ],
+          "policy_validity": "invalid",
+          "channel_disposition": "migrate-same-family",
+          "source": {
+            "id": 501,
+            "name": "firefox-150-invalid",
+            "description": "Invalid policy semantics are preserved for review",
+            "schema_version": "release-150",
+            "flags": {
+              "DisableTelemetry": "yes"
+            },
+            "revision": 3,
+            "owner": "legacy-owner",
+            "created_at": "2026-04-23T12:00:00+00:00",
+            "updated_at": "2026-04-24T12:00:00+00:00",
+            "deleted_at": null
+          },
+          "expected_head": {
+            "id": 501,
+            "name": "firefox-150-invalid",
+            "description": "Invalid policy semantics are preserved for review",
+            "schema_version": "release-153",
+            "flags": {
+              "DisableTelemetry": "yes"
+            },
+            "compliance": null,
+            "revision": 3,
+            "created_at": "2026-04-23T12:00:00+00:00",
+            "updated_at": "2026-04-24T12:00:00+00:00",
+            "deleted_at": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "from-firefox-151",
+      "source_ids": [
+        "canonical-20260521"
+      ],
+      "cases": [
+        {
+          "id": "firefox-151-esr",
+          "dimensions": [
+            "active",
+            "esr-channel",
+            "valid"
+          ],
+          "policy_validity": "valid",
+          "channel_disposition": "migrate-same-family",
+          "source": {
+            "id": 601,
+            "name": "firefox-151-esr",
+            "description": null,
+            "schema_version": "esr-140.11",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "revision": 4,
+            "owner": null,
+            "created_at": "2026-05-21T12:00:00+00:00",
+            "updated_at": "2026-05-21T12:00:00+00:00",
+            "deleted_at": null
+          },
+          "expected_head": {
+            "id": 601,
+            "name": "firefox-151-esr",
+            "description": null,
+            "schema_version": "esr-140.13",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "compliance": null,
+            "revision": 4,
+            "created_at": "2026-05-21T12:00:00+00:00",
+            "updated_at": "2026-05-21T12:00:00+00:00",
+            "deleted_at": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "from-owner-drop",
+      "source_ids": [
+        "canonical-20260606"
+      ],
+      "cases": [
+        {
+          "id": "ownerless-release-compliance",
+          "dimensions": [
+            "active",
+            "compliance",
+            "release-channel",
+            "revision",
+            "valid"
+          ],
+          "policy_validity": "valid",
+          "channel_disposition": "migrate-same-family",
+          "source": {
+            "id": 701,
+            "name": "ownerless-compliance",
+            "description": null,
+            "schema_version": "release-151",
+            "flags": {
+              "Proxy": {
+                "Mode": "none"
+              }
+            },
+            "compliance": {
+              "benchmark": "CIS Firefox Benchmark",
+              "level": 1
+            },
+            "revision": 9,
+            "created_at": "2026-06-06T12:00:00+00:00",
+            "updated_at": "2026-06-07T12:00:00+00:00",
+            "deleted_at": null
+          },
+          "expected_head": {
+            "id": 701,
+            "name": "ownerless-compliance",
+            "description": null,
+            "schema_version": "release-153",
+            "flags": {
+              "Proxy": {
+                "Mode": "none"
+              }
+            },
+            "compliance": {
+              "benchmark": "CIS Firefox Benchmark",
+              "level": 1
+            },
+            "revision": 9,
+            "created_at": "2026-06-06T12:00:00+00:00",
+            "updated_at": "2026-06-07T12:00:00+00:00",
+            "deleted_at": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "from-firefox-152",
+      "source_ids": [
+        "canonical-20260620"
+      ],
+      "cases": [
+        {
+          "id": "firefox-152-archived-esr",
+          "dimensions": [
+            "archived",
+            "esr-channel",
+            "revision",
+            "valid"
+          ],
+          "policy_validity": "valid",
+          "channel_disposition": "migrate-same-family",
+          "source": {
+            "id": 801,
+            "name": "firefox-152-archived-esr",
+            "description": null,
+            "schema_version": "esr-140.12",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "compliance": null,
+            "revision": 6,
+            "created_at": "2026-06-20T12:00:00+00:00",
+            "updated_at": "2026-06-21T12:00:00+00:00",
+            "deleted_at": "2026-06-22T12:00:00+00:00"
+          },
+          "expected_head": {
+            "id": 801,
+            "name": "firefox-152-archived-esr",
+            "description": null,
+            "schema_version": "esr-140.13",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "compliance": null,
+            "revision": 6,
+            "created_at": "2026-06-20T12:00:00+00:00",
+            "updated_at": "2026-06-21T12:00:00+00:00",
+            "deleted_at": "2026-06-22T12:00:00+00:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "head-idempotent",
+      "source_ids": [
+        "canonical-20260721",
+        "canonical-20260804",
+        "canonical-20260804-name-casefold"
+      ],
+      "cases": [
+        {
+          "id": "head-current-esr-153",
+          "dimensions": [
+            "active",
+            "compliance",
+            "esr-channel",
+            "revision",
+            "supported-current-channel",
+            "valid"
+          ],
+          "policy_validity": "valid",
+          "channel_disposition": "preserve-supported",
+          "source": {
+            "id": 901,
+            "name": "head-esr-153",
+            "description": "Current dual-ESR channel must not collide with release",
+            "schema_version": "esr-153.0",
+            "flags": {
+              "DisableTelemetry": true,
+              "Proxy": {
+                "Mode": "none"
+              }
+            },
+            "compliance": {
+              "benchmark": "CIS Firefox Benchmark",
+              "level": 2
+            },
+            "revision": 12,
+            "created_at": "2026-07-21T12:00:00+00:00",
+            "updated_at": "2026-07-22T12:00:00+00:00",
+            "deleted_at": null
+          },
+          "expected_head": {
+            "id": 901,
+            "name": "head-esr-153",
+            "description": "Current dual-ESR channel must not collide with release",
+            "schema_version": "esr-153.0",
+            "flags": {
+              "DisableTelemetry": true,
+              "Proxy": {
+                "Mode": "none"
+              }
+            },
+            "compliance": {
+              "benchmark": "CIS Firefox Benchmark",
+              "level": 2
+            },
+            "revision": 12,
+            "created_at": "2026-07-21T12:00:00+00:00",
+            "updated_at": "2026-07-22T12:00:00+00:00",
+            "deleted_at": null
+          }
+        },
+        {
+          "id": "head-unsupported-channel-quarantine",
+          "dimensions": [
+            "active",
+            "unsupported-channel"
+          ],
+          "policy_validity": "uncheckable",
+          "channel_disposition": "preserve-quarantined",
+          "source": {
+            "id": 902,
+            "name": "head-unsupported-channel",
+            "description": "Unknown channels are never guessed during a database upgrade",
+            "schema_version": "custom-enterprise-channel",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "compliance": null,
+            "revision": 5,
+            "created_at": "2026-07-21T13:00:00+00:00",
+            "updated_at": "2026-07-21T13:00:00+00:00",
+            "deleted_at": null
+          },
+          "expected_head": {
+            "id": 902,
+            "name": "head-unsupported-channel",
+            "description": "Unknown channels are never guessed during a database upgrade",
+            "schema_version": "custom-enterprise-channel",
+            "flags": {
+              "DisableTelemetry": true
+            },
+            "compliance": null,
+            "revision": 5,
+            "created_at": "2026-07-21T13:00:00+00:00",
+            "updated_at": "2026-07-21T13:00:00+00:00",
+            "deleted_at": null
+          }
+        }
+      ]
+    }
+  ]
+}

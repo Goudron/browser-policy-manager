@@ -108,6 +108,14 @@
       ]
     },
     {
+      "id": "contract-schema-lifecycle",
+      "prefix": "tests/contract/schema/",
+      "layer": "contract",
+      "markers": [
+        "schema"
+      ]
+    },
+    {
       "id": "contract-ui-smoke",
       "prefix": "tests/contract/ui/smoke/",
       "layer": "contract",

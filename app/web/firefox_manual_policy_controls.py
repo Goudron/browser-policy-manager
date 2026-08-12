@@ -3,7 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
-from app.core.schema_channels import DEFAULT_RELEASE_SCHEMA_CHANNEL
+from app.core.schema_channels import DEFAULT_RELEASE_SCHEMA_CHANNEL, SUPPORTED_SCHEMA_CHANNELS
 from app.services.policy_schema_service import get_policy_definition
 
 _MANUAL_POLICY_GROUPS: list[dict[str, Any]] = [
@@ -146,7 +146,11 @@ def get_manual_policy_controls_catalog(
     quick_policy_keys: list[str] = []
 
     for group in _MANUAL_POLICY_GROUPS:
-        items = [_resolve_control_item(item, schema_version) for item in group["items"]]
+        items = [
+            resolved
+            for item in group["items"]
+            if (resolved := _resolve_control_item(item, schema_version)) is not None
+        ]
         groups.append({"id": group["id"], "items": items})
         quick_policy_keys.extend(item["policy_id"] for item in items)
 
@@ -158,13 +162,18 @@ def get_manual_policy_controls_catalog(
     }
 
 
-def _resolve_control_item(item: dict[str, Any], schema_version: str) -> dict[str, Any]:
+def _resolve_control_item(item: dict[str, Any], schema_version: str) -> dict[str, Any] | None:
     definition = get_policy_definition(schema_version, item["policy_id"])
+    if definition is None:
+        return None
     resolved = deepcopy(item)
     resolved["target"] = f"policy:{item['policy_id']}"
+    resolved["available_schema_versions"] = [
+        channel
+        for channel in SUPPORTED_SCHEMA_CHANNELS
+        if get_policy_definition(channel, item["policy_id"]) is not None
+    ]
     resolved["enum_values"] = (
-        list(definition.enum or [])
-        if definition is not None and item["control_kind"] == "enum-select"
-        else []
+        list(definition.enum or []) if item["control_kind"] == "enum-select" else []
     )
     return resolved
