@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -24,7 +25,7 @@ SOURCE_ROOT = REPO_ROOT / "app" / "static_src"
 ENTRY_ROOT = SOURCE_ROOT / "profile_bundle_entries"
 OUTPUT_DIR = STATIC_ROOT / "profiles_bundles"
 VERIFY_DIR = STATIC_ROOT / "profiles_bundles.check"
-ESBUILD = REPO_ROOT / "node_modules" / ".bin" / "esbuild"
+ESBUILD = REPO_ROOT / "node_modules" / ".bin" / ("esbuild.cmd" if os.name == "nt" else "esbuild")
 PACKAGE_LOCK = REPO_ROOT / "package-lock.json"
 MANIFEST_NAME = "profiles-bundles-manifest.json"
 METAFILE_NAME = "profiles-bundles-metafile.json"

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 from tools import build_profile_frontend_bundles as bundles
@@ -8,6 +9,12 @@ from tools import verify_profile_frontend_bundles as verifier
 
 ROOT = Path(__file__).resolve().parents[3]
 MANIFEST = ROOT / "app" / "static" / "profiles_bundles" / "profiles-bundles-manifest.json"
+
+
+def test_profile_bundle_builder_selects_the_platform_esbuild_launcher() -> None:
+    expected = "esbuild.cmd" if os.name == "nt" else "esbuild"
+
+    assert bundles.ESBUILD.name == expected
 
 
 def test_profile_bundle_manifest_and_checksums_are_valid():
