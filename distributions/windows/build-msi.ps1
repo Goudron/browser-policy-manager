@@ -33,7 +33,7 @@ function Get-VerifiedDownload([string]$Url, [string]$ExpectedSha256, [string]$De
     Invoke-WebRequest -Uri $Url -OutFile $Destination
     $actual = Get-Sha256 $Destination
     if ($actual -ne $ExpectedSha256) {
-        throw "checksum mismatch for $Url: expected $ExpectedSha256, got $actual"
+        throw "checksum mismatch for ${Url}: expected $ExpectedSha256, got $actual"
     }
 }
 

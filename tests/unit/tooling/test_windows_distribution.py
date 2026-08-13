@@ -29,6 +29,7 @@ def test_windows_release_inputs_are_complete_and_bound_to_current_bpm_version() 
 
 def test_windows_msi_payload_preserves_native_and_explicit_lifecycle_boundaries() -> None:
     product = (WINDOWS_ROOT / "Product.wxs").read_text(encoding="utf-8")
+    builder = (WINDOWS_ROOT / "build-msi.ps1").read_text(encoding="utf-8")
     migrator = (WINDOWS_ROOT / "templates" / "bpm-migrate.cmd").read_text(encoding="utf-8")
     service = (WINDOWS_ROOT / "templates" / "bpm-service.xml").read_text(encoding="utf-8")
     smoke = (WINDOWS_ROOT / "smoke-msi.ps1").read_text(encoding="utf-8")
@@ -42,6 +43,7 @@ def test_windows_msi_payload_preserves_native_and_explicit_lifecycle_boundaries(
     assert "bpm-service.cmd" in service
     assert "MSI started BPM during installation" in smoke
     assert "ordinary MSI uninstall removed the operator-owned BPM database" in smoke
+    assert "${Url}: expected" in builder
 
 
 def test_windows_lock_keeps_base_runtime_without_optional_ai_or_unsupported_uvloop() -> None:
