@@ -75,10 +75,13 @@ def test_windows_make_targets_and_manual_workflows_keep_signing_and_platform_pro
     assert "inputs.run_windows_msi == 'RUN'" in smoke_workflow
     assert "runs-on: windows-2022" in smoke_workflow
     assert "actual Windows 10 x64" in smoke_workflow
+    assert "actions/setup-node@v6" in smoke_workflow
+    assert "make build-profile-frontend-bundles" in smoke_workflow
     assert "inputs.publish_windows_release == 'PUBLISH'" in publish_workflow
     assert "BPM_WINDOWS_SIGNING_CERTIFICATE_BASE64" in publish_workflow
     assert "python tools/windows_distribution.py stage-release" in publish_workflow
     assert "gh release" in publish_workflow
+    assert "make build-profile-frontend-bundles" in publish_workflow
     assert "self-hosted, windows, x64" in compatibility_workflow
     assert "windows-10-x64" in compatibility_workflow
     assert "windows-11-x64" in compatibility_workflow

@@ -27,6 +27,12 @@ jobs:
           python-version: "3.14"
           cache: pip
 
+      - name: Setup Node.js for generated profile assets
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.22.1"
+          cache: npm
+
       - name: Install documentation release tooling
         run: |
           python -m pip install --upgrade pip
@@ -83,6 +89,14 @@ jobs:
           $env:PATH = "$env:USERPROFILE\.dotnet\tools;$env:PATH"
           wix extension add -g WixToolset.Util.wixext/4.0.6
           "WIX=$env:USERPROFILE\.dotnet\tools" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Build deterministic profile frontend assets
+        shell: pwsh
+        run: |
+          npm ci
+          make verify-frontend-vendor
+          make check-profiles-css
+          make build-profile-frontend-bundles
 
       - name: Build, smoke, and stage only a signed MSI
         shell: pwsh
