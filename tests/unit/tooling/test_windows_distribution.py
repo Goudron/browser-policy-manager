@@ -36,8 +36,9 @@ def test_windows_msi_payload_preserves_native_and_explicit_lifecycle_boundaries(
 
     assert 'Start="demand"' in product
     assert 'Account="NT AUTHORITY\\LocalService"' in product
-    assert 'Permanent="yes">' in product
-    assert 'NeverOverwrite="yes"' in product
+    assert 'Permanent="yes" NeverOverwrite="yes">' in product
+    assert '<Files Directory="INSTALLFOLDER"' in product
+    assert "ComponentGroup" not in product
     assert "net session" in migrator
     assert "alembic" in migrator
     assert "bpm-service.cmd" in service

@@ -27,13 +27,13 @@
 
     <StandardDirectory Id="CommonAppDataFolder">
       <Directory Id="BPMDATA" Name="Browser Policy Manager">
-        <Component Id="BpmState" Guid="{D4F11BF4-3F0A-40F9-93FD-1E0F5F56C2F8}" Permanent="yes">
+        <Component Id="BpmState" Guid="{D4F11BF4-3F0A-40F9-93FD-1E0F5F56C2F8}"
+                   Permanent="yes" NeverOverwrite="yes">
           <CreateFolder>
             <util:PermissionEx User="LocalService" GenericAll="yes" />
             <util:PermissionEx User="Administrators" GenericAll="yes" />
           </CreateFolder>
-          <File Id="BpmEnvironment" Source="!(bindpath.state)\bpm.env" KeyPath="yes"
-                NeverOverwrite="yes" />
+          <File Id="BpmEnvironment" Source="!(bindpath.state)\bpm.env" KeyPath="yes" />
         </Component>
       </Directory>
     </StandardDirectory>
@@ -41,15 +41,9 @@
     <Feature Id="Complete" Title="Browser Policy Manager" Level="1">
       <ComponentRef Id="BpmService" />
       <ComponentRef Id="BpmState" />
-      <ComponentGroupRef Id="BpmPayload" />
-    </Feature>
-  </Package>
-
-  <Fragment>
-    <ComponentGroup Id="BpmPayload">
       <Files Directory="INSTALLFOLDER" Include="!(bindpath.payload)\**">
         <Exclude Files="!(bindpath.payload)\bpm-service.exe" />
       </Files>
-    </ComponentGroup>
-  </Fragment>
+    </Feature>
+  </Package>
 </Wix>
