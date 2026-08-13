@@ -49,6 +49,7 @@ def test_windows_msi_payload_preserves_native_and_explicit_lifecycle_boundaries(
 def test_windows_lock_keeps_base_runtime_without_optional_ai_or_unsupported_uvloop() -> None:
     lock = (WINDOWS_ROOT / "requirements.windows.lock").read_text(encoding="utf-8")
 
+    assert "typing-inspection==0.4.4" in lock
     assert "uvloop==" not in lock
     assert "numpy==" not in lock
     assert "onnxruntime==" not in lock
