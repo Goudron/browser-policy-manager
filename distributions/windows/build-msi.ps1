@@ -122,6 +122,17 @@ function New-HarvestedPayloadFragment([string]$Destination) {
     Set-Content -LiteralPath $Destination -Value $lines -Encoding utf8
 }
 
+function New-WindowsAlembicConfiguration([string]$Source, [string]$Destination) {
+    $configuration = @(
+        Get-Content -LiteralPath $Source |
+            Where-Object { -not $_.TrimStart().StartsWith('#') }
+    )
+    if ($configuration.Count -eq 0) {
+        throw 'Windows Alembic configuration has no executable settings'
+    }
+    Set-Content -LiteralPath $Destination -Value $configuration -Encoding ascii
+}
+
 if (-not $IsWindows) {
     throw 'Windows MSI assembly must run on a native Windows x64 host.'
 }
@@ -197,7 +208,8 @@ try {
     & tar.exe -xzf $Documentation -C $DocumentationSite --strip-components=1
     if ($LASTEXITCODE -ne 0) { throw 'failed to extract verified documentation archive' }
     Copy-Item (Join-Path $SourceRoot 'alembic') -Destination (Join-Path $Payload 'alembic') -Recurse
-    Copy-Item (Join-Path $SourceRoot 'alembic.ini'), (Join-Path $SourceRoot 'LICENSE') -Destination $Payload
+    New-WindowsAlembicConfiguration (Join-Path $SourceRoot 'alembic.ini') (Join-Path $Payload 'alembic.ini')
+    Copy-Item (Join-Path $SourceRoot 'LICENSE') -Destination $Payload
     Copy-Item (Join-Path $SourceRoot 'distributions/docker/requirements.lock') -Destination $Payload
     Copy-Item (Join-Path $SourceRoot 'distributions/windows/requirements.windows.lock') -Destination $Payload
     Copy-Item (Join-Path $SourceRoot 'documentation/config/THIRD_PARTY_NOTICES.md') `
