@@ -37,6 +37,92 @@ function Get-VerifiedDownload([string]$Url, [string]$ExpectedSha256, [string]$De
     }
 }
 
+function Get-StableWixId([string]$Prefix, [string]$Value) {
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($Value.ToLowerInvariant())
+    $digest = [System.Security.Cryptography.SHA256]::HashData($bytes)
+    $suffix = [System.BitConverter]::ToString($digest).Replace('-', '').Substring(0, 24)
+    return "${Prefix}_$suffix"
+}
+
+function Get-PayloadRelativePath([string]$FullName) {
+    return $FullName.Substring($Payload.Length).TrimStart('\').Replace('\', '/')
+}
+
+function New-HarvestedPayloadFragment([string]$Destination) {
+    $payloadFiles = @(
+        Get-ChildItem -LiteralPath $Payload -File -Recurse |
+            Where-Object { (Get-PayloadRelativePath $_.FullName) -ne 'bpm-service.exe' } |
+            Sort-Object FullName
+    )
+    if ($payloadFiles.Count -eq 0) {
+        throw 'Windows MSI payload contains no application files to harvest'
+    }
+    $payloadDirectories = @(
+        Get-ChildItem -LiteralPath $Payload -Directory -Recurse |
+            ForEach-Object { Get-PayloadRelativePath $_.FullName } |
+            Sort-Object
+    )
+    $directoryIds = @{}
+    foreach ($relativeDirectory in $payloadDirectories) {
+        $directoryIds[$relativeDirectory] = Get-StableWixId 'BpmDirectory' $relativeDirectory
+    }
+
+    $lines = [System.Collections.Generic.List[string]]::new()
+    $null = $lines.Add('<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">')
+    $null = $lines.Add('  <Fragment>')
+    $null = $lines.Add('    <DirectoryRef Id="INSTALLFOLDER">')
+
+    function Add-PayloadDirectories([string]$ParentRelativePath, [int]$Depth) {
+        $children = @($payloadDirectories | Where-Object {
+            $separator = $_.LastIndexOf('/')
+            $parent = if ($separator -lt 0) { '' } else { $_.Substring(0, $separator) }
+            $parent -eq $ParentRelativePath
+        })
+        foreach ($relativeDirectory in $children) {
+            $nameSeparator = $relativeDirectory.LastIndexOf('/')
+            $name = if ($nameSeparator -lt 0) {
+                $relativeDirectory
+            } else {
+                $relativeDirectory.Substring($nameSeparator + 1)
+            }
+            $indent = '  ' * $Depth
+            $directoryId = $directoryIds[$relativeDirectory]
+            $escapedName = [System.Security.SecurityElement]::Escape($name)
+            $null = $lines.Add(
+                ('{0}<Directory Id="{1}" Name="{2}">' -f $indent, $directoryId, $escapedName)
+            )
+            Add-PayloadDirectories $relativeDirectory ($Depth + 1)
+            $null = $lines.Add("$indent</Directory>")
+        }
+    }
+
+    Add-PayloadDirectories '' 3
+    $null = $lines.Add('    </DirectoryRef>')
+    $null = $lines.Add('    <ComponentGroup Id="BpmPayload">')
+    foreach ($payloadFile in $payloadFiles) {
+        $relativeFile = Get-PayloadRelativePath $payloadFile.FullName
+        $separator = $relativeFile.LastIndexOf('/')
+        $parentDirectory = if ($separator -lt 0) { '' } else { $relativeFile.Substring(0, $separator) }
+        $directoryId = if ($parentDirectory) { $directoryIds[$parentDirectory] } else { 'INSTALLFOLDER' }
+        $componentId = Get-StableWixId 'BpmComponent' $relativeFile
+        $fileId = Get-StableWixId 'BpmFile' $relativeFile
+        $source = [System.Security.SecurityElement]::Escape(
+            ('!(bindpath.payload)\' + $relativeFile.Replace('/', '\'))
+        )
+        $null = $lines.Add(
+            ('      <Component Id="{0}" Directory="{1}" Guid="*">' -f $componentId, $directoryId)
+        )
+        $null = $lines.Add(
+            ('        <File Id="{0}" Source="{1}" KeyPath="yes" />' -f $fileId, $source)
+        )
+        $null = $lines.Add('      </Component>')
+    }
+    $null = $lines.Add('    </ComponentGroup>')
+    $null = $lines.Add('  </Fragment>')
+    $null = $lines.Add('</Wix>')
+    Set-Content -LiteralPath $Destination -Value $lines -Encoding utf8
+}
+
 if (-not $IsWindows) {
     throw 'Windows MSI assembly must run on a native Windows x64 host.'
 }
@@ -144,9 +230,11 @@ try {
 
     Write-Stage "build $Artifact with WiX $($Target.wix.tool_version)"
     if (Test-Path -LiteralPath $OutputArtifact) { Remove-Item -LiteralPath $OutputArtifact -Force }
+    $PayloadFragment = Join-Path $WorkRoot 'harvested-payload.wxs'
+    New-HarvestedPayloadFragment $PayloadFragment
     & wix build -arch x64 -ext $Target.wix.util_extension `
         -bindpath "payload=$Payload" -bindpath "state=$State" `
-        -out $OutputArtifact (Join-Path $SourceRoot 'distributions/windows/Product.wxs')
+        -out $OutputArtifact (Join-Path $SourceRoot 'distributions/windows/Product.wxs') $PayloadFragment
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $OutputArtifact)) {
         throw 'WiX did not produce the expected MSI artifact'
     }

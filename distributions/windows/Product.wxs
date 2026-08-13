@@ -41,9 +41,7 @@
     <Feature Id="Complete" Title="Browser Policy Manager" Level="1">
       <ComponentRef Id="BpmService" />
       <ComponentRef Id="BpmState" />
-      <Files Directory="INSTALLFOLDER" Include="!(bindpath.payload)\**">
-        <Exclude Files="!(bindpath.payload)\bpm-service.exe" />
-      </Files>
+      <ComponentGroupRef Id="BpmPayload" />
     </Feature>
   </Package>
 </Wix>
