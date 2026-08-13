@@ -1,0 +1,43 @@
+# Compose is a local, single-node reference deployment.  It deliberately
+# binds BPM to loopback and does not supply TLS, authentication, reverse proxy,
+# HA, or PostgreSQL topology.
+name: bpm
+
+x-bpm-runtime: &bpm-runtime
+  image: ${BPM_IMAGE:-browser-policy-manager:0.9.5}
+  environment:
+    BPM_DATABASE_URL: sqlite+aiosqlite:////var/lib/bpm/bpm.db
+    BPM_DOCUMENTATION_SITE_DIR: /opt/bpm/documentation/site
+    BPM_HOST: 0.0.0.0
+    BPM_PORT: 8000
+    BPM_RELOAD: "false"
+  volumes:
+    - bpm-data:/var/lib/bpm
+
+services:
+  bpm:
+    <<: *bpm-runtime
+    build:
+      context: ../..
+      dockerfile: distributions/docker/Dockerfile
+      args:
+        BPM_SOURCE_REVISION: ${BPM_SOURCE_REVISION:-unknown}
+    command: ["serve"]
+    ports:
+      - "127.0.0.1:${BPM_PORT:-8000}:8000"
+
+  # Run this service explicitly before the first BPM start and before a
+  # release that contains migrations: `docker compose run --rm bpm-migrate`.
+  bpm-migrate:
+    <<: *bpm-runtime
+    build:
+      context: ../..
+      dockerfile: distributions/docker/Dockerfile
+      args:
+        BPM_SOURCE_REVISION: ${BPM_SOURCE_REVISION:-unknown}
+    command: ["migrate"]
+    profiles: ["maintenance"]
+
+volumes:
+  bpm-data:
+    name: ${BPM_DATA_VOLUME:-bpm-data}

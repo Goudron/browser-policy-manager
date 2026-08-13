@@ -1,4 +1,4 @@
-.PHONY: run dev ai-extra-check ai-model-install-dev ai-rag-install-dev ai-runtime-install-dev ai-web-sources-check-dev dependency-audit package-smoke test test-ai-incubation test-ai-incubation-coverage coverage-release-implementation test-browser test-contract test-fast test-frontend test-frontend-coverage test-integration test-live test-profile-pure-modules test-profile-conversion-ux test-release test-ui test-unit test-unit-pilot test-unit-xdist test-firefox-live firefox-live-workflow firefox-live-four-channel-workflow test-firefox-live-amo test-locale-contract test-firefox-schema-contract test-firefox-schema-workflow verify-firefox-schema-matrix verify-firefox-conversion-matrix schema-lifecycle-dry-run test-db-integration test-db-recovery test-postgres-integration postgres-ci-evidence setup-firefox-live-browsers verify-firefox-live-browsers provision-firefox-schema-inputs setup-docs-toolchain test-docs test-docs-contract test-docs-ui test-docs-ui-contract test-docs-browser codex-snapshot docs-snapshot docs-fast-check docs-coverage docs-release-check docs-release-handoff docs-validate docs-build docs-install-dev docs-reproducibility-check docs-package docs-package-verify docs-pdf-build docs-pdf-verify docs-pdf-deliver docs-pdf-delivery-verify coverage coverage-report fmt lint typecheck architecture pre-commit-check release-boundary quality repo-health profile-performance profile-performance-gate profile-performance-release-gate locale-inventory locale-quality build-locale-catalogs check-locale-catalogs build-profiles-css check-profiles-css build-profile-frontend-bundles verify-profile-frontend-vendor verify-frontend-vendor rebuild-frontend-vendor local-chromium-ui-audit clean-local-artifacts
+.PHONY: run dev ai-extra-check ai-model-install-dev ai-rag-install-dev ai-runtime-install-dev ai-web-sources-check-dev dependency-audit package-smoke docker-build docker-migrate docker-up docker-down docker-smoke native-package-list native-package-validate native-package-build native-package-smoke native-package-smoke-all native-package-stage-release native-package-release-gate windows-package-list windows-package-validate windows-package-build windows-package-smoke windows-package-stage-release windows-package-release-gate test test-ai-incubation test-ai-incubation-coverage coverage-release-implementation test-browser test-contract test-fast test-frontend test-frontend-coverage test-integration test-live test-profile-pure-modules test-profile-conversion-ux test-release test-ui test-unit test-unit-pilot test-unit-xdist test-firefox-live firefox-live-workflow firefox-live-four-channel-workflow test-firefox-live-amo test-locale-contract test-firefox-schema-contract test-firefox-schema-workflow verify-firefox-schema-matrix verify-firefox-conversion-matrix schema-lifecycle-dry-run test-db-integration test-db-recovery test-postgres-integration postgres-ci-evidence setup-firefox-live-browsers verify-firefox-live-browsers provision-firefox-schema-inputs setup-docs-toolchain test-docs test-docs-contract test-docs-ui test-docs-ui-contract test-docs-browser codex-snapshot docs-snapshot docs-fast-check docs-coverage docs-release-check docs-release-handoff docs-validate docs-build docs-install-dev docs-reproducibility-check docs-package docs-package-verify docs-pdf-build docs-pdf-verify docs-pdf-deliver docs-pdf-delivery-verify coverage coverage-report fmt lint typecheck architecture pre-commit-check release-boundary quality repo-health profile-performance profile-performance-gate profile-performance-release-gate locale-inventory locale-quality build-locale-catalogs check-locale-catalogs build-profiles-css check-profiles-css build-profile-frontend-bundles verify-profile-frontend-vendor verify-frontend-vendor rebuild-frontend-vendor local-chromium-ui-audit clean-local-artifacts
 
 PYTEST ?= $(if $(wildcard .venv/bin/pytest),.venv/bin/pytest,pytest)
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python)
@@ -118,6 +118,12 @@ LOCAL_ARTIFACT_FILES := \
 	coverage.xml \
 	app/documentation/.site-dev-install.json \
 	tmp-bootstrap.db
+DOCKER ?= docker
+DOCKER_COMPOSE ?= $(DOCKER) compose
+DOCKER_COMPOSE_FILE ?= distributions/docker/compose.yaml
+DOCKER_IMAGE ?= browser-policy-manager:0.9.5
+BPM_SOURCE_REVISION ?= $(shell git rev-parse --verify HEAD 2>/dev/null || printf unknown)
+TARGET ?= all
 
 run:
 	$(PYTHON) -m uvicorn app.main:app --reload --port 8000
@@ -149,6 +155,69 @@ dependency-audit:
 
 package-smoke:
 	$(PYTHON) tools/package_smoke.py
+
+# Docker is a separate distribution contour.  It consumes the verified
+# documentation package and keeps migration explicit; `docker-up` never writes
+# a database schema by itself.
+docker-build: docs-package-verify
+	BPM_IMAGE="$(DOCKER_IMAGE)" BPM_SOURCE_REVISION="$(BPM_SOURCE_REVISION)" $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) build bpm
+
+docker-migrate: docker-build
+	BPM_IMAGE="$(DOCKER_IMAGE)" $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) run --rm bpm-migrate
+
+docker-up: docker-build
+	BPM_IMAGE="$(DOCKER_IMAGE)" $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up --detach bpm
+
+docker-down:
+	BPM_IMAGE="$(DOCKER_IMAGE)" $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) down
+
+docker-smoke: docker-build
+	$(PYTHON) tools/docker_distribution_smoke.py --image "$(DOCKER_IMAGE)"
+
+# Native package targets run one frozen Linux userspace at a time. They are
+# release-only operations: artifacts go to ignored local evidence, and no
+# command publishes a package or mutates a host database.
+native-package-list: native-package-validate
+	$(PYTHON) tools/native_distribution.py list --target "$(TARGET)"
+
+native-package-validate:
+	$(PYTHON) tools/native_distribution.py validate
+
+native-package-build: docs-package-verify native-package-validate
+	$(PYTHON) tools/native_distribution.py build --target "$(TARGET)"
+
+native-package-smoke: native-package-validate
+	$(PYTHON) tools/native_distribution.py smoke --target "$(TARGET)"
+
+native-package-smoke-all: native-package-smoke
+
+native-package-stage-release: native-package-validate
+	$(PYTHON) tools/native_distribution.py stage-release --target all
+
+native-package-release-gate: docs-package-verify native-package-validate
+	$(PYTHON) tools/native_distribution.py build --target all
+	$(PYTHON) tools/native_distribution.py smoke --target all
+
+# Native Windows is an independent MSI contour. Build and smoke commands are
+# intentionally native-Windows-only; WSL is not an installer backend.
+windows-package-list: windows-package-validate
+	$(PYTHON) tools/windows_distribution.py list
+
+windows-package-validate:
+	$(PYTHON) tools/windows_distribution.py validate
+
+windows-package-build: docs-package-verify windows-package-validate
+	$(PYTHON) tools/windows_distribution.py build
+
+windows-package-smoke: windows-package-validate
+	$(PYTHON) tools/windows_distribution.py smoke
+
+windows-package-stage-release: windows-package-validate
+	$(PYTHON) tools/windows_distribution.py stage-release
+
+windows-package-release-gate: docs-package-verify windows-package-validate
+	$(PYTHON) tools/windows_distribution.py build
+	$(PYTHON) tools/windows_distribution.py smoke
 
 test:
 	$(PYTEST)

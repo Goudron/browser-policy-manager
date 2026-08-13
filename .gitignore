@@ -108,6 +108,8 @@ pytestdebug.log
 /app/documentation/.site-dev-install.json
 /app/static/profiles_bundles/
 /distributions/documentation/[0-9]*/
+/distributions/releases/[0-9]*/assets/*
+!/distributions/releases/[0-9]*/assets/.gitkeep
 
 # -----------------------------------------------------------------------------
 # Local deployment helpers

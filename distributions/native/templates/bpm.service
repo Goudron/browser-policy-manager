@@ -1,0 +1,29 @@
+[Unit]
+Description=Browser Policy Manager
+Documentation=https://github.com/Goudron/browser-policy-manager
+After=network.target
+
+[Service]
+Type=simple
+User=bpm
+Group=bpm
+WorkingDirectory=/opt/bpm
+EnvironmentFile=-/etc/bpm/bpm.env
+ExecStart=/usr/bin/bpm serve
+Restart=on-failure
+RestartSec=5s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/bpm
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target

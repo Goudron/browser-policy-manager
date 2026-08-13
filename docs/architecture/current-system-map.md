@@ -127,6 +127,26 @@ its owned library responsibilities live in `documentation/buildlib/` (source
 validation, portal/catalog generation, PDF, and publication). Use
 `make docs-validate` or `make test-docs` rather than loading its corpus.
 
+Native Linux packaging is a separate release-assembly contour. Its source of
+truth is `distributions/native/targets.json`; `tools/native_distribution.py`
+builds one frozen target userspace at a time, while
+`distributions/native/build-target.sh` and `distributions/native/smoke-target.sh`
+own the private Python payload and clean-install proof. It produces transient
+`.deb`, `.rpm`, and `pkg.tar.zst` evidence only after verified documentation
+packaging; it never imports application runtime modules or changes BPM
+functionality. Start with `make native-package-validate`; the explicit release
+gate is `make native-package-release-gate`, with focused contracts in
+`tests/unit/tooling/test_native_distribution.py`.
+
+Native Windows packaging is a separate direct-host MSI contour, never a WSL
+adapter. `distributions/windows/targets.json` freezes the Windows 10/11 x64
+payload inputs; `tools/windows_distribution.py` assembles and smoke-tests the
+MSI only on a native Windows x64 host. It retains explicit migration, a manual
+least-privilege service, and Authenticode-required release staging. Start with
+`make windows-package-validate`; the native-host release gate is
+`make windows-package-release-gate`, with focused contracts in
+`tests/unit/tooling/test_windows_distribution.py`.
+
 ## Test Contours And Fast Commands
 
 | Change area | Start here | Escalate when needed |
@@ -138,6 +158,8 @@ validation, portal/catalog generation, PDF, and publication). Use
 | Directed Firefox conversion | `make verify-firefox-conversion-matrix` | `tests/unit/tooling/test_verify_firefox_conversion_matrix.py` |
 | Firefox policy behavior | `make setup-firefox-live-browsers FIREFOX_CHANNEL=<release|esr153|esr140|esr115>` | `make firefox-live-four-channel-workflow` |
 | Documentation tooling/portal | `make test-docs` | `make docs-validate` |
+| Native Linux distributions | `make native-package-validate` | `make native-package-release-gate` |
+| Native Windows MSI | `make windows-package-validate` | `make windows-package-release-gate` |
 | Performance/repository health | `make profile-performance-gate` | `make repo-health` |
 | Profile frontend graph | `make frontend-profile-graph` | named DOM/browser contracts in `tests/contract/ui/profiles/` |
 | Profile route bundles | `make check-profile-frontend-bundles` | `tests/unit/profiles/test_profile_frontend_bundles.py`, route/browser asset contracts |
@@ -195,6 +217,14 @@ checks named paths and commands; it does not recursively scan the repository.
     "app/ai/",
     "documentation/tools/build_docs.py",
     "documentation/buildlib/",
+    "distributions/native/targets.json",
+    "distributions/native/build-target.sh",
+    "distributions/native/smoke-target.sh",
+    "tools/native_distribution.py",
+    "distributions/windows/targets.json",
+    "distributions/windows/build-msi.ps1",
+    "distributions/windows/smoke-msi.ps1",
+    "tools/windows_distribution.py",
     "tests/contract/ui/profiles/",
     "tests/live/firefox/",
     "tests/contract/compliance/",
@@ -205,7 +235,9 @@ checks named paths and commands; it does not recursively scan the repository.
     "tests/unit/schema/contracts/test_lifecycle_transition_plan.py",
     "tests/unit/schema/contracts/test_retirement_convertibility_preflight.py",
     "tests/integration/db/test_retirement_owner_v1.py",
-    "tests/integration/db/test_retirement_revision_materializer_v1.py"
+    "tests/integration/db/test_retirement_revision_materializer_v1.py",
+    "tests/unit/tooling/test_native_distribution.py",
+    "tests/unit/tooling/test_windows_distribution.py"
   ],
   "commands": [
     "make architecture",
@@ -226,7 +258,11 @@ checks named paths and commands; it does not recursively scan the repository.
     "make profile-performance-gate",
     "make repo-health",
     "make test-profile-pure-modules",
-    "make check-profile-frontend-bundles"
+    "make check-profile-frontend-bundles",
+    "make native-package-validate",
+    "make native-package-release-gate",
+    "make windows-package-validate",
+    "make windows-package-release-gate"
   ],
   "excluded_boundaries": [
     "app/static/vendor/",

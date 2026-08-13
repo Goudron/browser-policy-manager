@@ -1,0 +1,14 @@
+<service>
+  <id>BPM</id>
+  <name>Browser Policy Manager</name>
+  <description>Browser Policy Manager local web service</description>
+  <executable>%SystemRoot%\System32\cmd.exe</executable>
+  <arguments>/d /c &quot;%BASE%\bpm-service.cmd&quot;</arguments>
+  <workingdirectory>%BASE%</workingdirectory>
+  <stoptimeout>30sec</stoptimeout>
+  <logpath>%ProgramData%\Browser Policy Manager\logs</logpath>
+  <log mode="roll-by-size">
+    <sizeThreshold>10240</sizeThreshold>
+    <keepFiles>5</keepFiles>
+  </log>
+</service>

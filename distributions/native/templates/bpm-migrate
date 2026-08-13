@@ -1,0 +1,26 @@
+#!/bin/sh
+# Alembic migration is an explicit operator action. Package installation,
+# service start, and `bpm serve` must never execute this command implicitly.
+set -eu
+
+if [ -r /etc/bpm/bpm.env ]; then
+    set -a
+    . /etc/bpm/bpm.env
+    set +a
+fi
+
+if [ "$(id -u)" -eq 0 ]; then
+    exec runuser -u bpm -- /usr/bin/bpm-migrate --as-bpm
+fi
+
+if [ "${1:-}" = "--as-bpm" ]; then
+    shift
+fi
+
+if [ "$#" -ne 0 ]; then
+    echo "bpm-migrate accepts no additional arguments" >&2
+    exit 64
+fi
+
+cd /opt/bpm
+exec /opt/bpm/venv/bin/python -m alembic -c /opt/bpm/alembic.ini upgrade head

@@ -1,0 +1,77 @@
+name: Native Windows MSI compatibility evidence
+
+on:
+  workflow_dispatch:
+    inputs:
+      compatibility_target:
+        description: Select the dedicated self-hosted clean Windows validation host.
+        type: choice
+        required: true
+        options:
+          - windows-10-x64
+          - windows-11-x64
+
+permissions:
+  contents: read
+
+jobs:
+  native-windows-compatibility:
+    name: Prove BPM 0.9.5 MSI on ${{ inputs.compatibility_target }}
+    runs-on: [self-hosted, windows, x64, "${{ inputs.compatibility_target }}"]
+    timeout-minutes: 45
+    steps:
+      - name: Checkout smoke contract
+        uses: actions/checkout@v6
+
+      - name: Download signed MSI and its release checksum
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $assetDirectory = Join-Path $env:RUNNER_TEMP 'bpm-msi-release-assets'
+          New-Item -ItemType Directory -Force -Path $assetDirectory | Out-Null
+          gh release download v0.9.5 --repo Goudron/browser-policy-manager --dir $assetDirectory `
+            --pattern 'browser-policy-manager-0.9.5-windows-x64.msi' `
+            --pattern 'browser-policy-manager-0.9.5-windows-x64.msi.sha256'
+          "BPM_MSI_ASSET_DIRECTORY=$assetDirectory" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Verify release checksum and Authenticode before installation
+        shell: pwsh
+        run: |
+          $msi = Join-Path $env:BPM_MSI_ASSET_DIRECTORY 'browser-policy-manager-0.9.5-windows-x64.msi'
+          $checksum = Join-Path $env:BPM_MSI_ASSET_DIRECTORY 'browser-policy-manager-0.9.5-windows-x64.msi.sha256'
+          $expected = (Get-Content -LiteralPath $checksum -Raw).Trim().Split(' ')[0]
+          $actual = (Get-FileHash -LiteralPath $msi -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) { throw "MSI checksum mismatch: expected $expected, got $actual" }
+          $signature = (Get-AuthenticodeSignature -LiteralPath $msi).Status.ToString()
+          if ($signature -ne 'Valid') { throw "MSI Authenticode status is $signature" }
+          "BPM_MSI_PATH=$msi" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Execute clean native install, migration, service, restart, and uninstall smoke
+        shell: pwsh
+        run: .\distributions\windows\smoke-msi.ps1 -MsiPath $env:BPM_MSI_PATH
+
+      - name: Record non-secret compatibility receipt
+        shell: pwsh
+        run: |
+          $computer = Get-CimInstance Win32_OperatingSystem
+          @{
+            schema_version = 1
+            bpm_version = '0.9.5'
+            target = '${{ inputs.compatibility_target }}'
+            operating_system = $computer.Caption
+            operating_system_version = $computer.Version
+            build_number = $computer.BuildNumber
+            architecture = $computer.OSArchitecture
+            msi_sha256 = (Get-FileHash -LiteralPath $env:BPM_MSI_PATH -Algorithm SHA256).Hash.ToLowerInvariant()
+            authenticode_status = (Get-AuthenticodeSignature -LiteralPath $env:BPM_MSI_PATH).Status.ToString()
+            smoke_result = 'passed'
+          } | ConvertTo-Json | Set-Content -LiteralPath compatibility-receipt.json -Encoding utf8
+
+      - name: Upload compatibility evidence
+        uses: actions/upload-artifact@v6
+        with:
+          name: bpm-0.9.5-${{ inputs.compatibility_target }}-compatibility-evidence
+          path: compatibility-receipt.json
+          if-no-files-found: error
+          retention-days: 90

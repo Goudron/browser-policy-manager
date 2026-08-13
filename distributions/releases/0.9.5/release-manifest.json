@@ -1,0 +1,48 @@
+{
+  "assets": [
+    {
+      "format": "deb",
+      "path": "assets/debian-13-5/browser-policy-manager_0.9.5-1~debian13_amd64.deb",
+      "sha256": "8766dd9914b5d9edfbcb96f828160b4ab5525a76af11d0399837d0d528aa379d",
+      "size_bytes": 111518668,
+      "target": "debian-13-5"
+    },
+    {
+      "format": "rpm",
+      "path": "assets/fedora-44/browser-policy-manager-0.9.5-1.fc44.x86_64.rpm",
+      "sha256": "1f47def4363d73715c4067041b99075af30181df62191e317fc98510934b2052",
+      "size_bytes": 64622575,
+      "target": "fedora-44"
+    },
+    {
+      "format": "deb",
+      "path": "assets/linux-mint-22-3/browser-policy-manager_0.9.5-1~linuxmint22.3_amd64.deb",
+      "sha256": "5b982a47f57919cfb65558de7e3f5f0d9fe7b3ceeccbd94727b6e81b85fd66ee",
+      "size_bytes": 122365766,
+      "target": "linux-mint-22-3"
+    },
+    {
+      "format": "arch",
+      "path": "assets/manjaro-stable/browser-policy-manager-0.9.5-1-x86_64.pkg.tar.zst",
+      "sha256": "fdad7d2a355a62169f7a2fa52f2990ddc0424c8145444b47f54bc1edfa9aeed6",
+      "size_bytes": 57279267,
+      "target": "manjaro-stable"
+    },
+    {
+      "format": "deb",
+      "path": "assets/ubuntu-26-04/browser-policy-manager_0.9.5-1~ubuntu26.04_amd64.deb",
+      "sha256": "8a904e6d318c23c238b9262502b15b476774777cf0cf07441fd33cf68135dee7",
+      "size_bytes": 122413684,
+      "target": "ubuntu-26-04"
+    }
+  ],
+  "bpm_version": "0.9.5",
+  "publication": {
+    "provider": "github-release-assets",
+    "release_url": "https://github.com/Goudron/browser-policy-manager/releases/tag/v0.9.5",
+    "repository": "Goudron/browser-policy-manager"
+  },
+  "release_tag": "v0.9.5",
+  "schema_version": 1,
+  "source_revision": "e6e6a0f80b76b38405b46081d5bef7441c030f22"
+}

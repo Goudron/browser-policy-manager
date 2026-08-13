@@ -1,0 +1,109 @@
+name: Native Windows MSI distribution gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_windows_msi:
+        description: Type RUN to build and smoke-test the BPM 0.9.5 native Windows MSI.
+        required: true
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  documentation-package:
+    if: ${{ inputs.run_windows_msi == 'RUN' }}
+    name: Build verified BPM documentation package
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: Install documentation release tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Build and verify product documentation package
+        run: |
+          make setup-docs-toolchain
+          make docs-package
+          make docs-package-verify
+
+      - name: Transfer verified documentation package to Windows assembly
+        uses: actions/upload-artifact@v6
+        with:
+          name: bpm-0.9.5-documentation-package
+          path: |
+            documentation/dist/bpm-documentation-0.9.5.tar.gz
+            documentation/dist/bpm-documentation-0.9.5.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 1
+
+  windows-msi-release-gate:
+    if: ${{ inputs.run_windows_msi == 'RUN' }}
+    needs: documentation-package
+    name: Build and smoke BPM 0.9.5 native Windows MSI
+    runs-on: windows-2022
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: Restore verified documentation package
+        uses: actions/download-artifact@v8
+        with:
+          name: bpm-0.9.5-documentation-package
+          path: documentation/dist
+
+      - name: Install Windows release tooling without optional BPM extras
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+          dotnet tool install --global wix --version 4.0.6
+          $env:PATH = "$env:USERPROFILE\.dotnet\tools;$env:PATH"
+          wix extension add -g WixToolset.Util.wixext/4.0.6
+          "WIX=$env:USERPROFILE\.dotnet\tools" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Build and smoke the native Windows MSI
+        shell: pwsh
+        run: |
+          $env:PATH = "$env:WIX;$env:PATH"
+          python tools/windows_distribution.py build
+          python tools/windows_distribution.py smoke
+
+      - name: Upload generated Windows MSI evidence
+        uses: actions/upload-artifact@v6
+        with:
+          name: bpm-0.9.5-windows-msi-evidence
+          path: artifacts/windows-packages/0.9.5/windows-10-11-x64/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish non-secret release evidence summary
+        shell: pwsh
+        run: |
+          @"
+          ## BPM 0.9.5 native Windows MSI gate
+
+          - Source revision: ``$(git rev-parse --verify HEAD)``
+          - Build host: Windows Server 2022 x64 (assembly and smoke evidence only).
+          - Runtime: private CPython 3.14.6; no system Python, PATH, or WSL mutation.
+          - Result: MSI preserved explicit migration and service activation, then completed clean-install, probe, restart, and state-retention smoke.
+          - Remaining release acceptance: clean recorded smoke on actual Windows 10 x64 and Windows 11 x64 hosts.
+          "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append

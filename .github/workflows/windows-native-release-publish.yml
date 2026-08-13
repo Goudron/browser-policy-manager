@@ -1,0 +1,110 @@
+name: Publish native Windows MSI release asset
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_windows_release:
+        description: Type PUBLISH to build, sign, smoke, and upload the BPM 0.9.5 Windows MSI.
+        required: true
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  documentation-package:
+    if: ${{ inputs.publish_windows_release == 'PUBLISH' }}
+    name: Build verified BPM documentation package
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: Install documentation release tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Build and verify product documentation package
+        run: |
+          make setup-docs-toolchain
+          make docs-package
+          make docs-package-verify
+
+      - name: Transfer verified documentation package to Windows assembly
+        uses: actions/upload-artifact@v6
+        with:
+          name: bpm-0.9.5-documentation-package-release
+          path: |
+            documentation/dist/bpm-documentation-0.9.5.tar.gz
+            documentation/dist/bpm-documentation-0.9.5.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 1
+
+  publish-windows-msi:
+    if: ${{ inputs.publish_windows_release == 'PUBLISH' }}
+    needs: documentation-package
+    name: Build, sign, smoke, and publish BPM 0.9.5 Windows MSI
+    runs-on: windows-2022
+    timeout-minutes: 105
+    env:
+      BPM_WINDOWS_SIGNING_CERTIFICATE_BASE64: ${{ secrets.BPM_WINDOWS_SIGNING_CERTIFICATE_BASE64 }}
+      BPM_WINDOWS_SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.BPM_WINDOWS_SIGNING_CERTIFICATE_PASSWORD }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: Restore verified documentation package
+        uses: actions/download-artifact@v8
+        with:
+          name: bpm-0.9.5-documentation-package-release
+          path: documentation/dist
+
+      - name: Install Windows release tooling without optional BPM extras
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+          dotnet tool install --global wix --version 4.0.6
+          $env:PATH = "$env:USERPROFILE\.dotnet\tools;$env:PATH"
+          wix extension add -g WixToolset.Util.wixext/4.0.6
+          "WIX=$env:USERPROFILE\.dotnet\tools" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Build, smoke, and stage only a signed MSI
+        shell: pwsh
+        run: |
+          if (-not $env:BPM_WINDOWS_SIGNING_CERTIFICATE_BASE64 -or -not $env:BPM_WINDOWS_SIGNING_CERTIFICATE_PASSWORD) {
+            throw 'The protected BPM Windows Authenticode certificate and password secrets are required for publication.'
+          }
+          $env:PATH = "$env:WIX;$env:PATH"
+          python tools/windows_distribution.py build
+          python tools/windows_distribution.py smoke
+          python tools/windows_distribution.py stage-release
+
+      - name: Create or update draft GitHub Release assets
+        shell: pwsh
+        run: |
+          $releaseStore = 'distributions/releases/0.9.5'
+          $assets = @(
+            "$releaseStore/SHA256SUMS",
+            "$releaseStore/release-manifest.json"
+          ) + (Get-ChildItem "$releaseStore/assets/windows-10-11-x64" -File | ForEach-Object FullName)
+          if (gh release view v0.9.5 2>$null) {
+            gh release upload v0.9.5 @assets --clobber
+          } else {
+            gh release create v0.9.5 --draft --title 'BPM 0.9.5' --notes-file "$releaseStore/README.md" @assets
+          }

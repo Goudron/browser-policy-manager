@@ -19,7 +19,7 @@
     "development_tooling": {
       "modules": ["documentation/tools/", "tools/"],
       "dependencies": ["anyio", "beautifulsoup4", "build", "cyclonedx-bom", "import-linter", "ipython", "mypy", "pip-audit", "pre-commit", "pytest", "pytest-asyncio", "pytest-cov", "pytest-xdist", "ruff", "selenium", "types-pyyaml", "types-requests"],
-      "commands": ["lint", "typecheck", "quality", "docs-validate", "repo-health", "release-boundary", "package-smoke"],
+      "commands": ["lint", "typecheck", "quality", "docs-validate", "repo-health", "release-boundary", "package-smoke", "native-package-validate", "native-package-build", "native-package-smoke", "native-package-release-gate", "windows-package-validate", "windows-package-build", "windows-package-smoke", "windows-package-release-gate"],
       "fixtures": ["documentation/tests/"],
       "tests": ["tests/unit/tooling/test_ci_workflow_layers.py", "tests/unit/tooling/test_makefile_test_targets.py", "tests/unit/testing/test_pytest_marker_policy.py", "tests/integration/app/test_python_architecture_contracts.py", "tests/integration/app/test_release_incubation_boundary.py"]
     },

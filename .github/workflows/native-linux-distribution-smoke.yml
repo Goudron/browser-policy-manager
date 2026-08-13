@@ -1,0 +1,64 @@
+name: Native Linux distribution release gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_native_packages:
+        description: Type RUN to build and smoke-test all five BPM native Linux packages.
+        required: true
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  native-linux-distribution-release-gate:
+    if: ${{ inputs.run_native_packages == 'RUN' }}
+    name: Build and verify five BPM 0.9.5 native Linux packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: "pip"
+
+      - name: Install release tooling without optional BPM extras
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Install pinned documentation toolchain
+        run: make setup-docs-toolchain
+
+      - name: Build and verify product documentation package
+        run: |
+          make docs-package
+          make docs-package-verify
+
+      - name: Build and smoke-test every native target sequentially
+        run: make native-package-release-gate
+
+      - name: Upload generated native package evidence
+        uses: actions/upload-artifact@v6
+        with:
+          name: bpm-0.9.5-native-linux-packages
+          path: artifacts/native-packages/0.9.5/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish non-secret release evidence summary
+        run: |
+          {
+            echo "## BPM 0.9.5 native Linux distribution gate"
+            echo
+            echo "- Source revision: \`$(git rev-parse --verify HEAD)\`"
+            echo "- Documentation archive: \`$(sha256sum documentation/dist/bpm-documentation-0.9.5.tar.gz)\`"
+            echo "- Targets: Ubuntu 26.04, Debian 13.5, Fedora 44, Linux Mint 22.3, Manjaro stable."
+            echo "- Result: each generated package completed explicit migration, base-runtime, documentation, probe, and restart smoke."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,55 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+  <Package Name="Browser Policy Manager"
+           Manufacturer="Valery Ledovskoy"
+           Version="0.9.5"
+           UpgradeCode="{F6AE9E8E-1C11-4AFA-87C0-7C8103F1B7E9}"
+           Scope="perMachine">
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Browser Policy Manager is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="INSTALLFOLDER" Name="Browser Policy Manager">
+        <Component Id="BpmService" Bitness="always64" Guid="{C6F19B91-A251-47F2-9C8E-39D2D2C6DA0C}">
+          <File Id="BpmServiceExecutable" Source="!(bindpath.payload)\bpm-service.exe" KeyPath="yes" />
+          <ServiceInstall Id="BpmServiceInstall"
+                          Name="BPM"
+                          DisplayName="Browser Policy Manager"
+                          Description="Browser Policy Manager local web service"
+                          Start="demand"
+                          Type="ownProcess"
+                          ErrorControl="normal"
+                          Account="NT AUTHORITY\LocalService" />
+          <ServiceControl Id="BpmServiceControl" Name="BPM" Stop="both" Remove="uninstall" Wait="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="CommonAppDataFolder">
+      <Directory Id="BPMDATA" Name="Browser Policy Manager">
+        <Component Id="BpmState" Guid="{D4F11BF4-3F0A-40F9-93FD-1E0F5F56C2F8}" Permanent="yes">
+          <CreateFolder>
+            <util:PermissionEx User="LocalService" GenericAll="yes" />
+            <util:PermissionEx User="Administrators" GenericAll="yes" />
+          </CreateFolder>
+          <File Id="BpmEnvironment" Source="!(bindpath.state)\bpm.env" KeyPath="yes"
+                NeverOverwrite="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <Feature Id="Complete" Title="Browser Policy Manager" Level="1">
+      <ComponentRef Id="BpmService" />
+      <ComponentRef Id="BpmState" />
+      <ComponentGroupRef Id="BpmPayload" />
+    </Feature>
+  </Package>
+
+  <Fragment>
+    <ComponentGroup Id="BpmPayload">
+      <Files Directory="INSTALLFOLDER" Include="!(bindpath.payload)\**">
+        <Exclude Files="!(bindpath.payload)\bpm-service.exe" />
+      </Files>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

@@ -1,0 +1,64 @@
+name: Publish native Linux release assets
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_native_release:
+        description: Type PUBLISH to create or update the draft GitHub Release for BPM 0.9.5.
+        required: true
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  publish-native-linux-release:
+    if: ${{ inputs.publish_native_release == 'PUBLISH' }}
+    name: Publish BPM 0.9.5 native package assets as a draft release
+    runs-on: ubuntu-latest
+    timeout-minutes: 210
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: "pip"
+
+      - name: Install release tooling without optional BPM extras
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Build and verify product documentation package
+        run: |
+          make setup-docs-toolchain
+          make docs-package
+          make docs-package-verify
+
+      - name: Build and smoke-test every native target sequentially
+        run: make native-package-release-gate
+
+      - name: Stage receipt-verified release assets
+        run: make native-package-stage-release
+
+      - name: Create or update draft GitHub Release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v0.9.5
+        run: |
+          release_store=distributions/releases/0.9.5
+          asset_args=(
+            "$release_store/SHA256SUMS"
+            "$release_store/release-manifest.json"
+            "$release_store"/assets/*/*
+          )
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "${asset_args[@]}" --clobber
+          else
+            gh release create "$TAG" --draft --title "BPM 0.9.5" \
+              --notes-file "$release_store/README.md" "${asset_args[@]}"
+          fi

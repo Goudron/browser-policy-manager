@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.5",
+  "architecture": "amd64",
+  "runtime": {
+    "python_version": "3.14.6",
+    "python_sha256": "143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+    "prefix": "/opt/bpm/runtime",
+    "venv": "/opt/bpm/venv"
+  },
+  "package": {
+    "name": "browser-policy-manager",
+    "release": 1,
+    "service_user": "bpm",
+    "state_directory": "/var/lib/bpm",
+    "configuration_file": "/etc/bpm/bpm.env",
+    "documentation_directory": "/opt/bpm/documentation/site"
+  },
+  "targets": {
+    "ubuntu-26-04": {
+      "release": "Ubuntu 26.04 LTS",
+      "format": "deb",
+      "builder_image": "ubuntu@sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+      "builder_evidence": "Docker Official Image index sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e; amd64 manifest sha256:c6c0067e0e45b7a826eaebb193cef957be28045380963a9b1eeb2a5d3c70a1b9",
+      "package_release": "1~ubuntu26.04",
+      "artifact": "browser-policy-manager_0.9.5-1~ubuntu26.04_amd64.deb",
+      "runtime_dependencies": ["adduser", "ca-certificates", "libbz2-1.0", "libffi8", "libgdbm6t64", "liblzma5", "libncursesw6", "libreadline8t64", "libsqlite3-0", "libssl3t64", "passwd", "systemd", "util-linux", "zlib1g"]
+    },
+    "debian-13-5": {
+      "release": "Debian 13.5 (trixie)",
+      "format": "deb",
+      "builder_image": "debian@sha256:d07d1b51c39f51188e60be9b64e6bf769fa94e187f092bc32b91305cfa34ba5a",
+      "builder_evidence": "Docker Official Image index sha256:d07d1b51c39f51188e60be9b64e6bf769fa94e187f092bc32b91305cfa34ba5a; amd64 manifest sha256:3a953985c225a97dfb5a8f1ddc6a3ecefefc35ef51f537075e08941305045a1e",
+      "package_release": "1~debian13",
+      "artifact": "browser-policy-manager_0.9.5-1~debian13_amd64.deb",
+      "runtime_dependencies": ["adduser", "ca-certificates", "libbz2-1.0", "libffi8", "libgdbm6t64", "liblzma5", "libncursesw6", "libreadline8t64", "libsqlite3-0", "libssl3t64", "passwd", "systemd", "util-linux", "zlib1g"]
+    },
+    "fedora-44": {
+      "release": "Fedora Linux 44",
+      "format": "rpm",
+      "builder_image": "fedora@sha256:6c75d5bf57cb0fa5aa4b92c6a83c86c791644496d9ac230de7711f5b8ec3b898",
+      "builder_evidence": "Docker Official Image index sha256:6c75d5bf57cb0fa5aa4b92c6a83c86c791644496d9ac230de7711f5b8ec3b898; amd64 manifest sha256:89f61a124414261868224666aa7fb8df1b78397a53623774bdfb105d1612b48b",
+      "package_release": "1.fc44",
+      "artifact": "browser-policy-manager-0.9.5-1.fc44.x86_64.rpm",
+      "runtime_dependencies": ["bzip2-libs", "ca-certificates", "gdbm", "libffi", "ncurses-libs", "openssl-libs", "readline", "shadow-utils", "sqlite-libs", "systemd", "util-linux", "xz-libs", "zlib"]
+    },
+    "linux-mint-22-3": {
+      "release": "Linux Mint 22.3 (Zena)",
+      "format": "deb",
+      "builder_image": "bpm091/linux-mint:22.3-zena-amd64",
+      "builder_evidence": "Local image imported from the authenticated Linux Mint 22.3 Cinnamon ISO SHA-256 a081ab202cfda17f6924128dbd2de8b63518ac0531bcfe3f1a1b88097c459bd4; Ubuntu substitution is forbidden.",
+      "package_release": "1~linuxmint22.3",
+      "artifact": "browser-policy-manager_0.9.5-1~linuxmint22.3_amd64.deb",
+      "runtime_dependencies": ["adduser", "ca-certificates", "libbz2-1.0", "libffi8", "libgdbm6t64", "liblzma5", "libncursesw6", "libreadline8", "libsqlite3-0", "libssl3", "passwd", "systemd", "util-linux", "zlib1g"]
+    },
+    "manjaro-stable": {
+      "release": "Manjaro stable branch after the 2026-06-26 update",
+      "format": "arch",
+      "builder_image": "manjarolinux/base@sha256:bbf1f1d746f28e138eea610e140d2f28cbb5b7c5da2fbff034b883527aa604e9",
+      "builder_evidence": "Manjaro seed index sha256:bbf1f1d746f28e138eea610e140d2f28cbb5b7c5da2fbff034b883527aa604e9; amd64 manifest sha256:a411decb8d219cb4b16b39618e9aa8ce8228acad9cba5b10420f804a20ca5c84. The build transcript must record a full stable update and pacman-mirrors -G.",
+      "package_release": "1",
+      "artifact": "browser-policy-manager-0.9.5-1-x86_64.pkg.tar.zst",
+      "runtime_dependencies": ["bzip2", "ca-certificates", "gdbm", "libffi", "ncurses", "openssl", "readline", "shadow", "sqlite", "systemd", "util-linux", "xz", "zlib"]
+    }
+  }
+}

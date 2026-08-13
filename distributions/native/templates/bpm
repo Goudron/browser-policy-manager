@@ -1,0 +1,32 @@
+#!/bin/sh
+# Native BPM launcher. The package always uses its private CPython runtime and
+# never falls back to, or modifies, the operating system Python.
+set -eu
+
+if [ -r /etc/bpm/bpm.env ]; then
+    set -a
+    . /etc/bpm/bpm.env
+    set +a
+fi
+
+command_name="${1:-serve}"
+case "$command_name" in
+    serve)
+        shift
+        exec /opt/bpm/venv/bin/python -m uvicorn app.main:app \
+            --host "${BPM_HOST:-127.0.0.1}" \
+            --port "${BPM_PORT:-8000}" "$@"
+        ;;
+    migrate)
+        shift
+        exec /usr/bin/bpm-migrate "$@"
+        ;;
+    version)
+        exec /opt/bpm/venv/bin/python -I -c \
+            "from importlib.metadata import version; print(version('browser-policy-manager'))"
+        ;;
+    *)
+        echo "Usage: bpm {serve|migrate|version}" >&2
+        exit 64
+        ;;
+esac

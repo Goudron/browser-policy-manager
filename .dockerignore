@@ -1,0 +1,32 @@
+# The Docker distributive is assembled from the release runtime, Alembic
+# migrations, and the verified documentation archive only.  Keep the build
+# context independent of a maintainer's local environment and development
+# tooling.
+**
+!pyproject.toml
+!README.md
+!LICENSE
+!alembic.ini
+!alembic/
+!alembic/**
+!app/
+!app/**
+!documentation/
+!documentation/dist/
+!documentation/dist/bpm-documentation-0.9.5.tar.gz
+!distributions/
+!distributions/docker/
+!distributions/docker/**
+
+# The release documentation archive, not an ignored maintainer-site copy, is
+# the only documentation payload allowed in the image.
+app/documentation/site/
+app/documentation/.site-dev-install.json
+
+# Never send local state or generated development caches to the daemon.
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+app/static/profiles_bundles/**/*.map
