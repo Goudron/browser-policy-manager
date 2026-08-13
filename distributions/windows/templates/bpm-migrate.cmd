@@ -7,7 +7,7 @@ if not "%errorlevel%"=="0" (
 )
 call "%~dp0bpm-env.cmd"
 pushd "%~dp0"
-"%~dp0venv\Scripts\python.exe" -m alembic -c "%~dp0alembic.ini" upgrade head
+"%~dp0runtime\python.exe" -m alembic -c "%~dp0alembic.ini" upgrade head
 set "BPM_MIGRATE_RESULT=%errorlevel%"
 popd
 exit /b %BPM_MIGRATE_RESULT%

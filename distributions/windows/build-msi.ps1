@@ -17,7 +17,6 @@ $Payload = Join-Path $WorkRoot 'payload'
 $State = Join-Path $WorkRoot 'state'
 $Wheelhouse = Join-Path $WorkRoot 'wheelhouse'
 $Runtime = Join-Path $Payload 'runtime'
-$Venv = Join-Path $Payload 'venv'
 $OutputArtifact = Join-Path $OutputDirectory $Artifact
 
 function Write-Stage([string]$Message) {
@@ -170,19 +169,16 @@ try {
     & $RuntimePython -m pip wheel --disable-pip-version-check --no-deps --no-build-isolation `
         --wheel-dir $Wheelhouse $BuildSource
     if ($LASTEXITCODE -ne 0) { throw 'failed to build BPM wheel' }
-    & $RuntimePython -m venv --copies $Venv
-    if ($LASTEXITCODE -ne 0) { throw 'failed to create private BPM virtual environment' }
-    $VenvPython = Join-Path $Venv 'Scripts/python.exe'
-    & $VenvPython -m pip install --disable-pip-version-check --no-index --find-links $Wheelhouse `
+    & $RuntimePython -m pip install --disable-pip-version-check --no-index --find-links $Wheelhouse `
         --requirement (Join-Path $SourceRoot 'distributions/windows/requirements.windows.lock')
     if ($LASTEXITCODE -ne 0) { throw 'failed to install locked Windows base runtime' }
     $BpmWheel = Get-ChildItem -LiteralPath $Wheelhouse -Filter "browser_policy_manager-$Version-*.whl" |
         Select-Object -First 1
     if ($null -eq $BpmWheel) { throw 'BPM wheel is absent from the private wheelhouse' }
-    & $VenvPython -m pip install --disable-pip-version-check --no-index --find-links $Wheelhouse `
+    & $RuntimePython -m pip install --disable-pip-version-check --no-index --find-links $Wheelhouse `
         --no-deps $BpmWheel.FullName
-    if ($LASTEXITCODE -ne 0) { throw 'failed to install BPM into the private virtual environment' }
-    & $VenvPython -I -c "import importlib.metadata, importlib.util, app.main; assert importlib.metadata.version('browser-policy-manager') == '$Version'; assert all(importlib.util.find_spec(name) is None for name in ('numpy', 'onnxruntime', 'tokenizers'))"
+    if ($LASTEXITCODE -ne 0) { throw 'failed to install BPM into the private Windows runtime' }
+    & $RuntimePython -I -c "import importlib.metadata, importlib.util, app.main; assert importlib.metadata.version('browser-policy-manager') == '$Version'; assert all(importlib.util.find_spec(name) is None for name in ('numpy', 'onnxruntime', 'tokenizers'))"
     if ($LASTEXITCODE -ne 0) { throw 'private BPM payload verification failed' }
 
     Write-Stage 'install verified documentation, migration, and native Windows service payload'

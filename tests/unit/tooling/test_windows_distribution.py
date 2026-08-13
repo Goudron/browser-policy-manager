@@ -44,7 +44,11 @@ def test_windows_msi_payload_preserves_native_and_explicit_lifecycle_boundaries(
     assert "Get-StableWixId" in builder
     assert "net session" in migrator
     assert "alembic" in migrator
+    assert "runtime\\python.exe" in migrator
     assert "bpm-service.cmd" in service
+    assert "runtime\\python.exe" in (WINDOWS_ROOT / "templates" / "bpm-service.cmd").read_text(
+        encoding="utf-8"
+    )
     assert "MSI started BPM during installation" in smoke
     assert "ordinary MSI uninstall removed the operator-owned BPM database" in smoke
     assert "${Url}: expected" in builder
