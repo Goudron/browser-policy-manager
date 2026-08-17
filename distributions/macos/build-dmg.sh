@@ -103,7 +103,12 @@ install -m 0644 "$SOURCE_ROOT/distributions/macos/Info.plist.in" "$APP_ROOT/Cont
 printf 'APPL????' >"$APP_ROOT/Contents/PkgInfo"
 
 log "apply ad-hoc test signature"
-codesign --force --deep --sign - "$APP_ROOT"
+while IFS= read -r -d '' candidate; do
+    if file --brief "$candidate" | grep --quiet 'Mach-O'; then
+        codesign --force --sign - "$candidate"
+    fi
+done < <(find "$APP_ROOT/Contents/MacOS" -type f -print0)
+codesign --force --sign - "$APP_ROOT"
 codesign --verify --deep --strict "$APP_ROOT"
 
 DMG_STAGE="$WORK_ROOT/dmg-root"

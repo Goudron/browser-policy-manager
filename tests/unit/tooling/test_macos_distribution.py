@@ -39,7 +39,8 @@ def test_macos_bundle_preserves_native_runtime_and_explicit_lifecycle_boundaries
     assert 'PYTHON="${PYTHON_EXECUTABLE:-python}"' in builder
     assert "--hidden-import migration_support.retirement_owner_v1" in builder
     assert "--collect-submodules app" not in builder
-    assert "codesign --force --deep --sign -" in builder
+    assert "file --brief \"$candidate\" | grep --quiet 'Mach-O'" in builder
+    assert 'codesign --force --sign - "$APP_ROOT"' in builder
     assert "hdiutil create" in builder
     assert "system Python" not in builder
     assert "BPM_DATABASE_URL" in launcher
