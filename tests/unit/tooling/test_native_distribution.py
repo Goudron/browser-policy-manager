@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from tools import native_distribution
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -24,7 +26,17 @@ def test_native_target_manifest_declares_the_five_documented_linux_targets() -> 
     assert targets["manjaro-stable"].artifact.endswith(".pkg.tar.zst")
 
 
-def test_native_release_inputs_are_complete_and_bound_to_the_current_bpm_version() -> None:
+def test_native_release_inputs_are_complete_and_bound_to_the_current_bpm_version(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    archive = tmp_path / "bpm-documentation-0.9.5.tar.gz"
+    archive.write_bytes(b"verified unit-test documentation archive")
+    checksum = archive.with_suffix(archive.suffix + ".sha256")
+    checksum.write_text(
+        f"{native_distribution._sha256(archive)}  {archive.name}\n", encoding="ascii"
+    )
+    monkeypatch.setattr(native_distribution, "_documentation_archive", lambda: (archive, checksum))
+
     targets = native_distribution.validate_release_inputs()
 
     assert native_distribution._project_version() == "0.9.5"

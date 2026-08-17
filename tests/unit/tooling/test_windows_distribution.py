@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from tools import windows_distribution
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -20,7 +22,17 @@ def test_windows_target_is_one_native_x64_msi_for_windows_10_and_11() -> None:
     assert manifest["installer"]["service_account"] == "NT AUTHORITY\\LocalService"
 
 
-def test_windows_release_inputs_are_complete_and_bound_to_current_bpm_version() -> None:
+def test_windows_release_inputs_are_complete_and_bound_to_current_bpm_version(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    archive = tmp_path / "bpm-documentation-0.9.5.tar.gz"
+    archive.write_bytes(b"verified unit-test documentation archive")
+    checksum = archive.with_suffix(archive.suffix + ".sha256")
+    checksum.write_text(
+        f"{windows_distribution._sha256(archive)}  {archive.name}\n", encoding="ascii"
+    )
+    monkeypatch.setattr(windows_distribution, "_documentation_archive", lambda: (archive, checksum))
+
     target = windows_distribution.validate_release_inputs()
 
     assert windows_distribution._project_version() == "0.9.5"

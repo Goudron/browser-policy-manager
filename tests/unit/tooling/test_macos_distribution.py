@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from tools import macos_distribution
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -22,7 +24,17 @@ def test_macos_targets_are_separate_native_intel_and_apple_silicon_dmgs() -> Non
     assert manifest["application"]["state_directory"].startswith("~/Library/")
 
 
-def test_macos_release_inputs_are_complete_and_bound_to_current_bpm_version() -> None:
+def test_macos_release_inputs_are_complete_and_bound_to_current_bpm_version(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    archive = tmp_path / "bpm-documentation-0.9.5.tar.gz"
+    archive.write_bytes(b"verified unit-test documentation archive")
+    checksum = archive.with_suffix(archive.suffix + ".sha256")
+    checksum.write_text(
+        f"{macos_distribution._sha256(archive)}  {archive.name}\n", encoding="ascii"
+    )
+    monkeypatch.setattr(macos_distribution, "_documentation_archive", lambda: (archive, checksum))
+
     targets = macos_distribution.validate_release_inputs()
 
     assert macos_distribution._project_version() == "0.9.5"
