@@ -3,7 +3,7 @@
 Generated only by `make codex-snapshot` (`docs/codex/generate_project_snapshot.py`); do not edit manually.
 It deliberately has no Git, local-machine, generated-artifact, or report input.
 Target BPM version: `0.9.5`
-Declared-source digest: `0aa149fd37077ec49027c31dda1ef59cd55d27c8c42df0ab4d60d3c814532990`
+Declared-source digest: `a116fc139ba2bda37f87d614ea5dc0348891b72b403fe5656ca0e50a773a8b4e`
 
 ## Start Here
 

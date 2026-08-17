@@ -2,6 +2,11 @@
 
 This repository-owned directory is the staging root for future BPM distributives.
 
+For a future-version native package run, start with the manual
+[`NATIVE_DISTRIBUTION_PLAYBOOK.md`](NATIVE_DISTRIBUTION_PLAYBOOK.md). It
+creates and dispatches a reviewed, version-scoped contour only when
+distributives are requested; it is not part of ordinary release CI.
+
 `documentation/` contains the verified, versioned PDF documentation release only; it is not a
 build cache. It must never contain local models, RAG indexes, embeddings, logs, reports,
 credentials, source DITA or an unpacked documentation site.

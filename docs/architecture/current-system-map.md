@@ -156,6 +156,9 @@ unsigned test inputs; release staging awaits a Developer ID signature
 and Apple notarization. Start with `make macos-package-validate`; use
 `make macos-package-release-gate` only on matching native macOS architectures.
 Focused contracts are in `tests/unit/tooling/test_macos_distribution.py`.
+For an on-demand future-version run across all native contours, start with
+`distributions/NATIVE_DISTRIBUTION_PLAYBOOK.md`; it requires a reviewed,
+version-scoped manual workflow rather than adding native packaging to normal CI.
 
 ## Test Contours And Fast Commands
 
@@ -228,6 +231,7 @@ checks named paths and commands; it does not recursively scan the repository.
     "app/ai/",
     "documentation/tools/build_docs.py",
     "documentation/buildlib/",
+    "distributions/NATIVE_DISTRIBUTION_PLAYBOOK.md",
     "distributions/native/targets.json",
     "distributions/native/build-target.sh",
     "distributions/native/smoke-target.sh",
