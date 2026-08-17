@@ -147,6 +147,16 @@ least-privilege service, and Authenticode-required release staging. Start with
 `make windows-package-release-gate`, with focused contracts in
 `tests/unit/tooling/test_windows_distribution.py`.
 
+Native macOS packaging is a separate native-DMG test contour. Its two frozen
+targets are defined by `distributions/macos/targets.json`; the macOS-only
+builder, mounted-DMG smoke proof, and explicit migration launcher live beneath
+`distributions/macos/`, orchestrated by `tools/macos_distribution.py`. The
+manual CI workflow builds Intel and Apple Silicon artifacts separately with an
+ad-hoc test signature only; release staging awaits a Developer ID signature
+and Apple notarization. Start with `make macos-package-validate`; use
+`make macos-package-release-gate` only on matching native macOS architectures.
+Focused contracts are in `tests/unit/tooling/test_macos_distribution.py`.
+
 ## Test Contours And Fast Commands
 
 | Change area | Start here | Escalate when needed |
@@ -160,6 +170,7 @@ least-privilege service, and Authenticode-required release staging. Start with
 | Documentation tooling/portal | `make test-docs` | `make docs-validate` |
 | Native Linux distributions | `make native-package-validate` | `make native-package-release-gate` |
 | Native Windows MSI | `make windows-package-validate` | `make windows-package-release-gate` |
+| Native macOS DMG test artifacts | `make macos-package-validate` | `make macos-package-release-gate` |
 | Performance/repository health | `make profile-performance-gate` | `make repo-health` |
 | Profile frontend graph | `make frontend-profile-graph` | named DOM/browser contracts in `tests/contract/ui/profiles/` |
 | Profile route bundles | `make check-profile-frontend-bundles` | `tests/unit/profiles/test_profile_frontend_bundles.py`, route/browser asset contracts |
@@ -225,6 +236,11 @@ checks named paths and commands; it does not recursively scan the repository.
     "distributions/windows/build-msi.ps1",
     "distributions/windows/smoke-msi.ps1",
     "tools/windows_distribution.py",
+    "distributions/macos/targets.json",
+    "distributions/macos/build-dmg.sh",
+    "distributions/macos/smoke-dmg.sh",
+    "distributions/macos/launcher.py",
+    "tools/macos_distribution.py",
     "tests/contract/ui/profiles/",
     "tests/live/firefox/",
     "tests/contract/compliance/",
@@ -237,7 +253,8 @@ checks named paths and commands; it does not recursively scan the repository.
     "tests/integration/db/test_retirement_owner_v1.py",
     "tests/integration/db/test_retirement_revision_materializer_v1.py",
     "tests/unit/tooling/test_native_distribution.py",
-    "tests/unit/tooling/test_windows_distribution.py"
+    "tests/unit/tooling/test_windows_distribution.py",
+    "tests/unit/tooling/test_macos_distribution.py"
   ],
   "commands": [
     "make architecture",
@@ -262,7 +279,9 @@ checks named paths and commands; it does not recursively scan the repository.
     "make native-package-validate",
     "make native-package-release-gate",
     "make windows-package-validate",
-    "make windows-package-release-gate"
+    "make windows-package-release-gate",
+    "make macos-package-validate",
+    "make macos-package-release-gate"
   ],
   "excluded_boundaries": [
     "app/static/vendor/",

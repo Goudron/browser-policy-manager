@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly APPLICATION="$(cd "$(dirname "$0")" && pwd)/Browser Policy Manager.app"
+exec "$APPLICATION/Contents/MacOS/bpm" migrate "$@"

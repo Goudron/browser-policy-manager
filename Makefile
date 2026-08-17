@@ -1,4 +1,4 @@
-.PHONY: run dev ai-extra-check ai-model-install-dev ai-rag-install-dev ai-runtime-install-dev ai-web-sources-check-dev dependency-audit package-smoke docker-build docker-migrate docker-up docker-down docker-smoke native-package-list native-package-validate native-package-build native-package-smoke native-package-smoke-all native-package-stage-release native-package-release-gate windows-package-list windows-package-validate windows-package-build windows-package-smoke windows-package-stage-release windows-package-release-gate test test-ai-incubation test-ai-incubation-coverage coverage-release-implementation test-browser test-contract test-fast test-frontend test-frontend-coverage test-integration test-live test-profile-pure-modules test-profile-conversion-ux test-release test-ui test-unit test-unit-pilot test-unit-xdist test-firefox-live firefox-live-workflow firefox-live-four-channel-workflow test-firefox-live-amo test-locale-contract test-firefox-schema-contract test-firefox-schema-workflow verify-firefox-schema-matrix verify-firefox-conversion-matrix schema-lifecycle-dry-run test-db-integration test-db-recovery test-postgres-integration postgres-ci-evidence setup-firefox-live-browsers verify-firefox-live-browsers provision-firefox-schema-inputs setup-docs-toolchain test-docs test-docs-contract test-docs-ui test-docs-ui-contract test-docs-browser codex-snapshot docs-snapshot docs-fast-check docs-coverage docs-release-check docs-release-handoff docs-validate docs-build docs-install-dev docs-reproducibility-check docs-package docs-package-verify docs-pdf-build docs-pdf-verify docs-pdf-deliver docs-pdf-delivery-verify coverage coverage-report fmt lint typecheck architecture pre-commit-check release-boundary quality repo-health profile-performance profile-performance-gate profile-performance-release-gate locale-inventory locale-quality build-locale-catalogs check-locale-catalogs build-profiles-css check-profiles-css build-profile-frontend-bundles verify-profile-frontend-vendor verify-frontend-vendor rebuild-frontend-vendor local-chromium-ui-audit clean-local-artifacts
+.PHONY: run dev ai-extra-check ai-model-install-dev ai-rag-install-dev ai-runtime-install-dev ai-web-sources-check-dev dependency-audit package-smoke docker-build docker-migrate docker-up docker-down docker-smoke native-package-list native-package-validate native-package-build native-package-smoke native-package-smoke-all native-package-stage-release native-package-release-gate windows-package-list windows-package-validate windows-package-build windows-package-smoke windows-package-stage-release windows-package-release-gate macos-package-list macos-package-validate macos-package-build macos-package-smoke macos-package-release-gate test test-ai-incubation test-ai-incubation-coverage coverage-release-implementation test-browser test-contract test-fast test-frontend test-frontend-coverage test-integration test-live test-profile-pure-modules test-profile-conversion-ux test-release test-ui test-unit test-unit-pilot test-unit-xdist test-firefox-live firefox-live-workflow firefox-live-four-channel-workflow test-firefox-live-amo test-locale-contract test-firefox-schema-contract test-firefox-schema-workflow verify-firefox-schema-matrix verify-firefox-conversion-matrix schema-lifecycle-dry-run test-db-integration test-db-recovery test-postgres-integration postgres-ci-evidence setup-firefox-live-browsers verify-firefox-live-browsers provision-firefox-schema-inputs setup-docs-toolchain test-docs test-docs-contract test-docs-ui test-docs-ui-contract test-docs-browser codex-snapshot docs-snapshot docs-fast-check docs-coverage docs-release-check docs-release-handoff docs-validate docs-build docs-install-dev docs-reproducibility-check docs-package docs-package-verify docs-pdf-build docs-pdf-verify docs-pdf-deliver docs-pdf-delivery-verify coverage coverage-report fmt lint typecheck architecture pre-commit-check release-boundary quality repo-health profile-performance profile-performance-gate profile-performance-release-gate locale-inventory locale-quality build-locale-catalogs check-locale-catalogs build-profiles-css check-profiles-css build-profile-frontend-bundles verify-profile-frontend-vendor verify-frontend-vendor rebuild-frontend-vendor local-chromium-ui-audit clean-local-artifacts
 
 PYTEST ?= $(if $(wildcard .venv/bin/pytest),.venv/bin/pytest,pytest)
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python)
@@ -218,6 +218,24 @@ windows-package-stage-release: windows-package-validate
 windows-package-release-gate: docs-package-verify windows-package-validate
 	$(PYTHON) tools/windows_distribution.py build
 	$(PYTHON) tools/windows_distribution.py smoke
+
+# Native macOS DMGs are built and smoke-tested only on their matching macOS
+# architecture. Initial CI evidence is ad-hoc-signed and ineligible for release.
+macos-package-list: macos-package-validate
+	$(PYTHON) tools/macos_distribution.py list --target "$(TARGET)"
+
+macos-package-validate:
+	$(PYTHON) tools/macos_distribution.py validate --target "$(TARGET)"
+
+macos-package-build: docs-package-verify macos-package-validate
+	$(PYTHON) tools/macos_distribution.py build --target "$(TARGET)"
+
+macos-package-smoke: macos-package-validate
+	$(PYTHON) tools/macos_distribution.py smoke --target "$(TARGET)"
+
+macos-package-release-gate: docs-package-verify macos-package-validate
+	$(PYTHON) tools/macos_distribution.py build --target "$(TARGET)"
+	$(PYTHON) tools/macos_distribution.py smoke --target "$(TARGET)"
 
 test:
 	$(PYTEST)

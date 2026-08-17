@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.5",
+  "installer_format": "dmg",
+  "minimum_macos_version": "14",
+  "targets": [
+    {
+      "id": "macos-14-x64",
+      "architecture": "x64",
+      "runner": "macos-15-intel",
+      "artifact": "browser-policy-manager-0.9.5-macos-x64.dmg"
+    },
+    {
+      "id": "macos-14-arm64",
+      "architecture": "arm64",
+      "runner": "macos-14",
+      "artifact": "browser-policy-manager-0.9.5-macos-arm64.dmg"
+    }
+  ],
+  "runtime": {
+    "python_version": "3.14.6",
+    "pyinstaller_version": "6.21.0"
+  },
+  "application": {
+    "bundle_name": "Browser Policy Manager.app",
+    "bundle_identifier": "io.goudron.browser-policy-manager",
+    "state_directory": "~/Library/Application Support/Browser Policy Manager"
+  }
+}

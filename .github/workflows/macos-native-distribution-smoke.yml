@@ -1,0 +1,119 @@
+name: Native macOS DMG distribution gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_macos_dmg:
+        description: Type RUN to build and smoke-test the BPM 0.9.5 native macOS DMGs.
+        required: true
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  documentation-package:
+    if: ${{ inputs.run_macos_dmg == 'RUN' }}
+    name: Build verified BPM documentation package
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: Install documentation release tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Build and verify product documentation package
+        run: |
+          make setup-docs-toolchain
+          make docs-package
+          make docs-package-verify
+
+      - name: Transfer verified documentation package to macOS assembly
+        uses: actions/upload-artifact@v6
+        with:
+          name: bpm-0.9.5-documentation-package
+          path: |
+            documentation/dist/bpm-documentation-0.9.5.tar.gz
+            documentation/dist/bpm-documentation-0.9.5.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 1
+
+  macos-dmg-test-gate:
+    if: ${{ inputs.run_macos_dmg == 'RUN' }}
+    needs: documentation-package
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: macos-14-x64
+            runner: macos-15-intel
+          - target: macos-14-arm64
+            runner: macos-14
+    name: Build and smoke BPM 0.9.5 ${{ matrix.target }} DMG
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: Setup Node.js for generated profile assets
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.22.1"
+          cache: npm
+
+      - name: Restore verified documentation package
+        uses: actions/download-artifact@v8
+        with:
+          name: bpm-0.9.5-documentation-package
+          path: documentation/dist
+
+      - name: Build deterministic profile frontend assets
+        run: |
+          npm ci
+          make verify-frontend-vendor
+          make check-profiles-css
+          make build-profile-frontend-bundles
+
+      - name: Build and smoke the target-native macOS DMG
+        run: |
+          chmod +x distributions/macos/build-dmg.sh distributions/macos/smoke-dmg.sh
+          python tools/macos_distribution.py build --target "${{ matrix.target }}"
+          python tools/macos_distribution.py smoke --target "${{ matrix.target }}"
+
+      - name: Upload generated macOS DMG test evidence
+        uses: actions/upload-artifact@v6
+        with:
+          name: bpm-0.9.5-${{ matrix.target }}-dmg-test-evidence
+          path: artifacts/macos-packages/0.9.5/${{ matrix.target }}/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish non-secret test evidence summary
+        run: |
+          {
+            echo "## BPM 0.9.5 native macOS DMG test gate"
+            echo
+            echo "- Source revision: \`$(git rev-parse --verify HEAD)\`"
+            echo "- Native target: \`${{ matrix.target }}\` on \`${{ matrix.runner }}\`."
+            echo "- Runtime: bundled CPython 3.14.6; no system Python, PATH, firewall, or user-state mutation."
+            echo "- Result: explicit migration followed by root, readiness, documentation, profiles, and restart smoke."
+            echo "- Signature: ad-hoc test signature only; no Developer ID signature or Apple notarization."
+            echo "- Remaining acceptance: clean recorded tests by colleagues on macOS 14+ Intel and Apple Silicon devices."
+          } >> "$GITHUB_STEP_SUMMARY"
