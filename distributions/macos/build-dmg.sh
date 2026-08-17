@@ -74,7 +74,7 @@ tar --extract --gzip --file "$DOC_ARCHIVE" --strip-components=1 \
     --directory "$WORK_ROOT/documentation/site"
 
 log "freeze BPM with the target-native Python runtime"
-"$WORK_ROOT/venv/bin/python" -m PyInstaller --noconfirm --clean --onedir \
+"$WORK_ROOT/venv/bin/python" -m PyInstaller --noconfirm --clean --windowed \
     --name bpm \
     --target-architecture "$PYINSTALLER_ARCHITECTURE" \
     --paths "$SOURCE_ROOT" \
@@ -97,8 +97,7 @@ log "freeze BPM with the target-native Python runtime"
     "$SOURCE_ROOT/distributions/macos/launcher.py"
 
 APP_ROOT="$WORK_ROOT/$APP_NAME"
-mkdir -p "$APP_ROOT/Contents/MacOS" "$APP_ROOT/Contents/Resources"
-cp -R "$WORK_ROOT/dist/bpm/." "$APP_ROOT/Contents/MacOS/"
+mv "$WORK_ROOT/dist/bpm.app" "$APP_ROOT"
 install -m 0644 "$SOURCE_ROOT/distributions/macos/Info.plist.in" "$APP_ROOT/Contents/Info.plist"
 printf 'APPL????' >"$APP_ROOT/Contents/PkgInfo"
 

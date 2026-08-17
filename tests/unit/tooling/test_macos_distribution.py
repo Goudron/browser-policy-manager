@@ -36,6 +36,8 @@ def test_macos_bundle_preserves_native_runtime_and_explicit_lifecycle_boundaries
     migrator = (MACOS_ROOT / "BPM Migrate.command.in").read_text(encoding="utf-8")
 
     assert "PyInstaller" in builder
+    assert "--windowed" in builder
+    assert 'mv "$WORK_ROOT/dist/bpm.app" "$APP_ROOT"' in builder
     assert 'PYTHON="${PYTHON_EXECUTABLE:-python}"' in builder
     assert "--hidden-import migration_support.retirement_owner_v1" in builder
     assert "--collect-submodules app" not in builder
