@@ -43,10 +43,8 @@ cleanup() {
         kill "$PROCESS_ID" 2>/dev/null || true
         wait "$PROCESS_ID" 2>/dev/null || true
     fi
-    if mount | grep --fixed-strings --quiet "on $MOUNT_POINT "; then
-        hdiutil detach "$MOUNT_POINT" -quiet || true
-    fi
-    rm -rf "$WORK_ROOT"
+    hdiutil detach "$MOUNT_POINT" -force -quiet 2>/dev/null || true
+    rm -rf "$WORK_ROOT" 2>/dev/null || true
 }
 trap cleanup EXIT
 

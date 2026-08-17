@@ -50,6 +50,7 @@ def test_macos_bundle_preserves_native_runtime_and_explicit_lifecycle_boundaries
     assert 'test ! -e "$STATE_ROOT/bpm.db"' in smoke
     assert "start_verify_stop" in smoke
     assert "codesign --verify" not in smoke
+    assert 'hdiutil detach "$MOUNT_POINT" -force -quiet' in smoke
 
 
 def test_macos_make_targets_and_manual_workflow_keep_test_status_explicit() -> None:
