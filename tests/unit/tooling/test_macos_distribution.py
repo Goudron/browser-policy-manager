@@ -38,6 +38,7 @@ def test_macos_bundle_preserves_native_runtime_and_explicit_lifecycle_boundaries
     assert "PyInstaller" in builder
     assert "--windowed" in builder
     assert 'mv "$WORK_ROOT/dist/bpm.app" "$APP_ROOT"' in builder
+    assert "--hidden-import aiosqlite" in builder
     assert 'PYTHON="${PYTHON_EXECUTABLE:-python}"' in builder
     assert "--hidden-import migration_support.retirement_owner_v1" in builder
     assert "--collect-submodules app" not in builder

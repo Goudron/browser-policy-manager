@@ -79,6 +79,7 @@ log "freeze BPM with the target-native Python runtime"
     --target-architecture "$PYINSTALLER_ARCHITECTURE" \
     --paths "$SOURCE_ROOT" \
     --hidden-import app.main \
+    --hidden-import aiosqlite \
     --hidden-import app.documentation.conversation_context \
     --hidden-import app.documentation.conversation_stream \
     --hidden-import migration_support.retirement_owner_v1 \
