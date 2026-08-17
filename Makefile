@@ -220,7 +220,7 @@ windows-package-release-gate: docs-package-verify windows-package-validate
 	$(PYTHON) tools/windows_distribution.py smoke
 
 # Native macOS DMGs are built and smoke-tested only on their matching macOS
-# architecture. Initial CI evidence is ad-hoc-signed and ineligible for release.
+# architecture. Initial CI evidence is unsigned and ineligible for release.
 macos-package-list: macos-package-validate
 	$(PYTHON) tools/macos_distribution.py list --target "$(TARGET)"
 

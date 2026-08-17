@@ -151,8 +151,8 @@ Native macOS packaging is a separate native-DMG test contour. Its two frozen
 targets are defined by `distributions/macos/targets.json`; the macOS-only
 builder, mounted-DMG smoke proof, and explicit migration launcher live beneath
 `distributions/macos/`, orchestrated by `tools/macos_distribution.py`. The
-manual CI workflow builds Intel and Apple Silicon artifacts separately with an
-ad-hoc test signature only; release staging awaits a Developer ID signature
+manual CI workflow builds Intel and Apple Silicon artifacts separately as
+unsigned test inputs; release staging awaits a Developer ID signature
 and Apple notarization. Start with `make macos-package-validate`; use
 `make macos-package-release-gate` only on matching native macOS architectures.
 Focused contracts are in `tests/unit/tooling/test_macos_distribution.py`.

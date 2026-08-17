@@ -39,8 +39,8 @@ def test_macos_bundle_preserves_native_runtime_and_explicit_lifecycle_boundaries
     assert 'PYTHON="${PYTHON_EXECUTABLE:-python}"' in builder
     assert "--hidden-import migration_support.retirement_owner_v1" in builder
     assert "--collect-submodules app" not in builder
-    assert "file --brief \"$candidate\" | grep --quiet 'Mach-O'" in builder
-    assert 'codesign --force --sign - "$APP_ROOT"' in builder
+    assert "intentionally unsigned test application bundle" in builder
+    assert "codesign --force" not in builder
     assert "hdiutil create" in builder
     assert "system Python" not in builder
     assert "BPM_DATABASE_URL" in launcher
@@ -49,7 +49,7 @@ def test_macos_bundle_preserves_native_runtime_and_explicit_lifecycle_boundaries
     assert "migrate" in migrator
     assert 'test ! -e "$STATE_ROOT/bpm.db"' in smoke
     assert "start_verify_stop" in smoke
-    assert "codesign --verify --deep --strict" in smoke
+    assert "codesign --verify" not in smoke
 
 
 def test_macos_make_targets_and_manual_workflow_keep_test_status_explicit() -> None:
@@ -65,5 +65,5 @@ def test_macos_make_targets_and_manual_workflow_keep_test_status_explicit() -> N
     assert "inputs.run_macos_dmg == 'RUN'" in workflow
     assert "macos-15-intel" in workflow
     assert "macos-14" in workflow
-    assert "ad-hoc test signature only" in workflow
+    assert "unsigned test application" in workflow
     assert "Apple notarization" in workflow

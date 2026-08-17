@@ -8,11 +8,10 @@ VM, WSL, or a wrapper around the system Python.
 
 The manual GitHub Actions workflow `Native macOS DMG distribution gate` builds
 and smoke-tests both targets on GitHub-hosted macOS runners. Its DMGs are
-test artifacts only: they use an ad-hoc signature, not a Developer ID
-signature, and are not notarized because release signing material is not
-present in the workflow. macOS may therefore ask a tester to explicitly
-approve opening the application. Do not treat this artifact as a production
-release.
+test artifacts only: they are unsigned and not notarized because release
+signing material is not present in the workflow. macOS may therefore ask a
+tester to explicitly approve opening the application. Do not treat this
+artifact as a production release.
 
 After copying `Browser Policy Manager.app` from the mounted DMG to
 `/Applications`, a tester must run `BPM Migrate.command` from the DMG before

@@ -50,9 +50,8 @@ is explicit, runs migration, checks root/readiness/help/profiles, and restarts
 against the same state directory. It uploads a DMG, checksum, build
 environment, manifest, and smoke receipt for 30 days.
 
-Those artifacts use an ad-hoc signature solely so the generated bundle can run
-in CI. They have no Developer ID signature and no Apple notarization ticket;
-they are colleague test inputs, not release assets. Actual acceptance requires
+Those artifacts are unsigned and have no Developer ID signature or Apple
+notarization ticket; they are colleague test inputs, not release assets. Actual acceptance requires
 recorded clean-device testing on macOS 14+ Intel and Apple Silicon Macs.
 
 `distributions/releases/0.9.5/` remains the versioned index for final release

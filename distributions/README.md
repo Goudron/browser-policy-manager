@@ -21,7 +21,7 @@ It installs directly on Windows, not through WSL, and keeps migrations and
 service activation explicit. See [`windows/README.md`](windows/README.md).
 
 `macos/` owns the BPM 0.9.5 native `x64` and `arm64` DMG test-build process for
-macOS 14 and later. The CI artifacts use an ad-hoc test signature and require
-device testing before any signed/notarized release can be considered. It keeps
+macOS 14 and later. The CI artifacts are unsigned and require device testing
+before any signed/notarized release can be considered. It keeps
 migration explicit and all state in the installing user's Library directory.
 See [`macos/README.md`](macos/README.md).

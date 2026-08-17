@@ -114,6 +114,6 @@ jobs:
             echo "- Native target: \`${{ matrix.target }}\` on \`${{ matrix.runner }}\`."
             echo "- Runtime: bundled CPython 3.14.6; no system Python, PATH, firewall, or user-state mutation."
             echo "- Result: explicit migration followed by root, readiness, documentation, profiles, and restart smoke."
-            echo "- Signature: ad-hoc test signature only; no Developer ID signature or Apple notarization."
+            echo "- Signature: unsigned test application; no Developer ID signature or Apple notarization."
             echo "- Remaining acceptance: clean recorded tests by colleagues on macOS 14+ Intel and Apple Silicon devices."
           } >> "$GITHUB_STEP_SUMMARY"

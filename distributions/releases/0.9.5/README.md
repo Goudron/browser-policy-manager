@@ -21,7 +21,7 @@ through Git LFS. GitHub blocks ordinary Git files above 100 MiB, while this
 release contains Debian packages above that limit; GitHub Release assets allow
 each file below 2 GiB.
 
-The current manual macOS workflow emits ad-hoc-signed, non-notarized test
+The current manual macOS workflow emits unsigned, non-notarized test
 evidence only; it must not be copied to this store or published. A later Apple
 Developer release workflow may stage a DMG here only after it records a valid
 Developer ID signature and a stapled Apple notarization ticket.

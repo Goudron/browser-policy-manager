@@ -88,7 +88,6 @@ test -x "$MOUNT_POINT/Browser Policy Manager.app/Contents/MacOS/bpm"
 test -x "$MOUNT_POINT/BPM Migrate.command"
 ditto "$MOUNT_POINT/Browser Policy Manager.app" "$INSTALL_ROOT/Browser Policy Manager.app"
 EXECUTABLE="$INSTALL_ROOT/Browser Policy Manager.app/Contents/MacOS/bpm"
-codesign --verify --deep --strict "$INSTALL_ROOT/Browser Policy Manager.app"
 lipo -archs "$EXECUTABLE" | tr ' ' '\n' | grep --fixed-strings "$EXPECTED_MACHINE" >/dev/null
 
 log "prove migration is explicit, then migrate"

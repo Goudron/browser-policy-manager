@@ -238,8 +238,8 @@ def build_target(target: MacOSTarget) -> Path:
     if checksum.read_text(encoding="ascii") != f"{_sha256(artifact)}  {artifact.name}\n":
         raise MacOSDistributionError("macOS DMG checksum does not match generated artifact")
     build_environment = json.loads(environment.read_text(encoding="utf-8"))
-    if build_environment.get("signing") != "ad-hoc-test-only":
-        raise MacOSDistributionError("test DMG builder did not record its ad-hoc signature state")
+    if build_environment.get("signing") != "unsigned-test-only":
+        raise MacOSDistributionError("test DMG builder did not record its unsigned status")
     archive, _ = _documentation_archive()
     manifest = {
         "schema_version": 1,
@@ -252,7 +252,7 @@ def build_target(target: MacOSTarget) -> Path:
         "source_revision": _source_revision(),
         "documentation_archive": {"path": archive.name, "sha256": _sha256(archive)},
         "build_environment": {"path": environment.name, "sha256": _sha256(environment)},
-        "signing": "ad-hoc-test-only",
+        "signing": "unsigned-test-only",
         "notarization": "not-submitted",
         "migration_contract": "explicit-bpm-migrate-only",
     }

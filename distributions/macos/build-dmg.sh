@@ -102,14 +102,7 @@ cp -R "$WORK_ROOT/dist/bpm/." "$APP_ROOT/Contents/MacOS/"
 install -m 0644 "$SOURCE_ROOT/distributions/macos/Info.plist.in" "$APP_ROOT/Contents/Info.plist"
 printf 'APPL????' >"$APP_ROOT/Contents/PkgInfo"
 
-log "apply ad-hoc test signature"
-while IFS= read -r -d '' candidate; do
-    if file --brief "$candidate" | grep --quiet 'Mach-O'; then
-        codesign --force --sign - "$candidate"
-    fi
-done < <(find "$APP_ROOT/Contents/MacOS" -type f -print0)
-codesign --force --sign - "$APP_ROOT"
-codesign --verify --deep --strict "$APP_ROOT"
+log "assemble intentionally unsigned test application bundle"
 
 DMG_STAGE="$WORK_ROOT/dmg-root"
 mkdir -p "$DMG_STAGE"
@@ -142,7 +135,7 @@ payload = {
     "pyinstaller_version": subprocess.check_output(
         [os.environ["BPM_BUILD_PYTHON"], "-m", "PyInstaller", "--version"], text=True
     ).strip(),
-    "signing": "ad-hoc-test-only",
+    "signing": "unsigned-test-only",
     "notarization": "not-submitted",
 }
 output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
