@@ -48,8 +48,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'explicit BPM migration failed' }
     Start-Service -Name BPM
     Wait-BpmReady
-    if ((Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8000/).Content -notmatch '"version":"0.9.5"') {
-        throw 'BPM root response does not expose version 0.9.5'
+    if ((Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8000/).Content -notmatch '"version":"0.9.5.1"') {
+        throw 'BPM root response does not expose version 0.9.5.1'
     }
     Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8000/help/ | Out-Null
     Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8000/profiles | Out-Null

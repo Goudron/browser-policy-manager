@@ -29,8 +29,8 @@
     },
     "test_layers": {
       "unit": {"minimum_collected_tests": 8, "max_wall_seconds": 11.628, "source_sha256": {"tests/unit/profiles/test_profiles_core_unit.py": "eeb5a3bdc2c4dd14d12ff65bd51e4fddbad87274fb2211d51544c8bb73dd6746"}},
-      "api": {"minimum_collected_tests": 3, "max_wall_seconds": 14.155, "source_sha256": {"tests/integration/api/test_profiles_api.py": "4c0031721d8e32ccbc2f7589c411a93626450bf54bfa9dd3e74d0948bb7ae957"}},
-      "ui_contract": {"minimum_collected_tests": 4, "max_wall_seconds": 24.054, "source_sha256": {"tests/contract/ui/profiles/test_semantic_characterization.py": "710e3951bbd7910ca7a94617dd22732cbe79b320046ffdcd1651a3b46fcf9e70"}}
+      "api": {"minimum_collected_tests": 3, "max_wall_seconds": 14.155, "source_sha256": {"tests/integration/api/test_profiles_api.py": "48f9b26e714b55f9b899e905fc1c8fd751c0f1385ecbc6f6b2b165bcdad2556d"}},
+      "ui_contract": {"minimum_collected_tests": 4, "max_wall_seconds": 24.054, "source_sha256": {"tests/contract/ui/profiles/test_semantic_characterization.py": "efee453d6622e74345cd25eba77e8602a064f5968336f639faaa96c1ad67bf33"}}
     },
     "max_selected_test_layer_seconds": 49.837,
     "owned_sizes": {

@@ -37,7 +37,7 @@ def test_four_channel_gate_emits_truthful_progress_and_deterministic_report(tmp_
             for message in messages
         )
     assert any(
-        "phase=m3-05-audit" in message and "pair=esr-115.38->" in message for message in messages
+        "phase=m3-05-audit" in message and "pair=esr-115.39->" in message for message in messages
     )
     assert messages[-1] == "phase=complete channel=matrix [4/4] status=passed"
 
@@ -56,7 +56,7 @@ def test_four_channel_gate_mutations_fail_closed() -> None:
 
 
 def test_four_channel_gate_rejects_bundle_metadata_drift() -> None:
-    target = next(item for item in load_schema_build_targets() if item.channel == "esr-115.38")
+    target = next(item for item in load_schema_build_targets() if item.channel == "esr-115.39")
     bundle = _load_json(target.output)
     bundle["x-bpm-source"] = "drifted-source"
 

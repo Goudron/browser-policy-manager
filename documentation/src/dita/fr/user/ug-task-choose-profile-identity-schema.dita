@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Confirmez que vous modifiez le brouillon de profil prévu.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Entrez un nom de profil clair.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Choisissez le canal de schéma Firefox : Release 153, ESR 153.0, ESR 140.13 ou ESR 115.38.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent. ESR 115.38 sert à une prise en charge critique limitée des systèmes anciens, sans prolonger celle de leur éditeur ; BPM réexamine cette limite le 2027-03-01.</p></info></step>
+      <step><cmd>Choisissez le canal de schéma Firefox : Release 153, ESR 153.0, ESR 140.13 ou ESR 115.39.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent. ESR 115.39 sert à une prise en charge critique limitée des systèmes anciens, sans prolonger celle de leur éditeur ; BPM réexamine cette limite le 2027-03-01.</p></info></step>
       <step><cmd>Vérifiez si le canal sélectionné modifie les commandes visibles avant de continuer.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
     <result><p>Le brouillon guidé possède un canal d'identité et de schéma stable.</p></result>

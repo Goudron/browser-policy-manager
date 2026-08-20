@@ -19,7 +19,7 @@ def test_pinned_schema_targets_include_generated_esr115_before_runtime_wiring() 
         "release-153",
         "esr-153.0",
         "esr-140.13",
-        "esr-115.38",
+        "esr-115.39",
     )
     runtime_targets = tuple(
         target for target in targets if target.channel in SUPPORTED_SCHEMA_CHANNELS
@@ -28,11 +28,11 @@ def test_pinned_schema_targets_include_generated_esr115_before_runtime_wiring() 
     assert {target.channel: target.output.name for target in runtime_targets} == SCHEMA_FILENAMES
     assert {target.channel: target.source_tag for target in runtime_targets} == SCHEMA_SOURCES
 
-    esr115 = next(target for target in targets if target.channel == "esr-115.38")
+    esr115 = next(target for target in targets if target.channel == "esr-115.39")
     assert esr115.schema_metadata is not None
     assert esr115.schema_metadata["line_id"] == "esr-115"
     assert esr115.schema_metadata["firefox_line"] == 115
-    assert esr115.schema_metadata["firefox_version"] == "115.38.0esr"
+    assert esr115.schema_metadata["firefox_version"] == "115.39.0esr"
 
 
 def test_pinned_schema_conversion_is_offline_and_reproduces_all_bundles(
@@ -59,16 +59,16 @@ def test_pinned_schema_conversion_is_offline_and_reproduces_all_bundles(
         assert target.output.read_bytes() == bundled.read_bytes()
         assert target.output.read_bytes() == second_target.output.read_bytes()
 
-    esr115 = next(target for target in first_targets if target.channel == "esr-115.38")
-    second_esr115 = next(target for target in second_targets if target.channel == "esr-115.38")
+    esr115 = next(target for target in first_targets if target.channel == "esr-115.39")
+    second_esr115 = next(target for target in second_targets if target.channel == "esr-115.39")
     generated = json.loads(esr115.output.read_text(encoding="utf-8"))
-    assert generated["x-bpm-channel"] == "esr-115.38"
-    assert generated["x-bpm-artifact-id"] == "esr-115.38"
+    assert generated["x-bpm-channel"] == "esr-115.39"
+    assert generated["x-bpm-artifact-id"] == "esr-115.39"
     assert generated["x-bpm-line-id"] == "esr-115"
     assert generated["x-bpm-firefox-line"] == 115
-    assert generated["x-bpm-firefox-version"] == "115.38.0esr"
+    assert generated["x-bpm-firefox-version"] == "115.39.0esr"
     assert generated["x-bpm-source"] == "mozilla-policy-templates-v5.12"
-    assert generated["x-bpm-ui-label"] == "ESR 115.38"
+    assert generated["x-bpm-ui-label"] == "ESR 115.39"
     assert generated["x-bpm-generator"] == {
         "identity": "bpm-firefox-policy-schema-converter/v1",
         "entrypoint": "tools/convert_policies_from_upstream.py",
@@ -89,7 +89,7 @@ def test_pinned_schema_conversion_is_offline_and_reproduces_all_bundles(
 
 def test_esr115_nested_policy_completeness_and_channel_boundaries() -> None:
     schema = json.loads(
-        (REPO_ROOT / "app" / "schemas" / "policies" / "firefox-esr-115.38.json").read_text(
+        (REPO_ROOT / "app" / "schemas" / "policies" / "firefox-esr-115.39.json").read_text(
             encoding="utf-8"
         )
     )

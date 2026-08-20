@@ -70,8 +70,8 @@ def test_write_generated_layers_creates_deterministic_json_documents(tmp_path) -
     written = write_generated_layers(output_dir=tmp_path)
 
     assert [path.name for path in written] == [
-        "cis_l1.esr-115.38.json",
-        "cis_l2.esr-115.38.json",
+        "cis_l1.esr-115.39.json",
+        "cis_l2.esr-115.39.json",
         "cis_l1.esr-140.13.json",
         "cis_l2.esr-140.13.json",
         "cis_l1.esr-153.0.json",

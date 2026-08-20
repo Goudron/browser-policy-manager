@@ -64,11 +64,11 @@ def test_generated_policy_skeleton_inventory_covers_every_supported_policy_once(
     assert index["channel_differences_backlog_item"] == "BPM090-M5-05"
     assert index["schema_refresh_runbook_backlog_item"] == "BPM090-M5-08"
     assert index["provenance_review_backlog_item"] == "BPM090-M5-09"
-    assert index["target_bpm_version"] == "0.9.5"
+    assert index["target_bpm_version"] == "0.9.5.1"
     assert index["refresh_backlog_item"] == "BPM095-M8-04"
     assert index["generated_by"] == "documentation/tools/generate_firefox_policy_skeletons.py"
-    assert index["policy_count"] == len(policies) == 121
-    assert index["example_count"] == sum(len(policy["channels"]) for policy in policies) == 451
+    assert index["policy_count"] == len(policies) == 123
+    assert index["example_count"] == sum(len(policy["channels"]) for policy in policies) == 453
     assert {entry["policy_id"] for entry in generated} == expected_ids
     assert len({entry["doc_id"] for entry in generated}) == len(expected_ids)
     assert len({entry["path"] for entry in generated}) == len(expected_ids)
@@ -94,8 +94,8 @@ def test_skeleton_owner_check_reports_artifact_progress_without_writing_source()
     )
 
     assert completed.returncode == 0, completed.stdout + completed.stderr
-    assert "phase=render; completed=0/125" in completed.stdout
-    assert "phase=check; completed=125/125" in completed.stdout
+    assert "phase=render; completed=0/127" in completed.stdout
+    assert "phase=check; completed=127/127" in completed.stdout
 
 
 def test_generated_policy_skeleton_map_is_stable_and_keyed() -> None:
@@ -220,16 +220,16 @@ def test_policy_provenance_review_records_approved_sources_and_forbidden_claims(
     assert {record["source_version_or_revision"] for record in provenance["source_records"]} == {
         "mozilla-policy-templates-v5.12",
         "mozilla-policy-templates-v7.12",
-        "mozilla-policy-templates-v8.0",
+        "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
     }
     assert provenance["summary"] == {
         "both_channels": 97,
         "changed_definitions": 8,
-        "esr_only": 0,
-        "example_count": 451,
+        "esr_only": 1,
+        "example_count": 453,
         "partial": 24,
-        "policy_count": 121,
-        "release_only": 0,
+        "policy_count": 123,
+        "release_only": 1,
     }
     assert {entry["policy_id"] for entry in provenance["policies"]} == {
         entry["policy_id"] for entry in index["policies"]
@@ -286,7 +286,7 @@ def test_each_generated_policy_topic_carries_source_version_and_license_metadata
             "MPL-2.0",
             "BPM is not affiliated with or endorsed by Mozilla.",
             "BPM095-M8-04",
-            "0.9.5",
+            "0.9.5.1",
         ):
             assert required in provenance_text
 
@@ -297,8 +297,9 @@ def test_each_generated_policy_topic_carries_source_version_and_license_metadata
             assert channel_meta["schema_source"] in provenance_text
             assert channel["schema_sha256"] in provenance_text
             source = channel_meta["schema_source"]
-            assert generator._source_metadata(source)["source_locator"] in provenance_text
-            assert generator._source_metadata(source)["source_retrieved_on"] in provenance_text
+            metadata = generator._source_metadata(source, channel_meta["schema_source_provenance"])
+            assert metadata["source_locator"] in provenance_text
+            assert metadata["source_retrieved_on"] in provenance_text
 
 
 def test_generated_policy_topics_reject_unreviewed_mozilla_prose_and_unsupported_claims() -> None:

@@ -174,9 +174,9 @@ def _assert_semantics(contract: dict[str, Any]) -> None:
 
     lifecycle = _load_json(LIFECYCLE_PATH)
     rows = {row["artifact_id"]: row for row in lifecycle["channels"]}
-    assert rows["esr-115.38"]["recommendation_target_line_id"] == "esr-153"
+    assert rows["esr-115.39"]["recommendation_target_line_id"] == "esr-153"
     assert rows["esr-140.13"]["recommendation_target_line_id"] == "esr-153"
-    assert rows["esr-115.38"]["retirement_successor_line_id"] == "esr-140"
+    assert rows["esr-115.39"]["retirement_successor_line_id"] == "esr-140"
     assert rows["esr-140.13"]["retirement_successor_line_id"] == "esr-153"
 
     conversion = _load_json(CONVERSION_PATH)

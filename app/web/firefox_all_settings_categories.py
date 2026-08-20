@@ -78,11 +78,11 @@ _ALL_SETTINGS_CATEGORIES: tuple[dict[str, Any], ...] = (
 _SCHEMA_SHELL_STEP_BY_POLICY_SECTION = {
     "browser_behavior": 2,
     "network_access": 2,
-    "home_startup": 3,
-    "search": 4,
-    "privacy_security": 5,
-    "extensions_integrations": 6,
-    "ai_smart": 7,
+    "home_startup": 2,
+    "search": 2,
+    "privacy_security": 3,
+    "extensions_integrations": 4,
+    "ai_smart": 5,
     "advanced": 8,
 }
 

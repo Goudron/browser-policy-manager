@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import json
 import re
 from collections.abc import Mapping
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -233,7 +235,12 @@ def _version_at_least(version: str, minimum: str) -> bool:
     return _version_tuple(version) >= _version_tuple(minimum)
 
 
-def apply_documented_schema_overrides(schema: dict, target_version: str) -> dict:
+def apply_documented_schema_overrides(
+    schema: dict,
+    target_version: str,
+    *,
+    target_channel: str | None = None,
+) -> dict:
     """Fill documented upstream gaps that the retired policy-template Markdown omits.
 
     Mozilla's v8.0 release package points policy syntax to Firefox Administrator Reference. Its
@@ -243,55 +250,57 @@ def apply_documented_schema_overrides(schema: dict, target_version: str) -> dict
     structure again.
     """
     extension_settings = schema.get("properties", {}).get("ExtensionSettings")
-    if not isinstance(extension_settings, dict):
-        return schema
+    if isinstance(extension_settings, dict):
+        additional = extension_settings.setdefault(
+            "additionalProperties",
+            {"type": "object", "properties": {}, "additionalProperties": False},
+        )
+        if isinstance(additional, dict):
+            properties = additional.setdefault("properties", {})
+            if isinstance(properties, dict):
+                base_properties = {
+                    "default_area": {"type": "string", "enum": ["navbar", "menupanel"]},
+                    "private_browsing": {"type": "boolean"},
+                    "restricted_domains": {"type": "array", "items": {"type": "string"}},
+                    "temporarily_allow_weak_signatures": {"type": "boolean"},
+                }
+                for name, definition in base_properties.items():
+                    properties.setdefault(name, definition)
 
-    additional = extension_settings.setdefault(
-        "additionalProperties",
-        {"type": "object", "properties": {}, "additionalProperties": False},
-    )
-    if not isinstance(additional, dict):
-        return schema
-    properties = additional.setdefault("properties", {})
-    if not isinstance(properties, dict):
-        return schema
+                installation_mode = properties.setdefault("installation_mode", {"type": "string"})
+                if isinstance(installation_mode, dict):
+                    installation_mode["enum"] = [
+                        "allowed",
+                        "blocked",
+                        "force_installed",
+                        "normal_installed",
+                    ]
 
-    base_properties = {
-        "default_area": {"type": "string", "enum": ["navbar", "menupanel"]},
-        "private_browsing": {"type": "boolean"},
-        "restricted_domains": {"type": "array", "items": {"type": "string"}},
-        "temporarily_allow_weak_signatures": {"type": "boolean"},
-    }
-    for name, definition in base_properties.items():
-        properties.setdefault(name, definition)
+                allowed_types = properties.setdefault(
+                    "allowed_types", {"type": "array", "items": {"type": "string"}}
+                )
+                if isinstance(allowed_types, dict):
+                    allowed_type_items = allowed_types.setdefault("items", {"type": "string"})
+                    if isinstance(allowed_type_items, dict):
+                        allowed_type_items["enum"] = [
+                            "extension",
+                            "theme",
+                            "dictionary",
+                            "locale",
+                            "sitepermission",
+                        ]
 
-    installation_mode = properties.setdefault("installation_mode", {"type": "string"})
-    if isinstance(installation_mode, dict):
-        installation_mode["enum"] = ["allowed", "blocked", "force_installed", "normal_installed"]
+                if _version_at_least(target_version, "153.0"):
+                    firefox_153_properties = {
+                        "allowed_permissions": {"type": "array", "items": {"type": "string"}},
+                        "blocked_permissions": {"type": "array", "items": {"type": "string"}},
+                        "runtime_allowed_hosts": {"type": "array", "items": {"type": "string"}},
+                        "runtime_blocked_hosts": {"type": "array", "items": {"type": "string"}},
+                    }
+                    for name, definition in firefox_153_properties.items():
+                        properties.setdefault(name, definition)
 
-    allowed_types = properties.setdefault(
-        "allowed_types", {"type": "array", "items": {"type": "string"}}
-    )
-    if isinstance(allowed_types, dict):
-        allowed_type_items = allowed_types.setdefault("items", {"type": "string"})
-        if isinstance(allowed_type_items, dict):
-            allowed_type_items["enum"] = [
-                "extension",
-                "theme",
-                "dictionary",
-                "locale",
-                "sitepermission",
-            ]
-
-    if _version_at_least(target_version, "153.0"):
-        firefox_153_properties = {
-            "allowed_permissions": {"type": "array", "items": {"type": "string"}},
-            "blocked_permissions": {"type": "array", "items": {"type": "string"}},
-            "runtime_allowed_hosts": {"type": "array", "items": {"type": "string"}},
-            "runtime_blocked_hosts": {"type": "array", "items": {"type": "string"}},
-        }
-        for name, definition in firefox_153_properties.items():
-            properties.setdefault(name, definition)
+    _remove_unsupported_sanitize_exceptions(schema, target_version, target_channel)
 
     return schema
 
@@ -302,20 +311,84 @@ def _version_tuple(value: str | None) -> tuple[int, ...]:
     return tuple(int(part) for part in value.split(".") if part.isdigit())
 
 
+# Mozilla's policy-template Markdown is no longer complete after the documentation
+# moved to Firefox Administrator Reference.  These declarations bridge only the
+# entries present in master/linux-policies.json but missing compatibility metadata.
+# A policy's release and ESR availability must be kept independent: a numerically
+# newer ESR does not imply support for a release-only policy.
+_MASTER_POLICY_CHANNEL_MINIMUMS: dict[str, dict[str, str | None]] = {
+    "CNSA2KeyAgreementEnabled": {"release": "154.0", "esr": None},
+    "DefaultBrowserSettingEnabled": {"release": "154.0", "esr": "153.0"},
+    "SitePolicies": {"release": "150.0", "esr": None},
+}
+
+
+def _target_channel_family(target_channel: str | None) -> str | None:
+    if target_channel is None:
+        return None
+    if target_channel.startswith("release-"):
+        return "release"
+    if target_channel.startswith("esr-"):
+        return "esr"
+    raise ValueError(f"Unknown Firefox schema channel family: {target_channel}")
+
+
+def _remove_unsupported_sanitize_exceptions(
+    schema: dict,
+    target_version: str,
+    target_channel: str | None,
+) -> None:
+    """Omit the Firefox-154 release-only nested field from older bundle shapes."""
+    family = _target_channel_family(target_channel)
+    if family is None or (family == "release" and _version_at_least(target_version, "154.0")):
+        return
+
+    sanitize = schema.get("properties", {}).get("SanitizeOnShutdown")
+    if not isinstance(sanitize, dict):
+        return
+    branches = sanitize.get("oneOf")
+    if not isinstance(branches, list):
+        return
+
+    retained: list[dict[str, Any]] = []
+    fingerprints: set[str] = set()
+    for branch in branches:
+        if not isinstance(branch, dict):
+            continue
+        properties = branch.get("properties")
+        if isinstance(properties, dict):
+            properties.pop("Exceptions", None)
+        fingerprint = json.dumps(branch, sort_keys=True, separators=(",", ":"))
+        if fingerprint not in fingerprints:
+            fingerprints.add(fingerprint)
+            retained.append(branch)
+    sanitize["oneOf"] = retained
+
+
 def filter_policies_for_target_version(
     policies: list[SchemaPolicyDefinition],
     target_version: str,
+    *,
+    target_channel: str | None = None,
 ) -> list[SchemaPolicyDefinition]:
-    """Keep only policies available by the target Firefox version."""
+    """Keep only policies available by the target Firefox version and family."""
     target = _version_tuple(target_version)
     if not target:
         return list(policies)
 
-    return [
-        policy
-        for policy in policies
-        if not policy.min_version or _version_tuple(policy.min_version) <= target
-    ]
+    family = _target_channel_family(target_channel)
+    selected: list[SchemaPolicyDefinition] = []
+    for policy in policies:
+        compatibility = _MASTER_POLICY_CHANNEL_MINIMUMS.get(policy.id)
+        if compatibility is not None and family is not None:
+            minimum = compatibility[family]
+            if minimum is None or not _version_at_least(target_version, minimum):
+                continue
+            selected.append(replace(policy, min_version=minimum))
+            continue
+        if not policy.min_version or _version_tuple(policy.min_version) <= target:
+            selected.append(policy)
+    return selected
 
 
 def convert_upstream_html_to_policies(html_path) -> list[UpstreamPolicyEntry]:

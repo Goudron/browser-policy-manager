@@ -221,5 +221,7 @@
     "profiles.schema_field_allowed_permissions": "Разрешённые разрешения дополнения",
     "profiles.schema_field_blocked_permissions": "Запрещённые разрешения дополнения",
     "profiles.schema_field_runtime_allowed_hosts": "Разрешённые хосты дополнения",
-    "profiles.schema_field_runtime_blocked_hosts": "Запрещённые хосты дополнения"
+    "profiles.schema_field_runtime_blocked_hosts": "Запрещённые хосты дополнения",
+    "profiles.shell_policy_default_browser_setting_enabled": "Включить настройку браузера по умолчанию",
+    "profiles.shell_policy_site_policies": "Политики сайтов"
 }

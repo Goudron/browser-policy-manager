@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "contract_id": "bpm-pdf-delivery-0.9.5",
+  "contract_id": "bpm-pdf-delivery-0.9.5.1",
   "backlog_item": "BPM095-M8-05",
-  "target_bpm_version": "0.9.5",
+  "target_bpm_version": "0.9.5.1",
   "candidate_root": "documentation/build/pdf",
   "delivery_root": "distributions/documentation",
   "delivery_directory": "{bpm_version}",

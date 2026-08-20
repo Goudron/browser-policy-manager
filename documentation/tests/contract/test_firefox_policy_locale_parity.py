@@ -129,7 +129,7 @@ def test_firefox_generated_policy_skeletons_remain_language_neutral_schema_facts
     """
 
     generated_policy_topics = sorted((GENERATED_FIREFOX_ROOT / "policies").glob("fx-policy-*.dita"))
-    assert len(generated_policy_topics) == 121
+    assert len(generated_policy_topics) == 123
     assert not any(
         list((DITA_ROOT / locale / "firefox").glob("fx-policy-*.dita")) for locale in LOCALES
     )
@@ -152,7 +152,7 @@ def test_firefox_generated_policy_skeletons_remain_language_neutral_schema_facts
         "release-153",
         "MPL-2.0",
         "mozilla-policy-templates-v7.12",
-        "mozilla-policy-templates-v8.0",
+        "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
         "BPM is not affiliated with or endorsed by Mozilla.",
     ):
         assert required in text

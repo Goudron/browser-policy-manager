@@ -93,26 +93,50 @@ def _source(
     )
 
 
-_V8_SOURCE = _source(
-    source_tag="mozilla-policy-templates-v8.0",
-    upstream_tag="v8.0",
-    documentation_input_path="data/upstream/policy-templates/v8.0/policy-templates.md",
-    documentation_input_url="https://raw.githubusercontent.com/mozilla/policy-templates/v8.0/docs/index.md",
+_MASTER_RELEASE_SOURCE = _source(
+    source_tag="mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+    upstream_tag="a892b621f7f98ee91c8ed84290641f2703e88490",
+    documentation_input_path=(
+        "data/upstream/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/"
+        "policy-templates.md"
+    ),
+    documentation_input_url=(
+        "https://raw.githubusercontent.com/mozilla/policy-templates/"
+        "a892b621f7f98ee91c8ed84290641f2703e88490/docs/index.md"
+    ),
     documentation_input_sha256="2e00f3bf14ce2e90b96d9697700c493cc3688fb95aed2af49a000a5b62ef0bc1",
-    linux_policies_input_path="data/upstream/policy-templates/v8.0/linux-policies.json",
-    linux_policies_input_url="https://raw.githubusercontent.com/mozilla/policy-templates/v8.0/linux/policies.json",
-    linux_policies_input_sha256="cadcd2052e4c449d68be760234c1eebc2916cb89319d9a4f1b71788504747fac",
+    linux_policies_input_path=(
+        "data/upstream/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/"
+        "linux-policies.json"
+    ),
+    linux_policies_input_url=(
+        "https://raw.githubusercontent.com/mozilla/policy-templates/"
+        "a892b621f7f98ee91c8ed84290641f2703e88490/linux/policies.json"
+    ),
+    linux_policies_input_sha256="d5a8076b9dc7d4332e757af5cf2702e4cf0acf125a9bc4483aaf6780cee833cc",
     output_path="app/schemas/policies/firefox-release-153.json",
 )
-_V8_ESR_SOURCE = _source(
-    source_tag="mozilla-policy-templates-v8.0",
-    upstream_tag="v8.0",
-    documentation_input_path="data/upstream/policy-templates/v8.0/policy-templates.md",
-    documentation_input_url="https://raw.githubusercontent.com/mozilla/policy-templates/v8.0/docs/index.md",
+_MASTER_ESR_SOURCE = _source(
+    source_tag="mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+    upstream_tag="a892b621f7f98ee91c8ed84290641f2703e88490",
+    documentation_input_path=(
+        "data/upstream/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/"
+        "policy-templates.md"
+    ),
+    documentation_input_url=(
+        "https://raw.githubusercontent.com/mozilla/policy-templates/"
+        "a892b621f7f98ee91c8ed84290641f2703e88490/docs/index.md"
+    ),
     documentation_input_sha256="2e00f3bf14ce2e90b96d9697700c493cc3688fb95aed2af49a000a5b62ef0bc1",
-    linux_policies_input_path="data/upstream/policy-templates/v8.0/linux-policies.json",
-    linux_policies_input_url="https://raw.githubusercontent.com/mozilla/policy-templates/v8.0/linux/policies.json",
-    linux_policies_input_sha256="cadcd2052e4c449d68be760234c1eebc2916cb89319d9a4f1b71788504747fac",
+    linux_policies_input_path=(
+        "data/upstream/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/"
+        "linux-policies.json"
+    ),
+    linux_policies_input_url=(
+        "https://raw.githubusercontent.com/mozilla/policy-templates/"
+        "a892b621f7f98ee91c8ed84290641f2703e88490/linux/policies.json"
+    ),
+    linux_policies_input_sha256="d5a8076b9dc7d4332e757af5cf2702e4cf0acf125a9bc4483aaf6780cee833cc",
     output_path="app/schemas/policies/firefox-esr-153.0.json",
 )
 _V7_SOURCE = _source(
@@ -126,7 +150,7 @@ _V7_SOURCE = _source(
     linux_policies_input_sha256="5a180e55c6838e6d359ce2223e8e41294ab5ebde439347cf4c08bab459f39e5c",
     output_path="app/schemas/policies/firefox-esr-140.13.json",
 )
-_V5_SOURCE = _source(
+_V5_ESR115_SOURCE = _source(
     source_tag="mozilla-policy-templates-v5.12",
     upstream_tag="v5.12",
     documentation_input_path="data/upstream/policy-templates/v5.12/policy-templates.md",
@@ -135,7 +159,7 @@ _V5_SOURCE = _source(
     linux_policies_input_path="data/upstream/policy-templates/v5.12/linux-policies.json",
     linux_policies_input_url="https://raw.githubusercontent.com/mozilla/policy-templates/v5.12/linux/policies.json",
     linux_policies_input_sha256="da9caaefe75f7f5e54694bccda8a044e62f034dbd5889bcf1595bb08d6a04347",
-    output_path="app/schemas/policies/firefox-esr-115.38.json",
+    output_path="app/schemas/policies/firefox-esr-115.39.json",
 )
 
 
@@ -145,13 +169,13 @@ _V5_SOURCE = _source(
 SCHEMA_CHANNEL_CATALOG: tuple[SchemaChannel, ...] = (
     SchemaChannel(
         line_id="esr-115",
-        artifact_id="esr-115.38",
-        channel_id="esr-115.38",
+        artifact_id="esr-115.39",
+        channel_id="esr-115.39",
         family="esr",
         line_number=115,
-        artifact_version="115.38",
-        label="ESR 115.38",
-        i18n_key="profiles.firefox_schema_esr_115_38",
+        artifact_version="115.39",
+        label="ESR 115.39",
+        i18n_key="profiles.firefox_schema_esr_115_39",
         support_state="supported",
         selectable=True,
         is_latest_esr=False,
@@ -159,7 +183,7 @@ SCHEMA_CHANNEL_CATALOG: tuple[SchemaChannel, ...] = (
         is_default_release=False,
         recommendation_target_line_id="esr-153",
         retirement_successor_line_id="esr-140",
-        source=_V5_SOURCE,
+        source=_V5_ESR115_SOURCE,
     ),
     SchemaChannel(
         line_id="release-153",
@@ -177,7 +201,7 @@ SCHEMA_CHANNEL_CATALOG: tuple[SchemaChannel, ...] = (
         is_default_release=True,
         recommendation_target_line_id=None,
         retirement_successor_line_id=None,
-        source=_V8_SOURCE,
+        source=_MASTER_RELEASE_SOURCE,
     ),
     SchemaChannel(
         line_id="esr-140",
@@ -213,7 +237,7 @@ SCHEMA_CHANNEL_CATALOG: tuple[SchemaChannel, ...] = (
         is_default_release=False,
         recommendation_target_line_id=None,
         retirement_successor_line_id=None,
-        source=_V8_ESR_SOURCE,
+        source=_MASTER_ESR_SOURCE,
     ),
 )
 

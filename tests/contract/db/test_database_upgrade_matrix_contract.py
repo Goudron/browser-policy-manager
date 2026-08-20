@@ -164,7 +164,7 @@ def test_upgrade_matrix_declares_fail_closed_preflight_and_owned_evidence_gaps()
         "active_graph_changed": False,
         "observed_head_revision": matrix["observed_head_revision"],
         "immutable_proof_digest": (
-            "3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb"
+            "9de84bde21e11d161d48297d19cc2447c36ac052d6cef8aed7727b8fa29746ef"
         ),
         "sqlite_evidence": "candidate-artifact-real-alembic-upgrade-pass",
         "postgresql_evidence": "pending-m6-remediation-r3",

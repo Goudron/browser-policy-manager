@@ -1,0 +1,12 @@
+{
+  "assets": [],
+  "bpm_version": "0.9.5.1",
+  "publication": {
+    "provider": "github-release-assets",
+    "release_url": "https://github.com/Goudron/browser-policy-manager/releases/tag/v0.9.5.1",
+    "repository": "Goudron/browser-policy-manager"
+  },
+  "release_tag": "v0.9.5.1",
+  "schema_version": 1,
+  "source_revision": "unpublished"
+}

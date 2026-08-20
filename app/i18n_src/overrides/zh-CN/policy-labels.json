@@ -223,5 +223,7 @@
     "profiles.schema_field_allowed_permissions": "扩展可获权限",
     "profiles.schema_field_blocked_permissions": "扩展已阻止权限",
     "profiles.schema_field_runtime_allowed_hosts": "扩展允许访问的主机",
-    "profiles.schema_field_runtime_blocked_hosts": "扩展禁止访问的主机"
+    "profiles.schema_field_runtime_blocked_hosts": "扩展禁止访问的主机",
+    "profiles.shell_policy_default_browser_setting_enabled": "启用默认浏览器设置",
+    "profiles.shell_policy_site_policies": "网站策略"
 }

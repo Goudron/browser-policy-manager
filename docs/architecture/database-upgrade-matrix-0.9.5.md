@@ -1,14 +1,14 @@
-# BPM 0.9.5 Database Upgrade Matrix And Recovery Contract
+# BPM 0.9.5.1 Database Upgrade Matrix And Recovery Contract
 
 Status: active release contract; interruption and recovery evidence closed by `BPM094-M4-06`
 
-Machine contract: `database-upgrade-matrix-0.9.5.json`
+Machine contract: `.9.5.json`
 
 Golden data: `tests/fixtures/database_upgrade/golden_profiles_0_9_5.json`
 
 ## Decision
 
-BPM 0.9.5 retains the complete released Alembic window, from the original
+BPM 0.9.5.1 retains the complete released Alembic window, from the original
 October 2025 schema through the Firefox 153/dual-ESR revision, plus the three
 revision aliases that `alembic/env.py` already recognizes. Every retained source
 is upgradeable on SQLite and PostgreSQL through the released migration head.
@@ -38,7 +38,7 @@ retirement revision is installed under `alembic/versions/` and ordinary
 
 `migration_support/retirement_revision_materializer_v1.py` owns the exact
 future ESR 140.13 to ESR 153.0 candidate. It freezes proof digest
-`3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb`,
+`9de84bde21e11d161d48297d19cc2447c36ac052d6cef8aed7727b8fa29746ef`,
 both exact schema identities, the empty recipe registry and the complete
 report. The current supported catalog is a hard materialization error. A
 reviewed candidate that explicitly retires ESR 140 can render an inert,
@@ -175,15 +175,15 @@ new outputs must not exist, and neither backup nor candidate may be the
 repository `data/bpm.db` path.
 
 ```bash
-sqlite3 /absolute/source.db ".backup '/absolute/bpm-pre-0.9.5.backup.db'"
-chmod a-w /absolute/bpm-pre-0.9.5.backup.db
+sqlite3 /absolute/source.db ".backup '/absolute/bpm-pre-0.9.5.1.backup.db'"
+chmod a-w /absolute/bpm-pre-0.9.5.1.backup.db
 .venv/bin/python tools/database_upgrade_recovery.py verify-sqlite-backup \
-  --backup /absolute/bpm-pre-0.9.5.backup.db \
-  --manifest /absolute/bpm-pre-0.9.5.backup.json
+  --backup /absolute/bpm-pre-0.9.5.1.backup.db \
+  --manifest /absolute/bpm-pre-0.9.5.1.backup.json
 .venv/bin/python tools/database_upgrade_recovery.py retry-sqlite-upgrade \
-  --backup /absolute/bpm-pre-0.9.5.backup.db \
-  --manifest /absolute/bpm-pre-0.9.5.backup.json \
-  --candidate /absolute/bpm-0.9.5-candidate.db
+  --backup /absolute/bpm-pre-0.9.5.1.backup.db \
+  --manifest /absolute/bpm-pre-0.9.5.1.backup.json \
+  --candidate /absolute/bpm-0.9.5.1-candidate.db
 ```
 
 The last command restores a new candidate, runs Alembic head, and applies the
@@ -212,15 +212,15 @@ The tested retry sequence is:
 
 ```bash
 pg_dump --format=custom --serializable-deferrable \
-  --file=/absolute/bpm-pre-0.9.5.dump <source-database-url>
-sha256sum /absolute/bpm-pre-0.9.5.dump
-chmod a-w /absolute/bpm-pre-0.9.5.dump
+  --file=/absolute/bpm-pre-0.9.5.1.dump <source-database-url>
+sha256sum /absolute/bpm-pre-0.9.5.1.dump
+chmod a-w /absolute/bpm-pre-0.9.5.1.dump
 createdb <isolated-restore-check-db>
 pg_restore --exit-on-error --single-transaction --no-owner --no-privileges \
-  --dbname=<isolated-restore-check-db> /absolute/bpm-pre-0.9.5.dump
+  --dbname=<isolated-restore-check-db> /absolute/bpm-pre-0.9.5.1.dump
 createdb <new-retry-candidate-db>
 pg_restore --exit-on-error --single-transaction --no-owner --no-privileges \
-  --dbname=<new-retry-candidate-db> /absolute/bpm-pre-0.9.5.dump
+  --dbname=<new-retry-candidate-db> /absolute/bpm-pre-0.9.5.1.dump
 .venv/bin/alembic -c <candidate-specific-alembic.ini> upgrade head
 ```
 

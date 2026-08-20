@@ -387,7 +387,7 @@ def _resolve_policy_values_for_channel(
             resolved[policy_id] = _resolve_schema_enabled_value(policy_id, schema_version)
         else:
             resolved[policy_id] = deepcopy(value)
-    if schema_version == "esr-115.38":
+    if schema_version == "esr-115.39":
         for policy_id in _ESR_115_PRESET_POLICY_EXCLUSIONS:
             resolved.pop(policy_id, None)
         for policy_id, excluded_fields in _ESR_115_PRESET_NESTED_EXCLUSIONS.items():

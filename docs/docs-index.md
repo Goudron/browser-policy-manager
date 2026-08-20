@@ -1,6 +1,6 @@
-# BPM 0.9.5 Documentation Index
+# BPM 0.9.5.1 Documentation Index
 
-Updated: 2026-08-12
+Updated: 2026-08-20
 
 This index classifies every maintained documentation file under `docs/` so
 release, refactoring, schema, CIS, locale, administrator, DevOps, and

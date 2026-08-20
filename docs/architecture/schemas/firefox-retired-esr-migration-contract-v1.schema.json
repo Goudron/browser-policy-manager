@@ -35,7 +35,7 @@
       "const": "bpm095-firefox-retired-esr-migration-safety"
     },
     "target_bpm_version": {
-      "const": "0.9.5"
+      "const": "0.9.5.1"
     },
     "status": {
       "const": "normative-target-preimplementation"

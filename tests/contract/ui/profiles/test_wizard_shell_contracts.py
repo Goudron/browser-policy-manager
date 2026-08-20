@@ -275,7 +275,7 @@ def test_default_wizard_path_does_not_render_guided_coverage_blocks():
     assert "wizard-guided-coverage-step" not in dom_source
     assert ".wizard-guided-coverage" not in css_source
     assert 'id="wizard-schema-shell-step-2"' not in response.text
-    assert 'id="wizard-schema-shell-step-8"' in response.text
+    assert 'id="wizard-schema-shell-step-6"' in response.text
 
 
 def test_default_wizard_path_does_not_render_settings_map_blocks():

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build, smoke-test, and stage the BPM 0.9.5 native Windows x64 MSI.
+"""Build, smoke-test, and stage the BPM 0.9.5.1 native Windows x64 MSI.
 
 This tool owns Windows packaging only. It never substitutes WSL for native
 Windows, runs only on a Windows x64 host for build or smoke, and keeps MSI
@@ -26,7 +26,7 @@ CONFIG_PATH = REPO_ROOT / "distributions" / "windows" / "targets.json"
 WINDOWS_ROOT = REPO_ROOT / "distributions" / "windows"
 ARTIFACT_ROOT = REPO_ROOT / "artifacts" / "windows-packages"
 RELEASE_STORE_ROOT = REPO_ROOT / "distributions" / "releases"
-TARGET_VERSION = "0.9.5"
+TARGET_VERSION = "0.9.5.1"
 TARGET_ID = "windows-10-11-x64"
 ARCHITECTURE = "x64"
 
@@ -92,7 +92,7 @@ def load_target() -> WindowsTarget:
     if payload.get("schema_version") != 1:
         raise WindowsDistributionError("Windows target manifest schema_version must be 1")
     if payload.get("target_bpm_version") != TARGET_VERSION:
-        raise WindowsDistributionError("Windows target manifest must match BPM 0.9.5")
+        raise WindowsDistributionError("Windows target manifest must match BPM 0.9.5.1")
     if payload.get("architecture") != ARCHITECTURE or payload.get("installer_format") != "msi":
         raise WindowsDistributionError("Windows target must be an x64 MSI")
     if payload.get("supported_platforms") != ["Windows 10 x64", "Windows 11 x64"]:
@@ -122,9 +122,9 @@ def load_target() -> WindowsTarget:
     )
     if target.python_version != "3.14.6":
         raise WindowsDistributionError("Windows target must pin CPython 3.14.6")
-    if target.artifact != "browser-policy-manager-0.9.5-windows-x64.msi":
+    if target.artifact != "browser-policy-manager-0.9.5.1-windows-x64.msi":
         raise WindowsDistributionError(
-            "Windows MSI artifact name is not the BPM 0.9.5 release name"
+            "Windows MSI artifact name is not the BPM 0.9.5.1 release name"
         )
     if not target.python_installer_url.startswith("https://www.python.org/"):
         raise WindowsDistributionError("Windows runtime must come from python.org over HTTPS")
@@ -375,7 +375,7 @@ def _existing_release_assets(release_store: Path) -> list[dict[str, object]]:
 
 
 def stage_release_assets(target: WindowsTarget) -> None:
-    """Add the verified signed MSI to the shared BPM 0.9.5 release store."""
+    """Add the verified signed MSI to the shared BPM 0.9.5.1 release store."""
     artifact, environment, manifest = _verified_artifact(target)
     release_store = _release_store_directory()
     if not release_store.is_dir():

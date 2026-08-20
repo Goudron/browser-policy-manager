@@ -1,7 +1,7 @@
-# BPM 0.9.5 Docker base-runtime resolution for linux/amd64.
+# BPM 0.9.5.1 Docker base-runtime resolution for linux/amd64.
 # Refresh only as an explicit release decision, then rebuild and rerun
 # `make docker-smoke`.  This file intentionally excludes BPM itself: the image
-# installs the wheel built from the checked-out 0.9.5 source with --no-deps.
+# installs the wheel built from the checked-out 0.9.5.1 source with --no-deps.
 Jinja2==3.1.6
 Mako==1.4.1
 MarkupSafe==3.0.3

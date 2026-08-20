@@ -52,7 +52,7 @@ def _requirement_names(values: list[str]) -> set[str]:
 def _load_manifest() -> dict[str, Any]:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     assert manifest["schema_version"] == 1
-    assert manifest["target_version"] == "0.9.5"
+    assert manifest["target_version"] == "0.9.5.1"
     assert set(manifest["categories"]) == REQUIRED_CATEGORIES
     for category in manifest["categories"].values():
         assert set(category) == REQUIRED_SECTIONS

@@ -42,11 +42,11 @@ def test_current_catalog_diff_is_empty_and_ignores_declaration_order() -> None:
         "retained_lines": [
             {
                 "line_id": "esr-115",
-                "artifact_id": "esr-115.38",
-                "channel_id": "esr-115.38",
+                "artifact_id": "esr-115.39",
+                "channel_id": "esr-115.39",
                 "family": "esr",
                 "line_number": 115,
-                "artifact_version": "115.38",
+                "artifact_version": "115.39",
                 "support_state": "supported",
                 "selectable": True,
             },
@@ -251,7 +251,7 @@ def test_retirement_maps_esr115_to_exact_immediate_esr140_successor() -> None:
         ),
         (
             lambda: SCHEMA_CHANNEL_CATALOG,
-            {"esr-115.38", "esr-153.0", "release-153"},
+            {"esr-115.39", "esr-153.0", "release-153"},
             "retirement_successor_unbundled_target",
         ),
     ],

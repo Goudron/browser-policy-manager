@@ -2,14 +2,14 @@
   "$schema": "./schemas/firefox-esr-115-policy-disposition-audit-v1.schema.json",
   "schema_version": 1,
   "contract_id": "bpm095-firefox-esr-115-policy-disposition-audit",
-  "target_bpm_version": "0.9.5",
+  "target_bpm_version": "0.9.5.1",
   "status": "active-audit-and-runtime-guard",
-  "source_channel": "esr-115.38",
+  "source_channel": "esr-115.39",
   "artifacts": {
-    "esr-115.38": "4d5b5107b3d645c65a16d81adde20155451ff0fef7ec63295f30481a214ba03b",
+    "esr-115.39": "81056cba8d2f6b3545cc0ed073e30177eb720f7ec8877ba08c009130dae22022",
     "esr-140.13": "9dd77157022cf463b2c0cce2a168527b2809e9647ada369583b9e459732c26d4",
-    "esr-153.0": "afd71b67bd0483756803ad8b03f3571507f3cee69160142f8fff12cabde00d80",
-    "release-153": "4251b7a1263775465315bdc5d39148243ae30e8a3311449b751735be5299cf7f"
+    "esr-153.0": "160d2ae865a2a0fd06df4c95c947babe429e63fd48029cf2d2c121c5f37f946d",
+    "release-153": "3903bf9c49fa250a04839fdb4d6fd79c0106a5c927a5bb30f0c660151000dc9f"
   },
   "evidence": {
     "source_provenance": "firefox-four-channel-provenance-matrix-0.9.5.md",
@@ -30,37 +30,37 @@
       "source_policy_count": 97,
       "target_policy_count": 112,
       "groups": [
-        {"kind": "target_only_policy", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.38:esr-140.13:target-only:", "members": ["/AllowFileSelectionDialogs", "/AutofillAddressEnabled", "/AutofillCreditCardEnabled", "/ContentAnalysis", "/DefaultSerialGuardSetting", "/DisableEncryptedClientHello", "/HttpAllowlist", "/MicrosoftEntraSSO", "/PostQuantumKeyAgreementEnabled", "/PrintingEnabled", "/PrivateBrowsingModeAvailability", "/SkipTermsOfUse", "/TranslateEnabled"]},
-        {"kind": "target_only_policy", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.38:esr-140.13:target-only:", "members": ["/FirefoxSuggest", "/HttpsOnlyMode"]},
-        {"kind": "changed_path", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.38:esr-140.13:changed:", "members": ["/EnableTrackingProtection/properties/BaselineExceptions", "/EnableTrackingProtection/properties/Category", "/EnableTrackingProtection/properties/ConvenienceExceptions", "/EnableTrackingProtection/properties/SuspectedFingerprinting"]},
-        {"kind": "changed_path", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.38:esr-140.13:changed:", "members": ["/FirefoxHome/properties/SponsoredStories", "/FirefoxHome/properties/Stories", "/FirefoxHome/properties/Weather", "/Permissions/properties/ScreenShare", "/Permissions/properties/VirtualReality", "/SanitizeOnShutdown/oneOf", "/UserMessaging/properties/FirefoxLabs"]}
+        {"kind": "target_only_policy", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.39:esr-140.13:target-only:", "members": ["/AllowFileSelectionDialogs", "/AutofillAddressEnabled", "/AutofillCreditCardEnabled", "/ContentAnalysis", "/DefaultSerialGuardSetting", "/DisableEncryptedClientHello", "/HttpAllowlist", "/MicrosoftEntraSSO", "/PostQuantumKeyAgreementEnabled", "/PrintingEnabled", "/PrivateBrowsingModeAvailability", "/SkipTermsOfUse", "/TranslateEnabled"]},
+        {"kind": "target_only_policy", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.39:esr-140.13:target-only:", "members": ["/FirefoxSuggest", "/HttpsOnlyMode"]},
+        {"kind": "changed_path", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.39:esr-140.13:changed:", "members": ["/EnableTrackingProtection/properties/BaselineExceptions", "/EnableTrackingProtection/properties/Category", "/EnableTrackingProtection/properties/ConvenienceExceptions", "/EnableTrackingProtection/properties/SuspectedFingerprinting"]},
+        {"kind": "changed_path", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.39:esr-140.13:changed:", "members": ["/FirefoxHome/properties/SponsoredStories", "/FirefoxHome/properties/Stories", "/FirefoxHome/properties/Weather", "/Permissions/properties/ScreenShare", "/Permissions/properties/VirtualReality", "/SanitizeOnShutdown/oneOf", "/UserMessaging/properties/FirefoxLabs"]}
       ]
     },
     {
       "target_channel": "esr-153.0",
       "source_policy_count": 97,
-      "target_policy_count": 121,
+      "target_policy_count": 122,
       "groups": [
-        {"kind": "target_only_policy", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.38:esr-153.0:target-only:", "members": ["/AIControls", "/FirefoxSuggest", "/GenerativeAI", "/HttpsOnlyMode", "/IPProtectionAvailable", "/LocalNetworkAccess", "/VisualSearchEnabled", "/XSLTEnabled"]},
-        {"kind": "target_only_policy", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.38:esr-153.0:target-only:", "members": ["/AllowFileSelectionDialogs", "/AutofillAddressEnabled", "/AutofillCreditCardEnabled", "/BrowserDataBackup", "/ContentAnalysis", "/DefaultSerialGuardSetting", "/DisableEncryptedClientHello", "/DisableRemoteImprovements", "/DisableRemoteSettingsAndAcceptSecurityConsequences", "/HttpAllowlist", "/MicrosoftEntraSSO", "/PostQuantumKeyAgreementEnabled", "/PrintingEnabled", "/PrivateBrowsingModeAvailability", "/SkipTermsOfUse", "/TranslateEnabled"]},
-        {"kind": "changed_path", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.38:esr-153.0:changed:", "members": ["/Cookies/properties/Behavior/enum", "/Cookies/properties/BehaviorPrivateBrowsing/enum", "/EnableTrackingProtection/properties/BaselineExceptions", "/EnableTrackingProtection/properties/Category", "/EnableTrackingProtection/properties/ConvenienceExceptions", "/EnableTrackingProtection/properties/SuspectedFingerprinting"]},
-        {"kind": "changed_path", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.38:esr-153.0:changed:", "members": ["/ExtensionSettings/additionalProperties/properties/allowed_permissions", "/ExtensionSettings/additionalProperties/properties/blocked_permissions", "/ExtensionSettings/additionalProperties/properties/runtime_allowed_hosts", "/ExtensionSettings/additionalProperties/properties/runtime_blocked_hosts", "/FirefoxHome/properties/SponsoredStories", "/FirefoxHome/properties/Stories", "/FirefoxHome/properties/Weather", "/Homepage/properties/NewTabOnRestore", "/Permissions/properties/ScreenShare", "/Permissions/properties/VirtualReality", "/SanitizeOnShutdown/oneOf", "/UserMessaging/properties/FirefoxLabs"]}
+        {"kind": "target_only_policy", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.39:esr-153.0:target-only:", "members": ["/AIControls", "/FirefoxSuggest", "/GenerativeAI", "/HttpsOnlyMode", "/IPProtectionAvailable", "/LocalNetworkAccess", "/VisualSearchEnabled", "/XSLTEnabled"]},
+        {"kind": "target_only_policy", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.39:esr-153.0:target-only:", "members": ["/AllowFileSelectionDialogs", "/AutofillAddressEnabled", "/AutofillCreditCardEnabled", "/BrowserDataBackup", "/ContentAnalysis", "/DefaultBrowserSettingEnabled", "/DefaultSerialGuardSetting", "/DisableEncryptedClientHello", "/DisableRemoteImprovements", "/DisableRemoteSettingsAndAcceptSecurityConsequences", "/HttpAllowlist", "/MicrosoftEntraSSO", "/PostQuantumKeyAgreementEnabled", "/PrintingEnabled", "/PrivateBrowsingModeAvailability", "/SkipTermsOfUse", "/TranslateEnabled"]},
+        {"kind": "changed_path", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.39:esr-153.0:changed:", "members": ["/Cookies/properties/Behavior/enum", "/Cookies/properties/BehaviorPrivateBrowsing/enum", "/EnableTrackingProtection/properties/BaselineExceptions", "/EnableTrackingProtection/properties/Category", "/EnableTrackingProtection/properties/ConvenienceExceptions", "/EnableTrackingProtection/properties/SuspectedFingerprinting"]},
+        {"kind": "changed_path", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.39:esr-153.0:changed:", "members": ["/ExtensionSettings/additionalProperties/properties/allowed_permissions", "/ExtensionSettings/additionalProperties/properties/blocked_permissions", "/ExtensionSettings/additionalProperties/properties/runtime_allowed_hosts", "/ExtensionSettings/additionalProperties/properties/runtime_blocked_hosts", "/FirefoxHome/properties/SponsoredStories", "/FirefoxHome/properties/Stories", "/FirefoxHome/properties/Weather", "/Homepage/properties/NewTabOnRestore", "/Permissions/properties/ScreenShare", "/Permissions/properties/VirtualReality", "/SanitizeOnShutdown/oneOf", "/UserMessaging/properties/FirefoxLabs"]}
       ]
     },
     {
       "target_channel": "release-153",
       "source_policy_count": 97,
-      "target_policy_count": 121,
+      "target_policy_count": 122,
       "groups": [
-        {"kind": "target_only_policy", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.38:release-153:target-only:", "members": ["/AIControls", "/FirefoxSuggest", "/GenerativeAI", "/HttpsOnlyMode", "/IPProtectionAvailable", "/LocalNetworkAccess", "/VisualSearchEnabled", "/XSLTEnabled"]},
-        {"kind": "target_only_policy", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.38:release-153:target-only:", "members": ["/AllowFileSelectionDialogs", "/AutofillAddressEnabled", "/AutofillCreditCardEnabled", "/BrowserDataBackup", "/ContentAnalysis", "/DefaultSerialGuardSetting", "/DisableEncryptedClientHello", "/DisableRemoteImprovements", "/DisableRemoteSettingsAndAcceptSecurityConsequences", "/HttpAllowlist", "/MicrosoftEntraSSO", "/PostQuantumKeyAgreementEnabled", "/PrintingEnabled", "/PrivateBrowsingModeAvailability", "/SkipTermsOfUse", "/TranslateEnabled"]},
-        {"kind": "changed_path", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.38:release-153:changed:", "members": ["/Cookies/properties/Behavior/enum", "/Cookies/properties/BehaviorPrivateBrowsing/enum", "/EnableTrackingProtection/properties/BaselineExceptions", "/EnableTrackingProtection/properties/Category", "/EnableTrackingProtection/properties/ConvenienceExceptions", "/EnableTrackingProtection/properties/SuspectedFingerprinting"]},
-        {"kind": "changed_path", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.38:release-153:changed:", "members": ["/ExtensionSettings/additionalProperties/properties/allowed_permissions", "/ExtensionSettings/additionalProperties/properties/blocked_permissions", "/ExtensionSettings/additionalProperties/properties/runtime_allowed_hosts", "/ExtensionSettings/additionalProperties/properties/runtime_blocked_hosts", "/FirefoxHome/properties/SponsoredStories", "/FirefoxHome/properties/Stories", "/FirefoxHome/properties/Weather", "/Homepage/properties/NewTabOnRestore", "/Permissions/properties/ScreenShare", "/Permissions/properties/VirtualReality", "/SanitizeOnShutdown/oneOf", "/UserMessaging/properties/FirefoxLabs"]}
+        {"kind": "target_only_policy", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.39:release-153:target-only:", "members": ["/AIControls", "/FirefoxSuggest", "/GenerativeAI", "/HttpsOnlyMode", "/IPProtectionAvailable", "/LocalNetworkAccess", "/VisualSearchEnabled", "/XSLTEnabled"]},
+        {"kind": "target_only_policy", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.39:release-153:target-only:", "members": ["/AllowFileSelectionDialogs", "/AutofillAddressEnabled", "/AutofillCreditCardEnabled", "/BrowserDataBackup", "/ContentAnalysis", "/DefaultSerialGuardSetting", "/DisableEncryptedClientHello", "/DisableRemoteImprovements", "/DisableRemoteSettingsAndAcceptSecurityConsequences", "/HttpAllowlist", "/MicrosoftEntraSSO", "/PostQuantumKeyAgreementEnabled", "/PrintingEnabled", "/PrivateBrowsingModeAvailability", "/SitePolicies", "/SkipTermsOfUse", "/TranslateEnabled"]},
+        {"kind": "changed_path", "owner": "raw_fallback", "stable_identity_prefix": "bpm095:esr-115.39:release-153:changed:", "members": ["/Cookies/properties/Behavior/enum", "/Cookies/properties/BehaviorPrivateBrowsing/enum", "/EnableTrackingProtection/properties/BaselineExceptions", "/EnableTrackingProtection/properties/Category", "/EnableTrackingProtection/properties/ConvenienceExceptions", "/EnableTrackingProtection/properties/SuspectedFingerprinting"]},
+        {"kind": "changed_path", "owner": "guided", "stable_identity_prefix": "bpm095:esr-115.39:release-153:changed:", "members": ["/ExtensionSettings/additionalProperties/properties/allowed_permissions", "/ExtensionSettings/additionalProperties/properties/blocked_permissions", "/ExtensionSettings/additionalProperties/properties/runtime_allowed_hosts", "/ExtensionSettings/additionalProperties/properties/runtime_blocked_hosts", "/FirefoxHome/properties/SponsoredStories", "/FirefoxHome/properties/Stories", "/FirefoxHome/properties/Weather", "/Homepage/properties/NewTabOnRestore", "/Permissions/properties/ScreenShare", "/Permissions/properties/VirtualReality", "/SanitizeOnShutdown/oneOf", "/UserMessaging/properties/FirefoxLabs"]}
       ]
     }
   ],
   "preset_evidence": {
-    "validated_channels": ["esr-115.38", "esr-140.13", "esr-153.0", "release-153"],
+    "validated_channels": ["esr-115.39", "esr-140.13", "esr-153.0", "release-153"],
     "esr_115_excluded_policy_ids": ["FirefoxSuggest", "HttpsOnlyMode"],
     "esr_115_excluded_paths": ["/EnableTrackingProtection/BaselineExceptions", "/EnableTrackingProtection/Category", "/EnableTrackingProtection/ConvenienceExceptions", "/EnableTrackingProtection/SuspectedFingerprinting", "/FirefoxHome/SponsoredStories", "/FirefoxHome/Stories", "/Permissions/ScreenShare", "/Permissions/VirtualReality", "/UserMessaging/FirefoxLabs"]
   },
@@ -68,7 +68,7 @@
     "benchmark_id": "cis-firefox-esr-gpo",
     "upstream_version": "1.0.0",
     "benchmark_tested_by_cis_against": "Mozilla Firefox 115.10 ESR on Windows 11 Release 23H2",
-    "available_channels": ["release-153", "esr-153.0", "esr-140.13", "esr-115.38"],
+    "available_channels": ["release-153", "esr-153.0", "esr-140.13", "esr-115.39"],
     "unavailable_channels": {},
     "mapping_target_count_per_channel": 53,
     "validated_levels": [1, 2],

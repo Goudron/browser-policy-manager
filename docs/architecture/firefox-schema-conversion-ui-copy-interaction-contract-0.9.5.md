@@ -1,4 +1,4 @@
-# Firefox Schema Conversion UI Copy And Interaction Contract (BPM 0.9.5)
+# Firefox Schema Conversion UI Copy And Interaction Contract (BPM 0.9.5.1)
 
 Status: active normative target; implementation begins in `BPM095-M5-01`.
 
@@ -39,7 +39,7 @@ removed under `remove-explanation`, and none may be replaced by a help link.
 
 An active saved profile on a **supported older ESR** line receives a manual
 recommendation to the lifecycle catalog's exact **latest supported ESR**
-artifact. In this contract both ESR 115.38 and ESR 140.13 recommend ESR 153.0.
+artifact. In this contract both ESR 115.39 and ESR 140.13 recommend ESR 153.0.
 Opening that recommendation performs no write. It leads to a preview; only a
 current applicable preview followed by explicit confirmation can apply.
 

@@ -34,12 +34,12 @@ each retirement successor. For the BPM 0.9.5 four-channel example:
 
 | Field | Example |
 |---|---|
-| Firefox 153 source tag | `mozilla-policy-templates-v8.0` |
+| Firefox 153 source tag | `mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490` |
 | Release channel | `release-153` |
 | Release version/file | `153.0` / `app/schemas/policies/firefox-release-153.json` |
 | Latest ESR / product default | `esr-153.0` / `app/schemas/policies/firefox-esr-153.0.json` |
 | Retained older ESR | `esr-140.13` / `app/schemas/policies/firefox-esr-140.13.json` |
-| Retained legacy-OS ESR | `esr-115.38` / `app/schemas/policies/firefox-esr-115.38.json` |
+| Retained legacy-OS ESR | `esr-115.39` / `app/schemas/policies/firefox-esr-115.39.json` |
 | Latest-ESR recommendations | `esr-115` and `esr-140` → `esr-153` (explicit user preview only) |
 | Prospective retirement chain | `esr-115` → `esr-140` → `esr-153` (Alembic only after retirement) |
 

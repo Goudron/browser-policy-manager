@@ -1,14 +1,14 @@
-# BPM 0.9.5 Native Windows Distribution Contract
+# BPM 0.9.5.1 Native Windows Distribution Contract
 
 Status: active release-delivery contract.
 
 ## Scope
 
-BPM 0.9.5 delivers one native `windows/x64` MSI:
+BPM 0.9.5.1 delivers one native `windows/x64` MSI:
 
 | Supported target | Artifact |
 | --- | --- |
-| Windows 10 x64 and Windows 11 x64 | `browser-policy-manager-0.9.5-windows-x64.msi` |
+| Windows 10 x64 and Windows 11 x64 | `browser-policy-manager-0.9.5.1-windows-x64.msi` |
 
 This installer is a direct Windows installation. WSL is neither installed nor
 used by the MSI. Existing documentation for source deployment through WSL is
@@ -25,7 +25,7 @@ The MSI installs an immutable private payload at
 `C:\Program Files\Browser Policy Manager`:
 
 - verified CPython 3.14.6 and a private base-only virtual environment;
-- BPM 0.9.5 wheel and the Windows-specific locked base resolution;
+- BPM 0.9.5.1 wheel and the Windows-specific locked base resolution;
 - verified product documentation, Alembic configuration, and migration tree;
 - `bpm.cmd`, elevated `bpm-migrate.cmd`, and the pinned WinSW service host;
 - release manifest, licence, and BPM/WinSW third-party notices.
@@ -55,7 +55,7 @@ blocked; Alembic downgrade is not a rollback procedure.
 The MSI build requires a native Windows x64 host, a checksum-verified
 documentation package, WiX 4.0.6, and the two verified upstream binaries
 named in `targets.json`. It produces transient evidence under
-`artifacts/windows-packages/0.9.5/windows-10-11-x64/`.
+`artifacts/windows-packages/0.9.5.1/windows-10-11-x64/`.
 
 The smoke gate uses a clean elevated Windows x64 host to prove silent install,
 no automatic service start or migration, explicit migration, service start,
@@ -71,7 +71,7 @@ then retains a non-secret compatibility receipt for each host.
 `make windows-package-stage-release` accepts only the smoke-passed MSI with a
 valid Authenticode signature and writes the asset, checksum, build environment,
 smoke receipt, and build receipt beneath
-`distributions/releases/0.9.5/assets/windows-10-11-x64/`. It merges the MSI
+`distributions/releases/0.9.5.1/assets/windows-10-11-x64/`. It merges the MSI
 into the common `SHA256SUMS` and `release-manifest.json` alongside Linux
-packages. The publisher uploads those files to draft GitHub Release `v0.9.5`;
+packages. The publisher uploads those files to draft GitHub Release `v0.9.5.1`;
 regular Git and Git LFS are not distribution channels.

@@ -21,10 +21,11 @@ PARTIAL_POLICIES = {
     "GenerativeAI",
     "IPProtectionAvailable",
     "LocalNetworkAccess",
+    "SitePolicies",
     "VisualSearchEnabled",
     "XSLTEnabled",
 }
-ALL_CHANNEL_PARTIAL_POLICIES = PARTIAL_POLICIES | {
+ALL_CHANNEL_PARTIAL_POLICIES = (PARTIAL_POLICIES - {"SitePolicies"}) | {
     "AllowFileSelectionDialogs",
     "AutofillAddressEnabled",
     "AutofillCreditCardEnabled",
@@ -68,13 +69,13 @@ def test_firefox_policy_documentation_inventory_is_current_and_complete():
     assert inventory == build_inventory()
     assert inventory["schema_version"] == 1
     assert inventory["backlog_item"] == "BPM095-M8-04"
-    assert inventory["generated_for_bpm"] == "0.9.5"
+    assert inventory["generated_for_bpm"] == "0.9.5.1"
 
     policies = inventory["policies"]
     assert isinstance(policies, list)
-    assert len(policies) == 121
-    assert len({entry["policy_id"] for entry in policies}) == 121
-    assert len({entry["doc_id"] for entry in policies}) == 121
+    assert len(policies) == 123
+    assert len({entry["policy_id"] for entry in policies}) == 123
+    assert len({entry["doc_id"] for entry in policies}) == 123
     assert all(entry["doc_id"] == f"fx-policy-{entry['policy_id']}" for entry in policies)
     assert all(entry["ui_target"] == f"policy:{entry['policy_id']}" for entry in policies)
 
@@ -105,7 +106,7 @@ def test_firefox_policy_documentation_inventory_records_channel_differences():
 
     assert release_ids - esr_ids == PARTIAL_POLICIES
     assert esr_ids - release_ids == set()
-    assert set(by_id) == esr_ids | release_ids
+    assert set(by_id) == set().union(*schema_ids.values())
     assert {
         policy_id for policy_id, entry in by_id.items() if entry["channel_scope"] == "partial"
     } == ALL_CHANNEL_PARTIAL_POLICIES
@@ -115,6 +116,8 @@ def test_firefox_policy_documentation_inventory_records_channel_differences():
     assert inventory["summary"]["policy_scope_counts"] == {
         "both": 97,
         "partial": 24,
+        "esr-only": 1,
+        "release-only": 1,
     }
 
     for policy_id, entry in by_id.items():
@@ -166,7 +169,7 @@ def test_firefox_policy_documentation_inventory_summary_is_active():
 
     for required in (
         "Four current policy/channel badges derive from one lifecycle catalog",
-        "ESR 115.38 and ESR 140.13 remain",
+        "ESR 115.39 and ESR 140.13 remain",
         "97 policies occur in all four",
         "62 known managed preferences",
         "do not edit manually",
@@ -188,6 +191,6 @@ def test_inventory_owner_check_reports_four_channel_and_artifact_progress() -> N
 
     assert completed.returncode == 0, completed.stdout + completed.stderr
     assert "phase=channels; completed=0/6" in completed.stdout
-    for channel in ("release-153", "esr-153.0", "esr-140.13", "esr-115.38"):
+    for channel in ("release-153", "esr-153.0", "esr-140.13", "esr-115.39"):
         assert f"channel={channel}" in completed.stdout
     assert "artifact=summary; completed=6/6" in completed.stdout

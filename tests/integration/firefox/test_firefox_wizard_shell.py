@@ -6,9 +6,9 @@ from app.web.firefox_wizard_shell import get_wizard_schema_shell_catalog
 def test_wizard_schema_shell_catalog_exposes_steps_and_channels():
     catalog = get_wizard_schema_shell_catalog()
 
-    assert [step["step"] for step in catalog["steps"]] == [2, 3, 4, 5, 6, 7, 8]
+    assert [step["step"] for step in catalog["steps"]] == [2, 3, 4, 5, 6]
     assert set(catalog["channels"]) == {
-        "esr-115.38",
+        "esr-115.39",
         "esr-140.13",
         "esr-153.0",
         "release-153",
@@ -17,7 +17,7 @@ def test_wizard_schema_shell_catalog_exposes_steps_and_channels():
 
 def test_esr_115_shell_contains_its_exact_97_policy_catalog_without_post_115_controls():
     catalog = get_wizard_schema_shell_catalog()
-    esr_115 = catalog["channels"]["esr-115.38"]
+    esr_115 = catalog["channels"]["esr-115.39"]
     policy_ids = {
         item["id"]
         for step in esr_115["steps"].values()
@@ -34,11 +34,9 @@ def test_esr_115_shell_contains_its_exact_97_policy_catalog_without_post_115_con
 def test_wizard_schema_shell_catalog_groups_real_policies_into_step_buckets():
     catalog = get_wizard_schema_shell_catalog()
     release_general = catalog["channels"]["release-153"]["steps"]["2"]
-    release_search = catalog["channels"]["release-153"]["steps"]["4"]
-    release_review = catalog["channels"]["release-153"]["steps"]["8"]
+    release_review = catalog["channels"]["release-153"]["steps"]["6"]
 
     general_recommended = {item["id"] for item in release_general["recommended"]}
-    search_recommended = {item["id"] for item in release_search["recommended"]}
 
     assert "Proxy" in general_recommended
     assert "Authentication" in general_recommended
@@ -46,25 +44,25 @@ def test_wizard_schema_shell_catalog_groups_real_policies_into_step_buckets():
         next(item for item in release_general["recommended"] if item["id"] == "Proxy")["section_id"]
         == "network_access"
     )
-    assert "SearchEngines" in search_recommended
+    assert "SearchEngines" in general_recommended
     assert release_general["preferences"][0]["id"] == "general"
     assert release_review["compatibility"]["raw_fallback"] >= 1
 
 
 def test_wizard_schema_shell_catalog_marks_raw_fallback_items():
     catalog = get_wizard_schema_shell_catalog()
-    review_items = catalog["channels"]["esr-140.13"]["steps"]["8"]["raw_fallback"]
+    review_items = catalog["channels"]["esr-140.13"]["steps"]["6"]["raw_fallback"]
 
     assert review_items
     assert all(item["support_level"] == "fallback" for item in review_items)
-    assert all(item["target"].startswith("shell-policy:8:") for item in review_items)
+    assert all(item["target"].startswith("shell-policy:6:") for item in review_items)
 
 
 def test_firefox_152_serial_guard_stays_in_all_settings_review_fallback():
     catalog = get_wizard_schema_shell_catalog()
 
     for channel in ("esr-140.13", "esr-153.0", "release-153"):
-        review_items = catalog["channels"][channel]["steps"]["8"]["raw_fallback"]
+        review_items = catalog["channels"][channel]["steps"]["6"]["raw_fallback"]
         serial_guard = next(
             item for item in review_items if item["id"] == "DefaultSerialGuardSetting"
         )
@@ -78,22 +76,15 @@ def test_wizard_schema_shell_catalog_exposes_inline_editor_specs_for_phase_three
     step_two_items = (
         catalog["channels"]["release-153"]["steps"]["2"]["recommended"]
         + catalog["channels"]["release-153"]["steps"]["2"]["additional"]
-    )
-    step_three_items = (
-        catalog["channels"]["release-153"]["steps"]["3"]["recommended"]
-        + catalog["channels"]["release-153"]["steps"]["3"]["additional"]
-        + catalog["channels"]["release-153"]["steps"]["3"]["raw_fallback"]
+        + catalog["channels"]["release-153"]["steps"]["2"]["raw_fallback"]
     )
     step_four_items = (
         catalog["channels"]["release-153"]["steps"]["4"]["recommended"]
         + catalog["channels"]["release-153"]["steps"]["4"]["additional"]
+        + catalog["channels"]["release-153"]["steps"]["4"]["raw_fallback"]
     )
-    step_six_items = catalog["channels"]["release-153"]["steps"]["6"]["recommended"]
 
-    by_id = {
-        item["id"]: item
-        for item in step_two_items + step_three_items + step_four_items + step_six_items
-    }
+    by_id = {item["id"]: item for item in step_two_items + step_four_items}
 
     assert by_id["WindowsSSO"]["inline_editor"]["kind"] == "boolean-select"
     assert by_id["AppAutoUpdate"]["inline_editor"]["kind"] == "boolean-select"
@@ -172,15 +163,15 @@ def test_wizard_schema_shell_catalog_exposes_visual_editors_for_guided_scalar_po
     ]
 
 
-def test_wizard_schema_shell_catalog_exposes_complex_inline_editor_specs_for_phase_five():
+def test_wizard_schema_shell_catalog_exposes_complex_inline_editor_specs_for_step_three():
     catalog = get_wizard_schema_shell_catalog()
     step_two_items = (
         catalog["channels"]["release-153"]["steps"]["2"]["recommended"]
         + catalog["channels"]["release-153"]["steps"]["2"]["additional"]
     )
-    step_five_items = catalog["channels"]["release-153"]["steps"]["5"]["recommended"]
+    step_three_items = catalog["channels"]["release-153"]["steps"]["3"]["recommended"]
 
-    by_id = {item["id"]: item for item in step_two_items + step_five_items}
+    by_id = {item["id"]: item for item in step_two_items + step_three_items}
 
     authentication = by_id["Authentication"]["inline_editor"]
     sanitize = by_id["SanitizeOnShutdown"]["inline_editor"]
@@ -204,12 +195,12 @@ def test_wizard_schema_shell_catalog_exposes_complex_inline_editor_specs_for_pha
 
 def test_wizard_schema_shell_catalog_exposes_nested_object_and_cookie_inline_editors():
     catalog = get_wizard_schema_shell_catalog()
-    step_five_items = (
-        catalog["channels"]["release-153"]["steps"]["5"]["recommended"]
-        + catalog["channels"]["release-153"]["steps"]["5"]["additional"]
-        + catalog["channels"]["release-153"]["steps"]["5"]["raw_fallback"]
+    step_three_items = (
+        catalog["channels"]["release-153"]["steps"]["3"]["recommended"]
+        + catalog["channels"]["release-153"]["steps"]["3"]["additional"]
+        + catalog["channels"]["release-153"]["steps"]["3"]["raw_fallback"]
     )
-    by_id = {item["id"]: item for item in step_five_items}
+    by_id = {item["id"]: item for item in step_three_items}
 
     permissions = by_id["Permissions"]["inline_editor"]
     cookies = by_id["Cookies"]["inline_editor"]
@@ -259,12 +250,12 @@ def test_wizard_schema_shell_catalog_exposes_nested_object_and_cookie_inline_edi
 
 def test_wizard_schema_shell_catalog_exposes_recursive_handler_inline_editor():
     catalog = get_wizard_schema_shell_catalog()
-    step_six_items = (
-        catalog["channels"]["release-153"]["steps"]["6"]["recommended"]
-        + catalog["channels"]["release-153"]["steps"]["6"]["additional"]
-        + catalog["channels"]["release-153"]["steps"]["6"]["raw_fallback"]
+    step_four_items = (
+        catalog["channels"]["release-153"]["steps"]["4"]["recommended"]
+        + catalog["channels"]["release-153"]["steps"]["4"]["additional"]
+        + catalog["channels"]["release-153"]["steps"]["4"]["raw_fallback"]
     )
-    by_id = {item["id"]: item for item in step_six_items}
+    by_id = {item["id"]: item for item in step_four_items}
 
     handlers = by_id["Handlers"]["inline_editor"]
 
@@ -285,10 +276,10 @@ def test_wizard_schema_shell_catalog_exposes_recursive_handler_inline_editor():
     assert {field["name"] for field in handlers_field["fields"]} >= {"name", "uriTemplate"}
 
 
-def test_wizard_schema_shell_catalog_exposes_array_inline_editor_specs_for_phase_six():
+def test_wizard_schema_shell_catalog_exposes_array_inline_editor_specs_for_step_four():
     catalog = get_wizard_schema_shell_catalog()
-    step_six_items = catalog["channels"]["release-153"]["steps"]["6"]["additional"]
-    by_id = {item["id"]: item for item in step_six_items}
+    step_four_items = catalog["channels"]["release-153"]["steps"]["4"]["additional"]
+    by_id = {item["id"]: item for item in step_four_items}
 
     bookmarks = by_id["Bookmarks"]["inline_editor"]
     managed_bookmarks = by_id["ManagedBookmarks"]["inline_editor"]
@@ -308,13 +299,13 @@ def test_wizard_schema_shell_catalog_exposes_array_inline_editor_specs_for_phase
     )
 
 
-def test_wizard_schema_shell_catalog_exposes_dictionary_inline_editor_specs_for_phase_seven():
+def test_wizard_schema_shell_catalog_exposes_dictionary_inline_editor_specs_for_step_four():
     catalog = get_wizard_schema_shell_catalog()
-    step_six_items = (
-        catalog["channels"]["release-153"]["steps"]["6"]["recommended"]
-        + catalog["channels"]["release-153"]["steps"]["6"]["additional"]
+    step_four_items = (
+        catalog["channels"]["release-153"]["steps"]["4"]["recommended"]
+        + catalog["channels"]["release-153"]["steps"]["4"]["additional"]
     )
-    by_id = {item["id"]: item for item in step_six_items}
+    by_id = {item["id"]: item for item in step_four_items}
 
     extension_settings = by_id["ExtensionSettings"]["inline_editor"]
 
@@ -371,13 +362,13 @@ def test_wizard_schema_shell_catalog_exposes_dictionary_inline_editor_specs_for_
     )
 
 
-def test_wizard_schema_shell_catalog_exposes_ai_inline_editors_on_step_seven():
+def test_wizard_schema_shell_catalog_exposes_ai_inline_editors_on_step_five():
     catalog = get_wizard_schema_shell_catalog()
-    step_seven_items = (
-        catalog["channels"]["release-153"]["steps"]["7"]["recommended"]
-        + catalog["channels"]["release-153"]["steps"]["7"]["additional"]
+    step_five_items = (
+        catalog["channels"]["release-153"]["steps"]["5"]["recommended"]
+        + catalog["channels"]["release-153"]["steps"]["5"]["additional"]
     )
-    by_id = {item["id"]: item for item in step_seven_items}
+    by_id = {item["id"]: item for item in step_five_items}
 
     ai_controls = by_id["AIControls"]["inline_editor"]
     generative_ai = by_id["GenerativeAI"]["inline_editor"]
@@ -418,13 +409,13 @@ def test_wizard_schema_shell_catalog_exposes_ai_inline_editors_on_step_seven():
     assert visual_search["kind"] == "boolean-select"
 
 
-def test_wizard_schema_shell_catalog_exposes_release_151_privacy_network_controls_on_step_five():
+def test_wizard_schema_shell_catalog_exposes_release_151_privacy_network_controls_on_step_three():
     catalog = get_wizard_schema_shell_catalog()
-    step_five_items = (
-        catalog["channels"]["release-153"]["steps"]["5"]["recommended"]
-        + catalog["channels"]["release-153"]["steps"]["5"]["additional"]
+    step_three_items = (
+        catalog["channels"]["release-153"]["steps"]["3"]["recommended"]
+        + catalog["channels"]["release-153"]["steps"]["3"]["additional"]
     )
-    by_id = {item["id"]: item for item in step_five_items}
+    by_id = {item["id"]: item for item in step_three_items}
 
     assert by_id["IPProtectionAvailable"]["inline_editor"]["kind"] == "boolean-select"
     local_network_access = by_id["LocalNetworkAccess"]["inline_editor"]
@@ -444,11 +435,11 @@ def test_wizard_schema_shell_catalog_exposes_release_151_privacy_network_control
     )
     assert by_id["XSLTEnabled"]["inline_editor"]["kind"] == "boolean-select"
 
-    esr_step_five_items = (
-        catalog["channels"]["esr-140.13"]["steps"]["5"]["recommended"]
-        + catalog["channels"]["esr-140.13"]["steps"]["5"]["additional"]
-        + catalog["channels"]["esr-140.13"]["steps"]["5"]["raw_fallback"]
+    esr_step_three_items = (
+        catalog["channels"]["esr-140.13"]["steps"]["3"]["recommended"]
+        + catalog["channels"]["esr-140.13"]["steps"]["3"]["additional"]
+        + catalog["channels"]["esr-140.13"]["steps"]["3"]["raw_fallback"]
     )
-    esr_ids = {item["id"] for item in esr_step_five_items}
+    esr_ids = {item["id"] for item in esr_step_three_items}
     assert "LocalNetworkAccess" not in esr_ids
     assert "XSLTEnabled" not in esr_ids

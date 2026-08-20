@@ -2,7 +2,7 @@
   "schema_version": 1,
   "contract_id": "bpm-pdf-generation-0.9.3",
   "backlog_item": "BPM093-M14-08",
-  "target_bpm_version": "0.9.5",
+  "target_bpm_version": "0.9.5.1",
   "candidate_root": "documentation/build/pdf",
   "candidate_path_layout": "{locale}/{filename}",
   "dita_format": "html5",

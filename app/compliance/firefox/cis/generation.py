@@ -20,7 +20,7 @@ GENERATED_DIR = BASE_DIR / "generated"
 # Keep this set explicit: adding a future schema channel must fail closed until
 # its complete mapping matrix and generated layers are reviewed.
 CIS_SCHEMA_UNAVAILABLE_REASON = "cis_benchmark_not_validated_for_schema"
-CIS_AVAILABLE_SCHEMA_CHANNELS = frozenset({"release-153", "esr-153.0", "esr-140.13", "esr-115.38"})
+CIS_AVAILABLE_SCHEMA_CHANNELS = frozenset({"release-153", "esr-153.0", "esr-140.13", "esr-115.39"})
 
 
 class CisLayerUnavailableError(ValueError):

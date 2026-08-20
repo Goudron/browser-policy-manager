@@ -201,7 +201,7 @@ def _complete_report() -> dict[str, Any]:
     result = {
         "source": {
             "line_id": "esr-115",
-            "artifact_id": "esr-115.38",
+            "artifact_id": "esr-115.39",
             "schema_bundle_sha256": "3" * 64,
             "validation_schema_sha256": "4" * 64,
         },
@@ -342,7 +342,7 @@ def _prepare_database(target: _RetirementDatabaseTarget) -> tuple[sa.Engine, sa.
                     "name": "active-source",
                     "name_casefold": "active-source",
                     "description": "preserve",
-                    "schema_version": "esr-115.38",
+                    "schema_version": "esr-115.39",
                     "flags": {"Enabled": True, "Nested": {"items": [1, 2]}},
                     "compliance": None,
                     "revision": 3,
@@ -355,7 +355,7 @@ def _prepare_database(target: _RetirementDatabaseTarget) -> tuple[sa.Engine, sa.
                     "name": "archived-source",
                     "name_casefold": "archived-source",
                     "description": None,
-                    "schema_version": "esr-115.38",
+                    "schema_version": "esr-115.39",
                     "flags": {"Enabled": False},
                     "compliance": {"benchmark": "synthetic", "status": "verified"},
                     "revision": 8,
@@ -407,7 +407,7 @@ def _prepare_database(target: _RetirementDatabaseTarget) -> tuple[sa.Engine, sa.
                     "name": "active-empty-source",
                     "name_casefold": "active-empty-source",
                     "description": "empty valid document",
-                    "schema_version": "esr-115.38",
+                    "schema_version": "esr-115.39",
                     "flags": {},
                     "compliance": {
                         "benchmark": "synthetic",
@@ -568,7 +568,7 @@ def test_current_real_proof_does_not_authorize_the_still_supported_runtime_catal
     assert error.value.code == "retirement_manifest_identity_mismatch"
     assert report["status"] == "complete"
     assert report["results"][0]["proof_artifact_digest"] == (
-        "3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb"
+        "9de84bde21e11d161d48297d19cc2447c36ac052d6cef8aed7727b8fa29746ef"
     )
     assert manifest["alembic_target_revision"] is None
     assert manifest["source"]["artifact_id"] == "esr-140.13"

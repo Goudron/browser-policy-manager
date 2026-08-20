@@ -18,7 +18,7 @@ from app.core.config import Settings
 from app.main import create_app
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-TARGET_VERSION = "0.9.5"
+TARGET_VERSION = "0.9.5.1"
 
 
 def _project_version() -> str:

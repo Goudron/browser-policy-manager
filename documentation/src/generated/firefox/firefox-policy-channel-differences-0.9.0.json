@@ -1,23 +1,42 @@
 {
   "backlog_item": "BPM090-M5-05",
   "channels": {
-    "esr-115.38": {
-      "artifact_id": "esr-115.38",
+    "esr-115.39": {
+      "artifact_id": "esr-115.39",
       "family": "esr",
-      "filename": "firefox-esr-115.38.json",
+      "filename": "firefox-esr-115.39.json",
       "is_default": false,
       "is_default_release": false,
       "is_latest_esr": false,
       "is_product_default": false,
-      "label": "ESR 115.38",
+      "label": "ESR 115.39",
       "line_id": "esr-115",
       "line_number": 115,
-      "mozilla_version": "115.38",
+      "mozilla_version": "115.39",
       "policy_count": 97,
       "recommendation_target_line_id": "esr-153",
       "retirement_successor_line_id": "esr-140",
       "schema_source": "mozilla-policy-templates-v5.12",
-      "schema_version": "115.38",
+      "schema_source_provenance": {
+        "inputs": {
+          "linux-policies.json": {
+            "bytes": 11922,
+            "sha256": "da9caaefe75f7f5e54694bccda8a044e62f034dbd5889bcf1595bb08d6a04347",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v5.12/linux/policies.json"
+          },
+          "policy-templates.md": {
+            "bytes": 180619,
+            "sha256": "ce84a587dabc8e995e93206866e8d8ab3c9cf8423bb7dfbe74f20b9b28aaac42",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v5.12/docs/index.md"
+          }
+        },
+        "license_spdx": "MPL-2.0",
+        "license_url": "https://www.mozilla.org/MPL/2.0/",
+        "source_tag": "mozilla-policy-templates-v5.12",
+        "upstream_release_url": "https://github.com/mozilla/policy-templates/releases/tag/v5.12",
+        "upstream_tag": "v5.12"
+      },
+      "schema_version": "115.39",
       "selectable": true,
       "support_state": "supported",
       "type_counts": {
@@ -47,6 +66,25 @@
       "recommendation_target_line_id": "esr-153",
       "retirement_successor_line_id": "esr-153",
       "schema_source": "mozilla-policy-templates-v7.12",
+      "schema_source_provenance": {
+        "inputs": {
+          "linux-policies.json": {
+            "bytes": 14038,
+            "sha256": "5a180e55c6838e6d359ce2223e8e41294ab5ebde439347cf4c08bab459f39e5c",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v7.12/linux/policies.json"
+          },
+          "policy-templates.md": {
+            "bytes": 228056,
+            "sha256": "cebeacfdff92699c53d1fa7ab3b9db76fb2dae4362e3dd929165be1da79e265b",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v7.12/docs/index.md"
+          }
+        },
+        "license_spdx": "MPL-2.0",
+        "license_url": "https://www.mozilla.org/MPL/2.0/",
+        "source_tag": "mozilla-policy-templates-v7.12",
+        "upstream_release_url": "https://github.com/mozilla/policy-templates/releases/tag/v7.12",
+        "upstream_tag": "v7.12"
+      },
       "schema_version": "140.13",
       "selectable": true,
       "support_state": "supported",
@@ -74,22 +112,41 @@
       "line_id": "esr-153",
       "line_number": 153,
       "mozilla_version": "153.0",
-      "policy_count": 121,
+      "policy_count": 122,
       "recommendation_target_line_id": null,
       "retirement_successor_line_id": null,
-      "schema_source": "mozilla-policy-templates-v8.0",
+      "schema_source": "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+      "schema_source_provenance": {
+        "inputs": {
+          "linux-policies.json": {
+            "bytes": 14648,
+            "sha256": "d5a8076b9dc7d4332e757af5cf2702e4cf0acf125a9bc4483aaf6780cee833cc",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/linux/policies.json"
+          },
+          "policy-templates.md": {
+            "bytes": 228223,
+            "sha256": "2e00f3bf14ce2e90b96d9697700c493cc3688fb95aed2af49a000a5b62ef0bc1",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/docs/index.md"
+          }
+        },
+        "license_spdx": "MPL-2.0",
+        "license_url": "https://www.mozilla.org/MPL/2.0/",
+        "source_tag": "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+        "upstream_release_url": "https://github.com/mozilla/policy-templates/commit/a892b621f7f98ee91c8ed84290641f2703e88490",
+        "upstream_tag": "a892b621f7f98ee91c8ed84290641f2703e88490"
+      },
       "schema_version": "153.0",
       "selectable": true,
       "support_state": "supported",
       "type_counts": {
         "array": 8,
-        "boolean": 60,
+        "boolean": 61,
         "integer": 2,
         "object": 37,
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 70,
+        "fallback": 71,
         "mapped": 51
       }
     },
@@ -105,22 +162,41 @@
       "line_id": "release-153",
       "line_number": 153,
       "mozilla_version": "153.0",
-      "policy_count": 121,
+      "policy_count": 122,
       "recommendation_target_line_id": null,
       "retirement_successor_line_id": null,
-      "schema_source": "mozilla-policy-templates-v8.0",
+      "schema_source": "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+      "schema_source_provenance": {
+        "inputs": {
+          "linux-policies.json": {
+            "bytes": 14648,
+            "sha256": "d5a8076b9dc7d4332e757af5cf2702e4cf0acf125a9bc4483aaf6780cee833cc",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/linux/policies.json"
+          },
+          "policy-templates.md": {
+            "bytes": 228223,
+            "sha256": "2e00f3bf14ce2e90b96d9697700c493cc3688fb95aed2af49a000a5b62ef0bc1",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/docs/index.md"
+          }
+        },
+        "license_spdx": "MPL-2.0",
+        "license_url": "https://www.mozilla.org/MPL/2.0/",
+        "source_tag": "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+        "upstream_release_url": "https://github.com/mozilla/policy-templates/commit/a892b621f7f98ee91c8ed84290641f2703e88490",
+        "upstream_tag": "a892b621f7f98ee91c8ed84290641f2703e88490"
+      },
       "schema_version": "153.0",
       "selectable": true,
       "support_state": "supported",
       "type_counts": {
-        "array": 8,
+        "array": 9,
         "boolean": 60,
         "integer": 2,
         "object": 37,
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 70,
+        "fallback": 71,
         "mapped": 51
       }
     }
@@ -237,7 +313,9 @@
       "SanitizeOnShutdown",
       "UserMessaging"
     ],
-    "esr_only": [],
+    "esr_only": [
+      "DefaultBrowserSettingEnabled"
+    ],
     "partial": [
       "AIControls",
       "AllowFileSelectionDialogs",
@@ -264,7 +342,9 @@
       "VisualSearchEnabled",
       "XSLTEnabled"
     ],
-    "release_only": []
+    "release_only": [
+      "SitePolicies"
+    ]
   },
   "provenance_review_backlog_item": "BPM090-M5-09",
   "refresh_backlog_item": "BPM095-M8-04",
@@ -281,13 +361,13 @@
     "generated_topic_section": "a-channel-support"
   },
   "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
-  "source_inventory_sha256": "04f7ace3ac83f4e81ba33ba87503ae3bebf25fb0cee326a92bea42c5e9c6c4da",
+  "source_inventory_sha256": "5d31408e48fcb58eb3a62c2aafce1b64890ac6815ff7aab35e73e0bdab4c37ff",
   "summary": {
     "both_channels": 97,
     "changed_definitions": 8,
-    "esr_only": 0,
+    "esr_only": 1,
     "partial": 24,
-    "release_only": 0
+    "release_only": 1
   },
-  "target_bpm_version": "0.9.5"
+  "target_bpm_version": "0.9.5.1"
 }

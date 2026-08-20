@@ -66,7 +66,7 @@ def test_import_edit_export_preserves_schema_valid_esr_115_values():
         }
     }
     payload = _import_payload("ESR 115 round trip")
-    payload["schema_version"] = "esr-115.38"
+    payload["schema_version"] = "esr-115.39"
     payload["document"] = document
 
     with make_test_client() as client:

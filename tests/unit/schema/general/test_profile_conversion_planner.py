@@ -161,7 +161,7 @@ def test_nested_dynamic_arrays_and_empty_containers_are_classified_once_without_
     }
     original = copy.deepcopy(document)
 
-    result = _plan(document, source="esr-115.38", target="esr-140.13")
+    result = _plan(document, source="esr-115.39", target="esr-140.13")
     plan = result.plan
     source_paths = [path for entry in plan["entries"] for path in entry["source_paths"]]
     target_paths = [path for entry in plan["entries"] for path in entry["target_paths"]]
@@ -182,7 +182,7 @@ def test_nested_dynamic_arrays_and_empty_containers_are_classified_once_without_
 
 
 def test_empty_document_is_positive_and_target_validation_always_binds_candidate():
-    result = _plan({"policies": {}}, source="esr-115.38", target="release-153")
+    result = _plan({"policies": {}}, source="esr-115.39", target="release-153")
     plan = result.plan
 
     assert plan["entries"] == []

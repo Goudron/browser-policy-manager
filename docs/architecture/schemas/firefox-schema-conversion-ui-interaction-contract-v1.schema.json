@@ -22,7 +22,7 @@
     "$schema": {"type": "string", "format": "uri"},
     "schema_version": {"const": 1},
     "contract_id": {"const": "bpm095-firefox-schema-conversion-ui-interactions"},
-    "target_bpm_version": {"const": "0.9.5"},
+    "target_bpm_version": {"const": "0.9.5.1"},
     "status": {"const": "normative-target-preimplementation"},
     "dependencies": {
       "type": "object",

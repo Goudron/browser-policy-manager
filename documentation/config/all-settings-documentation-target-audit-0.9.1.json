@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_id": "bpm-all-settings-documentation-target-audit-0.9.1",
   "backlog_item": "BPM091-M9-01",
-  "target_bpm_version": "0.9.5",
+  "target_bpm_version": "0.9.5.1",
   "status": "accepted",
   "audited_sources": {
     "row_inventory": "app/static/profiles_settings_inventory.js",
@@ -14,11 +14,13 @@
   },
   "coverage": {
     "firefox_policies": {
-      "inventory_count": 121,
+      "inventory_count": 123,
       "both_channel_count": 97,
       "partial_channel_count": 24,
+      "release_only_policy_count": 1,
+      "esr_only_policy_count": 1,
       "expected_target_pattern": "policy:{exact_policy_id}",
-      "generated_target_count": 121,
+      "generated_target_count": 123,
       "current_disposition": "linked",
       "fallback_disposition": "missing_documentation",
       "rule": "Every schema-known policy keeps its exact policy identity, including raw-fallback, invalid, and deprecated row states."
@@ -110,8 +112,8 @@
     }
   ],
   "summary": {
-    "policy_inventory_count": 121,
-    "policy_linked_count": 121,
+    "policy_inventory_count": 123,
+    "policy_linked_count": 123,
     "known_preference_inventory_count": 62,
     "known_preference_linked_count": 62,
     "known_preference_missing_documentation_count": 0,

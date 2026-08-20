@@ -46,7 +46,7 @@ def test_contract_declares_exact_manifest_backed_identity_rules() -> None:
     assert contract["schema_version"] == 1
     assert contract["contract_id"] == "bpm-all-settings-help-target-map-0.9.1"
     assert contract["backlog_item"] == "BPM091-M9-02"
-    assert contract["target_bpm_version"] == "0.9.5"
+    assert contract["target_bpm_version"] == "0.9.5.1"
     assert contract["status"] == "accepted"
     assert contract["known_preference_targets"] == {
         "target_pattern": "known-preference:{exact.preference.id}",
@@ -69,7 +69,12 @@ def test_target_map_covers_exact_release_esr_policy_union_and_known_preferences(
     policy_ids = {item["policy_id"] for item in inventory["policies"]}
     preference_ids = {item["preference_id"] for item in inventory["managed_preferences"]}
 
-    assert inventory["summary"]["policy_scope_counts"] == {"both": 97, "partial": 24}
+    assert inventory["summary"]["policy_scope_counts"] == {
+        "both": 97,
+        "partial": 24,
+        "release-only": 1,
+        "esr-only": 1,
+    }
     assert {
         key.removeprefix("policy:") for key in targets if key.startswith("policy:")
     } == policy_ids

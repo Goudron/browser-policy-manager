@@ -1,8 +1,8 @@
 # Browser Policy Manager Current System Map
 
-Date: 2026-08-12
+Date: 2026-08-20
 
-This is the first orientation point for BPM 0.9.5 work. Read this map before
+This is the first orientation point for BPM 0.9.5.1 work. Read this map before
 opening a subsystem. It names owned entrypoints and narrow verification routes;
 it is not an inventory of dependencies, generated files, caches, secrets, or
 the implementation of every feature. Import direction rules are executable in
@@ -147,13 +147,13 @@ least-privilege service, and Authenticode-required release staging. Start with
 `make windows-package-release-gate`, with focused contracts in
 `tests/unit/tooling/test_windows_distribution.py`.
 
-Native macOS packaging is a separate native-DMG test contour. Its two frozen
+Native macOS packaging is a separate native-DMG distribution contour. Its two frozen
 targets are defined by `distributions/macos/targets.json`; the macOS-only
 builder, mounted-DMG smoke proof, and explicit migration launcher live beneath
 `distributions/macos/`, orchestrated by `tools/macos_distribution.py`. The
-manual CI workflow builds Intel and Apple Silicon artifacts separately as
-unsigned test inputs; release staging awaits a Developer ID signature
-and Apple notarization. Start with `make macos-package-validate`; use
+manual CI workflow builds Intel and Apple Silicon artifacts separately; release
+publication uses the Developer ID signature and Apple notarization boundary.
+Start with `make macos-package-validate`; use
 `make macos-package-release-gate` only on matching native macOS architectures.
 Focused contracts are in `tests/unit/tooling/test_macos_distribution.py`.
 For an on-demand future-version run across all native contours, start with
@@ -173,7 +173,7 @@ version-scoped manual workflow rather than adding native packaging to normal CI.
 | Documentation tooling/portal | `make test-docs` | `make docs-validate` |
 | Native Linux distributions | `make native-package-validate` | `make native-package-release-gate` |
 | Native Windows MSI | `make windows-package-validate` | `make windows-package-release-gate` |
-| Native macOS DMG test artifacts | `make macos-package-validate` | `make macos-package-release-gate` |
+| Native macOS DMG distribution | `make macos-package-validate` | `make macos-package-release-gate` |
 | Performance/repository health | `make profile-performance-gate` | `make repo-health` |
 | Profile frontend graph | `make frontend-profile-graph` | named DOM/browser contracts in `tests/contract/ui/profiles/` |
 | Profile route bundles | `make check-profile-frontend-bundles` | `tests/unit/profiles/test_profile_frontend_bundles.py`, route/browser asset contracts |
@@ -192,7 +192,7 @@ checks named paths and commands; it does not recursively scan the repository.
 
 ```json system-map-contract
 {
-  "version": "0.9.5",
+  "version": "0.9.5.1",
   "paths": [
     "app/main.py",
     "app/core/config.py",

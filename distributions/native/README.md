@@ -1,4 +1,4 @@
-# BPM 0.9.5 native Linux distributions
+# BPM 0.9.5.1 native Linux distributions
 
 This directory owns the source recipes for the five native Linux packages:
 Ubuntu 26.04 LTS, Debian 13.5, Fedora 44, Linux Mint 22.3, and the Manjaro
@@ -35,7 +35,7 @@ make native-package-smoke TARGET=ubuntu-26-04
 Artifacts are first generated as transient release evidence under
 `artifacts/native-packages/`. After every target passes smoke, stage the
 versioned upload set with `make native-package-stage-release`. It copies only
-receipt-verified assets to `distributions/releases/0.9.5/assets/`, writes the
+receipt-verified assets to `distributions/releases/0.9.5.1/assets/`, writes the
 tracked aggregate checksum and manifest, and prepares the GitHub Release asset
 upload. The binaries remain ignored by Git because several are over GitHub's
 ordinary 100 MiB Git-file limit. The Mint target uses only the locally

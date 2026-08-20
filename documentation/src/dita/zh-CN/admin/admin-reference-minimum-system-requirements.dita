@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
-<reference id="admin-reference-minimum-system-requirements" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+<reference id="admin-reference-minimum-system-requirements" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows macos">
   <title>浏览器策略管理器的最低系统要求</title>
-  <shortdesc>这些最低要求适用于 BPM 0.9.4 支持的源码运行流程。</shortdesc>
+  <shortdesc>这些最低要求适用于 BPM 0.9.5.1 支持的发行版。</shortdesc>
   <refbody>
-    <section id="base-platform"><title>浏览器策略管理器基础环境</title><p>请通过受支持的 Linux x86_64 源码流程运行 BPM：Ubuntu 26.04 LTS、Debian 13.5、Fedora Linux 44、Linux Mint 22.3 或当前稳定的 Manjaro 分支。Windows 10 和 Windows 11 仅作为该 Linux 流程的 WSL 2 主机受支持。BPM 不提供原生 Windows 服务或安装程序。源码检出、虚拟环境、数据<uicontrol>库</uicontrol>、日志和文档构建需要 CPython 3.14、两个 CPU 核、4 GiB 内存和 4 GB 可写可用磁盘空间。</p></section>
+    <section id="base-platform"><title>浏览器策略管理器基础环境</title><p>BPM 为七个受支持的操作系统目标提供原生发行版：Ubuntu 26.04 LTS（DEB）、Debian 13.5（DEB）、Fedora Linux 44（RPM）、Linux Mint 22.3（DEB）、当前稳定的 Manjaro 分支（Pacman 软件包），以及 Windows 10 x64 / Windows 11 x64（MSI）和 macOS 14 或更高版本的 Intel x64 与 Apple Silicon arm64（DMG）。原生软件包包含私有运行时；Linux 源码流程使用 CPython 3.14。请为应用、状态数据、日志和文档预留两个 CPU 核、8 GiB 内存和 4 GB 可写可用磁盘空间。</p></section>
     <section id="browser-network-and-access"><title>浏览器、网络和访问</title><p>使用启用 JavaScript 和 HTTPS 的当前桌面浏览器操作 BPM Web 界面和文档门户。受支持的 Firefox 架构列表说明策略数据兼容性，并不要求在 Firefox 中运行 BPM UI。只有安装操作系统软件包或源码依赖项时才需要出站 HTTPS 和 sudo。运行进程需要可写入 BPM 检出目录和已配置数据目录的普通 Linux 用户；不要仅为运行应用程序而使用 root。</p></section>
-    <section id="local-assistant"><title>0.9.4 中的文档助手</title><p>文档助手聊天窗口可作为读者界面使用，但 0.9.4 不交付本地模型、RAG 索引、嵌入、生成式回答、引用或外部来源访问。因此，除 BPM 基础流程外，它不增加 CPU、内存、磁盘、GPU、NPU、云账户或网络要求。</p><p>每个已提交的问题都会显示本地化的本地模型训练提示。请使用独立的确定性文档搜索获取当前产品信息。</p></section>
+    <section id="local-assistant"><title>0.9.5.1 中的文档助手</title><p>文档助手聊天窗口可作为读者界面使用，但 0.9.5.1 不交付本地模型、RAG 索引、嵌入、生成式回答、引用或外部来源访问。因此，除 BPM 基础流程外，它不增加 CPU、内存、磁盘、GPU、NPU、云账户或网络要求。</p><p>每个已提交的问题都会显示本地化的本地模型训练提示。请使用独立的确定性文档搜索获取当前产品信息。</p></section>
   </refbody>
 </reference>

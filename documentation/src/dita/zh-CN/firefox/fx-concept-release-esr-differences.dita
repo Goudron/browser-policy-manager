@@ -4,9 +4,9 @@
   <title>火狐浏览器正式版与长期支持版策略差异</title>
   <shortdesc>使用通道标志和活动架构通道来避免配置在所选 Firefox 系列中不可用的策略。</shortdesc>
   <conbody>
-    <section id="a-current-channels"><title>当前通道</title><p>BPM 支持 Firefox Release 153、Firefox ESR 153.0、Firefox ESR 140.13 和 Firefox ESR 115.38。各 ESR 通道继续独立受支持；BPM 不会在受支持 ESR 之间自动迁移配置档案。ESR 115.38 面向旧版操作系统的有限关键安全支持，并不延长操作系统供应商支持；请在 2027-03-01 重新检查该边界。</p></section>
+    <section id="a-current-channels"><title>当前通道</title><p>BPM 支持 Firefox Release 153、Firefox ESR 153.0、Firefox ESR 140.13 和 Firefox ESR 115.39。各 ESR 通道继续独立受支持；BPM 不会在受支持 ESR 之间自动迁移配置档案。ESR 115.39 面向旧版操作系统的有限关键安全支持，并不延长操作系统供应商支持；请在 2027-03-01 重新检查该边界。</p></section>
     <section id="a-support-badges"><title>支持徽章</title><p>每个生成的策略参考都会列出其确切支持的通道。标有 Release 153 和 ESR 153.0 并不表示支持 ESR 140.13。该信息由维护的 Firefox 策略清单生成，而非来自翻译文本。</p></section>
-    <section id="a-release-only"><title>较早长期支持版中不可用的策略</title><p>以下九项当前策略在 Release 153 和 ESR 153.0 中可用，但在 ESR 140.13 和 ESR 115.38 中不可用：<codeph>AIControls</codeph>、<codeph>BrowserDataBackup</codeph>、<codeph>DisableRemoteImprovements</codeph>、<codeph>DisableRemoteSettingsAndAcceptSecurityConsequences</codeph>、<codeph>GenerativeAI</codeph>、<codeph>IPProtectionAvailable</codeph>、<codeph>LocalNetworkAccess</codeph>、<codeph>VisualSearchEnabled</codeph> 和 <codeph>XSLTEnabled</codeph>。</p></section>
+    <section id="a-release-only"><title>较早长期支持版中不可用的策略</title><p>以下九项当前策略在 Release 153 和 ESR 153.0 中均可用，但在 ESR 140.13 和 ESR 115.39 中不可用：<codeph>AIControls</codeph>、<codeph>BrowserDataBackup</codeph>、<codeph>DisableRemoteImprovements</codeph>、<codeph>DisableRemoteSettingsAndAcceptSecurityConsequences</codeph>、<codeph>GenerativeAI</codeph>、<codeph>IPProtectionAvailable</codeph>、<codeph>LocalNetworkAccess</codeph>、<codeph>VisualSearchEnabled</codeph> 和 <codeph>XSLTEnabled</codeph>。<codeph>SitePolicies</codeph> 仅在 Release 153 中可用；<codeph>DefaultBrowserSettingEnabled</codeph> 仅在 ESR 153.0 中可用。</p></section>
     <section id="a-changed-definitions"><title>更改的定义</title><p>公共策略 <codeph>Cookies</codeph>、<codeph>ExtensionSettings</codeph> 和 <codeph>Homepage</codeph> 会随通道而变化。Release 153 和 ESR 153.0 还包括当前的扩展权限和主机访问控制。</p></section>
     <section id="a-user-action"><title>用户操作</title><p>请在选择策略前选定 Firefox 架构通道，检查通道徽章，并在导出前重新验证。用户可以将任一不同的当前受支持工件选为手动转换目标，但预览可能报告未更改项目、已转换项目或阻止操作。只有适用、对目标有效且没有阻止项的预览才能被明确确认并应用；不可用策略绝不会被静默删除。</p></section>
   </conbody>

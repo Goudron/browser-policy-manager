@@ -1,11 +1,11 @@
-# Firefox Schema Lifecycle Documentation Impact Inventory (BPM 0.9.5)
+# Firefox Schema Lifecycle Documentation Impact Inventory (BPM 0.9.5.1)
 
 Status: accepted M8-01 authoring inventory. This is the ownership handoff for
 M8-02 through M8-06, not reader-facing product documentation and not authority
 to alter generated documentation artifacts.
 
 The normative machine-readable inventory is
-[`firefox-schema-lifecycle-documentation-impact-inventory-0.9.5.json`](firefox-schema-lifecycle-documentation-impact-inventory-0.9.5.json).
+[`.9.5.json`](.9.5.json).
 It derives product facts from the active lifecycle catalog, conversion contract,
 UI interaction contract, CIS inventory, and retirement safety contract.
 

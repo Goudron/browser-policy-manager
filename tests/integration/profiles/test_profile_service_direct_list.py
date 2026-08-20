@@ -92,7 +92,7 @@ async def test_profile_read_recommendation_is_read_only_and_legacy_unknown_is_sa
 ):
     older = await ProfileService.create(service_session, _mk("esr-140.13", "REC-Older", flags={}))
     archived = await ProfileService.create(
-        service_session, _mk("esr-115.38", "REC-Archived", flags={})
+        service_session, _mk("esr-115.39", "REC-Archived", flags={})
     )
     assert await ProfileService.soft_delete(service_session, archived.id)
     legacy = Profile(

@@ -324,7 +324,7 @@ def test_profile_route_variants_are_observable_isolated_and_within_budget(
     advanced = settings_focus.require("all-settings-catalog-advanced")
     assert advanced.attr("data-settings-focus-open") == "true"
     assert not advanced.has_attr("hidden")
-    assert not settings_focus.require("settings-schema-shell-step-5-details").has_attr("hidden")
+    assert not settings_focus.require("settings-schema-shell-step-3-details").has_attr("hidden")
     assert not settings_focus.require("settings-advanced-schema-privacy-security-details").has_attr(
         "hidden"
     )

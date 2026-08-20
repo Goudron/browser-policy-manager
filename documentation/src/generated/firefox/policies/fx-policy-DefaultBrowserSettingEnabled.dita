@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="fx-policy-DefaultBrowserSettingEnabled" audience="user" product="bpm-0-9-0" platform="web" props="firefox-esr" otherprops="policy(DefaultBrowserSettingEnabled)">
+  <title>DefaultBrowserSettingEnabled</title>
+  <shortdesc>Schema-grounded skeleton for the Firefox <codeph>DefaultBrowserSettingEnabled</codeph> policy.</shortdesc>
+  <refbody>
+    <section id="a-purpose">
+      <title>Purpose</title>
+    <!-- BPM-HAND-REGION-START purpose -->
+      <p><codeph>DefaultBrowserSettingEnabled</codeph> has a generated schema skeleton. Reviewed runtime guidance is added in the authored Firefox Policy Guide tasks.</p>
+    <!-- BPM-HAND-REGION-END purpose -->
+    </section>
+    <section id="a-bpm-location">
+      <title>BPM location</title>
+      <p>UI target: <codeph>policy:DefaultBrowserSettingEnabled</codeph>.</p>
+      <dl>
+        <dlentry><dt><codeph>esr-153.0</codeph></dt><dd>Section <codeph>advanced</codeph>, subsection <codeph>unmapped</codeph>, support <codeph>fallback</codeph>, widget <codeph>toggle</codeph>, complexity <codeph>advanced</codeph>.</dd></dlentry>
+      </dl>
+    </section>
+    <section id="a-value-shape">
+      <title>Value shape</title>
+      <p>Schema value type: <codeph>boolean</codeph>. Unknown nested fields preserved by BPM UI metadata: <codeph>false</codeph>.</p>
+    </section>
+    <section id="a-channel-support">
+      <title>Release and ESR support</title>
+      <p outputclass="channel-support-badge channel-scope-esr-only">Supported in Firefox ESR 153.0; absent from Firefox Release 153, Firefox ESR 115.39, Firefox ESR 140.13.</p>
+      <p>Channel scope: <codeph>esr-only</codeph>.</p>
+      <p props="firefox-release">Firefox Release 153 does not include this policy in the bundled schema.</p>
+      <p props="firefox-esr">Firefox ESR 115.39 does not include this policy in the bundled schema.</p>
+      <p props="firefox-esr">Firefox ESR 140.13 does not include this policy in the bundled schema.</p>
+      <p props="firefox-esr">Firefox ESR 153.0 supports this policy.</p>
+      <ul>
+        <li><codeph>esr-153.0</codeph>: type <codeph>boolean</codeph>, min <codeph>153.0</codeph>, max <codeph>none</codeph>, deprecated <codeph>false</codeph>, UI <codeph>advanced/unmapped</codeph> as <codeph>fallback</codeph> with <codeph>toggle</codeph>.</li>
+        <li outputclass="channel-absence-note">This policy is not available on every supported BPM Firefox schema channel and must retain its channel-specific availability.</li>
+      </ul>
+    </section>
+    <section id="a-examples">
+      <title>Examples</title>
+      <sectiondiv outputclass="schema-valid-example"><p><codeph>esr-153.0</codeph> schema-valid example <codeph>fx-policy-DefaultBrowserSettingEnabled-esr-153.0</codeph>:</p><codeblock outputclass="language-json">{
+  &quot;policies&quot;: {
+    &quot;DefaultBrowserSettingEnabled&quot;: true
+  }
+}</codeblock></sectiondiv>
+    <!-- BPM-HAND-REGION-START reviewed-examples -->
+      <p>Reviewed example guidance can add practical notes without changing the schema-valid generated examples above.</p>
+    <!-- BPM-HAND-REGION-END reviewed-examples -->
+    </section>
+    <section id="a-validation">
+      <title>Validation</title>
+    <!-- BPM-HAND-REGION-START validation -->
+      <p>BPM validates this policy at <codeph>policies.DefaultBrowserSettingEnabled</codeph> against the selected Firefox schema channel. Reviewed validation guidance is pending.</p>
+    <!-- BPM-HAND-REGION-END validation -->
+    </section>
+    <section id="a-caveats">
+      <title>Caveats</title>
+    <!-- BPM-HAND-REGION-START caveats -->
+      <p>Reviewed deployment, schema, unsupported-channel, and raw fallback caveats are pending.</p>
+    <!-- BPM-HAND-REGION-END caveats -->
+    </section>
+    <section id="a-interactions">
+      <title>Interactions</title>
+    <!-- BPM-HAND-REGION-START interactions -->
+      <p>Reviewed related-policy, managed-preference, conflict, and override guidance is pending.</p>
+    <!-- BPM-HAND-REGION-END interactions -->
+    </section>
+    <section id="a-cis-links">
+      <title>CIS links</title>
+    <!-- BPM-HAND-REGION-START cis-links -->
+      <p>No reviewed CIS recommendation links are assigned in this skeleton.</p>
+    <!-- BPM-HAND-REGION-END cis-links -->
+    </section>
+    <section id="a-provenance">
+      <title>Provenance</title>
+      <ul>
+        <li>Source family: <codeph>mozilla-policy-schema-facts</codeph>.</li>
+        <li>Reuse mode: <codeph>generated-facts</codeph> with BPM-authored guidance regions.</li>
+        <li>License: <codeph>MPL-2.0</codeph>.</li>
+        <li>BPM is not affiliated with or endorsed by Mozilla.</li>
+        <li>Inventory backlog item: <codeph>BPM095-M8-04</codeph>.</li>
+        <li>Generated for BPM: <codeph>0.9.5.1</codeph>.</li>
+        <li>Mozilla source locator: <codeph>https://github.com/mozilla/policy-templates/commit/a892b621f7f98ee91c8ed84290641f2703e88490</codeph>; source retrieved on <codeph>2026-08-20</codeph>.</li>
+        <li><codeph>esr-153.0</codeph>: Mozilla version <codeph>153.0</codeph>, schema source <codeph>mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490</codeph>, schema SHA-256 <codeph>a658e09121fa2db45553869c8710869fc92f95b7db050c27cf3bbcb09a5c565d</codeph>.</li>
+      </ul>
+    </section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</reference>

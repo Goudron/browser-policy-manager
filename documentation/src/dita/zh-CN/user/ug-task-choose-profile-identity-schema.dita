@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>确认您正在编辑预期的配置文件草稿。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>输入清晰的配置文件名称。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>选择 Firefox 架构通道：Release 153、ESR 153.0、ESR 140.13 或 ESR 115.38。</cmd><info><p>预期结果：引导配置文件保持一致。ESR 115.38 用于旧版操作系统的有限关键安全支持，不延长操作系统供应商支持；BPM 将在 2027-03-01 重新检查该边界。</p></info></step>
+      <step><cmd>选择 Firefox 架构通道：Release 153、ESR 153.0、ESR 140.13 或 ESR 115.39。</cmd><info><p>预期结果：引导配置文件保持一致。ESR 115.39 用于旧版操作系统的有限关键安全支持，不延长操作系统供应商支持；BPM 将在 2027-03-01 重新检查该边界。</p></info></step>
       <step><cmd>在继续之前检查所选通道是否更改可见控件。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
     <result><p>指导草案具有稳定的身份和模式通道。</p></result>

@@ -28,7 +28,7 @@ EXPECTED_ARTIFACT_IDS = (
     "release-153",
     "esr-153.0",
     "esr-140.13",
-    "esr-115.38",
+    "esr-115.39",
 )
 CURRENT_RUNTIME_ARTIFACT_IDS = EXPECTED_ARTIFACT_IDS
 
@@ -121,7 +121,7 @@ def _public_catalog(catalog: dict[str, Any]) -> dict[str, Any]:
 def _assert_catalog_is_valid(catalog: dict[str, Any]) -> None:
     assert catalog["schema_version"] == 1
     assert catalog["contract_id"] == "bpm095-firefox-schema-lifecycle-catalog"
-    assert catalog["target_bpm_version"] == "0.9.5"
+    assert catalog["target_bpm_version"] == "0.9.5.1"
     assert catalog["status"] == "active-runtime-catalog"
     assert catalog["implementation"] == {
         "phase": "m3-03-runtime-wired",
@@ -167,8 +167,11 @@ def _assert_catalog_is_valid(catalog: dict[str, Any]) -> None:
         assert row["selectable"] is (support["state"] == "supported")
 
         source = row["source"]
-        assert source["source_tag"].startswith("mozilla-policy-templates-v")
-        assert source["upstream_tag"].startswith("v")
+        assert re.fullmatch(
+            r"mozilla-policy-templates-(?:v\d+(?:\.\d+)*|master-[0-9a-f]{40})",
+            source["source_tag"],
+        )
+        assert re.fullmatch(r"(?:v\d+(?:\.\d+)*|[0-9a-f]{40})", source["upstream_tag"])
         for input_name in ("documentation_input", "linux_policies_input"):
             input_spec = source[input_name]
             assert input_spec["local_path"].startswith("data/upstream/policy-templates/")
@@ -251,7 +254,7 @@ def _assert_catalog_is_valid(catalog: dict[str, Any]) -> None:
     assert public_catalog["default_channel"] == "esr-153.0"
     assert public_catalog["default_release_channel"] == "release-153"
     assert public_catalog["latest_esr_channel"] == "esr-153.0"
-    assert public_catalog["esr_channels"] == ["esr-153.0", "esr-140.13", "esr-115.38"]
+    assert public_catalog["esr_channels"] == ["esr-153.0", "esr-140.13", "esr-115.39"]
     assert public_catalog["default_label"] == "ESR 153.0"
     assert [set(option) for option in public_catalog["options"]] == [
         set(catalog["serialization"]["option_fields"])
@@ -405,12 +408,12 @@ def test_generated_four_artifacts_match_catalog_source_and_output_identity() -> 
 
 def test_esr_115_is_generated_and_wired_as_a_runtime_artifact() -> None:
     catalog = _catalog()
-    generated = next(row for row in catalog["channels"] if row["artifact_id"] == "esr-115.38")
+    generated = next(row for row in catalog["channels"] if row["artifact_id"] == "esr-115.39")
     assert generated["line_id"] == "esr-115"
-    assert generated["support"]["browser_version"] == "115.38.0esr"
+    assert generated["support"]["browser_version"] == "115.39.0esr"
     assert generated["source"]["source_tag"] == "mozilla-policy-templates-v5.12"
     assert (SCHEMAS_DIR / generated["source"]["filename"]).exists()
-    assert "esr-115.38" in {channel.value for channel in SCHEMA_CHANNELS}
+    assert "esr-115.39" in {channel.value for channel in SCHEMA_CHANNELS}
 
     target_channels = {target["channel"] for target in _load_json(TARGETS_PATH)["targets"]}
     input_tags = {
@@ -421,10 +424,10 @@ def test_esr_115_is_generated_and_wired_as_a_runtime_artifact() -> None:
 
     provenance = PROVENANCE_PATH.read_text(encoding="utf-8")
     for required in (
-        "`esr-115.38`",
-        "`115.38.0esr`",
+        "`esr-115.39`",
+        "`115.39.0esr`",
         "`mozilla-policy-templates-v5.12`",
-        "`firefox-esr-115.38.json`",
+        "`firefox-esr-115.39.json`",
         "March 2027",
     ):
         assert required in provenance

@@ -11,7 +11,7 @@ def test_docker_distribution_keeps_release_payload_and_explicit_migration_bounda
     entrypoint = (DOCKER_ROOT / "entrypoint.sh").read_text(encoding="utf-8")
 
     assert "python:3.14.3-slim-bookworm@sha256:" in dockerfile
-    assert "COPY documentation/dist/bpm-documentation-0.9.5.tar.gz" in dockerfile
+    assert "COPY documentation/dist/bpm-documentation-0.9.5.1.tar.gz" in dockerfile
     assert "COPY alembic ./alembic" in dockerfile
     assert "USER bpm" in dockerfile
     assert 'VOLUME ["/var/lib/bpm"]' in dockerfile

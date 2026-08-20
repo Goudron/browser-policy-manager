@@ -1,4 +1,4 @@
-# Firefox Pairwise Profile Conversion Contract (BPM 0.9.5)
+# Firefox Pairwise Profile Conversion Contract (BPM 0.9.5.1)
 
 Status: active M4-06 directed-matrix contract. The deterministic planner,
 bounded registry, read-only preview API, atomic apply API, and repeatable

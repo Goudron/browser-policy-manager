@@ -46,4 +46,9 @@ def test_all_settings_category_catalog_maps_existing_sections_without_guided_ste
         "sync": "users-addons-sites",
     }
     assert catalog["schema_shell_steps_by_category_id"]["browser-access"] == [2]
+    assert catalog["schema_shell_steps_by_category_id"]["home-startup"] == [2]
+    assert catalog["schema_shell_steps_by_category_id"]["search-navigation"] == [2]
+    assert catalog["schema_shell_steps_by_category_id"]["privacy-security"] == [3]
+    assert catalog["schema_shell_steps_by_category_id"]["users-addons-sites"] == [4]
+    assert catalog["schema_shell_steps_by_category_id"]["ai-smart-features"] == [5]
     assert catalog["schema_shell_steps_by_category_id"]["raw-unmapped"] == [8]

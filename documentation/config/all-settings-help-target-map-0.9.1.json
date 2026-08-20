@@ -2,12 +2,12 @@
   "schema_version": 1,
   "contract_id": "bpm-all-settings-help-target-map-0.9.1",
   "backlog_item": "BPM091-M9-02",
-  "target_bpm_version": "0.9.5",
+  "target_bpm_version": "0.9.5.1",
   "status": "accepted",
   "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
   "policy_targets": {
     "target_pattern": "policy:{exact_policy_id}",
-    "coverage": "Exact union of Release 153, ESR 153.0, ESR 140.13, and ESR 115.38 policy IDs from the active lifecycle catalog.",
+    "coverage": "Exact union of Release 153, ESR 153.0, ESR 140.13, and ESR 115.39 policy IDs from the active lifecycle catalog.",
     "channel_rule": "Release-only policies retain a target; channel availability remains inventory and row-state metadata.",
     "deprecated_rule": "A deprecated policy retains its exact target while it remains in either current channel inventory.",
     "removed_rule": "A policy removed from both current channel inventories must not retain a generated target."
@@ -54,8 +54,8 @@
     "documentation_build": {
       "commands": ["make docs-validate", "make docs-build"],
       "result": "pass",
-      "target_count": 520,
-      "policy_target_count": 121,
+      "target_count": 522,
+      "policy_target_count": 123,
       "known_preference_target_count": 62
     },
     "incidental_drift_fixed": "Raised the deterministic per-locale search-index ceiling to 4,100,000 bytes after the M10-06 full localized-prose corpus made the 161-topic zh-CN index 3,980,853 bytes; all other search budgets remain unchanged."

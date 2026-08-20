@@ -62,8 +62,8 @@ v7.12 Firefox 140 baseline.
 
 | BPM channel | User-visible label | Firefox version | Policy-template provenance | Default role |
 | --- | --- | --- | --- | --- |
-| `release-153` | Release 153 | `153.0` | `mozilla-policy-templates-v8.0` | Default Release channel |
-| `esr-153.0` | ESR 153.0 | `153.0` | `mozilla-policy-templates-v8.0` | Selectable current ESR; never an automatic migration target |
+| `release-153` | Release 153 | `153.0` | `mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490` | Default Release channel |
+| `esr-153.0` | ESR 153.0 | `153.0` | `mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490` | Selectable current ESR; never an automatic migration target |
 | `esr-140.13` | ESR 140.13 | `140.13` | `mozilla-policy-templates-v7.12`, validated as the frozen Firefox 140 policy baseline | Default schema channel during the dual-ESR transition |
 
 All three rows are first-class supported schemas. An ESR label is not an alias, and both ESR rows

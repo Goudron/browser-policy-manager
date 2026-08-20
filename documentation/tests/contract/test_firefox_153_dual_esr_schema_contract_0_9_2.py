@@ -17,7 +17,7 @@ def test_firefox_153_dual_esr_contract_declares_three_independent_channels() -> 
         "`release-153`",
         "`esr-153.0`",
         "`esr-140.13`",
-        "`mozilla-policy-templates-v8.0`",
+        "`mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490`",
         "`mozilla-policy-templates-v7.12`",
     ):
         assert required in contract

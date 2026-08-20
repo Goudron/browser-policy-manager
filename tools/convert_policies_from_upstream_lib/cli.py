@@ -72,7 +72,11 @@ def generate_schema_targets(targets: tuple[SchemaBuildTarget, ...]) -> None:
                     )
             policy_cache[source_key] = schema_policies
 
-        selected_policies = filter_policies_for_target_version(schema_policies, target.version)
+        selected_policies = filter_policies_for_target_version(
+            schema_policies,
+            target.version,
+            target_channel=target.channel,
+        )
         print(
             "phase schema-policy-filter: "
             f"channel={target.channel} [{len(selected_policies)}/{len(schema_policies)}]",
@@ -85,7 +89,11 @@ def generate_schema_targets(targets: tuple[SchemaBuildTarget, ...]) -> None:
             policies=selected_policies,
             schema_metadata=target.schema_metadata,
         )
-        apply_documented_schema_overrides(schema, target.version)
+        apply_documented_schema_overrides(
+            schema,
+            target.version,
+            target_channel=target.channel,
+        )
         target.output.parent.mkdir(parents=True, exist_ok=True)
         target.output.write_text(
             json.dumps(schema, indent=2, ensure_ascii=False),

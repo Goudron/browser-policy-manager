@@ -1,19 +1,19 @@
-# BPM 0.9.5 Native Linux Distribution Contract
+# BPM 0.9.5.1 Native Linux Distribution Contract
 
 Status: active release-delivery contract.
 
 ## Targets and scope
 
-BPM 0.9.5 supplies native `linux/amd64` packages for the five Linux targets
+BPM 0.9.5.1 supplies native `linux/amd64` packages for the five Linux targets
 already selected and validated for source installation:
 
 | Target | Artifact format | Artifact name |
 | --- | --- | --- |
-| Ubuntu 26.04 LTS | Debian package | `browser-policy-manager_0.9.5-1~ubuntu26.04_amd64.deb` |
-| Debian 13.5 | Debian package | `browser-policy-manager_0.9.5-1~debian13_amd64.deb` |
-| Fedora 44 | RPM | `browser-policy-manager-0.9.5-1.fc44.x86_64.rpm` |
-| Linux Mint 22.3 | Debian package | `browser-policy-manager_0.9.5-1~linuxmint22.3_amd64.deb` |
-| Manjaro stable | Arch package | `browser-policy-manager-0.9.5-1-x86_64.pkg.tar.zst` |
+| Ubuntu 26.04 LTS | Debian package | `browser-policy-manager_0.9.5.1-1~ubuntu26.04_amd64.deb` |
+| Debian 13.5 | Debian package | `browser-policy-manager_0.9.5.1-1~debian13_amd64.deb` |
+| Fedora 44 | RPM | `browser-policy-manager-0.9.5.1-1.fc44.x86_64.rpm` |
+| Linux Mint 22.3 | Debian package | `browser-policy-manager_0.9.5.1-1~linuxmint22.3_amd64.deb` |
+| Manjaro stable | Arch package | `browser-policy-manager-0.9.5.1-1-x86_64.pkg.tar.zst` |
 
 `distributions/native/targets.json` is the machine-readable source of truth
 for names, target provenance, runtime dependencies, and the private runtime.
@@ -32,9 +32,9 @@ Every package contains the same release payload:
 
 - checksum-verified CPython 3.14.6 at `/opt/bpm/runtime`;
 - a private base-only virtual environment at `/opt/bpm/venv`;
-- BPM 0.9.5 wheel and exact base runtime dependency resolution;
+- BPM 0.9.5.1 wheel and exact base runtime dependency resolution;
 - Alembic configuration and the complete released migration tree;
-- the verified `bpm-documentation-0.9.5.tar.gz` tree at
+- the verified `bpm-documentation-0.9.5.1.tar.gz` tree at
   `/opt/bpm/documentation/site`;
 - immutable release manifest, license, and third-party notices under `/opt/bpm`;
 - operator configuration at `/etc/bpm/bpm.env`;
@@ -85,16 +85,16 @@ make native-package-smoke TARGET=<target>
 
 The builder mounts source read-only, isolates an amd64 target container, limits
 CPU, memory, process, and open-file resources, and writes only transient
-artifacts under `artifacts/native-packages/0.9.5/<target>/`. The receipt
+artifacts under `artifacts/native-packages/0.9.5.1/<target>/`. The receipt
 contains the source revision, documentation checksum, frozen image/ISO
 evidence, artifact checksum, architecture, and explicit-migration contract.
 
 After all five packages pass their target smoke, `make native-package-stage-release`
-creates the versioned release store at `distributions/releases/0.9.5/`.
+creates the versioned release store at `distributions/releases/0.9.5.1/`.
 `release-manifest.json` and `SHA256SUMS` are tracked delivery metadata;
 `assets/` is ignored local upload staging containing the package, its checksum,
 the target build-environment receipt, and its build receipt. The release
-publisher uploads that exact staging set to the GitHub Release tag `v0.9.5`.
+publisher uploads that exact staging set to the GitHub Release tag `v0.9.5.1`.
 It must not commit the package binaries as ordinary Git blobs: GitHub blocks
 files over 100 MiB and multiple BPM packages exceed this. GitHub Release assets
 permit individual files under 2 GiB, so they are the release channel; Git LFS

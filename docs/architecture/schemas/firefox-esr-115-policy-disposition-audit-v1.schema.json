@@ -5,7 +5,7 @@
   "additionalProperties": false,
   "required": ["schema_version", "contract_id", "target_bpm_version", "status", "source_channel", "artifacts", "evidence", "owner_dispositions", "comparisons", "preset_evidence", "cis_evidence"],
   "properties": {
-    "$schema": {"type": "string"}, "schema_version": {"const": 1}, "contract_id": {"const": "bpm095-firefox-esr-115-policy-disposition-audit"}, "target_bpm_version": {"const": "0.9.5"}, "status": {"const": "active-audit-and-runtime-guard"}, "source_channel": {"const": "esr-115.38"},
+    "$schema": {"type": "string"}, "schema_version": {"const": 1}, "contract_id": {"const": "bpm095-firefox-esr-115-policy-disposition-audit"}, "target_bpm_version": {"const": "0.9.5.1"}, "status": {"const": "active-audit-and-runtime-guard"}, "source_channel": {"const": "esr-115.39"},
     "artifacts": {"type": "object", "minProperties": 4, "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
     "evidence": {"type": "object", "additionalProperties": {"type": "string"}},
     "owner_dispositions": {"type": "object", "required": ["guided", "manual", "raw_fallback", "unsupported_by_channel", "preset", "cis"], "additionalProperties": {"type": "string"}},

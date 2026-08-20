@@ -2,13 +2,13 @@
   "schema_version": 1,
   "contract_id": "bpm-future-distribution-documentation-layout-0.9.3",
   "backlog_item": "BPM093-M14-07",
-  "target_bpm_version": "0.9.5",
+  "target_bpm_version": "0.9.5.1",
   "status": "implemented-and-delivered",
   "delivery_root": "distributions/documentation",
   "release_directory": "{bpm_version}",
   "tracked_release_versions": ["0.9.3"],
-  "preserved_handoff_versions": ["0.9.4"],
-  "handoff_target_version": "0.9.5",
+  "preserved_handoff_versions": ["0.9.4", "0.9.5"],
+  "handoff_target_version": "0.9.5.1",
   "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
   "guides": [
     {

@@ -1,4 +1,4 @@
-# BPM 0.9.5 Dependency, Toolchain, And Browser Currency Decision
+# BPM 0.9.5.1 Dependency, Toolchain, And Browser Currency Decision
 
 Date: 2026-08-10
 
@@ -145,7 +145,7 @@ lock/checksum/third-party evidence together, never loosen the line.
 ## Pinned Firefox Artifacts And Geckodriver
 
 The product-details feed reports Release `153.0.3`, ESR 140 `140.13.0esr`,
-ESR 153 `153.0esr`, and ESR 115 `115.38.0esr` on the review date. ESR 115 is
+ESR 153 `153.0esr`, and ESR 115 `115.39.0esr` on the review date. ESR 115 is
 not a current live-browser manifest entry: its independent provenance and
 checksum are owned by BPM095-M2-02/M3-01/M7-04, so M1-04 must not invent or
 download it. Browser checksums below remain the exact manifest provenance.
@@ -155,7 +155,7 @@ download it. Browser checksums below remain the exact manifest provenance.
 | Firefox Release | `153.0.1` / not installed / `153.0.3` | [Mozilla feed](https://product-details.mozilla.org/1.0/firefox_versions.json) and [pinned archive](https://archive.mozilla.org/pub/firefox/releases/153.0.1/linux-x86_64/en-US/firefox-153.0.1.tar.xz); MPL-2.0; Linux x86_64 only. | Upstream review | **Approve update to 153.0.3.** Record official archive URL/SHA-256, provision atomically, exact-version probe, Release live and AMO-canary suites. |
 | Firefox ESR 153 | `153.0esr` / not installed / `153.0esr` | [Mozilla feed](https://product-details.mozilla.org/1.0/firefox_versions.json) and [pinned archive](https://archive.mozilla.org/pub/firefox/releases/153.0esr/linux-x86_64/en-US/firefox-153.0esr.tar.xz); MPL-2.0; Linux x86_64 only. | Upstream review | Retain exact pin/checksum. Atomic provision, version probe, ESR 153 live and AMO-canary suites. |
 | Firefox ESR 140 | `140.13.0esr` / not installed / `140.13.0esr` | [Mozilla feed](https://product-details.mozilla.org/1.0/firefox_versions.json) and [pinned archive](https://archive.mozilla.org/pub/firefox/releases/140.13.0esr/linux-x86_64/en-US/firefox-140.13.0esr.tar.xz); MPL-2.0; Linux x86_64 only. | Upstream review | Retain exact pin/checksum. Atomic provision, version probe, ESR 140 live and AMO-canary suites. |
-| Firefox ESR 115 channel | not declared / not installed / `115.38.0esr` | [Mozilla feed](https://product-details.mozilla.org/1.0/firefox_versions.json); MPL-2.0; future Linux x86_64 artifact must be independently pinned. | Upstream review | **Defer to M2-02/M3-01/M7-04.** Verify support statement, source tag/archive/SHA-256 and then run separate ESR 115 live evidence; no M1-04 download/change. |
+| Firefox ESR 115 channel | not declared / not installed / `115.39.0esr` | [Mozilla feed](https://product-details.mozilla.org/1.0/firefox_versions.json); MPL-2.0; future Linux x86_64 artifact must be independently pinned. | Upstream review | **Defer to M2-02/M3-01/M7-04.** Verify support statement, source tag/archive/SHA-256 and then run separate ESR 115 live evidence; no M1-04 download/change. |
 | geckodriver | `0.37.1` / not installed / `0.37.1` | [official release](https://github.com/mozilla/geckodriver/releases/tag/v0.37.1); MPL-2.0; Linux x86_64 and Selenium/Firefox pairing, `--allow-system-access`. | Upstream review | Retain exact pin/checksum. Pair with every retained/updated Firefox channel and run WebDriver/live suites. |
 
 ## Approved, Deferred, And Security Result

@@ -34,7 +34,7 @@ def test_m8_impact_inventory_has_one_audience_owner_for_every_behavior_and_bound
     assert inventory["schema_version"] == 1
     assert inventory["inventory_id"] == "bpm095-firefox-schema-lifecycle-documentation-impact"
     assert inventory["backlog_item"] == "BPM095-M8-01"
-    assert inventory["target_bpm_version"] == "0.9.5"
+    assert inventory["target_bpm_version"] == "0.9.5.1"
     assert inventory["status"] == "accepted-authoring-inventory"
 
     owners = inventory["audience_owners"]

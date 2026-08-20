@@ -49,7 +49,7 @@ test("suppresses malformed, archived, stale, and non-preview recommendations wit
     const variants = [
         { ...profile, is_deleted: true },
         { ...profile, recommendation: { ...recommendation, profile_revision: 6 } },
-        { ...profile, recommendation: { ...recommendation, source: { ...recommendation.source, artifact_id: "esr-115.38" } } },
+        { ...profile, recommendation: { ...recommendation, source: { ...recommendation.source, artifact_id: "esr-115.39" } } },
         { ...profile, recommendation: { ...recommendation, action: { ...recommendation.action, action_id: "conversion-apply" } } },
         { ...profile, recommendation: null },
     ];
@@ -70,12 +70,12 @@ test("rejects each malformed recommendation boundary before creating a preview l
         { ...recommendation, recommendation_id: "unrelated" },
         { ...recommendation, action: { ...recommendation.action, action_id: "conversion-apply" } },
         { ...recommendation, profile_revision: 6 },
-        { ...recommendation, source: { ...recommendation.source, artifact_id: "esr-115.38" } },
+        { ...recommendation, source: { ...recommendation.source, artifact_id: "esr-115.39" } },
         { ...recommendation, target: { ...recommendation.target, artifact_id: "" } },
         { ...recommendation, action: { ...recommendation.action, preview_target_artifact_id: "" } },
         {
             ...recommendation,
-            action: { ...recommendation.action, preview_target_artifact_id: "esr-115.38" },
+            action: { ...recommendation.action, preview_target_artifact_id: "esr-115.39" },
         },
     ];
 

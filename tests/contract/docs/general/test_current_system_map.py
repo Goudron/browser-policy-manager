@@ -18,7 +18,7 @@ def _contract() -> dict[str, object]:
 
 def test_system_map_contract_references_existing_owned_paths_and_commands():
     contract = _contract()
-    assert contract["version"] == "0.9.5"
+    assert contract["version"] == "0.9.5.1"
 
     paths = contract["paths"]
     assert isinstance(paths, list)

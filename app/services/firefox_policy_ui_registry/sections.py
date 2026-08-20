@@ -11,13 +11,13 @@ UI_SECTIONS = [
     ),
     PolicyUiSection(
         id="home_startup",
-        title_key="profiles.wizard_step_three",
+        title_key="profiles.wizard_step_two",
         fallback="Home and startup surfaces",
         order=30,
     ),
     PolicyUiSection(
         id="search",
-        title_key="profiles.wizard_step_four",
+        title_key="profiles.wizard_step_two",
         fallback="Search and address bar",
         order=40,
     ),
@@ -29,19 +29,19 @@ UI_SECTIONS = [
     ),
     PolicyUiSection(
         id="privacy_security",
-        title_key="profiles.wizard_step_five",
+        title_key="profiles.wizard_step_three",
         fallback="Privacy and security",
         order=60,
     ),
     PolicyUiSection(
         id="extensions_integrations",
-        title_key="profiles.wizard_section_extensions_integrations",
+        title_key="profiles.wizard_step_four",
         fallback="Extensions and integrations",
         order=70,
     ),
     PolicyUiSection(
         id="ai_smart",
-        title_key="profiles.wizard_step_seven",
+        title_key="profiles.wizard_step_five",
         fallback="AI and smart features",
         order=80,
     ),

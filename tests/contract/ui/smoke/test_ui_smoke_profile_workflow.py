@@ -518,7 +518,7 @@ def test_profiles_ui_shell_keeps_export_actions_before_technical_catalog():
     save_action_index = html.index('id="wizard-export-save-action"')
     download_action_index = html.index('id="wizard-export-firefox-policies"')
     technical_index = html.index('id="wizard-export-section-technical"')
-    shell_index = html.index('id="wizard-schema-shell-step-8"')
+    shell_index = html.index('id="wizard-schema-shell-step-6"')
 
     assert step_six_index < ready_index < save_action_index < download_action_index
     assert download_action_index < technical_index < shell_index

@@ -39,12 +39,12 @@ def test_schema_channels_are_four_independent_catalog_artifacts_in_public_order(
         "release-153",
         "esr-153.0",
         "esr-140.13",
-        "esr-115.38",
+        "esr-115.39",
     )
     assert HEADER_SCHEMA_CHANNEL_VALUES == SUPPORTED_SCHEMA_CHANNELS
     assert tuple(channel.value for channel in HEADER_SCHEMA_CHANNELS) == SUPPORTED_SCHEMA_CHANNELS
     assert SUPPORTED_SCHEMA_CHANNEL_SET == set(SUPPORTED_SCHEMA_CHANNELS)
-    assert SUPPORTED_ESR_SCHEMA_CHANNELS == ("esr-153.0", "esr-140.13", "esr-115.38")
+    assert SUPPORTED_ESR_SCHEMA_CHANNELS == ("esr-153.0", "esr-140.13", "esr-115.39")
     assert DEFAULT_SCHEMA_CHANNEL == LATEST_ESR_SCHEMA_CHANNEL == "esr-153.0"
     assert DEFAULT_RELEASE_SCHEMA_CHANNEL == CURRENT_RELEASE_SCHEMA_CHANNEL == "release-153"
     assert SCHEMA_LABELS == {channel.value: channel.label for channel in SCHEMA_CHANNELS}
@@ -53,7 +53,7 @@ def test_schema_channels_are_four_independent_catalog_artifacts_in_public_order(
         channel.value: channel.mozilla_version for channel in SCHEMA_CHANNELS
     }
     assert SCHEMA_SOURCES == {channel.value: channel.source_tag for channel in SCHEMA_CHANNELS}
-    assert SCHEMA_FILENAMES["esr-115.38"] == "firefox-esr-115.38.json"
+    assert SCHEMA_FILENAMES["esr-115.39"] == "firefox-esr-115.39.json"
     assert get_schema_channel("release-153") is not None
     assert get_schema_channel("unknown-channel") is None
 
@@ -87,7 +87,7 @@ def test_public_order_does_not_depend_on_catalog_declaration_order():
 def test_supported_resolution_fails_closed_for_unknown_retired_and_unbundled_channels(
     monkeypatch: pytest.MonkeyPatch,
 ):
-    assert require_supported_schema_channel("esr-115.38").line_id == "esr-115"
+    assert require_supported_schema_channel("esr-115.39").line_id == "esr-115"
 
     with pytest.raises(UnknownSchemaChannelError):
         require_supported_schema_channel("unknown")
@@ -145,7 +145,7 @@ def test_latest_esr_recommendation_uses_catalog_roles_not_declaration_order():
     bundled = {channel.artifact_id: channel.filename for channel in SCHEMA_CHANNEL_CATALOG}
 
     recommendation = profile_conversion_recommendation(
-        schema_version="esr-115.38",
+        schema_version="esr-115.39",
         revision=7,
         is_active=True,
         channels=tuple(reversed(SCHEMA_CHANNEL_CATALOG)),
@@ -156,7 +156,7 @@ def test_latest_esr_recommendation_uses_catalog_roles_not_declaration_order():
         "recommendation_id": "schema-conversion.older-esr-recommendation",
         "reason_code": "supported_older_esr_to_latest_esr",
         "profile_revision": 7,
-        "source": {"line_id": "esr-115", "artifact_id": "esr-115.38"},
+        "source": {"line_id": "esr-115", "artifact_id": "esr-115.39"},
         "target": {
             "line_id": "esr-153",
             "artifact_id": "esr-153.0",
@@ -172,7 +172,7 @@ def test_latest_esr_recommendation_uses_catalog_roles_not_declaration_order():
 
 def test_latest_esr_recommendation_fails_closed_for_catalog_and_profile_states():
     bundled = {channel.artifact_id: channel.filename for channel in SCHEMA_CHANNEL_CATALOG}
-    for source in ("esr-115.38", "esr-140.13"):
+    for source in ("esr-115.39", "esr-140.13"):
         recommendation = profile_conversion_recommendation(
             schema_version=source,
             revision=1,
@@ -209,7 +209,7 @@ def test_latest_esr_recommendation_fails_closed_for_catalog_and_profile_states()
     ambiguous = SCHEMA_CHANNEL_CATALOG + (replace(latest, artifact_id="esr-153.1"),)
     assert (
         profile_conversion_recommendation(
-            schema_version="esr-115.38",
+            schema_version="esr-115.39",
             revision=1,
             is_active=True,
             channels=ambiguous,
@@ -219,11 +219,11 @@ def test_latest_esr_recommendation_fails_closed_for_catalog_and_profile_states()
     )
     assert (
         profile_conversion_recommendation(
-            schema_version="esr-115.38",
+            schema_version="esr-115.39",
             revision=1,
             is_active=True,
             channels=SCHEMA_CHANNEL_CATALOG,
-            bundled_artifact_ids={"esr-115.38": "firefox-esr-115.38.json"},
+            bundled_artifact_ids={"esr-115.39": "firefox-esr-115.39.json"},
         )
         is None
     )

@@ -21,7 +21,7 @@ def test_profiles_header_shows_supported_firefox_channels_on_a_separate_explanat
         "Release 153,",
         "ESR 153.0,",
         "ESR 140.13,",
-        "ESR 115.38",
+        "ESR 115.39",
     ]
     assert counter is not None
     assert counter.find("strong", id="workspace-profile-count", recursive=False) is not None
@@ -39,7 +39,7 @@ def test_profiles_header_uses_the_approved_russian_three_schema_wording():
 
     assert versions is not None
     assert versions.get_text(" ", strip=True).replace(" ,", ",") == (
-        "Поддерживаемые схемы Firefox: релиз 153, ESR 153.0, ESR 140.13, ESR 115.38"
+        "Поддерживаемые схемы Firefox: релиз 153, ESR 153.0, ESR 140.13, ESR 115.39"
     )
 
 
@@ -64,7 +64,7 @@ def test_profiles_header_uses_comma_separated_schema_lists_without_css_separator
                         "profiles.firefox_schema_release_153",
                         "profiles.firefox_schema_esr_153_0",
                         "profiles.firefox_schema_esr_140_13",
-                        "profiles.firefox_schema_esr_115_38",
+                        "profiles.firefox_schema_esr_115_39",
                     )
                 ),
             )
@@ -179,7 +179,7 @@ def test_esr_115_profile_is_selectable_and_schema_scoped_across_editor_surfaces(
         "/api/profiles",
         json=build_profile_payload(
             name="ESR 115 editor surface contract",
-            schema_version="esr-115.38",
+            schema_version="esr-115.39",
             flags={"DisableTelemetry": True},
         ),
     )
@@ -193,18 +193,18 @@ def test_esr_115_profile_is_selectable_and_schema_scoped_across_editor_surfaces(
 
     for response in (library, compare, guided, settings, json_editor):
         assert response.status_code == 200
-        assert 'data-firefox-channel="esr-115.38"' in response.text
-        assert "ESR 115.38" in response.text
+        assert 'data-firefox-channel="esr-115.39"' in response.text
+        assert "ESR 115.39" in response.text
 
-    assert '<option value="esr-115.38"' in library.text
+    assert '<option value="esr-115.39"' in library.text
     assert 'id="schema-channels-catalog"' in compare.text
-    assert '"schema_version": "esr-115.38"' in guided.text
+    assert '"schema_version": "esr-115.39"' in guided.text
     shell_catalog = json.loads(
         BeautifulSoup(guided.text, "html.parser").find(id="wizard-schema-shell-catalog").get_text()
     )
     esr_115_policy_ids = {
         item["id"]
-        for step in shell_catalog["channels"]["esr-115.38"]["steps"].values()
+        for step in shell_catalog["channels"]["esr-115.39"]["steps"].values()
         for bucket in ("recommended", "additional", "raw_fallback")
         for item in step[bucket]
     }

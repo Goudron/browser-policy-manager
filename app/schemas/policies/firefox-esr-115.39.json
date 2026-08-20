@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Esr 115.38 Policies 115.38",
+  "title": "Esr 115.39 Policies 115.39",
   "type": "object",
   "additionalProperties": false,
-  "x-bpm-channel": "esr-115.38",
-  "x-bpm-version": "115.38",
+  "x-bpm-channel": "esr-115.39",
+  "x-bpm-version": "115.39",
   "x-bpm-source": "mozilla-policy-templates-v5.12",
   "properties": {
     "3rdparty": {
@@ -1975,11 +1975,11 @@
       "x-bpm-min-version": "91.0"
     }
   },
-  "x-bpm-artifact-id": "esr-115.38",
+  "x-bpm-artifact-id": "esr-115.39",
   "x-bpm-line-id": "esr-115",
   "x-bpm-firefox-line": 115,
-  "x-bpm-firefox-version": "115.38.0esr",
-  "x-bpm-ui-label": "ESR 115.38",
+  "x-bpm-firefox-version": "115.39.0esr",
+  "x-bpm-ui-label": "ESR 115.39",
   "x-bpm-source-provenance": {
     "source_tag": "mozilla-policy-templates-v5.12",
     "upstream_tag": "v5.12",

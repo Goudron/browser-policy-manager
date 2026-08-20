@@ -31,7 +31,7 @@ const catalog = {
             recommendation_target: "esr-153.0",
         },
         {
-            artifact_id: "esr-115.38", support_state: "supported", selectable: true,
+            artifact_id: "esr-115.39", support_state: "supported", selectable: true,
             recommendation_target: "esr-153.0",
         },
         { artifact_id: "esr-102.15", support_state: "retired", selectable: false },
@@ -126,7 +126,7 @@ function fakeReviewHost() {
 test("catalog target selector is data-derived and excludes only the current or unavailable artifact", () => {
     assert.deepEqual(
         supportedConversionTargets(catalog, "esr-140.13").map((option) => option.artifact_id),
-        ["release-153", "esr-153.0", "esr-115.38"],
+        ["release-153", "esr-153.0", "esr-115.39"],
     );
     assert.equal(recommendedConversionTarget(catalog, "esr-140.13"), "esr-153.0");
     assert.equal(recommendedConversionTarget(catalog, "release-153"), "");
@@ -211,7 +211,7 @@ test("errors use stable recovery states without depending on HTTP text", () => {
     );
     assert.equal(
         reviewStateForError(
-            { detail: { code: "schema_channel_unknown", parameters: { target_artifact_id: "esr-115.38" } } },
+            { detail: { code: "schema_channel_unknown", parameters: { target_artifact_id: "esr-115.39" } } },
             "esr-153.0",
         ),
         CONVERSION_REVIEW_STATES.sourceInvalid,
@@ -514,7 +514,7 @@ test("a blocked preview stays aggregate-only and a retry starts a fresh target-o
                     ...conversionPlan().target,
                     artifact: {
                         ...conversionPlan().target.artifact,
-                        line_id: targetArtifactId === "esr-115.38" ? "esr-115" : "esr-153",
+                        line_id: targetArtifactId === "esr-115.39" ? "esr-115" : "esr-153",
                         artifact_id: targetArtifactId,
                     },
                 };
@@ -539,7 +539,7 @@ test("a blocked preview stays aggregate-only and a retry starts a fresh target-o
         state: { getCurrentProfile: () => profile },
     });
 
-    await review.selectTarget("esr-115.38");
+    await review.selectTarget("esr-115.39");
     assert.equal(review.getState(), CONVERSION_REVIEW_STATES.blocked);
     assert.match(host.innerHTML, /Blocked condition: conversion_policy_blocked/);
     assert.doesNotMatch(host.innerHTML, /SensitivePolicy/);
@@ -548,7 +548,7 @@ test("a blocked preview stays aggregate-only and a retry starts a fresh target-o
     await review.selectTarget("esr-153.0");
     assert.equal(review.getState(), CONVERSION_REVIEW_STATES.available);
     assert.deepEqual(requests, [
-        { id: 17, targetArtifactId: "esr-115.38" },
+        { id: 17, targetArtifactId: "esr-115.39" },
         { id: 17, targetArtifactId: "esr-153.0" },
     ]);
 });

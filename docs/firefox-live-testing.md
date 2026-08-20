@@ -69,10 +69,10 @@ make setup-firefox-live-browsers FIREFOX_CHANNEL=esr115
 ```
 
 The supported deterministic channels are `release` (Firefox `153.0.3`), `esr153` (Firefox
-`153.0esr`), `esr140` (Firefox `140.13.0esr`), and `esr115` (Firefox `115.38.0esr`), all paired
+`153.0esr`), `esr140` (Firefox `140.13.0esr`), and `esr115` (Firefox `115.39.0esr`), all paired
 with geckodriver `0.37.1`. ESR 115 uses Mozilla's immutable
-`firefox-115.38.0esr.tar.bz2` archive; its manifest SHA-256 is
-`24ad694f543b251482f62b6313f1e10bdfafa3279a2aec8aae6042c0b3eed530`.
+`firefox-115.39.0esr.tar.bz2` archive; its manifest SHA-256 is
+`d7fb42d0aaf4bfccec49c5e3918118d55a222a52854a7ad4651e09eaf7b7c685`.
 Verify a provisioned channel before a rerun:
 
 ```bash

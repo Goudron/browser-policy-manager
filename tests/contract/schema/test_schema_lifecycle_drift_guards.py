@@ -451,12 +451,12 @@ def test_partial_future_bump_and_derived_surface_mutations_fail_at_the_owner_lay
         for target in mapping.get("targets") or []
         if isinstance(target, dict) and isinstance(target.get("schema_channels"), dict)
     )
-    first_target["schema_channels"].pop("esr-115.38")
+    first_target["schema_channels"].pop("esr-115.39")
     with pytest.raises(SchemaLifecycleDriftError, match="CIS target omits"):
         _validate_locales_and_cis(rows, cis_mappings)
 
     inventory = copy.deepcopy(_read_json(paths["policy_documentation_inventory"]))
-    inventory["channels"].pop("esr-115.38")
+    inventory["channels"].pop("esr-115.39")
     with pytest.raises(SchemaLifecycleDriftError, match="documentation/help inventory omits"):
         _validate_documentation_inventory(rows, inventory)
 

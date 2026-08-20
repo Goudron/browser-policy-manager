@@ -786,7 +786,7 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "Landing page",
         },
         "firefox_channel": {
-            "esr-115.38": "Firefox ESR 115.38",
+            "esr-115.39": "Firefox ESR 115.39",
             "esr-140.13": "Firefox ESR 140.13",
             "esr-153.0": "Firefox ESR 153.0",
             "release-153": "Firefox Release 153",
@@ -834,7 +834,7 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "Начальная страница",
         },
         "firefox_channel": {
-            "esr-115.38": "Firefox ESR 115.38",
+            "esr-115.39": "Firefox ESR 115.39",
             "esr-140.13": "Firefox ESR 140.13",
             "esr-153.0": "Firefox ESR 153.0",
             "release-153": "Firefox Release 153",
@@ -882,7 +882,7 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "Startseite",
         },
         "firefox_channel": {
-            "esr-115.38": "Firefox ESR 115.38",
+            "esr-115.39": "Firefox ESR 115.39",
             "esr-140.13": "Firefox ESR 140.13",
             "esr-153.0": "Firefox ESR 153.0",
             "release-153": "Firefox Release 153",
@@ -930,7 +930,7 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "首页",
         },
         "firefox_channel": {
-            "esr-115.38": "Firefox ESR 115.38",
+            "esr-115.39": "Firefox ESR 115.39",
             "esr-140.13": "Firefox ESR 140.13",
             "esr-153.0": "Firefox ESR 153.0",
             "release-153": "Firefox Release 153",
@@ -978,7 +978,7 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "Page d’accueil",
         },
         "firefox_channel": {
-            "esr-115.38": "Firefox ESR 115.38",
+            "esr-115.39": "Firefox ESR 115.39",
             "esr-140.13": "Firefox ESR 140.13",
             "esr-153.0": "Firefox ESR 153.0",
             "release-153": "Firefox Release 153",
@@ -1026,7 +1026,7 @@ SEARCH_FILTER_VALUE_LABELS = {
             "landing": "Página inicial",
         },
         "firefox_channel": {
-            "esr-115.38": "Firefox ESR 115.38",
+            "esr-115.39": "Firefox ESR 115.39",
             "esr-140.13": "Firefox ESR 140.13",
             "esr-153.0": "Firefox ESR 153.0",
             "release-153": "Firefox Release 153",

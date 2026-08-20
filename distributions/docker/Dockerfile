@@ -1,5 +1,5 @@
 #
-# BPM 0.9.5 container distribution.  The base image is an OCI-index digest;
+# BPM 0.9.5.1 container distribution.  The base image is an OCI-index digest;
 # Docker resolves the matching linux platform manifest without following a
 # mutable tag at release build time.
 ARG BPM_PYTHON_IMAGE=python:3.14.3-slim-bookworm@sha256:f21c0d5a44c56805654c15abccc1b2fd576c8d93aca0a3f74b4aba2dc92510e2
@@ -23,8 +23,8 @@ FROM ${BPM_PYTHON_IMAGE} AS runtime
 ARG BPM_SOURCE_REVISION=unknown
 
 LABEL org.opencontainers.image.title="Browser Policy Manager" \
-      org.opencontainers.image.description="BPM 0.9.5 single-node Docker distribution" \
-      org.opencontainers.image.version="0.9.5" \
+      org.opencontainers.image.description="BPM 0.9.5.1 single-node Docker distribution" \
+      org.opencontainers.image.version="0.9.5.1" \
       org.opencontainers.image.revision="${BPM_SOURCE_REVISION}" \
       org.opencontainers.image.licenses="MPL-2.0" \
       org.opencontainers.image.source="https://github.com/Goudron/browser-policy-manager"
@@ -59,7 +59,7 @@ COPY alembic ./alembic
 
 # A Docker distributive is built only after documentation/package verification.
 # Do not substitute app/documentation/site: it is a local development cache.
-COPY documentation/dist/bpm-documentation-0.9.5.tar.gz /tmp/bpm-documentation.tar.gz
+COPY documentation/dist/bpm-documentation-0.9.5.1.tar.gz /tmp/bpm-documentation.tar.gz
 RUN mkdir -p /opt/bpm/documentation/site /var/lib/bpm \
     && tar --extract --gzip --file /tmp/bpm-documentation.tar.gz \
         --strip-components=1 --directory /opt/bpm/documentation/site \

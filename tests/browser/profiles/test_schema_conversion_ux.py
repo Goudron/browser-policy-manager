@@ -214,7 +214,7 @@ def test_browser_schema_conversion_library_recommendations_are_catalog_derived_a
         esr_115 = _create_profile(
             base_url,
             name="M5 UX older ESR 115",
-            schema_version="esr-115.38",
+            schema_version="esr-115.39",
             flags={"DisableTelemetry": True},
         )
         esr_140 = _create_profile(
@@ -264,7 +264,7 @@ def test_browser_schema_conversion_library_recommendations_are_catalog_derived_a
                 option["artifact_id"]: option.get("recommendation_target")
                 for option in catalog["options"]
             }
-            assert catalog_targets["esr-115.38"] == "esr-153.0"
+            assert catalog_targets["esr-115.39"] == "esr-153.0"
             assert catalog_targets["esr-140.13"] == "esr-153.0"
             assert catalog_targets["esr-153.0"] is None
             assert catalog_targets["release-153"] is None
@@ -291,7 +291,7 @@ def test_browser_schema_conversion_library_recommendations_are_catalog_derived_a
                 assert "DisableTelemetry" not in parsed.query
                 assert entry.get_attribute("aria-describedby")
                 accessible_name = entry.get_attribute("aria-label")
-                assert "ESR 140.13" in accessible_name or "ESR 115.38" in accessible_name
+                assert "ESR 140.13" in accessible_name or "ESR 115.39" in accessible_name
                 assert "ESR 153.0" in accessible_name
 
             rendered = _body_text(driver)
@@ -405,9 +405,9 @@ def test_browser_schema_conversion_blocked_retry_and_unsaved_cancel_are_side_eff
                 "",
                 "esr-153.0",
                 "esr-140.13",
-                "esr-115.38",
+                "esr-115.39",
             ]
-            _change_select(driver, target_select_element, "esr-115.38")
+            _change_select(driver, target_select_element, "esr-115.39")
             review = _wait_for_review_state(wait, driver, by, "schema-conversion.preview-blocked")
             assert "AIControls" not in review.text
             assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-schema-conversion-apply]")

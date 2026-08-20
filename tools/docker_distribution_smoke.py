@@ -12,7 +12,7 @@ from pathlib import Path
 from urllib.request import urlopen
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_VERSION = "0.9.5"
+EXPECTED_VERSION = "0.9.5.1"
 FORBIDDEN_BASE_MODULES = ("numpy", "onnxruntime", "tokenizers")
 
 
@@ -86,7 +86,7 @@ def _assert_base_runtime(image: str) -> None:
 import importlib.metadata
 import importlib.util
 
-assert importlib.metadata.version('browser-policy-manager') == '0.9.5'
+assert importlib.metadata.version('browser-policy-manager') == '0.9.5.1'
 assert all(importlib.util.find_spec(module) is None for module in ('numpy', 'onnxruntime', 'tokenizers'))
 print('base runtime: OK')
 """

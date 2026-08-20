@@ -26,7 +26,7 @@
     "$schema": { "type": "string", "minLength": 1 },
     "schema_version": { "const": 1 },
     "contract_id": { "const": "bpm095-firefox-pairwise-profile-conversion" },
-    "target_bpm_version": { "const": "0.9.5" },
+    "target_bpm_version": { "const": "0.9.5.1" },
     "status": { "const": "active-m4-06-directed-matrix-gate" },
     "implementation": {
       "type": "object",
@@ -342,7 +342,7 @@
         "artifact_id": { "type": "string", "pattern": "^(?:release|esr)-[0-9]+(?:\\.[0-9]+)?$" },
         "channel_id": { "type": "string", "pattern": "^(?:release|esr)-[0-9]+(?:\\.[0-9]+)?$" },
         "artifact_version": { "type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)+$" },
-        "source_tag": { "type": "string", "pattern": "^mozilla-policy-templates-v[0-9]+(?:\\.[0-9]+)*$" },
+        "source_tag": { "type": "string", "pattern": "^mozilla-policy-templates-(?:v[0-9]+(?:\\.[0-9]+)*|master-[0-9a-f]{40})$" },
         "schema_bundle_sha256": { "$ref": "#/$defs/sha256" },
         "validation_schema_sha256": { "$ref": "#/$defs/sha256" }
       }

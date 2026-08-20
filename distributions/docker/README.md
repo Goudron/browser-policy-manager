@@ -1,10 +1,10 @@
-# BPM 0.9.5 Docker distribution
+# BPM 0.9.5.1 Docker distribution
 
 This is the reproducible, single-node Docker distribution for Browser Policy
-Manager 0.9.5. It contains the base BPM wheel, its released Alembic migration
-payload, and the verified 0.9.5 product-documentation archive.
+Manager 0.9.5.1. It contains the base BPM wheel, its released Alembic migration
+payload, and the verified 0.9.5.1 product-documentation archive.
 
-It is intentionally not a production topology. BPM 0.9.5 does not provide
+It is intentionally not a production topology. BPM 0.9.5.1 does not provide
 authentication, authorization, TLS termination, reverse-proxy configuration,
 backup automation, HA, or a PostgreSQL Compose deployment. The reference
 Compose file binds the HTTP port to loopback only.

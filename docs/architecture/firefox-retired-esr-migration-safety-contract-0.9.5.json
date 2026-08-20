@@ -2,7 +2,7 @@
   "$schema": "schemas/firefox-retired-esr-migration-contract-v1.schema.json",
   "schema_version": 1,
   "contract_id": "bpm095-firefox-retired-esr-migration-safety",
-  "target_bpm_version": "0.9.5",
+  "target_bpm_version": "0.9.5.1",
   "status": "normative-target-preimplementation",
   "dependencies": {
     "lifecycle_catalog": {
@@ -397,7 +397,7 @@
           "family": "esr",
           "line_id": "esr-115",
           "line_number": 115,
-          "artifact_id": "esr-115.38",
+          "artifact_id": "esr-115.39",
           "schema_bundle_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
           "validation_schema_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
         },
@@ -428,7 +428,7 @@
         "total_proof_artifact_digest": "8888888888888888888888888888888888888888888888888888888888888888",
         "alembic_source_revision": "fixture_before_esr115_retirement",
         "alembic_target_revision": "fixture_retire_esr115_to_esr140",
-        "manifest_digest": "48af8cb6a5b18ee98a866cb6ac5b349fa361c7b6439101d779d77e7dc3768ec1"
+        "manifest_digest": "86639299d0d0c221f3e8dbcdb636c88352d31075a465ffbf8bf07483b4289024"
       },
       "total_proof": {
         "status": "complete",
@@ -442,7 +442,7 @@
       },
       "preflight": {
         "status": "complete-contract-simulation",
-        "manifest_digest": "48af8cb6a5b18ee98a866cb6ac5b349fa361c7b6439101d779d77e7dc3768ec1",
+        "manifest_digest": "86639299d0d0c221f3e8dbcdb636c88352d31075a465ffbf8bf07483b4289024",
         "engine": "sqlite",
         "database_snapshot_digest": "9999999999999999999999999999999999999999999999999999999999999999",
         "source_stamp": "fixture_before_esr115_retirement",
@@ -463,7 +463,7 @@
           "source_profile_count": 3,
           "restored_profile_count": 3
         },
-        "preflight_digest": "4cb2193cb8996ded20f4fd575972541010746b1de2be00133d9428cbe372075d"
+        "preflight_digest": "6923f57036e40aee5056464827a9a0233ade69a926740c09c83a0c024922bdef"
       },
       "expected": {
         "decision": "pass-contract-fixture-only",
@@ -479,7 +479,7 @@
         "contract_version": 1,
         "transition_id": "required-retire-esr140-to-esr153",
         "evidence_scope": "current-exact-artifacts",
-        "previous_catalog_digest": "3a4d94f070e6e6f9f4ce0b2f31e5e74e56f470f9cb90b79ec3ec1887fdcbda50",
+        "previous_catalog_digest": "d34ab9a1142f5f0838a9ea8ed9e5de5798853a2ac6c7483b9625e9d937361812",
         "candidate_catalog_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
         "source": {
           "family": "esr",
@@ -494,14 +494,14 @@
           "line_id": "esr-153",
           "line_number": 153,
           "artifact_id": "esr-153.0",
-          "schema_bundle_sha256": "afd71b67bd0483756803ad8b03f3571507f3cee69160142f8fff12cabde00d80",
-          "validation_schema_sha256": "bcdf1f2cd349f81c1bc8b1e1bffda69422d88e95c2203e8957987825486a42a2"
+          "schema_bundle_sha256": "160d2ae865a2a0fd06df4c95c947babe429e63fd48029cf2d2c121c5f37f946d",
+          "validation_schema_sha256": "1ca36d178cc5a80a3b16a26a98a9941e8575bb30dfb064c5167dfed853d94260"
         },
         "candidate_supported_esr_lines": [
           {
             "line_id": "esr-115",
             "line_number": 115,
-            "artifact_id": "esr-115.38"
+            "artifact_id": "esr-115.39"
           },
           {
             "line_id": "esr-153",
@@ -513,10 +513,10 @@
         "conversion_contract_version": 1,
         "recipe_registry_version": 1,
         "recipe_registry_digest": "1d4b572f358a7ff9f7e23beb5a2a27104cec4c2d3451ad8a49099cf8665113a6",
-        "total_proof_artifact_digest": "3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb",
+        "total_proof_artifact_digest": "9de84bde21e11d161d48297d19cc2447c36ac052d6cef8aed7727b8fa29746ef",
         "alembic_source_revision": "20260804_add_profile_name_casefold",
         "alembic_target_revision": null,
-        "manifest_digest": "ca3263df5fb37ae04a98e613616e843d117bec56146cb774afb31a98961e7cf0"
+        "manifest_digest": "0480c30032260b0fa30b0d3c1f7a344f75f988734ee54bd8d047696d13611372"
       },
       "total_proof": {
         "status": "complete",
@@ -524,13 +524,13 @@
         "evidence_scope": "production-exact-artifacts",
         "exact_artifacts_bound": true,
         "source_schema_domain": "all-valid-instances",
-        "proof_artifact_digest": "3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb",
+        "proof_artifact_digest": "9de84bde21e11d161d48297d19cc2447c36ac052d6cef8aed7727b8fa29746ef",
         "uncovered_schema_locations": [],
         "blockers": []
       },
       "preflight": {
         "status": "not-run-m6-03-migration-pending",
-        "manifest_digest": "ca3263df5fb37ae04a98e613616e843d117bec56146cb774afb31a98961e7cf0",
+        "manifest_digest": "0480c30032260b0fa30b0d3c1f7a344f75f988734ee54bd8d047696d13611372",
         "engine": null,
         "database_snapshot_digest": null,
         "source_stamp": null,
@@ -551,7 +551,7 @@
           "source_profile_count": 0,
           "restored_profile_count": 0
         },
-        "preflight_digest": "8c0e95a05a9a02de2cb271cadfe9ba4831e2ac0ccc40f28eda17e32d38c8e32a"
+        "preflight_digest": "b1aec4521995e9d12e6df2601a5f212c6b27bdc67a43bde0bdd2649bfb9f896f"
       },
       "expected": {
         "decision": "m6-02-proof-complete-m6-03-pending",

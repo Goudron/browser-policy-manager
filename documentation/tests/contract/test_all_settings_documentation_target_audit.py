@@ -43,7 +43,7 @@ def test_audit_declares_m9_01_scope_status_and_sources() -> None:
     assert audit["schema_version"] == 1
     assert audit["audit_id"] == "bpm-all-settings-documentation-target-audit-0.9.1"
     assert audit["backlog_item"] == "BPM091-M9-01"
-    assert audit["target_bpm_version"] == "0.9.5"
+    assert audit["target_bpm_version"] == "0.9.5.1"
     assert audit["status"] == "accepted"
     for source in audit["audited_sources"].values():
         path = source.split("::", 1)[0]
@@ -64,10 +64,12 @@ def test_all_policy_inventory_entries_have_exact_generated_targets() -> None:
     }
 
     assert policy_ids == indexed_policy_ids == generated_policy_ids
-    assert len(policy_ids) == audit["coverage"]["firefox_policies"]["inventory_count"] == 121
+    assert len(policy_ids) == audit["coverage"]["firefox_policies"]["inventory_count"] == 123
     assert inventory["summary"]["policy_scope_counts"] == {
         "both": audit["coverage"]["firefox_policies"]["both_channel_count"],
         "partial": audit["coverage"]["firefox_policies"]["partial_channel_count"],
+        "release-only": audit["coverage"]["firefox_policies"]["release_only_policy_count"],
+        "esr-only": audit["coverage"]["firefox_policies"]["esr_only_policy_count"],
     }
     assert all(targets[f"policy:{policy_id}"]["source_id"] == policy_id for policy_id in policy_ids)
 
@@ -132,8 +134,8 @@ def test_audit_summary_and_closed_findings_match_implemented_guards() -> None:
     audit = _json(AUDIT)
 
     assert audit["summary"] == {
-        "policy_inventory_count": 121,
-        "policy_linked_count": 121,
+        "policy_inventory_count": 123,
+        "policy_linked_count": 123,
         "known_preference_inventory_count": 62,
         "known_preference_linked_count": 62,
         "known_preference_missing_documentation_count": 0,

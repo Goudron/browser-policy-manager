@@ -77,7 +77,7 @@ def test_cis_documentation_inventory_targets_firefox_documentation_ids():
     assert all(
         target["schema_channels"]
         == {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid",

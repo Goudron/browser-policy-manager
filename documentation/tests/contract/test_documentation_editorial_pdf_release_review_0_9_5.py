@@ -53,9 +53,9 @@ def test_m8_review_covers_all_affected_locale_families_and_pdf_pairs() -> None:
     review = _review()
 
     assert review["schema_version"] == 1
-    assert review["review_id"] == "bpm-0.9.5-editorial-pdf-release-review"
+    assert review["review_id"] == "bpm-0.9.5.1-editorial-pdf-release-review"
     assert review["backlog_item"] == "BPM095-M8-05"
-    assert review["target_bpm_version"] == "0.9.5"
+    assert review["target_bpm_version"] == "0.9.5.1"
     assert review["release_blocking"] is True
     reviewed_source = _object(review["reviewed_source"])
     assert reviewed_source["changed_physical_topic_files"] == {
@@ -90,7 +90,7 @@ def test_m8_review_covers_all_affected_locale_families_and_pdf_pairs() -> None:
             "documentation/build/pdf/"
             f"{_string(entry['locale'])}/browser-policy-manager-"
             f"{'user-guide' if entry['guide'] == 'user' else 'administrator-guide'}-"
-            f"{_string(entry['locale'])}-0.9.5.pdf"
+            f"{_string(entry['locale'])}-0.9.5.1.pdf"
         )
         assert _integer(entry["page_count"]) > 1
         assert re.fullmatch(r"[0-9a-f]{64}", _string(entry["sha256"]))

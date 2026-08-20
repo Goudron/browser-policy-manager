@@ -70,7 +70,7 @@ start_verify_stop() {
         return 1
     fi
     curl --fail --silent --show-error "http://127.0.0.1:${PORT}/" \
-        | grep --fixed-strings '"version":"0.9.5"' >/dev/null
+        | grep --fixed-strings '"version":"0.9.5.1"' >/dev/null
     curl --fail --silent --show-error --location "http://127.0.0.1:${PORT}/help/" >/dev/null
     curl --fail --silent --show-error "http://127.0.0.1:${PORT}/api/profiles" \
         | grep --fixed-strings '[]' >/dev/null

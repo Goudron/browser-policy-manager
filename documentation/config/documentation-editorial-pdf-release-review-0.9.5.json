@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "review_id": "bpm-0.9.5-editorial-pdf-release-review",
+  "review_id": "bpm-0.9.5.1-editorial-pdf-release-review",
   "backlog_item": "BPM095-M8-05",
-  "target_bpm_version": "0.9.5",
+  "target_bpm_version": "0.9.5.1",
   "release_blocking": true,
   "status": "accepted",
   "reviewed_at": "2026-08-12",
-  "reviewer": "BPM 0.9.5 product-documentation editorial and PDF release review",
+  "reviewer": "BPM 0.9.5.1 product-documentation editorial and PDF release review",
   "reviewed_source": {
     "source_fingerprint": "693801a8ae9a56a484c5670f5c2d82380908c2ae8aaf0254a61621a152b7cd32",
     "source_revision": "6ea9010a1e35df45d091543a8ea95ceb380600c6",
@@ -87,18 +87,18 @@
     "exclusion_reason": "The maintained PDF generation contract has exactly User and Administrator source maps. Firefox Policy and CIS are affected and were reviewed in DITA/site and as referenced User Guide workflows, but no separate Firefox or CIS PDF artifact exists in the delivery contract."
   },
   "pdf_visual_reviews": [
-    {"locale": "en", "guide": "user", "artifact": "documentation/build/pdf/en/browser-policy-manager-user-guide-en-0.9.5.pdf", "sha256": "1cb9429ccb2b01d717f4fbbcbbdd2fac89b498f66e94d4b2fa089c639ae1136c", "page_count": 105},
-    {"locale": "en", "guide": "admin", "artifact": "documentation/build/pdf/en/browser-policy-manager-administrator-guide-en-0.9.5.pdf", "sha256": "c3bfa117d156425e7cfed34dad0fdaacfa9ee369dcefe4b77f723bead0a11b2b", "page_count": 81},
-    {"locale": "ru", "guide": "user", "artifact": "documentation/build/pdf/ru/browser-policy-manager-user-guide-ru-0.9.5.pdf", "sha256": "d2ea0f264b401a42a259bd7fa4dff2a966e53bdc669721f0a30756af6e4e7625", "page_count": 108},
-    {"locale": "ru", "guide": "admin", "artifact": "documentation/build/pdf/ru/browser-policy-manager-administrator-guide-ru-0.9.5.pdf", "sha256": "61916e7dcb0e9d5544db489c9beedcfe5b3ac678e7ba30994526383c74b600b3", "page_count": 99},
-    {"locale": "de", "guide": "user", "artifact": "documentation/build/pdf/de/browser-policy-manager-user-guide-de-0.9.5.pdf", "sha256": "a12bd85997d07f54badf3ab08dbfaa773343a073e3bce8548aea1751e4b1c3d0", "page_count": 107},
-    {"locale": "de", "guide": "admin", "artifact": "documentation/build/pdf/de/browser-policy-manager-administrator-guide-de-0.9.5.pdf", "sha256": "3d35002a9cef90f072e4954322badc2ebf81a8e516c3854c6cbeca8421dfce8f", "page_count": 97},
-    {"locale": "zh-CN", "guide": "user", "artifact": "documentation/build/pdf/zh-CN/browser-policy-manager-user-guide-zh-CN-0.9.5.pdf", "sha256": "3836929ce185e002b31f8f4605ed7a9373c75cdeee83432731cfbe39df3b2149", "page_count": 104},
-    {"locale": "zh-CN", "guide": "admin", "artifact": "documentation/build/pdf/zh-CN/browser-policy-manager-administrator-guide-zh-CN-0.9.5.pdf", "sha256": "7fdfa304f7d409e3dd076f23e279ad816a46d73a461f65ede3e9866a452d7a84", "page_count": 69},
-    {"locale": "fr", "guide": "user", "artifact": "documentation/build/pdf/fr/browser-policy-manager-user-guide-fr-0.9.5.pdf", "sha256": "66a4cfba9d563351fcc7c9b3edc6b4171da04934b37e4fa23472869a750c8019", "page_count": 107},
-    {"locale": "fr", "guide": "admin", "artifact": "documentation/build/pdf/fr/browser-policy-manager-administrator-guide-fr-0.9.5.pdf", "sha256": "530af0e3db2498bfd389518d3f8c647d1d98db94a3ad656bef5d88588d6816ae", "page_count": 95},
-    {"locale": "es-ES", "guide": "user", "artifact": "documentation/build/pdf/es-ES/browser-policy-manager-user-guide-es-ES-0.9.5.pdf", "sha256": "e8d299453327fed6eeeeb97304f928839b3e4f3ce29d7f79789cfc124d26926d", "page_count": 106},
-    {"locale": "es-ES", "guide": "admin", "artifact": "documentation/build/pdf/es-ES/browser-policy-manager-administrator-guide-es-ES-0.9.5.pdf", "sha256": "1fdb4e3d0453e57a5d070f367e80a1cc0d6855afc800caa0aa6f6169be356cfb", "page_count": 97}
+    {"locale": "en", "guide": "user", "artifact": "documentation/build/pdf/en/browser-policy-manager-user-guide-en-0.9.5.1.pdf", "sha256": "1cb9429ccb2b01d717f4fbbcbbdd2fac89b498f66e94d4b2fa089c639ae1136c", "page_count": 105},
+    {"locale": "en", "guide": "admin", "artifact": "documentation/build/pdf/en/browser-policy-manager-administrator-guide-en-0.9.5.1.pdf", "sha256": "c3bfa117d156425e7cfed34dad0fdaacfa9ee369dcefe4b77f723bead0a11b2b", "page_count": 81},
+    {"locale": "ru", "guide": "user", "artifact": "documentation/build/pdf/ru/browser-policy-manager-user-guide-ru-0.9.5.1.pdf", "sha256": "d2ea0f264b401a42a259bd7fa4dff2a966e53bdc669721f0a30756af6e4e7625", "page_count": 108},
+    {"locale": "ru", "guide": "admin", "artifact": "documentation/build/pdf/ru/browser-policy-manager-administrator-guide-ru-0.9.5.1.pdf", "sha256": "61916e7dcb0e9d5544db489c9beedcfe5b3ac678e7ba30994526383c74b600b3", "page_count": 99},
+    {"locale": "de", "guide": "user", "artifact": "documentation/build/pdf/de/browser-policy-manager-user-guide-de-0.9.5.1.pdf", "sha256": "a12bd85997d07f54badf3ab08dbfaa773343a073e3bce8548aea1751e4b1c3d0", "page_count": 107},
+    {"locale": "de", "guide": "admin", "artifact": "documentation/build/pdf/de/browser-policy-manager-administrator-guide-de-0.9.5.1.pdf", "sha256": "3d35002a9cef90f072e4954322badc2ebf81a8e516c3854c6cbeca8421dfce8f", "page_count": 97},
+    {"locale": "zh-CN", "guide": "user", "artifact": "documentation/build/pdf/zh-CN/browser-policy-manager-user-guide-zh-CN-0.9.5.1.pdf", "sha256": "3836929ce185e002b31f8f4605ed7a9373c75cdeee83432731cfbe39df3b2149", "page_count": 104},
+    {"locale": "zh-CN", "guide": "admin", "artifact": "documentation/build/pdf/zh-CN/browser-policy-manager-administrator-guide-zh-CN-0.9.5.1.pdf", "sha256": "7fdfa304f7d409e3dd076f23e279ad816a46d73a461f65ede3e9866a452d7a84", "page_count": 69},
+    {"locale": "fr", "guide": "user", "artifact": "documentation/build/pdf/fr/browser-policy-manager-user-guide-fr-0.9.5.1.pdf", "sha256": "66a4cfba9d563351fcc7c9b3edc6b4171da04934b37e4fa23472869a750c8019", "page_count": 107},
+    {"locale": "fr", "guide": "admin", "artifact": "documentation/build/pdf/fr/browser-policy-manager-administrator-guide-fr-0.9.5.1.pdf", "sha256": "530af0e3db2498bfd389518d3f8c647d1d98db94a3ad656bef5d88588d6816ae", "page_count": 95},
+    {"locale": "es-ES", "guide": "user", "artifact": "documentation/build/pdf/es-ES/browser-policy-manager-user-guide-es-ES-0.9.5.1.pdf", "sha256": "e8d299453327fed6eeeeb97304f928839b3e4f3ce29d7f79789cfc124d26926d", "page_count": 106},
+    {"locale": "es-ES", "guide": "admin", "artifact": "documentation/build/pdf/es-ES/browser-policy-manager-administrator-guide-es-ES-0.9.5.1.pdf", "sha256": "1fdb4e3d0453e57a5d070f367e80a1cc0d6855afc800caa0aa6f6169be356cfb", "page_count": 97}
   ],
   "visual_checks": {
     "title_page_page_count_and_footer": "passed: six localized titles, exact page totals, footer year/copyright placement, and no title-page sequence number were checked by the binary verifier and representative visual inspection.",
@@ -116,9 +116,9 @@
     "pdf_build": "passed: one controlled make docs-pdf-build completed 24/24 locale-guide phases and atomic candidate promotion",
     "pdf_binary_verification": "passed: make docs-pdf-verify; qpdf --check and pdfinfo metadata review covered all 12 PDFs",
     "pdf_independent_reproducibility": "passed: cache-bypassed isolated rerun completed 24/24 locale-guide phases and matched all 12 PDFs plus manifest (13 files)",
-    "pdf_delivery": "passed: make docs-pdf-deliver atomically promoted distributions/documentation/0.9.5 and make docs-pdf-delivery-verify accepted it",
+    "pdf_delivery": "passed: make docs-pdf-deliver atomically promoted distributions/documentation/0.9.5.1 and make docs-pdf-delivery-verify accepted it",
     "docs_release_check": "passed: final make docs-release-check completed after this evidence record was installed; all 1,001 selected documentation contracts passed",
-    "docs_install_dev": "passed: make docs-install-dev installed the BPM 0.9.5 documentation artifact after the final documentation change; this task did not start make dev"
+    "docs_install_dev": "passed: make docs-install-dev installed the BPM 0.9.5.1 documentation artifact after the final documentation change; this task did not start make dev"
   },
   "final_sign_off": {
     "state": "accepted",

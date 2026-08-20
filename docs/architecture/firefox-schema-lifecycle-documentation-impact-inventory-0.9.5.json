@@ -2,7 +2,7 @@
   "schema_version": 1,
   "inventory_id": "bpm095-firefox-schema-lifecycle-documentation-impact",
   "backlog_item": "BPM095-M8-01",
-  "target_bpm_version": "0.9.5",
+  "target_bpm_version": "0.9.5.1",
   "status": "accepted-authoring-inventory",
   "scope": {
     "source_locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],

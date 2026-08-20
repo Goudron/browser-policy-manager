@@ -39,7 +39,7 @@ def test_native_release_inputs_are_complete_and_bound_to_the_current_bpm_version
 
     targets = native_distribution.validate_release_inputs()
 
-    assert native_distribution._project_version() == "0.9.5"
+    assert native_distribution._project_version() == "0.9.5.1"
     assert len(targets) == 5
 
 
@@ -106,7 +106,7 @@ def test_native_make_targets_and_manual_release_workflow_stay_explicit() -> None
 
 
 def test_versioned_native_release_store_keeps_metadata_in_git_and_assets_outside_it() -> None:
-    release_store = REPO_ROOT / "distributions" / "releases" / "0.9.5"
+    release_store = REPO_ROOT / "distributions" / "releases" / "0.9.5.1"
     readme = (release_store / "README.md").read_text(encoding="utf-8")
     ignore = (REPO_ROOT / ".gitignore").read_text(encoding="utf-8")
     tool = (REPO_ROOT / "tools" / "native_distribution.py").read_text(encoding="utf-8")

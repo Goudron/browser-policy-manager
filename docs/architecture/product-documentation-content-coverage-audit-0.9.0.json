@@ -140,9 +140,9 @@
       "disposition": "covered",
       "release_gates": ["DOC090-G05"],
       "summary": {
-        "policy_count": 121,
+        "policy_count": 123,
         "managed_preference_count": 62,
-        "release_only_policy_count": 0
+        "release_only_policy_count": 1
       },
       "source_inventories": [
         "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",

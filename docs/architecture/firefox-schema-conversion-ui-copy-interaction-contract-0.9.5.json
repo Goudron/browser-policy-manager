@@ -2,7 +2,7 @@
   "$schema": "./schemas/firefox-schema-conversion-ui-interaction-contract-v1.schema.json",
   "schema_version": 1,
   "contract_id": "bpm095-firefox-schema-conversion-ui-interactions",
-  "target_bpm_version": "0.9.5",
+  "target_bpm_version": "0.9.5.1",
   "status": "normative-target-preimplementation",
   "dependencies": {
     "ui_copy": "ui-copy-classification-contract-0.9.2.md",

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.5.1
+
+Status: **Unreleased.**
+
+### Changed
+- Updated the Firefox schema matrix to Release 153, ESR 153.0, ESR 140.13, and ESR 115.39.
+- Regenerated Release 153 and ESR 153.0 from the checksum-pinned Mozilla policy-templates
+  `master` snapshot; `SitePolicies` is Release-only and `DefaultBrowserSettingEnabled` is ESR-only.
+- Added `AIControls.SmartWindow` to the fifth Guided editor step for schemas that support it.
+- Updated the product distribution metadata and documentation for the five Linux targets,
+  Windows 10/11 x64, and macOS 14+ x64/arm64.
+
 ## 0.9.5
 
 Status: **Release candidate; implementation, documentation delivery, and final quality review are complete. Reviewed commit and CI handoff remain.**

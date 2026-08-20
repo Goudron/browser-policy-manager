@@ -85,9 +85,9 @@ EXPECTED_CHANNELS = (
     "release-153",
     "esr-153.0",
     "esr-140.13",
-    "esr-115.38",
+    "esr-115.39",
 )
-SOURCE_CHANNEL = "esr-115.38"
+SOURCE_CHANNEL = "esr-115.39"
 AUDIT_TARGETS = ("esr-140.13", "esr-153.0", "release-153")
 SEMANTIC_SHAPE_KEYS = (
     "type",
@@ -909,7 +909,11 @@ def run_gate(
     mutation_checks = run_fail_closed_mutation_checks(targets)
     _progress(emit, phase="legacy-guard", channel="matrix", completed=1, total=1)
     _require_equal(catalog["default_channel"], DEFAULT_SCHEMA_CHANNEL, "Final catalog default")
-    _require_equal(input_digests.keys(), {"v8.0", "v7.12", "v5.12"}, "Pinned source matrix")
+    _require_equal(
+        input_digests.keys(),
+        {"a892b621f7f98ee91c8ed84290641f2703e88490", "v7.12", "v5.12"},
+        "Pinned source matrix",
+    )
 
     report: dict[str, Any] = {
         "report_version": REPORT_VERSION,

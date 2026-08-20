@@ -197,5 +197,7 @@
     "profiles.schema_field_allowed_permissions": "Zugelassene Add-on-Berechtigungen",
     "profiles.schema_field_blocked_permissions": "Gesperrte Add-on-Berechtigungen",
     "profiles.schema_field_runtime_allowed_hosts": "Zugelassene Add-on-Hosts",
-    "profiles.schema_field_runtime_blocked_hosts": "Gesperrte Add-on-Hosts"
+    "profiles.schema_field_runtime_blocked_hosts": "Gesperrte Add-on-Hosts",
+    "profiles.shell_policy_default_browser_setting_enabled": "Einstellung als Standardbrowser aktivieren",
+    "profiles.shell_policy_site_policies": "Website-Richtlinien"
 }

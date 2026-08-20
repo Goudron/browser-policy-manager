@@ -7,7 +7,7 @@
     <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action ayant échoué indique que le flux de travail en cours ne peut pas continuer en toute sécurité.</p></prereq>
     <context><p>L'inadéquation du schéma signifie généralement qu'un paramètre existe dans un canal Firefox mais qu'il est indisponible, obsolète ou structuré différemment dans le canal sélectionné.</p></context>
     <steps>
-      <step><cmd>Confirmez si le profil cible ESR 115.38, ESR 140.13, ESR 153.0 ou Release 153.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Confirmez si le profil cible ESR 115.39, ESR 140.13, ESR 153.0 ou Release 153.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Identifiez le paramètre qui est indisponible, non pris en charge, obsolète ou dépendant du schéma dans ce canal.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Choisissez si vous souhaitez changer de canal de schéma ou supprimer/modifier le paramètre affecté pour la cible Firefox prévue.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Revalidez et examinez la préparation à l'exportation après la décision de canal ou de réglage.</cmd><info><note type="warning">Réessayez uniquement depuis l’interface BPM ; ne modifiez pas les données du profil en dehors de l’application.</note></info></step>

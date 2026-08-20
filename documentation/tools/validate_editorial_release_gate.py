@@ -94,9 +94,9 @@ def m8_review_blockers(review: dict[str, object]) -> list[str]:
 
     required = {
         "schema_version": 1,
-        "review_id": "bpm-0.9.5-editorial-pdf-release-review",
+        "review_id": "bpm-0.9.5.1-editorial-pdf-release-review",
         "backlog_item": "BPM095-M8-05",
-        "target_bpm_version": "0.9.5",
+        "target_bpm_version": "0.9.5.1",
         "release_blocking": True,
     }
     blockers = [

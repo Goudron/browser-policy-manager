@@ -1,6 +1,6 @@
 {
   "contract_version": 2,
-  "product_version": "0.9.5",
+  "product_version": "0.9.5.1",
   "observed_head_revision": "20260804_add_profile_name_casefold",
   "planned_upgrade_owner": "BPM094-M4-04",
   "supported_engines": [
@@ -459,7 +459,7 @@
     "backup_boundary": "The retained native backup is integrity-checked and SHA-256 verified before and after failure.",
     "retry_boundary": "Retry always restores the same verified backup into a new absent candidate and upgrades that candidate to head.",
     "promotion_boundary": "No recovery tool replaces the configured database; switching BPM to the verified candidate is an explicit maintainer action.",
-    "downgrade_policy": "Downgrade from the 0.9.5 head is unsupported; retained backup restore is the only recovery path.",
+    "downgrade_policy": "Downgrade from the 0.9.5.1 head is unsupported; retained backup restore is the only recovery path.",
     "sqlite_commands": [
       "python tools/database_upgrade_recovery.py verify-sqlite-backup --backup <absolute-backup> --manifest <absolute-new-manifest>",
       "python tools/database_upgrade_recovery.py retry-sqlite-upgrade --backup <absolute-backup> --manifest <absolute-manifest> --candidate <absolute-new-candidate>"
@@ -473,7 +473,7 @@
     "materializer": "migration_support/retirement_revision_materializer_v1.py",
     "active_graph_changed": false,
     "observed_head_revision": "20260804_add_profile_name_casefold",
-    "immutable_proof_digest": "3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb",
+    "immutable_proof_digest": "9de84bde21e11d161d48297d19cc2447c36ac052d6cef8aed7727b8fa29746ef",
     "sqlite_evidence": "candidate-artifact-real-alembic-upgrade-pass",
     "postgresql_evidence": "pending-m6-remediation-r3",
     "activation_conditions": [

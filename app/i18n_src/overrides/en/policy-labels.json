@@ -98,5 +98,7 @@
     "profiles.schema_field_allowed_permissions": "Allowed extension permissions",
     "profiles.schema_field_blocked_permissions": "Blocked extension permissions",
     "profiles.schema_field_runtime_allowed_hosts": "Allowed extension hosts",
-    "profiles.schema_field_runtime_blocked_hosts": "Blocked extension hosts"
+    "profiles.schema_field_runtime_blocked_hosts": "Blocked extension hosts",
+    "profiles.shell_policy_default_browser_setting_enabled": "Enable default browser setting",
+    "profiles.shell_policy_site_policies": "Site policies"
 }

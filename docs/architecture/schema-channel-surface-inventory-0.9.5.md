@@ -1,4 +1,4 @@
-# BPM 0.9.5 Current Schema-Channel Surface Inventory
+# BPM 0.9.5.1 Current Schema-Channel Surface Inventory
 
 Status: active architecture inventory
 Scope: current BPM095 ownership after M7-04. This inventory names maintained
@@ -8,9 +8,9 @@ a generated-artifact inventory, or authorization to retire a supported ESR.
 ## Current lifecycle matrix
 
 The runtime catalog has four independently generated, supported artifacts:
-`release-153`, `esr-153.0`, `esr-140.13`, and `esr-115.38`. Lifecycle roles,
+`release-153`, `esr-153.0`, `esr-140.13`, and `esr-115.39`. Lifecycle roles,
 not tuple order, labels, defaults, or aliases, determine product default
-(ESR 153.0), latest ESR (ESR 153.0), older-ESR recommendations (ESR 115.38
+(ESR 153.0), latest ESR (ESR 153.0), older-ESR recommendations (ESR 115.39
 and ESR 140.13 to ESR 153.0), and prospective immediate retirement successors
 (ESR 115 to ESR 140; ESR 140 to ESR 153). An older supported ESR is selectable
 and is never moved at runtime.

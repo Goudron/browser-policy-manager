@@ -37,7 +37,7 @@ creates a profile ID.
 - Version-aware validation against bundled Firefox policy schemas.
 - Guided editor for common administrator and security-team scenarios.
 - Dedicated AI and smart browser features step for schema versions that support those policies.
-- Schema-aware Release/ESR behavior across Release 153, ESR 153.0, ESR 140.13, and ESR 115.38.
+- Schema-aware Release/ESR behavior across Release 153, ESR 153.0, ESR 140.13, and ESR 115.39.
 - Triage-first All settings workflow with Review, Configured, and Catalog modes, source attribution,
   grouped search, bounded long lists, and one primary detail editor.
 - JSON editor backed by the locally bundled Monaco editor.
@@ -51,11 +51,11 @@ creates a profile ID.
 | Firefox Release 153 | `release-153` | Active |
 | Firefox ESR 153.0 | `esr-153.0` | Active |
 | Firefox ESR 140.13 | `esr-140.13` | Active |
-| Firefox ESR 115.38 | `esr-115.38` | Active, older legacy-OS channel |
+| Firefox ESR 115.39 | `esr-115.39` | Active, older legacy-OS channel |
 
 The selected schema controls validation, imported-profile normalization, available UI controls,
 and schema-specific behavior. Firefox Release 153 and ESR 153.0 expose the current AI policy
-controls; ESR 140.13 and ESR 115.38 do not. ESR 115.38 is retained for legacy operating systems
+controls; ESR 140.13 and ESR 115.39 do not. ESR 115.39 is retained for legacy operating systems
 with limited security support through March 2027 and a scheduled recheck. ESR 153.0 is the latest
 ESR and BPM recommends it for profiles using either older ESR channel.
 

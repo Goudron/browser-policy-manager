@@ -52,7 +52,7 @@ def test_cis_coverage_report_counts_current_dataset() -> None:
     }
     assert benchmark["by_level"] == {"L1": 51, "L2": 4}
     assert benchmark["schema_compatibility"] == {
-        "esr-115.38:valid": 53,
+        "esr-115.39:valid": 53,
         "esr-140.13:valid": 53,
         "esr-153.0:valid": 53,
         "release-153:valid": 53,

@@ -78,7 +78,7 @@ def _synthetic_artifacts() -> tuple[SchemaArtifactBinding, SchemaArtifactBinding
         "additionalProperties": False,
     }
     return (
-        _schema_bundle(line_id="esr-115", artifact_id="esr-115.38", schema=source_schema),
+        _schema_bundle(line_id="esr-115", artifact_id="esr-115.39", schema=source_schema),
         _schema_bundle(line_id="esr-140", artifact_id="esr-140.13", schema=target_schema),
     )
 
@@ -224,7 +224,7 @@ def test_target_only_policy_does_not_create_a_source_domain_error_when_root_cont
     }
     source = _schema_bundle(
         line_id="esr-115",
-        artifact_id="esr-115.38",
+        artifact_id="esr-115.39",
         schema=source_schema,
     )
     target = _schema_bundle(
@@ -282,7 +282,7 @@ def test_malformed_schema_and_artifact_line_substitution_fail_before_a_proof_res
     with pytest.raises(RetirementConvertibilityPreflightError, match="retirement_schema_malformed"):
         _schema_bundle(
             line_id="esr-115",
-            artifact_id="esr-115.38",
+            artifact_id="esr-115.39",
             schema={"type": "not-a-json-schema-type"},
         )
 
@@ -361,7 +361,7 @@ def test_required_current_esr140_to_esr153_plan_is_bound_to_exact_complete_proof
     assert result.method == "schema-containment"
     assert (
         result.proof_artifact_digest
-        == "3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb"
+        == "9de84bde21e11d161d48297d19cc2447c36ac052d6cef8aed7727b8fa29746ef"
     )
     assert result.blockers == ()
     assert result.uncovered_schema_locations == ()

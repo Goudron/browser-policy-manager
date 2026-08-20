@@ -333,9 +333,7 @@ PROFILES_PAGE_REVIEW_TOKENS = (
 PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
     "data-wizard-disclosure-toggle",
     'id="wizard-schema-shell-step-5-raw"',
-    'id="wizard-schema-shell-step-7-badges"',
-    'id="wizard-schema-shell-step-8-coverage"',
-    'id="wizard-schema-shell-step-8-badges"',
+    'id="wizard-schema-shell-step-6-badges"',
     "data-schema-dict-add",
     "data-schema-dict-remove",
     "data-schema-dict-key",

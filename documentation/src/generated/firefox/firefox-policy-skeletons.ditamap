@@ -25,6 +25,7 @@
   <topicref keys="topic.fx-policy-Containers" href="policies/fx-policy-Containers.dita"/>
   <topicref keys="topic.fx-policy-ContentAnalysis" href="policies/fx-policy-ContentAnalysis.dita"/>
   <topicref keys="topic.fx-policy-Cookies" href="policies/fx-policy-Cookies.dita"/>
+  <topicref keys="topic.fx-policy-DefaultBrowserSettingEnabled" href="policies/fx-policy-DefaultBrowserSettingEnabled.dita"/>
   <topicref keys="topic.fx-policy-DefaultDownloadDirectory" href="policies/fx-policy-DefaultDownloadDirectory.dita"/>
   <topicref keys="topic.fx-policy-DefaultSerialGuardSetting" href="policies/fx-policy-DefaultSerialGuardSetting.dita"/>
   <topicref keys="topic.fx-policy-DisableAppUpdate" href="policies/fx-policy-DisableAppUpdate.dita"/>
@@ -111,6 +112,7 @@
   <topicref keys="topic.fx-policy-SearchSuggestEnabled" href="policies/fx-policy-SearchSuggestEnabled.dita"/>
   <topicref keys="topic.fx-policy-SecurityDevices" href="policies/fx-policy-SecurityDevices.dita"/>
   <topicref keys="topic.fx-policy-ShowHomeButton" href="policies/fx-policy-ShowHomeButton.dita"/>
+  <topicref keys="topic.fx-policy-SitePolicies" href="policies/fx-policy-SitePolicies.dita"/>
   <topicref keys="topic.fx-policy-SkipTermsOfUse" href="policies/fx-policy-SkipTermsOfUse.dita"/>
   <topicref keys="topic.fx-policy-SSLVersionMax" href="policies/fx-policy-SSLVersionMax.dita"/>
   <topicref keys="topic.fx-policy-SSLVersionMin" href="policies/fx-policy-SSLVersionMin.dita"/>

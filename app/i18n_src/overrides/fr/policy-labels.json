@@ -196,5 +196,7 @@
     "profiles.schema_field_allowed_permissions": "Autorisations d’extensions autorisées",
     "profiles.schema_field_blocked_permissions": "Autorisations d’extensions bloquées",
     "profiles.schema_field_runtime_allowed_hosts": "Hôtes autorisés des extensions",
-    "profiles.schema_field_runtime_blocked_hosts": "Hôtes bloqués des extensions"
+    "profiles.schema_field_runtime_blocked_hosts": "Hôtes bloqués des extensions",
+    "profiles.shell_policy_default_browser_setting_enabled": "Activer le paramètre de navigateur par défaut",
+    "profiles.shell_policy_site_policies": "Politiques de sites"
 }

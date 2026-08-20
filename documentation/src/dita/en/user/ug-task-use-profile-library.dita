@@ -5,7 +5,7 @@
   <shortdesc>Open the <uicontrol>Library</uicontrol> and use its counts, status, and row actions as the starting point for saved profile work.</shortdesc>
   <taskbody>
     <prereq><p>BPM is open and you are working with saved profile records, not an unsaved editor draft.</p></prereq>
-    <context><p>The <uicontrol>Library</uicontrol> lists saved profiles and shows filtered and total counts so you know whether filters or search are hiding rows. Its action grid comes first; the filter row is immediately above the profile table. An active saved ESR 115.38 or ESR 140.13 profile can offer a review update to the latest ESR, ESR 153.0. Opening that recommendation only opens a preview and does not change the profile; Release 153, ESR 153.0, unknown, retired, inactive, and unsaved profiles receive no invented recommendation.</p>
+    <context><p>The <uicontrol>Library</uicontrol> lists saved profiles and shows filtered and total counts so you know whether filters or search are hiding rows. Its action grid comes first; the filter row is immediately above the profile table. An active saved ESR 115.39 or ESR 140.13 profile can offer a review update to the latest ESR, ESR 153.0. Opening that recommendation only opens a preview and does not change the profile; Release 153, ESR 153.0, unknown, retired, inactive, and unsaved profiles receive no invented recommendation.</p>
       <fig id="screenshot-library-overview">
         <title>Library overview</title>
         <image keyref="screenshot.library-overview" placement="break" scalefit="yes" align="center">

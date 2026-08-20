@@ -168,7 +168,7 @@ def test_conversion_apply_rejects_stale_retry_and_never_accepts_client_candidate
             "conversion_schema_identity_stale",
         ),
         (
-            lambda payload: payload["source"].__setitem__("artifact_id", "esr-115.38"),
+            lambda payload: payload["source"].__setitem__("artifact_id", "esr-115.39"),
             "conversion_schema_identity_stale",
         ),
         (
@@ -228,7 +228,7 @@ def test_conversion_apply_blocks_target_invalid_plan_and_preserves_full_row():
             flags={"AIControls": {"Default": {"Value": "blocked", "Locked": True}}},
         )
         before = client.get(f"/api/profiles/{profile['id']}").json()
-        preview = _preview(client, profile["id"], "esr-115.38")
+        preview = _preview(client, profile["id"], "esr-115.39")
         assert preview["compatibility"]["applicable"] is False
         response = client.post(
             f"/api/profiles/{profile['id']}/conversion-apply",

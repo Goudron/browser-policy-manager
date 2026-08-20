@@ -1,19 +1,19 @@
-# BPM 0.9.5 Docker Distribution Contract
+# BPM 0.9.5.1 Docker Distribution Contract
 
 Status: active release-delivery contract.
 
 ## Scope
 
 The Docker distribution is a Linux single-node delivery of the existing BPM
-0.9.5 release runtime. It does not change application behavior or widen the
+0.9.5.1 release runtime. It does not change application behavior or widen the
 product security and deployment boundary. It contains:
 
-- a wheel built from the BPM 0.9.5 base package without `dev`, `ai`, or
+- a wheel built from the BPM 0.9.5.1 base package without `dev`, `ai`, or
   `postgres` extras;
 - the exact Linux amd64 base-runtime dependency resolution in
   `distributions/docker/requirements.lock`;
 - the released Alembic configuration and migration tree;
-- the verified `bpm-documentation-0.9.5.tar.gz` package extracted to the
+- the verified `bpm-documentation-0.9.5.1.tar.gz` package extracted to the
   runtime documentation path;
 - one persistent SQLite volume at `/var/lib/bpm`; and
 - an unprivileged `bpm` runtime user.
@@ -50,7 +50,7 @@ make docker-smoke
 ```
 
 `docker-smoke` proves a clean image starts only after explicit migration,
-responds on `/`, `/health`, `/health/ready`, `/help/`, has BPM `0.9.5`, has no
+responds on `/`, `/health`, `/health/ready`, `/help/`, has BPM `0.9.5.1`, has no
 NumPy, ONNX Runtime, or Tokenizers distribution, and remains ready after a
 restart on the same temporary volume. The release record retains the source
 revision, documentation-archive checksum, base-image digest, image digest,

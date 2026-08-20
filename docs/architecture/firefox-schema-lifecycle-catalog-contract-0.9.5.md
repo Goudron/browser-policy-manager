@@ -1,4 +1,4 @@
-# Firefox Schema Lifecycle Catalog Contract (BPM 0.9.5)
+# Firefox Schema Lifecycle Catalog Contract (BPM 0.9.5.1)
 
 Status: active runtime catalog; all four schemas are independently generated
 and loaded through the M3-03 lifecycle catalog.
@@ -6,7 +6,7 @@ and loaded through the M3-03 lifecycle catalog.
 ## Purpose and authority
 
 This is the single lifecycle-catalog contract for Firefox policy schemas in
-BPM 0.9.5.  Its machine-readable companion,
+BPM 0.9.5.1.  Its machine-readable companion,
 [`firefox-schema-lifecycle-catalog-contract-0.9.5.json`](firefox-schema-lifecycle-catalog-contract-0.9.5.json),
 is the normative catalog fixture. The Markdown explains the rules; M3-01/02
 provision and generate the fourth bundle, and M3-03 wires its runtime catalog.
@@ -32,7 +32,7 @@ Each catalog row has these identities, which must not be conflated:
 | Field | Meaning and rule |
 | --- | --- |
 | `line_id` | Stable lifecycle identity. ESR lines are `esr-115`, `esr-140`, and `esr-153`; a same-line patch refresh retains this value. `release-153` is the current Release-line identity. |
-| `artifact_id` and `channel_id` | Exact persisted/public schema artifact identifier. They are equal in BPM 0.9.5: `esr-115.38`, `esr-140.13`, `esr-153.0`, or `release-153`. A patch refresh creates a new exact artifact/channel ID; it is not a new ESR line. |
+| `artifact_id` and `channel_id` | Exact persisted/public schema artifact identifier. They are equal in BPM 0.9.5.1: `esr-115.39`, `esr-140.13`, `esr-153.0`, or `release-153`. A patch refresh creates a new exact artifact/channel ID; it is not a new ESR line. |
 | `family` and `line_number` | `family` is `esr` or `release`. `line_number` is a numeric line comparison key. ESR ordering uses it, never lexical identifier order. |
 | `artifact_version` | Exact schema/browser-version surface represented by the artifact, separate from its lifecycle line. |
 | `label` and `i18n_key` | English product fallback and the stable source-locale key. Labels are localized only through the key; identifiers never localize. |
@@ -48,16 +48,16 @@ row and must not be represented as general-current-ESR support.
 
 ## BPM095 normative four-channel example
 
-The target catalog has exactly these supported and selectable artifacts.  The
-ESR 115 has an independently generated bundle from verified v5.12 inputs. It
-is not a runtime row until M3-03 implements the lifecycle catalog.
+The target catalog has exactly these supported and selectable artifacts. ESR
+115 is an independently generated bundle from verified v5.12 inputs and is an
+active runtime row.
 
 | Artifact/channel ID | Stable line | Family | Support role | Lifecycle role | Label/key |
 | --- | --- | --- | --- | --- | --- |
 | `release-153` | `release-153` | Release | supported | only default Release; never an ESR recommendation or ESR successor | Release 153 / `profiles.firefox_schema_release_153` |
 | `esr-153.0` | `esr-153` | ESR | supported | only latest ESR and only product default | ESR 153.0 / `profiles.firefox_schema_esr_153_0` |
 | `esr-140.13` | `esr-140` | ESR | supported older | recommends ESR 153; prospective retirement successor is ESR 153 | ESR 140.13 / `profiles.firefox_schema_esr_140_13` |
-| `esr-115.38` | `esr-115` | ESR | supported older, limited legacy-OS security support through March 2027/recheck | recommends ESR 153; prospective retirement successor is ESR 140 | ESR 115.38 / `profiles.firefox_schema_esr_115_38` |
+| `esr-115.39` | `esr-115` | ESR | supported older, limited legacy-OS security support through March 2027/recheck | recommends ESR 153; prospective retirement successor is ESR 140 | ESR 115.39 / `profiles.firefox_schema_esr_115_39` |
 
 The word **prospective** matters.  It records the successor that an approved
 future retirement transition must use.  It does not perform a write and does
@@ -71,7 +71,7 @@ These values have different owners and must never be derived from one another:
 | --- | --- | --- |
 | Product creation default | exact artifact `esr-153.0` | Used only when a newly created profile does not explicitly choose a channel. |
 | Default Release | exact artifact `release-153` | Used only by an explicit Release-specific product choice. |
-| Latest-ESR recommendation target | stable line `esr-153`, resolved to the latest supported artifact `esr-153.0` | `esr-115.38` and `esr-140.13` may recommend an explicit, previewable user conversion to ESR 153. A recommendation never writes or changes the stored artifact. |
+| Latest-ESR recommendation target | stable line `esr-153`, resolved to the latest supported artifact `esr-153.0` | `esr-115.39` and `esr-140.13` may recommend an explicit, previewable user conversion to ESR 153. A recommendation never writes or changes the stored artifact. |
 | Retirement successor | immediate newer stable ESR line | Used only by the M6 Alembic-owned, total-convertibility-gated retirement transition. Current chain: `esr-115` -> `esr-140` -> `esr-153`. |
 
 Therefore a supported ESR 115 or ESR 140 profile recommends ESR 153 but is
@@ -92,7 +92,7 @@ numeric `line_number`, then descending parsed artifact version for a same-line
 refresh.  For the current target, both public sequences are:
 
 ```text
-release-153, esr-153.0, esr-140.13, esr-115.38
+release-153, esr-153.0, esr-140.13, esr-115.39
 ```
 
 The role invariants are exact:
@@ -131,13 +131,13 @@ its existing `value`, `label`, and `i18n_key` fields and only adds fields.
 ```json
 {
   "catalog_version": 1,
-  "supported_channels": ["release-153", "esr-153.0", "esr-140.13", "esr-115.38"],
+  "supported_channels": ["release-153", "esr-153.0", "esr-140.13", "esr-115.39"],
   "default_channel": "esr-153.0",
   "default_release_channel": "release-153",
   "latest_esr_channel": "esr-153.0",
-  "esr_channels": ["esr-153.0", "esr-140.13", "esr-115.38"],
-  "selector_channels": ["release-153", "esr-153.0", "esr-140.13", "esr-115.38"],
-  "header_channels": ["release-153", "esr-153.0", "esr-140.13", "esr-115.38"],
+  "esr_channels": ["esr-153.0", "esr-140.13", "esr-115.39"],
+  "selector_channels": ["release-153", "esr-153.0", "esr-140.13", "esr-115.39"],
+  "header_channels": ["release-153", "esr-153.0", "esr-140.13", "esr-115.39"],
   "default_label": "ESR 153.0",
   "labels": {"artifact_id": "localized label"},
   "filenames": {"artifact_id": "firefox-...json"},
@@ -227,7 +227,7 @@ rules.
 
 | 0.9.2 rule | BPM095 disposition |
 | --- | --- |
-| Release 153, ESR 153.0, and ESR 140.13 are independent schemas; a label change cannot substitute for generation; v8.0/v7.12 provenance remains separate. | **Preserved.** The same rule now applies to ESR 115/v5.12 and every future artifact. |
+| Release 153, ESR 153.0, and ESR 140.13 are independent schemas; a label change cannot substitute for generation; master/v7.12 provenance remains separate. | **Preserved.** The same rule now applies to ESR 115/v5.12 and every future artifact. |
 | Release 153 and ESR 153.0 remain different BPM channels despite a shared policy surface. | **Preserved.** Family and exact artifact identity remain explicit. |
 | Moving between still-supported ESR lines is an explicit user choice followed by validation; no cross-ESR automatic migration occurs while both lines are supported. | **Preserved.** ESR 115/140 profiles recommend ESR 153 but remain unchanged until an explicit conversion. |
 | A singular `CURRENT_ESR_SCHEMA_CHANNEL` must not determine persistence migration during a dual-ESR period. | **Strengthened.** The alias is deprecated/removed; no singular current ESR controls persistence in any lifecycle state. |

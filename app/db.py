@@ -85,7 +85,7 @@ def _assert_release_schema_ready(connection: Connection) -> None:
         )
     if "profiles" not in tables or "policies" in tables:
         raise DatabaseReadinessError(
-            "Database profile tables do not match the BPM 0.9.5 release schema"
+            "Database profile tables do not match the BPM 0.9.5.1 release schema"
         )
 
     # Prefer retirement-specific guidance over a generic head-stamp error
@@ -97,18 +97,18 @@ def _assert_release_schema_ready(connection: Connection) -> None:
     revisions = connection.execute(text("SELECT version_num FROM alembic_version")).scalars().all()
     if revisions != [EXPECTED_DATABASE_REVISION]:
         raise DatabaseReadinessError(
-            "Database revision is not the BPM 0.9.5 head; run the documented verified-backup "
+            "Database revision is not the BPM 0.9.5.1 head; run the documented verified-backup "
             "candidate upgrade before starting BPM"
         )
 
     if columns != EXPECTED_PROFILE_COLUMNS:
         raise DatabaseReadinessError(
-            "Database is stamped at BPM 0.9.5 head but has a partial/incompatible profile shape"
+            "Database is stamped at BPM 0.9.5.1 head but has a partial/incompatible profile shape"
         )
     indexes = {index["name"] for index in inspector.get_indexes("profiles")}
     if not EXPECTED_PROFILE_INDEXES <= indexes:
         raise DatabaseReadinessError(
-            "Database is stamped at BPM 0.9.5 head but is missing required profile indexes"
+            "Database is stamped at BPM 0.9.5.1 head but is missing required profile indexes"
         )
 
 

@@ -97,7 +97,7 @@ def test_profile_recommendation_is_value_free_and_preserved_by_list_pagination_a
     with make_test_client() as client:
         older = client.post(
             "/api/profiles",
-            json={"name": "Older ESR", "schema_version": "esr-115.38", "flags": {}},
+            json={"name": "Older ESR", "schema_version": "esr-115.39", "flags": {}},
         )
         latest = client.post(
             "/api/profiles",
@@ -106,11 +106,11 @@ def test_profile_recommendation_is_value_free_and_preserved_by_list_pagination_a
         page = client.get(
             "/api/profiles", params={"limit": 1, "offset": 0, "sort": "id", "order": "asc"}
         )
-        filtered = client.get("/api/profiles", params={"schema_version": "esr-115.38"})
+        filtered = client.get("/api/profiles", params={"schema_version": "esr-115.39"})
 
     assert older.status_code == status.HTTP_201_CREATED
     recommendation = older.json()["recommendation"]
-    assert recommendation["source"] == {"line_id": "esr-115", "artifact_id": "esr-115.38"}
+    assert recommendation["source"] == {"line_id": "esr-115", "artifact_id": "esr-115.39"}
     assert recommendation["target"]["artifact_id"] == "esr-153.0"
     assert recommendation["target"]["i18n_key"] == "profiles.firefox_schema_esr_153_0"
     assert recommendation["profile_revision"] == older.json()["revision"]

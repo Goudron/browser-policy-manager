@@ -41,7 +41,7 @@ EXPECTED_CHANNELS = (
     "release-153",
     "esr-153.0",
     "esr-140.13",
-    "esr-115.38",
+    "esr-115.39",
 )
 EXPECTED_PAIR_COUNT = len(EXPECTED_CHANNELS) * (len(EXPECTED_CHANNELS) - 1)
 MAX_SCHEMA_LOADER_MISSES = len(EXPECTED_CHANNELS)
@@ -63,7 +63,14 @@ _SOURCE_ONLY_VECTORS: dict[str, Any] = {
     "AIControls": {"Default": {"Value": "blocked", "Locked": True}},
     "BrowserDataBackup": {"AllowBackup": True},
     "AutofillAddressEnabled": True,
+    "DefaultBrowserSettingEnabled": True,
     "HttpAllowlist": ["https://matrix.example.invalid"],
+    "SitePolicies": [
+        {
+            "Match": ["*.matrix.example.invalid"],
+            "Policies": {"DisableJit": True},
+        }
+    ],
 }
 _SHARED_DOCUMENT: dict[str, Any] = {
     "policies": {
@@ -588,7 +595,7 @@ def _api_error_code(response: Any, *, expected: str) -> None:
 
 
 def _apply_identity_proof(client: Any) -> dict[str, Any]:
-    source = "esr-115.38"
+    source = "esr-115.39"
     target = "esr-140.13"
     profile = _create_profile(
         client,

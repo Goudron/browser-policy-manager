@@ -22,7 +22,7 @@ SCHEMA_PATH = (
 )
 DOCS_INDEX_PATH = REPO_ROOT / "docs/docs-index.md"
 SCHEMAS_DIR = REPO_ROOT / "app/schemas/policies"
-SOURCE = "esr-115.38"
+SOURCE = "esr-115.39"
 TARGETS = ("esr-140.13", "esr-153.0", "release-153")
 
 

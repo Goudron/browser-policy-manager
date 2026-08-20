@@ -96,14 +96,14 @@ def test_pinned_manifest_covers_exact_release_and_three_esr_channels() -> None:
         "release": "153.0.3",
         "esr153": "153.0esr",
         "esr140": "140.13.0esr",
-        "esr115": "115.38.0esr",
+        "esr115": "115.39.0esr",
     }
     assert firefox["esr115"] == {
-        "version": "115.38.0esr",
-        "url": "https://archive.mozilla.org/pub/firefox/releases/115.38.0esr/"
-        "linux-x86_64/en-US/firefox-115.38.0esr.tar.bz2",
-        "sha256": "24ad694f543b251482f62b6313f1e10bdfafa3279a2aec8aae6042c0b3eed530",
-        "archive": "firefox-115.38.0esr.tar.bz2",
+        "version": "115.39.0esr",
+        "url": "https://archive.mozilla.org/pub/firefox/releases/115.39.0esr/"
+        "linux-x86_64/en-US/firefox-115.39.0esr.tar.bz2",
+        "sha256": "d7fb42d0aaf4bfccec49c5e3918118d55a222a52854a7ad4651e09eaf7b7c685",
+        "archive": "firefox-115.39.0esr.tar.bz2",
     }
     for entry in [*firefox.values(), payload["platforms"]["linux-x86_64"]["geckodriver"]]:
         assert entry["url"].startswith("https://")

@@ -132,7 +132,7 @@ def test_conversion_preview_returns_blocked_plan_with_target_validation_without_
         before = client.get(f"/api/profiles/{profile['id']}").json()
         response = client.post(
             f"/api/profiles/{profile['id']}/conversion-preview",
-            json={"target_artifact_id": "esr-115.38"},
+            json={"target_artifact_id": "esr-115.39"},
         )
         after = client.get(f"/api/profiles/{profile['id']}").json()
 

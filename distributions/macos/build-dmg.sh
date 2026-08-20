@@ -37,7 +37,7 @@ esac
     exit 2
 }
 
-readonly BPM_VERSION="0.9.5"
+readonly BPM_VERSION="0.9.5.1"
 readonly APP_NAME="Browser Policy Manager.app"
 readonly PYTHON="${PYTHON_EXECUTABLE:-python}"
 readonly WORK_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/bpm-macos-build.XXXXXX")"

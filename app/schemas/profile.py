@@ -277,7 +277,7 @@ class ConversionPreviewResponse(BaseModel):
                         "artifact_id": "esr-153.0",
                         "channel_id": "esr-153.0",
                         "artifact_version": "153.0",
-                        "source_tag": "mozilla-policy-templates-v8.0",
+                        "source_tag": "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
                         "schema_bundle_sha256": "4" * 64,
                         "validation_schema_sha256": "5" * 64,
                     },

@@ -2,7 +2,7 @@ import re
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-TARGET_VERSION = "0.9.5"
+TARGET_VERSION = "0.9.5.1"
 RELEASE_SECTION_HEADING_RE = re.compile(
     r"^#{1,6}\s*(?:changelog|release (?:history|notes)|what['’]s new)\b",
     re.IGNORECASE | re.MULTILINE,
@@ -29,7 +29,7 @@ def test_readme_states_current_schema_support_and_manual_conversion_boundary():
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
     normalized_readme = " ".join(readme.split())
 
-    for channel in ("release-153", "esr-153.0", "esr-140.13", "esr-115.38"):
+    for channel in ("release-153", "esr-153.0", "esr-140.13", "esr-115.39"):
         assert f"`{channel}`" in readme
     assert "limited security support through March 2027 and a scheduled recheck" in readme
     assert "BPM recommends it for profiles using either older ESR channel." in readme

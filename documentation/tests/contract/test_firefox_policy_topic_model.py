@@ -103,7 +103,7 @@ def test_model_covers_supported_channels_simple_complex_and_release_only_policy_
     assert complex_object["channel_scope"] == "both"
     assert {entry["value_type"] for entry in complex_object["channels"].values()} == {"object"}
     assert preserve_unknown["channels"]["esr-140.13"]["ui"]["preserve_unknown_fields"] is True
-    assert "esr-115.38" in simple["channels"]
+    assert "esr-115.39" in simple["channels"]
     assert release_object["channel_scope"] == "partial"
     assert set(release_object["channels"]) == {"esr-153.0", "release-153"}
     assert release_object["channels"]["release-153"]["value_type"] == "object"

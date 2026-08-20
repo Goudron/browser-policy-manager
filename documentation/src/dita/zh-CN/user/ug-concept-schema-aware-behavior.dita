@@ -4,10 +4,10 @@
   <title>火狐浏览器架构通道和验证</title>
   <shortdesc>Firefox 模式通道控制 BPM 可以验证和显示受支持的策略和值。</shortdesc>
   <conbody>
-    <p>请选择与浏览器部署相匹配的通道：Firefox Release 153、Firefox ESR 153.0、Firefox ESR 140.13 或 Firefox ESR 115.38。架构选择会更改可用控件、验证消息以及设置的支持状态。</p>
-    <section id="a-channel-choice"><title>选择通道</title><p>支持的架构通道是 Release 153、ESR 153.0、ESR 140.13 和 ESR 115.38。请在导入、验证、详细编辑或导出配置文件前选择通道。ESR 115.38 面向仍需要旧版操作系统有限关键安全支持的组织；它不会延长操作系统供应商的支持期限。BPM 将在 2027-03-01 重新检查该支持边界。</p></section>
+    <p>请选择与浏览器部署相匹配的通道：Firefox Release 153、Firefox ESR 153.0、Firefox ESR 140.13 或 Firefox ESR 115.39。架构选择会更改可用控件、验证消息以及设置的支持状态。</p>
+    <section id="a-channel-choice"><title>选择通道</title><p>支持的架构通道是 Release 153、ESR 153.0、ESR 140.13 和 ESR 115.39。请在导入、验证、详细编辑或导出配置文件前选择通道。ESR 115.39 面向仍需要旧版操作系统有限关键安全支持的组织；它不会延长操作系统供应商的支持期限。BPM 将在 2027-03-01 重新检查该支持边界。</p></section>
     <section id="a-validation"><title>验证</title><p>验证根据所选模式和 BPM 规范化模型检查配置文件。在导出之前、JSON 编辑之后、导入之后以及比较重要配置文件之前运行验证。</p></section>
-    <section id="a-release-esr-differences"><title>了解稳定版和长期支持版的差异</title><p>DisableTelemetry 等常见策略在所有四个受支持通道中均可验证。Release 153 和 ESR 153.0 可以支持 ESR 140.13 和 ESR 115.38 中没有的较新控件，例如 AIControls 和 VisualSearchEnabled。</p></section>
+    <section id="a-release-esr-differences"><title>了解稳定版和长期支持版的差异</title><p>DisableTelemetry 等常见策略在所有四个受支持通道中均可验证。Release 153 和 ESR 153.0 可以支持 ESR 140.13 和 ESR 115.39 中没有的较新控件，例如 AIControls 和 VisualSearchEnabled。</p></section>
     <section id="a-state-meanings"><title>支持、不可用、已弃用、未知和原始状态</title><p>可以针对所选模式编辑和验证支持的设置。切换前应检查不可用或未知的设置；已弃用的设置可能仍然存在，但需要当前频道确认；应故意保留或删除原始后备值。</p></section>
     <section id="a-migration-expectations"><title>检查通道变更</title><p>切换架构通道是一项审查决定，而不是静默迁移。切换后请重新验证，并在保存或导出前检查较新通道中的值、ESR 中不可用的值、导入值、原始值和已弃用值。</p></section>
     <section id="a-example-boundary"><title>检查支持边界</title><p>DisableTelemetry 是常见的有效示例。AIControls 和 VisualSearchEnabled 在 Release 153 和 ESR 153.0 中可能有效，但在 ESR 140.13 中不受支持。错误的值类型（例如为 DisableTelemetry 提供字符串）对所有架构都无效。</p></section>

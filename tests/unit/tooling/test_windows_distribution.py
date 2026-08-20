@@ -14,7 +14,7 @@ WINDOWS_ROOT = REPO_ROOT / "distributions" / "windows"
 def test_windows_target_is_one_native_x64_msi_for_windows_10_and_11() -> None:
     target = windows_distribution.load_target()
 
-    assert target.artifact == "browser-policy-manager-0.9.5-windows-x64.msi"
+    assert target.artifact == "browser-policy-manager-0.9.5.1-windows-x64.msi"
     assert target.python_version == "3.14.6"
     assert target.wix_version == "4.0.6"
     manifest = json.loads((WINDOWS_ROOT / "targets.json").read_text(encoding="utf-8"))
@@ -35,7 +35,7 @@ def test_windows_release_inputs_are_complete_and_bound_to_current_bpm_version(
 
     target = windows_distribution.validate_release_inputs()
 
-    assert windows_distribution._project_version() == "0.9.5"
+    assert windows_distribution._project_version() == "0.9.5.1"
     assert target.winsw_version == "2.12.0"
 
 

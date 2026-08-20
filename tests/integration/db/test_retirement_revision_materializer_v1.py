@@ -246,7 +246,7 @@ def test_candidate_materialization_binds_exact_catalog_proof_manifest_and_graph(
     assert artifact.manifest["total_proof_artifact_digest"] == TOTAL_PROOF_ARTIFACT_DIGEST
     assert artifact.manifest["candidate_catalog_digest"] == artifact.candidate_catalog_digest
     assert artifact.manifest["candidate_supported_esr_lines"] == [
-        {"line_id": "esr-115", "line_number": 115, "artifact_id": "esr-115.38"},
+        {"line_id": "esr-115", "line_number": 115, "artifact_id": "esr-115.39"},
         {"line_id": "esr-153", "line_number": 153, "artifact_id": "esr-153.0"},
     ]
     assert hashlib.sha256(artifact.source.encode()).hexdigest() == artifact.source_sha256

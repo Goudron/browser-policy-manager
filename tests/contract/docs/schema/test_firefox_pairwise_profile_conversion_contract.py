@@ -30,7 +30,7 @@ LIFECYCLE_PATH = (
 )
 GOLDEN_PROFILES_PATH = REPO_ROOT / "tests/fixtures/database_upgrade/golden_profiles_0_9_4.json"
 
-ARTIFACT_IDS = ("release-153", "esr-153.0", "esr-140.13", "esr-115.38")
+ARTIFACT_IDS = ("release-153", "esr-153.0", "esr-140.13", "esr-115.39")
 CURRENT_ARTIFACT_IDS = ARTIFACT_IDS[:3]
 PLAN_INCLUDE_KEYS = (
     "kind",
@@ -481,7 +481,9 @@ def _make_transformed_plan(contract: dict[str, Any]) -> dict[str, Any]:
     )
     plan["recipe_registry"]["recipes"] = [recipe]
     plan["compatibility"]["status"] = "compatible-transformed"
-    plan["compatibility"]["counts"].update({"unchanged_semantic": 0, "transformed": 1})
+    plan["compatibility"]["counts"].update(
+        {"unchanged_byte": 0, "unchanged_semantic": 0, "transformed": 1, "warnings": 1}
+    )
     plan["warnings"] = [
         {
             "code": "lossless_transformation_used",
@@ -507,7 +509,13 @@ def _make_blocked_plan(contract: dict[str, Any]) -> dict[str, Any]:
     )
     plan["compatibility"].update({"status": "blocked", "applicable": False})
     plan["compatibility"]["counts"].update(
-        {"unchanged_semantic": 0, "blocked": 1, "warnings": 0, "blockers": 1}
+        {
+            "unchanged_byte": 0,
+            "unchanged_semantic": 0,
+            "blocked": 1,
+            "warnings": 0,
+            "blockers": 1,
+        }
     )
     plan["warnings"] = []
     plan["blockers"] = [
@@ -586,7 +594,7 @@ def test_all_directed_pairs_are_current_planner_inputs_after_m3() -> None:
     assert {pair["runtime_status"] for pair in contract["pair_matrix"]} == {
         "planner-runtime-active-empty-production-registry"
     }
-    assert (REPO_ROOT / "app/schemas/policies/firefox-esr-115.38.json").exists()
+    assert (REPO_ROOT / "app/schemas/policies/firefox-esr-115.39.json").exists()
 
 
 def test_preview_identity_and_atomization_ignore_object_and_pair_declaration_order() -> None:
@@ -743,9 +751,9 @@ def test_json_schema_rejects_drop_missing_identity_and_mutation_escape_hatches(
         ),
         (
             lambda value: value["examples"]["plan"]["entries"][0].__setitem__(
-                "evidence_digest", None
+                "evidence_digest", "e" * 64
             ),
-            "require evidence",
+            "must not invent semantic evidence",
         ),
         (
             lambda value: value["examples"]["plan"]["target_validation"].__setitem__(

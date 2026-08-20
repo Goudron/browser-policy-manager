@@ -200,5 +200,7 @@
     "profiles.schema_field_allowed_permissions": "Permisos permitidos de complementos",
     "profiles.schema_field_blocked_permissions": "Permisos bloqueados de complementos",
     "profiles.schema_field_runtime_allowed_hosts": "Hosts permitidos de complementos",
-    "profiles.schema_field_runtime_blocked_hosts": "Hosts bloqueados de complementos"
+    "profiles.schema_field_runtime_blocked_hosts": "Hosts bloqueados de complementos",
+    "profiles.shell_policy_default_browser_setting_enabled": "Activar la configuración de navegador predeterminado",
+    "profiles.shell_policy_site_policies": "Políticas de sitios"
 }

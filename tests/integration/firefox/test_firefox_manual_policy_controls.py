@@ -22,7 +22,7 @@ def test_manual_policy_controls_catalog_uses_schema_enum_for_https_only_mode():
 
 
 def test_manual_policy_controls_catalog_omits_post_115_controls_for_esr_115():
-    catalog = get_manual_policy_controls_catalog("esr-115.38")
+    catalog = get_manual_policy_controls_catalog("esr-115.39")
     policy_ids = {item["policy_id"] for group in catalog["groups"] for item in group["items"]}
 
     assert "HttpsOnlyMode" not in policy_ids

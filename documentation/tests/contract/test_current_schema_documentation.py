@@ -81,7 +81,7 @@ def test_english_m8_sources_cover_current_lifecycle_api_and_safe_recovery_bounda
     """Keep M8-02 current facts in English without pre-empting M8-03 localization."""
     text = "\n".join(_text(DITA_ROOT / "en" / topic) for topic in M8_ENGLISH_SOURCE_TOPICS)
 
-    for channel in ("Release 153", "ESR 153.0", "ESR 140.13", "ESR 115.38"):
+    for channel in ("Release 153", "ESR 153.0", "ESR 140.13", "ESR 115.39"):
         assert channel in text
 
     for required in (
@@ -134,7 +134,7 @@ def test_m8_lifecycle_locales_keep_the_shipped_four_channel_and_conversion_contr
             "Release 153",
             "ESR 153.0",
             "ESR 140.13",
-            "ESR 115.38",
+            "ESR 115.39",
             "2027-03-01",
             "ESR 153.0",
             '{"policies":{...}}',

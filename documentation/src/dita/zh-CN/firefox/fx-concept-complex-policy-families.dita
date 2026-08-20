@@ -10,7 +10,7 @@
     <section id="a-certificates"><title>证书</title><p><codeph>Certificates</codeph>可以导入企业根并安装证书文件。将路径和信任行为视为特定于环境的行为，并在部署之前在 BPM 外部验证它们。</p></section>
     <section id="a-proxy"><title>代理</title><p><codeph>Proxy</codeph> 结合了模式、服务器、端口和协议重用。请仔细验证手动代理值，因为格式错误的地址可能会阻止浏览器网络访问。</p></section>
     <section id="a-search-homepage"><title>搜索和主页</title><p><codeph>SearchEngines</codeph> 和 <codeph>Homepage</codeph> 塑造第一个用户入口点。搜索 URL 模板必须保留 <codeph>{searchTerms}</codeph>，并且应根据源跟踪检查锁定的主页。</p></section>
-    <section id="a-privacy-ai"><title>隐私和人工智能控制</title><p><codeph>EnableTrackingProtection</codeph> 和 <codeph>Cookies</codeph> 等隐私系列可以与站点例外进行交互。 Firefox AI 控件（例如 <codeph>AIControls</codeph>）是要记录的产品政策；他们没有将 AI 功能添加到文档门户。</p></section>
+    <section id="a-privacy-ai"><title>隐私和人工智能控制</title><p><codeph>EnableTrackingProtection</codeph> 和 <codeph>Cookies</codeph> 等隐私系列可以与站点例外进行交互。Firefox AI 控件（例如 <codeph>AIControls</codeph>）是要记录的产品策略；它们不会向文档门户添加 AI 功能。选择 Release 153 或 ESR 153.0 架构后，在第 5 步 <uicontrol>AI 与智能功能</uicontrol>中为智能窗口设置 <codeph>AIControls.SmartWindow</codeph>：为 <codeph>Value</codeph> 选择 <codeph>available</codeph> 或 <codeph>blocked</codeph>；当用户不得修改时设置 <codeph>Locked</codeph>。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.fx-task-review-complex-policy-configuration"/>

@@ -250,7 +250,7 @@ async def test_real_engine_blocked_and_stale_identity_requests_do_not_mutate(
         blocked = await _apply_request(
             runtime,
             profile_id=profile_id,
-            target_artifact_id="esr-115.38",
+            target_artifact_id="esr-115.39",
         )
         with pytest.raises(ConversionApplyFailure, match="conversion_plan_blocked"):
             await _apply(runtime, profile_id, blocked)

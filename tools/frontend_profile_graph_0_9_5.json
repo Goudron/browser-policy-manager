@@ -1,5 +1,5 @@
 {
-  "version": "0.9.5",
+  "version": "0.9.5.1",
   "owner": "profile frontend",
   "execution_model": "route-specific native ESM entry bundles use direct module imports with no profile global bridge",
   "pure_module_sources": [

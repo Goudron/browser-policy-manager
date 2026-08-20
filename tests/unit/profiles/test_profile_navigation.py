@@ -69,11 +69,19 @@ def test_profile_navigation_resolves_settings_shell_focus_step():
             "release-153",
             shell_catalog,
         )
-        == 5
+        == 3
     )
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "policy:LocalNetworkAccess",
+            "release-153",
+            shell_catalog,
+        )
+        == 3
+    )
+    assert (
+        profile_navigation.resolve_settings_shell_focus_step(
+            "policy:AIControls",
             "release-153",
             shell_catalog,
         )

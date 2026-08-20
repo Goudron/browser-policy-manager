@@ -1,11 +1,11 @@
 # ESR 115 Policy Placement, Preset, And CIS Audit
 
-Date: 2026-08-11
+Date: 2026-08-20
 
 Status: **Active evidence and runtime guard for `BPM095-M3-05`.**
 
-The machine-readable [audit contract](firefox-esr-115-policy-disposition-audit-0.9.5.json)
-is authoritative. It compares the independently generated ESR 115.38 bundle with
+The machine-readable [audit contract](.9.5.json)
+is authoritative. It compares the independently generated ESR 115.39 bundle with
 ESR 140.13, ESR 153.0, and Release 153 at validation-relevant policy and nested
 schema-path level. It intentionally excludes descriptions and generator metadata.
 
@@ -14,11 +14,12 @@ schema-path level. It intentionally excludes descriptions and generator metadata
 | Pair | ESR115 policies | Target policies | Target-only policies | Changed nested paths |
 | --- | ---: | ---: | ---: | ---: |
 | ESR115 → ESR140 | 97 | 112 | 15 | 11 |
-| ESR115 → ESR153 | 97 | 121 | 24 | 18 |
-| ESR115 → Release153 | 97 | 121 | 24 | 18 |
+| ESR115 → ESR153 | 97 | 122 | 25 | 18 |
+| ESR115 → Release153 | 97 | 122 | 25 | 18 |
 
 There are no ESR115-only policies in any comparison. ESR153 and Release153 have
-the same validation-relevant shape. The contract records every difference as a
+separate validation-relevant master surfaces: `DefaultBrowserSettingEnabled` is
+ESR153-only and `SitePolicies` is Release153-only. The contract records every difference as a
 stable identity constructed from its pair prefix and JSON pointer; the checked-in
 bundle SHA-256 values are evidence for both ends of each comparison.
 
@@ -26,7 +27,7 @@ bundle SHA-256 values are evidence for both ends of each comparison.
 
 All settings exposes each exact bundle policy once: ESR115 is 43 reviewed Guided
 items plus 54 raw-fallback items, or 97/97. The other exact counts are Release
-121 (51/70), ESR153 (51/70), and ESR140 (45/67). A policy is promoted to Guided
+122 (51/71), ESR153 (51/71), and ESR140 (45/67). A policy is promoted to Guided
 only by reviewed UI metadata. The manual quick-control catalog remains curated
 and filters each control against the selected schema. The JSON editor/import/
 export boundary remains the lossless raw fallback for any schema-valid ESR115

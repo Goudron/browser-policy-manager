@@ -103,7 +103,7 @@ def test_conversion_apply_roundtrip_retains_target_state_across_profile_surfaces
             "/api/profiles",
             json={
                 "name": "M4-05 persisted roundtrip",
-                "schema_version": "esr-115.38",
+                "schema_version": "esr-115.39",
                 "flags": source_flags,
                 "compliance": source_compliance,
             },
@@ -198,14 +198,14 @@ def test_target_shell_hides_source_only_controls_and_blocked_source_policy_never
                 "flags": {"DisableTelemetry": True},
             },
         ).json()
-        _preview, _applied = _apply(client, compatible["id"], "esr-115.38")
+        _preview, _applied = _apply(client, compatible["id"], "esr-115.39")
         target = client.get(f"/api/profiles/{compatible['id']}").json()
-        assert target["schema_version"] == "esr-115.38"
+        assert target["schema_version"] == "esr-115.39"
 
         guided = client.get(f"/profiles/{compatible['id']}/edit")
         assert guided.status_code == status.HTTP_200_OK
         shell_catalog = _embedded_json(guided, "wizard-schema-shell-catalog")
-        assert "AIControls" not in _shell_policy_ids(shell_catalog, "esr-115.38")
+        assert "AIControls" not in _shell_policy_ids(shell_catalog, "esr-115.39")
         assert "AIControls" in _shell_policy_ids(shell_catalog, "esr-153.0")
 
         blocked_response = client.post(
@@ -224,7 +224,7 @@ def test_target_shell_hides_source_only_controls_and_blocked_source_policy_never
         before = client.get(f"/api/profiles/{blocked['id']}").json()
         preview_response = client.post(
             f"/api/profiles/{blocked['id']}/conversion-preview",
-            json={"target_artifact_id": "esr-115.38"},
+            json={"target_artifact_id": "esr-115.39"},
         )
         assert preview_response.status_code == status.HTTP_200_OK, preview_response.text
         preview = preview_response.json()

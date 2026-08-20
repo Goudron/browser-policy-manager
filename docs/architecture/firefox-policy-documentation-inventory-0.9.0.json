@@ -1,23 +1,42 @@
 {
   "backlog_item": "BPM095-M8-04",
   "channels": {
-    "esr-115.38": {
-      "artifact_id": "esr-115.38",
+    "esr-115.39": {
+      "artifact_id": "esr-115.39",
       "family": "esr",
-      "filename": "firefox-esr-115.38.json",
+      "filename": "firefox-esr-115.39.json",
       "is_default": false,
       "is_default_release": false,
       "is_latest_esr": false,
       "is_product_default": false,
-      "label": "ESR 115.38",
+      "label": "ESR 115.39",
       "line_id": "esr-115",
       "line_number": 115,
-      "mozilla_version": "115.38",
+      "mozilla_version": "115.39",
       "policy_count": 97,
       "recommendation_target_line_id": "esr-153",
       "retirement_successor_line_id": "esr-140",
       "schema_source": "mozilla-policy-templates-v5.12",
-      "schema_version": "115.38",
+      "schema_source_provenance": {
+        "inputs": {
+          "linux-policies.json": {
+            "bytes": 11922,
+            "sha256": "da9caaefe75f7f5e54694bccda8a044e62f034dbd5889bcf1595bb08d6a04347",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v5.12/linux/policies.json"
+          },
+          "policy-templates.md": {
+            "bytes": 180619,
+            "sha256": "ce84a587dabc8e995e93206866e8d8ab3c9cf8423bb7dfbe74f20b9b28aaac42",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v5.12/docs/index.md"
+          }
+        },
+        "license_spdx": "MPL-2.0",
+        "license_url": "https://www.mozilla.org/MPL/2.0/",
+        "source_tag": "mozilla-policy-templates-v5.12",
+        "upstream_release_url": "https://github.com/mozilla/policy-templates/releases/tag/v5.12",
+        "upstream_tag": "v5.12"
+      },
+      "schema_version": "115.39",
       "selectable": true,
       "support_state": "supported",
       "type_counts": {
@@ -47,6 +66,25 @@
       "recommendation_target_line_id": "esr-153",
       "retirement_successor_line_id": "esr-153",
       "schema_source": "mozilla-policy-templates-v7.12",
+      "schema_source_provenance": {
+        "inputs": {
+          "linux-policies.json": {
+            "bytes": 14038,
+            "sha256": "5a180e55c6838e6d359ce2223e8e41294ab5ebde439347cf4c08bab459f39e5c",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v7.12/linux/policies.json"
+          },
+          "policy-templates.md": {
+            "bytes": 228056,
+            "sha256": "cebeacfdff92699c53d1fa7ab3b9db76fb2dae4362e3dd929165be1da79e265b",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/v7.12/docs/index.md"
+          }
+        },
+        "license_spdx": "MPL-2.0",
+        "license_url": "https://www.mozilla.org/MPL/2.0/",
+        "source_tag": "mozilla-policy-templates-v7.12",
+        "upstream_release_url": "https://github.com/mozilla/policy-templates/releases/tag/v7.12",
+        "upstream_tag": "v7.12"
+      },
       "schema_version": "140.13",
       "selectable": true,
       "support_state": "supported",
@@ -74,22 +112,41 @@
       "line_id": "esr-153",
       "line_number": 153,
       "mozilla_version": "153.0",
-      "policy_count": 121,
+      "policy_count": 122,
       "recommendation_target_line_id": null,
       "retirement_successor_line_id": null,
-      "schema_source": "mozilla-policy-templates-v8.0",
+      "schema_source": "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+      "schema_source_provenance": {
+        "inputs": {
+          "linux-policies.json": {
+            "bytes": 14648,
+            "sha256": "d5a8076b9dc7d4332e757af5cf2702e4cf0acf125a9bc4483aaf6780cee833cc",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/linux/policies.json"
+          },
+          "policy-templates.md": {
+            "bytes": 228223,
+            "sha256": "2e00f3bf14ce2e90b96d9697700c493cc3688fb95aed2af49a000a5b62ef0bc1",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/docs/index.md"
+          }
+        },
+        "license_spdx": "MPL-2.0",
+        "license_url": "https://www.mozilla.org/MPL/2.0/",
+        "source_tag": "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+        "upstream_release_url": "https://github.com/mozilla/policy-templates/commit/a892b621f7f98ee91c8ed84290641f2703e88490",
+        "upstream_tag": "a892b621f7f98ee91c8ed84290641f2703e88490"
+      },
       "schema_version": "153.0",
       "selectable": true,
       "support_state": "supported",
       "type_counts": {
         "array": 8,
-        "boolean": 60,
+        "boolean": 61,
         "integer": 2,
         "object": 37,
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 70,
+        "fallback": 71,
         "mapped": 51
       }
     },
@@ -105,27 +162,46 @@
       "line_id": "release-153",
       "line_number": 153,
       "mozilla_version": "153.0",
-      "policy_count": 121,
+      "policy_count": 122,
       "recommendation_target_line_id": null,
       "retirement_successor_line_id": null,
-      "schema_source": "mozilla-policy-templates-v8.0",
+      "schema_source": "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+      "schema_source_provenance": {
+        "inputs": {
+          "linux-policies.json": {
+            "bytes": 14648,
+            "sha256": "d5a8076b9dc7d4332e757af5cf2702e4cf0acf125a9bc4483aaf6780cee833cc",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/linux/policies.json"
+          },
+          "policy-templates.md": {
+            "bytes": 228223,
+            "sha256": "2e00f3bf14ce2e90b96d9697700c493cc3688fb95aed2af49a000a5b62ef0bc1",
+            "url": "https://raw.githubusercontent.com/mozilla/policy-templates/a892b621f7f98ee91c8ed84290641f2703e88490/docs/index.md"
+          }
+        },
+        "license_spdx": "MPL-2.0",
+        "license_url": "https://www.mozilla.org/MPL/2.0/",
+        "source_tag": "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+        "upstream_release_url": "https://github.com/mozilla/policy-templates/commit/a892b621f7f98ee91c8ed84290641f2703e88490",
+        "upstream_tag": "a892b621f7f98ee91c8ed84290641f2703e88490"
+      },
       "schema_version": "153.0",
       "selectable": true,
       "support_state": "supported",
       "type_counts": {
-        "array": 8,
+        "array": 9,
         "boolean": 60,
         "integer": 2,
         "object": 37,
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 70,
+        "fallback": 71,
         "mapped": 51
       }
     }
   },
-  "generated_for_bpm": "0.9.5",
+  "generated_for_bpm": "0.9.5.1",
   "managed_preferences": [
     {
       "can_autofill": false,
@@ -1002,7 +1078,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.3rdparty",
@@ -1122,7 +1198,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.AllowedDomainsForApps",
@@ -1259,7 +1335,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.AppAutoUpdate",
@@ -1336,7 +1412,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.AppUpdatePin",
@@ -1413,7 +1489,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.AppUpdateURL",
@@ -1490,7 +1566,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Authentication",
@@ -1687,7 +1763,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.AutoLaunchProtocolsFromOrigins",
@@ -1764,7 +1840,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.BackgroundAppUpdate",
@@ -1841,7 +1917,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.BlockAboutAddons",
@@ -1918,7 +1994,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.BlockAboutConfig",
@@ -1995,7 +2071,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.BlockAboutProfiles",
@@ -2072,7 +2148,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.BlockAboutSupport",
@@ -2149,7 +2225,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Bookmarks",
@@ -2269,7 +2345,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.CaptivePortal",
@@ -2346,7 +2422,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Certificates",
@@ -2423,7 +2499,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Containers",
@@ -2560,7 +2636,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Cookies",
@@ -2635,9 +2711,35 @@
       "ui_target": "policy:Cookies"
     },
     {
+      "channel_scope": "esr-only",
+      "channels": {
+        "esr-153.0": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.DefaultBrowserSettingEnabled",
+          "max_version": null,
+          "min_version": "153.0",
+          "schema_sha256": "a658e09121fa2db45553869c8710869fc92f95b7db050c27cf3bbcb09a5c565d",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "toggle"
+          },
+          "value_type": "boolean"
+        }
+      },
+      "definition_changed_across_channels": false,
+      "doc_id": "fx-policy-DefaultBrowserSettingEnabled",
+      "policy_id": "DefaultBrowserSettingEnabled",
+      "ui_target": "policy:DefaultBrowserSettingEnabled"
+    },
+    {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DefaultDownloadDirectory",
@@ -2774,7 +2876,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableAppUpdate",
@@ -2851,7 +2953,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableBuiltinPDFViewer",
@@ -2928,7 +3030,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisabledCiphers",
@@ -3005,7 +3107,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableDefaultBrowserAgent",
@@ -3082,7 +3184,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableDeveloperTools",
@@ -3219,7 +3321,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableFeedbackCommands",
@@ -3296,7 +3398,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableFirefoxAccounts",
@@ -3373,7 +3475,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableFirefoxScreenshots",
@@ -3450,7 +3552,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableFirefoxStudies",
@@ -3527,7 +3629,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableForgetButton",
@@ -3604,7 +3706,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableFormHistory",
@@ -3681,7 +3783,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableMasterPasswordCreation",
@@ -3758,7 +3860,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisablePasswordReveal",
@@ -3835,7 +3937,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisablePocket",
@@ -3912,7 +4014,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisablePrivateBrowsing",
@@ -3989,7 +4091,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableProfileImport",
@@ -4066,7 +4168,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableProfileRefresh",
@@ -4229,7 +4331,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableSafeMode",
@@ -4306,7 +4408,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableSecurityBypass",
@@ -4383,7 +4485,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableSetDesktopBackground",
@@ -4460,7 +4562,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableSystemAddonUpdate",
@@ -4537,7 +4639,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableTelemetry",
@@ -4614,7 +4716,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisableThirdPartyModuleBlocking",
@@ -4691,7 +4793,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisplayBookmarksToolbar",
@@ -4768,7 +4870,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DisplayMenuBar",
@@ -4845,7 +4947,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DNSOverHTTPS",
@@ -4922,7 +5024,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DontCheckDefaultBrowser",
@@ -4999,7 +5101,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.DownloadDirectory",
@@ -5076,7 +5178,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.EnableTrackingProtection",
@@ -5153,7 +5255,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.EncryptedMediaExtensions",
@@ -5230,7 +5332,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.EnterprisePoliciesEnabled",
@@ -5307,7 +5409,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.ExemptDomainFileTypePairsFromFileTypeDownloadWarnings",
@@ -5384,7 +5486,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Extensions",
@@ -5461,7 +5563,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.ExtensionSettings",
@@ -5538,7 +5640,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.ExtensionUpdate",
@@ -5615,7 +5717,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.FirefoxHome",
@@ -5795,7 +5897,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.GoToIntranetSiteForSingleWordEntryInAddressBar",
@@ -5872,7 +5974,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Handlers",
@@ -5949,7 +6051,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.HardwareAcceleration",
@@ -6026,7 +6128,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Homepage",
@@ -6223,7 +6325,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.InstallAddonsPermission",
@@ -6343,7 +6445,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.LegacyProfiles",
@@ -6420,7 +6522,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.LegacySameSiteCookieBehaviorEnabled",
@@ -6497,7 +6599,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.LegacySameSiteCookieBehaviorEnabledForDomainList",
@@ -6574,7 +6676,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.LocalFileLinks",
@@ -6694,7 +6796,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.ManagedBookmarks",
@@ -6771,7 +6873,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.ManualAppUpdateOnly",
@@ -6908,7 +7010,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.NetworkPrediction",
@@ -6985,7 +7087,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.NewTabPage",
@@ -7062,7 +7164,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.NoDefaultBookmarks",
@@ -7139,7 +7241,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.OfferToSaveLogins",
@@ -7216,7 +7318,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.OfferToSaveLoginsDefault",
@@ -7293,7 +7395,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.OverrideFirstRunPage",
@@ -7370,7 +7472,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.OverridePostUpdatePage",
@@ -7447,7 +7549,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.PasswordManagerEnabled",
@@ -7524,7 +7626,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.PasswordManagerExceptions",
@@ -7601,7 +7703,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.PDFjs",
@@ -7678,7 +7780,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Permissions",
@@ -7755,7 +7857,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.PictureInPicture",
@@ -7832,7 +7934,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.PopupBlocking",
@@ -7969,7 +8071,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Preferences",
@@ -8046,7 +8148,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.PrimaryPassword",
@@ -8243,7 +8345,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.PromptForDownloadLocation",
@@ -8320,7 +8422,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.Proxy",
@@ -8397,7 +8499,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.RequestedLocales",
@@ -8474,7 +8576,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.SanitizeOnShutdown",
@@ -8551,7 +8653,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.SearchBar",
@@ -8628,7 +8730,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.SearchEngines",
@@ -8705,7 +8807,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.SearchSuggestEnabled",
@@ -8782,7 +8884,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.SecurityDevices",
@@ -8859,7 +8961,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.ShowHomeButton",
@@ -8934,6 +9036,32 @@
       "ui_target": "policy:ShowHomeButton"
     },
     {
+      "channel_scope": "release-only",
+      "channels": {
+        "release-153": {
+          "categories": [],
+          "deprecated": false,
+          "description_key": "policy.SitePolicies",
+          "max_version": null,
+          "min_version": "150.0",
+          "schema_sha256": "0a424380bb51d0e1e3967a7340e000fffd71f3047f65fdadb4ced16413efaae1",
+          "ui": {
+            "complexity": "advanced",
+            "preserve_unknown_fields": false,
+            "section": "advanced",
+            "subsection": "unmapped",
+            "support_level": "fallback",
+            "widget": "array-of-objects"
+          },
+          "value_type": "array"
+        }
+      },
+      "definition_changed_across_channels": false,
+      "doc_id": "fx-policy-SitePolicies",
+      "policy_id": "SitePolicies",
+      "ui_target": "policy:SitePolicies"
+    },
+    {
       "channel_scope": "partial",
       "channels": {
         "esr-140.13": {
@@ -8996,7 +9124,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.SSLVersionMax",
@@ -9073,7 +9201,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.SSLVersionMin",
@@ -9150,7 +9278,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.StartDownloadsInTempDirectory",
@@ -9227,7 +9355,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.SupportMenu",
@@ -9364,7 +9492,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.UserMessaging",
@@ -9441,7 +9569,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.UseSystemPrintDialog",
@@ -9561,7 +9689,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.WebsiteFilter",
@@ -9638,7 +9766,7 @@
     {
       "channel_scope": "both",
       "channels": {
-        "esr-115.38": {
+        "esr-115.39": {
           "categories": [],
           "deprecated": false,
           "description_key": "policy.WindowsSSO",
@@ -9775,8 +9903,10 @@
     },
     "policy_scope_counts": {
       "both": 97,
-      "partial": 24
+      "esr-only": 1,
+      "partial": 24,
+      "release-only": 1
     },
-    "policy_union_count": 121
+    "policy_union_count": 123
   }
 }

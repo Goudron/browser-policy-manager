@@ -121,7 +121,7 @@ LOCAL_ARTIFACT_FILES := \
 DOCKER ?= docker
 DOCKER_COMPOSE ?= $(DOCKER) compose
 DOCKER_COMPOSE_FILE ?= distributions/docker/compose.yaml
-DOCKER_IMAGE ?= browser-policy-manager:0.9.5
+DOCKER_IMAGE ?= browser-policy-manager:0.9.5.1
 BPM_SOURCE_REVISION ?= $(shell git rev-parse --verify HEAD 2>/dev/null || printf unknown)
 TARGET ?= all
 

@@ -126,8 +126,14 @@ def test_mozilla_reuse_keeps_mpl_provenance_and_separate_trademark_rules():
     assert any("logos" in rule for rule in trademark_source["forbidden_reuse"])
 
     for schema_name, source in (
-        ("firefox-release-153.json", "mozilla-policy-templates-v8.0"),
-        ("firefox-esr-153.0.json", "mozilla-policy-templates-v8.0"),
+        (
+            "firefox-release-153.json",
+            "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+        ),
+        (
+            "firefox-esr-153.0.json",
+            "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+        ),
         ("firefox-esr-140.13.json", "mozilla-policy-templates-v7.12"),
     ):
         schema = json.loads(

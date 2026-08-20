@@ -1,6 +1,6 @@
-# BPM 0.9.5 native Windows MSI
+# BPM 0.9.5.1 native Windows MSI
 
-This directory owns the native `x64` Windows installer for BPM 0.9.5. It is
+This directory owns the native `x64` Windows installer for BPM 0.9.5.1. It is
 not a WSL wrapper: the MSI installs BPM, its private CPython runtime, and its
 Windows Service directly on the Windows host.
 
@@ -39,7 +39,7 @@ make windows-package-smoke
 ```
 
 The result is transient evidence under
-`artifacts/windows-packages/0.9.5/windows-10-11-x64/`. Staging a release
+`artifacts/windows-packages/0.9.5.1/windows-10-11-x64/`. Staging a release
 additionally requires an Authenticode-valid MSI; set the certificate material
 only in the protected release environment, then run:
 
@@ -49,6 +49,6 @@ make windows-package-stage-release
 
 It writes the MSI, checksum, build environment, smoke receipt, and signed
 build receipt to the ignored upload area
-`distributions/releases/0.9.5/assets/windows-10-11-x64/`, and merges its
+`distributions/releases/0.9.5.1/assets/windows-10-11-x64/`, and merges its
 metadata into the shared release manifest. Publish those generated files to
-the existing GitHub Release `v0.9.5`, never as regular Git or Git LFS blobs.
+the existing GitHub Release `v0.9.5.1`, never as regular Git or Git LFS blobs.

@@ -1,4 +1,4 @@
-# Firefox Retired-ESR Migration Safety Contract (BPM 0.9.5)
+# Firefox Retired-ESR Migration Safety Contract (BPM 0.9.5.1)
 
 Status: active normative contract; M6-01 through the fail-closed M6-03 owner are implemented.
 
@@ -128,7 +128,7 @@ An incomplete static total-convertibility report produces a deterministic
 lists only blocked source/target artifact mappings and safe blocker codes, with
 the recovery direction `complete-schema-wide-proof-before-retirement`.
 
-No production revision is present in `alembic/versions/`, and the BPM 0.9.5
+No production revision is present in `alembic/versions/`, and the BPM 0.9.5.1
 head remains `20260804_add_profile_name_casefold`. The exact ESR 140.13 to ESR
 153.0 M6-02 report and candidate-only materializer are complete. This permits a
 reviewed retired candidate to render an inert revision artifact; it does
@@ -387,7 +387,7 @@ The machine contract contains two transition fixtures:
 1. `synthetic-esr115-to-esr140-gate` uses toy exact-schema identities to prove
    successor selection, a complete synthetic containment result, backup/
    preflight shape, and the no-production-promotion boundary. It does **not**
-   claim that the planned ESR 115.38 bundle exists or that real ESR 115 to ESR
+   claim that the planned ESR 115.39 bundle exists or that real ESR 115 to ESR
    140 conversion is lossless.
 2. `required-current-esr140-to-esr153` binds the current exact ESR 140.13 and
    ESR 153.0 bundles, normalized-schema hashes and complete reviewed proof. Its

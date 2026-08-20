@@ -149,12 +149,27 @@ def _channel_sort_key(channel_id: str) -> tuple[int, str]:
     return (2, channel_id)
 
 
-def _source_metadata(source: str) -> dict[str, str]:
+def _source_metadata(
+    source: str, source_provenance: dict[str, Any] | None = None
+) -> dict[str, str]:
     version = source.removeprefix("mozilla-policy-templates-")
+    upstream_release_url = (
+        source_provenance.get("upstream_release_url")
+        if isinstance(source_provenance, dict)
+        else None
+    )
     return {
-        "source_locator": f"https://github.com/mozilla/policy-templates/releases/tag/{version}",
+        "source_locator": upstream_release_url
+        if isinstance(upstream_release_url, str)
+        else f"https://github.com/mozilla/policy-templates/releases/tag/{version}",
         "source_version_or_revision": source,
-        "source_retrieved_on": "2026-07-22" if version == "v8.0" else "2026-03-24",
+        "source_retrieved_on": (
+            "2026-08-20"
+            if version.startswith("master-")
+            else "2026-07-22"
+            if version == "v8.0"
+            else "2026-03-24"
+        ),
     }
 
 
@@ -354,10 +369,15 @@ def _provenance(policy: dict[str, Any], inventory: dict[str, Any]) -> str:
         f"        <li>Generated for BPM: <codeph>{_escape(inventory['generated_for_bpm'])}</codeph>.</li>",
     ]
     source_records = {
-        inventory["channels"][channel_id]["schema_source"] for channel_id in policy["channels"]
+        channel_meta["schema_source"]: _source_metadata(
+            channel_meta["schema_source"],
+            channel_meta.get("schema_source_provenance"),
+        )
+        for channel_id in policy["channels"]
+        for channel_meta in (inventory["channels"][channel_id],)
     }
     for source in sorted(source_records):
-        metadata = _source_metadata(source)
+        metadata = source_records[source]
         lines.append(
             "        <li>Mozilla source locator: "
             f"<codeph>{_escape(metadata['source_locator'])}</codeph>; source retrieved on "
@@ -592,7 +612,10 @@ def _provenance_review_content(
                     "schema_version": channel_meta["schema_version"],
                     "schema_sha256": policy["channels"][channel_id]["schema_sha256"],
                     "topic_section_id": "a-provenance",
-                    **_source_metadata(channel_meta["schema_source"]),
+                    **_source_metadata(
+                        channel_meta["schema_source"],
+                        channel_meta.get("schema_source_provenance"),
+                    ),
                 }
             )
         source_records = {
@@ -650,7 +673,10 @@ def _provenance_review_content(
         "source_family_id": "mozilla-policy-schema-facts",
         "source_records": sorted(
             {
-                channel["schema_source"]: _source_metadata(channel["schema_source"])
+                channel["schema_source"]: _source_metadata(
+                    channel["schema_source"],
+                    channel.get("schema_source_provenance"),
+                )
                 for channel in inventory["channels"].values()
             }.values(),
             key=lambda record: record["source_version_or_revision"],

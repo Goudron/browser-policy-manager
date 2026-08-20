@@ -407,7 +407,7 @@ def test_required_transition_identities_match_catalog_pair_and_current_bundles()
         "evidence_scope": "production-exact-artifacts",
         "exact_artifacts_bound": True,
         "source_schema_domain": "all-valid-instances",
-        "proof_artifact_digest": "3d04890c00a89534526fea7456e89250c36ba3617fa0d10949c8e51d98bcc2bb",
+        "proof_artifact_digest": "9de84bde21e11d161d48297d19cc2447c36ac052d6cef8aed7727b8fa29746ef",
         "uncovered_schema_locations": [],
         "blockers": [],
     }

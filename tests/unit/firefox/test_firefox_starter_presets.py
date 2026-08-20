@@ -77,7 +77,7 @@ def test_cis_catalog_exposes_both_layers_for_every_supported_schema_channel():
         layer = catalog["compliance_layers"][layer_key]
         assert set(layer["available_schema_versions"]) == set(SUPPORTED_SCHEMA_CHANNELS)
         assert layer["unavailable_reason_codes"] == {}
-    snapshot = get_wizard_starter_compliance_snapshot("basic_corporate", "esr-115.38", "cis_l2")
+    snapshot = get_wizard_starter_compliance_snapshot("basic_corporate", "esr-115.39", "cis_l2")
     assert snapshot is not None
     assert snapshot["policy_values"]["DisableTelemetry"] is True
     assert snapshot["policy_values"]["DisableFirefoxAccounts"] is True
@@ -117,16 +117,16 @@ def test_esr_115_starter_presets_apply_only_explicitly_reviewed_shapes():
     catalog = get_wizard_starter_catalog()
 
     for starter_key in catalog["presets"]:
-        document = build_wizard_starter_document(starter_key, "esr-115.38")
+        document = build_wizard_starter_document(starter_key, "esr-115.39")
         validate_profile_payload_with_schema(
             {
-                "name": f"{starter_key}-esr-115.38",
-                "channel": "esr-115.38",
+                "name": f"{starter_key}-esr-115.39",
+                "channel": "esr-115.39",
                 "policies": document,
             }
         )
 
-    hardened = build_wizard_starter_document("soc_hard", "esr-115.38")
+    hardened = build_wizard_starter_document("soc_hard", "esr-115.39")
     assert "HttpsOnlyMode" not in hardened
     assert "FirefoxSuggest" not in hardened
     assert "Category" not in hardened["EnableTrackingProtection"]

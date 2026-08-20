@@ -190,6 +190,96 @@ def test_schema_to_json_schema_emits_raw_json_schema_bundle():
     )
 
 
+def test_master_only_policies_are_filtered_by_release_or_esr_availability():
+    module = _load_module()
+    policies = [
+        module.SchemaPolicyDefinition(
+            id=policy_id,
+            type="boolean",
+            description_key=f"policy.{policy_id}",
+            categories=[],
+            min_version="1.0",
+            max_version=None,
+            deprecated=False,
+            enum=None,
+            items_type=None,
+            items=None,
+            properties={},
+            additional_properties=True,
+            additional_properties_schema=None,
+        )
+        for policy_id in (
+            "CNSA2KeyAgreementEnabled",
+            "DefaultBrowserSettingEnabled",
+            "SitePolicies",
+        )
+    ]
+
+    release_153 = module.filter_policies_for_target_version(
+        policies, "153.0", target_channel="release-153"
+    )
+    esr_153 = module.filter_policies_for_target_version(
+        policies, "153.0", target_channel="esr-153.0"
+    )
+    release_154 = module.filter_policies_for_target_version(
+        policies, "154.0", target_channel="release-154"
+    )
+
+    assert [(policy.id, policy.min_version) for policy in release_153] == [
+        ("SitePolicies", "150.0")
+    ]
+    assert [(policy.id, policy.min_version) for policy in esr_153] == [
+        ("DefaultBrowserSettingEnabled", "153.0")
+    ]
+    assert [(policy.id, policy.min_version) for policy in release_154] == [
+        ("CNSA2KeyAgreementEnabled", "154.0"),
+        ("DefaultBrowserSettingEnabled", "154.0"),
+        ("SitePolicies", "150.0"),
+    ]
+
+
+def test_master_sanitize_exception_is_limited_to_firefox_154_release():
+    module = _load_module()
+    schema = {
+        "properties": {
+            "SanitizeOnShutdown": {
+                "oneOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "Cache": {"type": "boolean"},
+                            "Exceptions": {"type": "array", "items": {"type": "string"}},
+                        },
+                        "additionalProperties": False,
+                    },
+                    {
+                        "type": "object",
+                        "properties": {"Cache": {"type": "boolean"}},
+                        "additionalProperties": False,
+                    },
+                    {"type": "boolean"},
+                ]
+            }
+        }
+    }
+
+    module.apply_documented_schema_overrides(
+        schema,
+        "153.0",
+        target_channel="esr-153.0",
+    )
+
+    branches = schema["properties"]["SanitizeOnShutdown"]["oneOf"]
+    assert branches == [
+        {
+            "type": "object",
+            "properties": {"Cache": {"type": "boolean"}},
+            "additionalProperties": False,
+        },
+        {"type": "boolean"},
+    ]
+
+
 def test_build_schema_policy_marks_required_fields_from_section_text():
     module = _load_module()
     entry = module.UpstreamPolicyEntry(
@@ -585,21 +675,29 @@ def test_schema_target_manifest_declares_four_independent_outputs_with_esr115_pr
     targets = module.load_schema_build_targets()
 
     assert [(target.channel, target.version, target.source_tag) for target in targets] == [
-        ("release-153", "153.0", "mozilla-policy-templates-v8.0"),
-        ("esr-153.0", "153.0", "mozilla-policy-templates-v8.0"),
+        (
+            "release-153",
+            "153.0",
+            "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+        ),
+        (
+            "esr-153.0",
+            "153.0",
+            "mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490",
+        ),
         ("esr-140.13", "140.13", "mozilla-policy-templates-v7.12"),
-        ("esr-115.38", "115.38", "mozilla-policy-templates-v5.12"),
+        ("esr-115.39", "115.39", "mozilla-policy-templates-v5.12"),
     ]
     assert len({target.output for target in targets}) == 4
 
-    esr115 = next(target for target in targets if target.channel == "esr-115.38")
-    assert esr115.output.as_posix().endswith("app/schemas/policies/firefox-esr-115.38.json")
+    esr115 = next(target for target in targets if target.channel == "esr-115.39")
+    assert esr115.output.as_posix().endswith("app/schemas/policies/firefox-esr-115.39.json")
     assert esr115.schema_metadata == {
-        "artifact_id": "esr-115.38",
+        "artifact_id": "esr-115.39",
         "line_id": "esr-115",
         "firefox_line": 115,
-        "firefox_version": "115.38.0esr",
-        "ui_label": "ESR 115.38",
+        "firefox_version": "115.39.0esr",
+        "ui_label": "ESR 115.39",
         "source_provenance": {
             "source_tag": "mozilla-policy-templates-v5.12",
             "upstream_tag": "v5.12",

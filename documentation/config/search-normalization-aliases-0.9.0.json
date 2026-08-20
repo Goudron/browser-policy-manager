@@ -105,7 +105,7 @@
         "topic:ug-task-use-profile-library",
         "topic:admin-task-manage-profile-retirement"
       ],
-      "technical_identifiers": ["esr-115.38", "esr-140.13", "esr-153.0", "release-153"],
+      "technical_identifiers": ["esr-115.39", "esr-140.13", "esr-153.0", "release-153"],
       "terms": {
         "en": ["Firefox ESR", "ESR 115", "schema conversion", "latest ESR"],
         "ru": ["Firefox ESR", "ESR 115", "преобразование схемы", "последняя ESR"],

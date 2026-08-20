@@ -43,20 +43,20 @@
     "source_expression_indexed": false
   },
   "source_inventory": "docs/architecture/cis-documentation-inventory-0.9.0.json",
-  "source_inventory_sha256": "cd958221f8ca1f1e9bd03ed5ca5cf9af4a73b98a7b8c420b6256be87f16a1816",
+  "source_inventory_sha256": "2d44bbed01e43e0c496b848cb3f09132c52218159c8ac908d42b080d82afd6d4",
   "source_model": "documentation/config/cis-settings-topic-model-0.9.0.json",
-  "source_model_sha256": "d77e6b64f6d15cd8d141ca88d96a1fe873930f7427bcdb0ed1d6d4a19d82b42d",
+  "source_model_sha256": "36db5140a57720753d4f702ac7a354d90024019210f336a87e590c9af0873011",
   "target_bpm_version": "0.9.0",
   "topic_count": 53,
   "topics": [
     {
       "doc_id": "cis-rec-1-1-1-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -76,10 +76,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -104,10 +104,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -140,7 +140,7 @@
           ],
           "path_id": "InstallAddonsPermission.Default",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -164,11 +164,11 @@
     {
       "doc_id": "cis-rec-1-1-2-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -188,10 +188,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": [],
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -216,10 +216,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": [],
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -252,7 +252,7 @@
           ],
           "path_id": "Authentication.NTLM",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -276,11 +276,11 @@
     {
       "doc_id": "cis-rec-1-1-5-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -300,10 +300,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -328,10 +328,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -364,7 +364,7 @@
           ],
           "path_id": "SanitizeOnShutdown.Sessions",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -388,11 +388,11 @@
     {
       "doc_id": "cis-rec-1-1-5-2",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -412,10 +412,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -440,10 +440,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -476,7 +476,7 @@
           ],
           "path_id": "SanitizeOnShutdown.History",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -500,11 +500,11 @@
     {
       "doc_id": "cis-rec-1-1-5-4",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -524,10 +524,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -552,10 +552,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -588,7 +588,7 @@
           ],
           "path_id": "SanitizeOnShutdown.FormData",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -612,11 +612,11 @@
     {
       "doc_id": "cis-rec-1-1-5-5",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -636,10 +636,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -664,10 +664,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -700,7 +700,7 @@
           ],
           "path_id": "SanitizeOnShutdown.Locked",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -724,11 +724,11 @@
     {
       "doc_id": "cis-rec-1-1-6-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -748,10 +748,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": "reject-tracker-and-partition-foreign",
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -776,10 +776,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": "reject-tracker-and-partition-foreign",
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -812,7 +812,7 @@
           ],
           "path_id": "Cookies.Behavior",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -836,11 +836,11 @@
     {
       "doc_id": "cis-rec-1-1-6-2",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -860,10 +860,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": "reject-tracker-and-partition-foreign",
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -888,10 +888,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": "reject-tracker-and-partition-foreign",
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -924,7 +924,7 @@
           ],
           "path_id": "Cookies.BehaviorPrivateBrowsing",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -948,11 +948,11 @@
     {
       "doc_id": "cis-rec-1-1-7-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -972,10 +972,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1000,10 +1000,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1036,7 +1036,7 @@
           ],
           "path_id": "DisabledCiphers.TLS_RSA_WITH_3DES_EDE_CBC_SHA",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -1060,11 +1060,11 @@
     {
       "doc_id": "cis-rec-1-1-9-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -1084,10 +1084,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1112,10 +1112,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1148,7 +1148,7 @@
           ],
           "path_id": "EncryptedMediaExtensions.Locked",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -1172,11 +1172,11 @@
     {
       "doc_id": "cis-rec-1-1-10-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -1194,10 +1194,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1222,10 +1222,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1257,7 +1257,7 @@
           ],
           "path_id": "ExtensionUpdate",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -1281,11 +1281,11 @@
     {
       "doc_id": "cis-rec-1-1-15-3-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -1307,10 +1307,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1335,10 +1335,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1372,7 +1372,7 @@
           ],
           "path_id": "Permissions.Location.BlockNewRequests",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -1396,11 +1396,11 @@
     {
       "doc_id": "cis-rec-1-1-15-3-2",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -1422,10 +1422,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1450,10 +1450,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1487,7 +1487,7 @@
           ],
           "path_id": "Permissions.Location.Locked",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -1511,11 +1511,11 @@
     {
       "doc_id": "cis-rec-1-1-17-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -1535,10 +1535,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1563,10 +1563,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1599,7 +1599,7 @@
           ],
           "path_id": "PopupBlocking.Default",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -1623,11 +1623,11 @@
     {
       "doc_id": "cis-rec-1-1-17-2",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -1647,10 +1647,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1675,10 +1675,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1711,7 +1711,7 @@
           ],
           "path_id": "PopupBlocking.Locked",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -1735,11 +1735,11 @@
     {
       "doc_id": "cis-rec-1-1-18-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -1763,14 +1763,14 @@
           "kind": "preference",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1807,14 +1807,14 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1858,7 +1858,7 @@
           ],
           "path_id": "browser.safebrowsing.malware.enabled",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -1886,11 +1886,11 @@
     {
       "doc_id": "cis-rec-1-1-18-2",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -1914,14 +1914,14 @@
           "kind": "preference",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -1958,14 +1958,14 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2009,7 +2009,7 @@
           ],
           "path_id": "browser.safebrowsing.phishing.enabled",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -2037,11 +2037,11 @@
     {
       "doc_id": "cis-rec-1-1-18-3",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -2065,14 +2065,14 @@
           "kind": "preference",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2109,14 +2109,14 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2160,7 +2160,7 @@
           ],
           "path_id": "browser.search.update",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -2188,11 +2188,11 @@
     {
       "doc_id": "cis-rec-1-1-18-4",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -2216,14 +2216,14 @@
           "kind": "preference",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": false
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2260,14 +2260,14 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": false
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2311,7 +2311,7 @@
           ],
           "path_id": "dom.allow_scripts_to_close_windows",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -2339,11 +2339,11 @@
     {
       "doc_id": "cis-rec-1-1-18-5",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -2367,14 +2367,14 @@
           "kind": "preference",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2411,14 +2411,14 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2462,7 +2462,7 @@
           ],
           "path_id": "dom.disable_window_flip",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -2490,11 +2490,11 @@
     {
       "doc_id": "cis-rec-1-1-18-6",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -2518,14 +2518,14 @@
           "kind": "preference",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2562,14 +2562,14 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2613,7 +2613,7 @@
           ],
           "path_id": "dom.disable_window_move_resize",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -2641,11 +2641,11 @@
     {
       "doc_id": "cis-rec-1-1-18-7",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -2669,14 +2669,14 @@
           "kind": "preference",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2713,14 +2713,14 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2764,7 +2764,7 @@
           ],
           "path_id": "extensions.blocklist.enabled",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -2792,11 +2792,11 @@
     {
       "doc_id": "cis-rec-1-1-18-8",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -2820,14 +2820,14 @@
           "kind": "preference",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": false
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2864,14 +2864,14 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": false
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -2915,7 +2915,7 @@
           ],
           "path_id": "media.peerconnection.enabled",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -2943,7 +2943,7 @@
     {
       "doc_id": "cis-rec-1-1-18-9",
       "generated_layers": [
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -2967,14 +2967,14 @@
           "kind": "preference",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3018,7 +3018,7 @@
           ],
           "path_id": "network.IDN_show_punycode",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -3046,11 +3046,11 @@
     {
       "doc_id": "cis-rec-1-1-18-10",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -3074,14 +3074,14 @@
           "kind": "preference",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3118,14 +3118,14 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": {
                 "Status": "locked",
                 "Type": "boolean",
                 "Value": true
               },
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3169,7 +3169,7 @@
           ],
           "path_id": "security.mixed_content.block_active_content",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -3197,11 +3197,11 @@
     {
       "doc_id": "cis-rec-1-1-19-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -3221,10 +3221,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": "none",
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3249,10 +3249,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": "none",
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3285,7 +3285,7 @@
           ],
           "path_id": "Proxy.Mode",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -3309,11 +3309,11 @@
     {
       "doc_id": "cis-rec-1-1-19-2",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -3333,10 +3333,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3361,10 +3361,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3397,7 +3397,7 @@
           ],
           "path_id": "Proxy.Locked",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -3421,7 +3421,7 @@
     {
       "doc_id": "cis-rec-1-1-20-1",
       "generated_layers": [
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -3439,10 +3439,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3474,7 +3474,7 @@
           ],
           "path_id": "SearchSuggestEnabled",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -3498,11 +3498,11 @@
     {
       "doc_id": "cis-rec-1-1-22-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -3522,10 +3522,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3550,10 +3550,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3586,7 +3586,7 @@
           ],
           "path_id": "EnableTrackingProtection.Cryptomining",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -3610,11 +3610,11 @@
     {
       "doc_id": "cis-rec-1-1-22-2",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -3634,10 +3634,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3662,10 +3662,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3698,7 +3698,7 @@
           ],
           "path_id": "EnableTrackingProtection.Locked",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -3722,11 +3722,11 @@
     {
       "doc_id": "cis-rec-1-1-22-3",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -3746,10 +3746,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3774,10 +3774,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3810,7 +3810,7 @@
           ],
           "path_id": "EnableTrackingProtection.EmailTracking",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -3834,11 +3834,11 @@
     {
       "doc_id": "cis-rec-1-1-22-4",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -3858,10 +3858,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3886,10 +3886,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3922,7 +3922,7 @@
           ],
           "path_id": "EnableTrackingProtection.Value",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -3946,11 +3946,11 @@
     {
       "doc_id": "cis-rec-1-1-22-5",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -3970,10 +3970,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -3998,10 +3998,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4034,7 +4034,7 @@
           ],
           "path_id": "EnableTrackingProtection.Fingerprinting",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -4058,11 +4058,11 @@
     {
       "doc_id": "cis-rec-1-1-23-1",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -4082,10 +4082,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4110,10 +4110,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4146,7 +4146,7 @@
           ],
           "path_id": "UserMessaging.ExtensionRecommendations",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -4170,11 +4170,11 @@
     {
       "doc_id": "cis-rec-1-1-24",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -4192,10 +4192,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4220,10 +4220,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4255,7 +4255,7 @@
           ],
           "path_id": "AppAutoUpdate",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -4279,11 +4279,11 @@
     {
       "doc_id": "cis-rec-1-1-25",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -4301,10 +4301,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4329,10 +4329,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4364,7 +4364,7 @@
           ],
           "path_id": "BackgroundAppUpdate",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -4388,11 +4388,11 @@
     {
       "doc_id": "cis-rec-1-1-26",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -4410,10 +4410,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4438,10 +4438,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4473,7 +4473,7 @@
           ],
           "path_id": "DisableDeveloperTools",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -4497,11 +4497,11 @@
     {
       "doc_id": "cis-rec-1-1-27",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -4519,10 +4519,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4547,10 +4547,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4582,7 +4582,7 @@
           ],
           "path_id": "DisableFeedbackCommands",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -4606,11 +4606,11 @@
     {
       "doc_id": "cis-rec-1-1-28",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -4628,10 +4628,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4656,10 +4656,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4691,7 +4691,7 @@
           ],
           "path_id": "DisableFirefoxAccounts",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -4715,11 +4715,11 @@
     {
       "doc_id": "cis-rec-1-1-29",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -4737,10 +4737,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4765,10 +4765,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4800,7 +4800,7 @@
           ],
           "path_id": "DisableFirefoxStudies",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -4824,11 +4824,11 @@
     {
       "doc_id": "cis-rec-1-1-30",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -4846,10 +4846,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4874,10 +4874,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4909,7 +4909,7 @@
           ],
           "path_id": "DisableForgetButton",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -4933,7 +4933,7 @@
     {
       "doc_id": "cis-rec-1-1-31",
       "generated_layers": [
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -4951,10 +4951,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -4986,7 +4986,7 @@
           ],
           "path_id": "DisableFormHistory",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -5010,11 +5010,11 @@
     {
       "doc_id": "cis-rec-1-1-32",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -5032,10 +5032,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5060,10 +5060,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5095,7 +5095,7 @@
           ],
           "path_id": "DisablePocket",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -5119,11 +5119,11 @@
     {
       "doc_id": "cis-rec-1-1-33",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -5141,10 +5141,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5169,10 +5169,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5204,7 +5204,7 @@
           ],
           "path_id": "DisablePrivateBrowsing",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -5228,11 +5228,11 @@
     {
       "doc_id": "cis-rec-1-1-34",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -5250,10 +5250,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5278,10 +5278,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5313,7 +5313,7 @@
           ],
           "path_id": "DisableSystemAddonUpdate",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -5337,11 +5337,11 @@
     {
       "doc_id": "cis-rec-1-1-35",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -5359,10 +5359,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5387,10 +5387,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": true,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5422,7 +5422,7 @@
           ],
           "path_id": "DisableTelemetry",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -5446,11 +5446,11 @@
     {
       "doc_id": "cis-rec-1-1-36",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -5468,10 +5468,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5496,10 +5496,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5531,7 +5531,7 @@
           ],
           "path_id": "DisableAppUpdate",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -5555,11 +5555,11 @@
     {
       "doc_id": "cis-rec-1-1-37",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -5577,10 +5577,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": "tls1.3",
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5605,10 +5605,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": "tls1.3",
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5640,7 +5640,7 @@
           ],
           "path_id": "SSLVersionMax",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -5664,11 +5664,11 @@
     {
       "doc_id": "cis-rec-1-1-38",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -5686,10 +5686,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": "tls1.2",
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5714,10 +5714,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": "tls1.2",
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5749,7 +5749,7 @@
           ],
           "path_id": "SSLVersionMin",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -5773,11 +5773,11 @@
     {
       "doc_id": "cis-rec-1-1-39",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -5795,10 +5795,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5823,10 +5823,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5858,7 +5858,7 @@
           ],
           "path_id": "NetworkPrediction",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -5882,7 +5882,7 @@
     {
       "doc_id": "cis-rec-1-1-40",
       "generated_layers": [
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -5900,10 +5900,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -5935,7 +5935,7 @@
           ],
           "path_id": "NewTabPage",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -5959,11 +5959,11 @@
     {
       "doc_id": "cis-rec-1-1-41",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -5981,10 +5981,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -6009,10 +6009,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -6044,7 +6044,7 @@
           ],
           "path_id": "OfferToSaveLogins",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
@@ -6068,11 +6068,11 @@
     {
       "doc_id": "cis-rec-1-1-42",
       "generated_layers": [
-        "cis-l1.esr-115.38",
+        "cis-l1.esr-115.39",
         "cis-l1.esr-140.13",
         "cis-l1.esr-153.0",
         "cis-l1.release-153",
-        "cis-l2.esr-115.38",
+        "cis-l2.esr-115.39",
         "cis-l2.esr-140.13",
         "cis-l2.esr-153.0",
         "cis-l2.release-153"
@@ -6090,10 +6090,10 @@
           "kind": "policy",
           "layer_checks": [
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.38.json",
-              "layer_id": "cis-l1.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l1.esr-115.39.json",
+              "layer_id": "cis-l1.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -6118,10 +6118,10 @@
               "value_matches": true
             },
             {
-              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.38.json",
-              "layer_id": "cis-l2.esr-115.38",
+              "file": "app/compliance/firefox/cis/generated/cis_l2.esr-115.39.json",
+              "layer_id": "cis-l2.esr-115.39",
               "layer_value": false,
-              "schema_channel": "esr-115.38",
+              "schema_channel": "esr-115.39",
               "value_matches": true
             },
             {
@@ -6153,7 +6153,7 @@
           ],
           "path_id": "PasswordManagerEnabled",
           "schema_channels": {
-            "esr-115.38": "valid",
+            "esr-115.39": "valid",
             "esr-140.13": "valid",
             "esr-153.0": "valid",
             "release-153": "valid"
