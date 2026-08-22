@@ -157,6 +157,8 @@ def test_epic_backlog_creation_runbook_defines_versioned_backlog_contract():
         "Create a git commit for the completed epic.",
         "Push the reviewed commit to its configured remote branch",
         "Automated push and CI control",
+        "The approved BPM integration branch is `dev`.",
+        "Do not push backlog commits to a temporary `codex/*` or other agent branch",
         "regular non-force push",
         "monitors every required GitHub Actions workflow",
         "must not force-push, rewrite history, create a tag or release",

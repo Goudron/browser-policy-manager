@@ -415,11 +415,18 @@ If Make targets change in a future epic, update this runbook and the backlog tog
 
 ### Automated push and CI control
 
-After the reviewed epic commit is created, the assistant pushes it to the configured remote branch
-with a regular non-force push and monitors every required GitHub Actions workflow triggered by that
-push until it is green. The handoff records the commit SHA, remote branch, workflow URLs, and each
-job result. The assistant must not force-push, rewrite history, create a tag or release, open a
-pull request, or push unrelated local changes.
+The approved BPM integration branch is `dev`. After the reviewed epic commit is created, the
+assistant fetches `origin/dev`, works from the up-to-date local `dev`, and delivers the reviewed
+commit to `origin/dev` with a regular non-force fast-forward push. Do not push backlog commits to a
+temporary `codex/*` or other agent branch, including to start or manually dispatch CI. The handoff
+records the commit SHA, remote branch (`dev`), workflow URLs, and each job result. The assistant
+monitors every required GitHub Actions workflow triggered by that push until it is green. The
+assistant must not force-push, rewrite history, create a tag or release, open a pull request, or
+push unrelated local changes.
+
+If an incorrect temporary remote branch was created, first verify that the intended commit is
+present on `origin/dev`, then remove only that confirmed temporary remote branch and cancel its
+redundant workflows. A manual workflow dispatch does not substitute for the required `dev` push.
 
 For every required workflow failure, inspect its failing job and logs, distinguish a direct,
 actionable repository failure from an external or permission blocker, and repair direct failures.
