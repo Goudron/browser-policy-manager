@@ -43,6 +43,11 @@ class ProfilesPage(BrowserPage):
         return int(response.json()["id"])
 
     def set_locale(self, wait: Any, ui: Any, *, locale: str, expected_text: str) -> None:
+        wait.until(
+            lambda current_driver: current_driver.execute_script(
+                "return document.documentElement.dataset.langMode || '';"
+            )
+        )
         select = ui.Select(
             wait.until(lambda current_driver: current_driver.find_element("id", "lang"))
         )

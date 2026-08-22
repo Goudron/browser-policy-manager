@@ -1,6 +1,8 @@
 <div class="app-shell mx-auto max-w-[900px] px-4 py-4 md:px-6 md:py-6">
     {% include "profiles/_page_header.html" %}
     <main id="profile-preparation" class="surface-panel fade-up p-5 md:p-6" aria-labelledby="profile-preparation-title">
+        {% set context_help_surface = "guided" %}
+        {% include "profiles/_context_help_link.html" %}
         {% if preparation_terminal_action_mode == "create" %}
         <h2 id="profile-preparation-title" data-i18n="profiles.preparation_create_title">{{ tr("profiles.preparation_create_title", "Create profile") }}</h2>
         {% set context_help_icon_target = "preparation-create" %}

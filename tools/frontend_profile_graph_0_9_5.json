@@ -53,7 +53,7 @@
     "shared": [],
     "library": ["shared"],
     "compare": ["shared"],
-    "preparation-entry": [],
+    "preparation-entry": ["shared"],
     "editor-core": ["shared"],
     "guided-entry": ["editor-core"],
     "settings-entry": ["editor-core"],

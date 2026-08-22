@@ -675,6 +675,9 @@ def test_contextual_help_links_are_manifest_backed_and_responsive_contract():
     for surface, template in templates.items():
         assert f'{{% set context_help_surface = "{surface}" %}}' in template
         assert '{% include "profiles/_context_help_link.html" %}' in template
+    preparation_template = template_source("_preparation_shell.html")
+    assert '{% set context_help_surface = "guided" %}' in preparation_template
+    assert '{% include "profiles/_context_help_link.html" %}' in preparation_template
     assert_source_contains_all(
         css_source(),
         (

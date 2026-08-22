@@ -1,9 +1,85 @@
+import { resolveBrowserLanguage, updateDocumentationLinks } from "../../static/profiles_platform.js";
+
 const PREPARE_NEW_PROFILE_PATH = "/api/profiles/prepare/new";
 const PREVIEW_DUPLICATE_PROFILE_PATH = "/api/profiles/prepare/duplicate/preview";
 const PREPARE_DUPLICATE_PROFILE_PATH = "/api/profiles/prepare/duplicate";
 const IDEMPOTENCY_STORAGE_PREFIX = "bpm096:prepare:";
+const LANGUAGE_STORAGE_KEY = "bpm-lang-mode";
 
 const form = typeof document === "undefined" ? null : document.getElementById("profile-preparation-form");
+const languageSelect = typeof document === "undefined" ? null : document.getElementById("lang");
+
+function readInitialLocale() {
+    const payload = document.getElementById("profiles-initial-locale");
+    if (!payload?.textContent) return {};
+    try {
+        const locale = JSON.parse(payload.textContent);
+        return locale && typeof locale === "object" ? locale : {};
+    } catch {
+        return {};
+    }
+}
+
+function applyLocaleText(locale) {
+    document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.getAttribute("data-i18n");
+        if (key && locale[key]) element.textContent = locale[key];
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+        const key = element.getAttribute("data-i18n-placeholder");
+        if (key && locale[key]) element.placeholder = locale[key];
+    });
+    document.querySelectorAll("[data-i18n-title]").forEach((element) => {
+        const key = element.getAttribute("data-i18n-title");
+        if (key && locale[key]) element.title = locale[key];
+    });
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+        const key = element.getAttribute("data-i18n-aria-label");
+        if (key && locale[key]) element.setAttribute("aria-label", locale[key]);
+    });
+}
+
+if (typeof HTMLSelectElement !== "undefined" && languageSelect instanceof HTMLSelectElement) {
+    let localeRequestId = 0;
+    const initialLanguage = document.body.dataset.initialLang || document.documentElement.lang;
+    const initialLocale = readInitialLocale();
+
+    async function applyLanguageMode(mode, persist = true) {
+        const enabledModes = Array.from(languageSelect.options)
+            .filter((option) => !option.disabled)
+            .map((option) => option.value);
+        const normalizedMode = enabledModes.includes(mode) ? mode : "system";
+        const language = normalizedMode === "system"
+            ? resolveBrowserLanguage(window.navigator, enabledModes)
+            : normalizedMode;
+        const requestId = ++localeRequestId;
+
+        document.documentElement.dataset.langMode = normalizedMode;
+        languageSelect.value = normalizedMode;
+        if (persist) window.localStorage.setItem(LANGUAGE_STORAGE_KEY, normalizedMode);
+
+        try {
+            const locale = language === initialLanguage && Object.keys(initialLocale).length
+                ? initialLocale
+                : await window.fetch(`/i18n/${language}.json`).then(async (response) => {
+                    if (!response.ok) throw new Error(await response.text());
+                    return response.json();
+                });
+            if (requestId !== localeRequestId) return;
+
+            document.documentElement.lang = language;
+            updateDocumentationLinks(document, language);
+            applyLocaleText(locale);
+        } catch (error) {
+            console.warn("preparation i18n load failed:", error);
+        }
+    }
+
+    languageSelect.addEventListener("change", (event) => {
+        void applyLanguageMode(event.target.value);
+    });
+    void applyLanguageMode(window.localStorage.getItem(LANGUAGE_STORAGE_KEY) || "system", false);
+}
 
 if (typeof HTMLFormElement !== "undefined" && form instanceof HTMLFormElement) {
     const state = document.getElementById("profile-preparation-state");

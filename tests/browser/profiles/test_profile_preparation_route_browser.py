@@ -12,7 +12,7 @@ import requests
 
 from tests.browser.harness import assert_document_fits as _assert_document_fits
 from tests.browser.harness import build_chromium_driver as _build_chromium_driver
-from tests.browser.profiles.pages import load_locale_catalog
+from tests.browser.profiles.pages import load_locale_catalog, set_locale
 from tests.support import build_profile_payload
 
 PREPARE_NEW_PATH = "/api/profiles/prepare/new"
@@ -371,6 +371,21 @@ def test_browser_preparation_locales_keyboard_accessibility_and_narrow_long_labe
             .strip()
             == catalog["profiles.preparation_cis_label"]
         )
+
+    ru = load_locale_catalog("ru")
+    set_locale(
+        driver,
+        wait,
+        ui,
+        locale="ru",
+        expected_text=ru["profiles.locale_label"],
+    )
+    assert (
+        driver.find_element(by.By.ID, "profile-preparation-submit")
+        .get_attribute("textContent")
+        .strip()
+        == ru["profiles.preparation_duplicate_action"]
+    )
 
     driver.execute_cdp_cmd(
         "Network.setUserAgentOverride",
