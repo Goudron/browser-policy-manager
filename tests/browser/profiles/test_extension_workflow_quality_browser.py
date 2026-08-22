@@ -49,6 +49,8 @@ def _install_fake_amo(driver) -> None:
                 (() => {
                   const realFetch = window.fetch.bind(window);
                   window.__m7AmoSearchCalls = [];
+                  window.__m7AlertCalls = 0;
+                  window.alert = () => { window.__m7AlertCalls += 1; };
                   window.fetch = (input, options) => {
                     const url = String(typeof input === "string" ? input : input?.url || "");
                     if (!url.includes("/api/profiles/extensions/amo-search")) {
@@ -108,8 +110,14 @@ def test_fake_amo_selection_round_trips_every_active_schema_without_background_l
                         (by.By.CSS_SELECTOR, "#wizard-extension-amo-search-results [role=listitem]")
                     )
                 )
-                assert "<img src=x onerror=alert(1)> M7 fake" in result.text
+                assert (
+                    result.find_element(
+                        by.By.CSS_SELECTOR, ".wizard-extension-amo-identity strong"
+                    ).get_attribute("textContent")
+                    == "<img src=x onerror=alert(1)> M7 fake"
+                )
                 assert not result.find_elements(by.By.CSS_SELECTOR, "a, img")
+                assert driver.execute_script("return window.__m7AlertCalls") == 0
                 assert driver.execute_script("return window.__m7AmoSearchCalls") == [
                     "/api/profiles/extensions/amo-search?q=M7%20fake&locale=en"
                 ]
