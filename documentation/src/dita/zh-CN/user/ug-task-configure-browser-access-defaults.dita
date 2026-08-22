@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-browser-access-defaults" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>配置浏览器访问和默认值</title>
-  <shortdesc>使用步骤 2 配置浏览器访问、网络行为和基准默认值。</shortdesc>
+  <shortdesc>使用步骤 1 配置浏览器行为、网络访问和搜索，不重复 URL 或站点控件。</shortdesc>
   <taskbody>
-    <prereq><p>引导轮廓草稿已打开。</p></prereq>
-    <context><p>浏览器访问和默认值决定 Firefox 是否可以访问资源，以及在选择特定内容的策略之前浏览器的行为方式。</p></context>
+    <prereq><p>已在<uicontrol>引导式编辑器</uicontrol>中打开保存的配置文件。</p></prereq>
+    <context><p><uicontrol>浏览器、网络和搜索</uicontrol>集中浏览器行为、网络访问和搜索。主页、启动、站点筛选、处理程序和受管书签仅属于步骤 2。</p></context>
     <steps>
-      <step><cmd>打开引导式配置的第 2 步。</cmd><info><p>预期结果：引导配置档案保持一致。</p></info></step>
+      <step><cmd>打开步骤 1 <uicontrol>浏览器、网络和搜索</uicontrol>。</cmd><info><p>预期结果：仅显示此域的控件。</p></info></step>
       <step><cmd>检查部署的网络访问和浏览器行为控制。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>在添加主页、搜索或特定于导航的选项之前设置基线默认值。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>主页或站点导航请打开步骤 2，而不要在此处重复创建规则。</cmd><info><p>预期结果：每项 URL/站点策略只有一个归属位置。</p></info></step>
       <step><cmd>验证模式相关控件旁边显示的警告。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
     <result><p>该配置文件具有有意的浏览器访问权限和默认行为设置。</p></result>
-    <postreq><p>恢复：如果验证标记了一个值，则撤消最后的更改或使用 <uicontrol>所有设置</uicontrol> 检查原始策略形状。</p></postreq>
+    <postreq><p>恢复：撤消上次修改或在<uicontrol>所有设置</uicontrol>中检查原始策略形状。对于 URL、站点、处理程序或受管书签，请使用步骤 2。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

@@ -53,7 +53,7 @@ def test_makefile_test_targets_use_named_marker_expressions():
         "TEST_INTEGRATION_MARKERS": "integration and not db and not ai_incubation",
         "TEST_CONTRACT_MARKERS": "contract and not ai_incubation",
         "TEST_BROWSER_MARKERS": "browser",
-        "TEST_UI_MARKERS": "ui",
+        "TEST_UI_MARKERS": "ui or browser_ui",
         "TEST_LIVE_MARKERS": "live",
         "TEST_RELEASE_MARKERS": "not ai_incubation and not browser and not live",
     }

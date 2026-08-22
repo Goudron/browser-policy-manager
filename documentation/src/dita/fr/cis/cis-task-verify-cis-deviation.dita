@@ -15,6 +15,7 @@
       <step><cmd>Rouvrez le profil et confirmez que l'attribution de la source indique toujours si la valeur est de référence, CIS, manuelle, importée ou brute.</cmd><info><p>Résultat attendu : les réviseurs ultérieurs peuvent retracer la valeur configurée et trouver l'enregistrement externe.</p></info></step>
     </steps>
     <result><p>L'écart CIS comporte des preuves de vérification exploitables, un enregistrement d'exception externe et une attribution visible de la source BPM.</p></result>
+    <example id="bpm096-localized-current"><title>Comportement actuel dans 0.9.6</title><p>Le schéma, le préréglage de départ et la ligne de base CIS sont choisis avant le profil enregistré. Les sources baseline, CIS, manual, imported, converted et raw servent à la vérification et ne prouvent pas la conformité. Les certificats et la confiance ont un registre distinct par chemin; les états manual, imported, converted, raw, unavailable et blocked exigent une vérification manuelle.</p></example>
     <postreq><p>Si le réviseur ne peut pas vérifier le chemin exporté ou les preuves externes, conservez l'élément en révision manuelle et ne le décrivez pas comme conforme.</p></postreq>
   </taskbody>
   <related-links>

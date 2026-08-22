@@ -1,0 +1,67 @@
+<div class="app-shell mx-auto max-w-[900px] px-4 py-4 md:px-6 md:py-6">
+    {% include "profiles/_page_header.html" %}
+    <main id="profile-preparation" class="surface-panel fade-up p-5 md:p-6" aria-labelledby="profile-preparation-title">
+        {% if preparation_terminal_action_mode == "create" %}
+        <h2 id="profile-preparation-title" data-i18n="profiles.preparation_create_title">{{ tr("profiles.preparation_create_title", "Create profile") }}</h2>
+        {% set context_help_icon_target = "preparation-create" %}
+        {% set context_help_icon_label_key = "profiles.help_preparation_create" %}
+        {% include "profiles/_context_help_icon.html" %}
+        {% elif preparation_terminal_action_mode == "duplicate" %}
+        <h2 id="profile-preparation-title" data-i18n="profiles.preparation_duplicate_title">{{ tr("profiles.preparation_duplicate_title", "Duplicate profile") }}</h2>
+        {% set context_help_icon_target = "preparation-duplicate" %}
+        {% set context_help_icon_label_key = "profiles.help_preparation_duplicate" %}
+        {% include "profiles/_context_help_icon.html" %}
+        <p id="profile-preparation-source" data-preparation-source-name="{{ preparation_source.name }}"><span data-i18n="profiles.preparation_source_label">{{ tr("profiles.preparation_source_label", "Source profile") }}</span>: {{ preparation_source.name }} · r{{ preparation_source.revision }} · {{ preparation_source.schema_id }}</p>
+        {% else %}
+        <h2 id="profile-preparation-title" data-i18n="profiles.preparation_source_unavailable_title">{{ tr("profiles.preparation_source_unavailable_title", "Duplicate source unavailable") }}</h2>
+        <p id="profile-preparation-source-error" data-preparation-source-state="{{ preparation_source_state }}" data-i18n="profiles.preparation_source_unavailable">{{ tr("profiles.preparation_source_unavailable", "The requested source profile is unavailable. No profile was created.") }}</p>
+        {% endif %}
+        <form id="profile-preparation-form" class="mt-5" data-preparation-form-state="ready" novalidate>
+            <div class="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
+                <div class="min-w-0 sm:col-span-2">
+                    <label class="form-label" for="profile-preparation-name" data-i18n="profiles.preparation_name_label">{{ tr("profiles.preparation_name_label", "Profile name") }}</label>
+                    <input id="profile-preparation-name" class="input-base w-full" name="name" type="text" required autocomplete="off" aria-describedby="profile-preparation-name-error" aria-errormessage="profile-preparation-name-error" data-required-message="{{ tr("profiles.preparation_name_required", "Enter a profile name.") }}" data-conflict-message="{{ tr("profiles.preparation_name_conflict", "This profile name is already in use. Choose another name.") }}"{% if preparation_source %} placeholder="{{ tr("profiles.preparation_duplicate_name_hint", "Duplicate of {source_name}").replace("{source_name}", preparation_source.name) }}"{% endif %} />
+                    <p id="profile-preparation-name-error" class="mt-1 text-sm text-red-700" role="alert" hidden></p>
+                </div>
+                <div class="min-w-0">
+                    <label class="form-label" for="profile-preparation-schema" data-i18n="profiles.preparation_schema_label">{{ tr("profiles.preparation_schema_label", "Firefox schema") }}</label>
+                    <select id="profile-preparation-schema" class="input-base w-full" name="target_schema_id" required aria-describedby="profile-preparation-schema-error" aria-errormessage="profile-preparation-schema-error" data-required-message="{{ tr("profiles.preparation_schema_required", "Choose a Firefox schema.") }}" data-unavailable-message="{{ tr("profiles.preparation_schema_unavailable", "This Firefox schema is unavailable. Choose a supported schema.") }}">
+                        <option value="" hidden>{{ tr("profiles.preparation_schema_required", "Choose a Firefox schema.") }}</option>
+                        {% for option in preparation_catalog.schema_options %}
+                        <option value="{{ option.value }}"{% if loop.first %} selected{% endif %}>{{ option.label }}</option>
+                        {% endfor %}
+                    </select>
+                    <p id="profile-preparation-schema-error" class="mt-1 text-sm text-red-700" role="alert" hidden></p>
+                </div>
+                <div class="min-w-0">
+                    <label class="form-label" for="profile-preparation-starter" data-i18n="profiles.preparation_starter_label">{{ tr("profiles.preparation_starter_label", "Starter preset") }}</label>
+                    <select id="profile-preparation-starter" class="input-base w-full" name="starter_id" required aria-describedby="profile-preparation-starter-error" aria-errormessage="profile-preparation-starter-error" data-required-message="{{ tr("profiles.preparation_starter_required", "Choose a starter preset.") }}" data-unavailable-message="{{ tr("profiles.preparation_starter_unavailable", "This starter preset is unavailable. Choose another preset.") }}">
+                        <option value="" hidden>{{ tr("profiles.preparation_starter_required", "Choose a starter preset.") }}</option>
+                        {% for option in preparation_catalog.starter_options if preparation_mode in option.allowed_modes %}
+                        <option value="{{ option.id }}"{% if (preparation_mode == "duplicate" and option.id == "keep_current") or (preparation_mode == "create" and option.id == "blank") %} selected{% endif %}>{{ tr(option.label_key, option.id) }}</option>
+                        {% endfor %}
+                    </select>
+                    <p id="profile-preparation-starter-error" class="mt-1 text-sm text-red-700" role="alert" hidden></p>
+                </div>
+                <div class="min-w-0 sm:col-span-2">
+                    <label class="form-label" for="profile-preparation-cis" data-i18n="profiles.preparation_cis_label">{{ tr("profiles.preparation_cis_label", "CIS baseline") }}</label>
+                    <select id="profile-preparation-cis" class="input-base w-full" name="cis_baseline_id" required aria-describedby="profile-preparation-cis-error" aria-errormessage="profile-preparation-cis-error" data-required-message="{{ tr("profiles.preparation_cis_required", "Choose a CIS baseline.") }}" data-unavailable-message="{{ tr("profiles.preparation_cis_unavailable", "This CIS baseline is unavailable for the selected Firefox schema. Choose another baseline or schema.") }}">
+                        <option value="" hidden>{{ tr("profiles.preparation_cis_required", "Choose a CIS baseline.") }}</option>
+                        {% for option in preparation_catalog.cis_options %}
+                        <option value="{{ option.id }}" data-available-schema-versions="{{ option.available_schema_versions | join(',') }}"{% if option.id == "none" %} selected{% endif %}>{{ tr(option.label_key, option.id) }}</option>
+                        {% endfor %}
+                    </select>
+                    <p id="profile-preparation-cis-error" class="mt-1 text-sm text-red-700" role="alert" hidden></p>
+                </div>
+            </div>
+            <div id="profile-preparation-state" class="mt-4" role="status" aria-live="polite" aria-atomic="true"></div>
+            <div class="mt-5 flex min-w-0 justify-end">
+                <button id="profile-preparation-submit" class="button-base button-primary max-w-full whitespace-normal" type="submit" data-preparation-terminal-action="{{ preparation_terminal_action_mode }}" data-blocker-message="{{ tr("profiles.preparation_blocked", "This selection cannot be prepared. Change the marked selection and try again.") }}" data-source-stale-message="{{ tr("profiles.preparation_source_stale", "The source profile changed. Reload this page to review it before duplicating.") }}" data-idempotency-reused-message="{{ tr("profiles.preparation_idempotency_reused", "This duplicate request cannot be reused with changed selections. Reload this page before trying again.") }}" data-submitting-message="{% if preparation_terminal_action_mode == "duplicate" %}{{ tr("profiles.preparation_duplicating", "Duplicating profile…") }}{% else %}{{ tr("profiles.preparation_submitting", "Creating profile…") }}{% endif %}" aria-describedby="{% if preparation_terminal_action_mode == "unavailable" %}profile-preparation-source-error {% endif %}profile-preparation-action-error"{% if preparation_terminal_action_mode == "unavailable" %} disabled{% endif %}>{% if preparation_terminal_action_mode == "duplicate" %}<span data-i18n="profiles.preparation_duplicate_action">{{ tr("profiles.preparation_duplicate_action", "Duplicate") }}</span>{% else %}<span data-i18n="profiles.preparation_create_action">{{ tr("profiles.preparation_create_action", "Create") }}</span>{% endif %}</button>
+            </div>
+            <p id="profile-preparation-action-error" class="mt-1 text-right text-sm text-red-700" role="alert" hidden></p>
+        </form>
+    </main>
+    {% include "profiles/_page_footer.html" %}
+</div>
+
+<script id="profile-preparation-catalog" type="application/json">{{ preparation_catalog | tojson }}</script>

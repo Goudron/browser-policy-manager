@@ -12,6 +12,7 @@
           <alt>Éditeur JSON affichant les politiques Firefox modifiables JSON pour un profil enregistré.</alt>
         </image>
       </fig>
+      <p>L’en-tête affiche le schéma, le préréglage et la ligne de base CIS comme faits en lecture seule. Modifiez ces identités par préparation ou conversion explicite, non en modifiant le JSON.</p>
       <p>Enregistrez ou abandonnez délibérément les modifications de l’éditeur JSON avant d’ouvrir la revue de conversion du schéma. L’aperçu n’écrase jamais les modifications locales du navigateur ; un aperçu obsolète doit être demandé de nouveau.</p>
     </context>
     <steps>

@@ -43,7 +43,7 @@ def test_audit_declares_m9_01_scope_status_and_sources() -> None:
     assert audit["schema_version"] == 1
     assert audit["audit_id"] == "bpm-all-settings-documentation-target-audit-0.9.1"
     assert audit["backlog_item"] == "BPM091-M9-01"
-    assert audit["target_bpm_version"] == "0.9.5.1"
+    assert audit["target_bpm_version"] == "0.9.6"
     assert audit["status"] == "accepted"
     for source in audit["audited_sources"].values():
         path = source.split("::", 1)[0]

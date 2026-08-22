@@ -54,7 +54,11 @@ TEST_UNIT_MARKERS := unit and not ai_incubation
 TEST_INTEGRATION_MARKERS := integration and not db and not ai_incubation
 TEST_CONTRACT_MARKERS := contract and not ai_incubation
 TEST_BROWSER_MARKERS := browser
-TEST_UI_MARKERS := ui
+# Product/UI contracts plus the deterministic Chromium product and documentation
+# smoke contours share one maintainer-facing gate.  `browser_ui` is deliberately
+# separate from the primary `browser` layer, so selecting only `ui` would omit
+# the real-browser scenarios from `make test-ui`.
+TEST_UI_MARKERS := ui or browser_ui
 TEST_LIVE_MARKERS := live
 TEST_RELEASE_MARKERS := not ai_incubation and not browser and not live
 PRE_COMMIT_TEST_PATHS := \
@@ -121,7 +125,7 @@ LOCAL_ARTIFACT_FILES := \
 DOCKER ?= docker
 DOCKER_COMPOSE ?= $(DOCKER) compose
 DOCKER_COMPOSE_FILE ?= distributions/docker/compose.yaml
-DOCKER_IMAGE ?= browser-policy-manager:0.9.5.1
+DOCKER_IMAGE ?= browser-policy-manager:0.9.6
 BPM_SOURCE_REVISION ?= $(shell git rev-parse --verify HEAD 2>/dev/null || printf unknown)
 TARGET ?= all
 

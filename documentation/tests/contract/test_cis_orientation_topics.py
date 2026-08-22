@@ -50,6 +50,7 @@ TOPICS = {
             "a-layer-decisions",
             "a-conflicts-manual-review",
             "a-attribution-boundary",
+            "bpm096-attribution",
         },
     },
     "cis-task-trace-cis-source": {
@@ -64,6 +65,7 @@ TOPICS = {
             "a-proxy-routing",
             "a-evidence-retention",
             "a-exception-boundary",
+            "bpm096-localized-current",
         },
     },
     "cis-task-verify-cis-deviation": {

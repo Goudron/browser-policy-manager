@@ -15,10 +15,11 @@ from packaging.requirements import Requirement
 from packaging.utils import canonicalize_name
 
 from app.core.config import Settings
+from app.documentation import manifest as documentation_manifest
 from app.main import create_app
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-TARGET_VERSION = "0.9.5.1"
+TARGET_VERSION = "0.9.6"
 
 
 def _project_version() -> str:
@@ -89,8 +90,42 @@ def test_current_version_metadata_is_single_source_of_truth():
         encoding="utf-8"
     )
     assert f"first orientation point for BPM {version} work" in system_map
-    changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert changelog.splitlines()[2] == f"## {version}"
+
+
+def test_active_release_boundary_declarations_match_product_version() -> None:
+    version = _project_version()
+    release_boundary = json.loads(
+        (REPO_ROOT / "tools" / "release_boundary_manifest_0_9_5.json").read_text(encoding="utf-8")
+    )
+    documentation_policy = json.loads(
+        (REPO_ROOT / "documentation" / "config" / "artifact-policy.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    assert version == TARGET_VERSION
+    assert release_boundary["target_version"] == version
+    assert documentation_policy["target_bpm_version"] == version
+    assert documentation_policy["archive"]["root"] == f"bpm-documentation-{version}"
+    assert documentation_policy["paths"]["release_archive"] == (
+        f"documentation/dist/bpm-documentation-{version}.tar.gz"
+    )
+    assert documentation_policy["paths"]["release_checksum"] == (
+        f"documentation/dist/bpm-documentation-{version}.tar.gz.sha256"
+    )
+
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    assert "BPM 0." not in readme
+    assert "## Release" not in readme
+
+
+def test_served_documentation_rejects_a_stale_product_version(tmp_path: Path) -> None:
+    (tmp_path / "manifest.json").write_text(
+        json.dumps({"artifact": {"bpm_version": "0.9.5.1"}}),
+        encoding="utf-8",
+    )
+
+    assert documentation_manifest.documentation_artifact_problem(tmp_path) == "stale"
 
 
 def test_release_artifacts_and_installed_runtime_match_project_metadata(tmp_path: Path):

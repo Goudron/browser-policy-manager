@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.9.6
+
+Status: **Release candidate; implementation, documentation delivery, and release-quality gates are complete. Reviewed commit and CI handoff remain.**
+
+### Changed
+- Added atomic profile preparation for create and duplicate: the preparation form chooses a name,
+  supported Firefox schema, starter preset, and CIS baseline before a saved profile opens in
+  Guided editor. Cross-schema duplication creates a reviewed conversion plan and never mutates
+  the source profile.
+- Reworked the Guided editor into eight focused steps. Its schema, preset, and CIS baseline are
+  read-only saved facts in Guided, All settings, and JSON editor chrome; schema changes remain an
+  explicit conversion workflow.
+- Added dedicated Guided workflows for URLs and site access, extensions, and certificates/trust.
+  Extension lookup uses the configured AMO origin when available and preserves a validated manual
+  GUID/install-URL path when it is not.
+- Added durable baseline and certificate-trust provenance across creation, import, duplicate, and
+  conversion, including CIS/manual/converted/imported attribution and review states.
+- Moved active product, package, runtime, distribution, and maintained documentation version
+  surfaces to `0.9.6`; refreshed the current Firefox schema matrix and supported policy artifacts.
+
+### Documentation
+- Updated the six-locale User, Firefox Policy, CIS Settings, and Administrator/DevOps guides for
+  atomic preparation, the eight-step Guided workflow, conversion, AMO fallback, URL/site access,
+  certificates/trust, and source/CIS boundaries.
+- Delivered and verified the six-locale documentation site and User/Administrator PDF artifacts,
+  including deterministic manifest/search/navigation, package integrity, and atomic development
+  installation.
+
+### Quality
+- Completed focused ownership and lifecycle verification, full tests, type/lint/architecture,
+  declared coverage, Chromium product/documentation smoke, pinned Firefox policy evidence, and
+  clean-install, migration, security, dependency-audit, and reproducibility gates. The verified
+  outcomes and remaining commit/CI boundary are recorded in the 0.9.6 release-readiness evidence.
+
 ## 0.9.5.1
 
 Status: **Unreleased.**

@@ -2,20 +2,29 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-duplicate-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Duplicate a profile</title>
-  <shortdesc>Create a named Guided draft from an existing saved profile when you want a safe starting point for changes.</shortdesc>
+  <shortdesc>Create a separate saved profile through duplicate preparation without changing the source.</shortdesc>
   <taskbody>
-    <prereq><p>The source profile is visible in the <uicontrol>Library</uicontrol> and you have confirmed its row identity.</p></prereq>
-    <context><p><uicontrol>Duplicate</uicontrol> creates a separate profile draft based on the selected saved profile. It does not change the source profile.</p></context>
+    <prereq><p>The active source profile is visible in <uicontrol>Library</uicontrol>. Confirm its name and current state before duplicating it.</p></prereq>
+    <context><p>Duplicate preparation suggests a name based on the source and asks for the target schema, starter preset, and CIS baseline. If the schema changes, BPM plans the conversion before it creates the target. It never silently drops source values and never changes the source profile.</p>
+      <fig id="screenshot-preparation-duplicate">
+        <title>Duplicate profile preparation</title>
+        <image keyref="screenshot.preparation-duplicate" placement="break" scalefit="yes" align="center">
+          <alt>Duplicate preparation form showing the source profile, suggested name, Firefox schema, starter preset, CIS baseline, and Duplicate action.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Choose <uicontrol>Duplicate</uicontrol> on the source profile row.</cmd><info><p>Expected result: BPM opens a clone-name panel.</p></info></step>
-      <step><cmd>Enter a clear name that differs from existing profile names.</cmd><info><p>BPM requires a name and reports duplicate-name validation before confirming.</p></info></step>
-      <step><cmd>Confirm the duplicate action.</cmd><info><note type="warning">A duplicate is separate from the source. Later edits to one profile do not update the other.</note></info></step>
+      <step><cmd>Choose <uicontrol>Duplicate</uicontrol> on the intended source profile.</cmd><info><p>Expected result: BPM opens the duplicate preparation form with a suggested name.</p></info></step>
+      <step><cmd>Enter a distinct name and select the target schema, starter preset, and CIS baseline.</cmd><info><p>Keep the source schema when no conversion is intended. A selected target schema can have different supported policy shapes.</p></info></step>
+      <step><cmd>When the schema differs, review the duplicate conversion state.</cmd><info><p>A valid plan permits duplication. A blocked or unavailable plan means BPM creates no target and leaves the source unchanged; select another target or resolve the affected configuration before trying again.</p></info></step>
+      <step><cmd>Choose <uicontrol>Duplicate</uicontrol>.</cmd><info><p>Expected result: BPM creates one separate saved profile and opens it in <uicontrol>Guided editor</uicontrol>.</p><note type="warning">Later changes to either profile do not update the other. A source-stale, name-conflict, or conversion-blocked message creates no target.</note></info></step>
     </steps>
-    <result><p>BPM opens or creates the duplicated profile as a named Guided draft or saved profile according to the current workflow.</p></result>
-    <postreq><p>Recovery: cancel the clone-name panel if the selected source row or new name is wrong.</p></postreq>
+    <result><p>The source remains unchanged and the new saved profile has the selected schema, preset, CIS baseline, and conversion result.</p></result>
+    <postreq><p>Recovery: cancel preparation if the wrong source was selected. If the source changed while the form was open, reopen duplicate preparation from the current source; do not rely on an old conversion result.</p></postreq>
   </taskbody>
   <related-links>
-    <link keyref="topic.ug-reference-library-profile-row"/>
-    <link keyref="topic.ug-task-open-saved-profile"/>
+    <link keyref="topic.ug-task-create-first-profile"/>
+    <link keyref="topic.ug-troubleshoot-schema-mismatch"/>
+    <link keyref="topic.ug-task-use-guided-editor"/>
   </related-links>
 </task>

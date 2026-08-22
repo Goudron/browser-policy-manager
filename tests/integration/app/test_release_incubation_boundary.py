@@ -15,7 +15,7 @@ MANIFEST_PATH = REPO_ROOT / "tools" / "release_boundary_manifest_0_9_5.json"
 def test_boundary_manifest_classifies_every_declared_delivery_extra() -> None:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 
-    assert manifest["target_version"] == "0.9.5.1"
+    assert manifest["target_version"] == "0.9.6"
     assert set(manifest["categories"]) == {
         "default_release",
         "optional_incubation",

@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Navegar por los seis pasos del «Editor guiado»</title>
-  <shortdesc>Los seis pasos cubren la identidad del perfil, el acceso al navegador y los valores predeterminados, la seguridad y la privacidad, los usuarios, los complementos y los sitios, las funciones inteligentes, y la revisión y exportación.</shortdesc>
-  <taskbody>
-    <prereq><p>Abra un perfil en el editor guiado desde la biblioteca o el flujo de creación.</p></prereq>
-    <context><p>El «<uicontrol>Editor guiado</uicontrol>» organiza la configuración del perfil en seis pasos y mantiene visible la validación del esquema mientras trabaja.</p>
+  <title>Usar los ocho pasos del editor guiado</title>
+  <shortdesc>Tras preparar un perfil guardado, configúrelo en ocho pasos orientados a tareas.</shortdesc>
+  <taskbody><prereq><p>Abra un perfil guardado en el <uicontrol>Editor guiado</uicontrol> desde la <uicontrol>Biblioteca</uicontrol>, después de crear o preparar un duplicado.</p></prereq><context><p>El encabezado muestra el esquema, el preajuste y la línea base CIS como datos de solo lectura. Cámbielos únicamente mediante una preparación nueva o una conversión explícita de esquema. El editor tiene ocho pasos y cada familia de políticas tiene un único propietario guiado.</p>
       <fig id="screenshot-guided-editor-overview">
-        <title>Descripción general del «Editor guiado»</title>
+        <title>Cabecera del editor guiado</title>
         <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
-          <alt>Editor guiado que muestra el estado de validación y navegación de pasos para un perfil guardado.</alt>
+          <alt>Editor guiado que muestra como solo lectura el esquema, el preajuste y la línea base CIS, con navegación de ocho pasos.</alt>
         </image>
       </fig>
-      <p>Para un perfil guardado, abra la revisión de conversión del esquema solo después de decidir cambiar de canal: preserve el trabajo sin guardar, elija otro destino compatible y use la vista previa de solo lectura antes de cualquier aplicación explícita.</p>
-    </context>
-    <steps>
-      <step><cmd>En el paso 1, confirme el nombre, el canal de esquema, el escenario, el ajuste inicial y la capa CIS.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
-      <step><cmd>En el paso 2, configure el acceso a la red, el comportamiento del navegador, el inicio, la búsqueda y los valores de navegación predeterminados.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
-      <step><cmd>En el paso 3, configure la privacidad, los permisos, las cookies, la limpieza, DNS y la postura de seguridad.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
-      <step><cmd>En el paso 4, configure las cuentas, las extensiones, los marcadores, el idioma, la traducción y las reglas de sitios.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
-      <step><cmd>En el paso 5, configure solo las políticas de Firefox para <uicontrol>IA y funciones inteligentes</uicontrol> compatibles con el esquema seleccionado.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
-      <step><cmd>En el paso 6, valide, guarde y exporte el perfil.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
-    </steps>
-    <result><p>Puede explicar a dónde pertenece cada configuración guiada y continuar desde el paso correcto.</p></result>
-    <postreq><p>Recuperación: si está en la zona incorrecta, vaya al paso adecuado o use la búsqueda en lugar de cambiar ajustes no relacionados.</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-task-search-guided-settings"/>
-    <link keyref="topic.ug-task-review-guided-profile"/>
-  </related-links>
+      <fig id="screenshot-guided-step-6-extensions">
+        <title>Extensiones</title>
+        <image keyref="screenshot.guided-step-6-extensions" placement="break" scalefit="yes" align="center">
+          <alt>Paso 6 del editor guiado con búsqueda de AMO y entrada manual de reglas de extensiones.</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>Use el paso 1, <uicontrol>Navegador, red y búsqueda</uicontrol>, para el comportamiento del navegador, el acceso de red y la búsqueda.</cmd><info><p>No contiene controles de URL, sitios ni certificados.</p></info></step>
+<step><cmd>Use el paso 2, <uicontrol>URL, sitios y navegación</uicontrol>, para página de inicio, arranque, sitios permitidos o bloqueados, controladores y marcadores gestionados.</cmd><info><p>Los valores de navegación se revisan juntos.</p></info></step>
+<step><cmd>Use el paso 3, <uicontrol>Seguridad &amp; privacidad</uicontrol>, para privacidad, permisos, cookies, limpieza, DNS y endurecimiento.</cmd><info><p>Las decisiones de privacidad se mantienen separadas de la confianza de certificados.</p></info></step>
+<step><cmd>Use el paso 4, <uicontrol>Certificados y confianza</uicontrol>, para referencias de certificados, raíces empresariales, autenticación y dispositivos de seguridad.</cmd><info><p>BPM almacena referencias literales y no lee el contenido de certificados ni dispositivos.</p></info></step>
+<step><cmd>Use el paso 5, <uicontrol>Usuarios, idioma y sincronización</uicontrol>, para controles de identidad, idioma y sincronización compatibles.</cmd><info><p>No duplica reglas de extensiones ni sitios.</p></info></step>
+<step><cmd>Use el paso 6, <uicontrol>Extensiones</uicontrol>, para reglas permitidas, bloqueadas, obligatorias, bloqueadas y de actualización.</cmd><info><p>La búsqueda de AMO es opcional y explícita; si no está disponible, siguen disponibles la entrada manual del GUID y una URL de instalación validada.</p></info></step>
+<step><cmd>Use el paso 7, <uicontrol>IA</uicontrol>, solo para políticas compatibles de Firefox.</cmd><info><p>Los controles no compatibles permanecen indisponibles con el esquema seleccionado.</p></info></step>
+<step><cmd>Use el paso 8, <uicontrol>Revisar y exportar</uicontrol>, para resolver elementos de atención, validar, guardar y exportar.</cmd><info><note type="warning">Una advertencia de esquema, una reserva sin procesar, un elemento CIS de revisión manual o un bloqueo de conversión requiere una decisión visible; otro paso no lo repara de forma silenciosa.</note></info></step>
+</steps><result><p>Puede encontrar cada familia de políticas y distinguir los datos de línea base de solo lectura de los valores editables.</p></result><postreq><p>Recuperación: use el selector de pasos, la búsqueda de configuraciones o el salto desde Revisión si una configuración está en el contexto incorrecto. Para cambiar el esquema, guarde o descarte deliberadamente los cambios, solicite una vista previa de conversión de solo lectura y aplique únicamente un plan actual válido.</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-configure-browser-access-defaults"/><link keyref="topic.ug-task-configure-security-privacy"/><link keyref="topic.fx-task-review-complex-policy-configuration"/></related-links>
 </task>

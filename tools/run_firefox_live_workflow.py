@@ -11,6 +11,7 @@ part of this runner.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -21,6 +22,7 @@ import subprocess
 import sys
 import time
 import xml.etree.ElementTree as element_tree
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
@@ -49,9 +51,44 @@ ALL_CHANNELS = "all"
 LIVE_TEST_PATHS = (
     "tests/live/firefox/test_policy_scenarios.py",
     "tests/live/firefox/test_persisted_profile_e2e.py",
+    "tests/live/firefox/test_prepared_profile_policy_e2e.py",
 )
 DEFAULT_TIMEOUT_SECONDS = 1_200
 _TMP_PATH = re.compile(r"/(?:tmp|var/folders)/[^\s\"']+")
+
+# The live-browser channel names intentionally differ from durable BPM schema
+# artifact IDs. Keep that explicit bridge beside the provisioned-browser matrix
+# so the subprocess cannot silently default to Release or prove the wrong schema.
+CHANNEL_SCHEMA_ARTIFACTS: dict[str, dict[str, str]] = {
+    "release": {
+        "artifact_id": "release-153",
+        "schema_path": "app/schemas/policies/firefox-release-153.json",
+    },
+    "esr153": {
+        "artifact_id": "esr-153.0",
+        "schema_path": "app/schemas/policies/firefox-esr-153.0.json",
+    },
+    "esr140": {
+        "artifact_id": "esr-140.13",
+        "schema_path": "app/schemas/policies/firefox-esr-140.13.json",
+    },
+    "esr115": {
+        "artifact_id": "esr-115.39",
+        "schema_path": "app/schemas/policies/firefox-esr-115.39.json",
+    },
+}
+CHANNEL_UNSUPPORTED_CASES: dict[str, tuple[dict[str, str], ...]] = {
+    "release": (),
+    "esr153": (),
+    "esr140": (),
+    "esr115": (
+        {
+            "policy_id": "MicrosoftEntraSSO",
+            "disposition": "not-declared-in-target-schema",
+            "reason": "The ESR 115.39 artifact cannot create, duplicate, or install this policy.",
+        },
+    ),
+}
 
 
 def _progress(message: str) -> None:
@@ -139,6 +176,18 @@ def _write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def _schema_evidence(channel: str) -> dict[str, str]:
+    """Return the exact BPM schema artifact paired with one browser channel."""
+
+    artifact = CHANNEL_SCHEMA_ARTIFACTS[channel]
+    schema_path = REPO_ROOT / artifact["schema_path"]
+    return {
+        "artifact_id": artifact["artifact_id"],
+        "path": artifact["schema_path"],
+        "sha256": hashlib.sha256(schema_path.read_bytes()).hexdigest(),
+    }
+
+
 def _pytest_command(junit_path: Path, pytest_work_dir: Path) -> list[str]:
     return [
         sys.executable,
@@ -173,7 +222,12 @@ def _terminate(process: subprocess.Popen[str]) -> None:
 
 
 def _run_streamed(
-    command: list[str], *, timeout_seconds: int, log_path: Path, progress_label: str
+    command: list[str],
+    *,
+    timeout_seconds: int,
+    log_path: Path,
+    progress_label: str,
+    environment: Mapping[str, str],
 ) -> tuple[int, bool]:
     """Stream pytest output and enforce an end-to-end channel timeout."""
 
@@ -185,6 +239,7 @@ def _run_streamed(
             **os.environ,
             "BPM_FIREFOX_LIVE_LOCAL_ONLY": "1",
             "BPM_FIREFOX_LIVE_ARTIFACT_DIR": str(log_path.parent / "failures"),
+            **environment,
         },
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -283,6 +338,9 @@ def run_channel(
     if not 1 <= current_channel <= total_channels:
         raise ValueError("matrix_position must satisfy 1 <= current <= total")
 
+    schema_evidence = _schema_evidence(channel)
+    unsupported_cases = list(CHANNEL_UNSUPPORTED_CASES[channel])
+
     artifact_dir.mkdir(parents=True, exist_ok=True)
     junit_path = artifact_dir / "junit.xml"
     log_path = artifact_dir / "pytest.log"
@@ -313,6 +371,8 @@ def run_channel(
                 "policy_runtime_observations": _junit_policy_runtime_observations(junit_path),
                 "failed_scenarios": [],
                 "versions": {},
+                "schema_artifact": schema_evidence,
+                "unsupported_cases": unsupported_cases,
                 "failure_artifacts": "failures",
                 "artifact_dir": str(artifact_dir),
                 "network_scope": "local loopback policy fixtures after provisioning; AMO excluded",
@@ -340,6 +400,10 @@ def run_channel(
                 timeout_seconds=timeout_seconds,
                 log_path=log_path,
                 progress_label=channel,
+                environment={
+                    "BPM_FIREFOX_CHANNEL": channel,
+                    "BPM_FIREFOX_LIVE_SCHEMA_ARTIFACT": schema_evidence["artifact_id"],
+                },
             )
             diagnostic = None
         except OSError as error:
@@ -375,6 +439,8 @@ def run_channel(
         "policy_runtime_observations": _junit_policy_runtime_observations(junit_path),
         "failed_scenarios": failed,
         "versions": versions,
+        "schema_artifact": schema_evidence,
+        "unsupported_cases": unsupported_cases,
         "failure_artifacts": "failures",
         "artifact_dir": str(artifact_dir),
         "network_scope": "local loopback policy fixtures after provisioning; AMO excluded",

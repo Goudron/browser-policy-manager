@@ -53,6 +53,65 @@ test("search indexes known-preference sections through the ESM API", () => {
     assert.doesNotThrow(() => search.buildIndex());
 });
 
+test("Guided search keeps a retained control target instead of its All-settings alias", (context) => {
+    context.after(installImmediateWindow());
+
+    const directTarget = createFakeElement("input");
+    const input = createFakeElement("input");
+    input.value = "default search engine";
+    const results = createFakeElement("div");
+    const clear = createFakeElement("button");
+    const search = createSearch({
+        documentRef: {
+            body: { dataset: { profilesTemplateKind: "editor" } },
+            createElement: (tagName) => createFakeElement(tagName),
+            querySelector: (selector) => selector === '[data-settings-target="field:wizard-search-default-engine"]'
+                ? directTarget
+                : null,
+        },
+        elements: {
+            wizardSettingsSearchInputEl: input,
+            wizardSettingsSearchMetaEl: createFakeElement("div"),
+            wizardSettingsSearchResultsEl: results,
+            wizardSettingsSearchClearEl: clear,
+        },
+        dependencies: {
+            t: (key, fallback = "") => fallback || key,
+            escapeHtml: (value) => String(value || ""),
+            humanizeIdentifier: (value) => String(value || ""),
+            normalizeSearchText: (value) => String(value || "").toLowerCase(),
+            setWizardStep: () => {},
+            getAllSettingsSearchEntries: () => [],
+            findAllSettingsEntryTarget: () => null,
+        },
+        wizardSettingsCatalog: {
+            sections: [{
+                id: "search",
+                ui_maps: { search: [{ id: "default", label_key: "area.default", fallback: "Default" }] },
+                ui_controls: {
+                    search: [{
+                        label_key: "control.default",
+                        fallback: "Default search engine",
+                        area_id: "default",
+                        target: "field:wizard-search-default-engine",
+                    }],
+                },
+            }],
+        },
+        wizardSearchSectionSteps: {
+            search: { step: 1, key: "step.search", fallback: "Browser, network & search" },
+        },
+        settingsTargetAliases: {
+            "field:wizard-search-default-engine": "shell-policy:1:SearchEngines",
+        },
+    });
+
+    search.renderResults();
+
+    assert.ok(resultTargets(results).includes("field:wizard-search-default-engine"));
+    assert.equal(search.findTarget("field:wizard-search-default-engine"), directTarget);
+});
+
 test("search groups, scopes, deduplicates, and activates all-settings targets", (context) => {
     context.after(installImmediateWindow());
 

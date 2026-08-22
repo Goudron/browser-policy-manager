@@ -1,8 +1,5 @@
     function create({
         documentRef = document,
-        managedExtensionProfiles = [],
-        managedExtensionFields = [],
-        managedExtensionStatusEls = [],
         elements = {},
         dependencies = {},
         state = {},
@@ -16,40 +13,37 @@
             renderExtensionReviewSummary,
             updateWizardSummary,
             getActiveWizardSchemaVersion,
+            getComplianceInfo = () => null,
+            getManualEdits = () => [],
         } = dependencies;
         const getEditor = state.getEditor || (() => null);
         const setCurrentRaw = state.setCurrentRaw || (() => {});
-        const wizardExtensionManagedKeys = state.wizardExtensionManagedKeys || [];
+        const getCurrentProfile = state.getCurrentProfile || (() => null);
+        const setCurrentProfile = state.setCurrentProfile || (() => {});
 
         const {
-            wizardExtensionDefaultModeEl,
+            wizardExtensionAmoSearchFormEl,
+            wizardExtensionAmoQueryEl,
+            wizardExtensionAmoSearchSubmitEl,
+            wizardExtensionAmoSearchStatusEl,
+            wizardExtensionAmoManualFocusEl,
+            wizardExtensionAmoSearchResultsEl,
+            wizardExtensionAmoSelectedRulesEl,
+            wizardExtensionRuleAddFormEl,
+            wizardExtensionRuleGuidEl,
+            wizardExtensionRuleInstallUrlEl,
+            wizardExtensionRuleStatusEl,
+            wizardExtensionRulesEl,
+            wizardExtensionRawRulesEl,
+            wizardExtensionUpdateEl,
+            wizardExtensionInstallDefaultEl,
+            wizardExtensionInstallAllowEl,
             wizardExtensionInstallEl,
-            wizardExtensionInstallSummaryEl,
-            wizardExtensionInstallToggleEl,
-            wizardExtensionInstallPanelEl,
             wizardExtensionLockedEl,
-            wizardExtensionLockedSummaryEl,
-            wizardExtensionLockedToggleEl,
-            wizardExtensionLockedPanelEl,
             wizardExtensionUninstallEl,
-            wizardExtensionUninstallSummaryEl,
-            wizardExtensionUninstallToggleEl,
-            wizardExtensionUninstallPanelEl,
-            wizardExtensionSectionStatusEl,
-            wizardExtensionFineTuningToggleEl,
-            wizardExtensionFineTuningPanelEl,
-            wizardExtensionCuratedStatusEl,
-            wizardExtensionCuratedToggleEl,
-            wizardExtensionCuratedPanelEl,
             wizardSyncSectionStatusEl,
             wizardSyncFineTuningToggleEl,
             wizardSyncFineTuningPanelEl,
-            wizardBookmarksSectionStatusEl,
-            wizardBookmarksOpenSettingsEl,
-            wizardBookmarksConfiguredActionsEl,
-            wizardBookmarksLinksJumpEl,
-            wizardBookmarksFoldersJumpEl,
-            wizardBookmarksNestedJumpEl,
             wizardLanguageSectionStatusEl,
             wizardLanguageAiHandoffEl,
             wizardAiEsrcEmptyStateEl,
@@ -63,24 +57,14 @@
             wizardGenerativeAiCardEl,
             wizardVisualSearchEnabledCardEl,
             wizardAiGovernanceCopyEl,
-            wizardWebsiteSectionStatusEl,
-            wizardWebsiteFineTuningToggleEl,
-            wizardWebsiteFineTuningPanelEl,
         } = elements;
-        let extensionFineTuningPanelPreference = null;
-        let extensionInstallPanelPreference = null;
-        let extensionLockedPanelPreference = null;
-        let extensionUninstallPanelPreference = null;
-        let curatedPanelPreference = null;
-        const extensionProfileDetailsPreferences = new Map();
         let syncPanelPreference = null;
-        let websitePanelPreference = null;
-        const extensionGovernancePresetButtons = Array.from(document.querySelectorAll("[data-extension-governance-preset]"));
+        let amoSearchAbortController = null;
+        let amoSearchSequence = 0;
+        const amoSelectedRules = new Map();
         const aiPosturePresetButtons = Array.from(document.querySelectorAll("[data-ai-posture-preset]"));
         const syncFocusPresetButtons = Array.from(documentRef.querySelectorAll("[data-sync-focus-preset]"));
         const languagePresetButtons = Array.from(documentRef.querySelectorAll("[data-language-preset]"));
-        const websiteAccessPostureButtons = Array.from(documentRef.querySelectorAll("[data-website-access-posture]"));
-        const websiteAccessHandlerButtons = Array.from(documentRef.querySelectorAll("[data-website-access-handlers]"));
 
         function setText(el, value) {
             if (el) {
@@ -88,8 +72,867 @@
             }
         }
 
-        function countTextareaLines(value) {
-            return linesToArray(value).length;
+        function isVerifiedFirefoxGuid(value) {
+            return typeof value === "string" && (
+                /^[A-Za-z0-9][A-Za-z0-9._-]{0,126}@[A-Za-z0-9][A-Za-z0-9.-]{0,126}$/.test(value)
+                || /^\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\}$/.test(value)
+            );
+        }
+
+        function amoLocale() {
+            const rawLocale = documentRef.getElementById("profiles-initial-locale")?.textContent;
+            try {
+                const parsed = JSON.parse(rawLocale || '"en"');
+                if (["en", "ru", "de", "es-ES", "fr", "zh-CN"].includes(parsed)) return parsed;
+            } catch {
+                // The query stays local when the authored locale bootstrap is malformed.
+            }
+            return "en";
+        }
+
+        function setAmoSearchStatus(messageKey) {
+            setText(wizardExtensionAmoSearchStatusEl, t(messageKey));
+        }
+
+        function clearAmoSearchResults() {
+            if (!wizardExtensionAmoSearchResultsEl) return;
+            wizardExtensionAmoSearchResultsEl.replaceChildren();
+            wizardExtensionAmoSearchResultsEl.hidden = true;
+        }
+
+        function setAmoManualRecoveryVisible(visible) {
+            if (wizardExtensionAmoManualFocusEl) wizardExtensionAmoManualFocusEl.hidden = !visible;
+        }
+
+        function focusManualExtensionEntry() {
+            wizardExtensionRuleAddFormEl?.scrollIntoView({ behavior: "smooth", block: "center" });
+            wizardExtensionRuleGuidEl?.focus({ preventScroll: true });
+        }
+
+        function setAmoSearchUnavailable() {
+            clearAmoSearchResults();
+            setAmoSearchStatus("profiles.wizard_extensions_amo_search_unavailable");
+            setAmoManualRecoveryVisible(true);
+        }
+
+        function extensionSettingsFromEditor() {
+            const editor = getEditor();
+            if (!editor) return null;
+            const mode = documentRef.getElementById("mode")?.value || "";
+            const parsed = fromEditorValue(editor.getValue(), mode);
+            const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
+            const extensionSettings = normalized.ExtensionSettings && typeof normalized.ExtensionSettings === "object"
+                ? { ...normalized.ExtensionSettings }
+                : {};
+            return { editor, mode, normalized, extensionSettings };
+        }
+
+        function renderAmoSelectedRules() {
+            if (!wizardExtensionAmoSelectedRulesEl) return;
+            wizardExtensionAmoSelectedRulesEl.replaceChildren();
+            wizardExtensionAmoSelectedRulesEl.hidden = amoSelectedRules.size === 0;
+
+            amoSelectedRules.forEach((result, guid) => {
+                const card = documentRef.createElement("div");
+                card.className = "wizard-extension-amo-rule";
+                card.dataset.extensionAmoRule = guid;
+
+                const identity = documentRef.createElement("div");
+                identity.className = "wizard-extension-amo-identity";
+                const name = documentRef.createElement("strong");
+                name.textContent = result.name || guid;
+                const meta = documentRef.createElement("span");
+                meta.className = "wizard-extension-amo-guid";
+                meta.textContent = result.version
+                    ? `${guid} • ${t("profiles.wizard_extensions_amo_version").replace("{version}", result.version)}`
+                    : guid;
+                identity.append(name, meta);
+
+                const modeLabel = documentRef.createElement("label");
+                modeLabel.className = "wizard-input-stack";
+                const labelText = documentRef.createElement("span");
+                labelText.className = "field-label";
+                labelText.textContent = t("profiles.wizard_extensions_amo_rule_mode_label");
+                const select = documentRef.createElement("select");
+                select.className = "soft-input";
+                select.dataset.extensionAmoRuleMode = guid;
+                [
+                    ["allowed", "profiles.wizard_extension_profile_mode_allowed"],
+                    ["blocked", "profiles.wizard_extension_profile_mode_blocked"],
+                ].forEach(([value, key]) => {
+                    const option = documentRef.createElement("option");
+                    option.value = value;
+                    option.textContent = t(key);
+                    select.append(option);
+                });
+                select.value = result.mode === "blocked" ? "blocked" : "allowed";
+                select.addEventListener("change", () => {
+                    applyAmoRuleMode(guid, select.value);
+                });
+                modeLabel.append(labelText, select);
+                card.append(identity, modeLabel);
+                wizardExtensionAmoSelectedRulesEl.append(card);
+            });
+        }
+
+        function syncAmoSelectedRulesFromPolicy(extensionSettings) {
+            Object.entries(extensionSettings).forEach(([guid, settings]) => {
+                if (!isVerifiedFirefoxGuid(guid) || !settings || typeof settings !== "object") return;
+                if (!Object.prototype.hasOwnProperty.call(settings, "installation_mode")) return;
+                const current = amoSelectedRules.get(guid);
+                amoSelectedRules.set(guid, {
+                    guid,
+                    name: current?.name || guid,
+                    version: current?.version || "",
+                    mode: settings.installation_mode === "blocked" ? "blocked" : "allowed",
+                });
+            });
+            renderAmoSelectedRules();
+        }
+
+        function applyAmoRuleMode(guid, selectedMode) {
+            if (!isVerifiedFirefoxGuid(guid) || !["allowed", "blocked"].includes(selectedMode)) return;
+            const current = amoSelectedRules.get(guid) || { guid, name: guid, version: "" };
+            amoSelectedRules.set(guid, { ...current, mode: selectedMode });
+            setExtensionRuleMode(guid, selectedMode, { source: "amo-assisted-manual" });
+        }
+
+        function selectAmoResult(result) {
+            if (!result || !isVerifiedFirefoxGuid(result.guid)) return;
+            amoSelectedRules.set(result.guid, {
+                guid: result.guid,
+                name: typeof result.name === "string" ? result.name : result.guid,
+                version: typeof result.version === "string" ? result.version : "",
+                mode: "allowed",
+            });
+            setExtensionRuleMode(result.guid, "allowed", { source: "amo-assisted-manual" });
+            setAmoSearchStatus("profiles.wizard_extensions_amo_rule_created");
+        }
+
+        function renderAmoSearchResults(results) {
+            clearAmoSearchResults();
+            if (!wizardExtensionAmoSearchResultsEl) return;
+            results.forEach((result) => {
+                if (!result || !isVerifiedFirefoxGuid(result.guid)) return;
+                const row = documentRef.createElement("div");
+                row.className = "wizard-extension-amo-result";
+                row.setAttribute("role", "listitem");
+                const identity = documentRef.createElement("div");
+                identity.className = "wizard-extension-amo-identity";
+                const name = documentRef.createElement("strong");
+                name.textContent = typeof result.name === "string" ? result.name : result.guid;
+                const meta = documentRef.createElement("span");
+                meta.className = "wizard-extension-amo-guid";
+                meta.textContent = typeof result.version === "string" && result.version
+                    ? `${result.guid} • ${t("profiles.wizard_extensions_amo_version").replace("{version}", result.version)}`
+                    : result.guid;
+                identity.append(name, meta);
+                const selectButton = documentRef.createElement("button");
+                selectButton.type = "button";
+                selectButton.className = "button-base ghost-button";
+                selectButton.textContent = t("profiles.wizard_extensions_amo_select_action");
+                selectButton.addEventListener("click", () => selectAmoResult(result));
+                row.append(identity, selectButton);
+                wizardExtensionAmoSearchResultsEl.append(row);
+            });
+            wizardExtensionAmoSearchResultsEl.hidden = wizardExtensionAmoSearchResultsEl.childElementCount === 0;
+        }
+
+        async function searchAmoByName() {
+            const query = wizardExtensionAmoQueryEl?.value.trim() || "";
+            if (!query) {
+                clearAmoSearchResults();
+                setAmoSearchStatus("profiles.wizard_extensions_amo_query_required");
+                wizardExtensionAmoQueryEl?.focus();
+                return;
+            }
+            amoSearchAbortController?.abort();
+            const controller = new AbortController();
+            amoSearchAbortController = controller;
+            const searchSequence = ++amoSearchSequence;
+            clearAmoSearchResults();
+            setAmoManualRecoveryVisible(false);
+            setAmoSearchStatus("profiles.wizard_extensions_amo_search_loading");
+            try {
+                const response = await fetch(
+                    `/api/profiles/extensions/amo-search?q=${encodeURIComponent(query)}&locale=${encodeURIComponent(amoLocale())}`,
+                    { credentials: "same-origin", signal: controller.signal },
+                );
+                const payload = await response.json();
+                if (searchSequence !== amoSearchSequence || controller.signal.aborted) return;
+                if (!response.ok || payload?.availability !== "available") {
+                    setAmoSearchUnavailable();
+                    return;
+                }
+                const results = Array.isArray(payload.results) ? payload.results : [];
+                if (!results.length) {
+                    setAmoSearchStatus("profiles.wizard_extensions_amo_search_empty");
+                    return;
+                }
+                renderAmoSearchResults(results);
+                setAmoSearchStatus("profiles.wizard_extensions_amo_search_results");
+            } catch (error) {
+                if (controller.signal.aborted) return;
+                setAmoSearchUnavailable();
+            }
+        }
+
+        const extensionRuleFields = [
+            "blocked_install_message",
+            "install_sources",
+            "installation_mode",
+            "allowed_types",
+            "install_url",
+            "updates_disabled",
+            "update_url",
+            "default_area",
+            "private_browsing",
+            "restricted_domains",
+            "temporarily_allow_weak_signatures",
+        ];
+        const extensionRule153Fields = [
+            "allowed_permissions",
+            "blocked_permissions",
+            "runtime_allowed_hosts",
+            "runtime_blocked_hosts",
+        ];
+        const extensionRuleListFields = new Set([
+            "install_sources",
+            "allowed_types",
+            "restricted_domains",
+            "allowed_permissions",
+            "blocked_permissions",
+            "runtime_allowed_hosts",
+            "runtime_blocked_hosts",
+        ]);
+        const extensionRuleBooleanFields = new Set([
+            "updates_disabled",
+            "private_browsing",
+            "temporarily_allow_weak_signatures",
+        ]);
+        const extensionRuleTextFields = new Set([
+            "blocked_install_message",
+            "install_url",
+            "update_url",
+        ]);
+
+        function supportsExtension153Fields() {
+            const channel = String(getActiveWizardSchemaVersion?.() || "");
+            return channel === "release-153" || channel === "esr-153.0";
+        }
+
+        function supportedExtensionRuleFields() {
+            return supportsExtension153Fields()
+                ? [...extensionRuleFields, ...extensionRule153Fields]
+                : [...extensionRuleFields];
+        }
+
+        function editorPolicyDocument() {
+            const editor = getEditor();
+            if (!editor) return null;
+            const mode = documentRef.getElementById("mode")?.value || "";
+            const parsed = fromEditorValue(editor.getValue(), mode);
+            return {
+                editor,
+                mode,
+                document: parsed && typeof parsed === "object" && !Array.isArray(parsed)
+                    ? { ...parsed }
+                    : {},
+            };
+        }
+
+        function writeExtensionPolicyDocument(editorState, { source = "manual", paths = [] } = {}) {
+            recordExtensionSources(paths, source);
+            setCurrentRaw(editorState.document);
+            editorState.editor.setValue(toEditorValue(editorState.document, editorState.mode));
+            renderExtensionRules(editorState.document);
+            renderAmoSelectedRules();
+            renderExtensionReviewSummary(editorState.document);
+            updateWizardSummary();
+        }
+
+        function extensionLines(value) {
+            if (typeof value !== "string") return [];
+            return value.split(/\r?\n/).filter((entry) => entry.length > 0);
+        }
+
+        function valueToExtensionLines(value) {
+            return Array.isArray(value) && value.every((entry) => typeof entry === "string")
+                ? value.join("\n")
+                : "";
+        }
+
+        function valueToBooleanControl(value) {
+            if (value === true) return "true";
+            if (value === false) return "false";
+            return "";
+        }
+
+        function controlToBoolean(value) {
+            if (value === "true") return true;
+            if (value === "false") return false;
+            return undefined;
+        }
+
+        function extensionRuleIsStructured(value) {
+            if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+            const supported = new Set(supportedExtensionRuleFields());
+            return Object.entries(value).every(([field, fieldValue]) => {
+                if (!supported.has(field)) return false;
+                if (extensionRuleListFields.has(field)) {
+                    return Array.isArray(fieldValue) && fieldValue.every((entry) => typeof entry === "string");
+                }
+                if (extensionRuleBooleanFields.has(field)) return typeof fieldValue === "boolean";
+                if (field === "installation_mode") {
+                    return ["allowed", "blocked", "force_installed", "normal_installed"].includes(fieldValue);
+                }
+                if (field === "default_area") return ["navbar", "menupanel"].includes(fieldValue);
+                return extensionRuleTextFields.has(field) && typeof fieldValue === "string";
+            });
+        }
+
+        function sourceMatchesPath(value, path) {
+            const candidate = Array.isArray(value?.path) ? value.path.map(String) : [];
+            return path.every((part, index) => candidate[index] === part)
+                || candidate.every((part, index) => path[index] === part);
+        }
+
+        const extensionSourceOrder = [
+            "converted",
+            "preset",
+            "cis",
+            "manual",
+            "amo-assisted-manual",
+            "imported",
+            "raw",
+        ];
+
+        function extensionPointer(parts) {
+            return `/${parts.map((part) => String(part)
+                .replaceAll("~", "~0")
+                .replaceAll("/", "~1")).join("/")}`;
+        }
+
+        function extensionValuePaths(documentValue) {
+            const values = new Map();
+            const walk = (value, path) => {
+                if (Array.isArray(value)) {
+                    if (!value.length) values.set(extensionPointer(path), value);
+                    else value.forEach((entry, index) => walk(entry, [...path, index]));
+                    return;
+                }
+                if (value && typeof value === "object") {
+                    const keys = Object.keys(value).sort();
+                    if (!keys.length) values.set(extensionPointer(path), value);
+                    else keys.forEach((key) => walk(value[key], [...path, key]));
+                    return;
+                }
+                values.set(extensionPointer(path), value);
+            };
+            ["ExtensionSettings", "ExtensionUpdate", "Extensions", "InstallAddonsPermission"].forEach((policy) => {
+                if (Object.prototype.hasOwnProperty.call(documentValue || {}, policy)) {
+                    walk(documentValue[policy], [policy]);
+                }
+            });
+            return values;
+        }
+
+        function changedExtensionValuePaths(before, after) {
+            const beforeValues = extensionValuePaths(before);
+            const afterValues = extensionValuePaths(after);
+            return Array.from(afterValues.keys()).filter((path) =>
+                !beforeValues.has(path)
+                || JSON.stringify(beforeValues.get(path)) !== JSON.stringify(afterValues.get(path)));
+        }
+
+        function extensionProvenancePaths() {
+            const provenance = getCurrentProfile()?.extension_provenance;
+            const paths = provenance?.paths;
+            return paths && typeof paths === "object" && !Array.isArray(paths) ? paths : {};
+        }
+
+        function recordExtensionSources(paths, source) {
+            if (!paths.length || !extensionSourceOrder.includes(source)) return;
+            const profile = getCurrentProfile();
+            if (!profile || typeof profile !== "object") return;
+            const prior = extensionProvenancePaths();
+            setCurrentProfile({
+                ...profile,
+                extension_provenance: {
+                    contract_id: "bpm096-profile-extension-provenance",
+                    contract_version: 1,
+                    paths: paths.reduce((next, path) => ({ ...next, [path]: source }), { ...prior }),
+                },
+            });
+        }
+
+        function legacyExtensionRuleSource(path) {
+            const manualEdits = Array.isArray(getManualEdits?.()) ? getManualEdits() : [];
+            if (manualEdits.some((entry) => sourceMatchesPath(entry, path))) return "manual";
+            const compliance = getComplianceInfo?.();
+            const decisions = Array.isArray(compliance?.decisions) ? compliance.decisions : [];
+            const decision = decisions.find((entry) => sourceMatchesPath(entry, path));
+            if (!decision) return "manual";
+            const selected = String(decision.selected_source || decision.selectedSource || "");
+            if (selected === "cis") return "cis";
+            if (selected === "base" || selected === "baseline") return "preset";
+            return "cis";
+        }
+
+        function extensionRuleSources(path, { raw = false } = {}) {
+            if (raw) return ["raw"];
+            const pointer = extensionPointer(path);
+            const prefix = `${pointer}/`;
+            const available = new Set(
+                Object.entries(extensionProvenancePaths())
+                    .filter(([candidate]) => candidate === pointer || candidate.startsWith(prefix))
+                    .map(([, source]) => source)
+                    .filter((source) => extensionSourceOrder.includes(source)),
+            );
+            if (available.size) return extensionSourceOrder.filter((source) => available.has(source));
+            return [legacyExtensionRuleSource(path)];
+        }
+
+        function extensionRuleSource(path, { raw = false } = {}) {
+            return extensionRuleSources(path, { raw })[0] || "manual";
+        }
+
+        function extensionRuleSourceText(source) {
+            const key = {
+                manual: "profiles.wizard_extension_source_manual",
+                cis: "profiles.wizard_extension_source_cis",
+                preset: "profiles.wizard_extension_source_preset",
+                converted: "profiles.wizard_extension_source_converted",
+                "amo-assisted-manual": "profiles.wizard_extension_source_amo_assisted_manual",
+                imported: "profiles.wizard_extension_source_imported",
+                raw: "profiles.wizard_extension_source_raw",
+            }[source] || "profiles.wizard_extension_source_manual";
+            return t(key);
+        }
+
+        function labelElement(labelKey, control) {
+            const label = documentRef.createElement("label");
+            label.className = "wizard-input-stack";
+            const labelText = documentRef.createElement("span");
+            labelText.className = "field-label";
+            labelText.textContent = t(labelKey);
+            label.append(labelText, control);
+            return label;
+        }
+
+        function createTextControl(guid, field, value, labelKey, { multiline = false } = {}) {
+            const control = multiline
+                ? documentRef.createElement("textarea")
+                : documentRef.createElement("input");
+            if (multiline) {
+                control.rows = 3;
+                control.spellcheck = false;
+            } else {
+                control.type = "text";
+            }
+            control.className = "soft-input";
+            control.value = value;
+            control.dataset.extensionRuleField = field;
+            control.dataset.extensionRuleGuid = guid;
+            return labelElement(labelKey, control);
+        }
+
+        function createSelectControl(guid, field, value, labelKey, options) {
+            const select = documentRef.createElement("select");
+            select.className = "soft-input";
+            select.dataset.extensionRuleField = field;
+            select.dataset.extensionRuleGuid = guid;
+            options.forEach(([optionValue, optionKey]) => {
+                const option = documentRef.createElement("option");
+                option.value = optionValue;
+                option.textContent = t(optionKey);
+                select.append(option);
+            });
+            select.value = value;
+            return labelElement(labelKey, select);
+        }
+
+        function extensionRuleConflicts(guid, value, documentValue) {
+            const conflicts = [];
+            const mode = value?.installation_mode;
+            const extensions = documentValue?.Extensions && typeof documentValue.Extensions === "object"
+                && !Array.isArray(documentValue.Extensions)
+                ? documentValue.Extensions
+                : {};
+            const uninstall = Array.isArray(extensions.Uninstall) ? extensions.Uninstall : [];
+            if (guid === "*" && ["force_installed", "normal_installed"].includes(mode)) {
+                conflicts.push("profiles.wizard_extension_rule_conflict_global_install");
+            }
+            if (uninstall.includes(guid) && ["force_installed", "normal_installed"].includes(mode)) {
+                conflicts.push("profiles.wizard_extension_rule_conflict_uninstall");
+            }
+            if (value?.install_url && ["allowed", "blocked"].includes(mode)) {
+                conflicts.push("profiles.wizard_extension_rule_conflict_install_url");
+            }
+            const allowedPermissions = Array.isArray(value?.allowed_permissions) ? value.allowed_permissions : [];
+            const blockedPermissions = Array.isArray(value?.blocked_permissions) ? value.blocked_permissions : [];
+            if (allowedPermissions.some((permission) => blockedPermissions.includes(permission))) {
+                conflicts.push("profiles.wizard_extension_rule_conflict_permission");
+            }
+            return conflicts;
+        }
+
+        function renderTypedExtensionRule(guid, value, documentValue) {
+            const card = documentRef.createElement("section");
+            card.className = "wizard-section-group wizard-subsection-card wizard-extension-rule-card";
+            card.dataset.extensionRule = guid;
+            const sources = extensionRuleSources(["ExtensionSettings", guid]);
+            card.dataset.extensionRuleSource = sources[0] || "manual";
+            card.dataset.extensionRuleSources = sources.join(",");
+            if (guid === "*") card.dataset.extensionRuleDefault = "true";
+
+            const heading = documentRef.createElement("div");
+            heading.className = "wizard-extension-rule-head";
+            const identity = documentRef.createElement("div");
+            identity.className = "wizard-extension-amo-identity";
+            const title = documentRef.createElement("strong");
+            title.textContent = guid === "*"
+                ? t("profiles.wizard_extension_rule_global_title")
+                : guid;
+            const source = documentRef.createElement("span");
+            source.className = "wizard-extension-rule-source";
+            source.dataset.extensionRuleSource = card.dataset.extensionRuleSource;
+            source.textContent = sources.map((entry) => extensionRuleSourceText(entry)).join(" · ");
+            identity.append(title, source);
+            const remove = documentRef.createElement("button");
+            remove.type = "button";
+            remove.className = "button-base ghost-button";
+            remove.dataset.extensionRuleRemove = guid;
+            remove.textContent = t("profiles.wizard_extension_rule_remove");
+            remove.addEventListener("click", () => removeExtensionRule(guid));
+            heading.append(identity, remove);
+            card.append(heading);
+
+            const fields = documentRef.createElement("div");
+            fields.className = "wizard-grid wizard-extension-rule-fields";
+            fields.append(
+                createSelectControl(guid, "installation_mode", value.installation_mode || "",
+                    "profiles.wizard_extension_profile_mode_label", [
+                        ["", "profiles.wizard_extension_profile_mode_inherit"],
+                        ["allowed", "profiles.wizard_extension_profile_mode_allowed"],
+                        ["blocked", "profiles.wizard_extension_profile_mode_blocked"],
+                        ["force_installed", "profiles.wizard_extension_profile_mode_force"],
+                        ["normal_installed", "profiles.wizard_extension_profile_mode_normal"],
+                    ]),
+                createTextControl(guid, "install_url", value.install_url || "",
+                    "profiles.wizard_extension_profile_url_label"),
+                createTextControl(guid, "update_url", value.update_url || "",
+                    "profiles.wizard_extension_rule_update_url_label"),
+                createSelectControl(guid, "updates_disabled", valueToBooleanControl(value.updates_disabled),
+                    "profiles.wizard_extension_profile_updates_label", [
+                        ["", "profiles.wizard_extension_inherit"],
+                        ["true", "profiles.wizard_extension_disabled"],
+                        ["false", "profiles.wizard_extension_enabled"],
+                    ]),
+                createSelectControl(guid, "private_browsing", valueToBooleanControl(value.private_browsing),
+                    "profiles.wizard_extension_profile_private_label", [
+                        ["", "profiles.wizard_extension_inherit"],
+                        ["true", "profiles.wizard_extension_enabled"],
+                        ["false", "profiles.wizard_extension_disabled"],
+                    ]),
+                createSelectControl(guid, "default_area", value.default_area || "",
+                    "profiles.wizard_extension_rule_default_area_label", [
+                        ["", "profiles.wizard_extension_inherit"],
+                        ["navbar", "profiles.wizard_extension_rule_default_area_navbar"],
+                        ["menupanel", "profiles.wizard_extension_rule_default_area_menupanel"],
+                    ]),
+                createSelectControl(guid, "temporarily_allow_weak_signatures",
+                    valueToBooleanControl(value.temporarily_allow_weak_signatures),
+                    "profiles.wizard_extension_rule_weak_signatures_label", [
+                        ["", "profiles.wizard_extension_inherit"],
+                        ["true", "profiles.wizard_extension_enabled"],
+                        ["false", "profiles.wizard_extension_disabled"],
+                    ]),
+                createTextControl(guid, "blocked_install_message", value.blocked_install_message || "",
+                    "profiles.wizard_extension_rule_blocked_message_label", { multiline: true }),
+                createTextControl(guid, "install_sources", valueToExtensionLines(value.install_sources),
+                    "profiles.wizard_extension_rule_install_sources_label", { multiline: true }),
+                createTextControl(guid, "allowed_types", valueToExtensionLines(value.allowed_types),
+                    "profiles.wizard_extension_rule_allowed_types_label", { multiline: true }),
+                createTextControl(guid, "restricted_domains", valueToExtensionLines(value.restricted_domains),
+                    "profiles.wizard_extension_rule_restricted_domains_label", { multiline: true }),
+            );
+            if (supportsExtension153Fields()) {
+                fields.append(
+                    createTextControl(guid, "allowed_permissions", valueToExtensionLines(value.allowed_permissions),
+                        "profiles.wizard_extension_rule_allowed_permissions_label", { multiline: true }),
+                    createTextControl(guid, "blocked_permissions", valueToExtensionLines(value.blocked_permissions),
+                        "profiles.wizard_extension_rule_blocked_permissions_label", { multiline: true }),
+                    createTextControl(guid, "runtime_allowed_hosts", valueToExtensionLines(value.runtime_allowed_hosts),
+                        "profiles.wizard_extension_rule_runtime_allowed_hosts_label", { multiline: true }),
+                    createTextControl(guid, "runtime_blocked_hosts", valueToExtensionLines(value.runtime_blocked_hosts),
+                        "profiles.wizard_extension_rule_runtime_blocked_hosts_label", { multiline: true }),
+                );
+            }
+            card.append(fields);
+            const conflicts = extensionRuleConflicts(guid, value, documentValue);
+            if (conflicts.length) {
+                card.dataset.extensionRuleConflict = "true";
+                const conflict = documentRef.createElement("div");
+                conflict.className = "wizard-extension-rule-conflict";
+                conflict.setAttribute("role", "alert");
+                conflict.textContent = conflicts.map((key) => t(key)).join(" ");
+                card.append(conflict);
+            }
+            return card;
+        }
+
+        function renderRawExtensionRule(guid, value, { policy = "ExtensionSettings" } = {}) {
+            const card = documentRef.createElement("section");
+            card.className = "wizard-section-group wizard-subsection-card wizard-extension-raw-rule";
+            card.dataset.extensionRawRule = guid;
+            card.dataset.extensionRuleSource = "raw";
+            const title = documentRef.createElement("strong");
+            title.textContent = policy === "ExtensionSettings" ? guid : policy;
+            const source = documentRef.createElement("span");
+            source.className = "wizard-extension-rule-source";
+            source.textContent = extensionRuleSourceText("raw");
+            const textarea = documentRef.createElement("textarea");
+            textarea.className = "soft-input";
+            textarea.rows = 6;
+            textarea.spellcheck = false;
+            textarea.dataset.extensionRawRule = guid;
+            textarea.dataset.extensionRawPolicy = policy;
+            textarea.value = JSON.stringify(value, null, 2);
+            textarea.addEventListener("change", () => applyRawExtensionRule(textarea));
+            card.append(title, source, textarea);
+            return card;
+        }
+
+        function syncSharedExtensionControls(documentValue) {
+            const extensions = documentValue.Extensions && typeof documentValue.Extensions === "object"
+                && !Array.isArray(documentValue.Extensions)
+                ? documentValue.Extensions
+                : {};
+            const installPermission = documentValue.InstallAddonsPermission
+                && typeof documentValue.InstallAddonsPermission === "object"
+                && !Array.isArray(documentValue.InstallAddonsPermission)
+                ? documentValue.InstallAddonsPermission
+                : {};
+            if (wizardExtensionUpdateEl) {
+                wizardExtensionUpdateEl.value = valueToBooleanControl(documentValue.ExtensionUpdate);
+            }
+            if (wizardExtensionInstallDefaultEl) {
+                wizardExtensionInstallDefaultEl.value = valueToBooleanControl(installPermission.Default);
+            }
+            if (wizardExtensionInstallAllowEl) {
+                wizardExtensionInstallAllowEl.value = valueToExtensionLines(installPermission.Allow);
+            }
+            if (wizardExtensionInstallEl) wizardExtensionInstallEl.value = valueToExtensionLines(extensions.Install);
+            if (wizardExtensionLockedEl) wizardExtensionLockedEl.value = valueToExtensionLines(extensions.Locked);
+            if (wizardExtensionUninstallEl) wizardExtensionUninstallEl.value = valueToExtensionLines(extensions.Uninstall);
+        }
+
+        function renderExtensionRules(documentValue) {
+            if (!wizardExtensionRulesEl || !wizardExtensionRawRulesEl) return;
+            wizardExtensionRulesEl.replaceChildren();
+            wizardExtensionRawRulesEl.replaceChildren();
+            const settings = documentValue.ExtensionSettings;
+            if (settings !== undefined && (!settings || typeof settings !== "object" || Array.isArray(settings))) {
+                wizardExtensionRawRulesEl.append(
+                    renderRawExtensionRule("ExtensionSettings", settings, { policy: "ExtensionSettings" }),
+                );
+            } else {
+                const entries = Object.entries(settings || {}).sort(([left], [right]) =>
+                    left === "*" ? -1 : right === "*" ? 1 : left.localeCompare(right));
+                entries.forEach(([guid, value]) => {
+                    if (extensionRuleIsStructured(value)) {
+                        wizardExtensionRulesEl.append(renderTypedExtensionRule(guid, value, documentValue));
+                    } else {
+                        wizardExtensionRawRulesEl.append(renderRawExtensionRule(guid, value));
+                    }
+                });
+            }
+            ["Extensions", "InstallAddonsPermission"].forEach((policy) => {
+                const value = documentValue[policy];
+                if (value === undefined) return;
+                const expectedObject = value && typeof value === "object" && !Array.isArray(value);
+                if (!expectedObject) {
+                    wizardExtensionRawRulesEl.append(renderRawExtensionRule(policy, value, { policy }));
+                }
+            });
+            syncSharedExtensionControls(documentValue);
+            const ruleCount = wizardExtensionRulesEl.querySelectorAll("[data-extension-rule]").length;
+            const rawCount = wizardExtensionRawRulesEl.childElementCount;
+            if (wizardExtensionRuleStatusEl) {
+                wizardExtensionRuleStatusEl.textContent = ruleCount || rawCount
+                    ? t("profiles.wizard_extension_rule_status_count")
+                        .replace("{count}", String(ruleCount + rawCount))
+                    : t("profiles.wizard_extension_rule_status_empty");
+            }
+        }
+
+        function applyExtensionRuleEditor() {
+            const editorState = editorPolicyDocument();
+            if (!editorState) return;
+            const documentValue = editorState.document;
+            const beforeDocument = JSON.parse(JSON.stringify(documentValue));
+            const currentSettings = documentValue.ExtensionSettings;
+            if (currentSettings !== undefined && (!currentSettings || typeof currentSettings !== "object" || Array.isArray(currentSettings))) {
+                setStatus(t("profiles.wizard_extension_rule_raw_required"), "error");
+                return;
+            }
+            const nextSettings = { ...(currentSettings || {}) };
+            documentRef.querySelectorAll("[data-extension-rule]").forEach((card) => {
+                const guid = String(card.dataset.extensionRule || "");
+                const currentRule = nextSettings[guid];
+                if (!guid || !extensionRuleIsStructured(currentRule)) return;
+                const nextRule = { ...currentRule };
+                supportedExtensionRuleFields().forEach((field) => delete nextRule[field]);
+                card.querySelectorAll("[data-extension-rule-field]").forEach((control) => {
+                    const field = String(control.dataset.extensionRuleField || "");
+                    if (!supportedExtensionRuleFields().includes(field)) return;
+                    const raw = control.value;
+                    if (extensionRuleListFields.has(field)) {
+                        const values = extensionLines(raw);
+                        if (values.length) nextRule[field] = values;
+                    } else if (extensionRuleBooleanFields.has(field)) {
+                        const value = controlToBoolean(raw);
+                        if (value !== undefined) nextRule[field] = value;
+                    } else if (raw !== "") {
+                        nextRule[field] = raw;
+                    }
+                });
+                if (Object.keys(nextRule).length) nextSettings[guid] = nextRule;
+                else delete nextSettings[guid];
+            });
+            if (Object.keys(nextSettings).length) documentValue.ExtensionSettings = nextSettings;
+            else delete documentValue.ExtensionSettings;
+
+            const extensions = documentValue.Extensions;
+            if (extensions === undefined || (extensions && typeof extensions === "object" && !Array.isArray(extensions))) {
+                const nextExtensions = { ...(extensions || {}) };
+                [
+                    [wizardExtensionInstallEl, "Install"],
+                    [wizardExtensionLockedEl, "Locked"],
+                    [wizardExtensionUninstallEl, "Uninstall"],
+                ].forEach(([control, field]) => {
+                    if (!control) return;
+                    const values = extensionLines(control.value);
+                    if (values.length) nextExtensions[field] = values;
+                    else delete nextExtensions[field];
+                });
+                if (Object.keys(nextExtensions).length) documentValue.Extensions = nextExtensions;
+                else delete documentValue.Extensions;
+            }
+            const permissions = documentValue.InstallAddonsPermission;
+            if (permissions === undefined || (permissions && typeof permissions === "object" && !Array.isArray(permissions))) {
+                const nextPermissions = { ...(permissions || {}) };
+                const defaultValue = controlToBoolean(wizardExtensionInstallDefaultEl?.value || "");
+                const allowedValues = extensionLines(wizardExtensionInstallAllowEl?.value || "");
+                if (defaultValue === undefined) delete nextPermissions.Default;
+                else nextPermissions.Default = defaultValue;
+                if (allowedValues.length) nextPermissions.Allow = allowedValues;
+                else delete nextPermissions.Allow;
+                if (Object.keys(nextPermissions).length) documentValue.InstallAddonsPermission = nextPermissions;
+                else delete documentValue.InstallAddonsPermission;
+            }
+            const updateValue = controlToBoolean(wizardExtensionUpdateEl?.value || "");
+            if (updateValue === undefined) delete documentValue.ExtensionUpdate;
+            else documentValue.ExtensionUpdate = updateValue;
+            writeExtensionPolicyDocument(editorState, {
+                source: "manual",
+                paths: changedExtensionValuePaths(beforeDocument, documentValue),
+            });
+            setStatus(t("profiles.wizard_extensions_applied"), "info");
+        }
+
+        function setExtensionRuleMode(guid, selectedMode, { source = "manual" } = {}) {
+            const editorState = editorPolicyDocument();
+            if (!editorState || !isVerifiedFirefoxGuid(guid)) return;
+            const settings = editorState.document.ExtensionSettings;
+            if (settings !== undefined && (!settings || typeof settings !== "object" || Array.isArray(settings))) return;
+            const current = settings?.[guid];
+            if (current !== undefined && !extensionRuleIsStructured(current)) return;
+            const nextSettings = { ...(settings || {}) };
+            nextSettings[guid] = { ...(current || {}), installation_mode: selectedMode };
+            editorState.document.ExtensionSettings = nextSettings;
+            const known = amoSelectedRules.get(guid);
+            if (known) amoSelectedRules.set(guid, { ...known, mode: selectedMode });
+            writeExtensionPolicyDocument(editorState, {
+                source,
+                paths: [extensionPointer(["ExtensionSettings", guid, "installation_mode"])],
+            });
+        }
+
+        function addExtensionRule(guid, installUrl = "") {
+            const normalizedGuid = String(guid || "").trim();
+            const normalizedInstallUrl = String(installUrl || "").trim();
+            if (normalizedGuid !== "*" && !isVerifiedFirefoxGuid(normalizedGuid)) {
+                setText(wizardExtensionRuleStatusEl, t("profiles.wizard_extension_rule_guid_invalid"));
+                wizardExtensionRuleGuidEl?.focus();
+                return;
+            }
+            const editorState = editorPolicyDocument();
+            if (!editorState) return;
+            const beforeDocument = JSON.parse(JSON.stringify(editorState.document));
+            const settings = editorState.document.ExtensionSettings;
+            if (settings !== undefined && (!settings || typeof settings !== "object" || Array.isArray(settings))) {
+                setText(wizardExtensionRuleStatusEl, t("profiles.wizard_extension_rule_raw_required"));
+                return;
+            }
+            const nextSettings = { ...(settings || {}) };
+            if (!Object.prototype.hasOwnProperty.call(nextSettings, normalizedGuid)) {
+                nextSettings[normalizedGuid] = {};
+            }
+            if (normalizedInstallUrl && normalizedGuid !== "*") {
+                nextSettings[normalizedGuid] = {
+                    ...nextSettings[normalizedGuid],
+                    install_url: normalizedInstallUrl,
+                };
+            }
+            editorState.document.ExtensionSettings = nextSettings;
+            if (wizardExtensionRuleGuidEl) wizardExtensionRuleGuidEl.value = "";
+            if (wizardExtensionRuleInstallUrlEl) wizardExtensionRuleInstallUrlEl.value = "";
+            writeExtensionPolicyDocument(editorState, {
+                source: "manual",
+                paths: changedExtensionValuePaths(beforeDocument, editorState.document),
+            });
+            const selector = "[data-extension-rule=\"" + CSS.escape(normalizedGuid) + "\"]";
+            wizardExtensionRulesEl?.querySelector(selector)
+                ?.querySelector("[data-extension-rule-field=installation_mode]")?.focus();
+        }
+
+        function removeExtensionRule(guid) {
+            const editorState = editorPolicyDocument();
+            if (!editorState) return;
+            const settings = editorState.document.ExtensionSettings;
+            if (!settings || typeof settings !== "object" || Array.isArray(settings)) return;
+            const nextSettings = { ...settings };
+            delete nextSettings[guid];
+            if (Object.keys(nextSettings).length) editorState.document.ExtensionSettings = nextSettings;
+            else delete editorState.document.ExtensionSettings;
+            amoSelectedRules.delete(guid);
+            writeExtensionPolicyDocument(editorState);
+        }
+
+        function applyRawExtensionRule(textarea) {
+            const editorState = editorPolicyDocument();
+            if (!editorState) return;
+            const beforeDocument = JSON.parse(JSON.stringify(editorState.document));
+            try {
+                const parsed = JSON.parse(textarea.value);
+                const policy = textarea.dataset.extensionRawPolicy || "ExtensionSettings";
+                const guid = textarea.dataset.extensionRawRule || "";
+                if (policy === "ExtensionSettings" && guid !== "ExtensionSettings") {
+                    const settings = editorState.document.ExtensionSettings;
+                    if (!settings || typeof settings !== "object" || Array.isArray(settings)) return;
+                    editorState.document.ExtensionSettings = { ...settings, [guid]: parsed };
+                } else {
+                    editorState.document[policy] = parsed;
+                }
+                writeExtensionPolicyDocument(editorState, {
+                    source: "raw",
+                    paths: changedExtensionValuePaths(beforeDocument, editorState.document),
+                });
+            } catch {
+                setStatus(t("profiles.wizard_extension_rule_raw_invalid"), "error");
+            }
         }
 
         function hasMeaningfulValue(value) {
@@ -147,386 +990,6 @@
                 button.classList.toggle("wizard-search-engine-preset--conflict", false);
                 button.setAttribute("aria-pressed", isActive ? "true" : "false");
             });
-        }
-
-        function getManagedExtensionField(profileId, field) {
-            return managedExtensionFields.find((element) =>
-                element.dataset.extensionProfile === profileId && element.dataset.extensionField === field
-            ) || null;
-        }
-
-        function getManagedExtensionStatusEl(profileId) {
-            return managedExtensionStatusEls.find((element) =>
-                element.dataset.extensionProfileStatus === profileId
-            ) || null;
-        }
-
-        function getManagedExtensionCardEl(profileId) {
-            return getManagedExtensionField(profileId, "mode")?.closest("[data-extension-profile-card]") || null;
-        }
-
-        function getManagedExtensionDetailsToggleEl(profileId) {
-            return getManagedExtensionCardEl(profileId)?.querySelector("[data-extension-profile-toggle]") || null;
-        }
-
-        function getManagedExtensionDetailsPanelEl(profileId) {
-            return getManagedExtensionCardEl(profileId)?.querySelector("[data-extension-profile-details-panel]") || null;
-        }
-
-        function formatManagedExtensionModeLabel(mode) {
-            if (mode === "allowed") {
-                return t("profiles.wizard_extension_profile_mode_allowed");
-            }
-            if (mode === "blocked") {
-                return t("profiles.wizard_extension_profile_mode_blocked");
-            }
-            if (mode === "force_installed") {
-                return t("profiles.wizard_extension_profile_mode_force");
-            }
-            if (mode === "normal_installed") {
-                return t("profiles.wizard_extension_profile_mode_normal");
-            }
-            return "";
-        }
-
-        function getManagedExtensionProfileValues(profile) {
-            const modeEl = getManagedExtensionField(profile.id, "mode");
-            const urlEl = getManagedExtensionField(profile.id, "url");
-            const updatesEl = getManagedExtensionField(profile.id, "updates_disabled");
-            const privateEl = getManagedExtensionField(profile.id, "private_browsing");
-            const mode = modeEl ? modeEl.value.trim() : "";
-            const typedUrl = urlEl ? urlEl.value.trim() : "";
-            const effectiveUrl = (mode === "force_installed" || mode === "normal_installed")
-                ? (typedUrl || profile.defaultUrl)
-                : typedUrl;
-
-            return {
-                mode,
-                typedUrl,
-                effectiveUrl,
-                updatesDisabled: updatesEl?.checked === true,
-                privateBrowsing: privateEl?.checked === true,
-            };
-        }
-
-        function getManagedExtensionProfileState(profile) {
-            const values = getManagedExtensionProfileValues(profile);
-            const hasExplicitRule = Boolean(
-                values.mode
-                || values.typedUrl
-                || values.updatesDisabled
-                || values.privateBrowsing
-            );
-
-            if (!hasExplicitRule) {
-                return { state: "missing", values };
-            }
-
-            const usesCatalogUrl = Boolean(
-                (values.mode === "force_installed" || values.mode === "normal_installed")
-                && values.effectiveUrl === profile.defaultUrl
-            );
-
-            if (usesCatalogUrl) {
-                return { state: "catalog_url", values };
-            }
-
-            if (values.effectiveUrl && values.effectiveUrl !== profile.defaultUrl) {
-                return { state: "custom_url", values };
-            }
-
-            return { state: "configured", values };
-        }
-
-        function formatManagedExtensionProfileState(profileState) {
-            if (profileState.state === "missing") {
-                return t("profiles.wizard_extension_profile_state_missing");
-            }
-
-            const parts = [];
-            const modeLabel = formatManagedExtensionModeLabel(profileState.values?.mode || "");
-            if (modeLabel) {
-                parts.push(modeLabel);
-            }
-            if (profileState.state === "catalog_url") {
-                parts.push(t("profiles.wizard_extension_profile_state_catalog_url"));
-            } else if (profileState.state === "custom_url") {
-                parts.push(t("profiles.wizard_extension_profile_state_custom_url"));
-            } else if (!parts.length) {
-                parts.push(t("profiles.wizard_extension_profile_state_configured"));
-            }
-            if (profileState.values?.updatesDisabled) {
-                parts.push(t("profiles.wizard_extension_profile_state_updates_disabled"));
-            }
-            if (profileState.values?.privateBrowsing) {
-                parts.push(t("profiles.wizard_extension_profile_state_private_browsing"));
-            }
-            return parts.join(" • ");
-        }
-
-        function setManagedExtensionDetailsExpanded(profileId, expanded) {
-            const cardEl = getManagedExtensionCardEl(profileId);
-            const panelEl = getManagedExtensionDetailsPanelEl(profileId);
-            const toggleEl = getManagedExtensionDetailsToggleEl(profileId);
-
-            if (cardEl) {
-                cardEl.dataset.extensionProfileDetailsExpanded = expanded ? "true" : "false";
-            }
-            if (panelEl) {
-                panelEl.hidden = !expanded;
-            }
-            if (toggleEl) {
-                toggleEl.setAttribute("aria-expanded", expanded ? "true" : "false");
-                toggleEl.textContent = expanded
-                    ? t("profiles.wizard_extension_profile_details_hide")
-                    : t("profiles.wizard_extension_profile_details_show");
-            }
-        }
-
-        function syncManagedExtensionDetailsVisibility(profile, profileState) {
-            const preferredState = extensionProfileDetailsPreferences.get(profile.id);
-            const hasSecondaryDetails = profileState.state === "custom_url"
-                || profileState.values?.updatesDisabled
-                || profileState.values?.privateBrowsing;
-            const expanded = preferredState === undefined ? hasSecondaryDetails : preferredState;
-
-            setManagedExtensionDetailsExpanded(profile.id, expanded);
-        }
-
-        function formatDefaultModeLabel(defaultMode) {
-            if (defaultMode === "allowed") {
-                return t("profiles.wizard_extensions_mode_allowed");
-            }
-            if (defaultMode === "blocked") {
-                return t("profiles.wizard_extensions_mode_blocked");
-            }
-            return t("profiles.wizard_extensions_mode_inherit");
-        }
-
-        function resolveExtensionGovernancePreset({
-            defaultMode = "",
-            installCount = 0,
-            lockedCount = 0,
-            uninstallCount = 0,
-            configuredCount = 0,
-        } = {}) {
-            const rulesCount = installCount + lockedCount + uninstallCount;
-            if (configuredCount > 0 && rulesCount > 0) return "mixed";
-            if (configuredCount > 0) return "curated";
-            if (rulesCount > 0) return "managed";
-            if (defaultMode === "allowed") return "open";
-            if (defaultMode === "blocked") return "blocked";
-            return "";
-        }
-
-        function applyExtensionGovernancePreset(presetKey) {
-            if (!wizardExtensionDefaultModeEl) return;
-            if (presetKey === "open") {
-                wizardExtensionDefaultModeEl.value = "allowed";
-            } else {
-                wizardExtensionDefaultModeEl.value = "blocked";
-            }
-
-            if (presetKey === "managed") {
-                extensionFineTuningPanelPreference = true;
-                extensionInstallPanelPreference = true;
-            } else if (presetKey === "curated") {
-                extensionFineTuningPanelPreference = true;
-                curatedPanelPreference = true;
-            } else if (presetKey === "mixed") {
-                extensionFineTuningPanelPreference = true;
-                extensionInstallPanelPreference = true;
-                curatedPanelPreference = true;
-            }
-            applyFromWizard();
-        }
-
-        function revealExtensionArea(kind) {
-            extensionFineTuningPanelPreference = true;
-            setPanelExpanded(
-                wizardExtensionFineTuningPanelEl,
-                wizardExtensionFineTuningToggleEl,
-                true,
-                t("profiles.wizard_fine_tuning_show"),
-                t("profiles.wizard_fine_tuning_hide"),
-            );
-
-            let targetEl = null;
-            if (kind === "known") {
-                curatedPanelPreference = true;
-                setCuratedPanelExpanded(true);
-                targetEl = document.getElementById("wizard-extension-curated-section");
-            } else if (kind === "rules") {
-                extensionInstallPanelPreference = true;
-                setPanelExpanded(
-                    wizardExtensionInstallPanelEl,
-                    wizardExtensionInstallToggleEl,
-                    true,
-                    t("profiles.wizard_extension_rule_show"),
-                    t("profiles.wizard_extension_rule_hide"),
-                );
-                targetEl = wizardExtensionInstallEl?.closest(".wizard-subsection-card") || wizardExtensionInstallEl;
-            } else if (kind === "mixed") {
-                curatedPanelPreference = true;
-                setCuratedPanelExpanded(true);
-                targetEl = document.getElementById("wizard-extension-curated-section")
-                    || wizardExtensionInstallEl?.closest(".wizard-subsection-card");
-            }
-
-            if (!targetEl) return;
-            targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
-            targetEl.classList.add("settings-target-highlight");
-            window.setTimeout(() => {
-                targetEl.classList.remove("settings-target-highlight");
-            }, 1800);
-            focusTargetForA11y(targetEl);
-        }
-
-        function renderExtensionSectionStatus({ configuredCount = 0, customUrlCount = 0 } = {}) {
-            const defaultMode = wizardExtensionDefaultModeEl?.value.trim() || "";
-            const installCount = countTextareaLines(wizardExtensionInstallEl?.value || "");
-            const lockedCount = countTextareaLines(wizardExtensionLockedEl?.value || "");
-            const uninstallCount = countTextareaLines(wizardExtensionUninstallEl?.value || "");
-            const fragments = [];
-
-            if (defaultMode) {
-                fragments.push(
-                    t("profiles.wizard_extensions_section_state_mode")
-                        .replace("{value}", formatDefaultModeLabel(defaultMode)),
-                );
-            }
-            if (installCount > 0) {
-                fragments.push(
-                    t("profiles.wizard_extensions_section_state_install")
-                        .replace("{count}", String(installCount)),
-                );
-            }
-            if (lockedCount > 0) {
-                fragments.push(
-                    t("profiles.wizard_extensions_section_state_locked")
-                        .replace("{count}", String(lockedCount)),
-                );
-            }
-            if (uninstallCount > 0) {
-                fragments.push(
-                    t("profiles.wizard_extensions_section_state_uninstall")
-                        .replace("{count}", String(uninstallCount)),
-                );
-            }
-            if (configuredCount > 0) {
-                fragments.push(
-                    t("profiles.wizard_extensions_section_state_curated")
-                        .replace("{count}", String(configuredCount)),
-                );
-            }
-
-            renderPresetButtonState(
-                extensionGovernancePresetButtons,
-                resolveExtensionGovernancePreset({
-                    defaultMode,
-                    installCount,
-                    lockedCount,
-                    uninstallCount,
-                    configuredCount,
-                }),
-                "extensionGovernancePreset",
-            );
-
-            setText(
-                wizardExtensionSectionStatusEl,
-                fragments.length
-                    ? fragments.join(" • ")
-                    : t("profiles.wizard_extensions_section_state_empty"),
-            );
-
-            let curatedStatus = t("profiles.wizard_extensions_profiles_empty");
-            if (configuredCount > 0) {
-                curatedStatus = t("profiles.wizard_extensions_profiles_configured")
-                    .replace("{count}", String(configuredCount));
-                if (customUrlCount > 0) {
-                    curatedStatus += ` • ${t("profiles.wizard_extensions_profiles_custom_urls")
-                        .replace("{count}", String(customUrlCount))}`;
-                }
-            }
-            setText(wizardExtensionCuratedStatusEl, curatedStatus);
-
-            setText(
-                wizardExtensionInstallSummaryEl,
-                installCount > 0
-                    ? t("profiles.wizard_extensions_rule_count").replace("{count}", String(installCount))
-                    : t("profiles.wizard_extensions_rule_empty"),
-            );
-            setText(
-                wizardExtensionLockedSummaryEl,
-                lockedCount > 0
-                    ? t("profiles.wizard_extensions_rule_count").replace("{count}", String(lockedCount))
-                    : t("profiles.wizard_extensions_rule_empty"),
-            );
-            setText(
-                wizardExtensionUninstallSummaryEl,
-                uninstallCount > 0
-                    ? t("profiles.wizard_extensions_rule_count").replace("{count}", String(uninstallCount))
-                    : t("profiles.wizard_extensions_rule_empty"),
-            );
-
-            setPanelExpanded(
-                wizardExtensionFineTuningPanelEl,
-                wizardExtensionFineTuningToggleEl,
-                extensionFineTuningPanelPreference === null
-                    ? (installCount + lockedCount + uninstallCount + configuredCount > 0)
-                    : extensionFineTuningPanelPreference,
-                t("profiles.wizard_fine_tuning_show"),
-                t("profiles.wizard_fine_tuning_hide"),
-            );
-            setPanelExpanded(
-                wizardExtensionInstallPanelEl,
-                wizardExtensionInstallToggleEl,
-                extensionInstallPanelPreference === null ? installCount > 0 : extensionInstallPanelPreference,
-                t("profiles.wizard_extension_rule_show"),
-                t("profiles.wizard_extension_rule_hide"),
-            );
-            setPanelExpanded(
-                wizardExtensionLockedPanelEl,
-                wizardExtensionLockedToggleEl,
-                extensionLockedPanelPreference === null ? lockedCount > 0 : extensionLockedPanelPreference,
-                t("profiles.wizard_extension_rule_show"),
-                t("profiles.wizard_extension_rule_hide"),
-            );
-            setPanelExpanded(
-                wizardExtensionUninstallPanelEl,
-                wizardExtensionUninstallToggleEl,
-                extensionUninstallPanelPreference === null ? uninstallCount > 0 : extensionUninstallPanelPreference,
-                t("profiles.wizard_extension_rule_show"),
-                t("profiles.wizard_extension_rule_hide"),
-            );
-        }
-
-        function setCuratedPanelExpanded(expanded) {
-            if (wizardExtensionCuratedPanelEl) {
-                wizardExtensionCuratedPanelEl.hidden = !expanded;
-            }
-            if (wizardExtensionCuratedToggleEl) {
-                wizardExtensionCuratedToggleEl.setAttribute("aria-expanded", expanded ? "true" : "false");
-                wizardExtensionCuratedToggleEl.textContent = expanded
-                    ? t("profiles.wizard_extensions_profiles_hide")
-                    : t("profiles.wizard_extensions_profiles_show");
-            }
-        }
-
-        function syncCuratedPanelVisibility({ configuredCount = 0 } = {}) {
-            const expanded = curatedPanelPreference === null ? configuredCount > 0 : curatedPanelPreference;
-            setCuratedPanelExpanded(expanded);
-        }
-
-        function toggleCuratedPanel() {
-            const currentlyExpanded = wizardExtensionCuratedPanelEl?.hidden === false;
-            curatedPanelPreference = !currentlyExpanded;
-            setCuratedPanelExpanded(curatedPanelPreference);
-        }
-
-        function toggleExtensionFineTuningPanel() {
-            extensionFineTuningPanelPreference = !(wizardExtensionFineTuningPanelEl?.hidden === false);
-            renderManagedExtensionProfileStatuses();
         }
 
         function getStepSixSummaryData(parsed) {
@@ -668,23 +1131,6 @@
             return "defaults";
         }
 
-        function resolveWebsiteHandlersPreset(summary) {
-            const fileRules = summary.handlerMimeRules + summary.handlerExtensionRules;
-            const protocolRules = summary.handlerSchemeRules;
-
-            if (fileRules > 0 && protocolRules > 0) return "both";
-            if (fileRules > 0) return "files";
-            if (protocolRules > 0) return "protocols";
-            return "defaults";
-        }
-
-        function resolveWebsiteAccessPosture(summary) {
-            if (summary.blockedSites > 0 && summary.exceptionSites > 0) return "mixed";
-            if (summary.blockedSites > 0) return "block_some";
-            if (summary.exceptionSites > 0) return "allow_only";
-            return "defaults";
-        }
-
         function resolveSyncFocusPreset(summary) {
             if (summary.accountsManaged && summary.userMessagingControls > 0) return "managed";
             if (summary.userMessagingControls > 0) return "guidance";
@@ -739,84 +1185,6 @@
             }
         }
 
-        function applyWebsiteAccessPosturePreset(presetKey) {
-            const editor = getEditor();
-            if (!editor) return;
-
-            try {
-                const mode = documentRef.getElementById("mode").value;
-                const parsed = fromEditorValue(editor.getValue(), mode);
-                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
-                const nextWebsiteFilter = {};
-
-                if (presetKey === "block_some") {
-                    nextWebsiteFilter.Block = ["https://blocked.example.test"];
-                } else if (presetKey === "allow_only") {
-                    nextWebsiteFilter.Exceptions = ["https://allowed.example.test"];
-                } else if (presetKey === "mixed") {
-                    nextWebsiteFilter.Block = ["https://blocked.example.test"];
-                    nextWebsiteFilter.Exceptions = ["https://allowed.example.test"];
-                }
-
-                if (Object.keys(nextWebsiteFilter).length) {
-                    normalized.WebsiteFilter = nextWebsiteFilter;
-                } else {
-                    delete normalized.WebsiteFilter;
-                }
-
-                setCurrentRaw(normalized);
-                editor.setValue(toEditorValue(normalized, mode));
-                renderStepSixWorkspace(normalized);
-                updateWizardSummary();
-                setStatus(t("profiles.wizard_policy_applied"), "info");
-            } catch (e) {
-                setStatus(t("profiles.error_wizard_policy").replace("{detail}", e.message || e), "error");
-            }
-        }
-
-        function applyWebsiteHandlersPreset(presetKey) {
-            const editor = getEditor();
-            if (!editor) return;
-
-            try {
-                const mode = documentRef.getElementById("mode").value;
-                const parsed = fromEditorValue(editor.getValue(), mode);
-                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
-                const nextHandlers = {};
-
-                if (presetKey === "mime_types") {
-                    nextHandlers.mimeTypes = {
-                        "application/pdf": { action: "saveToDisk" },
-                    };
-                } else if (presetKey === "protocols") {
-                    nextHandlers.schemes = {
-                        mailto: { action: "useSystemDefault" },
-                    };
-                } else if (presetKey === "mixed") {
-                    nextHandlers.mimeTypes = {
-                        "application/pdf": { action: "saveToDisk" },
-                    };
-                    nextHandlers.schemes = {
-                        mailto: { action: "useSystemDefault" },
-                    };
-                }
-
-                if (Object.keys(nextHandlers).length) {
-                    normalized.Handlers = nextHandlers;
-                } else {
-                    delete normalized.Handlers;
-                }
-
-                setCurrentRaw(normalized);
-                editor.setValue(toEditorValue(normalized, mode));
-                renderStepSixWorkspace(normalized);
-                updateWizardSummary();
-                setStatus(t("profiles.wizard_policy_applied"), "info");
-            } catch (e) {
-                setStatus(t("profiles.error_wizard_policy").replace("{detail}", e.message || e), "error");
-            }
-        }
-
         function revealLanguageTarget(kind) {
             const targetEl = kind === "translate"
                 ? documentRef.getElementById("wizard-translate-enabled-card")
@@ -828,38 +1196,6 @@
                 targetEl.classList.remove("settings-target-highlight");
             }, 1800);
             targetEl.querySelector("input, select, textarea, button")?.focus?.({ preventScroll: true });
-        }
-
-        function revealHandlersCard() {
-            if (wizardWebsiteFineTuningPanelEl?.hidden !== false) {
-                websitePanelPreference = true;
-                setPanelExpanded(
-                    wizardWebsiteFineTuningPanelEl,
-                    wizardWebsiteFineTuningToggleEl,
-                    true,
-                    t("profiles.wizard_fine_tuning_show"),
-                    t("profiles.wizard_fine_tuning_hide"),
-                );
-            }
-            const handlersCardEl = documentRef.getElementById("wizard-handlers-card");
-            if (!handlersCardEl) return;
-            handlersCardEl.scrollIntoView({ behavior: "smooth", block: "center" });
-            handlersCardEl.classList.add("settings-target-highlight");
-            window.setTimeout(() => {
-                handlersCardEl.classList.remove("settings-target-highlight");
-            }, 1800);
-            focusTargetForA11y(handlersCardEl);
-        }
-
-        function revealWebsiteFilterCard() {
-            const filterCardEl = documentRef.getElementById("wizard-website-filter-card");
-            if (!filterCardEl) return;
-            filterCardEl.scrollIntoView({ behavior: "smooth", block: "center" });
-            filterCardEl.classList.add("settings-target-highlight");
-            window.setTimeout(() => {
-                filterCardEl.classList.remove("settings-target-highlight");
-            }, 1800);
-            focusTargetForA11y(filterCardEl);
         }
 
         function revealSyncFocus(kind) {
@@ -886,7 +1222,7 @@
             }
 
             const accountTarget = documentRef.querySelector('[data-policy-key="DisableFirefoxAccounts"]')
-                || documentRef.querySelector("#wizard-step-4 [data-policy-key]")
+                || documentRef.querySelector('[data-wizard-step-id="users_language_sync"] [data-policy-key]')
                 || wizardSyncSectionStatusEl;
             if (!accountTarget) return;
             accountTarget.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -895,55 +1231,6 @@
                 accountTarget.classList.remove("settings-target-highlight");
             }, 1800);
             focusTargetForA11y(accountTarget);
-        }
-
-        function revealBookmarksFocus(kind) {
-            const jumpId = kind === "links"
-                ? "wizard-bookmark-summary-links-jump"
-                : (kind === "folders" || kind === "mixed"
-                    ? "wizard-bookmark-summary-folders-jump"
-                    : "wizard-bookmark-summary-links-jump");
-            const jumpButton = documentRef.getElementById(jumpId);
-            if (jumpButton && !jumpButton.disabled) {
-                jumpButton.click();
-                return;
-            }
-            openBookmarksAdvanced(kind);
-        }
-
-        function openBookmarksAdvanced(kind = "links") {
-            const settingsLink = documentRef.getElementById("editor-mode-settings");
-            const settingsHref = settingsLink?.getAttribute("href") || "";
-            if (
-                !settingsLink
-                || settingsLink.getAttribute("aria-disabled") === "true"
-                || settingsLink.matches("button[disabled]")
-                || !settingsHref
-                || settingsHref === "#"
-            ) {
-                return;
-            }
-
-            const wantsManaged = kind === "folders" || kind === "mixed" || kind === "nested";
-            const focusTarget = wantsManaged
-                ? "shell-policy:4:ManagedBookmarks"
-                : "shell-policy:4:Bookmarks";
-
-            try {
-                const nextUrl = new URL(settingsHref, window.location.origin);
-                nextUrl.searchParams.set("focus", focusTarget);
-                const settingsWindow = window.open(
-                    `${nextUrl.pathname}${nextUrl.search}`,
-                    "_blank",
-                    "noopener",
-                );
-                if (settingsWindow) {
-                    settingsWindow.opener = null;
-                }
-                return;
-            } catch {
-                settingsLink.click();
-            }
         }
 
         function renderStepSixExperience(parsed) {
@@ -974,45 +1261,6 @@
                 resolveSyncFocusPreset(summary),
                 "syncFocusPreset",
             );
-
-            const bookmarkFragments = [];
-            if (summary.bookmarkEntries > 0) {
-                bookmarkFragments.push(
-                    t("profiles.wizard_bookmarks_section_state_links")
-                        .replace("{count}", String(summary.bookmarkEntries)),
-                );
-            }
-            if (summary.managedBookmarkFolders > 0) {
-                bookmarkFragments.push(
-                    t("profiles.wizard_bookmarks_section_state_folders")
-                        .replace("{count}", String(summary.managedBookmarkFolders)),
-                );
-            }
-            if (summary.nestedBookmarkFolders > 0) {
-                bookmarkFragments.push(
-                    t("profiles.wizard_bookmarks_section_state_nested")
-                        .replace("{count}", String(summary.nestedBookmarkFolders)),
-                );
-            }
-            setText(
-                wizardBookmarksSectionStatusEl,
-                bookmarkFragments.length
-                    ? bookmarkFragments.join(" • ")
-                    : t("profiles.wizard_bookmarks_section_state_empty"),
-            );
-            const hasConfiguredBookmarks = summary.bookmarkEntries + summary.managedBookmarkFolders + summary.nestedBookmarkFolders > 0;
-            if (wizardBookmarksConfiguredActionsEl) {
-                wizardBookmarksConfiguredActionsEl.hidden = !hasConfiguredBookmarks;
-            }
-            [
-                { el: wizardBookmarksLinksJumpEl, count: summary.bookmarkEntries },
-                { el: wizardBookmarksFoldersJumpEl, count: summary.managedBookmarkFolders },
-                { el: wizardBookmarksNestedJumpEl, count: summary.nestedBookmarkFolders },
-            ].forEach(({ el, count }) => {
-                if (!el) return;
-                el.hidden = count <= 0;
-                el.disabled = count <= 0;
-            });
 
             const languageFragments = [];
             if (summary.requestedLocales > 0) {
@@ -1049,55 +1297,12 @@
                 resolveLanguagePreset(summary),
                 "languagePreset",
             );
-            const websiteFragments = [];
-            const handlerRules = summary.handlerMimeRules + summary.handlerSchemeRules + summary.handlerExtensionRules;
-            if (summary.blockedSites > 0) {
-                websiteFragments.push(
-                    t("profiles.wizard_website_section_state_blocked")
-                        .replace("{count}", String(summary.blockedSites)),
-                );
-            }
-            if (summary.exceptionSites > 0) {
-                websiteFragments.push(
-                    t("profiles.wizard_website_section_state_exceptions")
-                        .replace("{count}", String(summary.exceptionSites)),
-                );
-            }
-            if (handlerRules > 0) {
-                websiteFragments.push(
-                    t("profiles.wizard_website_section_state_handlers")
-                        .replace("{count}", String(handlerRules)),
-                );
-            }
-            renderPresetButtonState(
-                websiteAccessPostureButtons,
-                resolveWebsiteAccessPosture(summary),
-                "websiteAccessPosture",
-            );
-            renderPresetButtonState(
-                websiteAccessHandlerButtons,
-                resolveWebsiteHandlersPreset(summary),
-                "websiteAccessHandlers",
-            );
-            setText(
-                wizardWebsiteSectionStatusEl,
-                websiteFragments.length
-                    ? websiteFragments.join(" • ")
-                    : t("profiles.wizard_website_section_state_empty"),
-            );
             const showFineTuning = t("profiles.wizard_fine_tuning_show");
             const hideFineTuning = t("profiles.wizard_fine_tuning_hide");
             setPanelExpanded(
                 wizardSyncFineTuningPanelEl,
                 wizardSyncFineTuningToggleEl,
                 syncPanelPreference === null ? summary.userMessagingControls > 0 : syncPanelPreference,
-                showFineTuning,
-                hideFineTuning,
-            );
-            setPanelExpanded(
-                wizardWebsiteFineTuningPanelEl,
-                wizardWebsiteFineTuningToggleEl,
-                websitePanelPreference === null ? (summary.blockedSites + summary.exceptionSites + handlerRules > 0) : websitePanelPreference,
                 showFineTuning,
                 hideFineTuning,
             );
@@ -1264,9 +1469,6 @@
             if (panelKey === "sync") {
                 syncPanelPreference = !(wizardSyncFineTuningPanelEl?.hidden === false);
             }
-            if (panelKey === "website") {
-                websitePanelPreference = !(wizardWebsiteFineTuningPanelEl?.hidden === false);
-            }
             const editor = getEditor();
             if (!editor) return;
             try {
@@ -1278,356 +1480,70 @@
                 renderStepSixExperience({});
                 renderStepSevenAiExperience({});
             }
-        }
-
-        function renderManagedExtensionProfileStatuses() {
-            let configuredCount = 0;
-            let customUrlCount = 0;
-
-            managedExtensionProfiles.forEach((profile) => {
-                const statusEl = getManagedExtensionStatusEl(profile.id);
-                const modeEl = getManagedExtensionField(profile.id, "mode");
-                const cardEl = modeEl?.closest(".wizard-section-group");
-                const profileState = getManagedExtensionProfileState(profile);
-
-                if (profileState.state !== "missing") configuredCount += 1;
-                if (profileState.state === "custom_url") customUrlCount += 1;
-
-                if (statusEl) {
-                    statusEl.textContent = formatManagedExtensionProfileState(profileState);
-                }
-                if (cardEl) {
-                    cardEl.dataset.extensionProfileState = profileState.state;
-                    cardEl.classList.remove(
-                        "wizard-search-engine-preset--applied",
-                        "wizard-search-engine-preset--partial",
-                        "wizard-search-engine-preset--conflict",
-                    );
-                    if (profileState.state === "catalog_url") cardEl.classList.add("wizard-search-engine-preset--applied");
-                    if (profileState.state === "configured") cardEl.classList.add("wizard-search-engine-preset--partial");
-                    if (profileState.state === "custom_url") cardEl.classList.add("wizard-search-engine-preset--conflict");
-                }
-                syncManagedExtensionDetailsVisibility(profile, profileState);
-            });
-
-            renderExtensionSectionStatus({ configuredCount, customUrlCount });
-            syncCuratedPanelVisibility({ configuredCount, customUrlCount });
         }
 
         function syncFromEditor() {
-            const editor = getEditor();
-            if (!editor) return;
-            if (
-                !wizardExtensionDefaultModeEl
-                || !wizardExtensionInstallEl
-                || !wizardExtensionLockedEl
-                || !wizardExtensionUninstallEl
-            ) {
-                return;
+            const current = editorPolicyDocument();
+            if (current) {
+                const settings = current.document.ExtensionSettings;
+                if (settings && typeof settings === "object" && !Array.isArray(settings)) {
+                    Array.from(amoSelectedRules.keys()).forEach((guid) => {
+                        if (!extensionRuleIsStructured(settings[guid])) amoSelectedRules.delete(guid);
+                    });
+                    syncAmoSelectedRulesFromPolicy(settings);
+                } else {
+                    amoSelectedRules.clear();
+                    renderAmoSelectedRules();
+                }
+                renderExtensionRules(current.document);
+                renderStepSixExperience(current.document);
+                renderStepSevenAiExperience(current.document);
+                renderExtensionReviewSummary(current.document);
+                updateWizardSummary();
             }
-            extensionFineTuningPanelPreference = null;
-            extensionInstallPanelPreference = null;
-            extensionLockedPanelPreference = null;
-            extensionUninstallPanelPreference = null;
-            curatedPanelPreference = null;
-            syncPanelPreference = null;
-            websitePanelPreference = null;
-
-            try {
-                const parsed = fromEditorValue(editor.getValue(), document.getElementById("mode").value);
-                const normalized = parsed && typeof parsed === "object" ? parsed : {};
-                const extensions = normalized.Extensions && typeof normalized.Extensions === "object" ? normalized.Extensions : {};
-                const extensionSettings = normalized.ExtensionSettings && typeof normalized.ExtensionSettings === "object"
-                    ? normalized.ExtensionSettings
-                    : {};
-                const defaultSettings = extensionSettings["*"] && typeof extensionSettings["*"] === "object"
-                    ? extensionSettings["*"]
-                    : {};
-
-                wizardExtensionDefaultModeEl.disabled = false;
-                wizardExtensionInstallEl.disabled = false;
-                wizardExtensionLockedEl.disabled = false;
-                wizardExtensionUninstallEl.disabled = false;
-                managedExtensionFields.forEach((element) => {
-                    element.disabled = false;
-                });
-
-                wizardExtensionDefaultModeEl.value = typeof defaultSettings.installation_mode === "string"
-                    ? defaultSettings.installation_mode
-                    : "";
-                wizardExtensionInstallEl.value = Array.isArray(extensions.Install) ? extensions.Install.join("\n") : "";
-                wizardExtensionLockedEl.value = Array.isArray(extensions.Locked) ? extensions.Locked.join("\n") : "";
-                wizardExtensionUninstallEl.value = Array.isArray(extensions.Uninstall) ? extensions.Uninstall.join("\n") : "";
-
-                managedExtensionProfiles.forEach((profile) => {
-                    const settings = extensionSettings[profile.id] && typeof extensionSettings[profile.id] === "object"
-                        ? extensionSettings[profile.id]
-                        : {};
-                    const modeEl = getManagedExtensionField(profile.id, "mode");
-                    const urlEl = getManagedExtensionField(profile.id, "url");
-                    const updatesEl = getManagedExtensionField(profile.id, "updates_disabled");
-                    const privateEl = getManagedExtensionField(profile.id, "private_browsing");
-                    if (modeEl) modeEl.value = typeof settings.installation_mode === "string" ? settings.installation_mode : "";
-                    if (urlEl) urlEl.value = typeof settings.install_url === "string" ? settings.install_url : "";
-                    if (updatesEl) updatesEl.checked = settings.updates_disabled === true;
-                    if (privateEl) privateEl.checked = settings.private_browsing === true;
-                });
-                renderStepSixExperience(normalized);
-                renderStepSevenAiExperience(normalized);
-            } catch {
-                wizardExtensionDefaultModeEl.value = "";
-                wizardExtensionInstallEl.value = "";
-                wizardExtensionLockedEl.value = "";
-                wizardExtensionUninstallEl.value = "";
-                wizardExtensionDefaultModeEl.disabled = true;
-                wizardExtensionInstallEl.disabled = true;
-                wizardExtensionLockedEl.disabled = true;
-                wizardExtensionUninstallEl.disabled = true;
-                managedExtensionFields.forEach((element) => {
-                    if (element.type === "checkbox") {
-                        element.checked = false;
-                    } else {
-                        element.value = "";
-                    }
-                    element.disabled = true;
-                });
-                renderStepSixExperience({});
-                renderStepSevenAiExperience({});
-            }
-
-            renderManagedExtensionProfileStatuses();
-            renderExtensionReviewSummary();
-            updateWizardSummary();
         }
 
         function applyFromWizard() {
-            const editor = getEditor();
-            if (!editor) return;
-
-            try {
-                const mode = document.getElementById("mode").value;
-                const parsed = fromEditorValue(editor.getValue(), mode);
-                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
-                const install = linesToArray(wizardExtensionInstallEl.value);
-                const locked = linesToArray(wizardExtensionLockedEl.value);
-                const uninstall = linesToArray(wizardExtensionUninstallEl.value);
-                const defaultMode = wizardExtensionDefaultModeEl.value.trim();
-
-                const nextExtensions = { ...(normalized.Extensions && typeof normalized.Extensions === "object" ? normalized.Extensions : {}) };
-                const nextExtensionSettings = {
-                    ...(normalized.ExtensionSettings && typeof normalized.ExtensionSettings === "object" ? normalized.ExtensionSettings : {}),
-                };
-                const nextDefaultSettings = {
-                    ...(nextExtensionSettings["*"] && typeof nextExtensionSettings["*"] === "object" ? nextExtensionSettings["*"] : {}),
-                };
-
-                if (install.length) {
-                    nextExtensions.Install = install;
-                } else {
-                    delete nextExtensions.Install;
-                }
-
-                if (locked.length) {
-                    nextExtensions.Locked = locked;
-                } else {
-                    delete nextExtensions.Locked;
-                }
-
-                if (uninstall.length) {
-                    nextExtensions.Uninstall = uninstall;
-                } else {
-                    delete nextExtensions.Uninstall;
-                }
-
-                if (defaultMode) {
-                    nextDefaultSettings.installation_mode = defaultMode;
-                } else {
-                    delete nextDefaultSettings.installation_mode;
-                }
-
-                if (Object.keys(nextDefaultSettings).length) {
-                    nextExtensionSettings["*"] = nextDefaultSettings;
-                } else {
-                    delete nextExtensionSettings["*"];
-                }
-
-                managedExtensionProfiles.forEach((profile) => {
-                    const nextProfileSettings = {
-                        ...(nextExtensionSettings[profile.id] && typeof nextExtensionSettings[profile.id] === "object"
-                            ? nextExtensionSettings[profile.id]
-                            : {}),
-                    };
-                    const modeEl = getManagedExtensionField(profile.id, "mode");
-                    const urlEl = getManagedExtensionField(profile.id, "url");
-                    const updatesEl = getManagedExtensionField(profile.id, "updates_disabled");
-                    const privateEl = getManagedExtensionField(profile.id, "private_browsing");
-                    const selectedMode = modeEl ? modeEl.value : "";
-                    const typedUrl = urlEl ? urlEl.value.trim() : "";
-                    const installUrl = (selectedMode === "force_installed" || selectedMode === "normal_installed")
-                        ? (typedUrl || profile.defaultUrl)
-                        : "";
-
-                    wizardExtensionManagedKeys.forEach((key) => {
-                        delete nextProfileSettings[key];
-                    });
-
-                    if (selectedMode) {
-                        nextProfileSettings.installation_mode = selectedMode;
-                    }
-                    if (installUrl) {
-                        nextProfileSettings.install_url = installUrl;
-                    }
-                    if (updatesEl?.checked) {
-                        nextProfileSettings.updates_disabled = true;
-                    }
-                    if (privateEl?.checked) {
-                        nextProfileSettings.private_browsing = true;
-                    }
-
-                    if (Object.keys(nextProfileSettings).length) {
-                        nextExtensionSettings[profile.id] = nextProfileSettings;
-                    } else {
-                        delete nextExtensionSettings[profile.id];
-                    }
-                });
-
-                if (Object.keys(nextExtensions).length) {
-                    normalized.Extensions = nextExtensions;
-                } else {
-                    delete normalized.Extensions;
-                }
-
-                if (Object.keys(nextExtensionSettings).length) {
-                    normalized.ExtensionSettings = nextExtensionSettings;
-                } else {
-                    delete normalized.ExtensionSettings;
-                }
-
-                setCurrentRaw(normalized);
-                editor.setValue(toEditorValue(normalized, mode));
-                renderStepSixExperience(normalized);
-                renderStepSevenAiExperience(normalized);
-                renderManagedExtensionProfileStatuses();
-                renderExtensionReviewSummary(normalized);
-                setStatus(t("profiles.wizard_extensions_applied"), "info");
-            } catch (e) {
-                setStatus(t("profiles.error_wizard_extensions").replace("{detail}", e.message || e), "error");
-            }
+            applyExtensionRuleEditor();
         }
 
         function bindInputListeners(applyExtensionsFromWizard) {
-            managedExtensionFields.filter(Boolean).forEach((input) => {
-                input.addEventListener("input", applyExtensionsFromWizard);
-                input.addEventListener("change", applyExtensionsFromWizard);
+            wizardExtensionAmoSearchFormEl?.addEventListener("submit", (event) => {
+                event.preventDefault();
+                searchAmoByName();
             });
+            wizardExtensionAmoManualFocusEl?.addEventListener("click", () => {
+                focusManualExtensionEntry();
+            });
+            wizardExtensionRuleAddFormEl?.addEventListener("submit", (event) => {
+                event.preventDefault();
+                addExtensionRule(
+                    wizardExtensionRuleGuidEl?.value || "",
+                    wizardExtensionRuleInstallUrlEl?.value || "",
+                );
+            });
+            const applyRuleEditor = () => applyExtensionRuleEditor();
+            wizardExtensionRulesEl?.addEventListener("input", applyRuleEditor);
+            wizardExtensionRulesEl?.addEventListener("change", applyRuleEditor);
             [
-                wizardExtensionDefaultModeEl,
+                wizardExtensionUpdateEl,
+                wizardExtensionInstallDefaultEl,
+                wizardExtensionInstallAllowEl,
                 wizardExtensionInstallEl,
                 wizardExtensionLockedEl,
                 wizardExtensionUninstallEl,
             ].filter(Boolean).forEach((input) => {
-                input.addEventListener("input", applyExtensionsFromWizard);
-                input.addEventListener("change", applyExtensionsFromWizard);
+                input.addEventListener("input", applyRuleEditor);
+                input.addEventListener("change", applyRuleEditor);
             });
-            if (wizardExtensionCuratedToggleEl) {
-                wizardExtensionCuratedToggleEl.addEventListener("click", () => {
-                    toggleCuratedPanel();
-                });
-            }
-            if (wizardExtensionInstallToggleEl) {
-                wizardExtensionInstallToggleEl.addEventListener("click", () => {
-                    extensionInstallPanelPreference = !(wizardExtensionInstallPanelEl?.hidden === false);
-                    renderManagedExtensionProfileStatuses();
-                });
-            }
-            if (wizardExtensionLockedToggleEl) {
-                wizardExtensionLockedToggleEl.addEventListener("click", () => {
-                    extensionLockedPanelPreference = !(wizardExtensionLockedPanelEl?.hidden === false);
-                    renderManagedExtensionProfileStatuses();
-                });
-            }
-            if (wizardExtensionUninstallToggleEl) {
-                wizardExtensionUninstallToggleEl.addEventListener("click", () => {
-                    extensionUninstallPanelPreference = !(wizardExtensionUninstallPanelEl?.hidden === false);
-                    renderManagedExtensionProfileStatuses();
-                });
-            }
-            managedExtensionProfiles.forEach((profile) => {
-                const toggleEl = getManagedExtensionDetailsToggleEl(profile.id);
-                if (!toggleEl) return;
-                toggleEl.addEventListener("click", () => {
-                    const nextExpanded = getManagedExtensionDetailsPanelEl(profile.id)?.hidden !== false;
-                    extensionProfileDetailsPreferences.set(profile.id, nextExpanded);
-                    setManagedExtensionDetailsExpanded(profile.id, nextExpanded);
-                });
-            });
-            if (wizardExtensionFineTuningToggleEl) {
-                wizardExtensionFineTuningToggleEl.addEventListener("click", () => {
-                    toggleExtensionFineTuningPanel();
-                });
-            }
             if (wizardSyncFineTuningToggleEl) {
                 wizardSyncFineTuningToggleEl.addEventListener("click", () => {
                     toggleSectionPanel("sync");
                 });
             }
-            if (wizardWebsiteFineTuningToggleEl) {
-                wizardWebsiteFineTuningToggleEl.addEventListener("click", () => {
-                    toggleSectionPanel("website");
-                });
-            }
-            websiteAccessHandlerButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    applyWebsiteHandlersPreset(button.dataset.websiteAccessHandlers || "defaults");
-                    if ((button.dataset.websiteAccessHandlers || "defaults") !== "defaults") {
-                        revealHandlersCard();
-                    }
-                });
-            });
-            websiteAccessPostureButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    applyWebsiteAccessPosturePreset(button.dataset.websiteAccessPosture || "defaults");
-                    if ((button.dataset.websiteAccessPosture || "defaults") !== "defaults") {
-                        revealWebsiteFilterCard();
-                    }
-                });
-            });
             syncFocusPresetButtons.forEach((button) => {
                 button.addEventListener("click", () => {
                     revealSyncFocus(button.dataset.syncFocusPreset || "defaults");
-                });
-            });
-            wizardBookmarksOpenSettingsEl?.addEventListener("click", () => {
-                const editor = getEditor();
-                if (!editor) {
-                    openBookmarksAdvanced("links");
-                    return;
-                }
-                try {
-                    const parsed = fromEditorValue(editor.getValue(), document.getElementById("mode").value);
-                    const summary = getStepSixSummaryData(parsed && typeof parsed === "object" ? parsed : {});
-                    if (summary.bookmarkEntries > 0) {
-                        revealBookmarksFocus("links");
-                    } else if (summary.managedBookmarkFolders > 0 || summary.nestedBookmarkFolders > 0) {
-                        revealBookmarksFocus("folders");
-                    } else {
-                        openBookmarksAdvanced("links");
-                    }
-                } catch {
-                    openBookmarksAdvanced("links");
-                }
-            });
-            extensionGovernancePresetButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    const presetKey = button.dataset.extensionGovernancePreset || "open";
-                    applyExtensionGovernancePreset(presetKey);
-                    if (presetKey === "managed") {
-                        revealExtensionArea("rules");
-                    } else if (presetKey === "curated") {
-                        revealExtensionArea("known");
-                    } else if (presetKey === "mixed") {
-                        revealExtensionArea("mixed");
-                    }
                 });
             });
             aiPosturePresetButtons.forEach((button) => {
@@ -1650,8 +1566,6 @@
         }
 
         return {
-            getManagedExtensionField,
-            renderManagedExtensionProfileStatuses,
             syncFromEditor,
             applyFromWizard,
             bindInputListeners,

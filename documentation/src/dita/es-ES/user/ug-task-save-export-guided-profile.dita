@@ -4,7 +4,7 @@
   <title>Guardar y descargar un perfil guiado</title>
   <shortdesc>Guarde el perfil guiado revisado y descargue el artefacto de transferencia cuando la configuración esté lista.</shortdesc>
   <taskbody>
-    <prereq><p>La revisión del paso 6 está completa y se comprenden las advertencias de validación.</p></prereq>
+    <prereq><p>La revisión del paso 8 está completa y se comprenden las advertencias de validación.</p></prereq>
     <context><p>Al guardar se registra el perfil BPM; La descarga proporciona la versión revisada para la transferencia de políticas.</p></context>
     <steps>
       <step><cmd>Elija <uicontrol>Guardar</uicontrol> para almacenar el estado actual del perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>

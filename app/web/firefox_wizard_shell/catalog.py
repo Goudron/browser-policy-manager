@@ -11,18 +11,48 @@ from .serializer import humanize_identifier, serialize_policy
 
 SUPPORTED_POLICY_CHANNELS = SUPPORTED_SCHEMA_CHANNELS
 
+CERTIFICATE_TRUST_POSTURE_POLICY_IDS = (
+    "Certificates",
+    "DisableSecurityBypass",
+    "WindowsSSO",
+    "MicrosoftEntraSSO",
+)
+
+# These Firefox shapes have a single structured owner: the dedicated
+# Certificates & trust component on Guided step 4.  They must never leak back
+# into generic schema-shell cards (including the step-8 review shell), where a
+# second editor would bypass its raw-preservation and provenance safeguards.
+CERTIFICATE_TRUST_GUIDED_POLICY_IDS = frozenset(
+    {
+        "Authentication",
+        "Certificates",
+        "DisableSecurityBypass",
+        "MicrosoftEntraSSO",
+        "SecurityDevices",
+        "WindowsSSO",
+    }
+)
+
 WIZARD_SHELL_STEPS: list[dict[str, Any]] = [
     {
+        "step": 1,
+        "id": "browser_network_search",
+        "title_key": "profiles.wizard_step_one",
+        "fallback": "Browser, network & search",
+        "policy_sections": ["browser_behavior", "network_access", "search"],
+        "preference_sections": ["general", "search"],
+    },
+    {
         "step": 2,
-        "id": "general",
+        "id": "urls_sites_navigation",
         "title_key": "profiles.wizard_step_two",
-        "fallback": "Browser access & defaults",
-        "policy_sections": ["browser_behavior", "network_access", "home_startup", "search"],
-        "preference_sections": ["general", "home", "search"],
+        "fallback": "URLs, sites & navigation",
+        "policy_sections": ["home_startup", "urls_sites_navigation"],
+        "preference_sections": ["home"],
     },
     {
         "step": 3,
-        "id": "privacy",
+        "id": "security_privacy",
         "title_key": "profiles.wizard_step_three",
         "fallback": "Security & privacy",
         "policy_sections": ["privacy_security"],
@@ -30,26 +60,42 @@ WIZARD_SHELL_STEPS: list[dict[str, Any]] = [
     },
     {
         "step": 4,
-        "id": "sync",
+        "id": "certificates_trust",
         "title_key": "profiles.wizard_step_four",
-        "fallback": "Users, add-ons & sites",
-        "policy_sections": ["extensions_integrations"],
-        "preference_sections": ["sync"],
+        "fallback": "Certificates & trust",
+        "policy_sections": [],
+        "preference_sections": [],
     },
     {
         "step": 5,
-        "id": "ai",
+        "id": "users_language_sync",
         "title_key": "profiles.wizard_step_five",
-        "fallback": "AI & smart features",
+        "fallback": "Users, language & sync",
+        "policy_sections": ["sync_accounts"],
+        "preference_sections": ["sync"],
+    },
+    {
+        "step": 6,
+        "id": "extensions",
+        "title_key": "profiles.wizard_step_six",
+        "fallback": "Extensions",
+        "policy_sections": [],
+        "preference_sections": [],
+    },
+    {
+        "step": 7,
+        "id": "ai",
+        "title_key": "profiles.wizard_step_seven",
+        "fallback": "AI",
         "policy_sections": ["ai_smart"],
         "preference_sections": [],
     },
     {
-        "step": 6,
-        "id": "review",
-        "title_key": "profiles.wizard_step_six",
+        "step": 8,
+        "id": "review_export",
+        "title_key": "profiles.wizard_step_eight",
         "fallback": "Review & export",
-        "policy_sections": ["advanced"],
+        "policy_sections": ["advanced", "extensions_integrations"],
         "preference_sections": [],
     },
 ]
@@ -73,6 +119,18 @@ def get_wizard_schema_shell_catalog(
                     preferences_by_id,
                 )
                 for step in WIZARD_SHELL_STEPS
+            },
+            "certificate_trust_posture": {
+                "policy_ids": [
+                    policy_id
+                    for policy_id in CERTIFICATE_TRUST_POSTURE_POLICY_IDS
+                    if policy_id in load_policy_schema(channel).policies
+                ],
+            },
+            "certificate_trust": {
+                "policy_ids": sorted(
+                    CERTIFICATE_TRUST_GUIDED_POLICY_IDS & set(load_policy_schema(channel).policies)
+                ),
             },
         }
         for channel in SUPPORTED_POLICY_CHANNELS
@@ -115,7 +173,9 @@ def _build_channel_step_shell(
     policies = [
         definition
         for definition in schema.policies.values()
-        if definition.ui is not None and definition.ui.section in step_meta["policy_sections"]
+        if definition.ui is not None
+        and definition.ui.section in step_meta["policy_sections"]
+        and definition.id not in CERTIFICATE_TRUST_GUIDED_POLICY_IDS
     ]
 
     recommended = sorted(

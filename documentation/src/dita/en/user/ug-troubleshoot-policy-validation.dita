@@ -9,10 +9,11 @@
     <steps>
       <step><cmd>Read the affected policy path and message before changing values.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Classify the issue as unsupported policy, wrong value type, deprecated setting, unknown entry, imported value, or raw fallback.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
-      <step><cmd>Use <uicontrol>All settings</uicontrol> or JSON to navigate to the affected location and correct only the reported value.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Use the owning Guided step, <uicontrol>All settings</uicontrol>, or JSON to navigate to the affected location and correct only the reported value.</cmd><info><p>Use Step 2 for URLs/sites, Step 4 for certificates/trust, and Step 6 for extensions. Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Revalidate the profile in the same schema channel before saving or exporting.</cmd><info><note type="warning">Retry only from the BPM interface; do not change profile data outside the application.</note></info></step>
     </steps>
     <result><p>The validation error is either resolved or documented as a deliberate raw/unsupported value that cannot be treated as release-ready.</p></result>
+    <example id="bpm096-localized-current"><title>Current 0.9.6 behavior</title><p>Create and duplicate use atomic preparation: a name, schema, preset, CIS, or conversion error creates no target and does not change the source. Schema, preset, and CIS are read-only. To correct a value, use its owner: Step 2 for URLs/sites, Step 4 for certificates and trust, and Step 6 for extensions; request an explicit conversion preview to change schema.</p></example>
     <postreq><p>If the error repeats, stop the workflow and contact support with the visible message, profile name, schema channel, and current page.</p></postreq>
   </taskbody>
   <related-links>

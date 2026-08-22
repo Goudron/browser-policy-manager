@@ -4,8 +4,15 @@
   <title>Sicherheit und Datenschutz konfigurieren</title>
   <shortdesc>Verwenden Sie Schritt 3 für Datenschutz, Berechtigungen, Cookies, Bereinigung, DNS und Härtungskontrollen.</shortdesc>
   <taskbody>
-    <prereq><p>Ein geführter Profilentwurf ist im vorgesehenen Schemakanal geöffnet.</p></prereq>
-    <context><p>Sicherheits- und Datenschutzeinstellungen können sowohl die Benutzererfahrung als auch die Risikolage ändern. Prüfen Sie daher die Warnungen vor dem Speichern.</p></context>
+    <prereq><p>Ein gespeichertes Profil ist im <uicontrol>Geführten Editor</uicontrol> mit dem vorgesehenen schreibgeschützten Schema geöffnet.</p></prereq>
+    <context><p><uicontrol>Sicherheit und Datenschutz</uicontrol> kann Benutzererfahrung und Risikolage ändern. Zertifikate, Unternehmensstammzertifikate, Authentifizierung und Sicherheitsgeräte gehören ausschließlich zu Schritt 4.</p>
+      <fig id="screenshot-guided-step-4-certificates-trust">
+        <title>Zertifikate und Vertrauen</title>
+        <image keyref="screenshot.guided-step-4-certificates-trust" placement="break" scalefit="yes" align="center">
+          <alt>Schritt 4 des geführten Editors mit Vertrauensstatus und Zertifikatsverweisen.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
       <step><cmd>Öffnen Sie Schritt 3 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Konfigurieren Sie Datenschutzkontrollen und Berechtigungsstandards.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
@@ -13,7 +20,7 @@
       <step><cmd>Überprüfen Sie die Validierungsmeldungen und erläutern Sie etwaige Ausnahmen in der Überprüfung.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
     <result><p>Das Profil verfügt über einen überprüften Sicherheits- und Datenschutzstatus.</p></result>
-    <postreq><p>Wiederherstellung: Wenn ein Website-Arbeitsablauf unterbrochen wird, überprüfen Sie die Berechtigungs- oder Cookie-Einstellungen erneut und vergleichen Sie sie mit dem Profilziel.</p></postreq>
+    <postreq><p>Wiederherstellung: Überprüfen Sie Berechtigungs- oder Cookie-Einstellungen erneut. Verwenden Sie für Zertifikate, Unternehmensstammzertifikate oder Authentifizierung Schritt 4 und prüfen Sie das Laufzeitverhalten außerhalb von BPM.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-users-addons-sites"/>

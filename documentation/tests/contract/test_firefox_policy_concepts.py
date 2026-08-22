@@ -30,6 +30,7 @@ TOPICS = {
             "a-check-channel",
             "a-pick-edit-surface",
             "a-review-value-shape",
+            "bpm096-localized-current",
         },
     },
     "fx-concept-release-esr-differences": {
@@ -40,6 +41,7 @@ TOPICS = {
             "a-release-only",
             "a-changed-definitions",
             "a-user-action",
+            "bpm096-localized-current",
         },
     },
     "fx-concept-bpm-firefox-boundary": {
@@ -59,6 +61,7 @@ TOPICS = {
             "a-classroom-kiosk",
             "a-protected-station",
             "a-after-selection",
+            "bpm096-localized-current",
         },
     },
     "fx-concept-complex-policy-families": {

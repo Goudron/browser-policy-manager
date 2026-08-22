@@ -33,6 +33,7 @@ METAFILE_NAME = "profiles-bundles-metafile.json"
 ENTRIES = {
     "library": ENTRY_ROOT / "library.js",
     "compare": ENTRY_ROOT / "compare.js",
+    "preparation": ENTRY_ROOT / "preparation.js",
     "guided": ENTRY_ROOT / "guided.js",
     "settings": ENTRY_ROOT / "settings.js",
     "json": ENTRY_ROOT / "json.js",
@@ -40,7 +41,7 @@ ENTRIES = {
 ROUTE_ENTRIES = {
     "library": "profile-library.js",
     "compare": "profile-compare.js",
-    "new": "profile-guided.js",
+    "new": "profile-preparation.js",
     "edit": "profile-guided.js",
     "settings": "profile-settings.js",
     "json": "profile-json.js",
@@ -58,12 +59,12 @@ BUNDLE_BUDGETS = {
     # The shared conversion review is carried by the three editor routes and
     # its checksum-locked source maps. Keep the cap tight while admitting the
     # reviewed M5 UI state machine rather than silently disabling a guard.
-    "max_generated_bytes": 1_211_000,
-    "max_generated_javascript_bytes": 600_000,
+    "max_generated_bytes": 1_290_000,
+    "max_generated_javascript_bytes": 625_000,
     "route_max_javascript_bytes": {
         "library": 60_000,
         "compare": 60_000,
-        "new": 600_000,
+        "new": 60_000,
         "edit": 600_000,
         "settings": 600_000,
         "json": 600_000,

@@ -2,20 +2,19 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-duplicate-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Dupliquer un profil</title>
-  <shortdesc>Créez un brouillon guidé nommé à partir d'un profil enregistré existant lorsque vous souhaitez un point de départ sûr pour les modifications.</shortdesc>
-  <taskbody>
-    <prereq><p>Le profil source est visible dans la bibliothèque et vous avez confirmé son identité de ligne.</p></prereq>
-    <context><p><uicontrol>Dupliquer</uicontrol> crée un brouillon de profil distinct basé sur le profil enregistré sélectionné. Cela ne modifie pas le profil source.</p></context>
-    <steps>
-      <step><cmd>Choisissez <uicontrol>Dupliquer</uicontrol> sur la ligne du profil source.</cmd><info><p>Résultat attendu : BPM ouvre un panneau de nom de clone.</p></info></step>
-      <step><cmd>Entrez un nom clair qui diffère des noms de profil existants.</cmd><info><p>BPM nécessite un nom et signale une validation de nom en double avant de confirmer.</p></info></step>
-      <step><cmd>Confirmez l'action en double.</cmd><info><note type="warning">Un doublon est distinct de la source. Les modifications ultérieures apportées à un profil ne mettent pas à jour l'autre.</note></info></step>
-    </steps>
-    <result><p>BPM ouvre ou crée le profil dupliqué en tant que brouillon guidé nommé ou profil enregistré en fonction du flux de travail actuel.</p></result>
-    <postreq><p>Récupération : annulez le panneau de nom de clone si la ligne source sélectionnée ou le nouveau nom est incorrect.</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-reference-library-profile-row"/>
-    <link keyref="topic.ug-task-open-saved-profile"/>
-  </related-links>
+  <shortdesc>Créez par préparation de doublon un profil enregistré distinct sans modifier la source.</shortdesc>
+  <taskbody><prereq><p>Le profil source actif est visible dans la <uicontrol>Bibliothèque</uicontrol>. Vérifiez son nom et son état actuel avant de le dupliquer.</p></prereq><context><p>La préparation de doublon suggère un nom fondé sur la source et demande le schéma cible, le préréglage de départ et la ligne de base CIS. En cas de changement de schéma, BPM planifie la conversion avant de créer la cible. Il ne supprime jamais silencieusement des valeurs source et ne modifie pas le profil source.</p>
+      <fig id="screenshot-preparation-duplicate">
+        <title>Préparation de la duplication du profil</title>
+        <image keyref="screenshot.preparation-duplicate" placement="break" scalefit="yes" align="center">
+          <alt>Formulaire de duplication avec le profil source, le nom suggéré, le schéma Firefox, le préréglage de départ, la base CIS et l’action « Dupliquer ».</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>Choisissez <uicontrol>Dupliquer</uicontrol> sur le profil source voulu.</cmd><info><p>BPM ouvre le formulaire de préparation de doublon avec un nom suggéré.</p></info></step>
+<step><cmd>Saisissez un nom distinct et choisissez le schéma cible, le préréglage et la ligne de base CIS.</cmd><info><p>Conservez le schéma source lorsqu’aucune conversion n’est prévue.</p></info></step>
+<step><cmd>Si le schéma diffère, examinez l’état de conversion du doublon.</cmd><info><p>Un plan valide permet la duplication. Un plan bloqué ou indisponible ne crée aucune cible et laisse la source inchangée; choisissez une autre cible ou corrigez la configuration concernée.</p></info></step>
+<step><cmd>Choisissez <uicontrol>Dupliquer</uicontrol>.</cmd><info><p>BPM crée un profil enregistré distinct et l’ouvre dans l’<uicontrol>Éditeur guidé</uicontrol>.</p><note type="warning">Les modifications ultérieures de l’un des profils ne mettent pas l’autre à jour. Une source obsolète, un conflit de nom ou un blocage de conversion ne crée aucune cible.</note></info></step>
+</steps><result><p>La source reste inchangée et le nouveau profil porte l’identité choisie et le résultat de conversion.</p></result><postreq><p>Annulez si la mauvaise source a été choisie. Si elle a changé pendant l’ouverture du formulaire, rouvrez la préparation depuis la source actuelle; n’utilisez pas un ancien résultat de conversion.</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-create-first-profile"/><link keyref="topic.ug-troubleshoot-schema-mismatch"/><link keyref="topic.ug-task-use-guided-editor"/></related-links>
 </task>

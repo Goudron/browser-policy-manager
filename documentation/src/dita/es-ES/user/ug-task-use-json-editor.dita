@@ -12,6 +12,7 @@
           <alt>Editor JSON que muestra las políticas editables de Firefox JSON para un perfil guardado.</alt>
         </image>
       </fig>
+      <p>El encabezado muestra esquema, preajuste y línea base CIS como datos de solo lectura. Cambie esas identidades mediante preparación o conversión explícita, no editando JSON.</p>
       <p>Guarde o descarte deliberadamente los cambios del editor JSON antes de abrir la revisión de conversión del esquema. La vista previa nunca sobrescribe cambios locales del navegador; debe solicitarse de nuevo una vista previa obsoleta.</p>
     </context>
     <steps>

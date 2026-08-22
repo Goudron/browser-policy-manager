@@ -15,6 +15,7 @@
       <step><cmd>记录集成产品中的同步配置文件 ID、修订、验证状态、架构通道以及任何不透明的合规性元数据。</cmd><info><note type="warning">BPM 不提供多操作事务。如果后续步骤失败，集成产品将拥有恢复、审核记录和重试决策。</note></info></step>
     </steps>
     <result><p>集成具有用于列表、统计、读取、创建和更新操作的可重复配置文件同步路径。</p></result>
+    <example id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>公共准备使用 POST /api/profiles/prepare/new 和 POST /api/profiles/prepare/duplicate；复制预览通过只读 POST /api/profiles/prepare/duplicate/preview 提供。终止 ProfilePreparationErrorEnvelope 带 mutation="none"：不会创建目标，也不会修改源。调用方不提交 flags、compliance、provenance 或转换候选项。</p><p id="bpm096-localized-literals"><ph>准备契约字面量核对</ph> <codeph>API-PROFILE-012</codeph>、<codeph>API-PROFILE-013</codeph>、<codeph>404</codeph>、<codeph>500</codeph>、<codeph>POST $BPM_BASE_URL/api/profiles/prepare/new</codeph>、<codeph>{"name":"prepared-corp","target_schema_id":"release-153","starter_id":"basic_corporate","cis_baseline_id":"cis_l1","preparation_idempotency_key":"opaque-key"}</codeph>、<codeph>source_id</codeph>、<codeph>expected_source_revision</codeph>、<codeph>/prepare/duplicate</codeph>、<codeph>ProfilePreparationErrorEnvelope.detail.code</codeph>、<codeph>mutation</codeph>、<codeph>none</codeph>、<codeph>POST /api/profiles/prepare/new</codeph>、<codeph>POST /api/profiles/prepare/duplicate</codeph>、<codeph>POST /api/profiles/prepare/duplicate/preview</codeph>、<codeph>ProfilePreparationErrorEnvelope</codeph> 和 <codeph>mutation="none"</codeph> 是不可变准备字面量。</p></example>
     <postreq><p>在归档、恢复、永久删除或重置操作之前使用破坏性生命周期任务。</p></postreq>
   </taskbody>
   <related-links>

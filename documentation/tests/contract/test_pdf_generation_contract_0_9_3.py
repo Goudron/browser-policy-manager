@@ -18,7 +18,9 @@ PDF_COVER_LOGO = ROOT / "documentation/assets/branding/bpm-logo.png"
 PDF_RUNBOOK = ROOT / "documentation/runbooks/documentation-update-for-future-epics.md"
 DITA_ROOT = ROOT / "documentation/src/dita"
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
-ZH_TITLE_ALLOWED_ASCII_TOKENS = frozenset({"Firefox", "policies.json", "JSON"})
+ZH_TITLE_ALLOWED_ASCII_TOKENS = frozenset(
+    {"AI", "AMO", "API", "Firefox", "JSON", "URL", "policies.json"}
+)
 
 
 def _zh_title_ascii_tokens(text: str) -> set[str]:
@@ -32,7 +34,7 @@ def test_m14_08_pdf_generation_contract_covers_every_required_pdf() -> None:
     contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
 
     assert contract["backlog_item"] == "BPM093-M14-08"
-    assert contract["target_bpm_version"] == "0.9.5.1"
+    assert contract["target_bpm_version"] == "0.9.6"
     assert contract["candidate_root"] == "documentation/build/pdf"
     assert contract["candidate_path_layout"] == "{locale}/{filename}"
     assert contract["dita_format"] == "html5"

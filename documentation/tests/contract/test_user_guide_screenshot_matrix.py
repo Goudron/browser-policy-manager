@@ -97,11 +97,11 @@ def test_minimal_user_guide_screenshot_matrix_covers_all_locales_and_scenarios()
     scenarios = matrix["scenarios"]
     rows = matrix["matrix"]
 
-    assert matrix["target_bpm_version"] == "0.9.1"
-    assert matrix["backlog_item"] == "BPM091-M2-02"
+    assert matrix["target_bpm_version"] == "0.9.6"
+    assert matrix["backlog_item"] == "BPM096-M10-04"
     assert matrix["guide_id"] == "user-guide"
     assert matrix["locales"] == list(LOCALES)
-    assert len(scenarios) == 6
+    assert len(scenarios) == 11
     assert len(rows) == len(scenarios) * len(LOCALES)
 
     scenario_ids = {scenario["scenario_id"] for scenario in scenarios}
@@ -112,6 +112,36 @@ def test_minimal_user_guide_screenshot_matrix_covers_all_locales_and_scenarios()
         assert row["locale"] in LOCALES
         by_locale[row["locale"]].add(row["scenario_id"])
     assert all(ids == scenario_ids for ids in by_locale.values())
+    assert {
+        "preparation-create",
+        "preparation-duplicate",
+        "guided-step-2-urls-sites-navigation",
+        "guided-step-4-certificates-trust",
+        "guided-step-6-extensions",
+    } <= scenario_ids
+
+
+def test_bpm096_source_refresh_disposes_stale_sources_and_requires_visible_progress() -> None:
+    matrix = _json(MATRIX)
+    refresh = matrix["source_refresh"]
+
+    assert refresh["owner"] == "BPM096-M10-04"
+    assert set(refresh["required_subjects"]) >= {
+        "preparation-create",
+        "preparation-duplicate",
+        "guided-editor-overview",
+        "guided-step-2-urls-sites-navigation",
+        "guided-step-4-certificates-trust",
+        "guided-step-6-extensions",
+    }
+    assert {entry["subject"] for entry in refresh["obsolete_source_dispositions"]} == {
+        "six-step-guided-editor-overview",
+        "draft-only-create-flow",
+        "inline-clone-name-panel",
+    }
+    assert "phase=capture" in matrix["capture_execution"]["progress_output"]
+    assert "locale={locale}" in matrix["capture_execution"]["progress_output"]
+    assert "completed={completed}/{total}" in matrix["capture_execution"]["progress_output"]
 
 
 def test_user_guide_screenshot_matrix_is_user_guide_only_and_links_to_existing_topics() -> None:
@@ -222,7 +252,7 @@ def test_user_guide_screenshot_capture_command_and_assets_exist() -> None:
     execution = matrix["capture_execution"]
     viewports = matrix["capture_state_contract"]["viewports"]
 
-    assert execution["backlog_item"] == "BPM091-M5-02"
+    assert execution["backlog_item"] == "BPM096-M10-04"
     assert execution["command"] == (
         "./.venv/bin/python documentation/tools/capture_user_guide_screenshots.py"
     )

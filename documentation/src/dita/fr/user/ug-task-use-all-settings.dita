@@ -4,7 +4,7 @@
   <title>Utiliser « Tous les paramètres »</title>
   <shortdesc>Ouvrez « <uicontrol>Tous les paramètres</uicontrol> » pour un profil enregistré lorsque vous avez besoin d’un contrôle visuel complet au-delà du flux de travail guidé.</shortdesc>
   <taskbody>
-    <prereq><p>Un profil enregistré existe. Les nouveaux brouillons non enregistrés doivent être enregistrés avant que <uicontrol>Tous les paramètres</uicontrol> puisse s'ouvrir.</p></prereq>
+    <prereq><p>Un profil enregistré existe. La création et la préparation d’un doublon ouvrent toujours un profil enregistré avant l’accès à <uicontrol>Tous les paramètres</uicontrol>.</p></prereq>
     <context><p><uicontrol>Tous les paramètres</uicontrol> est l'éditeur visuel complet des politiques Firefox et connu <uicontrol>Préférences gérées</uicontrol>. Il s'ouvre dans <uicontrol>Revue</uicontrol> afin que les éléments d'attention soient visibles avant une navigation large dans le catalogue.</p>
       <fig id="screenshot-all-settings-review">
         <title>Mode « Revue » dans « Tous les paramètres »</title>
@@ -12,6 +12,7 @@
           <alt>Tous les paramètres affichant la liste de révision, les paramètres configurés et le panneau de détails des paramètres sur un écran étroit.</alt>
         </image>
       </fig>
+      <p>L’en-tête affiche le schéma, le préréglage et la ligne de base CIS du profil enregistré en lecture seule. Pour les modifier, utilisez la préparation ou une conversion explicite, pas un sélecteur d’éditeur.</p>
       <p>Lors d’un changement de schéma, n’écrasez pas les paramètres non enregistrés : enregistrez-les, ignorez-les délibérément ou annulez, puis choisissez une cible et lisez son aperçu de conversion. Un bloqueur ne supprime aucun paramètre.</p>
     </context>
     <steps>
@@ -21,7 +22,7 @@
       <step><cmd>Utilisez le mode qui correspond à la tâche : Vérifier pour attirer l'attention, Configuré pour les valeurs appliquées ou <uicontrol>Catalogue</uicontrol> pour chaque paramètre pris en charge.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Le profil enregistré est ouvert dans <uicontrol>Tous les paramètres</uicontrol> avec le mode correct disponible.</p></result>
-    <postreq><p>Récupération : si <uicontrol>Tous les paramètres</uicontrol> n'est pas disponible, enregistrez d'abord le brouillon guidé ou rouvrez un profil enregistré à partir de la bibliothèque.</p></postreq>
+    <postreq><p>Récupération : si <uicontrol>Tous les paramètres</uicontrol> n’est pas disponible, rouvrez le profil enregistré depuis la bibliothèque. Enregistrez ou abandonnez volontairement les modifications avant d’examiner une conversion de schéma; un blocage ne supprime pas les réglages.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

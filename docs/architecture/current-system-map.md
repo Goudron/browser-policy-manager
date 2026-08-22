@@ -2,7 +2,7 @@
 
 Date: 2026-08-20
 
-This is the first orientation point for BPM 0.9.5.1 work. Read this map before
+This is the first orientation point for BPM 0.9.6 work. Read this map before
 opening a subsystem. It names owned entrypoints and narrow verification routes;
 it is not an inventory of dependencies, generated files, caches, secrets, or
 the implementation of every feature. Import direction rules are executable in
@@ -192,7 +192,7 @@ checks named paths and commands; it does not recursively scan the repository.
 
 ```json system-map-contract
 {
-  "version": "0.9.5.1",
+  "version": "0.9.6",
   "paths": [
     "app/main.py",
     "app/core/config.py",

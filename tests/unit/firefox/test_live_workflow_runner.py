@@ -75,12 +75,21 @@ def test_runner_writes_terminal_channel_summary_without_external_scope(
     monkeypatch.setattr(live_runner, "verify_installation", lambda *args, **kwargs: versions)
 
     def fake_run(
-        command: list[str], *, timeout_seconds: int, log_path: Path, progress_label: str
+        command: list[str],
+        *,
+        timeout_seconds: int,
+        log_path: Path,
+        progress_label: str,
+        environment: dict[str, str],
     ) -> tuple[int, bool]:
         assert command[-1].startswith("--junitxml=")
         assert any(argument.startswith("--basetemp=") for argument in command)
         assert timeout_seconds == 12
         assert progress_label == "release"
+        assert environment == {
+            "BPM_FIREFOX_CHANNEL": "release",
+            "BPM_FIREFOX_LIVE_SCHEMA_ARTIFACT": "release-153",
+        }
         log_path.write_text("safe local log\n", encoding="utf-8")
         return 0, False
 
@@ -113,6 +122,9 @@ def test_runner_writes_terminal_channel_summary_without_external_scope(
         summary["network_scope"]
         == "local loopback policy fixtures after provisioning; AMO excluded"
     )
+    assert summary["schema_artifact"]["artifact_id"] == "release-153"
+    assert len(summary["schema_artifact"]["sha256"]) == 64
+    assert summary["unsupported_cases"] == []
     assert (artifacts / "versions.json").is_file()
 
 
@@ -210,6 +222,7 @@ def test_streamed_runner_enforces_timeout_when_pytest_writes_no_output(tmp_path:
         timeout_seconds=1,
         log_path=tmp_path / "pytest.log",
         progress_label="release",
+        environment={"BPM_FIREFOX_CHANNEL": "release"},
     )
 
     assert timed_out is True

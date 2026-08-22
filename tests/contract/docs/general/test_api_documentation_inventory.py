@@ -46,8 +46,8 @@ def test_api_documentation_inventory_matches_openapi_operations():
     ]
     integration_openapi, web_openapi = _openapi_operations()
 
-    assert len(api_rows) == 17
-    assert len({row["operation"] for row in api_rows}) == 17
+    assert len(api_rows) == 21
+    assert len({row["operation"] for row in api_rows}) == 21
     assert len({row["topic"] for row in api_rows}) == 7
     assert {(row["method"], row["path"]) for row in api_rows} == integration_openapi
 
@@ -63,6 +63,11 @@ def test_api_documentation_inventory_covers_models_errors_and_parameters():
         "ProfileCreate",
         "ProfileUpdate",
         "ProfileRead",
+        "NewProfilePreparationRequest",
+        "DuplicateProfilePreparationRequest",
+        "DuplicateProfilePreparationPreview",
+        "ProfilePreparationErrorEnvelope",
+        "AmoSearchApiResponse",
         "FirefoxPoliciesJsonImportRequest",
         "ValidationRequest",
         "Canonical Firefox export",
@@ -70,7 +75,7 @@ def test_api_documentation_inventory_covers_models_errors_and_parameters():
     ):
         assert f"| `{model}` |" in inventory or f"| {model} |" in inventory
 
-    for status in ("200", "201", "204", "400", "404", "409", "415", "422", "503"):
+    for status in ("200", "201", "204", "400", "403", "404", "409", "415", "422", "503"):
         assert f"| `{status}` |" in inventory
 
     for parameter in (
@@ -86,6 +91,7 @@ def test_api_documentation_inventory_covers_models_errors_and_parameters():
         "download",
         "indent",
         "pretty",
+        "locale",
     ):
         assert f"| `{parameter}` |" in inventory
 
@@ -107,7 +113,8 @@ def test_api_documentation_inventory_records_exclusions_and_limitations():
         "There is no authentication or authorization layer",
         "There is no API version prefix",
         "There is no rate limiting",
-        "Only PATCH supports optimistic concurrency",
+        "Generic PATCH supports optimistic concurrency",
+        "duplicate-preparation command separately binds its source",
         "There is no bulk profile CRUD/export endpoint",
         "Error bodies are not a single stable envelope",
         "does not promise transactional workflows",

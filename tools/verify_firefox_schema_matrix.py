@@ -57,6 +57,7 @@ from app.services.policy_schema_service import load_policy_schema
 from app.web.firefox_manual_policy_controls import get_manual_policy_controls_catalog
 from app.web.firefox_starter_presets import get_wizard_starter_catalog
 from app.web.firefox_wizard_shell import get_wizard_schema_shell_catalog
+from app.web.firefox_wizard_shell.catalog import CERTIFICATE_TRUST_GUIDED_POLICY_IDS
 from tools import build_locale_catalogs
 from tools import provision_firefox_schema_inputs as provisioner
 from tools.convert_policies_from_upstream_lib.cli import generate_schema_targets
@@ -502,8 +503,26 @@ def _assert_policy_placement(channel: str, shell_catalog: dict[str, Any]) -> int
         guided.update(recommended | additional)
         raw_fallback.update(raw)
         placed.update(recommended | additional | raw)
+    certificate_posture = channel_shell.get("certificate_trust_posture", {})
+    if not isinstance(certificate_posture, dict):
+        _fail(f"Certificate and trust placement is invalid for {channel}")
+    certificate_policy_ids = set(certificate_posture.get("policy_ids", []))
+    certificate_component_ids = {
+        policy_id
+        for policy_id in CERTIFICATE_TRUST_GUIDED_POLICY_IDS
+        if policy_id in policy_schema.policies
+    }
+    if not certificate_policy_ids <= certificate_component_ids:
+        _fail(f"Certificate and trust placement exposes an unavailable policy for {channel}")
+    if placed & certificate_component_ids:
+        _fail(f"Certificate and trust policy placement overlaps a wizard shell step for {channel}")
+    # The posture summary deliberately exposes only the four controls rendered in
+    # its card.  Authentication and SecurityDevices are still owned by the same
+    # dedicated certificate component, so include the full component here when
+    # proving that every schema policy has exactly one editor owner.
+    placed.update(certificate_component_ids)
     expected = set(policy_schema.policies)
-    _require_equal(placed, expected, f"All-settings policy placement for {channel}")
+    _require_equal(placed, expected, f"Policy placement for {channel}")
     manual = get_manual_policy_controls_catalog(channel)
     if manual.get("schema_version") != channel:
         _fail(f"Manual policy catalog resolves a different channel for {channel}")

@@ -1,0 +1,184 @@
+<section class="wizard-panel" id="wizard-step-4" data-wizard-step-id="certificates_trust" aria-hidden="true">
+    <nav class="wizard-step-map" aria-labelledby="wizard-certificates-map-title">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" id="wizard-certificates-map-title" data-i18n="profiles.wizard_certificates_map_title">{{ tr("profiles.wizard_certificates_map_title") }} {% set context_help_icon_target = "guided-certificates-trust" %}{% set context_help_icon_label_key = "profiles.help_guided_certificates_trust" %}{% include "profiles/_context_help_icon.html" %}</h3>
+        </div>
+        <div class="wizard-step-map-grid">
+            <a href="#wizard-step-4-trust-posture" class="wizard-step-map-link" data-i18n="profiles.wizard_certificates_posture_title">{{ tr("profiles.wizard_certificates_posture_title") }}</a>
+            <a href="#wizard-step-4-references" class="wizard-step-map-link" data-i18n="profiles.wizard_certificate_references_title">{{ tr("profiles.wizard_certificate_references_title") }}</a>
+            <a href="#wizard-step-4-authentication" class="wizard-step-map-link" data-i18n="profiles.wizard_certificate_authentication_title">{{ tr("profiles.wizard_certificate_authentication_title") }}</a>
+            <a href="#wizard-step-4-devices" class="wizard-step-map-link" data-i18n="profiles.wizard_certificate_devices_title">{{ tr("profiles.wizard_certificate_devices_title") }}</a>
+        </div>
+    </nav>
+    <div class="wizard-section-group" id="wizard-step-4-trust-posture">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_certificates_posture_title">{{ tr("profiles.wizard_certificates_posture_title") }}</h3>
+        </div>
+        <p class="wizard-input-hint" data-i18n="profiles.wizard_certificates_posture_hint">{{ tr("profiles.wizard_certificates_posture_hint") }}</p>
+        <div class="wizard-grid wizard-stage-panel" id="wizard-certificate-trust-posture">
+            <label>
+                <span class="field-label mb-1" data-i18n="profiles.wizard_certificate_system_trust_label">{{ tr("profiles.wizard_certificate_system_trust_label") }}</span>
+                <select id="wizard-certificate-system-trust" class="soft-input" data-certificate-trust-choice="system-trust">
+                    <option value="" data-i18n="profiles.wizard_certificate_choice_inherit">{{ tr("profiles.wizard_certificate_choice_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_certificate_choice_enabled">{{ tr("profiles.wizard_certificate_choice_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_certificate_choice_disabled">{{ tr("profiles.wizard_certificate_choice_disabled") }}</option>
+                    <option value="custom" disabled data-i18n="profiles.wizard_certificate_choice_custom">{{ tr("profiles.wizard_certificate_choice_custom") }}</option>
+                </select>
+                <span class="wizard-input-hint" data-i18n="profiles.wizard_certificate_system_trust_hint">{{ tr("profiles.wizard_certificate_system_trust_hint") }}</span>
+            </label>
+            <label>
+                <span class="field-label mb-1" data-i18n="profiles.wizard_certificate_enterprise_roots_label">{{ tr("profiles.wizard_certificate_enterprise_roots_label") }}</span>
+                <select id="wizard-certificate-enterprise-roots" class="soft-input" data-certificate-trust-choice="enterprise-roots">
+                    <option value="" data-i18n="profiles.wizard_certificate_choice_inherit">{{ tr("profiles.wizard_certificate_choice_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_certificate_choice_enabled">{{ tr("profiles.wizard_certificate_choice_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_certificate_choice_disabled">{{ tr("profiles.wizard_certificate_choice_disabled") }}</option>
+                    <option value="custom" disabled data-i18n="profiles.wizard_certificate_choice_custom">{{ tr("profiles.wizard_certificate_choice_custom") }}</option>
+                </select>
+                <span class="wizard-input-hint" data-i18n="profiles.wizard_certificate_enterprise_roots_hint">{{ tr("profiles.wizard_certificate_enterprise_roots_hint") }}</span>
+            </label>
+            <label>
+                <span class="field-label mb-1" data-i18n="profiles.wizard_certificate_error_bypass_label">{{ tr("profiles.wizard_certificate_error_bypass_label") }}</span>
+                <select id="wizard-certificate-error-bypass" class="soft-input" data-certificate-trust-choice="invalid-certificate">
+                    <option value="" data-i18n="profiles.wizard_certificate_choice_inherit">{{ tr("profiles.wizard_certificate_choice_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_certificate_choice_enabled">{{ tr("profiles.wizard_certificate_choice_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_certificate_choice_disabled">{{ tr("profiles.wizard_certificate_choice_disabled") }}</option>
+                    <option value="custom" disabled data-i18n="profiles.wizard_certificate_choice_custom">{{ tr("profiles.wizard_certificate_choice_custom") }}</option>
+                </select>
+                <span class="wizard-input-hint" data-i18n="profiles.wizard_certificate_error_bypass_hint">{{ tr("profiles.wizard_certificate_error_bypass_hint") }}</span>
+            </label>
+            <label>
+                <span class="field-label mb-1" data-i18n="profiles.wizard_certificate_windows_sso_label">{{ tr("profiles.wizard_certificate_windows_sso_label") }}</span>
+                <select id="wizard-certificate-windows-sso" class="soft-input" data-certificate-trust-choice="windows-sso">
+                    <option value="" data-i18n="profiles.wizard_certificate_choice_inherit">{{ tr("profiles.wizard_certificate_choice_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_certificate_choice_enabled">{{ tr("profiles.wizard_certificate_choice_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_certificate_choice_disabled">{{ tr("profiles.wizard_certificate_choice_disabled") }}</option>
+                    <option value="custom" disabled data-i18n="profiles.wizard_certificate_choice_custom">{{ tr("profiles.wizard_certificate_choice_custom") }}</option>
+                </select>
+                <span class="wizard-input-hint" data-i18n="profiles.wizard_certificate_windows_sso_hint">{{ tr("profiles.wizard_certificate_windows_sso_hint") }}</span>
+            </label>
+            <label id="wizard-certificate-entra-row">
+                <span class="field-label mb-1" data-i18n="profiles.wizard_certificate_entra_sso_label">{{ tr("profiles.wizard_certificate_entra_sso_label") }}</span>
+                <select id="wizard-certificate-entra-sso" class="soft-input" data-certificate-trust-choice="entra-sso">
+                    <option value="" data-i18n="profiles.wizard_certificate_choice_inherit">{{ tr("profiles.wizard_certificate_choice_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_certificate_choice_enabled">{{ tr("profiles.wizard_certificate_choice_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_certificate_choice_disabled">{{ tr("profiles.wizard_certificate_choice_disabled") }}</option>
+                    <option value="custom" disabled data-i18n="profiles.wizard_certificate_choice_custom">{{ tr("profiles.wizard_certificate_choice_custom") }}</option>
+                </select>
+                <span class="wizard-input-hint" data-i18n="profiles.wizard_certificate_entra_sso_hint">{{ tr("profiles.wizard_certificate_entra_sso_hint") }}</span>
+            </label>
+        </div>
+        <p class="wizard-input-hint" id="wizard-certificate-trust-schema-status" role="status" aria-live="polite"></p>
+        <p class="wizard-input-hint" data-i18n="profiles.wizard_certificate_cis_boundary">{{ tr("profiles.wizard_certificate_cis_boundary") }}</p>
+        <p class="wizard-input-hint" data-i18n="profiles.wizard_certificate_organization_boundary">{{ tr("profiles.wizard_certificate_organization_boundary") }}</p>
+    </div>
+
+    <div class="wizard-section-group" id="wizard-step-4-attribution">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_certificate_sources_title">{{ tr("profiles.wizard_certificate_sources_title") }}</h3>
+        </div>
+        <p class="wizard-input-hint" id="wizard-certificate-provenance-status" role="status" aria-live="polite"></p>
+        <p class="wizard-input-hint" id="wizard-certificate-cis-status" role="status" aria-live="polite"></p>
+    </div>
+    <div class="wizard-section-group" id="wizard-step-4-references">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_certificate_references_title">{{ tr("profiles.wizard_certificate_references_title") }}</h3>
+        </div>
+        <p class="wizard-input-hint" data-i18n="profiles.wizard_certificate_references_hint">{{ tr("profiles.wizard_certificate_references_hint") }}</p>
+        <form class="wizard-inline-form" id="wizard-certificate-install-form">
+            <label class="wizard-input-stack" for="wizard-certificate-install-reference">
+                <span class="field-label" data-i18n="profiles.wizard_certificate_reference_label">{{ tr("profiles.wizard_certificate_reference_label") }}</span>
+                <input class="soft-input" id="wizard-certificate-install-reference" type="text" autocomplete="off" spellcheck="false" data-i18n-placeholder="profiles.wizard_certificate_reference_placeholder" placeholder="/etc/firefox/company-root.pem">
+            </label>
+            <button class="button-base ghost-button" type="submit" data-i18n="profiles.wizard_certificate_add_reference">{{ tr("profiles.wizard_certificate_add_reference") }}</button>
+        </form>
+        <p class="wizard-input-hint" data-i18n="profiles.wizard_certificate_reference_boundary">{{ tr("profiles.wizard_certificate_reference_boundary") }}</p>
+        <div class="wizard-managed-list" id="wizard-certificate-install-list" role="list"></div>
+        <p class="wizard-input-hint" id="wizard-certificate-install-empty" data-i18n="profiles.wizard_certificate_install_empty">{{ tr("profiles.wizard_certificate_install_empty") }}</p>
+        <div class="wizard-raw-fallback" id="wizard-certificate-install-raw" hidden>
+            <p class="wizard-input-hint" data-i18n="profiles.wizard_certificate_raw_fallback">{{ tr("profiles.wizard_certificate_raw_fallback") }}</p>
+            <pre class="wizard-raw-value" id="wizard-certificate-install-raw-value"></pre>
+        </div>
+    </div>
+    <div class="wizard-section-group" id="wizard-step-4-authentication">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_certificate_authentication_title">{{ tr("profiles.wizard_certificate_authentication_title") }}</h3>
+        </div>
+        <p class="wizard-input-hint" data-i18n="profiles.wizard_certificate_authentication_hint">{{ tr("profiles.wizard_certificate_authentication_hint") }}</p>
+        <form class="wizard-inline-form" id="wizard-certificate-authentication-form">
+            <label class="wizard-input-stack" for="wizard-certificate-authentication-field">
+                <span class="field-label" data-i18n="profiles.wizard_certificate_authentication_kind">{{ tr("profiles.wizard_certificate_authentication_kind") }}</span>
+                <select class="soft-input" id="wizard-certificate-authentication-field">
+                    <option value="SPNEGO" data-i18n="profiles.wizard_certificate_auth_spnego">{{ tr("profiles.wizard_certificate_auth_spnego") }}</option>
+                    <option value="Delegated" data-i18n="profiles.wizard_certificate_auth_delegated">{{ tr("profiles.wizard_certificate_auth_delegated") }}</option>
+                    <option value="NTLM" data-i18n="profiles.wizard_certificate_auth_ntlm">{{ tr("profiles.wizard_certificate_auth_ntlm") }}</option>
+                    <option value="AllowNonFQDN" data-i18n="profiles.wizard_certificate_auth_non_fqdn">{{ tr("profiles.wizard_certificate_auth_non_fqdn") }}</option>
+                    <option value="AllowProxies" data-i18n="profiles.wizard_certificate_auth_proxies">{{ tr("profiles.wizard_certificate_auth_proxies") }}</option>
+                </select>
+            </label>
+            <label class="wizard-input-stack" for="wizard-certificate-authentication-host">
+                <span class="field-label" data-i18n="profiles.wizard_certificate_authentication_host">{{ tr("profiles.wizard_certificate_authentication_host") }}</span>
+                <input class="soft-input" id="wizard-certificate-authentication-host" type="text" autocomplete="off" spellcheck="false" data-i18n-placeholder="profiles.wizard_certificate_authentication_host_placeholder" placeholder="intranet.example">
+            </label>
+            <button class="button-base ghost-button" type="submit" data-i18n="profiles.wizard_certificate_add_host">{{ tr("profiles.wizard_certificate_add_host") }}</button>
+        </form>
+        <div class="wizard-grid wizard-stage-panel">
+            <label>
+                <span class="field-label mb-1" data-i18n="profiles.wizard_certificate_auth_locked">{{ tr("profiles.wizard_certificate_auth_locked") }}</span>
+                <select class="soft-input" id="wizard-certificate-authentication-locked" data-certificate-authentication-boolean="Locked">
+                    <option value="" data-i18n="profiles.wizard_certificate_choice_inherit">{{ tr("profiles.wizard_certificate_choice_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_certificate_choice_enabled">{{ tr("profiles.wizard_certificate_choice_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_certificate_choice_disabled">{{ tr("profiles.wizard_certificate_choice_disabled") }}</option>
+                    <option value="custom" disabled data-i18n="profiles.wizard_certificate_choice_custom">{{ tr("profiles.wizard_certificate_choice_custom") }}</option>
+                </select>
+            </label>
+            <label>
+                <span class="field-label mb-1" data-i18n="profiles.wizard_certificate_auth_private_browsing">{{ tr("profiles.wizard_certificate_auth_private_browsing") }}</span>
+                <select class="soft-input" id="wizard-certificate-authentication-private-browsing" data-certificate-authentication-boolean="PrivateBrowsing">
+                    <option value="" data-i18n="profiles.wizard_certificate_choice_inherit">{{ tr("profiles.wizard_certificate_choice_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_certificate_choice_enabled">{{ tr("profiles.wizard_certificate_choice_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_certificate_choice_disabled">{{ tr("profiles.wizard_certificate_choice_disabled") }}</option>
+                    <option value="custom" disabled data-i18n="profiles.wizard_certificate_choice_custom">{{ tr("profiles.wizard_certificate_choice_custom") }}</option>
+                </select>
+            </label>
+        </div>
+        <div class="wizard-managed-list" id="wizard-certificate-authentication-list" role="list"></div>
+        <p class="wizard-input-hint" id="wizard-certificate-authentication-empty" data-i18n="profiles.wizard_certificate_authentication_empty">{{ tr("profiles.wizard_certificate_authentication_empty") }}</p>
+        <div class="wizard-raw-fallback" id="wizard-certificate-authentication-raw" hidden>
+            <p class="wizard-input-hint" data-i18n="profiles.wizard_certificate_raw_fallback">{{ tr("profiles.wizard_certificate_raw_fallback") }}</p>
+            <pre class="wizard-raw-value" id="wizard-certificate-authentication-raw-value"></pre>
+        </div>
+        <p class="wizard-input-hint" id="wizard-certificate-client-selection-status" data-i18n="profiles.wizard_certificate_client_selection_unavailable">{{ tr("profiles.wizard_certificate_client_selection_unavailable") }}</p>
+    </div>
+    <div class="wizard-section-group" id="wizard-step-4-devices">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_certificate_devices_title">{{ tr("profiles.wizard_certificate_devices_title") }}</h3>
+        </div>
+        <p class="wizard-input-hint" data-i18n="profiles.wizard_certificate_devices_hint">{{ tr("profiles.wizard_certificate_devices_hint") }}</p>
+        <form class="wizard-inline-form" id="wizard-security-device-add-form">
+            <label class="wizard-input-stack" for="wizard-security-device-name">
+                <span class="field-label" data-i18n="profiles.wizard_certificate_device_name">{{ tr("profiles.wizard_certificate_device_name") }}</span>
+                <input class="soft-input" id="wizard-security-device-name" type="text" autocomplete="off" spellcheck="false">
+            </label>
+            <label class="wizard-input-stack" for="wizard-security-device-path">
+                <span class="field-label" data-i18n="profiles.wizard_certificate_device_path">{{ tr("profiles.wizard_certificate_device_path") }}</span>
+                <input class="soft-input" id="wizard-security-device-path" type="text" autocomplete="off" spellcheck="false" data-i18n-placeholder="profiles.wizard_certificate_device_path_placeholder" placeholder="C:\\Program Files\\Vendor\\device.dll">
+            </label>
+            <button class="button-base ghost-button" type="submit" data-i18n="profiles.wizard_certificate_add_device">{{ tr("profiles.wizard_certificate_add_device") }}</button>
+        </form>
+        <div class="wizard-managed-list" id="wizard-security-device-add-list" role="list"></div>
+        <p class="wizard-input-hint" id="wizard-security-device-add-empty" data-i18n="profiles.wizard_certificate_devices_add_empty">{{ tr("profiles.wizard_certificate_devices_add_empty") }}</p>
+        <form class="wizard-inline-form" id="wizard-security-device-delete-form">
+            <label class="wizard-input-stack" for="wizard-security-device-delete-name">
+                <span class="field-label" data-i18n="profiles.wizard_certificate_device_delete_name">{{ tr("profiles.wizard_certificate_device_delete_name") }}</span>
+                <input class="soft-input" id="wizard-security-device-delete-name" type="text" autocomplete="off" spellcheck="false">
+            </label>
+            <button class="button-base ghost-button" type="submit" data-i18n="profiles.wizard_certificate_delete_device">{{ tr("profiles.wizard_certificate_delete_device") }}</button>
+        </form>
+        <div class="wizard-managed-list" id="wizard-security-device-delete-list" role="list"></div>
+        <p class="wizard-input-hint" id="wizard-security-device-delete-empty" data-i18n="profiles.wizard_certificate_devices_delete_empty">{{ tr("profiles.wizard_certificate_devices_delete_empty") }}</p>
+        <div class="wizard-raw-fallback" id="wizard-security-devices-raw" hidden>
+            <p class="wizard-input-hint" data-i18n="profiles.wizard_certificate_raw_fallback">{{ tr("profiles.wizard_certificate_raw_fallback") }}</p>
+            <pre class="wizard-raw-value" id="wizard-security-devices-raw-value"></pre>
+        </div>
+    </div>
+</section>

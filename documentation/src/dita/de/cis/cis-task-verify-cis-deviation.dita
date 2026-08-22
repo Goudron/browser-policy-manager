@@ -15,6 +15,7 @@
       <step><cmd>Öffnen Sie das Profil erneut und bestätigen Sie, dass in der Quellenangabe immer noch angezeigt wird, ob der Wert „Baseline“, „CIS“, „Manuell“, „Importiert“ oder „Roh“ ist.</cmd><info><p>Erwartetes Ergebnis: Spätere Prüfer können den konfigurierten Wert verfolgen und den externen Datensatz finden.</p></info></step>
     </steps>
     <result><p>Die CIS-Abweichung verfügt über umsetzbare Verifizierungsnachweise, einen externen Ausnahmedatensatz und eine sichtbare BPM-Quellenzuordnung.</p></result>
+    <example id="bpm096-localized-current"><title>Aktuelles Verhalten in 0.9.6</title><p>Schema, Startvoreinstellung und CIS-Basislinie werden vor dem gespeicherten Profil gewählt. Die Herkunft baseline, CIS, manual, imported, converted und raw ist ein Prüfmittel, kein Konformitätsnachweis. Für Zertifikate und Vertrauen gibt es einen getrennten Pfadnachweis; manual, imported, converted, raw, unavailable und blocked erfordern eine manuelle Prüfung.</p></example>
     <postreq><p>Wenn der Prüfer den exportierten Pfad oder externe Beweise nicht überprüfen kann, belassen Sie das Element in der manuellen Überprüfung und beschreiben Sie es nicht als konform.</p></postreq>
   </taskbody>
   <related-links>

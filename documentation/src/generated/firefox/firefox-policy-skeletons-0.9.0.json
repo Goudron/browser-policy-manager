@@ -9712,8 +9712,8 @@
   "schema_refresh_runbook_backlog_item": "BPM090-M5-08",
   "schema_version": 1,
   "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
-  "source_inventory_sha256": "5d31408e48fcb58eb3a62c2aafce1b64890ac6815ff7aab35e73e0bdab4c37ff",
+  "source_inventory_sha256": "943ea47d870bedf91ca2e7b7425d5d2597c7f306c30e837e7c3a4f0d991fc25a",
   "source_model": "documentation/config/firefox-policy-topic-model-0.9.0.json",
   "source_model_sha256": "2dc4d69db6e20fde5b4f2fc6d872a3fe4e8f2e3ac2319b3a18ded600669a32ab",
-  "target_bpm_version": "0.9.5.1"
+  "target_bpm_version": "0.9.6"
 }

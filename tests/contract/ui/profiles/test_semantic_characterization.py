@@ -71,20 +71,27 @@ def test_profile_route_matrix_preserves_every_canonical_shell(profile_routes: Pr
             ("library-panel", "wizard-panel", "settings-panel", "editor-panel"),
         ),
         "new": RouteExpectation(
-            "New profile draft — Guided editor — Browser Policy Manager",
+            "Create profile — Browser Policy Manager",
             "new",
-            "editor",
+            "preparation",
             (
+                "profile-preparation",
+                "profile-preparation-title",
+                "profile-preparation-catalog",
+            ),
+            (
+                "library-panel",
+                "overview-panel",
                 "wizard-panel",
-                "wizard-schema",
-                "wizard-starter-catalog",
-                "wizard-settings-search-input",
-                "editor-mode-settings",
-                "editor-mode-json",
+                "settings-panel",
+                "editor-panel",
+                "editor",
+                "format",
                 "save",
                 "validate",
+                "wizard-starter-catalog",
+                "profiles-initial-profile",
             ),
-            ("library-panel", "settings-panel", "editor-panel", "editor", "format"),
         ),
         "edit": RouteExpectation(
             "Route contract profile — Guided editor — Browser Policy Manager",
@@ -95,7 +102,9 @@ def test_profile_route_matrix_preserves_every_canonical_shell(profile_routes: Pr
                 "current-name",
                 "profile-state-badge",
                 "wizard-panel",
-                "wizard-schema",
+                "profile-schema-fact",
+                "profile-starter-fact",
+                "profile-cis-fact",
                 "editor-mode-settings",
                 "editor-mode-json",
                 "save",
@@ -196,37 +205,36 @@ def test_profile_route_components_are_accessible_and_owned_by_the_right_shell(
         header.attr("scope") for header in compare.select("#compare-settings-table thead th")
     ] == ["col", "col", "col"]
 
-    guided = profile_routes.route("new")
-    steps = guided.select("#wizard-stepper button[aria-controls]")
-    assert len(steps) == 6
-    assert steps[0].attr("aria-current") == "step"
-    assert guided.require("wizard-settings-search-input").attr("type") == "search"
-    assert guided.require("editor-mode-settings").attr("aria-disabled") == "true"
-    assert guided.require("editor-mode-json").attr("aria-disabled") == "true"
-    for step in range(1, 7):
-        panel = guided.require(f"wizard-step-{step}")
-        assert panel.parent_tag == "div"
-        assert "wizard-panels" in panel.parent_classes
-        assert panel.parent_id == "wizard-panel"
-    step_owners = {
-        1: ("wizard-name", "wizard-schema", "wizard-starter-grid"),
-        2: ("wizard-step-2-basics", "wizard-step-2-proxy", "wizard-step-2-review"),
-        3: ("wizard-hardening-presets", "wizard-cleanup-presets"),
-        4: ("wizard-step-4-accounts", "wizard-step-4-extensions"),
-        5: ("wizard-ai-posture-presets", "wizard-ai-policy-controls"),
-        6: ("wizard-export-ready-card", "wizard-export-summary-ai"),
-    }
-    for step, identifiers in step_owners.items():
-        for identifier in identifiers:
-            assert f"wizard-step-{step}" in guided.require(identifier).ancestor_ids
-        other_prefixes = tuple(f"wizard-step-{other}-" for other in range(1, 7) if other != step)
-        leaking = [
-            identifier
-            for identifier, element in guided.elements_by_id.items()
-            if identifier.startswith(other_prefixes)
-            and f"wizard-step-{step}" in element.ancestor_ids
-        ]
-        assert leaking == []
+    preparation = profile_routes.route("new")
+    assert preparation.require("profile-preparation").attr("aria-labelledby") == (
+        "profile-preparation-title"
+    )
+    assert preparation.body_attr("data-preparation-mode") == "create"
+    assert preparation.body_attr("data-preparation-terminal-action-mode") == "create"
+    assert preparation.body_attr("data-preparation-source-state") == "absent"
+    assert "profile-preparation-catalog" in preparation.catalog_ids
+
+    preparation_form = preparation.require("profile-preparation-form")
+    assert preparation_form.tag == "form"
+    assert preparation_form.attr("data-preparation-form-state") == "ready"
+    assert preparation_form.attr("novalidate") == ""
+    for field_id, error_id in (
+        ("profile-preparation-name", "profile-preparation-name-error"),
+        ("profile-preparation-schema", "profile-preparation-schema-error"),
+        ("profile-preparation-starter", "profile-preparation-starter-error"),
+        ("profile-preparation-cis", "profile-preparation-cis-error"),
+    ):
+        control = preparation.require(field_id)
+        assert control.attr("required") == ""
+        assert control.attr("aria-describedby") == error_id
+        assert control.attr("aria-errormessage") == error_id
+        assert preparation.require(error_id).attr("role") == "alert"
+    assert preparation.require("profile-preparation-state").attr("role") == "status"
+    assert preparation.require("profile-preparation-state").attr("aria-live") == "polite"
+    assert (
+        preparation.require("profile-preparation-submit").attr("data-preparation-terminal-action")
+        == "create"
+    )
 
     settings = profile_routes.route("settings")
     mode_buttons = settings.select("[data-settings-mode-bar] button[data-settings-mode]")
@@ -254,21 +262,14 @@ def test_profile_route_assets_catalogs_and_security_follow_route_tables(
     canonical = {
         "library": "/static/profiles_bundles/profile-library.js",
         "compare": "/static/profiles_bundles/profile-compare.js",
-        "new": "/static/profiles_bundles/profile-guided.js",
+        "new": "/static/profiles_bundles/profile-preparation.js",
         "settings": "/static/profiles_bundles/profile-settings.js",
         "json": "/static/profiles_bundles/profile-json.js",
     }
     expected_catalogs = {
         "library": {"schema-channels-catalog"},
         "compare": {"schema-channels-catalog"},
-        "new": {
-            "wizard-starter-catalog",
-            "wizard-settings-catalog",
-            "wizard-preferences-catalog",
-            "wizard-manual-policy-controls",
-            "wizard-schema-shell-catalog",
-            "schema-channels-catalog",
-        },
+        "new": {"profile-preparation-catalog"},
         "settings": {
             "wizard-settings-catalog",
             "wizard-preferences-catalog",
@@ -314,11 +315,24 @@ def test_profile_route_variants_are_observable_isolated_and_within_budget(
     archived_id = profile_routes.archived_profile_id
 
     clone = profile_routes.route("active_clone")
-    assert clone.body_attr("data-clone-source-id") == str(active_id)
-    assert clone.body_attr("data-clone-name") == "Active copy"
-    assert profile_routes.route("active_duplicate").body_attr("data-clone-source-id") == str(
-        active_id
-    )
+    assert clone.body_attr("data-preparation-mode") == "duplicate"
+    assert clone.body_attr("data-preparation-terminal-action-mode") == "duplicate"
+    assert clone.body_attr("data-preparation-source-state") == "available"
+    assert clone.body_attr("data-preparation-source-id") == str(active_id)
+    assert clone.body_attr("data-preparation-source-revision") == "1"
+    assert clone.body_attr("data-clone-name") is None
+    assert profile_routes.route("active_duplicate").body_attr("data-clone-source-id") is None
+
+    for key, source_state in (("invalid_clone", "invalid"), ("missing_clone", "not-found")):
+        route = profile_routes.route(key)
+        assert route.body_attr("data-preparation-mode") == "duplicate"
+        assert route.body_attr("data-preparation-terminal-action-mode") == "unavailable"
+        assert route.body_attr("data-preparation-source-state") == source_state
+        assert (
+            route.require("profile-preparation-source-error").attr("data-preparation-source-state")
+            == source_state
+        )
+    assert profile_routes.profile_count_after_routes == profile_routes.profile_count_before_routes
 
     settings_focus = profile_routes.route("active_settings_focus")
     advanced = settings_focus.require("all-settings-catalog-advanced")
@@ -343,8 +357,13 @@ def test_profile_route_variants_are_observable_isolated_and_within_budget(
         assert route.require("profile-state-badge").text == "Deleted"
 
     archived_clone = profile_routes.route("archived_clone")
-    assert archived_clone.body_attr("data-clone-source-id") == str(archived_id)
-    assert archived_clone.body_attr("data-clone-name") == "Archived copy"
+    assert archived_clone.body_attr("data-preparation-mode") == "duplicate"
+    assert archived_clone.body_attr("data-preparation-terminal-action-mode") == "unavailable"
+    assert archived_clone.body_attr("data-preparation-source-state") == "archived"
+    unavailable_action = archived_clone.require("profile-preparation-submit")
+    assert unavailable_action.attr("disabled") == ""
+    assert "profile-preparation-source-error" in unavailable_action.attr("aria-describedby")
+    assert unavailable_action.attr("data-preparation-terminal-action") == "unavailable"
     archived_settings = profile_routes.route("archived_settings_focus")
     assert archived_settings.body_attr("data-json-return-url") == (
         f"/profiles/{archived_id}/edit?include_deleted=true"

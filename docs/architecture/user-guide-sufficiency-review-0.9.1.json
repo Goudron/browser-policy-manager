@@ -57,7 +57,7 @@
       "drift_source": ["app/templates/profiles/_page_header.html", "app/static/profiles_platform.js", "app/i18n/*.json"],
       "focused_verification": [
         "./.venv/bin/pytest -q tests/integration/locale/test_locale_matrix.py tests/contract/ui/localization/test_ui_runtime_i18n_contract.py tests/integration/ui/test_light_theme_surface_contract_091.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_primary_routes_render_in_ru_and_zh_cn tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_guided_disclosure_labels_follow_active_locale"
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_primary_routes_render_in_ru_and_zh_cn tests/browser/profiles/test_ui_browser_tabs.py::test_browser_shared_editor_chrome_labels_follow_active_locale"
       ],
       "evidence_type": ["browser_smoke", "documented_simulation_evidence"],
       "evidence_artifact": ["tests/browser/profiles/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_cross_cutting_topics.py"],
@@ -85,7 +85,7 @@
       "drift_source": ["app/api/profiles.py", "app/templates/profiles/_page_wizard.html", "app/presets", "app/compliance/firefox"],
       "focused_verification": [
         "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_schema_validation_topics.py documentation/tests/contract/test_user_guide_import_export_topics.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_imports_firefox_policies_json_in_russian_library tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs"
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_imports_firefox_policies_json_in_russian_library tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_duplicate_opens_preparation_in_a_new_tab"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
       "evidence_artifact": ["tests/browser/profiles/test_ui_browser_tabs.py", "tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py", "documentation/tests/contract/test_user_guide_import_export_topics.py"],
@@ -107,15 +107,15 @@
         "ug-task-review-guided-profile",
         "ug-task-save-export-guided-profile"
       ],
-      "task_or_claim": "Users can traverse all six Guided Editor steps, configure supported control families, review changes, save, and export.",
+      "task_or_claim": "Users can traverse all eight Guided Editor steps, configure supported control families, review changes, save, and export.",
       "prerequisites": "Resolved from each topic prereq and checked against a deterministic Release/ESR profile fixture.",
-      "exact_steps": "Resolved from each topic step/cmd sequence and checked against the six-step Guided runtime mapping.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and checked against the eight-step Guided runtime mapping after atomic preparation.",
       "expected_result": "Resolved from each topic result; saved and exported state matches the selected schema-supported guided controls.",
       "recovery_path": ["ug-troubleshoot-policy-validation", "ug-troubleshoot-schema-mismatch", "ug-troubleshoot-unsaved-changes"],
       "drift_source": ["app/web/firefox_wizard_steps.py", "app/web/firefox_wizard_shell", "app/templates/profiles/_page_wizard*.html", "app/static/profiles_wizard_flow.js"],
       "focused_verification": [
         "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_guided_topics.py tests/integration/firefox/test_firefox_wizard_shell.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_guided_disclosure_labels_follow_active_locale",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_guided_editor_uses_saved_baseline_without_selection_controls",
         "./.venv/bin/pytest -q tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py::test_release_guided_ai_and_vpn_browser_regression_can_save_and_export tests/contract/ui/smoke/test_ui_smoke_profile_workflow.py::test_library_to_editor_browser_regression_can_load_and_save_guided_homepage"
       ],
       "evidence_type": ["browser_smoke", "documented_simulation_evidence"],
@@ -276,7 +276,7 @@
       "drift_source": ["app/static/profiles_library_bootstrap.js", "app/api/profiles.py", "app/templates/profiles/_page_library_workspace.html"],
       "focused_verification": [
         "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_library_topics.py tests/integration/profiles/test_profiles_list_filters_and_include_deleted.py tests/integration/profiles/test_profiles_crud_extended.py",
-        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs"
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure tests/browser/profiles/test_ui_browser_tabs.py::test_browser_smoke_library_duplicate_opens_preparation_in_a_new_tab"
       ],
       "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
       "evidence_artifact": ["tests/browser/profiles/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_library_topics.py"],
@@ -342,7 +342,7 @@
   "execution_record": {
     "browser_smoke": {
       "date": "2026-07-10",
-      "command_scope": "Eight selected browser_ui nodes from tests/browser/profiles/test_ui_browser_tabs.py covering locale/routes, import, Guided disclosure, Library lifecycle, All Settings, JSON, Compare, and Library edit/clone.",
+      "command_scope": "Eight selected browser_ui nodes from tests/browser/profiles/test_ui_browser_tabs.py covering locale/routes, import, Guided disclosure, Library lifecycle, All Settings, JSON, Compare, and atomic duplicate preparation.",
       "result": "pass",
       "result_summary": "8 passed in 164.89s",
       "environment": "Repository Chromium/Selenium harness with isolated test application and database state."

@@ -141,6 +141,26 @@ product surface for that epic:
 - UI-visible version strings if the product exposes them;
 - tests that assert the current version.
 
+### Mandatory Stable-Component Refresh
+
+Every new epic backlog must make the first milestone both *discover* and *apply* stable upstream
+component updates. Split this into a currency-audit task followed immediately by an update task:
+
+1. The audit inventories every supported direct runtime, optional, test/dev, frontend/vendor,
+   browser/driver, and documentation-toolchain component from its authoritative upstream source.
+2. The following task updates every component for which that source offers a newer stable release,
+   together with the required constraints, locks, vendored outputs, licenses, provenance records,
+   archives, and checksums.
+3. Each updated component receives the focused compatibility and supply-chain checks named by the
+   audit; no update may be left as an unverified floating range.
+
+Do not defer a newer stable component merely because its current floor still works, its resolved
+environment happens to be newer, updating it requires a rebuild, or there is no advisory. A
+non-update is permitted only when no supported stable release exists, or when an evidenced
+compatibility, platform, license, security, or upstream-removal constraint makes the update
+unsafe. Such an exception must name its owner, evidence, review/expiry date, and a follow-up task
+in the same backlog. It is never an implicit disposition.
+
 By the end of the backlog, the repository should not describe the new work as belonging to the
 previous target version except in historical notes, archive files, or explicit migration context.
 README is not a version surface for this purpose. Do not add a README task to identify the active
@@ -458,6 +478,10 @@ Before calling a new backlog ready, confirm:
 - first milestone includes local editable-package metadata refresh and external dependency
   currency checks for Python, frontend vendor packages, documentation toolchain components, and
   test/dev dependencies;
+- first milestone follows every such currency check with a task that updates all newer stable
+  supported components and their locks, vendor outputs, license/provenance records, archives, and
+  checksums; any non-update meets the explicit, time-bounded exception rule in
+  `Mandatory Stable-Component Refresh` above;
 - first milestone does not include README target-version anchors, active-target notes, or
   future-version placeholders;
 - a dedicated documentation-update milestone appears before the final quality milestone when the

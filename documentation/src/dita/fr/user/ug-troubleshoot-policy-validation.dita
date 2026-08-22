@@ -13,6 +13,7 @@
       <step><cmd>Revalidez le profil dans le même canal de schéma avant de l'enregistrer ou de l'exporter.</cmd><info><note type="warning">Réessayez uniquement depuis l’interface BPM ; ne modifiez pas les données du profil en dehors de l’application.</note></info></step>
     </steps>
     <result><p>L'erreur de validation est soit résolue, soit documentée comme une valeur brute/non prise en charge délibérée qui ne peut pas être traitée comme prête à être publiée.</p></result>
+    <example id="bpm096-localized-current"><title>Comportement actuel dans 0.9.6</title><p>La création et la duplication utilisent une préparation atomique : une erreur de nom, schéma, préréglage, CIS ou conversion ne crée aucune cible et ne modifie pas la source. Le schéma, le préréglage et CIS sont en lecture seule. Pour corriger une valeur, utilisez son propriétaire : étape 2 pour URL/sites, étape 4 pour certificats et confiance, étape 6 pour extensions; pour changer de schéma, demandez un aperçu explicite de conversion.</p></example>
     <postreq><p>Si l’erreur se répète, arrêtez le flux de travail et contactez le support avec le message visible, le nom du profil, le canal de schéma et la page active.</p></postreq>
   </taskbody>
   <related-links>

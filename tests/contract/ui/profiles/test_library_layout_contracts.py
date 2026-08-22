@@ -92,7 +92,7 @@ def test_library_rows_keep_facts_and_distinct_actions_without_duplicate_open_or_
             "formatTimestamp(profile.updated_at)",
             'data-library-lifecycle-action="${profile.is_deleted ? "restore" : "archive"}"',
             'data-library-lifecycle-action="hard-delete"',
-            'data-clone-profile-id="${profile.id}"',
+            'data-duplicate-preparation-profile-id="${profile.id}"',
         ),
     )
     assert_source_excludes_all(
@@ -126,15 +126,17 @@ def test_library_empty_clone_and_destructive_states_keep_only_actionable_meaning
             't("profiles.confirm_soft_delete")',
             't("profiles.confirm_hard_delete")',
             't("profiles.library_export_unavailable_archived")',
-            't("profiles.clone_name_required")',
-            't("profiles.clone_name_duplicate")',
+            'data-duplicate-preparation-profile-id="${profile.id}"',
+            'href="${buildDuplicatePreparationHref(profile)}"',
+            'target="_blank"',
+            'rel="noopener"',
         ),
     )
     assert_source_excludes_all(
         source + workspace_source,
         (
             't("profiles.empty_list")',
-            't("profiles.clone_name_ready")',
+            "clone_name_ready",
             "list-empty-illustration",
             "clone_handoff",
         ),
@@ -367,16 +369,15 @@ def test_profile_runtime_and_wizard_bootstrap_guard_optional_inputs_contract():
     assert 'nameInput?.addEventListener("input", () => {' in runtime_source
     assert "ownerInput" not in runtime_source
     assert 'descriptionInput?.addEventListener("input", () => {' in runtime_source
-    assert 'profileTypeEl?.addEventListener("change", () => {' in runtime_source
-    assert "if (nameInput) {" in runtime_source
-    assert "if (profileTypeEl) {" in runtime_source
+    assert "profileTypeEl" not in runtime_source
+    assert "nameInput?.addEventListener" in runtime_source
 
     assert "if (!input) return;" in shared_source
     assert "if (!input) return;" in network_source
     assert "!wizardHomepageUrlEl" in network_source
     assert "!wizardProxyUseDnsEl" in network_source
-    assert "managedExtensionFields.filter(Boolean).forEach((input) => {" in extension_source
+    assert 'wizardExtensionRulesEl?.addEventListener("input", applyRuleEditor);' in extension_source
     assert "].filter(Boolean).forEach((input) => {" in extension_source
-    assert "if (wizardNameEl && nameInput) {" in wizard_source
+    assert "wizardNameEl" not in wizard_source
     assert "profile-owner" not in wizard_source
-    assert 'const profileTypeInput = documentRef.getElementById("profile-type");' in wizard_source
+    assert "profile-type" not in wizard_source

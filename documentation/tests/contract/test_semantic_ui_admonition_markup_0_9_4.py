@@ -104,6 +104,8 @@ def test_registered_catalog_ui_names_are_never_bare_in_maintained_prose() -> Non
             if scoped_keys:
                 scoped_text = "\n".join(_outside_text(root, excluded, exclude_notes=True))
                 for key in scoped_keys:
+                    if key in ambiguous:
+                        continue
                     value = catalog[key]
                     if _matches(scoped_text, value, locale=locale):
                         findings.append((locale, relative, key, value))

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-complex-policy-families" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>复杂的火狐浏览器策略系列</title>
-  <shortdesc>将嵌套策略系列作为组进行审查，因为一个导出的值可以组合多个相关的浏览器行为。</shortdesc>
+  <title>复杂 Firefox 策略系列</title>
+  <shortdesc>将嵌套策略系列作为组进行审查，因为一个导出值可以组合多个相关的浏览器行为。</shortdesc>
   <conbody>
-    <section id="a-extensions"><title>扩展</title><p>使用 <codeph>ExtensionSettings</codeph> 进行基于字典的安装规则和未知扩展 ID；仅当该形状与预期的 Firefox 行为匹配时才使用旧版 <codeph>Extensions</codeph>。</p></section>
-    <section id="a-permissions"><title>权限</title><p><codeph>Permissions</codeph> 对摄像头、麦克风、位置、通知、自动播放和类似决策进行分组。一起查看允许/阻止列表，因为一个域可能会受到多个权限分支的影响。</p></section>
-    <section id="a-updates"><title>更新</title><p>更新控件（例如 <codeph>DisableAppUpdate</codeph>、<codeph>AppAutoUpdate</codeph> 和 <codeph>DisableSystemAddonUpdate</codeph>）应作为一个系列进行审查，以便用户了解哪个更新程序保持活动状态。</p></section>
-    <section id="a-certificates"><title>证书</title><p><codeph>Certificates</codeph>可以导入企业根并安装证书文件。将路径和信任行为视为特定于环境的行为，并在部署之前在 BPM 外部验证它们。</p></section>
-    <section id="a-proxy"><title>代理</title><p><codeph>Proxy</codeph> 结合了模式、服务器、端口和协议重用。请仔细验证手动代理值，因为格式错误的地址可能会阻止浏览器网络访问。</p></section>
-    <section id="a-search-homepage"><title>搜索和主页</title><p><codeph>SearchEngines</codeph> 和 <codeph>Homepage</codeph> 塑造第一个用户入口点。搜索 URL 模板必须保留 <codeph>{searchTerms}</codeph>，并且应根据源跟踪检查锁定的主页。</p></section>
-    <section id="a-privacy-ai"><title>隐私和人工智能控制</title><p><codeph>EnableTrackingProtection</codeph> 和 <codeph>Cookies</codeph> 等隐私系列可以与站点例外进行交互。Firefox AI 控件（例如 <codeph>AIControls</codeph>）是要记录的产品策略；它们不会向文档门户添加 AI 功能。选择 Release 153 或 ESR 153.0 架构后，在第 5 步 <uicontrol>AI 与智能功能</uicontrol>中为智能窗口设置 <codeph>AIControls.SmartWindow</codeph>：为 <codeph>Value</codeph> 选择 <codeph>available</codeph> 或 <codeph>blocked</codeph>；当用户不得修改时设置 <codeph>Locked</codeph>。</p></section>
+    <section id="a-extensions"><title>扩展</title><p>使用步骤 6 <uicontrol>扩展</uicontrol>配置 <codeph>ExtensionSettings</codeph> 中允许、阻止、必须安装、锁定和更新规则；只有当该形状符合预期 Firefox 行为时，才使用旧版 <codeph>Extensions</codeph>。AMO 搜索是由用户明确启动的可选名称搜索。BPM 不获取 XPI，也不使用 AMO 结果 URL 进行安装。AMO 不可用时，请手动输入 GUID 和经过验证的安装 URL。手动条目在搜索不可用时仍可保存；请在部署前独立检查 GUID、安装地址和更新规则是否适合目标环境。安装前还应确认扩展发布者、固定版本、目标 Firefox 通道、网络可达性和本地部署审批记录；BPM 只保存策略引用，不能替代实际运行时测试或组织安全审查。</p></section>
+    <section id="a-permissions"><title>权限</title><p><codeph>Permissions</codeph> 对摄像头、麦克风、位置、通知、自动播放和类似功能的决定进行分组。请一起审查允许和阻止列表，因为一个域可能受到多个权限分支的影响。</p></section>
+    <section id="a-updates"><title>更新</title><p><codeph>DisableAppUpdate</codeph>、<codeph>AppAutoUpdate</codeph> 和 <codeph>DisableSystemAddonUpdate</codeph> 等更新控件应作为一个系列审查，以便明确哪个更新程序仍处于活动状态。</p></section>
+    <section id="a-certificates"><title>证书和信任</title><p>使用步骤 4 <uicontrol>证书与信任</uicontrol>配置 <codeph>Certificates</codeph>、企业根证书、身份验证和 <codeph>SecurityDevices</codeph>。证书和设备路径是字面引用。BPM 不上传、打开、哈希、读取或验证证书或设备内容；部署前请在 BPM 外部验证信任行为。</p></section>
+    <section id="a-proxy"><title>代理</title><p><codeph>Proxy</codeph> 组合模式、服务器、端口和协议复用。请仔细验证手动代理值，因为格式错误的地址可能会阻止浏览器网络访问。</p></section>
+    <section id="a-search-homepage"><title>搜索、URL、站点和主页</title><p>步骤 1 负责 <codeph>SearchEngines</codeph>；步骤 2 负责 <codeph>Homepage</codeph>、启动、站点筛选器、处理程序和受管书签。搜索 URL 模板必须保留 <codeph>{searchTerms}</codeph>。不安全或不受支持的导入 URL 和站点形状会保留供审查，不会被静默规范化。</p></section>
+    <section id="a-privacy-ai"><title>隐私和 AI 控件</title><p><codeph>EnableTrackingProtection</codeph> 和 <codeph>Cookies</codeph> 等隐私系列可能与站点例外互相影响。Firefox AI 控件（例如 <codeph>AIControls</codeph>）是产品策略，不会向文档门户添加 AI 功能。选择 Release 153 或 ESR 153.0 架构后，使用步骤 7 <uicontrol>AI</uicontrol>通过 <codeph>AIControls.SmartWindow</codeph> 配置 Smart Window：为 <codeph>Value</codeph> 选择 <codeph>available</codeph> 或 <codeph>blocked</codeph>；当用户不得修改时设置 <codeph>Locked</codeph>。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.fx-task-review-complex-policy-configuration"/>

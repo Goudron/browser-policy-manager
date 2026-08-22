@@ -13,6 +13,7 @@
       <step><cmd>Guarde o duplique nuevamente después de que se borre la sugerencia del nombre.</cmd><info><note type="warning">Vuelva a intentarlo solo desde la interfaz de BPM; no modifique los datos del perfil fuera de la aplicación.</note></info></step>
     </steps>
     <result><p>El perfil o clon tiene un nombre visible único que se puede encontrar más adelante en la <uicontrol>Biblioteca</uicontrol>.</p></result>
+    <example id="bpm096-localized-current"><title>Comportamiento actual en 0.9.6</title><p>La creación y la duplicación usan preparación atómica: un error de nombre, esquema, preajuste, CIS o conversión no crea destino ni cambia el origen. El esquema, el preajuste y CIS se muestran en solo lectura. Para corregir un valor use su propietario: paso 2 para URL/sitios, paso 4 para certificados y confianza, paso 6 para extensiones; para cambiar el esquema solicite una vista previa explícita de conversión.</p></example>
     <postreq><p>Si el error se repite, detenga el flujo de trabajo y contacte con el soporte indicando el mensaje visible, el nombre del perfil, el canal de esquema y la página actual.</p></postreq>
   </taskbody>
   <related-links>

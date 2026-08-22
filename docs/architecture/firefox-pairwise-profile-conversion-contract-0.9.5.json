@@ -123,6 +123,11 @@
       "schema_version",
       "flags",
       "compliance",
+      "baseline_provenance",
+      "extension_provenance",
+      "certificate_provenance",
+      "preparation_idempotency_key",
+      "preparation_request_fingerprint",
       "revision",
       "created_at",
       "updated_at",
@@ -133,6 +138,8 @@
       "schema_version",
       "flags",
       "compliance",
+      "extension_provenance",
+      "certificate_provenance",
       "revision"
     ],
     "database_managed_fields": [
@@ -143,6 +150,9 @@
       "name",
       "name_casefold",
       "description",
+      "baseline_provenance",
+      "preparation_idempotency_key",
+      "preparation_request_fingerprint",
       "created_at",
       "deleted_at"
     ],
@@ -598,6 +608,8 @@
           "schema_version",
           "flags",
           "compliance",
+          "extension_provenance",
+          "certificate_provenance",
           "revision"
         ],
         "database_managed_fields": [
@@ -608,6 +620,9 @@
           "name",
           "name_casefold",
           "description",
+          "baseline_provenance",
+          "preparation_idempotency_key",
+          "preparation_request_fingerprint",
           "created_at",
           "deleted_at"
         ],

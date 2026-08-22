@@ -4,7 +4,7 @@
   <title>Seleccionar una línea base de CIS y un ajuste preestablecido inicial</title>
   <shortdesc>Seleccione el canal de esquema de Firefox, el ajuste preestablecido de inicio y la capa CIS que coincidan con el objetivo de implementación antes de una revisión detallada.</shortdesc>
   <taskbody>
-    <prereq><p>Tiene un borrador de perfil, sabe si el navegador de destino sigue el esquema Firefox Release 153, ESR 153.0, ESR 140.13 o ESR 115.39 y puede revisar los valores antes de exportarlos.</p></prereq>
+    <prereq><p>Abra la preparación para crear o duplicar un perfil, determine si el navegador de destino sigue el comportamiento del esquema Firefox Release 153, ESR 153.0, ESR 140.13 o ESR 115.39 y prepárese para revisar los valores antes de exportarlos.</p></prereq>
     <context><p>Un ajuste preestablecido inicial expresa la forma del entorno, mientras que una capa CIS agrega la línea base de endurecimiento asignada de BPM. Utilice ambos como entradas revisadas, no como aprobación automática de implementación.</p></context>
     <steps>
       <step><cmd>Seleccione el canal de esquema de Firefox que coincida con la implementación de destino: Release 153, ESR 153.0, ESR 140.13 o ESR 115.39.</cmd><info><p>Resultado esperado: BPM valida las políticas disponibles y <uicontrol>Preferencias gestionadas</uicontrol> contra el canal previsto. Las capas CIS generadas solo existen para ESR 140.13 y Release 153, no para ESR 153.0 ni ESR 115.39.</p></info></step>
@@ -15,6 +15,7 @@
       <step><cmd>Valide y exporte solo después de que se documenten el canal seleccionado, el valor preestablecido, el nivel CIS y las decisiones manuales.</cmd><info><p>Resultado esperado: el <codeph>policies.json</codeph> exportado se puede revisar y está vinculado a la línea base de BPM elegida.</p></info></step>
     </steps>
     <result><p>El perfil tiene un valor inicial preestablecido deliberado, una capa CIS compatible, atribución de fuente visible y una lista clara de tareas de verificación manual restantes.</p></result>
+    <example id="bpm096-localized-current"><title>Comportamiento actual en 0.9.6</title><p>El esquema, el preajuste inicial y la línea base CIS se eligen antes de crear el perfil guardado. Las fuentes baseline, CIS, manual, imported, converted y raw sirven para revisar, no prueban conformidad. Los certificados y la confianza tienen un registro separado por ruta; los estados manual, imported, converted, raw, unavailable y blocked requieren revisión manual.</p></example>
     <postreq><p>Si la línea base es demasiado estricta o demasiado permisiva, elimine la capa CIS o cambie el ajuste preestablecido inicial, revalide y repita la revisión antes de exportar.</p></postreq>
   </taskbody>
   <related-links>

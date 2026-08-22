@@ -77,13 +77,16 @@
     "include_glob": "app/static/profiles_modules/**",
     "modules": [
       "app/static/profiles_modules/compare_state.mjs",
+      "app/static/profiles_modules/certificate_policy.mjs",
       "app/static/profiles_modules/conversion_recommendation.mjs",
       "app/static/profiles_modules/conversion_review.mjs",
       "app/static/profiles_modules/dirty_route_guard.mjs",
+      "app/static/profiles_modules/navigation_url.mjs",
       "app/static/profiles_modules/policy_document.mjs",
       "app/static/profiles_modules/preference_values.mjs",
       "app/static/profiles_modules/profile_list_url.mjs",
       "app/static/profiles_modules/review_state.mjs",
+      "app/static/profiles_modules/website_filter.mjs",
       "app/static/profiles_modules/workspace_state.mjs"
     ],
     "line_threshold_percent": 100,

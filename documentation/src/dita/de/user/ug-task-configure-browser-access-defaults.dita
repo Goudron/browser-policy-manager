@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-browser-access-defaults" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Browserzugriff und Standardeinstellungen konfigurieren</title>
-  <shortdesc>Verwenden Sie Schritt 2, um den Browserzugriff, das Netzwerkverhalten und die Grundeinstellungen zu konfigurieren.</shortdesc>
+  <shortdesc>Verwenden Sie Schritt 1 für Browserverhalten, Netzwerkzugriff und Suche, ohne URLs oder Websites zu duplizieren.</shortdesc>
   <taskbody>
-    <prereq><p>Ein geführter Profilentwurf ist geöffnet.</p></prereq>
-    <context><p>Die Einstellungen für Browserzugriff und Standardwerte bestimmen, ob Firefox Ressourcen erreichen kann und wie sich der Browser verhält, bevor inhaltsspezifische Richtlinien ausgewählt werden.</p></context>
+    <prereq><p>Ein gespeichertes Profil ist im <uicontrol>Geführten Editor</uicontrol> geöffnet.</p></prereq>
+    <context><p><uicontrol>Browser, Netzwerk &amp; Suche</uicontrol> enthält Browserverhalten, Netzwerkzugriff und Suche. Startseite, Startverhalten, Websitefilter, Handler und verwaltete Lesezeichen gehören ausschließlich zu Schritt 2.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 2 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 1 <uicontrol>Browser, Netzwerk &amp; Suche</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Nur Steuerelemente dieser Domäne sind sichtbar.</p></info></step>
       <step><cmd>Überprüfen Sie die Netzwerkzugriffs- und Browserverhaltenskontrollen für die Bereitstellung.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Legen Sie grundlegende Standardeinstellungen fest, bevor Sie Start-, Such- oder navigationsspezifische Optionen hinzufügen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 2 für Startseite oder Website-Navigation, statt diese Regeln hier zu erzeugen.</cmd><info><p>Erwartetes Ergebnis: Jede URL-/Website-Richtlinie hat einen Eigentümer.</p></info></step>
       <step><cmd>Validierungswarnungen, die neben schemaabhängigen Steuerelementen angezeigt werden.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
     <result><p>Das Profil verfügt über absichtlichen Browserzugriff und Standardverhaltenseinstellungen.</p></result>
-    <postreq><p>Wiederherstellung: Wenn bei der Validierung ein Wert beanstandet wird, machen Sie die letzte Änderung rückgängig oder verwenden Sie <uicontrol>Alle Einstellungen</uicontrol>, um die Rohform der Richtlinie zu überprüfen.</p></postreq>
+    <postreq><p>Wiederherstellung: Machen Sie die letzte Änderung rückgängig oder prüfen Sie die Rohform in <uicontrol>Alle Einstellungen</uicontrol>. Verwenden Sie für URL, Website, Handler oder verwaltetes Lesezeichen Schritt 2.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

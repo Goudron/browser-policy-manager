@@ -15,7 +15,8 @@
       <step><cmd>Valide, exporte <codeph>policies.json</codeph> y ejecute una verificación de implementación independiente con el tiempo de ejecución, el sistema operativo, la red o el método de auditoría aprobados por el propietario.</cmd><info><p>Resultado esperado: el perfil reforzado tiene un artefacto de exportación, un resultado de validación, evidencia de comparación y evidencia de verificación externa.</p></info></step>
     </steps>
     <result><p>El perfil reforzado representativo de Nivel 2 se puede revisar de principio a fin y permanece limitado por la evidencia de mapeo, exportación y atribución de fuente de BPM.</p></result>
-    <postreq><p>Si una verificación independiente encuentra riesgo de implementación, mantenga el perfil como borrador y actualice el registro de decisión externo antes de reutilizarlo.</p></postreq>
+    <example id="bpm096-localized-current"><title>Comportamiento actual en 0.9.6</title><p>El esquema, el preajuste inicial y la línea base CIS se eligen antes de crear el perfil guardado. Las fuentes baseline, CIS, manual, imported, converted y raw sirven para revisar, no prueban conformidad. Los certificados y la confianza tienen un registro separado por ruta; los estados manual, imported, converted, raw, unavailable y blocked requieren revisión manual.</p></example>
+    <postreq><p>Si una verificación independiente detecta un riesgo de implementación, suspenda la reutilización del perfil guardado y actualice el registro de decisión externo.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-levels-channels-layers"/>

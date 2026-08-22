@@ -137,7 +137,7 @@ if (-not $IsWindows) {
     throw 'Windows MSI assembly must run on a native Windows x64 host.'
 }
 if (-not [Environment]::Is64BitOperatingSystem) {
-    throw 'BPM 0.9.5.1 Windows MSI supports x64 hosts only.'
+    throw 'BPM 0.9.6 Windows MSI supports x64 hosts only.'
 }
 if (-not (Get-Command wix -ErrorAction SilentlyContinue)) {
     throw 'WiX Toolset is missing; install the pinned wix dotnet tool before building.'

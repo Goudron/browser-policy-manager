@@ -146,7 +146,7 @@ def test_english_json_editor_topics_cover_valid_and_invalid_end_to_end_examples(
         "locked",
         "normalized profile model",
         "All Settings",
-        "raw values",
-        "migration checks",
+        "raw document",
+        "conversion review",
     ):
         assert required.casefold() in text.casefold()

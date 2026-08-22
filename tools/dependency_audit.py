@@ -253,16 +253,31 @@ def main(argv: list[str] | None = None) -> int:
     artifact_dir.mkdir(parents=True, exist_ok=True)
     suppressions = load_suppressions(args.suppressions)
     print(f"Dependency audit evidence: {artifact_dir}", flush=True)
+    total_components = (0 if args.skip_python else 2) + (0 if args.skip_npm else 1)
+    completed_components = 0
 
     if not args.skip_python:
         with tempfile.TemporaryDirectory(prefix="bpm-dependency-audit-") as temporary:
             root = Path(temporary)
+            print(
+                f"Dependency audit: component {completed_components + 1}/{total_components} — Python base",
+                flush=True,
+            )
             base_python = _build_environment(root, "base", ".")
             _python_evidence(
                 name="base",
                 python=base_python,
                 artifact_dir=artifact_dir,
                 suppressions=suppressions,
+            )
+            completed_components += 1
+            print(
+                f"Dependency audit: completed {completed_components}/{total_components} — Python base",
+                flush=True,
+            )
+            print(
+                f"Dependency audit: component {completed_components + 1}/{total_components} — Python all extras",
+                flush=True,
             )
             all_extras_python = _build_environment(root, "all-extras", ".[dev,postgres,ai]")
             _python_evidence(
@@ -271,6 +286,11 @@ def main(argv: list[str] | None = None) -> int:
                 artifact_dir=artifact_dir,
                 suppressions=suppressions,
             )
+            completed_components += 1
+            print(
+                f"Dependency audit: completed {completed_components}/{total_components} — Python all extras",
+                flush=True,
+            )
 
     if not args.skip_npm:
         binary = REPO_ROOT / "node_modules" / ".bin" / "cyclonedx-npm"
@@ -278,9 +298,21 @@ def main(argv: list[str] | None = None) -> int:
             raise RuntimeError(
                 "npm dependencies are absent; run `npm ci` before `make dependency-audit`"
             )
+        print(
+            f"Dependency audit: component {completed_components + 1}/{total_components} — npm lock and SBOM",
+            flush=True,
+        )
         _npm_evidence(artifact_dir)
+        completed_components += 1
+        print(
+            f"Dependency audit: completed {completed_components}/{total_components} — npm lock and SBOM",
+            flush=True,
+        )
 
-    print("Dependency audits and CycloneDX SBOM generation passed", flush=True)
+    print(
+        f"Dependency audits and CycloneDX SBOM generation passed ({completed_components}/{total_components})",
+        flush=True,
+    )
     return 0
 
 

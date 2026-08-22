@@ -289,7 +289,7 @@ def test_browser_schema_conversion_library_recommendations_are_catalog_derived_a
                     "recommendation_id": ["schema-conversion.older-esr-recommendation"],
                 }
                 assert "DisableTelemetry" not in parsed.query
-                assert entry.get_attribute("aria-describedby")
+                assert not entry.get_attribute("aria-describedby")
                 accessible_name = entry.get_attribute("aria-label")
                 assert "ESR 140.13" in accessible_name or "ESR 115.39" in accessible_name
                 assert "ESR 153.0" in accessible_name
@@ -329,9 +329,7 @@ def test_browser_schema_conversion_library_recommendations_are_catalog_derived_a
                     )[0]
                     in entry.text
                 )
-                assert catalog_locale[
-                    "profiles.schema_conversion_recommendation_consequence"
-                ].split("{source_schema}")[0] in _body_text(driver)
+                assert "profiles.schema_conversion_recommendation_consequence" not in catalog_locale
 
             entry = driver.find_element(
                 by.By.CSS_SELECTOR,

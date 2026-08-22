@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>浏览“引导式编辑器”的六个步骤</title>
-  <shortdesc>依次配置配置档案、浏览器访问、安全性、用户和网站、智能功能，以及检查和导出。</shortdesc>
-  <taskbody>
-    <prereq><p>从资料<uicontrol>库</uicontrol>或创建流程中打开“<uicontrol>引导式编辑器</uicontrol>”中的配置档案。</p></prereq>
-    <context><p>“<uicontrol>引导式编辑器</uicontrol>”将配置档案配置分为六个步骤，并在您工作时显示架构验证状态。</p>
+  <title>使用引导式编辑器的八个步骤</title>
+  <shortdesc>准备工作创建已保存的配置文件后，在八个面向任务的步骤中进行配置。</shortdesc>
+  <taskbody><prereq><p>从<uicontrol>资料库</uicontrol>、创建流程或复制准备流程，在<uicontrol>引导式编辑器</uicontrol>中打开已保存的配置文件。</p></prereq><context><p>编辑器标题栏将所选架构、预设和 CIS 基线显示为只读事实。只能通过新的准备操作或明确的架构转换修改这些选择。编辑器有八个步骤，每个策略系列只有一个引导式归属位置。</p>
       <fig id="screenshot-guided-editor-overview">
-        <title>“引导式编辑器”概述</title>
+        <title>引导式编辑器顶部</title>
         <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
-        <alt>“引导式编辑器”显示已保存配置档案的步骤导航和验证状态。</alt>
+          <alt>引导式编辑器显示只读的架构、预设和 CIS 基线信息以及八步导航。</alt>
         </image>
       </fig>
-      <p>对于已保存的配置档案，仅在决定更改通道后才打开架构转换复核：先保留未保存的工作，选择不同的受支持目标，并在明确应用前使用只读预览。</p>
-    </context>
-    <steps>
-      <step><cmd>在第 1 步确认名称、架构通道、场景、初始预设和 CIS 层。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
-      <step><cmd>在第 2 步配置网络访问、浏览器行为、主页、<uicontrol>搜索和导航</uicontrol>默认值。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
-      <step><cmd>在第 3 步配置隐私、权限、Cookie、清理、DNS 和安全性。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
-      <step><cmd>在第 4 步配置帐户、扩展、书签、语言、翻译和网站规则。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
-      <step><cmd>在第 5 步仅配置所选架构支持的 Firefox AI 和智能功能策略。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
-      <step><cmd>在第 6 步验证、保存并导出配置档案。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
-    </steps>
-    <result><p>您可以确定每项引导设置的位置，并从正确的步骤继续操作。</p></result>
-    <postreq><p>恢复：如果进入了错误的区域，请转到相应步骤或使用搜索，不要更改无关设置。</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-task-search-guided-settings"/>
-    <link keyref="topic.ug-task-review-guided-profile"/>
-  </related-links>
+      <fig id="screenshot-guided-step-6-extensions">
+        <title>扩展</title>
+        <image keyref="screenshot.guided-step-6-extensions" placement="break" scalefit="yes" align="center">
+          <alt>引导式编辑器第 6 步显示 AMO 搜索和手动扩展规则输入。</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>在步骤 1 <uicontrol>浏览器、网络与搜索</uicontrol>中设置浏览器行为、网络访问和搜索。</cmd><info><p>此处不包含 URL、站点或证书控件。</p></info></step>
+<step><cmd>在步骤 2 <uicontrol>URL、网站与导航</uicontrol>中设置主页、启动、允许或阻止的站点、处理程序和受管书签。</cmd><info><p>导航值将一起审查。</p></info></step>
+<step><cmd>在步骤 3 <uicontrol>安全与隐私</uicontrol>中设置隐私、权限、Cookie、清理、DNS 和加固状态。</cmd><info><p>隐私决定与证书信任分开。</p></info></step>
+<step><cmd>在步骤 4 <uicontrol>证书与信任</uicontrol>中设置证书引用、企业根证书、身份验证和安全设备。</cmd><info><p>BPM 保存字面引用，不读取证书或设备内容。</p></info></step>
+<step><cmd>在步骤 5 <uicontrol>用户、语言与同步</uicontrol>中设置架构支持的身份、语言和同步控件。</cmd><info><p>不会重复扩展或站点规则。</p></info></step>
+<step><cmd>在步骤 6 <uicontrol>扩展</uicontrol>中设置允许、阻止、必须安装、锁定和更新规则。</cmd><info><p>AMO 搜索是可选且明确启动的；不可用时仍可手动输入 GUID 和经过验证的安装 URL。</p></info></step>
+<step><cmd>在步骤 7 <uicontrol>AI</uicontrol>中仅设置受支持的 Firefox AI 和智能功能策略。</cmd><info><p>不受支持的控件在所选架构中仍不可用。</p></info></step>
+<step><cmd>在步骤 8 <uicontrol>检查并导出</uicontrol>中解决待处理项、验证、保存并导出。</cmd><info><note type="warning">架构警告、原始回退、CIS 人工审查项或转换阻止项都需要可见的审查决定；切换其他步骤不会静默修复它们。</note></info></step>
+</steps><result><p>您可以找到每个策略系列，并区分只读基线事实和可编辑设置。</p></result><postreq><p>恢复：如果设置位于错误的上下文，请使用步骤导航、设置搜索或审查跳转。更改架构时，保存或有意放弃当前修改，请求只读转换预览，并且只应用当前可用的计划。</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-configure-browser-access-defaults"/><link keyref="topic.ug-task-configure-security-privacy"/><link keyref="topic.fx-task-review-complex-policy-configuration"/></related-links>
 </task>

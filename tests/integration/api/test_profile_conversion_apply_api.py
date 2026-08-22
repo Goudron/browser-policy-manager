@@ -126,6 +126,72 @@ def test_conversion_apply_rederives_current_plan_and_updates_only_owned_fields()
         assert after[field] == before[field]
 
 
+def test_conversion_apply_marks_retained_extension_values_converted() -> None:
+    with make_test_client(app) as client:
+        profile = _create_profile(
+            client,
+            name="Apply extension provenance",
+            schema_version="esr-140.13",
+            flags={
+                "ExtensionSettings": {
+                    "addon@example.test": {"installation_mode": "allowed"},
+                },
+            },
+        )
+        before = client.get(f"/api/profiles/{profile['id']}").json()
+        preview = _preview(client, profile["id"], "esr-153.0")
+        response = client.post(
+            f"/api/profiles/{profile['id']}/conversion-apply",
+            json=_apply_payload(preview),
+        )
+        after = client.get(f"/api/profiles/{profile['id']}").json()
+
+    assert response.status_code == status.HTTP_200_OK, response.text
+    assert before["extension_provenance"]["paths"] == {
+        "/ExtensionSettings/addon@example.test/installation_mode": "manual",
+    }
+    assert after["flags"] == before["flags"]
+    assert after["extension_provenance"]["paths"] == {
+        "/ExtensionSettings/addon@example.test/installation_mode": "converted",
+    }
+    assert response.json()["field_accounting"]["application_write_fields"] == [
+        "schema_version",
+        "flags",
+        "compliance",
+        "extension_provenance",
+        "certificate_provenance",
+        "revision",
+    ]
+
+
+def test_conversion_apply_marks_certificate_values_converted_without_changing_baseline() -> None:
+    flags = {"Certificates": {"ImportEnterpriseRoots": True}}
+    with make_test_client(app) as client:
+        profile = _create_profile(
+            client,
+            name="Apply certificate provenance",
+            schema_version="esr-140.13",
+            flags=flags,
+        )
+        before = client.get(f"/api/profiles/{profile['id']}").json()
+        preview = _preview(client, profile["id"], "esr-153.0")
+        response = client.post(
+            f"/api/profiles/{profile['id']}/conversion-apply",
+            json=_apply_payload(preview),
+        )
+        after = client.get(f"/api/profiles/{profile['id']}").json()
+
+    assert response.status_code == status.HTTP_200_OK, response.text
+    assert after["flags"] == flags
+    assert before["certificate_provenance"]["paths"] == {
+        "/Certificates/ImportEnterpriseRoots": "manual",
+    }
+    assert after["certificate_provenance"]["paths"] == {
+        "/Certificates/ImportEnterpriseRoots": "converted",
+    }
+    assert after["baseline_provenance"] == before["baseline_provenance"]
+
+
 def test_conversion_apply_rejects_stale_retry_and_never_accepts_client_candidates():
     with make_test_client(app) as client:
         profile = _create_profile(
@@ -226,6 +292,27 @@ def test_conversion_apply_blocks_target_invalid_plan_and_preserves_full_row():
             name="Apply blocked",
             schema_version="esr-153.0",
             flags={"AIControls": {"Default": {"Value": "blocked", "Locked": True}}},
+        )
+        before = client.get(f"/api/profiles/{profile['id']}").json()
+        preview = _preview(client, profile["id"], "esr-115.39")
+        assert preview["compatibility"]["applicable"] is False
+        response = client.post(
+            f"/api/profiles/{profile['id']}/conversion-apply",
+            json=_apply_payload(preview),
+        )
+        after = client.get(f"/api/profiles/{profile['id']}").json()
+
+    _assert_error(response, status_code=409, code="conversion_plan_blocked")
+    assert after == before
+
+
+def test_conversion_apply_blocks_unsupported_certificate_policy_without_writing() -> None:
+    with make_test_client(app) as client:
+        profile = _create_profile(
+            client,
+            name="Apply unsupported certificate policy",
+            schema_version="esr-153.0",
+            flags={"MicrosoftEntraSSO": True},
         )
         before = client.get(f"/api/profiles/{profile['id']}").json()
         preview = _preview(client, profile["id"], "esr-115.39")

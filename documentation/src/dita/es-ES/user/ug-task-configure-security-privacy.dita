@@ -4,8 +4,15 @@
   <title>Configurar seguridad y privacidad</title>
   <shortdesc>Utilice el Paso 3 para conocer la postura de privacidad, los permisos, las cookies, la limpieza, DNS y los controles de refuerzo.</shortdesc>
   <taskbody>
-    <prereq><p>Hay un borrador de perfil guiado abierto en el canal de esquema previsto.</p></prereq>
-    <context><p>Los ajustes de seguridad y privacidad pueden cambiar tanto la experiencia del usuario como el nivel de riesgo. Revise las advertencias antes de guardar.</p></context>
+    <prereq><p>Hay un perfil guardado abierto en el <uicontrol>Editor guiado</uicontrol> con el esquema previsto de solo lectura.</p></prereq>
+    <context><p><uicontrol>Seguridad y privacidad</uicontrol> puede cambiar la experiencia y el nivel de riesgo. Los certificados, raíces empresariales, autenticación y dispositivos de seguridad pertenecen solo al paso 4.</p>
+      <fig id="screenshot-guided-step-4-certificates-trust">
+        <title>Certificados y confianza</title>
+        <image keyref="screenshot.guided-step-4-certificates-trust" placement="break" scalefit="yes" align="center">
+          <alt>Paso 4 del editor guiado con controles de postura de confianza y referencias de certificados.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
       <step><cmd>Abra el paso 3 de la configuración guiada.</cmd><info><p>Resultado esperado: el perfil guiado permanece coherente.</p></info></step>
       <step><cmd>Configurar controles de privacidad y permisos predeterminados.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
@@ -13,7 +20,7 @@
       <step><cmd>Verifique los mensajes de validación y explique cualquier excepción en la revisión.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
     <result><p>El perfil tiene una postura de seguridad y privacidad revisada.</p></result>
-    <postreq><p>Recuperación: si el flujo de trabajo de un sitio se interrumpe, revise la configuración de permisos o cookies y compárela con el objetivo del perfil.</p></postreq>
+    <postreq><p>Recuperación: revise de nuevo los permisos o las cookies. Para certificados, raíces empresariales o autenticación, use el paso 4 y verifique el comportamiento en tiempo de ejecución fuera de BPM.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-users-addons-sites"/>

@@ -15,6 +15,7 @@
       <step><cmd>重新打开配置文件并确认源属性仍然显示该值是基线、CIS、手动、导入还是原始。</cmd><info><p>预期结果：以后的审阅者可以跟踪配置的值并找到外部记录。</p></info></step>
     </steps>
     <result><p>CIS 偏差具有可操作的验证证据、外部异常记录和可见的 BPM 源归因。</p></result>
+    <example id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>在创建已保存配置文件前选择架构、初始预设和 CIS 基线。baseline、CIS、manual、imported、converted 和 raw 来源仅用于审查，不是合规证明。证书和信任使用独立的路径台账；manual、imported、converted、raw、unavailable 和 blocked 状态都需要人工审查。</p></example>
     <postreq><p>如果审核者无法验证导出的路径或外部证据，请将该项目保留在手动审核中，并且不要将其描述为合规。</p></postreq>
   </taskbody>
   <related-links>

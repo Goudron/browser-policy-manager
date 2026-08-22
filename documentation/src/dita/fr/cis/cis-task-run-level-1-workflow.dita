@@ -15,6 +15,7 @@
       <step><cmd>Validez le profil, exportez <codeph>policies.json</codeph> et effectuez la vérification de déploiement indépendante approuvée en dehors de BPM.</cmd><info><p>Résultat attendu : le document exporté, le résultat de la validation, la note de comparaison et l'enregistrement de vérification externe peuvent être examinés ensemble.</p></info></step>
     </steps>
     <result><p>Le profil renforcé représentatif de niveau 1 est créé, inspecté dans <uicontrol>Éditeur guidé</uicontrol> et <uicontrol>Tous les paramètres</uicontrol>, comparé, exporté et vérifié de manière indépendante avec des preuves traçables.</p></result>
+    <example id="bpm096-localized-current"><title>Comportement actuel dans 0.9.6</title><p>Le schéma, le préréglage de départ et la ligne de base CIS sont choisis avant le profil enregistré. Les sources baseline, CIS, manual, imported, converted et raw servent à la vérification et ne prouvent pas la conformité. Les certificats et la confiance ont un registre distinct par chemin; les états manual, imported, converted, raw, unavailable et blocked exigent une vérification manuelle.</p></example>
     <postreq><p>Si une ligne de recommandation ne contient pas de table de mappage générée, de chemin de sujet de stratégie Firefox concerné, de chemin d'exportation ou d'enregistrement de vérification externe, laissez le flux de travail ouvert.</p></postreq>
   </taskbody>
   <related-links>

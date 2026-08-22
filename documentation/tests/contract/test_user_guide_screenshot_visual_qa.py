@@ -21,8 +21,7 @@ def _json(path: Path) -> dict[str, object]:
 def test_user_guide_screenshot_visual_qa_records_complete_review_scope() -> None:
     matrix = _json(MATRIX)
     qa = _json(VISUAL_QA)
-    matrix_rows = matrix["matrix"]
-    scenario_ids = {scenario["scenario_id"] for scenario in matrix["scenarios"]}
+    source_refresh = matrix["source_refresh"]
 
     assert qa["schema_version"] == 1
     assert qa["target_bpm_version"] == "0.9.1"
@@ -37,12 +36,43 @@ def test_user_guide_screenshot_visual_qa_records_complete_review_scope() -> None
     }
 
     coverage = qa["coverage"]
-    assert coverage["rows_expected"] == len(matrix_rows)
-    assert coverage["rows_reviewed"] == len(matrix_rows)
+    assert coverage["rows_expected"] == coverage["rows_reviewed"] == 36
     assert coverage["locales_reviewed"] == list(LOCALES)
-    assert set(coverage["scenarios_reviewed"]) == scenario_ids
-    assert set(coverage["viewports_reviewed"]) == {row["viewport"] for row in matrix_rows}
-    assert set(coverage["themes_reviewed"]) == {row["theme"] for row in matrix_rows}
+    assert set(coverage["scenarios_reviewed"]) == {
+        "library-overview",
+        "guided-editor-overview",
+        "guided-settings-search",
+        "all-settings-review",
+        "json-editor",
+        "compare-profiles",
+    }
+    assert set(coverage["viewports_reviewed"]) == {"desktop", "narrow"}
+    assert set(coverage["themes_reviewed"]) == {"light", "dark"}
+
+    assert len(matrix["matrix"]) == 66
+    assert source_refresh["owner"] == "BPM096-M10-04"
+    assert source_refresh["status"] == "source-capture-complete"
+    assert source_refresh["capture_scope"] == {
+        "new_rows_captured": 30,
+        "current_matrix_rows": 66,
+        "evidence_boundary": (
+            "The 30 new localized source PNGs complete the M10-04 capture scope. Rendered "
+            "site/PDF visual acceptance is not asserted here and remains owned by "
+            "BPM096-M10-07 and BPM096-M10-08."
+        ),
+    }
+    assert qa["subsequent_source_refresh"] == {
+        "owner": "BPM096-M10-04",
+        "matrix_rows": 66,
+        "new_rows_captured": 30,
+        "source_capture_status": "source-capture-complete",
+        "visual_acceptance_status": "not-reviewed",
+        "visual_acceptance_owners": ["BPM096-M10-07", "BPM096-M10-08"],
+        "scope_boundary": (
+            "This accepted BPM091 record reviews its historical 36-row matrix only. It cannot "
+            "accept the later 66-row BPM096 source matrix or rendered site/PDF output."
+        ),
+    }
 
 
 def test_user_guide_screenshot_visual_qa_blocks_release_until_locale_findings_close() -> None:

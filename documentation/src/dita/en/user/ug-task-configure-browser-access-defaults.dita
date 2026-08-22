@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-browser-access-defaults" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Configure browser access and defaults</title>
-  <shortdesc>Use Step 2 to configure browser access, network behavior, and baseline defaults.</shortdesc>
+  <shortdesc>Use Step 1 to configure browser behavior, network access, and search without duplicating URL or site controls.</shortdesc>
   <taskbody>
-    <prereq><p>A Guided profile draft is open.</p></prereq>
-    <context><p><uicontrol>Browser access &amp; defaults</uicontrol> collects controls that shape whether Firefox can reach resources and how it behaves before content-specific policy choices.</p></context>
+    <prereq><p>A saved profile is open in <uicontrol>Guided editor</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Browser, network, and search</uicontrol> collects browser behavior, network access, and search controls. Homepage, startup, site filters, handlers, and managed bookmarks belong only to Step 2.</p></context>
     <steps>
-      <step><cmd>Open Step 2, <uicontrol>Browser access &amp; defaults</uicontrol>.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Review network access and browser behavior controls for the deployment.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Set baseline defaults before adding home, search, or navigation-specific choices.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Open Step 1, <uicontrol>Browser, network, and search</uicontrol>.</cmd><info><p>Expected result: only this domain's controls are visible.</p></info></step>
+      <step><cmd>Review browser behavior, network access, and search controls for the deployment.</cmd><info><p>Expected result: network and search choices are intentional.</p></info></step>
+      <step><cmd>Open Step 2 for homepage or site-navigation controls rather than recreating them here.</cmd><info><p>Expected result: each URL/site policy has one Guided owner.</p></info></step>
       <step><cmd>Validate warnings shown next to schema-dependent controls.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
     </steps>
     <result><p>The profile has intentional browser access and default-behavior settings.</p></result>
-    <postreq><p>Recovery: if validation flags a value, undo the last change or use <uicontrol>All settings</uicontrol> to inspect the raw policy shape.</p></postreq>
+    <postreq><p>Recovery: if validation flags a value, undo the last change or use <uicontrol>All settings</uicontrol> to inspect the raw policy shape. Use Step 2 when the affected value is a URL, site, handler, or managed bookmark.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

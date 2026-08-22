@@ -15,6 +15,7 @@
       <step><cmd>Validieren und exportieren Sie erst, nachdem die Quelle und die Entscheidung für einen anderen Prüfer verständlich sind.</cmd><info><p>Erwartetes Ergebnis: Der exportierte <codeph>policies.json</codeph> spiegelt eine überprüfte Auswahl wider, während die reine BPM-Attribution im Profil verbleibt.</p></info></step>
     </steps>
     <result><p>Der konfigurierte Wert kann als Baseline, CIS, manuell, importiert oder roh erklärt werden, mit einer sichtbaren Zusammenführungsentscheidung und einem Überprüfungsstatus.</p></result>
+    <example id="bpm096-localized-current"><title>Aktuelles Verhalten in 0.9.6</title><p>Schema, Startvoreinstellung und CIS-Basislinie werden vor dem gespeicherten Profil gewählt. Die Herkunft baseline, CIS, manual, imported, converted und raw ist ein Prüfmittel, kein Konformitätsnachweis. Für Zertifikate und Vertrauen gibt es einen getrennten Pfadnachweis; manual, imported, converted, raw, unavailable und blocked erfordern eine manuelle Prüfung.</p></example>
     <postreq><p>Wenn die Zuordnung nicht eindeutig ist, vergleichen Sie das Profil mit einem leeren Profil plus derselben CIS-Ebene und überprüfen Sie dann Importe und manuelle Änderungen.</p></postreq>
   </taskbody>
   <related-links>

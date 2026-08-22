@@ -15,6 +15,7 @@
       <step><cmd>Valide y exporte solo después de que la fuente y la decisión sean comprensibles para otro revisor.</cmd><info><p>Resultado esperado: el <codeph>policies.json</codeph> exportado refleja una elección revisada, mientras que la atribución solo de BPM permanece en el perfil.</p></info></step>
     </steps>
     <result><p>El valor configurado se puede explicar como línea base, CIS, manual, importado o sin procesar, con una decisión de fusión visible y un estado de revisión.</p></result>
+    <example id="bpm096-localized-current"><title>Comportamiento actual en 0.9.6</title><p>El esquema, el preajuste inicial y la línea base CIS se eligen antes de crear el perfil guardado. Las fuentes baseline, CIS, manual, imported, converted y raw sirven para revisar, no prueban conformidad. Los certificados y la confianza tienen un registro separado por ruta; los estados manual, imported, converted, raw, unavailable y blocked requieren revisión manual.</p></example>
     <postreq><p>Si la atribución es ambigua, compare el perfil con un perfil en blanco más la misma capa CIS y luego inspeccione las importaciones y los cambios manuales.</p></postreq>
   </taskbody>
   <related-links>

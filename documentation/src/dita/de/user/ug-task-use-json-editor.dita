@@ -12,6 +12,7 @@
           <alt>JSON-Editor zeigt bearbeitbare Firefox-Richtlinien im JSON-Format für ein gespeichertes Profil.</alt>
         </image>
       </fig>
+      <p>Die Kopfzeile zeigt Schema, Voreinstellung und CIS-Basislinie als schreibgeschützte Fakten. Ändern Sie diese Identitäten durch Vorbereitung oder ausdrückliche Konvertierung, nicht durch JSON-Bearbeitung.</p>
       <p>Speichern oder verwerfen Sie Änderungen im <uicontrol>JSON-Editor</uicontrol> bewusst, bevor Sie die Schema-Konvertierungsprüfung öffnen. Die Vorschau überschreibt nie lokale Browseränderungen; eine veraltete Vorschau muss neu angefordert werden.</p>
     </context>
     <steps>

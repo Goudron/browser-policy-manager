@@ -64,7 +64,7 @@ def test_generated_policy_skeleton_inventory_covers_every_supported_policy_once(
     assert index["channel_differences_backlog_item"] == "BPM090-M5-05"
     assert index["schema_refresh_runbook_backlog_item"] == "BPM090-M5-08"
     assert index["provenance_review_backlog_item"] == "BPM090-M5-09"
-    assert index["target_bpm_version"] == "0.9.5.1"
+    assert index["target_bpm_version"] == "0.9.6"
     assert index["refresh_backlog_item"] == "BPM095-M8-04"
     assert index["generated_by"] == "documentation/tools/generate_firefox_policy_skeletons.py"
     assert index["policy_count"] == len(policies) == 123
@@ -286,7 +286,7 @@ def test_each_generated_policy_topic_carries_source_version_and_license_metadata
             "MPL-2.0",
             "BPM is not affiliated with or endorsed by Mozilla.",
             "BPM095-M8-04",
-            "0.9.5.1",
+            "0.9.6",
         ):
             assert required in provenance_text
 

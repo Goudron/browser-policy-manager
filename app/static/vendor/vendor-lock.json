@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "updated": "2026-08-10",
+  "updated": "2026-08-20",
   "packages": {
     "monaco-editor": "0.56.0",
     "esbuild": "0.28.2",
-    "dompurify": "3.4.13",
-    "marked": "14.0.0"
+    "dompurify": "3.4.14",
+    "marked": "18.0.10"
   },
   "assets": [
     {
@@ -15,8 +15,8 @@
     },
     {
       "path": "profiles_monaco.js",
-      "size": 9167649,
-      "sha256": "d197cb50debbae3924b0eb3c35f8c99d3be1b5686c458973ee28c695c0040a9b"
+      "size": 9168195,
+      "sha256": "05a7155f3b24907298330ab1a9a071dff114faf3c78d7fca56bed4df5b1a4b3f"
     },
     {
       "path": "profiles_monaco.css",

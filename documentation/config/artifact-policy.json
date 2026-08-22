@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "target_bpm_version": "0.9.5.1",
+  "target_bpm_version": "0.9.6",
   "commit_policy": {
     "reviewed_sources": "commit",
     "localized_screenshots": "commit-after-review",
@@ -11,11 +11,11 @@
   "paths": {
     "generated_dita": "documentation/src/generated",
     "local_site": "documentation/build/site",
-    "release_archive": "documentation/dist/bpm-documentation-0.9.5.1.tar.gz",
-    "release_checksum": "documentation/dist/bpm-documentation-0.9.5.1.tar.gz.sha256"
+    "release_archive": "documentation/dist/bpm-documentation-0.9.6.tar.gz",
+    "release_checksum": "documentation/dist/bpm-documentation-0.9.6.tar.gz.sha256"
   },
   "archive": {
-    "root": "bpm-documentation-0.9.5.1",
+    "root": "bpm-documentation-0.9.6",
     "format": "tar.gz",
     "mtime": 0,
     "file_mode": "0644",

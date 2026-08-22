@@ -173,6 +173,19 @@ test("inventory constructs blank, corporate, CIS, unknown, raw, and invalid prof
     assertCounts(blank, cases.blank.counts);
     assert.ok(blank.every((entry) => entry.state === "available"));
     assert.ok(blank.every((entry) => entry.sources.includes("catalog")));
+    for (const policyId of [
+        "Authentication",
+        "Certificates",
+        "DisableSecurityBypass",
+        "SecurityDevices",
+        "WindowsSSO",
+    ]) {
+        const entry = byKey(blank)[`policy:${policyId}`];
+        assert.ok(entry, `${policyId}: certificate owner must stay visible in All settings`);
+        assert.equal(entry.guided, true);
+        assert.equal(entry.schemaStepNumber, 4);
+        assert.equal(entry.schemaStepId, "certificates_trust");
+    }
 
     const basic = collect(cases.basicCorporate);
     assertCounts(basic, cases.basicCorporate.counts);

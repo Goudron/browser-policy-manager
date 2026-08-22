@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-browser-access-defaults" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Configurar el acceso y los valores predeterminados del navegador</title>
-  <shortdesc>Utilice el Paso 2 para configurar el acceso al navegador, el comportamiento de la red y los valores predeterminados básicos.</shortdesc>
+  <shortdesc>Use el paso 1 para el comportamiento del navegador, el acceso de red y la búsqueda sin duplicar URL ni sitios.</shortdesc>
   <taskbody>
-    <prereq><p>Hay abierto un borrador de perfil guiado.</p></prereq>
-    <context><p>Los ajustes de acceso al navegador y los valores predeterminados determinan si Firefox puede acceder a los recursos y cómo se comporta antes de elegir políticas específicas de contenido.</p></context>
+    <prereq><p>Hay un perfil guardado abierto en el <uicontrol>Editor guiado</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Navegador, red y búsqueda</uicontrol> reúne comportamiento del navegador, acceso de red y búsqueda. La página de inicio, el arranque, filtros de sitios, controladores y marcadores gestionados pertenecen solo al paso 2.</p></context>
     <steps>
-      <step><cmd>Abra el paso 2 de la configuración guiada.</cmd><info><p>Resultado esperado: el perfil guiado permanece coherente.</p></info></step>
+      <step><cmd>Abra el paso 1 <uicontrol>Navegador, red y búsqueda</uicontrol>.</cmd><info><p>Resultado esperado: solo se ven controles de este dominio.</p></info></step>
       <step><cmd>Revisar el acceso a la red y los controles de comportamiento del navegador para la implementación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
-      <step><cmd>Establezca valores predeterminados de referencia antes de agregar opciones específicas de inicio, búsqueda o navegación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Para página de inicio o navegación de sitios, abra el paso 2 en vez de recrear reglas aquí.</cmd><info><p>Resultado esperado: cada política de URL/sitio tiene un único propietario.</p></info></step>
       <step><cmd>Validar las advertencias que se muestran junto a los controles dependientes del esquema.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
     <result><p>El perfil tiene acceso intencional al navegador y configuración de comportamiento predeterminado.</p></result>
-    <postreq><p>Recuperación: si la validación marca un valor, deshaga el último cambio o use <uicontrol>Todos los ajustes</uicontrol> para inspeccionar la forma de la política sin procesar.</p></postreq>
+    <postreq><p>Recuperación: deshaga el último cambio o inspeccione la forma sin procesar en <uicontrol>Todos los ajustes</uicontrol>. Para URL, sitio, controlador o marcador gestionado, use el paso 2.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

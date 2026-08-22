@@ -14,6 +14,7 @@
       <step><cmd>Valide el perfil y revise la forma <codeph>policies.json</codeph> generada.</cmd><info><p>Resultado esperado: BPM no informa errores de esquema para el canal seleccionado.</p></info></step>
     </steps>
     <result><p>La familia compleja ha revisado los valores anidados, las decisiones de origen, el soporte del canal y un resultado de validación limpio.</p></result>
+    <example id="bpm096-localized-current"><title>Comportamiento actual en 0.9.6</title><p>El esquema, el preajuste y la línea base CIS se eligen durante la preparación y permanecen de solo lectura en el editor. Para otro perfil guardado, use conversión explícita o preparación de duplicado; un caso incompatible o bloqueado no descarta valores silenciosamente. Propietarios guiados: URL/sitios paso 2, certificados y confianza paso 4, extensiones paso 6.</p></example>
     <postreq><p>Si la validación falla, regrese a la familia, elimine las claves no admitidas o cambie al canal que realmente admite la política.</p></postreq>
   </taskbody>
   <related-links>

@@ -19,8 +19,10 @@
     {% if include_deleted %}data-include-deleted="true"{% endif %}
     {% if editing_profile_schema_version %}data-editing-profile-schema-version="{{ editing_profile_schema_version }}"{% endif %}
     {% if editing_profile_id is not none %}data-editing-profile-id="{{ editing_profile_id }}"{% endif %}
-    {% if clone_name %}data-clone-name="{{ clone_name }}"{% endif %}
-    {% if clone_source_id is not none %}data-clone-source-id="{{ clone_source_id }}"{% endif %}>
+    {% if preparation_mode %}data-preparation-mode="{{ preparation_mode }}"{% endif %}
+    {% if preparation_terminal_action_mode %}data-preparation-terminal-action-mode="{{ preparation_terminal_action_mode }}"{% endif %}
+    {% if preparation_source_state %}data-preparation-source-state="{{ preparation_source_state }}"{% endif %}
+    {% if preparation_source %}data-preparation-source-id="{{ preparation_source.id }}" data-preparation-source-revision="{{ preparation_source.revision }}" data-preparation-source-schema-id="{{ preparation_source.schema_id }}"{% endif %}>
     {% include profiles_shell_template %}
     <script id="profiles-initial-locale" type="application/json">{{ initial_locale | tojson }}</script>
     {% if editing_profile_initial %}

@@ -64,7 +64,7 @@ start_and_verify() {
         return 1
     fi
     curl --fail --silent --show-error http://127.0.0.1:8000/ \
-        | grep --fixed-strings '"version":"0.9.5.1"' >/dev/null
+        | grep --fixed-strings '"version":"0.9.6"' >/dev/null
     curl --fail --silent --show-error --location http://127.0.0.1:8000/help/ >/dev/null
     curl --fail --silent --show-error http://127.0.0.1:8000/profiles >/dev/null
     curl --fail --silent --show-error http://127.0.0.1:8000/api/profiles \
@@ -81,7 +81,7 @@ main() {
     id bpm
     test -f /usr/lib/systemd/system/bpm.service
     test -f /opt/bpm/release-manifest.json
-    /usr/bin/bpm version | grep --fixed-strings '0.9.5.1'
+    /usr/bin/bpm version | grep --fixed-strings '0.9.6'
     /opt/bpm/venv/bin/python -I -c "
 import importlib.util
 assert all(importlib.util.find_spec(name) is None for name in ('numpy', 'onnxruntime', 'tokenizers'))

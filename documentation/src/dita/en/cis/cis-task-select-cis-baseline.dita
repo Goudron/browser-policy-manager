@@ -4,18 +4,19 @@
   <title>Select a CIS baseline and starter preset</title>
   <shortdesc>Select the Firefox schema channel, starter preset, and CIS layer that match the deployment goal before detailed review.</shortdesc>
   <taskbody>
-    <prereq><p>You have a profile draft, know whether the target browser follows Firefox ESR 115.39, ESR 140.13, ESR 153.0, or Release 153 schema behavior, and can review values before export.</p></prereq>
-    <context><p>A starter preset expresses the environment shape, while a CIS layer adds BPM's mapped hardening baseline. Use both as reviewed inputs, not as automatic deployment approval.</p></context>
+    <prereq><p>Open create or duplicate preparation, know whether the target browser follows Firefox ESR 115.39, ESR 140.13, ESR 153.0, or Release 153 schema behavior, and can review values before export.</p></prereq>
+    <context><p>Preparation selects the schema, starter preset, and CIS baseline before BPM creates the saved profile. A starter preset expresses the environment shape, while a CIS layer adds BPM's mapped hardening baseline. Use both as reviewed inputs, not as automatic deployment approval.</p></context>
     <steps>
-      <step><cmd>Select the Firefox schema channel that matches the target deployment: ESR 115.39, ESR 140.13, ESR 153.0, or Release 153.</cmd><info><p>Expected result: BPM validates available policies and managed preferences against the intended channel.</p></info></step>
+      <step><cmd>Select the Firefox schema that matches the target deployment: ESR 115.39, ESR 140.13, ESR 153.0, or Release 153.</cmd><info><p>Expected result: BPM validates available policies and managed preferences against the intended schema.</p></info></step>
       <step><cmd>Choose a starter preset: Basic corporate for managed office profiles, classroom or kiosk for constrained shared browsing, or protected station for hardened SOC-style workstations.</cmd><info><p>Expected result: the profile has an initial environment baseline before CIS hardening is applied.</p></info></step>
       <step><cmd>Choose CIS Level 1 for broad baseline hardening or CIS Level 2 when the deployment accepts stricter controls and additional review.</cmd><info><p>Expected result: BPM applies a matching generated layer when one is available for the selected Firefox channel.</p></info></step>
       <step><cmd>Review source attribution for values added by the preset, the CIS layer, imports, manual edits, or raw fallback.</cmd><info><p>Expected result: each configured value can be traced before export.</p></info></step>
-      <step><cmd>Resolve manual-review paths and conflicts before saving the profile.</cmd><info><note type="warning">Do not treat the resulting profile as CIS certification or as a replacement for the official benchmark and local security approval.</note></info></step>
+      <step><cmd>Submit preparation, then resolve manual-review paths and conflicts before export.</cmd><info><note type="warning">Do not treat the resulting saved profile as CIS certification or as a replacement for the official benchmark and local security approval.</note></info></step>
       <step><cmd>Validate and export only after the selected channel, preset, CIS level, and manual decisions are documented.</cmd><info><p>Expected result: the exported <codeph>policies.json</codeph> is reviewable and tied to the chosen BPM baseline.</p></info></step>
     </steps>
     <result><p>The profile has a deliberate starter preset, a supported CIS layer, visible source attribution, and a clear list of remaining manual verification duties.</p></result>
-    <postreq><p>If the baseline is too strict or too permissive, remove the CIS layer or switch the starter preset, revalidate, and repeat the review before export.</p></postreq>
+    <example id="bpm096-localized-current"><title>Current 0.9.6 behavior</title><p>Schema, starter preset, and CIS baseline are selected before BPM creates the saved profile. Baseline, CIS, manual, imported, converted, and raw attribution support review rather than proving compliance. Certificates and trust use a separate path-level ledger; manual, imported, converted, raw, unavailable, and blocked states require manual review.</p></example>
+    <postreq><p>If the baseline is too strict or too permissive, prepare a new or duplicate profile with a different preset or CIS baseline, then revalidate and repeat the review before export. Do not relabel the read-only baseline in an editor.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-orientation"/>

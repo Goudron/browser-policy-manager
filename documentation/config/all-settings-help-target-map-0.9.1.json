@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "contract_id": "bpm-all-settings-help-target-map-0.9.1",
-  "backlog_item": "BPM091-M9-02",
-  "target_bpm_version": "0.9.5.1",
+  "backlog_item": "BPM096-M10-04",
+  "target_bpm_version": "0.9.6",
   "status": "accepted",
   "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
   "policy_targets": {
@@ -22,6 +22,14 @@
   "alias_policy": {
     "generated_alias_target_ids": [],
     "rule": "Editor and field aliases must resolve to a canonical policy or preference identity before documentation lookup; aliases are not additional ui-target-map keys."
+  },
+  "contextual_action_targets": {
+    "preparation-create": "topic:ug-task-create-first-profile",
+    "preparation-duplicate": "topic:ug-task-duplicate-profile",
+    "guided-urls-sites-navigation": "policy:Homepage",
+    "guided-certificates-trust": "policy:Certificates",
+    "guided-extensions": "policy:ExtensionSettings",
+    "rule": "Every contextual action resolves through the manifest target map; an action name is never emitted as a target-map identity or a constructed URL."
   },
   "missing_artifact_policy": {
     "build_time": "Target generation fails when the target topic or anchor is absent from the manifest.",

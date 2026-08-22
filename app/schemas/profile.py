@@ -3,8 +3,9 @@ from __future__ import annotations
 
 from datetime import datetime
 from typing import Any, Literal
+from unicodedata import normalize
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.core.schema_channels import DEFAULT_SCHEMA_CHANNEL
 
@@ -35,12 +36,39 @@ class ProfileUpdate(BaseModel):
     )
     flags: dict[str, Any] | None = None
     compliance: dict[str, Any] | None = None
+    extension_provenance: dict[str, Any] | None = Field(
+        default=None,
+        description=(
+            "Client-side extension interaction hints. The server preserves existing sources and "
+            "accepts AMO-assisted and raw-editor markers only for values changed in the same "
+            "request."
+        ),
+    )
+    certificate_provenance: dict[str, Any] | None = Field(
+        default=None,
+        description=(
+            "Client-side certificate/trust source hints. The server preserves existing sources "
+            "and accepts a raw-editor marker only for values changed in the same request."
+        ),
+    )
     expected_revision: int | None = Field(default=None, ge=1)
 
 
 class ProfileRead(ProfileBase):
     id: int
     revision: int
+    baseline_provenance: dict[str, Any] = Field(
+        ..., description="Server-owned durable starter and CIS provenance envelope."
+    )
+    baseline_display: dict[str, Any] = Field(
+        ..., description="Server-owned value-free baseline projection for profile headers."
+    )
+    extension_provenance: dict[str, Any] = Field(
+        ..., description="Server-normalized value-level extension source attribution."
+    )
+    certificate_provenance: dict[str, Any] = Field(
+        ..., description="Server-normalized value-level certificate/trust source attribution."
+    )
     created_at: datetime
     updated_at: datetime
     deleted_at: datetime | None = None
@@ -50,6 +78,199 @@ class ProfileRead(ProfileBase):
 
     # Pydantic v2 style config (replaces deprecated class Config)
     model_config = ConfigDict(from_attributes=True)
+
+
+class NewProfilePreparationRequest(BaseModel):
+    """Catalog identities for one server-composed new profile.
+
+    This intentionally has no document, flags, compliance, or provenance
+    fields.  The preparation service resolves all of those from the current
+    server-owned catalogs inside its write transaction.
+    """
+
+    name: str = Field(..., min_length=1, max_length=255)
+    target_schema_id: str = Field(..., min_length=1, max_length=50)
+    starter_id: str = Field(..., min_length=1, max_length=100)
+    cis_baseline_id: str = Field(..., min_length=1, max_length=100)
+    preparation_idempotency_key: str = Field(..., min_length=1, max_length=255)
+
+    model_config = ConfigDict(
+        extra="forbid",
+        strict=True,
+        json_schema_extra={
+            "example": {
+                "name": "Managed workstations",
+                "target_schema_id": "release-153",
+                "starter_id": "basic_corporate",
+                "cis_baseline_id": "cis_l1",
+                "preparation_idempotency_key": "0c2b75e79cae4d079f1691f27a9d55cf",
+            }
+        },
+    )
+
+    @field_validator("name")
+    @classmethod
+    def normalize_name(cls, value: str) -> str:
+        normalized = normalize("NFC", value).strip()
+        if not normalized:
+            raise ValueError("name must not be blank")
+        return normalized
+
+    @field_validator("preparation_idempotency_key")
+    @classmethod
+    def require_opaque_idempotency_key(cls, value: str) -> str:
+        if value != value.strip():
+            raise ValueError("idempotency key must not have outer whitespace")
+        return value
+
+
+class DuplicateProfilePreparationRequest(NewProfilePreparationRequest):
+    """The identifier-only command for one server-derived duplicate target."""
+
+    source_id: int = Field(..., ge=1)
+    expected_source_revision: int = Field(..., ge=1)
+
+    model_config = ConfigDict(
+        extra="forbid",
+        strict=True,
+        json_schema_extra={
+            "example": {
+                "name": "Managed workstations copy",
+                "target_schema_id": "release-153",
+                "starter_id": "keep_current",
+                "cis_baseline_id": "none",
+                "source_id": 42,
+                "expected_source_revision": 7,
+                "preparation_idempotency_key": "0c2b75e79cae4d079f1691f27a9d55cf",
+            }
+        },
+    )
+
+
+class DuplicateProfilePreparationPreviewRequest(BaseModel):
+    """Identifier-only input for a no-write duplicate-planning refresh."""
+
+    source_id: int = Field(..., ge=1)
+    expected_source_revision: int = Field(..., ge=1)
+    target_schema_id: str = Field(..., min_length=1, max_length=50)
+    starter_id: str = Field(..., min_length=1, max_length=100)
+    cis_baseline_id: str = Field(..., min_length=1, max_length=100)
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+
+class DuplicateProfilePreparationPreview(BaseModel):
+    """Small value-safe duplicate-planning state for the preparation form."""
+
+    kind: Literal["profile-duplicate-plan"]
+    contract_version: Literal[1]
+    status: Literal["valid", "blocked", "unavailable"]
+    reason_code: str | None
+    plan_digest: str = Field(min_length=64, max_length=64)
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class ProfilePreparationError(BaseModel):
+    """Value-free failure for an atomic profile-preparation command."""
+
+    kind: Literal["profile-preparation-error"]
+    contract_version: Literal[1]
+    code: Literal[
+        "preparation_request_invalid",
+        "preparation_schema_unavailable",
+        "preparation_starter_unavailable",
+        "preparation_cis_unavailable",
+        "preparation_candidate_invalid",
+        "preparation_name_conflict",
+        "preparation_duplicate_source_not_found",
+        "preparation_duplicate_source_not_eligible",
+        "preparation_source_stale",
+        "preparation_conversion_blocked",
+        "preparation_composition_blocked",
+        "preparation_idempotency_key_reused",
+        "preparation_transaction_failed",
+    ] = Field(description="Stable, locale-neutral terminal preparation code.")
+    i18n_key: str = Field(
+        description="Client localization key; never a policy value or diagnostic."
+    )
+    http_status: Literal[404, 409, 422, 500]
+    mutation: Literal["none"]
+    parameters: dict[str, str | int | bool | None] = Field(
+        description="Value-free UI parameters. Preparation commands currently return an empty object."
+    )
+
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={
+            "example": {
+                "kind": "profile-preparation-error",
+                "contract_version": 1,
+                "code": "preparation_conversion_blocked",
+                "i18n_key": "profiles.preparation_error_preparation_conversion_blocked",
+                "http_status": 409,
+                "mutation": "none",
+                "parameters": {},
+            }
+        },
+    )
+
+
+class ProfilePreparationErrorEnvelope(BaseModel):
+    detail: ProfilePreparationError
+
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={
+            "example": {
+                "detail": {
+                    "kind": "profile-preparation-error",
+                    "contract_version": 1,
+                    "code": "preparation_conversion_blocked",
+                    "i18n_key": "profiles.preparation_error_preparation_conversion_blocked",
+                    "http_status": 409,
+                    "mutation": "none",
+                    "parameters": {},
+                }
+            }
+        },
+    )
+
+
+class ProfileUpdateConflictError(BaseModel):
+    """Conflict detail returned by generic PATCH without exposing policy data."""
+
+    message: str
+    code: Literal["profile_schema_conversion_required"] | None = None
+    profile_id: int | None = Field(default=None, ge=1)
+    current_revision: int | None = Field(default=None, ge=1)
+    expected_revision: int | None = Field(default=None, ge=1)
+
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={
+            "example": {
+                "message": "Schema conversion preview is required for channel changes",
+                "code": "profile_schema_conversion_required",
+            }
+        },
+    )
+
+
+class ProfileUpdateConflictErrorEnvelope(BaseModel):
+    detail: ProfileUpdateConflictError
+
+    model_config = ConfigDict(
+        extra="forbid",
+        json_schema_extra={
+            "example": {
+                "detail": {
+                    "message": "Schema conversion preview is required for channel changes",
+                    "code": "profile_schema_conversion_required",
+                }
+            }
+        },
+    )
 
 
 class ProfileRecommendationArtifact(BaseModel):

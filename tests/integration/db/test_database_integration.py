@@ -16,6 +16,9 @@ from sqlalchemy import MetaData, Table, create_engine, event, inspect, select, t
 from sqlalchemy.exc import IntegrityError
 
 from alembic import command
+from app.core.profile_baseline_provenance import legacy_migration_baseline_provenance
+from app.core.profile_certificate_provenance import imported_certificate_provenance
+from app.core.profile_extension_provenance import imported_extension_provenance
 from app.db import DatabaseRuntime
 from app.models.profile import Profile
 from app.schemas.profile import ProfileCreate
@@ -25,8 +28,25 @@ from app.services.profile_service import ProfileService
 REPO_ROOT = Path(__file__).resolve().parents[3]
 MATRIX_PATH = REPO_ROOT / "docs" / "architecture" / "database-upgrade-matrix-0.9.5.json"
 FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "database_upgrade" / "golden_profiles_0_9_5.json"
-HEAD_REVISION = "20260804_add_profile_name_casefold"
+HEAD_REVISION = "20260821_add_profile_certificate_provenance"
 _TEMPORARY_POSTGRES_DATABASE = re.compile(r"^bpm_m4_05(?:_[a-z0-9]+)*$")
+
+
+def _historical_m3_legacy_baseline_provenance() -> dict[str, Any]:
+    """The M3 migration predates the additive `preset_id` catalog field."""
+
+    result = legacy_migration_baseline_provenance()
+    result["starter"].pop("preset_id")
+    return result
+
+
+def _expected_baseline_provenance(source: dict[str, Any]) -> dict[str, Any]:
+    """Respect the exact physical source shape used by the matrix fixture."""
+
+    shape = _matrix()["schema_shapes"][source["shape"]]
+    if "baseline_provenance" in shape["required_columns"]:
+        return legacy_migration_baseline_provenance()
+    return _historical_m3_legacy_baseline_provenance()
 
 
 @dataclass(frozen=True)
@@ -169,6 +189,16 @@ def _prepare_supported_source(target: DatabaseTarget, source: dict[str, Any]) ->
                 }
                 if "name_casefold" in table.c and "name_casefold" not in values:
                     values["name_casefold"] = str(source_row["name"]).casefold()
+                if "baseline_provenance" in table.c and "baseline_provenance" not in values:
+                    values["baseline_provenance"] = legacy_migration_baseline_provenance()
+                if "extension_provenance" in table.c and "extension_provenance" not in values:
+                    values["extension_provenance"] = imported_extension_provenance(
+                        source_row["flags"]
+                    )
+                if "certificate_provenance" in table.c and "certificate_provenance" not in values:
+                    values["certificate_provenance"] = imported_certificate_provenance(
+                        source_row["flags"]
+                    )
                 connection.execute(table.insert().values(**values))
     finally:
         engine.dispose()
@@ -188,6 +218,11 @@ def _assert_head_schema(target: DatabaseTarget) -> None:
             "schema_version",
             "flags",
             "compliance",
+            "baseline_provenance",
+            "extension_provenance",
+            "certificate_provenance",
+            "preparation_idempotency_key",
+            "preparation_request_fingerprint",
             "revision",
             "created_at",
             "updated_at",
@@ -200,6 +235,7 @@ def _assert_head_schema(target: DatabaseTarget) -> None:
             "ix_profiles_created_at",
             "ix_profiles_updated_at",
             "ix_profiles_deleted_at",
+            "uq_profiles_preparation_idempotency_key",
         }
         with engine.connect() as connection:
             assert connection.execute(
@@ -233,7 +269,8 @@ def _assert_golden_rows(target: DatabaseTarget, source: dict[str, Any]) -> None:
             rows = (
                 connection.execute(
                     text(
-                        "SELECT id, name, name_casefold, description, schema_version, flags, compliance, revision, deleted_at "
+                        "SELECT id, name, name_casefold, description, schema_version, flags, compliance, "
+                        "baseline_provenance, extension_provenance, certificate_provenance, revision, deleted_at "
                         "FROM profiles ORDER BY id"
                     )
                 )
@@ -252,6 +289,15 @@ def _assert_golden_rows(target: DatabaseTarget, source: dict[str, Any]) -> None:
         assert stored["schema_version"] == _expected_channel(source_row["schema_version"])
         assert _json_semantic_value(stored["flags"]) == source_row["flags"]
         assert _json_semantic_value(stored["compliance"]) == source_row.get("compliance")
+        assert _json_semantic_value(stored["baseline_provenance"]) == (
+            _expected_baseline_provenance(source)
+        )
+        assert _json_semantic_value(stored["extension_provenance"]) == (
+            imported_extension_provenance(source_row["flags"])
+        )
+        assert _json_semantic_value(stored["certificate_provenance"]) == (
+            imported_certificate_provenance(source_row["flags"])
+        )
         assert stored["revision"] == source_row.get("revision", 1)
         assert (stored["deleted_at"] is None) is (source_row.get("deleted_at") is None)
 

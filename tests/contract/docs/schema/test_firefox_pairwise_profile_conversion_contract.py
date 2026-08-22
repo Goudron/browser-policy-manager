@@ -343,6 +343,8 @@ def _assert_contract_semantics(contract: dict[str, Any]) -> None:
         "schema_version",
         "flags",
         "compliance",
+        "extension_provenance",
+        "certificate_provenance",
         "revision",
     }:
         raise ValueError("conversion application write set drift")
@@ -351,6 +353,9 @@ def _assert_contract_semantics(contract: dict[str, Any]) -> None:
         "name",
         "name_casefold",
         "description",
+        "baseline_provenance",
+        "preparation_idempotency_key",
+        "preparation_request_fingerprint",
         "created_at",
         "deleted_at",
     }:

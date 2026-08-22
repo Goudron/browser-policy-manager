@@ -40,14 +40,8 @@
             wizardExtensionSummaryCuratedJumpEl,
             wizardExtensionSummaryArbitraryJumpEl,
             wizardExtensionSummaryCustomUrlsJumpEl,
-            wizardNetworkSummaryAuthenticationEl,
-            wizardNetworkSummaryCertificatesEl,
             wizardNetworkSummaryDnsEl,
-            wizardNetworkSummaryWindowsSsoEl,
-            wizardNetworkSummaryAuthenticationJumpEl,
-            wizardNetworkSummaryCertificatesJumpEl,
             wizardNetworkSummaryDnsJumpEl,
-            wizardNetworkSummaryWindowsSsoJumpEl,
             wizardHomeSummaryHomepageEl,
             wizardHomeSummaryOverridesEl,
             wizardHomeSummaryFirefoxHomeEl,
@@ -120,54 +114,62 @@
             wizardExportReviewNowEl,
             wizardExportDrilldownEl,
             wizardExportDownloadHintEl,
-            wizardExportBaselineCopyEl,
-            wizardExportBaselineListEl,
             wizardCisFinalSummaryEl,
             wizardCisExceptionsCountEl,
             wizardCisExceptionsReasonsGroupEl,
             wizardCisExceptionsReasonsEl,
             wizardCisExceptionsDetailsEl,
             wizardCisExceptionsListEl,
-            wizardExportSummaryNetworkEl,
-            wizardExportSummaryHomeEl,
-            wizardExportSummarySearchEl,
-            wizardExportSummaryFeaturesEl,
+            wizardExportSummaryBrowserEl,
+            wizardExportSummaryUrlsEl,
+            wizardExportSummaryCertificatesEl,
+            wizardExportSummaryUsersEl,
+            wizardExportSummaryExtensionsEl,
             wizardExportSummaryAiEl,
             wizardExportSummaryPrivacyEl,
-            wizardExportSummaryNetworkJumpEl,
-            wizardExportSummaryHomeJumpEl,
-            wizardExportSummarySearchJumpEl,
-            wizardExportSummaryFeaturesJumpEl,
+            wizardExportSummaryReviewEl,
+            wizardExportSummaryBrowserJumpEl,
+            wizardExportSummaryUrlsJumpEl,
+            wizardExportSummaryCertificatesJumpEl,
+            wizardExportSummaryUsersJumpEl,
+            wizardExportSummaryExtensionsJumpEl,
             wizardExportSummaryAiJumpEl,
             wizardExportSummaryPrivacyJumpEl,
+            wizardExportSummaryReviewJumpEl,
             wizardExportShareableTextEl,
             wizardExportShareableCopyEl,
             wizardExportShareableStatusEl,
             editorEl,
             overviewPanelEl,
-            wizardSummaryNameEl,
-            wizardSummarySchemaEl,
-            wizardSummaryStarterEl,
-            wizardSummaryCisEl,
-            wizardSummaryDerivedEl,
         } = elements;
 
         const getCurrentId = state.getCurrentId || (() => null);
         const getCurrentProfile = state.getCurrentProfile || (() => null);
-        const getCloneSourceProfile = state.getCloneSourceProfile || (() => null);
         const getLifecycleSessionNote = state.getLifecycleSessionNote || (() => null);
         const getCurrentRaw = state.getCurrentRaw || (() => ({}));
         const getValidationPreviewTone = state.getValidationPreviewTone || (() => "neutral");
-        const getWizardStarter = state.getWizardStarter || (() => "blank");
-        const getWizardComplianceMergeInfo = state.getWizardComplianceMergeInfo || (() => ({
-            layer: "none",
-            label: "",
-            summary: {},
-            decisions: [],
-        }));
-        const setWizardComplianceDecisionNote = state.setWizardComplianceDecisionNote || (() => {});
-        const getBaselineSummary = state.getBaselineSummary || (() => ({ copy: "", items: [] }));
+        const setComplianceDecisionNote = state.setComplianceDecisionNote || (() => {});
         const workspaceSignalEl = state.workspaceSignalEl || null;
+
+        function getPersistedComplianceInfo() {
+            const compliance = getCurrentProfile()?.compliance;
+            if (!compliance || typeof compliance !== "object") {
+                return { layer: "none", label: t("profiles.wizard_cis_none_title"), summary: {}, decisions: [] };
+            }
+            const layer = compliance.layer || "none";
+            const label = layer === "cis_l1"
+                ? t("profiles.wizard_cis_l1_title")
+                : layer === "cis_l2"
+                    ? t("profiles.wizard_cis_l2_title")
+                    : t("profiles.wizard_cis_none_title");
+            return {
+                ...compliance,
+                layer,
+                label,
+                summary: compliance.summary || {},
+                decisions: Array.isArray(compliance.decisions) ? compliance.decisions : [],
+            };
+        }
         function setText(el, value) {
             if (el) {
                 el.textContent = String(value);
@@ -248,15 +250,13 @@
         function buildShareableGuidedSummaryText({
             exportSummary,
             guidedSummary,
-            baselineSummary,
         }) {
-            const profileName = wizardSummaryNameEl?.textContent?.trim()
+            const profileName = getCurrentProfile()?.name
                 || documentRef.getElementById("profile-name")?.value?.trim()
                 || t("profiles.wizard_export_shareable_profile_fallback");
-            const schemaLabel = wizardSummarySchemaEl?.textContent?.trim() || "";
-            const starterLabel = wizardSummaryStarterEl?.textContent?.trim() || "";
-            const cisLabel = wizardSummaryCisEl?.textContent?.trim() || "";
-            const derivedLabel = wizardSummaryDerivedEl?.textContent?.trim() || "";
+            const schemaLabel = documentRef.getElementById("profile-schema-fact")?.textContent?.trim() || "";
+            const starterLabel = documentRef.getElementById("profile-starter-fact")?.textContent?.trim() || "";
+            const cisLabel = documentRef.getElementById("profile-cis-fact")?.textContent?.trim() || "";
             const currentProfile = getCurrentProfile();
             const lifecycleSessionNote = getLifecycleSessionNote();
             const lines = [
@@ -273,9 +273,6 @@
             if (cisLabel) {
                 lines.push(`${t("profiles.wizard_export_shareable_cis_label")}: ${cisLabel}`);
             }
-            if (derivedLabel || getCloneSourceProfile()?.name) {
-                lines.push(`${t("profiles.wizard_summary_derived")}: ${derivedLabel || t("profiles.wizard_summary_derived_value").replace("{name}", getCloneSourceProfile().name)}`);
-            }
             if (currentProfile?.created_at) {
                 lines.push(`${t("profiles.lifecycle_item_created")}: ${formatLifecycleTimestamp(currentProfile.created_at)}`);
             }
@@ -286,8 +283,6 @@
                 lines.push(`${t("profiles.lifecycle_item_state")}: ${t("profiles.lifecycle_item_state_archived")}`);
             } else if (getCurrentId()) {
                 lines.push(`${t("profiles.lifecycle_item_state")}: ${t("profiles.lifecycle_item_state_saved")}`);
-            } else if (getCloneSourceProfile()?.name) {
-                lines.push(`${t("profiles.lifecycle_item_state")}: ${t("profiles.lifecycle_item_state_clone_draft")}`);
             }
             if (lifecycleSessionNote?.type === "restored" && lifecycleSessionNote.profileId === getCurrentId()) {
                 lines.push(`${t("profiles.lifecycle_item_recent")}: ${formatLifecycleTimestamp(lifecycleSessionNote.at)}`);
@@ -295,22 +290,14 @@
 
             lines.push(`${t("profiles.wizard_export_shareable_state_label")}: ${exportSummary.exportState}`);
 
-            const baselineItems = Array.isArray(baselineSummary.items) ? baselineSummary.items.filter(Boolean) : [];
-            if (baselineItems.length) {
-                lines.push("");
-                lines.push(t("profiles.wizard_export_baseline_summary_title"));
-                baselineItems.forEach((item) => {
-                    lines.push(`- ${item}`);
-                });
-            }
-
             const guidedSections = [
-                [t("profiles.wizard_export_guided_network"), guidedSummary.networkText, guidedSummary.networkTone],
-                [t("profiles.wizard_export_guided_home"), guidedSummary.homeText, guidedSummary.homeTone],
-                [t("profiles.wizard_export_guided_search"), guidedSummary.searchText, guidedSummary.searchTone],
-                [t("profiles.wizard_export_guided_features"), guidedSummary.featuresText, guidedSummary.featuresTone],
-                [t("profiles.wizard_export_guided_ai"), guidedSummary.aiText, guidedSummary.aiTone],
-                [t("profiles.wizard_export_guided_privacy"), guidedSummary.privacyText, guidedSummary.privacyTone],
+                [t("profiles.wizard_step_one"), guidedSummary.browserText, guidedSummary.browserTone],
+                [t("profiles.wizard_step_two"), guidedSummary.urlsText, guidedSummary.urlsTone],
+                [t("profiles.wizard_step_three"), guidedSummary.privacyText, guidedSummary.privacyTone],
+                [t("profiles.wizard_step_four"), guidedSummary.certificatesText, guidedSummary.certificatesTone],
+                [t("profiles.wizard_step_five"), guidedSummary.usersText, guidedSummary.usersTone],
+                [t("profiles.wizard_step_six"), guidedSummary.extensionsText, guidedSummary.extensionsTone],
+                [t("profiles.wizard_step_seven"), guidedSummary.aiText, guidedSummary.aiTone],
             ].filter(([, text, tone]) => Boolean(text) && tone !== "default");
 
             lines.push("");
@@ -394,6 +381,57 @@
             return t("profiles.wizard_review_default");
         }
 
+        function certificateSourceSummaryLabel(source) {
+            const key = {
+                baseline: "profiles.wizard_certificate_source_baseline",
+                cis: "profiles.wizard_certificate_source_cis",
+                manual: "profiles.wizard_certificate_source_manual",
+                converted: "profiles.wizard_certificate_source_converted",
+                imported: "profiles.wizard_certificate_source_imported",
+                raw: "profiles.wizard_certificate_source_raw",
+            }[source];
+            return key ? t(key) : "";
+        }
+
+        function getCertificateAttributionReviewData() {
+            const paths = getCurrentProfile()?.certificate_provenance?.paths;
+            const sourceCounts = {};
+            if (paths && typeof paths === "object" && !Array.isArray(paths)) {
+                Object.entries(paths).forEach(([path, source]) => {
+                    const isCertificatePath = path === "/Preferences/security.enterprise_roots.enabled"
+                        || [
+                            "/Authentication",
+                            "/Certificates",
+                            "/DisableSecurityBypass",
+                            "/MicrosoftEntraSSO",
+                            "/SecurityDevices",
+                            "/WindowsSSO",
+                        ].some((prefix) => path === prefix || path.startsWith(`${prefix}/`));
+                    if (isCertificatePath && ["baseline", "cis", "manual", "converted", "imported", "raw"].includes(source)) {
+                        sourceCounts[source] = (sourceCounts[source] || 0) + 1;
+                    }
+                });
+            }
+            const decisions = getCurrentProfile()?.compliance?.decisions;
+            const cisReviewCount = Array.isArray(decisions)
+                ? decisions.filter((decision) => {
+                    const path = decision?.path;
+                    return decision?.review_required && typeof path === "string" && (
+                        path === "/Preferences/security.enterprise_roots.enabled"
+                        || [
+                            "/Authentication",
+                            "/Certificates",
+                            "/DisableSecurityBypass",
+                            "/MicrosoftEntraSSO",
+                            "/SecurityDevices",
+                            "/WindowsSSO",
+                        ].some((prefix) => path === prefix || path.startsWith(`${prefix}/`))
+                    );
+                }).length
+                : 0;
+            return { sourceCounts, cisReviewCount };
+        }
+
         function getExtensionReviewSummaryData(parsed) {
             const extensionSettings = parsed?.ExtensionSettings && typeof parsed.ExtensionSettings === "object"
                 ? parsed.ExtensionSettings
@@ -409,6 +447,15 @@
 
             let arbitraryRules = 0;
             let customInstallUrls = 0;
+            const sourceCounts = {};
+            const provenancePaths = getCurrentProfile()?.extension_provenance?.paths;
+            if (provenancePaths && typeof provenancePaths === "object" && !Array.isArray(provenancePaths)) {
+                Object.values(provenancePaths).forEach((source) => {
+                    if (["converted", "preset", "cis", "manual", "amo-assisted-manual", "imported", "raw"].includes(source)) {
+                        sourceCounts[source] = (sourceCounts[source] || 0) + 1;
+                    }
+                });
+            }
 
             Object.entries(extensionSettings).forEach(([entryKey, entryValue]) => {
                 if (!entryValue || typeof entryValue !== "object" || Array.isArray(entryValue) || Object.keys(entryValue).length === 0) {
@@ -431,7 +478,21 @@
                 curatedProfiles,
                 arbitraryRules,
                 customInstallUrls,
+                sourceCounts,
             };
+        }
+
+        function extensionSourceSummaryLabel(source) {
+            const key = {
+                converted: "profiles.wizard_extension_source_converted",
+                preset: "profiles.wizard_extension_source_preset",
+                cis: "profiles.wizard_extension_source_cis",
+                manual: "profiles.wizard_extension_source_manual",
+                "amo-assisted-manual": "profiles.wizard_extension_source_amo_assisted_manual",
+                imported: "profiles.wizard_extension_source_imported",
+                raw: "profiles.wizard_extension_source_raw",
+            }[source];
+            return key ? t(key) : "";
         }
 
         function findExtensionReviewTarget(kind) {
@@ -517,32 +578,28 @@
         }
 
         function findNetworkReviewTarget(kind) {
-            const authenticationCardEl = documentRef.querySelector('[data-schema-policy-id="Authentication"][data-schema-policy-kind="object-card"]');
-            const certificatesCardEl = documentRef.querySelector('[data-schema-policy-id="Certificates"][data-schema-policy-kind="object-card"]');
             const dnsOverHttpsCardEl = documentRef.querySelector('[data-schema-policy-id="DNSOverHTTPS"][data-schema-policy-kind="object-card"]');
-            const windowsSsoCardEl = documentRef.querySelector('[data-schema-policy-id="WindowsSSO"][data-schema-policy-kind="boolean-select"]');
 
             if (kind === "authentication") {
-                return authenticationCardEl || findSettingsTarget("shell-policy:2:Authentication");
+                return documentRef.getElementById("wizard-step-4-authentication");
             }
             if (kind === "certificates") {
-                return certificatesCardEl || findSettingsTarget("shell-policy:2:Certificates");
+                return documentRef.getElementById("wizard-step-4-references")
+                    || documentRef.getElementById("wizard-step-4-attribution");
             }
             if (kind === "dns") {
-                return dnsOverHttpsCardEl || findSettingsTarget("shell-policy:2:DNSOverHTTPS");
+                return dnsOverHttpsCardEl || findSettingsTarget("shell-policy:1:DNSOverHTTPS");
             }
             if (kind === "windows_sso") {
-                return windowsSsoCardEl || findSettingsTarget("shell-policy:2:WindowsSSO");
+                return documentRef.getElementById("wizard-step-4-trust-posture")
+                    || documentRef.getElementById("wizard-step-4-attribution");
             }
             return null;
         }
 
         function renderNetworkReviewJumpButtons(summary) {
             [
-                { el: wizardNetworkSummaryAuthenticationJumpEl, count: summary.authenticationControls, kind: "authentication" },
-                { el: wizardNetworkSummaryCertificatesJumpEl, count: summary.certificateEntries, kind: "certificates" },
                 { el: wizardNetworkSummaryDnsJumpEl, count: summary.dnsEntries, kind: "dns" },
-                { el: wizardNetworkSummaryWindowsSsoJumpEl, count: summary.windowsSsoExplicit, kind: "windows_sso" },
             ].forEach(({ el, count, kind }) => {
                 if (!el) return;
                 el.disabled = !count || !findNetworkReviewTarget(kind);
@@ -552,24 +609,9 @@
         function renderNetworkReviewSummary(parsed) {
             const summary = getNetworkReviewSummaryData(parsed);
             setSummaryValue(
-                wizardNetworkSummaryAuthenticationEl,
-                formatAuthenticationObjectState(summary.authentication),
-                summary.authenticationControls > 0 ? "active" : "default",
-            );
-            setSummaryValue(
-                wizardNetworkSummaryCertificatesEl,
-                formatCertificatesObjectState(summary.certificates),
-                summary.certificateEntries > 0 ? "active" : "default",
-            );
-            setSummaryValue(
                 wizardNetworkSummaryDnsEl,
                 formatDnsOverHttpsObjectState(summary.dnsOverHttps),
                 summary.dnsEntries > 0 ? "active" : "default",
-            );
-            setSummaryValue(
-                wizardNetworkSummaryWindowsSsoEl,
-                formatBooleanManagedValue(summary.windowsSsoValue),
-                summary.windowsSsoExplicit > 0 ? "active" : "default",
             );
             renderNetworkReviewJumpButtons(summary);
         }
@@ -691,7 +733,7 @@
                 return findSettingsTarget("field:firefox-home-search");
             }
             if (kind === "user_messaging") {
-                return userMessagingCardEl || findSettingsTarget("shell-policy:3:UserMessaging");
+                return userMessagingCardEl || findSettingsTarget("shell-policy:5:UserMessaging");
             }
             return null;
         }
@@ -911,17 +953,17 @@
             if (kind === "bookmarks") {
                 return bookmarksCardEl?.querySelector('[data-schema-array-row-state="toolbar"], [data-schema-array-row-state="menu"], [data-schema-array-row-state="draft"]')
                     || bookmarksCardEl
-                    || findSettingsTarget("shell-policy:4:Bookmarks");
+                    || findSettingsTarget("shell-policy:2:Bookmarks");
             }
             if (kind === "managed") {
                 return managedBookmarksCardEl?.querySelector('[data-schema-array-row-state="children"], [data-schema-array-row-state="name_only"], [data-schema-array-row-state="tree_only"], [data-schema-array-row-state="invalid"]')
                     || managedBookmarksCardEl
-                    || findSettingsTarget("shell-policy:4:ManagedBookmarks");
+                    || findSettingsTarget("shell-policy:2:ManagedBookmarks");
             }
             if (kind === "nested") {
                 return managedBookmarksCardEl?.querySelector('[data-schema-array-row-state="children"], [data-schema-array-row-state="tree_only"]')
                     || managedBookmarksCardEl
-                    || findSettingsTarget("shell-policy:4:ManagedBookmarks");
+                    || findSettingsTarget("shell-policy:2:ManagedBookmarks");
             }
             return null;
         }
@@ -989,16 +1031,16 @@
         }
 
         function findWebsiteAccessReviewTarget(kind) {
-            const websiteFilterCardEl = documentRef.querySelector('[data-schema-policy-id="WebsiteFilter"][data-schema-policy-kind="object-card"]');
+            const websiteFilterCardEl = documentRef.querySelector('[data-settings-target="policy:WebsiteFilter"]');
             const handlersCardEl = documentRef.querySelector('[data-schema-policy-id="Handlers"][data-schema-policy-kind="object-card"]');
 
             if (kind === "blocked" || kind === "exceptions") {
-                return websiteFilterCardEl || findSettingsTarget("shell-policy:4:WebsiteFilter");
+                return websiteFilterCardEl || findSettingsTarget("shell-policy:2:WebsiteFilter");
             }
             if (kind === "handlers") {
                 return handlersCardEl
                     || documentRef.querySelector('[data-wizard-shell-policy-id="Handlers"]')
-                    || findSettingsTarget("shell-policy:4:Handlers");
+                    || findSettingsTarget("shell-policy:2:Handlers");
             }
             return null;
         }
@@ -1064,13 +1106,13 @@
                     || generativeAiCardEl
                     || findSettingsTarget("policy:AIControls")
                     || findSettingsTarget("policy:GenerativeAI")
-                    || findSettingsTarget("shell-policy:5:AIControls")
-                    || findSettingsTarget("shell-policy:5:GenerativeAI");
+                    || findSettingsTarget("shell-policy:7:AIControls")
+                    || findSettingsTarget("shell-policy:7:GenerativeAI");
             }
             if (kind === "surfaces") {
                 return visualSearchCardEl
                     || findSettingsTarget("policy:VisualSearchEnabled")
-                    || findSettingsTarget("shell-policy:5:VisualSearchEnabled");
+                    || findSettingsTarget("shell-policy:7:VisualSearchEnabled");
             }
             return null;
         }
@@ -1324,6 +1366,7 @@
         function getExportGuidedSummaryData(parsed) {
             const proxyConfigured = countConfiguredObjectEntries(parsed?.Proxy) > 0;
             const network = getNetworkReviewSummaryData(parsed);
+            const certificateAttribution = getCertificateAttributionReviewData();
             const home = getHomeReviewSummaryData(parsed);
             const search = getSearchReviewSummaryData(parsed);
             const features = getFeatureReviewSummaryData(parsed);
@@ -1336,17 +1379,32 @@
             if (network.dnsEntries > 0) {
                 networkFragments.push(formatDnsOverHttpsObjectState(network.dnsOverHttps));
             }
+
+            const certificatesFragments = [];
             if (network.authenticationControls > 0) {
-                networkFragments.push(formatAuthenticationObjectState(network.authentication));
+                certificatesFragments.push(formatAuthenticationObjectState(network.authentication));
             }
             if (network.certificateEntries > 0) {
-                networkFragments.push(formatCertificatesObjectState(network.certificates));
+                certificatesFragments.push(formatCertificatesObjectState(network.certificates));
             }
             if (network.windowsSsoExplicit > 0) {
-                networkFragments.push(
+                certificatesFragments.push(
                     network.windowsSsoValue === true
                         ? t("profiles.wizard_export_guided_network_sso_on")
                         : t("profiles.wizard_export_guided_network_sso_off"),
+                );
+            }
+            const certificateSources = Object.entries(certificateAttribution.sourceCounts)
+                .sort(([left], [right]) => left.localeCompare(right))
+                .map(([source, count]) => `${certificateSourceSummaryLabel(source)} (${count})`)
+                .filter(Boolean);
+            if (certificateSources.length) {
+                certificatesFragments.push(buildCompactStateText(certificateSources));
+            }
+            if (certificateAttribution.cisReviewCount > 0) {
+                certificatesFragments.push(
+                    t("profiles.wizard_certificate_cis_review_required")
+                        .replace("{count}", String(certificateAttribution.cisReviewCount)),
                 );
             }
 
@@ -1378,19 +1436,19 @@
                 searchFragments.push(formatSearchSuggestReviewValue(search));
             }
 
-            const featureFragments = [];
+            const usersFragments = [];
             if (features.accountsManaged > 0) {
-                featureFragments.push(
+                usersFragments.push(
                     features.accountsDisabled
                         ? t("profiles.wizard_export_guided_features_accounts_off")
                         : t("profiles.wizard_export_guided_features_accounts_on"),
                 );
             }
             if (features.requestedLocales > 0) {
-                featureFragments.push(formatCountText("profiles.wizard_export_guided_features_locales", features.requestedLocales));
+                usersFragments.push(formatCountText("profiles.wizard_export_guided_features_locales", features.requestedLocales));
             }
             if (features.translateManaged > 0) {
-                featureFragments.push(
+                usersFragments.push(
                     features.translateEnabled
                         ? t("profiles.wizard_export_guided_features_translate_on")
                         : t("profiles.wizard_export_guided_features_translate_off"),
@@ -1410,8 +1468,9 @@
             } else if (features.generativeAiControls > 0) {
                 aiFragments.push(formatCountText("profiles.wizard_export_guided_ai_controls", features.generativeAiControls));
             }
+            const extensionFragments = [];
             if (features.managedAddonControls > 0) {
-                featureFragments.push(
+                extensionFragments.push(
                     buildCompactStateText([
                         features.extensionReview.curatedProfiles > 0
                             ? formatCountText("profiles.wizard_export_guided_features_addons_curated", features.extensionReview.curatedProfiles)
@@ -1425,8 +1484,16 @@
                     ].filter(Boolean)),
                 );
             }
+            const extensionSources = Object.entries(features.extensionReview.sourceCounts || {})
+                .sort(([left], [right]) => left.localeCompare(right))
+                .map(([source, count]) => `${extensionSourceSummaryLabel(source)} (${count})`)
+                .filter(Boolean);
+            if (extensionSources.length) {
+                extensionFragments.push(buildCompactStateText(extensionSources));
+            }
+            const urlFragments = [...homeFragments];
             if (features.websiteHandlingRules > 0) {
-                featureFragments.push(
+                urlFragments.push(
                     buildCompactStateText([
                         features.websiteReview.blockedSites > 0
                             ? formatCountText("profiles.wizard_review_blocked_sites_short", features.websiteReview.blockedSites)
@@ -1441,7 +1508,7 @@
                 );
             }
             if (features.bookmarkGroups > 0) {
-                featureFragments.push(
+                urlFragments.push(
                     buildCompactStateText([
                         features.bookmarkReview.bookmarkEntries > 0
                             ? formatCountText("profiles.wizard_review_bookmarks", features.bookmarkReview.bookmarkEntries)
@@ -1484,16 +1551,18 @@
             }
 
             return {
-                networkText: buildHumanSummaryText(networkFragments),
-                homeText: buildHumanSummaryText(homeFragments),
-                searchText: buildHumanSummaryText(searchFragments),
-                featuresText: buildHumanSummaryText(featureFragments),
+                browserText: buildHumanSummaryText([...networkFragments, ...searchFragments]),
+                urlsText: buildHumanSummaryText(urlFragments),
+                certificatesText: buildHumanSummaryText(certificatesFragments),
+                usersText: buildHumanSummaryText(usersFragments),
+                extensionsText: buildHumanSummaryText(extensionFragments),
                 aiText: buildHumanSummaryText(aiFragments),
                 privacyText: buildHumanSummaryText(privacyFragments),
-                networkTone: networkFragments.length ? "active" : "default",
-                homeTone: homeFragments.length ? "active" : "default",
-                searchTone: searchFragments.length ? "active" : "default",
-                featuresTone: featureFragments.length ? "active" : "default",
+                browserTone: networkFragments.length || searchFragments.length ? "active" : "default",
+                urlsTone: urlFragments.length ? "active" : "default",
+                certificatesTone: certificatesFragments.length ? "active" : "default",
+                usersTone: usersFragments.length ? "active" : "default",
+                extensionsTone: extensionFragments.length ? "active" : "default",
                 aiTone: aiFragments.length ? "active" : "default",
                 privacyTone: (
                     privacy.lockedPermissionCategories > 0
@@ -1521,12 +1590,12 @@
             if (kind === "permissions") {
                 return permissionsCardEl
                     || documentRef.querySelector('[data-wizard-shell-policy-id="Permissions"]')
-                    || findSettingsTarget("shell-policy:5:Permissions");
+                    || findSettingsTarget("shell-policy:3:Permissions");
             }
             if (kind === "cookies") {
                 return cookiesCardEl
                     || documentRef.querySelector('[data-wizard-shell-policy-id="Cookies"]')
-                    || findSettingsTarget("shell-policy:5:Cookies");
+                    || findSettingsTarget("shell-policy:3:Cookies");
             }
             return null;
         }
@@ -1737,7 +1806,7 @@
             }
 
             return {
-                step: 6,
+                step: 8,
                 stepTitle: title,
                 items,
                 remaining: Math.max(0, normalizedKeys.length - items.length),
@@ -1970,7 +2039,7 @@
                 const textarea = row.querySelector("textarea");
                 if (textarea && decisionKey) {
                     textarea.addEventListener("input", () => {
-                        setWizardComplianceDecisionNote(decisionKey, textarea.value);
+                        setComplianceDecisionNote(decisionKey, textarea.value);
                     });
                 }
                 wizardCisExceptionsListEl.appendChild(row);
@@ -1981,7 +2050,7 @@
             const policyKey = getCisDecisionPolicyKey(decision);
             const items = [formatCisDecisionPath(decision)].filter(Boolean);
             return {
-                step: 6,
+                step: 8,
                 stepTitle: t("profiles.wizard_cis_review_context_title").replace("{path}", policyKey || "CIS"),
                 items,
                 remaining: 0,
@@ -1994,7 +2063,7 @@
             const policyIndex = getActiveSchemaPolicyIndex();
             if (kind === "cis") {
                 const policyKey = options.key || "";
-                const complianceInfo = getWizardComplianceMergeInfo();
+                const complianceInfo = getPersistedComplianceInfo();
                 const decision = options.decision || (Array.isArray(complianceInfo.decisions)
                     ? complianceInfo.decisions.find((entry) => getCisDecisionPolicyKey(entry) === policyKey)
                     : null);
@@ -2013,10 +2082,13 @@
             if (kind === "network") {
                 return {
                     target: findSettingsTarget("field:wizard-proxy-mode")
-                    || findNetworkReviewTarget("dns")
-                    || findNetworkReviewTarget("authentication")
-                    || findNetworkReviewTarget("certificates")
-                    || findNetworkReviewTarget("windows_sso"),
+                    || findNetworkReviewTarget("dns"),
+                };
+            }
+            if (kind === "browser") {
+                return {
+                    target: findFinalReviewTarget("network", resolvedSummary)
+                        || findFinalReviewTarget("search", resolvedSummary),
                 };
             }
             if (kind === "home") {
@@ -2025,6 +2097,13 @@
                     || findHomeReviewTarget("overrides")
                     || findHomeReviewTarget("firefox_home")
                     || findHomeReviewTarget("user_messaging"),
+                };
+            }
+            if (kind === "urls") {
+                return {
+                    target: findFinalReviewTarget("home", resolvedSummary)
+                        || findWebsiteAccessReviewTarget("blocked")
+                        || findBookmarkReviewTarget("bookmarks"),
                 };
             }
             if (kind === "search") {
@@ -2040,16 +2119,39 @@
                     target: findSettingsTarget("policy:DisableFirefoxAccounts")
                     || findSettingsTarget("policy:RequestedLocales")
                     || findSettingsTarget("policy:TranslateEnabled")
-                    || findSettingsTarget("field:wizard-extension-default-mode")
+                    || documentRef.getElementById("wizard-extension-rules")
                     || findSettingsTarget("policy:WebsiteFilter")
-                    || findSettingsTarget("shell-policy:4:ExtensionSettings"),
+                    || findSettingsTarget("policy:ExtensionSettings"),
+                };
+            }
+            if (kind === "certificates") {
+                return {
+                    target: documentRef.getElementById("wizard-step-4-attribution")
+                        || findNetworkReviewTarget("certificates")
+                        || findNetworkReviewTarget("authentication")
+                        || findNetworkReviewTarget("windows_sso"),
+                };
+            }
+            if (kind === "users") {
+                return {
+                    target: findSettingsTarget("policy:DisableFirefoxAccounts")
+                        || findSettingsTarget("policy:RequestedLocales")
+                        || findSettingsTarget("policy:TranslateEnabled"),
+                };
+            }
+            if (kind === "extensions") {
+                return {
+                    target: documentRef.getElementById("wizard-extension-rules")
+                        || findExtensionReviewTarget("curated")
+                        || findExtensionReviewTarget("arbitrary")
+                        || findSettingsTarget("policy:ExtensionSettings"),
                 };
             }
             if (kind === "ai") {
                 return {
                     target: findSettingsTarget("policy:GenerativeAI")
                     || findSettingsTarget("policy:VisualSearchEnabled")
-                    || findSettingsTarget("shell-policy:5:GenerativeAI"),
+                    || findSettingsTarget("shell-policy:7:GenerativeAI"),
                 };
             }
             if (kind === "privacy") {
@@ -2059,6 +2161,9 @@
                     || findPrivacyReviewTarget("permissions")
                     || findPrivacyReviewTarget("cookies"),
                 };
+            }
+            if (kind === "review") {
+                return { target: wizardExportReadyCardEl || overviewPanelEl };
             }
             if (kind === "raw") {
                 const keys = options.key ? [options.key] : resolvedSummary.rawFallbackKeys;
@@ -2098,12 +2203,14 @@
 
         function renderFinalReviewJumpButtons(summary) {
             [
-                { el: wizardExportSummaryNetworkJumpEl, kind: "network" },
-                { el: wizardExportSummaryHomeJumpEl, kind: "home" },
-                { el: wizardExportSummarySearchJumpEl, kind: "search" },
-                { el: wizardExportSummaryFeaturesJumpEl, kind: "features" },
+                { el: wizardExportSummaryBrowserJumpEl, kind: "browser" },
+                { el: wizardExportSummaryUrlsJumpEl, kind: "urls" },
+                { el: wizardExportSummaryCertificatesJumpEl, kind: "certificates" },
+                { el: wizardExportSummaryUsersJumpEl, kind: "users" },
+                { el: wizardExportSummaryExtensionsJumpEl, kind: "extensions" },
                 { el: wizardExportSummaryAiJumpEl, kind: "ai" },
                 { el: wizardExportSummaryPrivacyJumpEl, kind: "privacy" },
+                { el: wizardExportSummaryReviewJumpEl, kind: "review" },
             ].forEach(({ el, kind }) => {
                 if (!el) return;
                 el.disabled = !findFinalReviewTarget(kind, summary);
@@ -2374,7 +2481,7 @@
             const reviewNow = [];
             const drilldown = [];
             const policyIndex = getActiveSchemaPolicyIndex();
-            const complianceInfo = getWizardComplianceMergeInfo();
+            const complianceInfo = getPersistedComplianceInfo();
             const complianceDecisions = Array.isArray(complianceInfo.decisions)
                 ? complianceInfo.decisions
                 : [];
@@ -2570,7 +2677,6 @@
                 : (currentRaw && typeof currentRaw === "object" ? currentRaw : {});
             const summary = getFinalExportSummaryData(parsed, dirty, invalid);
             const guidedSummary = getExportGuidedSummaryData(parsed);
-            const baselineSummary = getBaselineSummary(getWizardStarter());
 
             setSummaryValue(wizardExportProfileStateEl, summary.profileState, summary.profileTone);
             setSummaryValue(
@@ -2592,23 +2698,24 @@
             setText(wizardExportReadyCopyEl, summary.exportReadyCopy);
             setHintValue(wizardExportDownloadHintEl, summary.downloadHint, summary.downloadHintTone);
             renderFinalExportTechnicalAlerts(summary);
-            setText(wizardExportBaselineCopyEl, baselineSummary.copy || "");
-            if (wizardExportBaselineListEl) {
-                wizardExportBaselineListEl.innerHTML = (Array.isArray(baselineSummary.items) ? baselineSummary.items : [])
-                    .map((item) => `<div class="wizard-baseline-summary-item">${escapeHtml(item)}</div>`)
-                    .join("");
-            }
-            setSummaryValue(wizardExportSummaryNetworkEl, guidedSummary.networkText, guidedSummary.networkTone);
-            setSummaryValue(wizardExportSummaryHomeEl, guidedSummary.homeText, guidedSummary.homeTone);
-            setSummaryValue(wizardExportSummarySearchEl, guidedSummary.searchText, guidedSummary.searchTone);
-            setSummaryValue(wizardExportSummaryFeaturesEl, guidedSummary.featuresText, guidedSummary.featuresTone);
+            setSummaryValue(wizardExportSummaryBrowserEl, guidedSummary.browserText, guidedSummary.browserTone);
+            setSummaryValue(wizardExportSummaryUrlsEl, guidedSummary.urlsText, guidedSummary.urlsTone);
+            setSummaryValue(wizardExportSummaryCertificatesEl, guidedSummary.certificatesText, guidedSummary.certificatesTone);
+            setSummaryValue(wizardExportSummaryUsersEl, guidedSummary.usersText, guidedSummary.usersTone);
+            setSummaryValue(wizardExportSummaryExtensionsEl, guidedSummary.extensionsText, guidedSummary.extensionsTone);
             setSummaryValue(wizardExportSummaryAiEl, guidedSummary.aiText, guidedSummary.aiTone);
             setSummaryValue(wizardExportSummaryPrivacyEl, guidedSummary.privacyText, guidedSummary.privacyTone);
+            setSummaryValue(
+                wizardExportSummaryReviewEl,
+                buildHumanSummaryText([summary.validationState, summary.exportState].filter(Boolean)),
+                summary.validationStateTone === "attention" || summary.exportTone === "attention"
+                    ? "attention"
+                    : (summary.exportTone === "ready" ? "ready" : "default"),
+            );
             if (wizardExportShareableTextEl) {
                 wizardExportShareableTextEl.value = buildShareableGuidedSummaryText({
                     exportSummary: summary,
                     guidedSummary,
-                    baselineSummary,
                 });
             }
             setHintValue(

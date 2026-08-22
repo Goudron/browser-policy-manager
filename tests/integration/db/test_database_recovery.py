@@ -18,6 +18,18 @@ from sqlalchemy.engine.url import make_url
 
 import app.core.schema_channels as schema_channels
 from alembic import command
+from app.core.profile_baseline_provenance import (
+    generic_create_baseline_provenance,
+    legacy_migration_baseline_provenance,
+)
+from app.core.profile_certificate_provenance import (
+    empty_certificate_provenance,
+    imported_certificate_provenance,
+)
+from app.core.profile_extension_provenance import (
+    empty_extension_provenance,
+    imported_extension_provenance,
+)
 from app.core.schema_channels import SCHEMA_CHANNEL_CATALOG
 from app.db import EXPECTED_DATABASE_REVISION, DatabaseReadinessError, DatabaseRuntime
 from app.main import create_app
@@ -28,6 +40,12 @@ from tools.database_upgrade_recovery import (
 )
 
 PRE_M4_HEAD = "20260721_upgrade_profiles_to_firefox153_dual_esr"
+
+
+def _historical_m3_legacy_baseline_provenance() -> dict[str, object]:
+    result = legacy_migration_baseline_provenance()
+    result["starter"].pop("preset_id")
+    return result
 
 
 def _config(path: Path) -> Config:
@@ -74,6 +92,7 @@ def _profile_snapshot(path: Path) -> tuple[tuple[object, ...], str]:
             row = connection.execute(
                 text(
                     "SELECT name, name_casefold, description, schema_version, flags, compliance, "
+                    "baseline_provenance, extension_provenance, certificate_provenance, "
                     "revision, created_at, updated_at, deleted_at FROM profiles "
                     "ORDER BY id"
                 )
@@ -93,8 +112,9 @@ def _insert_head_profile(path: Path, *, schema_version: str) -> None:
             connection.execute(
                 text(
                     "INSERT INTO profiles (name, name_casefold, description, schema_version, flags, "
-                    "compliance, revision) VALUES (:name, :name_casefold, :description, "
-                    ":schema_version, :flags, :compliance, :revision)"
+                    "compliance, baseline_provenance, extension_provenance, certificate_provenance, revision) VALUES "
+                    "(:name, :name_casefold, :description, :schema_version, :flags, :compliance, "
+                    ":baseline_provenance, :extension_provenance, :certificate_provenance, :revision)"
                 ),
                 {
                     "name": "m6-readiness-profile",
@@ -103,6 +123,9 @@ def _insert_head_profile(path: Path, *, schema_version: str) -> None:
                     "schema_version": schema_version,
                     "flags": "{}",
                     "compliance": None,
+                    "baseline_provenance": json.dumps(generic_create_baseline_provenance()),
+                    "extension_provenance": json.dumps(empty_extension_provenance()),
+                    "certificate_provenance": json.dumps(empty_certificate_provenance()),
                     "revision": 7,
                 },
             )
@@ -198,7 +221,7 @@ def test_failed_upgrade_keeps_backup_and_retry_starts_from_clean_candidate(tmp_p
     restore_sqlite_candidate(backup, manifest, failed_candidate)
     failure_seen: list[str] = []
 
-    def interrupt_after_m4_write(
+    def interrupt_after_baseline_copy(
         connection,
         cursor,
         statement: str,
@@ -209,18 +232,18 @@ def test_failed_upgrade_keeps_backup_and_retry_starts_from_clean_candidate(tmp_p
         del cursor, parameters, context, executemany
         if (
             Path(str(connection.engine.url.database)).resolve() == failed_candidate.resolve()
-            and "UPDATE profiles" in statement
-            and "schema_version = CASE" in statement
+            and "INSERT INTO _alembic_tmp_profiles" in statement
+            and "baseline_provenance" in statement
         ):
             failure_seen.append(statement)
-            raise RuntimeError("M4-06 controlled interruption after migration write boundary")
+            raise RuntimeError("BPM096-M3-01 interruption after baseline copy boundary")
 
-    event.listen(Engine, "before_cursor_execute", interrupt_after_m4_write)
+    event.listen(Engine, "before_cursor_execute", interrupt_after_baseline_copy)
     try:
-        with pytest.raises(RuntimeError, match="controlled interruption"):
+        with pytest.raises(RuntimeError, match="baseline copy boundary"):
             command.upgrade(_config(failed_candidate), "head")
     finally:
-        event.remove(Engine, "before_cursor_execute", interrupt_after_m4_write)
+        event.remove(Engine, "before_cursor_execute", interrupt_after_baseline_copy)
 
     assert failure_seen
     assert _sha256(source) == source_digest
@@ -236,11 +259,23 @@ def test_failed_upgrade_keeps_backup_and_retry_starts_from_clean_candidate(tmp_p
                 connection.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
                 == EXPECTED_DATABASE_REVISION
             )
-            row = connection.execute(text("SELECT name, schema_version, flags FROM profiles")).one()
+            row = connection.execute(
+                text(
+                    "SELECT name, schema_version, flags, baseline_provenance, "
+                    "extension_provenance, certificate_provenance FROM profiles"
+                )
+            ).one()
             assert row == (
                 "m4-06-retained",
                 "release-153",
                 json.dumps({"Proxy": {"Mode": "none"}}, sort_keys=True),
+                json.dumps(
+                    _historical_m3_legacy_baseline_provenance(),
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ),
+                json.dumps(imported_extension_provenance({"Proxy": {"Mode": "none"}})),
+                json.dumps(imported_certificate_provenance({"Proxy": {"Mode": "none"}})),
             )
         assert "compliance" in {
             column["name"] for column in inspect(engine).get_columns("profiles")
@@ -355,14 +390,27 @@ def _postgres_create(base_url: str, database: str) -> None:
     _postgres_admin(base_url, f'CREATE DATABASE "{database}"')
 
 
-def _postgres_snapshot(url: str) -> tuple[str, tuple[str, str, object]]:
+def _postgres_snapshot(
+    url: str,
+    *,
+    include_baseline_provenance: bool = False,
+    include_extension_provenance: bool = False,
+    include_certificate_provenance: bool = False,
+) -> tuple[str, tuple[object, ...]]:
     engine = create_engine(url, future=True)
     try:
         with engine.connect() as connection:
             revision = connection.execute(
                 text("SELECT version_num FROM alembic_version")
             ).scalar_one()
-            row = connection.execute(text("SELECT name, schema_version, flags FROM profiles")).one()
+            columns = "name, schema_version, flags"
+            if include_baseline_provenance:
+                columns += ", baseline_provenance"
+            if include_extension_provenance:
+                columns += ", extension_provenance"
+            if include_certificate_provenance:
+                columns += ", certificate_provenance"
+            row = connection.execute(text(f"SELECT {columns} FROM profiles")).one()
         return str(revision), row
     finally:
         engine.dispose()
@@ -449,11 +497,11 @@ def test_postgresql_native_backup_interruption_and_clean_retry(tmp_path: Path):
             del cursor, parameters, context, executemany
             if (
                 connection.engine.url.database == databases["failed"]
-                and "UPDATE profiles" in statement
-                and "schema_version = CASE" in statement
+                and "baseline_provenance" in statement
+                and "DROP DEFAULT" in statement
             ):
                 failure_seen.append(statement)
-                raise RuntimeError("M4-06 controlled PostgreSQL migration interruption")
+                raise RuntimeError("BPM096-M3-01 controlled PostgreSQL migration interruption")
 
         event.listen(Engine, "before_cursor_execute", interrupt_postgres_upgrade)
         try:
@@ -478,10 +526,18 @@ def test_postgresql_native_backup_interruption_and_clean_retry(tmp_path: Path):
             tmp_path,
         )
         command.upgrade(_config_url(sync_urls["retry"]), "head")
-        revision, row = _postgres_snapshot(sync_urls["retry"])
+        revision, row = _postgres_snapshot(
+            sync_urls["retry"],
+            include_baseline_provenance=True,
+            include_extension_provenance=True,
+            include_certificate_provenance=True,
+        )
         assert revision == EXPECTED_DATABASE_REVISION
         assert row[0:2] == ("m4-06-postgres", "release-153")
         assert row[2] == {"Proxy": {"Mode": "none"}}
+        assert row[3] == _historical_m3_legacy_baseline_provenance()
+        assert row[4] == imported_extension_provenance({"Proxy": {"Mode": "none"}})
+        assert row[5] == imported_certificate_provenance({"Proxy": {"Mode": "none"}})
         asyncio.run(_assert_app_accepts_url(async_urls["retry"]))
     finally:
         for database in reversed(tuple(databases.values())):

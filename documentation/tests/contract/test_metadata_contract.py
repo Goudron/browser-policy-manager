@@ -47,7 +47,7 @@ def test_vocabulary_uses_fixed_dita_attributes_and_maintained_dynamic_registries
     assert {group: len(values) for group, values in vocabulary["registry_values"].items()} == {
         "policy": 123,
         "cis": 55,
-        "api-operation": 17,
+        "api-operation": 21,
     }
 
 

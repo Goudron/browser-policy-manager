@@ -19,6 +19,11 @@ SURFACE_TARGETS = {
     "json": "topic:ug-task-use-json-editor",
 }
 DEEP_TARGETS = {
+    "preparation-create": "topic:ug-task-create-first-profile",
+    "preparation-duplicate": "topic:ug-task-duplicate-profile",
+    "guided-urls-sites-navigation": "policy:Homepage",
+    "guided-certificates-trust": "policy:Certificates",
+    "guided-extensions": "policy:ExtensionSettings",
     "policy-ai-controls": "policy:AIControls",
     "policy-visual-search-enabled": "policy:VisualSearchEnabled",
     "cis-baseline-selection": "cis:1.1.1.1",

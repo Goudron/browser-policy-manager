@@ -15,6 +15,7 @@
       <step><cmd>Vuelva a abrir el perfil y confirme que la atribución de fuente aún muestra si el valor es de referencia, CIS, manual, importado o sin procesar.</cmd><info><p>Resultado esperado: los revisores posteriores pueden rastrear el valor configurado y encontrar el registro externo.</p></info></step>
     </steps>
     <result><p>La desviación CIS tiene evidencia de verificación procesable, un registro de excepción externo y atribución de fuente BPM visible.</p></result>
+    <example id="bpm096-localized-current"><title>Comportamiento actual en 0.9.6</title><p>El esquema, el preajuste inicial y la línea base CIS se eligen antes de crear el perfil guardado. Las fuentes baseline, CIS, manual, imported, converted y raw sirven para revisar, no prueban conformidad. Los certificados y la confianza tienen un registro separado por ruta; los estados manual, imported, converted, raw, unavailable y blocked requieren revisión manual.</p></example>
     <postreq><p>Si el revisor no puede verificar la ruta exportada o la evidencia externa, mantenga el elemento en revisión manual y no lo describa como conforme.</p></postreq>
   </taskbody>
   <related-links>

@@ -13,6 +13,7 @@
       <step><cmd>名称提示清除后再次保存或复制。</cmd><info><note type="warning">仅通过 BPM 界面重试；不要在应用程序外修改配置文件数据。</note></info></step>
     </steps>
     <result><p>配置文件或克隆具有唯一的可见名称，稍后可以在<uicontrol>库</uicontrol>中找到该名称。</p></result>
+    <example id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>创建和复制使用原子准备流程：名称、架构、预设、CIS 或转换错误不会创建目标，也不会修改源。架构、预设和 CIS 仅以只读方式显示。修正值时请使用归属位置：步骤 2 用于 URL/站点，步骤 4 用于证书和信任，步骤 6 用于扩展；变更架构时请请求明确的只读转换预览。</p></example>
     <postreq><p>如果错误再次出现，请停止当前操作，并向支持人员提供可见消息、配置文件名称、模式通道和当前页面。</p></postreq>
   </taskbody>
   <related-links>

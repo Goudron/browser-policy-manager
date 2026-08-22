@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-home-search-navigation" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Startseite, Suche und Navigation konfigurieren</title>
-  <shortdesc>Legen Sie Startoberflächen, Navigationsverhalten, verwaltete Suchmaschinen und Suchvorschläge aus Schritt 2 fest.</shortdesc>
+  <title>URLs, Websites und Navigation konfigurieren</title>
+  <shortdesc>Verwenden Sie Schritt 2 für Startseite, Startverhalten, Websitezugriff, Handler und verwaltete Lesezeichen.</shortdesc>
   <taskbody>
     <prereq><p>Schritt 2 ist geöffnet und der Schemakanal ist korrekt.</p></prereq>
-    <context><p>Diese Steuerelemente beeinflussen, was Benutzer zuerst sehen und wie Firefox Navigations- und Suchaktivitäten auflöst.</p></context>
+    <context><p>Diese Steuerelemente bestimmen, welche Seiten Benutzer öffnen können und wie Firefox startet und navigiert. Verwaltete Suchmaschinen und Suchvorschläge gehören zu Schritt 1.</p>
+      <fig id="screenshot-guided-step-2-urls-sites-navigation">
+        <title>URLs, Websites und Navigation</title>
+        <image keyref="screenshot.guided-step-2-urls-sites-navigation" placement="break" scalefit="yes" align="center">
+          <alt>Schritt 2 des geführten Editors mit Einstellungen für Startseite und Websitezugriff.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Öffnen Sie die Abschnitte „Startseite“, „Suche“ und „Navigation“.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Legen Sie das für das Profil erforderliche Verhalten auf der Startseite oder bei neuen Tabs fest.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Konfigurieren Sie verwaltete Suchmaschinen und Suchvorschläge gemäß der Richtlinie.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Überprüfen Sie die Navigationsstandards, bevor Sie zu den Sicherheitseinstellungen wechseln.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
+      <step><cmd>Öffnen Sie Schritt 2, <uicontrol>URLs, Websites und Navigation</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Die Steuerelemente von Schritt 2 sind ohne Suchmaschinen-Steuerelemente sichtbar.</p></info></step>
+      <step><cmd>Legen Sie die für das Profil erforderliche Startseite oder das Startverhalten fest.</cmd><info><p>Erwartetes Ergebnis: Firefox öffnet die geprüfte Startoberfläche.</p></info></step>
+      <step><cmd>Konfigurieren Sie erlaubte oder blockierte Websites, Handler und verwaltete Lesezeichen, die das Profil benötigt.</cmd><info><p>Erwartetes Ergebnis: Zusammengehörige URL- und Websiteentscheidungen werden gemeinsam geprüft.</p></info></step>
+      <step><cmd>Überprüfen Sie die Navigationswerte, bevor Sie zu den Sicherheitseinstellungen wechseln.</cmd><info><note type="warning">Das Ändern eines schemaabhängigen Steuerelements kann einen Wert für den ausgewählten Firefox-Kanal ungültig machen. Verwenden Sie Schritt 1 für verwaltete Suchmaschinen oder Suchvorschläge.</note></info></step>
     </steps>
-    <result><p>Das Profil definiert die Startseite, die verwaltete Suche, Vorschläge und das Navigationsverhalten.</p></result>
-    <postreq><p>Wiederherstellung: Wenn Benutzer einen erwarteten Suchpfad verlieren würden, passen Sie den verwalteten Suchmaschineneintrag vor dem Speichern an.</p></postreq>
+    <result><p>Das Profil definiert geprüfte Startseite, Startverhalten, Websitezugriff, Handler, Lesezeichen und Navigation.</p></result>
+    <postreq><p>Wiederherstellung: Wenn Benutzer einen erwarteten Website- oder Navigationspfad verlieren, korrigieren Sie den sichtbaren URL- oder Websiteeintrag und validieren Sie erneut. Verwenden Sie Schritt 1 für die Wiederherstellung einer verwalteten Suche oder eines Suchvorschlags.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-browser-access-defaults"/>

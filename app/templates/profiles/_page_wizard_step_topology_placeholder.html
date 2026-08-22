@@ -1,0 +1,13 @@
+<section
+    class="wizard-panel"
+    id="wizard-step-{{ wizard_topology_step.step }}"
+    data-wizard-step-id="{{ wizard_topology_step.id }}"
+    aria-hidden="true"
+    aria-label="{{ tr(wizard_topology_step.label_key, wizard_topology_step.label_fallback) }}">
+    <div class="wizard-section-group wizard-topology-placeholder">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="{{ wizard_topology_step.label_key }}">{{ tr(wizard_topology_step.label_key, wizard_topology_step.label_fallback) }}</h3>
+        </div>
+        <p class="wizard-input-hint" data-i18n="{{ wizard_topology_step.copy_key }}">{{ tr(wizard_topology_step.copy_key, wizard_topology_step.copy_fallback) }}</p>
+    </div>
+</section>

@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Navigate the six Guided editor steps</title>
-  <shortdesc>Move through <uicontrol>Profile &amp; baseline</uicontrol>, <uicontrol>Browser access &amp; defaults</uicontrol>, <uicontrol>Security &amp; privacy</uicontrol>, <uicontrol>Users, add-ons &amp; sites</uicontrol>, <uicontrol>AI &amp; smart features</uicontrol>, and <uicontrol>Review &amp; export</uicontrol>.</shortdesc>
+  <title>Navigate the eight Guided editor steps</title>
+  <shortdesc>Use eight task-first steps after preparation has created a saved profile.</shortdesc>
   <taskbody>
-    <prereq><p>Open a profile in <uicontrol>Guided editor</uicontrol> from the <uicontrol>Library</uicontrol> or creation flow.</p></prereq>
-    <context><p><uicontrol>Guided editor</uicontrol> turns profile configuration into six task-first steps and keeps schema validation visible while you work.</p>
+    <prereq><p>Open a saved profile in <uicontrol>Guided editor</uicontrol> from <uicontrol>Library</uicontrol>, creation, or duplicate preparation.</p></prereq>
+    <context><p>The editor header displays the selected schema, preset, and CIS baseline as read-only facts. Change those choices only through a new preparation action or explicit schema conversion. The editor contains eight steps; each policy family has one Guided owner.</p>
       <fig id="screenshot-guided-editor-overview">
-        <title>Guided editor overview</title>
+        <title>Guided editor chrome</title>
         <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
-          <alt>Guided editor showing the step navigation and validation state for a saved profile.</alt>
+          <alt>Guided editor showing read-only schema, preset, and CIS baseline facts with the eight-step navigation.</alt>
+        </image>
+      </fig>
+      <fig id="screenshot-guided-step-6-extensions">
+        <title>Extensions</title>
+        <image keyref="screenshot.guided-step-6-extensions" placement="break" scalefit="yes" align="center">
+          <alt>Guided Step 6 showing AMO search and manual extension rule entry.</alt>
         </image>
       </fig>
     </context>
     <steps>
-      <step><cmd>Start with Step 1, <uicontrol>Profile &amp; baseline</uicontrol>, to confirm name, schema channel, scenario, starter preset, and CIS layer.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Continue through Step 2, <uicontrol>Browser access &amp; defaults</uicontrol>, for network access, browser behavior, home, search, and navigation defaults.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Use Step 3 for privacy controls, permissions, cookies, cleanup, DNS, and security hardening posture.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Use Step 4 for accounts, extensions, bookmarks, language, translation, add-ons, and website handling.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Use Step 5 only for existing Firefox <uicontrol>AI &amp; smart features</uicontrol> policy controls that the selected schema supports.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Finish in Step 6, <uicontrol>Review &amp; export</uicontrol>, to validate, save, and download the reviewed profile.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+      <step><cmd>Use Step 1, <uicontrol>Browser, network &amp; search</uicontrol>, for browser behavior, network access, and search.</cmd><info><p>Expected result: browser and network defaults are grouped without URL/site or certificate controls.</p></info></step>
+      <step><cmd>Use Step 2, <uicontrol>URLs, sites &amp; navigation</uicontrol>, for homepage, startup, permitted or blocked sites, handlers, and managed bookmarks.</cmd><info><p>Expected result: navigation values are reviewed together.</p></info></step>
+      <step><cmd>Use Step 3, <uicontrol>Security &amp; privacy</uicontrol>, for privacy controls, permissions, cookies, cleanup, DNS, and hardening posture.</cmd><info><p>Expected result: privacy decisions remain separate from certificate trust.</p></info></step>
+      <step><cmd>Use Step 4, <uicontrol>Certificates &amp; trust</uicontrol>, for certificate references, enterprise-root choices, authentication, and security devices.</cmd><info><p>BPM stores literal references and does not read certificate or device contents.</p></info></step>
+      <step><cmd>Use Step 5, <uicontrol>Users, language &amp; sync</uicontrol>, for the user-facing identity, language, and synchronization controls supported by the schema.</cmd><info><p>Expected result: these controls do not duplicate extension or site rules.</p></info></step>
+      <step><cmd>Use Step 6, <uicontrol>Extensions</uicontrol>, for allowed, blocked, installed, locked, and update rules.</cmd><info><p>AMO search is optional and explicit; manual GUID and validated install-URL entry remain available when it is unavailable.</p></info></step>
+      <step><cmd>Use Step 7, <uicontrol>AI</uicontrol>, only for supported Firefox AI and smart-feature policies.</cmd><info><p>Expected result: unsupported controls remain unavailable for the selected schema.</p></info></step>
+      <step><cmd>Use Step 8, <uicontrol>Review &amp; export</uicontrol>, to resolve attention items, validate, save, and export.</cmd><info><note type="warning">A schema warning, raw fallback, CIS manual-review item, or conversion blocker needs a visible review decision; it is not silently repaired by changing another step.</note></info></step>
     </steps>
-    <result><p>You can explain where each guided setting belongs and continue from the correct step.</p></result>
-    <postreq><p>Recovery: if you land in the wrong area, use the stepper or search instead of changing unrelated controls. For a saved profile, open schema conversion review only after you decide to change channel: preserve unsaved work first, choose a distinct supported target, and use the read-only preview before any explicit apply.</p></postreq>
+    <result><p>You can locate each Guided policy family and distinguish the read-only baseline facts from editable settings.</p></result>
+    <postreq><p>Recovery: use the stepper, setting search, or Review jump if a setting is in the wrong context. For a schema change, save or deliberately discard current edits, request an explicit read-only conversion preview, and apply only an applicable current plan.</p></postreq>
   </taskbody>
   <related-links>
-    <link keyref="topic.ug-task-search-guided-settings"/>
-    <link keyref="topic.ug-task-review-guided-profile"/>
+    <link keyref="topic.ug-task-configure-browser-access-defaults"/>
+    <link keyref="topic.ug-task-configure-security-privacy"/>
+    <link keyref="topic.fx-task-review-complex-policy-configuration"/>
   </related-links>
 </task>

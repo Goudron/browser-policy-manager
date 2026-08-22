@@ -1,12 +1,20 @@
 {% set initial_profile = editing_profile_initial if editing_profile_initial else none %}
 {% set has_initial_profile = initial_profile and initial_profile.id is not none %}
 {% set initial_schema_value = (initial_profile.schema_version if has_initial_profile and initial_profile.schema_version else editing_profile_schema_version) or schema_channels_catalog.default_value %}
-{% set initial_schema_label = schema_channels_catalog.default_label %}
-{% for option in schema_channels_catalog.options %}
-    {% if option.value == initial_schema_value %}
-        {% set initial_schema_label = option.label %}
-    {% endif %}
-{% endfor %}
+{% set initial_schema_label = editing_profile_schema_label or schema_channels_catalog.default_label %}
+{% set initial_baseline_display = initial_profile.get("baseline_display", {}) if has_initial_profile and initial_profile is mapping else {} %}
+{% set initial_starter_display = initial_baseline_display.get("starter", {}) if initial_baseline_display is mapping else {} %}
+{% set initial_starter_identity_state = initial_starter_display.get("identity_state") if initial_starter_display is mapping else none %}
+{% set initial_starter_id = initial_starter_display.get("preset_id") if initial_starter_display is mapping else none %}
+{% set initial_starter_availability = initial_starter_display.get("availability") if initial_starter_display is mapping else none %}
+{% set initial_starter_disposition = initial_starter_display.get("disposition") if initial_starter_display is mapping else none %}
+{% set initial_cis_display = initial_baseline_display.get("cis", {}) if initial_baseline_display is mapping else {} %}
+{% set initial_cis_identity_state = initial_cis_display.get("identity_state") if initial_cis_display is mapping else none %}
+{% set initial_cis_baseline_id = initial_cis_display.get("baseline_id") if initial_cis_display is mapping else none %}
+{% set initial_cis_benchmark_version = initial_cis_display.get("benchmark_version") if initial_cis_display is mapping else none %}
+{% set initial_cis_display_status = initial_cis_display.get("display_status") if initial_cis_display is mapping else none %}
+{% set initial_cis_current_claim = initial_cis_display.get("current_claim") if initial_cis_display is mapping else false %}
+{% set initial_cis_reason_code = initial_cis_display.get("reason_code") if initial_cis_display is mapping else none %}
 <section id="overview-panel" class="editor-chrome-panel surface-panel fade-up">
     <div class="editor-chrome-grid">
         <div class="editor-chrome-heading">
@@ -92,15 +100,96 @@
                             {{ tr("profiles.name_locked") if has_initial_profile else tr("profiles.name_hint") }}
                         </div>
                     </label>
-                    <label>
-                        <div class="field-label mb-1" data-i18n="profiles.schema_label">{{ tr("profiles.schema_label") }}</div>
-                        <select id="profile-type" class="soft-input w-full rounded-2xl px-3 py-3 text-sm"
-                            title="{{ tr('profiles.schema_label') }}"{% if has_initial_profile %} disabled{% endif %}>
-                            {% for option in schema_channels_catalog.options %}
-                            <option value="{{ option.value }}" data-schema-channel-label="{{ option.value }}" data-i18n="{{ option.i18n_key }}" {% if option.value == initial_schema_value %}selected{% endif %}>{{ option.label }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
+                    <dl class="editor-chrome-facts">
+                        <div class="editor-chrome-fact">
+                            <dt class="field-label mb-1" data-i18n="profiles.schema_label">{{ tr("profiles.schema_label") }}</dt>
+                            <dd id="profile-schema-fact" class="editor-chrome-fact-value"
+                                data-saved-profile-schema="{{ initial_schema_value }}">{{ initial_schema_label }}</dd>
+                        </div>
+                        <div class="editor-chrome-fact">
+                            <dt class="field-label mb-1" data-i18n="profiles.editor_chrome_starter_label">{{ tr("profiles.editor_chrome_starter_label") }}</dt>
+                            <dd id="profile-starter-fact" class="editor-chrome-fact-value"
+                                {% if initial_starter_identity_state %}data-saved-profile-starter-identity-state="{{ initial_starter_identity_state }}"{% endif %}
+                                {% if initial_starter_id %}data-saved-profile-starter-id="{{ initial_starter_id }}"{% endif %}
+                                {% if initial_starter_availability %}data-saved-profile-starter-availability="{{ initial_starter_availability }}"{% endif %}
+                                {% if initial_starter_disposition %}data-saved-profile-starter-disposition="{{ initial_starter_disposition }}"{% endif %}>
+                                {% if initial_starter_identity_state == "custom-imported" %}
+                                    <span data-i18n="profiles.editor_chrome_starter_custom_imported">{{ tr("profiles.editor_chrome_starter_custom_imported") }}</span>
+                                {% elif initial_starter_identity_state == "catalog" and initial_starter_id %}
+                                    {% if initial_starter_disposition == "preserved" %}
+                                    <span data-i18n="profiles.editor_chrome_starter_keep_source">{{ tr("profiles.editor_chrome_starter_keep_source") }}</span>
+                                    <span aria-hidden="true"> · </span>
+                                    {% endif %}
+                                    {% if initial_starter_availability == "unavailable" %}
+                                    <span data-i18n="profiles.editor_chrome_starter_unavailable">{{ tr("profiles.editor_chrome_starter_unavailable") }}</span>
+                                    <span aria-hidden="true"> · </span>
+                                    {% endif %}
+                                    <code>{{ initial_starter_id }}</code>
+                                {% else %}
+                                    <span data-i18n="profiles.editor_chrome_starter_unavailable">{{ tr("profiles.editor_chrome_starter_unavailable") }}</span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                        <div class="editor-chrome-fact">
+                            <dt class="field-label mb-1" data-i18n="profiles.editor_chrome_cis_label">{{ tr("profiles.editor_chrome_cis_label") }}</dt>
+                            <dd id="profile-cis-fact" class="editor-chrome-fact-value"
+                                data-saved-profile-cis-current-claim="{{ 'true' if initial_cis_current_claim else 'false' }}"
+                                {% if initial_cis_identity_state %}data-saved-profile-cis-identity-state="{{ initial_cis_identity_state }}"{% endif %}
+                                {% if initial_cis_display_status %}data-saved-profile-cis-display-status="{{ initial_cis_display_status }}"{% endif %}
+                                {% if initial_cis_baseline_id %}data-saved-profile-cis-baseline-id="{{ initial_cis_baseline_id }}"{% endif %}
+                                {% if initial_cis_reason_code %}aria-describedby="profile-cis-reason" data-saved-profile-cis-reason-code="{{ initial_cis_reason_code }}"{% endif %}>
+                                {% if initial_cis_display_status == "none" %}
+                                    <span data-i18n="profiles.editor_chrome_cis_none">{{ tr("profiles.editor_chrome_cis_none") }}</span>
+                                {% else %}
+                                    {% if initial_cis_identity_state == "custom-imported" %}
+                                    <span data-i18n="profiles.editor_chrome_cis_custom_imported">{{ tr("profiles.editor_chrome_cis_custom_imported") }}</span>
+                                    {% elif initial_cis_baseline_id in ["cis_l1", "cis-l1"] %}
+                                    <span data-i18n="profiles.editor_chrome_cis_level_1">{{ tr("profiles.editor_chrome_cis_level_1") }}</span>
+                                    {% elif initial_cis_baseline_id in ["cis_l2", "cis-l2"] %}
+                                    <span data-i18n="profiles.editor_chrome_cis_level_2">{{ tr("profiles.editor_chrome_cis_level_2") }}</span>
+                                    {% elif initial_cis_baseline_id %}
+                                    <code>{{ initial_cis_baseline_id }}</code>
+                                    {% else %}
+                                    <span data-i18n="profiles.editor_chrome_cis_unavailable">{{ tr("profiles.editor_chrome_cis_unavailable") }}</span>
+                                    {% endif %}
+                                    {% if initial_cis_benchmark_version %}
+                                    <span aria-hidden="true"> · </span><code>{{ initial_cis_benchmark_version }}</code>
+                                    {% endif %}
+                                    {% if initial_cis_display_status == "verified" %}
+                                    <span class="editor-chrome-fact-status" data-i18n="profiles.editor_chrome_cis_verified">{{ tr("profiles.editor_chrome_cis_verified") }}</span>
+                                    {% elif initial_cis_display_status == "manual-review" %}
+                                    <span class="editor-chrome-fact-status" data-i18n="profiles.editor_chrome_cis_manual_review">{{ tr("profiles.editor_chrome_cis_manual_review") }}</span>
+                                    {% elif initial_cis_display_status == "invalidated" %}
+                                    <span class="editor-chrome-fact-status" data-i18n="profiles.editor_chrome_cis_invalidated">{{ tr("profiles.editor_chrome_cis_invalidated") }}</span>
+                                    {% else %}
+                                    <span class="editor-chrome-fact-status" data-i18n="profiles.editor_chrome_cis_unavailable">{{ tr("profiles.editor_chrome_cis_unavailable") }}</span>
+                                    {% endif %}
+                                {% endif %}
+                                {% if initial_cis_reason_code %}
+                                <span id="profile-cis-reason" class="editor-chrome-fact-detail">
+                                    {% if initial_cis_reason_code == "cis_provenance_unknown" %}
+                                    <span data-i18n="profiles.editor_chrome_cis_reason_provenance_unknown">{{ tr("profiles.editor_chrome_cis_reason_provenance_unknown") }}</span>
+                                    {% elif initial_cis_reason_code == "baseline_provenance_unavailable" %}
+                                    <span data-i18n="profiles.editor_chrome_cis_reason_provenance_unavailable">{{ tr("profiles.editor_chrome_cis_reason_provenance_unavailable") }}</span>
+                                    {% elif initial_cis_reason_code == "cis_merge_manual_review_required" %}
+                                    <span data-i18n="profiles.editor_chrome_cis_reason_merge_review">{{ tr("profiles.editor_chrome_cis_reason_merge_review") }}</span>
+                                    {% elif initial_cis_reason_code == "profile_payload_modified" %}
+                                    <span data-i18n="profiles.editor_chrome_cis_reason_profile_changed">{{ tr("profiles.editor_chrome_cis_reason_profile_changed") }}</span>
+                                    {% elif initial_cis_reason_code == "compliance_target_proof_unavailable" %}
+                                    <span data-i18n="profiles.editor_chrome_cis_reason_conversion">{{ tr("profiles.editor_chrome_cis_reason_conversion") }}</span>
+                                    {% elif initial_cis_reason_code in ["cis_schema_unavailable", "duplicate_source_schema_unavailable", "duplicate_target_schema_unavailable"] %}
+                                    <span data-i18n="profiles.editor_chrome_cis_reason_schema_unavailable">{{ tr("profiles.editor_chrome_cis_reason_schema_unavailable") }}</span>
+                                    {% else %}
+                                    <span data-i18n="profiles.editor_chrome_cis_reason_unavailable">{{ tr("profiles.editor_chrome_cis_reason_unavailable") }}</span>
+                                    {% endif %}
+                                    {% if initial_cis_display_status in ["manual-review", "invalidated", "unavailable"] %}
+                                    <span data-i18n="profiles.editor_chrome_cis_recovery">{{ tr("profiles.editor_chrome_cis_recovery") }}</span>
+                                    {% endif %}
+                                </span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                    </dl>
         </div>
 
         <div class="editor-chrome-mode-switch">

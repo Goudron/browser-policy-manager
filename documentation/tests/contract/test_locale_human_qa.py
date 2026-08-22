@@ -52,7 +52,9 @@ def test_locale_human_qa_records_accepted_screenshot_release_scope() -> None:
     )
     assert qa["capture_report"].endswith("user-guide-screenshots-0.9.1.json")
     assert qa["contact_sheet"].endswith("contact-sheet.png")
-    assert len(matrix["matrix"]) == 36
+    assert len(matrix["matrix"]) == 66
+    assert matrix["source_refresh"]["status"] == "source-capture-complete"
+    assert matrix["source_refresh"]["capture_scope"]["new_rows_captured"] == 30
     assert set(qa["blocked_items_closed"]) == EXPECTED_CLOSED_BLOCKERS
     assert "Broader non-screenshot locale phrasing debt" in " ".join(
         qa["known_not_closed_by_this_item"]
@@ -72,6 +74,7 @@ def test_locale_human_qa_accepts_visual_qa_and_closes_blockers() -> None:
     assert set(visual["coverage"]["locales_reviewed"]) == {"en", *LOCALES}
     assert set(visual["screenshot_regeneration"]["last_reviewed_locales"]) == set(LOCALES)
     assert qa["status"] == visual["screenshot_regeneration"]["status"]
+    assert visual["subsequent_source_refresh"]["visual_acceptance_status"] == "not-reviewed"
 
 
 def test_locale_human_qa_records_each_non_english_locale_result() -> None:

@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Parcourir les six étapes de l’« Éditeur guidé »</title>
-  <shortdesc>Les six étapes couvrent l’identité du profil, l’accès au navigateur et les valeurs par défaut, la sécurité et la confidentialité, les utilisateurs, les extensions et les sites, les fonctionnalités intelligentes, puis la vérification et l’exportation.</shortdesc>
-  <taskbody>
-    <prereq><p>Ouvrez un profil dans l’éditeur guidé à partir de la bibliothèque ou du flux de création.</p></prereq>
-    <context><p>L’« <uicontrol>Éditeur guidé</uicontrol> » organise la configuration du profil en six étapes et maintient la validation du schéma visible pendant votre travail.</p>
+  <title>Utiliser les huit étapes de l’éditeur guidé</title>
+  <shortdesc>Après la préparation d’un profil enregistré, configurez-le dans huit étapes orientées tâche.</shortdesc>
+  <taskbody><prereq><p>Ouvrez un profil enregistré dans l’<uicontrol>Éditeur guidé</uicontrol> depuis la <uicontrol>Bibliothèque</uicontrol>, après la création ou la préparation d’un doublon.</p></prereq><context><p>L’en-tête affiche le schéma, le préréglage et la ligne de base CIS comme faits en lecture seule. Modifiez-les uniquement par une nouvelle préparation ou une conversion explicite de schéma. L’éditeur comporte huit étapes; chaque famille de stratégies a un seul propriétaire guidé.</p>
       <fig id="screenshot-guided-editor-overview">
-        <title>Vue d’ensemble de l’« Éditeur guidé »</title>
+        <title>En-tête de l’éditeur guidé</title>
         <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
-          <alt>Éditeur guidé affichant l'état de navigation et de validation des étapes pour un profil enregistré.</alt>
+          <alt>Éditeur guidé affichant les informations en lecture seule de schéma, préréglage et base CIS, avec une navigation en huit étapes.</alt>
         </image>
       </fig>
-      <p>Pour un profil enregistré, n’ouvrez la revue de conversion du schéma qu’après avoir décidé de changer de canal : préservez le travail non enregistré, choisissez une autre cible prise en charge et utilisez l’aperçu en lecture seule avant toute application explicite.</p>
-    </context>
-    <steps>
-      <step><cmd>Dans l’étape 1, confirmez le nom, le canal de schéma, le scénario, le préréglage de démarrage et la couche CIS.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
-      <step><cmd>Dans l’étape 2, configurez l’accès réseau, le comportement du navigateur, l’accueil, la recherche et les valeurs de navigation par défaut.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
-      <step><cmd>Dans l’étape 3, configurez la confidentialité, les autorisations, les cookies, le nettoyage, le DNS et le niveau de sécurité.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
-      <step><cmd>Dans l’étape 4, configurez les comptes, les extensions, les favoris, la langue, la traduction et les règles relatives aux sites.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
-      <step><cmd>Dans l’étape 5, configurez uniquement les stratégies Firefox pour l’IA et les fonctionnalités intelligentes prises en charge par le schéma sélectionné.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
-      <step><cmd>Dans l’étape 6, validez, enregistrez et exportez le profil.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
-    </steps>
-    <result><p>Vous pouvez expliquer à quoi appartient chaque paramètre guidé et continuer à partir de la bonne étape.</p></result>
-    <postreq><p>Récupération : si vous êtes dans la mauvaise zone, accédez à l’étape appropriée ou utilisez la recherche plutôt que de modifier des paramètres sans rapport.</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-task-search-guided-settings"/>
-    <link keyref="topic.ug-task-review-guided-profile"/>
-  </related-links>
+      <fig id="screenshot-guided-step-6-extensions">
+        <title>Extensions</title>
+        <image keyref="screenshot.guided-step-6-extensions" placement="break" scalefit="yes" align="center">
+          <alt>Étape 6 de l’éditeur guidé avec la recherche AMO et la saisie manuelle de règles d’extension.</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>Utilisez l’étape 1, <uicontrol>Navigateur, réseau &amp; recherche</uicontrol>, pour le comportement du navigateur, l’accès réseau et la recherche.</cmd><info><p>Elle n’inclut pas les URL, sites ou certificats.</p></info></step>
+<step><cmd>Utilisez l’étape 2, <uicontrol>URL, sites &amp; navigation</uicontrol>, pour la page d’accueil, le démarrage, les sites autorisés ou bloqués, les gestionnaires et les marque-pages gérés.</cmd><info><p>Les valeurs de navigation sont examinées ensemble.</p></info></step>
+<step><cmd>Utilisez l’étape 3, <uicontrol>Sécurité &amp; vie privée</uicontrol>, pour la vie privée, les permissions, cookies, nettoyage, DNS et le renforcement.</cmd><info><p>Les décisions de vie privée restent séparées de la confiance des certificats.</p></info></step>
+<step><cmd>Utilisez l’étape 4, <uicontrol>Certificats &amp; confiance</uicontrol>, pour les références de certificats, racines d’entreprise, authentification et périphériques de sécurité.</cmd><info><p>BPM conserve des références littérales et ne lit pas le contenu des certificats ou périphériques.</p></info></step>
+<step><cmd>Utilisez l’étape 5, <uicontrol>Utilisateurs, langue &amp; synchronisation</uicontrol>, pour les contrôles d’identité, de langue et de synchronisation pris en charge.</cmd><info><p>Les règles d’extensions et de sites n’y sont pas dupliquées.</p></info></step>
+<step><cmd>Utilisez l’étape 6, <uicontrol>Extensions</uicontrol>, pour les règles autorisées, bloquées, obligatoires, verrouillées et de mise à jour.</cmd><info><p>La recherche AMO est facultative et explicite; si elle est indisponible, la saisie manuelle du GUID et d’une URL d’installation validée reste possible.</p></info></step>
+<step><cmd>Utilisez l’étape 7, <uicontrol>IA</uicontrol>, seulement pour les stratégies Firefox prises en charge.</cmd><info><p>Les contrôles non pris en charge restent indisponibles dans le schéma choisi.</p></info></step>
+<step><cmd>Utilisez l’étape 8, <uicontrol>Vérifier et exporter</uicontrol>, pour résoudre les éléments d’attention, valider, enregistrer et exporter.</cmd><info><note type="warning">Un avertissement de schéma, une valeur brute, un élément CIS à vérifier manuellement ou un blocage de conversion exige une décision visible; une autre étape ne le corrige pas silencieusement.</note></info></step>
+</steps><result><p>Vous pouvez situer chaque famille de stratégies et distinguer les faits de base en lecture seule des réglages modifiables.</p></result><postreq><p>Récupération : utilisez l’étape, la recherche de réglage ou le saut depuis la vérification si un réglage est hors contexte. En cas de changement de schéma, enregistrez ou abandonnez volontairement les modifications, demandez un aperçu de conversion en lecture seule et n’appliquez qu’un plan actuel applicable.</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-configure-browser-access-defaults"/><link keyref="topic.ug-task-configure-security-privacy"/><link keyref="topic.fx-task-review-complex-policy-configuration"/></related-links>
 </task>

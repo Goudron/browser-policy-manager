@@ -37,7 +37,7 @@ def test_macos_release_inputs_are_complete_and_bound_to_current_bpm_version(
 
     targets = macos_distribution.validate_release_inputs()
 
-    assert macos_distribution._project_version() == "0.9.5.1"
+    assert macos_distribution._project_version() == "0.9.6"
     assert all(target.artifact.endswith(".dmg") for target in targets)
 
 

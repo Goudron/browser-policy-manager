@@ -7,7 +7,7 @@
     <prereq><p>Use fixture <codeph>cis-workflow-level-2-release-fixture</codeph>: Firefox Release 153, layer <codeph>cis-l2.release-153</codeph>, starter preset <codeph>soc_hard</codeph>, and comparison profile <codeph>cis-workflow-level-1-release-reference</codeph>.</p></prereq>
     <context><p>Level 2 is the hardened path. It may be less compatible than Level 1, so the reviewer must inspect Guided and <uicontrol>All settings</uicontrol>, resolve attention items, compare against a Level 1 reference, export, and independently verify the result.</p></context>
     <steps>
-      <step><cmd>Create or duplicate a Release 153 profile, apply the SOC-style hardened starter preset, and apply the Level 2 CIS layer.</cmd><info><p>Expected result: the profile records <codeph>soc_hard</codeph> and <codeph>cis-l2.release-153</codeph> in the source trail.</p></info></step>
+      <step><cmd>Create or duplicate a Release 153 profile, selecting the SOC-style hardened starter preset and Level 2 CIS baseline in preparation.</cmd><info><p>Expected result: the saved profile records <codeph>soc_hard</codeph> and <codeph>cis-l2.release-153</codeph> in the source trail.</p></info></step>
       <step><cmd>Review the profile in <uicontrol>Guided editor</uicontrol>, focusing on stricter security/privacy defaults and any controls that can affect usability, add-ons, browsing data, network behavior, or enterprise operations.</cmd><info><p>Expected result: high-impact settings are identified before the profile is exported.</p></info></step>
       <step><cmd>Use <uicontrol>All settings</uicontrol> to filter configured CIS rows, open attention items, and trace each row to its generated recommendation topic, mapping table, UI target, and affected Firefox policy topic.</cmd><info><p>Expected result: every stricter value has a visible source path and a policy-topic route for review.</p></info></step>
       <step><cmd>Resolve manual-review rows and intentional deviations using the deviation task, including owner, reason, review date, external record, and whether the value remains baseline, CIS, manual, imported, or raw.</cmd><info><note type="warning">BPM does not persist a dedicated exception or waiver object; preserve the external record before treating a deviation as reviewed.</note></info></step>
@@ -15,7 +15,8 @@
       <step><cmd>Validate, export <codeph>policies.json</codeph>, and run independent deployment verification with the owner-approved runtime, operating-system, network, or audit method.</cmd><info><p>Expected result: the hardened profile has an export artifact, validation result, comparison evidence, and external verification evidence.</p></info></step>
     </steps>
     <result><p>The representative Level 2 hardened profile is reviewable end to end and remains bounded by BPM's mapping, export, and source-attribution evidence.</p></result>
-    <postreq><p>If independent verification finds deployment risk, keep the profile as a draft and update the external decision record before reuse.</p></postreq>
+    <example id="bpm096-localized-current"><title>Current 0.9.6 behavior</title><p>Schema, starter preset, and CIS baseline are selected before BPM creates the saved profile. Baseline, CIS, manual, imported, converted, and raw attribution support review rather than proving compliance. Certificates and trust use a separate path-level ledger; manual, imported, converted, raw, unavailable, and blocked states require manual review.</p></example>
+    <postreq><p>If independent verification finds deployment risk, keep the saved profile out of deployment and update the external decision record before reuse.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-levels-channels-layers"/>

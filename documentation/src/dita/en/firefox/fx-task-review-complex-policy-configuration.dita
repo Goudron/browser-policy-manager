@@ -9,12 +9,13 @@
     <steps>
       <step><cmd>Open <uicontrol>All settings</uicontrol> and filter to the affected family.</cmd><info><p>Expected result: related policies, preferences, and source labels are visible together.</p></info></step>
       <step><cmd>Check the Release/ESR badge for every policy in the family.</cmd><info><note type="warning">A Release-only policy must not be exported for an ESR-targeted profile.</note></info></step>
-      <step><cmd>Inspect nested object and array values, including unknown preserved fields.</cmd><info><p>Expected result: raw fallback values are intentionally kept or removed before save.</p></info></step>
+      <step><cmd>Inspect nested object and array values, including unknown preserved fields.</cmd><info><p>Expected result: raw fallback values are intentionally kept or removed before save. For extensions, URLs/sites, and certificates/trust, return to Guided Steps 6, 2, and 4 respectively when the structured control applies.</p></info></step>
       <step><cmd>Compare preset, CIS, imported, manual, and raw sources.</cmd><info><p>Expected result: conflicts are resolved deliberately rather than hidden by later edits.</p></info></step>
       <step><cmd>Validate the profile and review the generated <codeph>policies.json</codeph> shape.</cmd><info><p>Expected result: BPM reports no schema errors for the selected channel.</p></info></step>
     </steps>
     <result><p>The complex family has reviewed nested values, source decisions, channel support, and a clean validation result.</p></result>
-    <postreq><p>If validation fails, return to the family, remove unsupported keys, or switch to the channel that actually supports the policy.</p></postreq>
+    <example id="bpm096-localized-current"><title>Current 0.9.6 behavior</title><p>Schema, preset, and CIS baseline are selected during preparation and remain read-only in the editor. For another saved profile, use explicit conversion or duplicate preparation; an unsupported or blocked case never silently drops values. Guided owners are Step 2 for URLs/sites, Step 4 for certificates and trust, and Step 6 for extensions.</p></example>
+    <postreq><p>If validation fails, return to the family, remove unsupported keys, or use explicit conversion to a schema that supports the policy. A conversion or duplicate blocker preserves the source and creates no converted target.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.fx-concept-complex-policy-families"/>

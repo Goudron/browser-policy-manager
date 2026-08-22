@@ -2,12 +2,12 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-firefox-ai-policies" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Configure Firefox AI and smart-feature policies</title>
-  <shortdesc>Use Step 5 to configure available Firefox policies for AI, visual search, and other smart features.</shortdesc>
+  <shortdesc>Use Step 7 to configure available Firefox policies for AI, visual search, and other smart features.</shortdesc>
   <taskbody>
     <prereq><p>Select Release 153 or ESR 153.0. Some controls are unavailable on ESR 140.13.</p></prereq>
     <context><p>This topic documents existing Firefox policy settings as product functionality. These browser controls are separate from the documentation assistant and do not change its chat or deterministic search behavior.</p></context>
     <steps>
-      <step><cmd>Open Step 5, <uicontrol>AI &amp; smart features</uicontrol>.</cmd><info><p>Expected result: the profile remains consistent.</p></info></step>
+      <step><cmd>Open Step 7, <uicontrol>AI</uicontrol>.</cmd><info><p>Expected result: the profile remains consistent.</p></info></step>
       <step><cmd>Review the browser AI, visual-search, and smart-browser policies supported by the selected schema.</cmd><info><p>Expected result: the profile remains consistent.</p></info></step>
       <step><cmd>Enable, disable, or leave each supported policy according to the profile goal.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>If a control is absent on ESR 140.13, treat it as unsupported rather than manually inventing a Guided setting.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>

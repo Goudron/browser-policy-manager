@@ -93,9 +93,9 @@ def test_pinned_manifest_covers_exact_release_and_three_esr_channels() -> None:
     firefox = payload["platforms"]["linux-x86_64"]["firefox"]
 
     assert {channel: firefox[channel]["version"] for channel in firefox} == {
-        "release": "153.0.3",
-        "esr153": "153.0esr",
-        "esr140": "140.13.0esr",
+        "release": "154.0",
+        "esr153": "153.1.0esr",
+        "esr140": "140.14.0esr",
         "esr115": "115.39.0esr",
     }
     assert firefox["esr115"] == {

@@ -237,8 +237,11 @@ Apply accepts only the versioned apply-request shape. In one transaction it:
 The normal ORM/database update mechanism owns `updated_at`; it is never client
 input. The result truthfully reports whether its stored value changed (database
 timestamp precision can make equal values observable). `id`, `name`,
-`name_casefold`, `description`, `created_at`, and `deleted_at` are byte/value
-preserved. `is_deleted` and `validation_state` remain derived read fields. A
+`name_casefold`, `description`, `baseline_provenance`, `created_at`, and `deleted_at` are byte/value
+preserved. `certificate_provenance` is recomputed from the successfully
+target-validated certificate/trust values as `converted`; it is value-source
+metadata only and never changes the selected CIS benchmark claim or baseline
+provenance. `is_deleted` and `validation_state` remain derived read fields. A
 successful manual apply is active before and after and increments revision
 exactly once, even if all policy values are unchanged. No separate profile is
 created.

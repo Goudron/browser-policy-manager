@@ -110,6 +110,21 @@ def open_about_policies_errors(driver: Any) -> None:
     driver.get("about:policies#errors")
 
 
+def _policy_errors_tab_is_hidden(driver: Any) -> bool:
+    """Return Firefox's explicit no-errors state across supported about:policies DOMs."""
+
+    result = driver.execute_script(
+        """
+        const tab = document.getElementById("category-errors");
+        if (!tab) {
+            return false;
+        }
+        return tab.hidden || getComputedStyle(tab).display === "none";
+        """
+    )
+    return result is True
+
+
 def assert_policy_active(driver: Any, policy_name: str) -> None:
     open_about_policies_active(driver)
     assert policy_name in driver.page_source
@@ -124,6 +139,12 @@ def assert_no_policy_errors(driver: Any, policy_names: list[str] | None = None) 
     """
 
     open_about_policies_errors(driver)
+    # Firefox ESR 115 hides the Errors category when policy processing is
+    # clean, but its static tab labels still include "Policy Errors". Looking
+    # only at body text therefore creates twelve false policy failures. A
+    # visible category remains subject to the conservative checks below.
+    if _policy_errors_tab_is_hidden(driver):
+        return
     page = driver.page_source
     text = body_text(driver).lower()
 

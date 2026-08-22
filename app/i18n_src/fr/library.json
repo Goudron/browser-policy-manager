@@ -76,14 +76,8 @@
     "profiles.compare_action": "Comparer ici",
     "profiles.compare_selected": "Comparaison en cours",
     "profiles.clone_name_pattern": "{name} (copie)",
-    "profiles.clone_name_label": "Nom du clone",
-    "profiles.clone_name_confirm": "Ouvrir le brouillon",
-    "profiles.clone_name_cancel": "Annuler",
-    "profiles.clone_name_required": "Saisissez un nom de clone.",
-    "profiles.clone_name_duplicate": "Un profil porte déjà ce nom.",
     "profiles.clone_source_value": "Basé sur {name}",
     "profiles.clone_source_unknown": "ce profil",
     "profiles.schema_conversion_recommendation_action": "Vérifier la mise à jour vers {target_schema}",
-    "profiles.schema_conversion_recommendation_consequence": "Ouvre un aperçu de conversion de {source_schema} vers {target_schema}. Votre profil ne sera pas modifié avant votre vérification et votre confirmation.",
     "profiles.schema_conversion_recommendation_accessible_name": "Vérifier l’aperçu de conversion du schéma de {source_schema} vers {target_schema}"
 }

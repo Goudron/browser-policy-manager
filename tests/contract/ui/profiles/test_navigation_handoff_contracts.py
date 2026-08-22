@@ -87,18 +87,17 @@ def test_editor_mode_links_preserve_route_aware_returns_and_settings_focus():
     assert 'el.removeAttribute("title");' in source
 
 
-def test_unsaved_guided_route_explicitly_disables_settings_and_json_handoffs():
+def test_preparation_route_does_not_embed_editor_mode_handoffs():
     client = make_test_client(app)
     response = client.get("/profiles/new")
 
     assert response.status_code == 200
-    assert 'id="editor-mode-settings"' in response.text
-    assert 'id="editor-mode-json"' in response.text
-    assert response.text.count('aria-disabled="true"') >= 2
-    assert response.text.count('title="Save profile to unlock modes."') >= 2
-    assert response.text.count("data-editor-mode-save-required") == 2
-    assert response.text.count("Save profile to unlock modes.") >= 4
-    assert 'id="editor-mode-links-hint"' not in response.text
+    assert 'data-profiles-template-kind="preparation"' in response.text
+    assert 'id="profile-preparation"' in response.text
+    assert 'id="editor-mode-guided"' not in response.text
+    assert 'id="editor-mode-settings"' not in response.text
+    assert 'id="editor-mode-json"' not in response.text
+    assert 'id="profiles-initial-profile"' not in response.text
 
 
 def test_saved_guided_route_enables_settings_and_json_handoffs_after_first_save():
@@ -120,6 +119,25 @@ def test_saved_guided_route_enables_settings_and_json_handoffs_after_first_save(
     assert 'title="Save profile to unlock modes."' not in response.text
     assert response.text.count("data-editor-mode-save-required hidden") == 2
     assert 'id="editor-mode-links-hint"' not in response.text
+
+
+def test_guided_route_accepts_canonical_and_explicit_legacy_step_targets():
+    client = make_test_client(app)
+    created = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Guided eight-step deep-link profile"),
+    ).json()
+
+    canonical = client.get(f"/profiles/{created['id']}/edit?step=ai")
+    legacy = client.get(f"/profiles/{created['id']}/edit?legacy_step=5")
+    ambiguous_current_number = client.get(f"/profiles/{created['id']}/edit?step=6")
+
+    assert canonical.status_code == 200
+    assert 'data-json-focus-target="ai"' in canonical.text
+    assert legacy.status_code == 200
+    assert 'data-json-focus-target="ai"' in legacy.text
+    assert ambiguous_current_number.status_code == 200
+    assert 'data-json-focus-target="6"' in ambiguous_current_number.text
 
 
 def test_profile_settings_route_preserves_step8_json_handoff():

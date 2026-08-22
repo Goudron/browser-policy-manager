@@ -1,15 +1,15 @@
 {
   "contract_version": 2,
-  "product_version": "0.9.5.1",
-  "observed_head_revision": "20260804_add_profile_name_casefold",
-  "planned_upgrade_owner": "BPM094-M4-04",
+  "product_version": "0.9.6",
+  "observed_head_revision": "20260821_add_profile_certificate_provenance",
+  "planned_upgrade_owner": "BPM096-M9-04",
   "supported_engines": [
     "sqlite",
     "postgresql"
   ],
   "retained_window": {
     "first_canonical_revision": "20251022_init_profiles",
-    "last_source_revision": "20260804_add_profile_name_casefold",
+    "last_source_revision": "20260821_add_profile_certificate_provenance",
     "policy": "Retain every released Alembic state and every alias already recognized by alembic/env.py; reject unstamped non-empty and unknown-stamp databases."
   },
   "legacy_revision_aliases": {
@@ -153,6 +153,81 @@
         "schema_version",
         "flags",
         "compliance",
+        "revision",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "optional_columns": [],
+      "forbidden_tables": [
+        "policies"
+      ],
+      "forbidden_columns": [
+        "owner"
+      ]
+    },
+    "profiles-ownerless-revision-name-casefold-baseline-provenance": {
+      "table": "profiles",
+      "required_columns": [
+        "id",
+        "name",
+        "name_casefold",
+        "description",
+        "schema_version",
+        "flags",
+        "compliance",
+        "baseline_provenance",
+        "revision",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "optional_columns": [],
+      "forbidden_tables": [
+        "policies"
+      ],
+      "forbidden_columns": [
+        "owner"
+      ]
+    },
+    "profiles-ownerless-revision-name-casefold-baseline-extension-provenance": {
+      "table": "profiles",
+      "required_columns": [
+        "id",
+        "name",
+        "name_casefold",
+        "description",
+        "schema_version",
+        "flags",
+        "compliance",
+        "baseline_provenance",
+        "extension_provenance",
+        "revision",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "optional_columns": [],
+      "forbidden_tables": [
+        "policies"
+      ],
+      "forbidden_columns": [
+        "owner"
+      ]
+    },
+    "profiles-ownerless-revision-name-casefold-baseline-extension-certificate-provenance": {
+      "table": "profiles",
+      "required_columns": [
+        "id",
+        "name",
+        "name_casefold",
+        "description",
+        "schema_version",
+        "flags",
+        "compliance",
+        "baseline_provenance",
+        "extension_provenance",
+        "certificate_provenance",
         "revision",
         "created_at",
         "updated_at",
@@ -347,6 +422,42 @@
         "sqlite": "required",
         "postgresql": "required"
       }
+    },
+    {
+      "id": "canonical-20260820-baseline-provenance",
+      "kind": "canonical_revision",
+      "stamp": "20260820_add_profile_baseline_provenance",
+      "canonical_revision": "20260820_add_profile_baseline_provenance",
+      "shape": "profiles-ownerless-revision-name-casefold-baseline-provenance",
+      "fixture_scenario": "head-idempotent",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260821-extension-provenance",
+      "kind": "canonical_revision",
+      "stamp": "20260821_add_profile_extension_provenance",
+      "canonical_revision": "20260821_add_profile_extension_provenance",
+      "shape": "profiles-ownerless-revision-name-casefold-baseline-extension-provenance",
+      "fixture_scenario": "head-idempotent",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260821-certificate-provenance",
+      "kind": "canonical_revision",
+      "stamp": "20260821_add_profile_certificate_provenance",
+      "canonical_revision": "20260821_add_profile_certificate_provenance",
+      "shape": "profiles-ownerless-revision-name-casefold-baseline-extension-certificate-provenance",
+      "fixture_scenario": "head-idempotent",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
     }
   ],
   "target_head_invariants": {
@@ -365,6 +476,9 @@
       "schema_version",
       "flags",
       "compliance",
+      "baseline_provenance",
+      "extension_provenance",
+      "certificate_provenance",
       "revision",
       "created_at",
       "updated_at",
@@ -414,6 +528,9 @@
     "row_rules": [
       "Preserve id, name, description, flags JSON structure, compliance JSON structure when present, timestamps, deleted_at, and revision when present.",
       "Default missing revision to 1 and missing compliance/deleted_at to null.",
+      "Default every pre-BPM096-M3-01 row, including archived rows, to the non-inferential legacy-migration / Custom-imported / manual-review baseline envelope; never infer a preset or CIS claim from flags, compliance, schema, or old Guided state.",
+      "Default every pre-BPM096-M7-07 extension-policy value, including archived rows, to imported; never infer a preset, CIS, conversion, manual, AMO-assisted, or raw-editor source from historical data.",
+      "Default every pre-BPM096-M9-04 certificate-related policy value, including archived rows, to imported; never infer a preset, CIS, conversion, manual, or raw-editor source from historical data, and never alter baseline provenance.",
       "Remove owner storage without copying owner data elsewhere.",
       "Apply only the explicit same-family Firefox channel transitions encoded by retained migrations.",
       "Preserve invalid policy JSON and unsupported channel strings for explicit quarantine; a database migration must not silently repair policy semantics."
@@ -450,16 +567,16 @@
     }
   ],
   "recovery_evidence": {
-    "owner": "BPM094-M4-06",
+    "owner": "BPM096-M3-01",
     "engines": [
       "sqlite",
       "postgresql"
     ],
-    "failure_boundary": "The real M4 head migration is interrupted on a disposable candidate; application lifespan must reject that candidate.",
+    "failure_boundary": "The real BPM096-M3-01 baseline-provenance migration and subsequent BPM096-M7-07 extension-provenance migration are interrupted after their SQLite copy or PostgreSQL write boundary on a disposable candidate; application lifespan must reject that candidate.",
     "backup_boundary": "The retained native backup is integrity-checked and SHA-256 verified before and after failure.",
     "retry_boundary": "Retry always restores the same verified backup into a new absent candidate and upgrades that candidate to head.",
     "promotion_boundary": "No recovery tool replaces the configured database; switching BPM to the verified candidate is an explicit maintainer action.",
-    "downgrade_policy": "Downgrade from the 0.9.5.1 head is unsupported; retained backup restore is the only recovery path.",
+    "downgrade_policy": "A broad recovery rollback is unsupported; retained backup restore remains the recovery path for broader migration incidents. The BPM096-M3-01 and BPM096-M7-07 downgrades remove only their provenance fields and named constraints; a subsequent upgrade gives every row the exact non-inferential baseline envelope and imported extension attribution.",
     "sqlite_commands": [
       "python tools/database_upgrade_recovery.py verify-sqlite-backup --backup <absolute-backup> --manifest <absolute-new-manifest>",
       "python tools/database_upgrade_recovery.py retry-sqlite-upgrade --backup <absolute-backup> --manifest <absolute-manifest> --candidate <absolute-new-candidate>"
@@ -472,7 +589,7 @@
     "status": "blocked-current-catalog-still-supported",
     "materializer": "migration_support/retirement_revision_materializer_v1.py",
     "active_graph_changed": false,
-    "observed_head_revision": "20260804_add_profile_name_casefold",
+    "observed_head_revision": "20260821_add_profile_certificate_provenance",
     "immutable_proof_digest": "9de84bde21e11d161d48297d19cc2447c36ac052d6cef8aed7727b8fa29746ef",
     "sqlite_evidence": "candidate-artifact-real-alembic-upgrade-pass",
     "postgresql_evidence": "pending-m6-remediation-r3",

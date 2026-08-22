@@ -554,11 +554,15 @@ def _validate_active_graph(
     config.set_main_option("script_location", str(repository_root / "alembic"))
     try:
         scripts = ScriptDirectory.from_config(config)
-        heads = scripts.get_heads()
         known_revisions = {item.revision for item in scripts.walk_revisions()}
     except (CommandError, OSError, RuntimeError) as exc:
         raise RetirementMigrationError("retirement_alembic_graph_stale") from exc
-    if heads != [source_revision] or target_revision in known_revisions:
+    # Candidate materialization is exercised long after the historical source
+    # revision stopped being the repository head.  Later, independent BPM
+    # migrations must not invalidate the reviewed retirement candidate: the
+    # source only needs to remain in the graph, while the candidate target
+    # must still be absent from it.
+    if source_revision not in known_revisions or target_revision in known_revisions:
         raise RetirementMigrationError("retirement_alembic_graph_stale")
 
 

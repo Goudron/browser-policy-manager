@@ -58,6 +58,22 @@ def test_profile_navigation_maps_settings_and_json_focus_targets():
     )
 
 
+def test_profile_navigation_accepts_eight_step_targets_and_explicit_legacy_aliases():
+    assert profile_navigation.resolve_guided_step_target("ai") == "ai"
+    assert profile_navigation.resolve_guided_step_target("step:review_export") == "review_export"
+    assert profile_navigation.resolve_guided_step_target("wizard-step-6") == "6"
+    assert profile_navigation.resolve_guided_step_target("9") is None
+    assert profile_navigation.resolve_guided_step_target("old-step-5") is None
+
+    assert profile_navigation.resolve_legacy_guided_step_target("1") == "browser_network_search"
+    assert profile_navigation.resolve_legacy_guided_step_target("2") == "browser_network_search"
+    assert profile_navigation.resolve_legacy_guided_step_target("3") == "security_privacy"
+    assert profile_navigation.resolve_legacy_guided_step_target("4") == "users_language_sync"
+    assert profile_navigation.resolve_legacy_guided_step_target("5") == "ai"
+    assert profile_navigation.resolve_legacy_guided_step_target("6") == "review_export"
+    assert profile_navigation.resolve_legacy_guided_step_target("7") is None
+
+
 def test_profile_navigation_resolves_settings_shell_focus_step():
     shell_catalog = get_wizard_schema_shell_catalog(
         get_wizard_preferences_catalog(get_wizard_settings_catalog())
@@ -85,7 +101,7 @@ def test_profile_navigation_resolves_settings_shell_focus_step():
             "release-153",
             shell_catalog,
         )
-        == 5
+        == 7
     )
     assert (
         profile_navigation.resolve_settings_shell_focus_step(

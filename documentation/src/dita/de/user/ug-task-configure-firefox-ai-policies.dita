@@ -2,12 +2,12 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-firefox-ai-policies" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Firefox-Richtlinien für KI und intelligente Funktionen konfigurieren</title>
-  <shortdesc>Konfigurieren Sie in Schritt 5 verfügbare Firefox-Richtlinien für KI, die visuelle Suche und andere intelligente Funktionen.</shortdesc>
+  <shortdesc>Konfigurieren Sie in Schritt 7 verfügbare Firefox-Richtlinien für KI, die visuelle Suche und andere intelligente Funktionen.</shortdesc>
   <taskbody>
     <prereq><p>Wählen Sie Release 153 oder ESR 153.0. Unter ESR 140.13 sind einige Steuerelemente nicht verfügbar.</p></prereq>
     <context><p>In diesem Thema werden vorhandene Firefox-Richtlinieneinstellungen als Produktfunktionalität dokumentiert. Diese Browser-Steuerelemente sind vom Dokumentationsassistenten getrennt und ändern weder dessen Chat noch die deterministische Suche.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 5 „<uicontrol>KI und intelligente Funktionen</uicontrol>“.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 7 „<uicontrol>KI</uicontrol>“.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
       <step><cmd>Prüfen Sie die KI-, visuelle Such- und intelligenten Browserrichtlinien, die das ausgewählte Schema unterstützt.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
       <step><cmd>Aktivieren, deaktivieren oder belassen Sie jede unterstützte Richtlinie entsprechend dem Profilziel.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Wenn ein Steuerelement in ESR 140.13 fehlt, behandeln Sie es als nicht unterstützt und fügen Sie die Einstellung nicht manuell hinzu.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>

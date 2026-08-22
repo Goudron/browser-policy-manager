@@ -4,7 +4,7 @@
   <title>使用“所有设置”</title>
   <shortdesc>当您需要在较短的引导式工作流程之外进行完整的视觉控制时，请打开 <uicontrol>所有设置</uicontrol> 以获取已保存的配置文件。</shortdesc>
   <taskbody>
-    <prereq><p>存在已保存的配置文件。必须先保存新的未保存草稿，然后才能打开 <uicontrol>所有设置</uicontrol>。</p></prereq>
+    <prereq><p>存在已保存的配置文件。创建和复制准备流程总会先打开保存的配置文件，然后才能访问<uicontrol>所有设置</uicontrol>。</p></prereq>
     <context><p><uicontrol>所有设置</uicontrol> 是 Firefox 策略和已知的 <uicontrol>托管首选项</uicontrol> 的完整可视化编辑器。它在 <uicontrol>检查</uicontrol> 中打开，因此在广泛的<uicontrol>目录</uicontrol>浏览之前可以看到注意事项。</p>
       <fig id="screenshot-all-settings-review">
         <title>“所有设置”中的检查</title>
@@ -12,6 +12,7 @@
           <alt>所有设置 在窄屏幕上显示审阅列表、配置的设置和设置详细信息面板。</alt>
         </image>
       </fig>
+      <p>标题栏将已保存配置文件的架构、预设和 CIS 基线显示为只读事实。要变更这些标识，请使用准备流程或明确转换，而不是编辑器选择器。</p>
       <p>更改架构时不要覆盖未保存的设置：保存、明确丢弃或取消，然后选择目标并阅读其转换预览。阻止项不会删除设置。</p>
     </context>
     <steps>
@@ -21,7 +22,7 @@
       <step><cmd>使用与任务匹配的模式：查看注意事项、配置应用值或为每个支持的设置编目。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>保存的配置文件在 <uicontrol>所有设置</uicontrol> 中打开，并提供正确的模式。</p></result>
-    <postreq><p>恢复：如果 <uicontrol>所有设置</uicontrol> 不可用，请先保存指导草稿或从<uicontrol>库</uicontrol>中重新打开已保存的配置文件。</p></postreq>
+    <postreq><p>恢复：如果<uicontrol>所有设置</uicontrol>不可用，请从<uicontrol>资料库</uicontrol>重新打开已保存的配置文件。在审查架构转换前请保存或有意放弃修改；阻止项不会删除设置。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

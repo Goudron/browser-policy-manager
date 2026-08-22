@@ -3,6 +3,18 @@ from __future__ import annotations
 from typing import Any
 
 POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
+    "AllowedDomainsForApps": {
+        "section": "urls_sites_navigation",
+        "subsection": "site_access",
+        "complexity": "advanced",
+        "tags": ["websites", "site-access"],
+    },
+    "AutoLaunchProtocolsFromOrigins": {
+        "section": "urls_sites_navigation",
+        "subsection": "managed_navigation",
+        "complexity": "advanced",
+        "tags": ["protocols", "handlers", "navigation"],
+    },
     "AppAutoUpdate": {
         "section": "browser_behavior",
         "subsection": "updates",
@@ -159,11 +171,17 @@ POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
         "tags": ["ai", "smart-features", "feature-controls"],
     },
     "Homepage": {
-        "section": "home_startup",
+        "section": "urls_sites_navigation",
         "subsection": "homepage",
         "complexity": "basic",
         "recommended": True,
         "tags": ["startup", "homepage"],
+    },
+    "HttpAllowlist": {
+        "section": "urls_sites_navigation",
+        "subsection": "site_access",
+        "complexity": "advanced",
+        "tags": ["http", "websites", "site-access"],
     },
     "HttpsOnlyMode": {
         "section": "privacy_security",
@@ -178,23 +196,41 @@ POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
         "complexity": "advanced",
         "tags": ["extensions", "permissions"],
     },
-    "ManagedBookmarks": {
-        "section": "extensions_integrations",
-        "subsection": "bookmarks",
-        "complexity": "advanced",
-        "tags": ["bookmarks"],
-    },
     "Bookmarks": {
-        "section": "extensions_integrations",
+        "section": "urls_sites_navigation",
         "subsection": "bookmarks",
         "complexity": "advanced",
-        "tags": ["bookmarks"],
+        "tags": ["bookmarks", "navigation"],
+    },
+    "GoToIntranetSiteForSingleWordEntryInAddressBar": {
+        "section": "urls_sites_navigation",
+        "subsection": "managed_navigation",
+        "complexity": "advanced",
+        "tags": ["intranet", "navigation", "address-bar"],
+    },
+    "Handlers": {
+        "section": "urls_sites_navigation",
+        "subsection": "managed_navigation",
+        "complexity": "advanced",
+        "tags": ["handlers", "protocols", "content"],
+    },
+    "ManagedBookmarks": {
+        "section": "urls_sites_navigation",
+        "subsection": "bookmarks",
+        "complexity": "advanced",
+        "tags": ["bookmarks", "navigation"],
     },
     "NetworkPrediction": {
         "section": "privacy_security",
         "subsection": "network_privacy",
         "complexity": "advanced",
         "tags": ["privacy", "network"],
+    },
+    "NoDefaultBookmarks": {
+        "section": "urls_sites_navigation",
+        "subsection": "bookmarks",
+        "complexity": "advanced",
+        "tags": ["bookmarks", "startup", "navigation"],
     },
     "IPProtectionAvailable": {
         "section": "privacy_security",
@@ -209,12 +245,30 @@ POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
         "recommended": True,
         "tags": ["privacy", "network", "local-network"],
     },
+    "LocalFileLinks": {
+        "section": "urls_sites_navigation",
+        "subsection": "site_access",
+        "complexity": "advanced",
+        "tags": ["files", "websites", "site-access"],
+    },
     "OfferToSaveLogins": {
         "section": "privacy_security",
         "subsection": "passwords",
         "complexity": "basic",
         "recommended": True,
         "tags": ["passwords"],
+    },
+    "OverrideFirstRunPage": {
+        "section": "urls_sites_navigation",
+        "subsection": "homepage",
+        "complexity": "basic",
+        "tags": ["startup", "navigation"],
+    },
+    "OverridePostUpdatePage": {
+        "section": "urls_sites_navigation",
+        "subsection": "homepage",
+        "complexity": "basic",
+        "tags": ["startup", "navigation"],
     },
     "PasswordManagerEnabled": {
         "section": "privacy_security",
@@ -290,7 +344,7 @@ POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
         "tags": ["downloads"],
     },
     "UserMessaging": {
-        "section": "home_startup",
+        "section": "sync_accounts",
         "subsection": "user_messaging",
         "complexity": "advanced",
         "recommended": True,
@@ -304,7 +358,7 @@ POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
         "tags": ["ai", "visual-search", "smart-features"],
     },
     "WebsiteFilter": {
-        "section": "extensions_integrations",
+        "section": "urls_sites_navigation",
         "subsection": "content_filtering",
         "complexity": "advanced",
         "recommended": True,

@@ -15,6 +15,7 @@
       <step><cmd>仅在其他审阅者可以理解来源和决策后才进行验证和导出。</cmd><info><p>预期结果：导出的 <codeph>policies.json</codeph> 反映经过审核的选择，而仅 BPM 归因保留在配置文件中。</p></info></step>
     </steps>
     <result><p>配置的值可以解释为基线、CIS、手动、导入或原始，并具有可见的合并决策和审核状态。</p></result>
+    <example id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>在创建已保存配置文件前选择架构、初始预设和 CIS 基线。baseline、CIS、manual、imported、converted 和 raw 来源仅用于审查，不是合规证明。证书和信任使用独立的路径台账；manual、imported、converted、raw、unavailable 和 blocked 状态都需要人工审查。</p></example>
     <postreq><p>如果归属不明确，请将配置文件与空白配置文件加上相同的 CIS 层进行比较，然后检查导入和手动更改。</p></postreq>
   </taskbody>
   <related-links>

@@ -405,6 +405,37 @@
                 });
             });
 
+            const certificateTrustIds = channelData?.certificate_trust?.policy_ids;
+            const certificateTrustStep = shellSteps.find((step) => step?.id === "certificates_trust");
+            (Array.isArray(certificateTrustIds) ? certificateTrustIds : []).forEach((policyId) => {
+                if (!policyId || seenIds.has(policyId)) return;
+                seenIds.add(policyId);
+                const configured = hasOwn(sourceData, policyId);
+                const categoryId = allSettingsCategoryCatalog.policy_section_to_category_id?.privacy_security
+                    || "raw-unmapped";
+                entries.push({
+                    id: policyId,
+                    label: policyId,
+                    kind: "policy",
+                    kindLabel: t("profiles.settings_list_kind_policy"),
+                    categoryId,
+                    categoryLabel: categoryTitle(categoryId),
+                    configured,
+                    guided: true,
+                    deprecated: false,
+                    rawFallback: false,
+                    unknown: false,
+                    schemaBucket: "recommended",
+                    schemaStepId: certificateTrustStep?.id || "certificates_trust",
+                    schemaStepNumber: certificateTrustStep?.step || 4,
+                    schemaItem: { id: policyId, support_level: "mapped" },
+                    target: `policy:${policyId}`,
+                    value: configured
+                        ? formatStructuredValue(sourceData[policyId])
+                        : t("profiles.settings_list_value_not_configured"),
+                });
+            });
+
             return entries;
         }
 

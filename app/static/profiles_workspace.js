@@ -17,7 +17,6 @@
             listProfiles,
             getProfileLibraryStats,
             getProfile,
-            createProfile,
             importFirefoxPoliciesJson,
             patchProfile,
             softDeleteProfile,
@@ -29,18 +28,13 @@
             updateWizardSummary,
             setWorkspaceHelper,
             syncWizardFieldsFromForm,
-            setWizardStarter,
-            setWizardComplianceLayer,
-            setWizardComplianceSnapshot,
-            getWizardComplianceMergeInfo,
             markWizardBaselineSnapshot,
             renderCurrentStepActions,
             syncWizardNetworkFromEditor,
             syncWizardPreferencesFromEditor,
+            syncWizardCertificateTrustFromEditor,
             syncWizardExtensionsFromEditor,
             syncWizardPoliciesFromEditor,
-            setWizardStep,
-            getWizardStep,
             renderAllSettingsList,
             setStatus,
         } = dependencies;
@@ -50,8 +44,6 @@
         const setCurrentId = state.setCurrentId || (() => {});
         const getCurrentProfile = state.getCurrentProfile || (() => null);
         const setCurrentProfile = state.setCurrentProfile || (() => {});
-        const getCloneSourceProfile = state.getCloneSourceProfile || (() => null);
-        const setCloneSourceProfile = state.setCloneSourceProfile || (() => {});
         const getLifecycleSessionNote = state.getLifecycleSessionNote || (() => null);
         const setLifecycleSessionNote = state.setLifecycleSessionNote || (() => {});
         const getCurrentRaw = state.getCurrentRaw || (() => ({}));
@@ -63,6 +55,7 @@
         const setBaselineSnapshot = state.setBaselineSnapshot || (() => {});
         const getLibraryStats = state.getLibraryStats || (() => ({ filtered: 0, total: 0 }));
         const setLibraryStats = state.setLibraryStats || (() => {});
+        const getValidationPreviewTone = state.getValidationPreviewTone || (() => "neutral");
         const setValidationPreviewTone = state.setValidationPreviewTone || (() => {});
         const setValidationIssues = state.setValidationIssues || (() => {});
 
@@ -78,7 +71,6 @@
             editorModeGuidedEl,
             editorModeSettingsEl,
             editorModeJsonEl,
-            profileDerivedNoteEl,
             profileLifecycleListEl,
             profileCompliancePanelEl,
             profileComplianceListEl,
@@ -119,7 +111,6 @@
             jsonReviewValidationStateEl,
             jsonReviewDownloadStateEl,
             wizardFinishEl,
-            wizardSummaryLifecycleListEl,
         } = elements;
         const overviewPanelEl = documentRef.getElementById("overview-panel");
         const commandDeckEl = documentRef.getElementById("command-deck");
@@ -127,6 +118,13 @@
         const routeFocusTarget = documentRef.body?.dataset.jsonFocusTarget || "";
         const defaultSchemaVersion = getDefaultSchemaVersion(documentRef);
         let saveConflictState = null;
+
+        function getSavedSchemaVersion(profile = getCurrentProfile()) {
+            const schemaVersion = profile?.schema_version || profile?.schemaVersion;
+            return typeof schemaVersion === "string" && schemaVersion
+                ? schemaVersion
+                : defaultSchemaVersion;
+        }
 
         function normalizeSettingsModeFocusTarget(focusTarget) {
             const normalizedTarget = String(focusTarget || "").trim();
@@ -205,20 +203,6 @@
             });
         }
 
-        function getCloneSourceLabel(sourceProfile = getCloneSourceProfile()) {
-            if (!sourceProfile?.name) return "";
-            return t("profiles.clone_source_value")
-                .replace("{name}", sourceProfile.name);
-        }
-
-        function renderCloneContext() {
-            const cloneLabel = getCloneSourceLabel();
-            if (profileDerivedNoteEl) {
-                profileDerivedNoteEl.hidden = !cloneLabel;
-                profileDerivedNoteEl.textContent = cloneLabel;
-            }
-        }
-
         function buildLifecycleReviewItems() {
             const currentProfile = getCurrentProfile();
             const sessionNote = getLifecycleSessionNote();
@@ -274,9 +258,6 @@
             if (profileLifecycleListEl) {
                 profileLifecycleListEl.replaceChildren(...renderItemNodes());
             }
-            if (wizardSummaryLifecycleListEl) {
-                wizardSummaryLifecycleListEl.replaceChildren(...renderItemNodes());
-            }
         }
 
         function getWorkflowLifecycleState(dirty, invalid) {
@@ -304,22 +285,18 @@
         }
 
         function syncWorkspaceOverview() {
-            const schemaVersion = documentRef.getElementById("profile-type").value || defaultSchemaVersion;
+            const schemaVersion = getSavedSchemaVersion();
             const mode = documentRef.getElementById("mode").value || "json";
             overviewSchemaEl.textContent = formatSchemaLabel(schemaVersion);
             overviewModeEl.textContent = mode.toUpperCase();
 
             if (getCurrentProfile()?.is_deleted) {
                 overviewContextEl.textContent = t("profiles.overview_deleted");
-            } else if (getCloneSourceProfile()?.name) {
-                overviewContextEl.textContent = t("profiles.overview_cloned")
-                    .replace("{name}", getCloneSourceProfile().name);
             } else if (getCurrentId()) {
                 overviewContextEl.textContent = t("profiles.overview_existing");
             } else {
                 overviewContextEl.textContent = t("profiles.overview_draft");
             }
-            renderCloneContext();
             renderLifecycleReview();
             refreshEditorModeLinks();
             updateWizardSummary();
@@ -358,7 +335,6 @@
             return {
                 name: nameInput.value.trim(),
                 description: descriptionInput.value.trim() || null,
-                schemaVersion: documentRef.getElementById("profile-type").value,
             };
         }
 
@@ -379,9 +355,7 @@
         }
 
         function showNameConflictState(error) {
-            const message = getCloneSourceProfile()?.name
-                ? t("profiles.clone_name_duplicate")
-                : (error?.message || t("profiles.error_api_profile_name_exists"));
+            const message = error?.message || t("profiles.error_api_profile_name_exists");
             clearSaveConflictState();
             setStatus(message, "warn");
             setValidationPreview(message, "error");
@@ -437,40 +411,6 @@
             );
         }
 
-        function buildCreatePayload(form, parsedFlags, compliancePayload, options = {}) {
-            return workspaceState.buildCreatePayload(form, parsedFlags, compliancePayload, options);
-        }
-
-        function buildCompliancePayload(complianceInfo, persistedCompliance = null) {
-            // A conversion apply may persist an evidence envelope which is not
-            // a wizard-owned editable CIS selection.  A normal editor save
-            // must carry that exact disposition forward rather than reducing
-            // it to the wizard's display projection.
-            if (persistedCompliance?.status === "current" || persistedCompliance?.status === "invalidated") {
-                return persistedCompliance;
-            }
-            return complianceInfo.layer && complianceInfo.layer !== "none"
-                ? {
-                    framework: "cis",
-                    benchmark_id: complianceInfo.benchmark_id || "cis-firefox-esr-gpo",
-                    benchmark_version: complianceInfo.benchmark_version || "1.0.0",
-                    layer: complianceInfo.layer,
-                    summary: complianceInfo.summary || {},
-                    decisions: complianceInfo.decisions || [],
-                }
-                : null;
-        }
-
-        function buildConflictCopyName(form) {
-            const sourceName = form.name || getCurrentProfile()?.name || t("profiles.conflict_copy_source_fallback");
-            const revision = saveConflictState?.expectedRevision || getCurrentProfile()?.revision || "";
-            const stamp = formatTimestamp(new Date());
-            return t("profiles.conflict_copy_name")
-                .replace("{name}", sourceName)
-                .replace("{revision}", String(revision || "?"))
-                .replace("{time}", stamp);
-        }
-
         function buildSnapshot() {
             const editor = getEditor();
             const form = readFormState();
@@ -478,8 +418,8 @@
                 id: getCurrentId(),
                 name: form.name,
                 description: form.description,
-                schemaVersion: form.schemaVersion,
                 flags: fromEditorValue(editor.getValue(), documentRef.getElementById("mode").value),
+                compliance: getCurrentProfile()?.compliance || null,
             };
         }
 
@@ -490,6 +430,9 @@
         }
 
         function currentSnapshotState() {
+            if (getValidationPreviewTone() === "error") {
+                return { dirty: true, invalid: true };
+            }
             try {
                 const currentSnapshot = snapshotToString(buildSnapshot());
                 return {
@@ -677,14 +620,12 @@
         function updateActionState() {
             const downloadFirefoxPolicies = documentRef.getElementById("download-firefox-policies");
             const { dirty, invalid } = refreshWorkspaceSignal();
-            const canFinish = !getIsBusy() && !invalid && (Boolean(getCurrentId()) || Boolean(nameInput.value.trim()));
+            const canFinish = !getIsBusy() && !invalid && Boolean(getCurrentId());
             const exportAvailable = Boolean(getCurrentId()) && !getCurrentProfile()?.is_deleted;
             const lifecycleState = getWorkflowLifecycleState(dirty, invalid);
 
-            saveButtonEl.textContent = getCurrentId()
-                ? t("profiles.save")
-                : t("profiles.create_submit");
-            setButtonDisabled(saveButtonEl, getIsBusy() || invalid || (!dirty && !!getCurrentId()));
+            saveButtonEl.textContent = t("profiles.save");
+            setButtonDisabled(saveButtonEl, getIsBusy() || !getCurrentId() || invalid || !dirty);
             setButtonDisabled(deleteButtonEl, getIsBusy() || !getCurrentId() || !!getCurrentProfile()?.is_deleted);
             setButtonDisabled(hardDeleteButtonEl, getIsBusy() || !getCurrentId());
             setButtonDisabled(restoreButtonEl, getIsBusy() || !getCurrentId() || !getCurrentProfile()?.is_deleted);
@@ -752,39 +693,8 @@
             updateActionState();
         }
 
-        function setDraftState(message, options = {}) {
-            const { preserveCloneSource = false } = options;
-            clearSaveConflictState();
-            setCurrentProfile(null);
-            setCurrentId(null);
-            setWizardComplianceSnapshot(null);
-            if (!preserveCloneSource) {
-                setCloneSourceProfile(null);
-            }
-            setLifecycleSessionNote(null);
-            setWizardStarter("blank");
-            currentNameEl.textContent = t("profiles.none_selected");
-            currentMetaEl.textContent = "";
-            stateBadgeEl.textContent = t("profiles.badge_draft");
-            stateBadgeEl.className = "state-chip state-chip--draft";
-            nameInput.disabled = false;
-            documentRef.getElementById("profile-type").disabled = false;
-            nameHintEl.textContent = t("profiles.name_hint");
-            setWorkspaceHelper(
-                t("profiles.helper_no_selection_title"),
-                t("profiles.helper_no_selection_body"),
-            );
-            setValidationPreview(message ? t("profiles.status_draft_ready") : t("profiles.selection_empty_status"));
-            if (profileCompliancePanelEl) {
-                profileCompliancePanelEl.hidden = true;
-            }
-            syncWizardFieldsFromForm();
-            syncWorkspaceOverview();
-            updateDownloadLinks();
-            syncWizardNetworkFromEditor();
-            syncWizardPreferencesFromEditor();
-            syncWizardExtensionsFromEditor();
-            renderList(getLibraryStats().items || []);
+        function redirectToPreparation() {
+            windowRef.location.assign("/profiles/new");
         }
 
         function formatComplianceLayerLabel(layer) {
@@ -829,11 +739,45 @@
             profileCompliancePanelEl.hidden = false;
         }
 
+        function getComplianceDecisionNoteKey(decision) {
+            const path = Array.isArray(decision?.path) ? decision.path : [];
+            if (path.length) return String(path[0]);
+            const recommendationIds = Array.isArray(decision?.recommendation_ids)
+                ? decision.recommendation_ids.filter(Boolean)
+                : [];
+            if (recommendationIds.length) return `cis:${recommendationIds[0]}`;
+            return decision?.decision ? `cis:${decision.decision}` : "";
+        }
+
+        function setComplianceDecisionNote(decisionKey, note) {
+            const profile = getCurrentProfile();
+            const compliance = profile?.compliance;
+            if (!profile || !compliance || !decisionKey) return;
+            const normalizedNote = String(note || "").trim();
+            const decisions = Array.isArray(compliance.decisions) ? compliance.decisions : [];
+            const nextDecisions = decisions.map((decision) => {
+                if (getComplianceDecisionNoteKey(decision) !== decisionKey) return decision;
+                const nextDecision = { ...decision };
+                if (normalizedNote) {
+                    nextDecision.exception_note = normalizedNote;
+                } else {
+                    delete nextDecision.exception_note;
+                    delete nextDecision.exceptionNote;
+                }
+                return nextDecision;
+            });
+            setCurrentProfile({
+                ...profile,
+                compliance: { ...compliance, decisions: nextDecisions },
+            });
+            updateActionState();
+        }
+
         function setMeta(profile) {
             clearSaveConflictState();
             setCurrentProfile(profile);
             if (!profile) {
-                setDraftState();
+                redirectToPreparation();
                 return;
             }
 
@@ -854,19 +798,9 @@
             );
             nameInput.value = profile.name || "";
             descriptionInput.value = profile.description || "";
-            documentRef.getElementById("profile-type").value = profile.schema_version || defaultSchemaVersion;
-            documentRef.getElementById("profile-type").disabled = true;
             nameInput.disabled = true;
             nameHintEl.textContent = t("profiles.name_locked");
             setValidationPreview(t("profiles.selection_active_status"), "success");
-
-            setWizardStarter("keep_current", { preserveComplianceLayer: true });
-            setWizardComplianceSnapshot(profile.compliance || null);
-            if (profile?.compliance?.layer) {
-                setWizardComplianceLayer(profile.compliance.layer, { skipApply: true, allowKeepCurrent: true });
-            } else {
-                setWizardComplianceLayer("none", { skipApply: true, allowKeepCurrent: true });
-            }
 
             renderProfileComplianceSummary(profile);
             syncWizardFieldsFromForm();
@@ -874,6 +808,7 @@
             updateDownloadLinks();
             syncWizardNetworkFromEditor();
             syncWizardPreferencesFromEditor();
+            syncWizardCertificateTrustFromEditor();
             syncWizardExtensionsFromEditor();
             updateActionState();
         }
@@ -884,72 +819,9 @@
             return windowRef.confirm(t("profiles.confirm_discard"));
         }
 
-        async function resetDraft(skipConfirm = false) {
-            const editor = getEditor();
-            if (!skipConfirm && !(await confirmIfDirty())) return;
-            const schemaVersion = documentRef.getElementById("profile-type").value || defaultSchemaVersion;
-            setCurrentRaw({});
-            nameInput.value = "";
-            descriptionInput.value = "";
-            documentRef.getElementById("profile-type").value = schemaVersion;
-            if (editor) {
-                editor.setValue(toEditorValue({}, documentRef.getElementById("mode").value));
-            }
-            setDraftState(t("profiles.draft_ready_meta"));
-            setStatus(t("profiles.status_draft_ready"), "info");
-            setBaselineFromCurrentUi();
-            syncWizardNetworkFromEditor();
-            syncWizardPoliciesFromEditor();
-            syncWizardPreferencesFromEditor();
-            syncWizardExtensionsFromEditor();
-            setWizardStep(1);
-            nameInput.focus();
-        }
-
-        function resolveCloneDraftName(sourceProfile, requestedCloneName = "") {
-            const sourceName = sourceProfile?.name || t("profiles.clone_source_unknown");
-            const cloneName = String(requestedCloneName || "").trim();
-            return cloneName || t("profiles.clone_name_pattern").replace("{name}", sourceName);
-        }
-
-        function setCloneDraftState(sourceProfile, options = {}) {
-            const sourceName = sourceProfile?.name || t("profiles.clone_source_unknown");
-            const clonedName = resolveCloneDraftName(sourceProfile, options.cloneName);
-            setCloneSourceProfile({
-                id: sourceProfile?.id || null,
-                name: sourceName,
-                schema_version: sourceProfile?.schema_version || defaultSchemaVersion,
-                is_deleted: sourceProfile?.is_deleted === true,
-            });
-            setWizardComplianceSnapshot(sourceProfile?.compliance || null);
-            setLifecycleSessionNote(null);
-            setCurrentProfile(null);
-            setCurrentId(null);
-            setWizardStarter("keep_current");
-            currentNameEl.textContent = clonedName;
-            currentMetaEl.textContent = "";
-            stateBadgeEl.textContent = t("profiles.badge_draft");
-            stateBadgeEl.className = "state-chip state-chip--draft";
-            nameInput.disabled = false;
-            nameInput.value = clonedName;
-            descriptionInput.value = sourceProfile?.description || "";
-            documentRef.getElementById("profile-type").value = sourceProfile?.schema_version || defaultSchemaVersion;
-            documentRef.getElementById("profile-type").disabled = false;
-            nameHintEl.textContent = t("profiles.name_hint");
-            setWorkspaceHelper(
-                t("profiles.helper_clone_title").replace("{name}", sourceName),
-                t("profiles.helper_clone_body"),
-            );
-            setValidationPreview(t("profiles.status_draft_ready"));
-            renderProfileComplianceSummary(sourceProfile);
-            syncWizardFieldsFromForm();
-            syncWorkspaceOverview();
-            updateDownloadLinks();
-            syncWizardNetworkFromEditor();
-            syncWizardPoliciesFromEditor();
-            syncWizardPreferencesFromEditor();
-            syncWizardExtensionsFromEditor();
-            renderList(getLibraryStats().items || []);
+        function navigateToPreparation(sourceProfileId = null) {
+            const query = sourceProfileId ? `?clone_from=${encodeURIComponent(sourceProfileId)}` : "";
+            windowRef.location.assign(`/profiles/new${query}`);
         }
 
         function renderList(items) {
@@ -1101,7 +973,6 @@
 
         async function loadProfile(id, options = {}) {
             const {
-                keepCloneSource = false,
                 skipConfirm = false,
                 syncLibrary = hasLibrarySurface,
                 announceLoaded = true,
@@ -1110,9 +981,6 @@
             try {
                 if (!skipConfirm && !(await confirmIfDirty())) return;
                 const profile = await getProfile(id);
-                if (!keepCloneSource) {
-                    setCloneSourceProfile(null);
-                }
                 setCurrentId(profile.id);
                 setCurrentRaw(profile.flags || {});
                 setMeta(profile);
@@ -1120,6 +988,7 @@
                 syncWizardNetworkFromEditor();
                 syncWizardPoliciesFromEditor();
                 syncWizardPreferencesFromEditor();
+                syncWizardCertificateTrustFromEditor();
                 syncWizardExtensionsFromEditor();
                 renderAllSettingsList?.();
                 setBaselineFromCurrentUi();
@@ -1142,32 +1011,9 @@
             }
         }
 
-        async function cloneFromProfile(id, options = {}) {
-            const editor = getEditor();
-            try {
-                if (!(await confirmIfDirty())) return;
-                const profile = await getProfile(id, windowRef.fetch, options.includeDeleted === true);
-                const schemaVersion = profile.schema_version || defaultSchemaVersion;
-                const flags = profile.flags && typeof profile.flags === "object" ? profile.flags : {};
-                documentRef.getElementById("profile-type").value = schemaVersion;
-                documentRef.getElementById("mode").value = "json";
-                setCurrentRaw(flags);
-                editor?.setValue(toEditorValue(flags, documentRef.getElementById("mode").value));
-                setCloneDraftState(profile, { cloneName: options.cloneName });
-                if (profile?.compliance?.layer) {
-                    setWizardComplianceLayer(profile.compliance.layer, { skipApply: true, allowKeepCurrent: true });
-                } else {
-                    setWizardComplianceLayer("none", { skipApply: true, allowKeepCurrent: true });
-                }
-                setBaselineFromCurrentUi();
-                setWizardStep(1);
-                nameInput.focus();
-                nameInput.select();
-                documentRef.getElementById("overview-panel").scrollIntoView({ behavior: "smooth", block: "start" });
-                setStatus(t("profiles.status_profile_cloned").replace("{name}", profile.name), "success");
-            } catch (e) {
-                setStatus(t("profiles.error_clone").replace("{detail}", e.message || e), "error");
-            }
+        async function cloneFromProfile(id) {
+            if (!(await confirmIfDirty())) return;
+            navigateToPreparation(id);
         }
 
         function setBusyState(nextBusy, labelKey = null) {
@@ -1194,46 +1040,32 @@
 
         async function saveCurrent(options = {}) {
             const { overwriteRevision = false } = options;
+            if (!getCurrentId()) {
+                navigateToPreparation();
+                return false;
+            }
             const editor = getEditor();
             try {
-                setBusyState(true, getCurrentId() ? "profiles.saving" : "profiles.creating");
+                setBusyState(true, "profiles.saving");
                 const form = readFormState();
                 const mode = documentRef.getElementById("mode").value;
                 const parsedFlags = fromEditorValue(editor.getValue(), mode);
-                const complianceInfo = typeof getWizardComplianceMergeInfo === "function"
-                    ? getWizardComplianceMergeInfo()
-                    : { layer: "none" };
-                const compliancePayload = buildCompliancePayload(
-                    complianceInfo,
-                    getCurrentId() ? getCurrentProfile()?.compliance || null : null,
-                );
-
-                if (!getCurrentId() && !form.name) {
-                    setBusyState(false);
-                    setStatus(t("profiles.create_name_required"), "warn");
-                    nameInput.focus();
-                    return false;
+                const compliancePayload = getCurrentProfile()?.compliance || null;
+                const extensionProvenance = getCurrentProfile()?.extension_provenance || null;
+                const certificateProvenance = getCurrentProfile()?.certificate_provenance || null;
+                const updatePayload = buildUpdatePayload(form, parsedFlags, compliancePayload, {
+                    includeExpectedRevision: !overwriteRevision,
+                });
+                if (extensionProvenance && typeof extensionProvenance === "object") {
+                    updatePayload.extension_provenance = extensionProvenance;
                 }
-
-                if (!getCurrentId()) {
-                    const createPayload = buildCreatePayload(form, parsedFlags, compliancePayload);
-                    const created = await createProfile(createPayload);
-                    setLifecycleSessionNote(null);
-                    setCurrentRaw(created.flags || {});
-                    await reloadList();
-                    await loadProfile(created.id, { keepCloneSource: Boolean(getCloneSourceProfile()?.name) });
-                    clearSaveConflictState();
-                    setStatus(t("profiles.status_profile_created").replace("{name}", created.name), "success");
-                    setValidationPreview(t("profiles.validation_ready"), "success");
-                    setBusyState(false);
-                    return true;
+                if (certificateProvenance && typeof certificateProvenance === "object") {
+                    updatePayload.certificate_provenance = certificateProvenance;
                 }
 
                 const updated = await patchProfile(
                     getCurrentId(),
-                    buildUpdatePayload(form, parsedFlags, compliancePayload, {
-                        includeExpectedRevision: !overwriteRevision,
-                    }),
+                    updatePayload,
                 );
                 setLifecycleSessionNote(null);
                 setCurrentRaw(updated.flags || {});
@@ -1261,47 +1093,13 @@
         }
 
         async function saveConflictAsCopy() {
-            const editor = getEditor();
-            if (!saveConflictState?.profileId && !getCurrentId()) {
+            const sourceProfileId = saveConflictState?.profileId || getCurrentId();
+            if (!sourceProfileId) {
                 setStatus(t("profiles.select_profile_first"), "warn");
                 return false;
             }
-
-            try {
-                setBusyState(true, "profiles.creating");
-                const form = readFormState();
-                const mode = documentRef.getElementById("mode").value;
-                const parsedFlags = fromEditorValue(editor.getValue(), mode);
-                const complianceInfo = typeof getWizardComplianceMergeInfo === "function"
-                    ? getWizardComplianceMergeInfo()
-                    : { layer: "none" };
-                const compliancePayload = buildCompliancePayload(
-                    complianceInfo,
-                    getCurrentProfile()?.compliance || null,
-                );
-                const copyName = buildConflictCopyName(form);
-                const copyPayload = buildCreatePayload(form, parsedFlags, compliancePayload, { name: copyName });
-                const created = await createProfile(copyPayload);
-
-                setCloneSourceProfile(null);
-                setLifecycleSessionNote(null);
-                setCurrentRaw(created.flags || {});
-                await reloadList();
-                await loadProfile(created.id, { skipConfirm: true });
-                clearSaveConflictState();
-                setStatus(t("profiles.conflict_copy_created").replace("{name}", created.name), "success");
-                setValidationPreview(t("profiles.validation_ready"), "success");
-                return true;
-            } catch (e) {
-                if (isNameConflictError(e)) {
-                    showNameConflictState(e);
-                    return false;
-                }
-                setStatus(t("profiles.error_save").replace("{detail}", e.message || e), "error");
-                return false;
-            } finally {
-                setBusyState(false);
-            }
+            navigateToPreparation(sourceProfileId);
+            return false;
         }
 
         async function doSoftDelete() {
@@ -1318,9 +1116,7 @@
                     id: getCurrentId(),
                     name: currentProfile?.name || nameInput.value.trim() || t("profiles.none_selected"),
                     description: currentProfile?.description || descriptionInput.value.trim() || null,
-                    schema_version: currentProfile?.schema_version
-                        || documentRef.getElementById("profile-type").value
-                        || defaultSchemaVersion,
+                    schema_version: getSavedSchemaVersion(currentProfile),
                     flags: getCurrentRaw() && typeof getCurrentRaw() === "object" ? getCurrentRaw() : {},
                     updated_at: new Date().toISOString(),
                     deleted_at: new Date().toISOString(),
@@ -1350,11 +1146,8 @@
                 const deletedProfileId = getCurrentId();
                 await hardDeleteProfile(deletedProfileId);
                 await reloadList();
-                setCurrentId(null);
-                setCurrentProfile(null);
-                setCurrentRaw({});
-                await resetDraft(true);
                 setStatus(t("profiles.hard_delete_done"), "success");
+                windowRef.location.assign("/profiles");
             } catch (e) {
                 setStatus(t("profiles.error_delete").replace("{detail}", e.message || e), "error");
             } finally {
@@ -1383,6 +1176,7 @@
                 syncWizardNetworkFromEditor();
                 syncWizardPoliciesFromEditor();
                 syncWizardPreferencesFromEditor();
+                syncWizardCertificateTrustFromEditor();
                 syncWizardExtensionsFromEditor();
                 setBaselineFromCurrentUi();
                 setStatus(t("profiles.status_profile_restored").replace("{name}", restored.name), "success");
@@ -1398,12 +1192,9 @@
             try {
                 setBusyState(true, "profiles.resetting_library");
                 await resetProfilesLibrary();
-                setCurrentId(null);
-                setCurrentProfile(null);
-                setCurrentRaw({});
-                await resetDraft(true);
                 await reloadList();
                 setStatus(t("profiles.reset_library_done"), "success");
+                windowRef.location.assign("/profiles");
             } catch (e) {
                 setStatus(t("profiles.error_reset").replace("{detail}", e.message || e), "error");
             } finally {
@@ -1415,7 +1206,7 @@
             const editor = getEditor();
             try {
                 setBusyState(true, "profiles.validating");
-                const profileKey = documentRef.getElementById("profile-type").value;
+                const profileKey = getSavedSchemaVersion();
                 const document = parseEditorPolicyDocument(
                     editor.getValue(),
                     documentRef.getElementById("mode").value,
@@ -1474,7 +1265,7 @@
                     );
                 }
 
-                const schemaVersion = documentRef.getElementById("profile-type").value || defaultSchemaVersion;
+                const schemaVersion = getSavedSchemaVersion();
                 const imported = await importFirefoxPoliciesJson({
                     name: profileName,
                     description: t("profiles.import_firefox_policies_description")
@@ -1483,7 +1274,6 @@
                     document,
                 });
 
-                setCloneSourceProfile(null);
                 setLifecycleSessionNote(null);
                 setImportStatus(
                     t("profiles.status_import_firefox_policies_done")
@@ -1561,18 +1351,16 @@
             refreshWorkspaceSignal,
             updateActionState,
             updateDownloadLinks,
-            setDraftState,
             setMeta,
             currentSnapshotState,
             setBaselineFromCurrentUi,
-            resetDraft,
             reloadList,
             loadProfile,
             cloneFromProfile,
             readFormState,
-            buildCreatePayload,
             buildSnapshot,
             saveCurrent,
+            setComplianceDecisionNote,
             saveConflictAsCopy,
             doSoftDelete,
             doHardDelete,

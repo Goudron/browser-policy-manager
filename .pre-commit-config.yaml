@@ -1,18 +1,18 @@
-minimum_pre_commit_version: 4.6.1
+minimum_pre_commit_version: 4.6.2
 default_language_version:
   python: python3.14
 
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Keep hook engines aligned with the reviewed dev-tool constraints.
-    rev: v0.16.1
+    rev: v0.16.3
     hooks:
       - id: ruff
         args: [--fix]
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.3.0
+    rev: v2.3.1
     hooks:
       - id: mypy
         # Keep this aligned with `make typecheck`, independently of staged
@@ -34,7 +34,7 @@ repos:
         # into this focused script check.
         entry: mypy --follow-imports=skip -m documentation.tools.extract_rag_chunks_0_9_3
         language: python
-        additional_dependencies: [mypy==2.3.0]
+        additional_dependencies: [mypy==2.3.1]
         pass_filenames: false
         always_run: true
       # This is deliberately not a product-suite claim.  The complete layer

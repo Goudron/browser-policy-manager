@@ -149,83 +149,8 @@ import {
             }
         }
 
-        function buildDefaultCloneName(profile) {
-            const sourceName = profile?.name || t("profiles.clone_source_unknown");
-            return t("profiles.clone_name_pattern").replace("{name}", sourceName);
-        }
-
-        function buildCloneDraftHref(profile, cloneName) {
-            const params = new URLSearchParams();
-            params.set("clone_from", String(profile.id));
-            params.set("clone_name", cloneName);
-            if (profile.is_deleted) {
-                params.set("include_deleted", "true");
-            }
-            return `/profiles/new?${params.toString()}`;
-        }
-
-        function profileNameExists(name, sourceProfileId = null) {
-            const normalizedName = String(name || "").trim().toLocaleLowerCase();
-            if (!normalizedName) return false;
-            return (windowRef.__BPM_LIBRARY_ITEMS__ || []).some((profile) => {
-                if (sourceProfileId && profile.id === sourceProfileId) return false;
-                return String(profile.name || "").trim().toLocaleLowerCase() === normalizedName;
-            });
-        }
-
-        function updateCloneNameControl(panelEl, profile) {
-            const inputEl = panelEl?.querySelector("[data-clone-name-input]");
-            const confirmEl = panelEl?.querySelector("[data-clone-name-confirm]");
-            const statusEl = panelEl?.querySelector("[data-clone-name-status]");
-            if (!inputEl || !confirmEl || !statusEl) return;
-
-            const cloneName = inputEl.value.trim();
-            let message = "";
-            let isValid = true;
-            if (!cloneName) {
-                message = t("profiles.clone_name_required");
-                isValid = false;
-            } else if (profileNameExists(cloneName, profile.id)) {
-                message = t("profiles.clone_name_duplicate");
-                isValid = false;
-            }
-
-            statusEl.textContent = message;
-            statusEl.dataset.statusTone = isValid ? "info" : "warn";
-            inputEl.setAttribute("aria-invalid", isValid ? "false" : "true");
-            confirmEl.href = isValid ? buildCloneDraftHref(profile, cloneName) : "#";
-            confirmEl.setAttribute("aria-disabled", isValid ? "false" : "true");
-            confirmEl.classList.toggle("pointer-events-none", !isValid);
-            confirmEl.classList.toggle("opacity-50", !isValid);
-        }
-
-        function closeOtherCloneNamePanels(activePanelEl = null) {
-            documentRef.querySelectorAll("[data-clone-name-panel]").forEach((panelEl) => {
-                if (panelEl === activePanelEl) return;
-                panelEl.hidden = true;
-            });
-            documentRef.querySelectorAll("[data-clone-profile-id]").forEach((buttonEl) => {
-                if (activePanelEl && buttonEl.getAttribute("aria-controls") === activePanelEl.id) return;
-                buttonEl.setAttribute("aria-expanded", "false");
-            });
-        }
-
-        function openCloneNamePanel(panelEl, buttonEl, profile) {
-            if (!panelEl) return;
-            closeOtherCloneNamePanels(panelEl);
-            panelEl.hidden = false;
-            buttonEl?.setAttribute("aria-expanded", "true");
-            updateCloneNameControl(panelEl, profile);
-            const inputEl = panelEl.querySelector("[data-clone-name-input]");
-            inputEl?.focus();
-            inputEl?.select();
-        }
-
-        function closeCloneNamePanel(panelEl, buttonEl) {
-            if (!panelEl) return;
-            panelEl.hidden = true;
-            buttonEl?.setAttribute("aria-expanded", "false");
-            buttonEl?.focus();
+        function buildDuplicatePreparationHref(profile) {
+            return `/profiles/new?clone_from=${encodeURIComponent(String(profile.id))}`;
         }
 
         function applyThemeMode(mode, persist = true) {
@@ -362,10 +287,6 @@ import {
                 const settingsHref = `/profiles/${profile.id}/settings${profile.is_deleted ? "?include_deleted=true" : ""}`;
                 const jsonHref = `/profiles/${profile.id}/json${profile.is_deleted ? "?include_deleted=true" : ""}`;
                 const exportHref = `/api/export/profiles/${profile.id}/firefox/policies.json?download=1`;
-                const clonePanelId = `library-clone-name-panel-${profile.id}`;
-                const cloneInputId = `library-clone-name-input-${profile.id}`;
-                const cloneStatusId = `library-clone-name-status-${profile.id}`;
-                const defaultCloneName = buildDefaultCloneName(profile);
                 const recommendation = resolveLibraryConversionRecommendation(profile);
                 const sourceSchema = recommendation
                     ? formatSchemaLabel(recommendation.source.artifact_id)
@@ -427,14 +348,14 @@ import {
                                 <a class="button-base ghost-button library-row-secondary-action" href="${jsonHref}" target="_blank" rel="noopener">
                                     ${t("profiles.library_action_json")}
                                 </a>
-                                <button
-                                    type="button"
+                                <a
                                     class="button-base ghost-button library-row-secondary-action"
-                                    data-clone-profile-id="${profile.id}"
-                                    aria-controls="${clonePanelId}"
-                                    aria-expanded="false">
+                                    href="${buildDuplicatePreparationHref(profile)}"
+                                    target="_blank"
+                                    rel="noopener"
+                                    data-duplicate-preparation-profile-id="${profile.id}">
                                     ${t("profiles.library_action_duplicate")}
-                                </button>
+                                </a>
                                 ${profile.is_deleted ? `
                                     <span
                                         class="button-base ghost-button library-row-secondary-action library-row-secondary-action--disabled"
@@ -462,46 +383,6 @@ import {
                                     ${t("profiles.hard_delete")}
                                 </button>
                             </div>
-                            <div
-                                id="${clonePanelId}"
-                                class="library-clone-name-panel"
-                                data-clone-name-panel
-                                hidden>
-                                <label class="field-label" for="${cloneInputId}">
-                                    ${t("profiles.clone_name_label")}
-                                </label>
-                                <div class="library-clone-name-controls">
-                                    <input
-                                        id="${cloneInputId}"
-                                        type="text"
-                                        class="soft-input library-clone-name-input"
-                                        value="${escapeHtml(defaultCloneName)}"
-                                        aria-describedby="${cloneStatusId}"
-                                        data-clone-name-input />
-                                    <div class="library-clone-name-actions">
-                                        <a
-                                            class="button-base primary-button library-clone-name-confirm"
-                                            href="${buildCloneDraftHref(profile, defaultCloneName)}"
-                                            target="_blank"
-                                            rel="noopener"
-                                            data-clone-name-confirm>
-                                            ${t("profiles.clone_name_confirm")}
-                                        </a>
-                                        <button
-                                            type="button"
-                                            class="button-base ghost-button library-clone-name-cancel"
-                                            data-clone-name-cancel>
-                                            ${t("profiles.clone_name_cancel")}
-                                        </button>
-                                    </div>
-                                </div>
-                                <div
-                                    id="${cloneStatusId}"
-                                    class="library-clone-name-status"
-                                    role="status"
-                                    aria-live="polite"
-                                    data-clone-name-status></div>
-                            </div>
                         </div>
                     </div>
                 `;
@@ -513,27 +394,6 @@ import {
                             lifecycleButton,
                         );
                     });
-                });
-                const cloneButton = li.querySelector("[data-clone-profile-id]");
-                const clonePanel = li.querySelector("[data-clone-name-panel]");
-                cloneButton?.addEventListener("click", () => {
-                    if (clonePanel?.hidden === false) {
-                        closeCloneNamePanel(clonePanel, cloneButton);
-                    } else {
-                        openCloneNamePanel(clonePanel, cloneButton, profile);
-                    }
-                });
-                clonePanel?.querySelector("[data-clone-name-input]")?.addEventListener("input", () => {
-                    updateCloneNameControl(clonePanel, profile);
-                });
-                clonePanel?.querySelector("[data-clone-name-confirm]")?.addEventListener("click", (event) => {
-                    updateCloneNameControl(clonePanel, profile);
-                    if (event.currentTarget.getAttribute("aria-disabled") === "true") {
-                        event.preventDefault();
-                    }
-                });
-                clonePanel?.querySelector("[data-clone-name-cancel]")?.addEventListener("click", () => {
-                    closeCloneNamePanel(clonePanel, cloneButton);
                 });
                 listEl.appendChild(li);
             });

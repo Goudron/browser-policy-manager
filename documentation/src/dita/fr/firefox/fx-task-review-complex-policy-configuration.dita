@@ -14,6 +14,7 @@
       <step><cmd>Validez le profil et examinez la forme <codeph>policies.json</codeph> générée.</cmd><info><p>Résultat attendu : BPM ne signale aucune erreur de schéma pour le canal sélectionné.</p></info></step>
     </steps>
     <result><p>La famille complexe a examiné les valeurs imbriquées, les décisions de source, la prise en charge des canaux et un résultat de validation propre.</p></result>
+    <example id="bpm096-localized-current"><title>Comportement actuel dans 0.9.6</title><p>Le schéma, le préréglage et la ligne de base CIS sont choisis durant la préparation et restent en lecture seule dans l’éditeur. Pour un autre profil enregistré, utilisez une conversion explicite ou la préparation d’un doublon; un cas non pris en charge ou bloqué n’abandonne pas silencieusement des valeurs. Propriétaires guidés : URL/sites étape 2, certificats et confiance étape 4, extensions étape 6.</p></example>
     <postreq><p>Si la validation échoue, revenez à la famille, supprimez les clés non prises en charge ou passez au canal qui prend réellement en charge la stratégie.</p></postreq>
   </taskbody>
   <related-links>

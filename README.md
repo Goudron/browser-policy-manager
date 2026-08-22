@@ -17,25 +17,28 @@ BPM manages one canonical profile model and exposes it through five dedicated UI
 |---|---|
 | Profile library | Manage saved profiles, lifecycle state, schema channel, validation status, duplication, export, and editor entry points. |
 | Profile comparison | Quickly find two saved profiles and compare policy and managed-preference settings side by side. |
-| Guided editor | Build common Firefox policy profiles through a shorter task-first workflow. |
+| Guided editor | Configure a saved Firefox policy profile through eight focused task-first steps. |
 | All settings | Search and edit the full visual catalog of supported schema-backed controls. |
 | JSON editor | Edit the complete Firefox Enterprise `policies.json` document directly. |
 
 The UI is route-based rather than a single hidden-panel workspace. Saved profiles can be opened
-in different modes in separate tabs. Unsaved drafts stay in the guided editor until the first save
-creates a profile ID.
+in different modes in separate tabs. Create and duplicate open a compact preparation form before
+they create one saved profile and open it in Guided editor.
 
 ## Main Capabilities
 
 - Database-backed Firefox policy profile library.
 - Create, edit, duplicate, archive, restore, permanently delete, import, and export workflows.
-- Named clone drafts that preserve the source configuration while letting the user choose the new
-  profile name before opening the draft.
+- Atomic create and duplicate preparation with a name, supported Firefox schema, starter preset,
+  and CIS baseline; duplicate preparation plans a schema conversion without changing the source.
 - Dedicated saved-profile comparison with fast two-profile search and a two-column settings table
   covering both policies and managed preferences.
 - Firefox Enterprise `policies.json` import and export at the product boundary.
 - Version-aware validation against bundled Firefox policy schemas.
-- Guided editor for common administrator and security-team scenarios.
+- Eight-step Guided editor with dedicated URLs/sites/navigation, certificates/trust, and extensions
+  workflows; its header shows the saved schema, preset, and CIS baseline as read-only facts.
+- Optional explicit AMO extension lookup with manual GUID and validated install-URL entry when AMO
+  is unavailable.
 - Dedicated AI and smart browser features step for schema versions that support those policies.
 - Schema-aware Release/ESR behavior across Release 153, ESR 153.0, ESR 140.13, and ESR 115.39.
 - Triage-first All settings workflow with Review, Configured, and Catalog modes, source attribution,
@@ -70,7 +73,7 @@ If the preview is blocked, stale, or fails, BPM leaves the profile unchanged.
 | `GET /` | JSON root endpoint with app status and version. |
 | `GET /profiles` | Profile library. |
 | `GET /profiles/compare` | Dedicated saved-profile comparison interface. |
-| `GET /profiles/new` | Guided editor for a new draft. |
+| `GET /profiles/new` | New-profile preparation form. |
 | `GET /profiles/{id}/edit` | Guided editor for an existing profile. |
 | `GET /profiles/{id}/settings` | All settings catalog for an existing profile. |
 | `GET /profiles/{id}/json` | JSON editor for an existing profile. |
@@ -232,9 +235,10 @@ opens `/profiles/compare` in a new tab and carries the selected language and the
 the comparison route.
 Saved-profile comparison lives only in the dedicated `/profiles/compare` interface.
 
-Duplicating a profile opens a clone-name control first. After the name is confirmed, BPM opens a
-new guided-editor draft initialized from the selected profile and the requested clone name. The
-clone-name controls wrap within the Library action panel across the active locale set.
+Create and duplicate both open a compact preparation form. It collects a name, supported Firefox
+schema, starter preset, and CIS baseline before BPM creates one saved profile and opens it in
+Guided editor. Duplicate preparation suggests a source-based name and plans a selected schema
+conversion before creating the target; it never silently drops source values or changes the source.
 
 ### Profile Comparison
 
@@ -248,9 +252,12 @@ return-to-Library control.
 
 ### Guided Editor
 
-The guided editor is the recommended starting point for most profile work. It uses scenario-first
-sections, starter presets, compliance-aware baselines, and focused controls for common Firefox
-administration tasks. It intentionally stays smaller than a full schema mirror.
+The guided editor is the recommended place to configure a prepared profile. Its header shows the
+selected schema, starter preset, and CIS baseline as read-only saved-profile facts; change them
+through preparation or explicit schema conversion, not an editor selector. Its eight focused steps
+keep URLs/sites/navigation, certificates/trust, and extensions in dedicated workflows while staying
+smaller than a full schema mirror. Extension lookup through AMO is optional and explicit; manual
+GUID and validated install-URL entry remain available when AMO is unavailable.
 
 The AI and smart browser features step remains a dedicated guided step. It shows current Firefox
 AI controls for Release 153 and ESR 153.0 where the selected schema supports them. For ESR 140.13,

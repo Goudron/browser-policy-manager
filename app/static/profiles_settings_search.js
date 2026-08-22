@@ -61,6 +61,12 @@
                 || normalizedTarget;
         }
 
+        function targetForSearchRoute(target) {
+            const normalizedTarget = String(target || "").trim();
+            if (!normalizedTarget) return "";
+            return isAllSettingsRoute ? resolveTargetAlias(normalizedTarget) : normalizedTarget;
+        }
+
         function createSettingsSearchEntry({
             title = "",
             description = "",
@@ -201,7 +207,7 @@
                         description: item.support_level === "fallback"
                             ? t("profiles.wizard_shell_raw_body")
                             : t("profiles.wizard_shell_additional_body"),
-                        target: resolveTargetAlias(entry.target),
+                        target: targetForSearchRoute(entry.target),
                         sectionId: entry.schemaStepId || entry.categoryId || "",
                         areaLabel: item.subsection_label || entry.categoryLabel || "",
                         kind: "policy_blueprint",
@@ -242,7 +248,7 @@
                             createSettingsSearchEntry({
                                 title: t(item.label_key, item.fallback),
                                 description: areas[item.area_id] || "",
-                                target: resolveTargetAlias(item.target),
+                                target: targetForSearchRoute(item.target),
                                 sectionId: section.id,
                                 areaLabel: areas[item.area_id] || "",
                                 kind: "control",
@@ -266,7 +272,7 @@
                         createSettingsSearchEntry({
                             title: sectionTitle,
                             description: sectionBody,
-                            target: resolveTargetAlias(`pref-section:${preferenceSection.id}`),
+                            target: targetForSearchRoute(`pref-section:${preferenceSection.id}`),
                             sectionId: section.id,
                             areaLabel: sectionTitle,
                             kind: "preference_section",
@@ -289,7 +295,7 @@
                             createSettingsSearchEntry({
                                 title: t(item.label_key, item.fallback),
                                 description: t(preset.description_key, preset.pref || ""),
-                                target: resolveTargetAlias(item.target),
+                                target: targetForSearchRoute(item.target),
                                 sectionId: section.id,
                                 areaLabel: guiGroups[item.area_id] || "",
                                 kind: "preference_preset",
@@ -311,7 +317,7 @@
                             createSettingsSearchEntry({
                                 title: t(bundle.label_key, bundle.id),
                                 description: t(bundle.description_key, bundle.id),
-                                target: resolveTargetAlias(`preference-bundle:${bundle.id}`),
+                                target: targetForSearchRoute(`preference-bundle:${bundle.id}`),
                                 sectionId: section.id,
                                 areaLabel: guiGroups[bundle.area_id] || sectionTitle,
                                 kind: "preference_bundle",
@@ -336,7 +342,7 @@
                                         || knownPreference.fallback
                                         || knownPreference.pref,
                                 ),
-                                target: resolveTargetAlias(`pref-section:${preferenceSection.id}`),
+                                target: targetForSearchRoute(`pref-section:${preferenceSection.id}`),
                                 sectionId: section.id,
                                 areaLabel: sectionTitle,
                                 kind: "known_preference",
@@ -360,7 +366,7 @@
                     createSettingsSearchEntry({
                         title: t(preset.title_key, preset.id),
                         description: t(preset.description_key, engineMeta.Description || ""),
-                        target: resolveTargetAlias(preset.target),
+                        target: targetForSearchRoute(preset.target),
                         sectionId: "search",
                         areaLabel: t("profiles.wizard_search_presets_title"),
                         kind: "search_engine_preset",
@@ -688,8 +694,15 @@
                     return findAllSettingsEntryTarget?.(entryTarget) || null;
                 }
             }
-            return documentRef.querySelector(`[data-settings-target="${normalizedTarget}"]`)
+            const directTarget = documentRef.querySelector(`[data-settings-target="${normalizedTarget}"]`)
                 || documentRef.querySelector(`[data-settings-target="${resolveTargetAlias(normalizedTarget)}"]`);
+            if (directTarget) return directTarget;
+
+            const shellPolicyMatch = /^shell-policy:\d+:(.+)$/.exec(normalizedTarget);
+            const shellPolicyId = String(shellPolicyMatch?.[1] || "").trim();
+            return shellPolicyId
+                ? documentRef.querySelector(`[data-settings-target="policy:${shellPolicyId}"]`)
+                : null;
         }
 
         function resolveAllSettingsEntryTarget(targetKey) {
@@ -718,14 +731,17 @@
             if (!targetEl) return;
 
             const panel = targetEl.closest(".wizard-panel");
-            if (panel?.id?.startsWith("wizard-step-")) {
-                const nextStep = Number(panel.id.replace("wizard-step-", ""));
-                if (!Number.isNaN(nextStep)) {
-                    setWizardStep(nextStep);
-                }
+            const nextStep = panel?.dataset.wizardStepId
+                || panel?.id?.replace(/^wizard-step-/, "")
+                || "";
+            if (nextStep) {
+                setWizardStep(nextStep);
             }
 
-            targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            const scrollBehavior = documentRef.defaultView?.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches
+                ? "auto"
+                : "smooth";
+            targetEl.scrollIntoView({ behavior: scrollBehavior, block: "center" });
             targetEl.classList.add("settings-target-highlight");
             window.setTimeout(() => {
                 targetEl.classList.remove("settings-target-highlight");
@@ -736,7 +752,11 @@
                 : targetEl.querySelector(
                     "[data-settings-detail-primary-focus], .all-settings-detail-editor [data-schema-policy-field], .all-settings-detail-editor [data-schema-branch-mode], input, select, textarea, button, [tabindex]",
                 );
-            focusTarget?.focus?.({ preventScroll: true });
+            const restoredFocusTarget = focusTarget || panel;
+            if (restoredFocusTarget && !restoredFocusTarget.matches("a[href], button, input, select, textarea, [tabindex]")) {
+                restoredFocusTarget.setAttribute("tabindex", "-1");
+            }
+            restoredFocusTarget?.focus?.({ preventScroll: true });
         }
 
         function applyFilter(navEl, areaId) {

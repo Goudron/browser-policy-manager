@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "target_version": "0.9.5.1",
+  "target_version": "0.9.6",
   "categories": {
     "default_release": {
       "modules": ["app.main", "app.api", "app.web", "app.services", "app.compliance", "app.core", "app.models", "app.schemas", "app.db", "app.middleware", "app.documentation.router", "app.documentation.assistant_contracts", "app.documentation.assistant_service", "app.documentation.training_notice", "app.ai.least_privilege", "app.ai.model_installation", "app.ai.model_management", "app.ai.runtime_installation"],

@@ -109,19 +109,16 @@ test("rejects each malformed recommendation boundary before creating a preview l
     }), "");
 });
 
-test("keeps the recommendation consequence explicitly read-only", () => {
+test("keeps localized action and accessible preview meaning", () => {
     const copy = recommendationCopy({ sourceSchema: "Firefox ESR 140", targetSchema: "Firefox ESR 153" });
 
     assert.equal(copy.action, "Review update to Firefox ESR 153");
-    assert.match(copy.consequence, /conversion preview/);
-    assert.match(copy.consequence, /will not change until you review and confirm/);
     assert.match(copy.accessibleName, /Firefox ESR 140.*Firefox ESR 153/);
 });
 
 test("gets Library recommendation copy from the active locale instead of an English fallback", () => {
     const translations = {
         "profiles.schema_conversion_recommendation_action": "Aktualisierung auf {target_schema} prüfen",
-        "profiles.schema_conversion_recommendation_consequence": "Öffnet eine Vorschau von {source_schema} nach {target_schema}. Das Profil bleibt bis zur Bestätigung unverändert.",
         "profiles.schema_conversion_recommendation_accessible_name": "Schemavorschau von {source_schema} nach {target_schema} prüfen",
     };
     const copy = recommendationCopy({
@@ -131,11 +128,10 @@ test("gets Library recommendation copy from the active locale instead of an Engl
     });
 
     assert.equal(copy.action, "Aktualisierung auf Firefox ESR 153 prüfen");
-    assert.match(copy.consequence, /Firefox ESR 140.*Firefox ESR 153/);
     assert.match(copy.accessibleName, /Schemavorschau/);
 });
 
-test("renders one keyboard-native preview entry with its local consequence", () => {
+test("renders one keyboard-native preview entry without Library explanation copy", () => {
     const profile = {
         id: 41,
         revision: 7,
@@ -156,8 +152,6 @@ test("renders one keyboard-native preview entry with its local consequence", () 
     assert.match(markup, /data-schema-conversion-preview-entry/);
     assert.match(markup, /schema_conversion=preview/);
     assert.match(markup, /target_artifact_id=esr-153.0/);
-    assert.match(markup, /aria-describedby="library-conversion-recommendation-consequence-41"/);
     assert.match(markup, /aria-label="Review schema conversion preview/);
-    assert.match(markup, /Your profile will not change until you review and confirm/);
-    assert.doesNotMatch(markup, /conversion-apply|<button/);
+    assert.doesNotMatch(markup, /consequence|conversion-apply|<button|<p/);
 });

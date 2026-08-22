@@ -7,11 +7,16 @@
   <keydef keys="guide.cis-settings-guide" />
   <keydef keys="guide.administrator-guide" />
   <keydef keys="screenshot.library-overview" href="../../../../assets/screenshots/zh-CN/ug-library-overview-desktop-light.png" format="png" />
-  <keydef keys="screenshot.guided-editor-overview" href="../../../../assets/screenshots/zh-CN/ug-guided-editor-overview-desktop-light.png" format="png" />
   <keydef keys="screenshot.guided-settings-search" href="../../../../assets/screenshots/zh-CN/ug-guided-settings-search-desktop-light.png" format="png" />
   <keydef keys="screenshot.all-settings-review" href="../../../../assets/screenshots/zh-CN/ug-all-settings-review-narrow-light.png" format="png" />
   <keydef keys="screenshot.json-editor" href="../../../../assets/screenshots/zh-CN/ug-json-editor-desktop-dark.png" format="png" />
   <keydef keys="screenshot.compare-profiles" href="../../../../assets/screenshots/zh-CN/ug-compare-profiles-desktop-light.png" format="png" />
+  <keydef keys="screenshot.preparation-create" href="../../../../assets/screenshots/zh-CN/ug-profile-preparation-create-desktop-light.png" format="png" />
+  <keydef keys="screenshot.preparation-duplicate" href="../../../../assets/screenshots/zh-CN/ug-profile-preparation-duplicate-desktop-light.png" format="png" />
+  <keydef keys="screenshot.guided-editor-overview" href="../../../../assets/screenshots/zh-CN/ug-guided-editor-overview-desktop-light.png" format="png" />
+  <keydef keys="screenshot.guided-step-2-urls-sites-navigation" href="../../../../assets/screenshots/zh-CN/ug-guided-urls-sites-navigation-desktop-light.png" format="png" />
+  <keydef keys="screenshot.guided-step-4-certificates-trust" href="../../../../assets/screenshots/zh-CN/ug-guided-certificates-trust-desktop-light.png" format="png" />
+  <keydef keys="screenshot.guided-step-6-extensions" href="../../../../assets/screenshots/zh-CN/ug-guided-extensions-desktop-light.png" format="png" />
   <keydef keys="topic.admin-task-prepare-linux-source-deployment" href="../admin/admin-task-prepare-linux-source-deployment.dita" />
   <keydef keys="topic.admin-task-set-up-linux-source-checkout" href="../admin/admin-task-set-up-linux-source-checkout.dita" />
   <keydef keys="topic.admin-task-configure-linux-source-runtime" href="../admin/admin-task-configure-linux-source-runtime.dita" />

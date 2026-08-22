@@ -13,7 +13,6 @@ UI_SHELL_TOKENS = (
     'id="profile-description"',
     'id="lang"',
     'id="wizard-panel"',
-    'id="wizard-starter-catalog"',
     'id="profile-derived-note"',
     'id="profile-compliance-panel"',
     'id="profile-compliance-list"',
@@ -22,30 +21,20 @@ UI_SHELL_TOKENS = (
     'id="wizard-settings-search-input"',
     'id="wizard-settings-search-results"',
     'id="wizard-settings-catalog"',
-    'id="wizard-schema"',
-    'id="wizard-mode"',
     'id="wizard-finish"',
     'id="wizard-step-actions"',
     'id="wizard-step-actions-copy"',
     'id="wizard-step-undo"',
     'id="wizard-step-reset"',
-    'data-starter-key="basic_corporate"',
-    'data-starter-key="basic_corporate" aria-pressed="true"',
-    'data-starter-key="classroom_kiosk"',
-    'data-starter-key="soc_hard"',
-    'data-scenario-key="corporate_default" aria-pressed="true"',
-    'data-scenario-key="targeted_edits" aria-pressed="false"',
-    'data-cis-layer-key="cis_l1"',
-    'data-cis-layer-key="cis_l2"',
-    'id="wizard-summary-starter"',
-    'id="wizard-summary-cis"',
+    'id="profile-starter-fact"',
+    'id="profile-cis-fact"',
     'id="wizard-cis-exceptions-list"',
     'id="wizard-homepage-url"',
     'id="wizard-homepage-shared-presets"',
     'id="wizard-search-bar"',
-    'id="wizard-step-2-default-search"',
-    'id="wizard-step-2-managed-engines"',
-    'id="wizard-step-2-suggestions"',
+    'id="wizard-step-1-default-search"',
+    'id="wizard-step-1-managed-engines"',
+    'id="wizard-step-1-suggestions"',
     'id="wizard-search-default-engine"',
     'id="wizard-search-engine-add"',
     'id="wizard-search-engine-list"',
@@ -72,51 +61,33 @@ UI_SHELL_TOKENS = (
     'id="wizard-new-tab-page"',
     'id="wizard-override-first-run"',
     'data-firefox-home-key="Search"',
-    'id="wizard-website-access-decision"',
-    'id="wizard-website-access-posture"',
-    'data-website-access-posture="allow_only"',
-    'id="wizard-website-access-handlers"',
-    'data-website-access-handlers="protocols"',
+    'id="wizard-site-access"',
     'data-firefox-suggest-key="WebSuggestions"',
     'id="wizard-proxy-mode"',
-    'id="wizard-network-summary-authentication"',
-    'id="wizard-network-summary-certificates"',
     'id="wizard-network-summary-dns"',
-    'id="wizard-network-summary-windows-sso"',
-    'id="wizard-network-summary-authentication-jump"',
-    'id="wizard-network-summary-certificates-jump"',
     'id="wizard-network-summary-dns-jump"',
-    'id="wizard-network-summary-windows-sso-jump"',
     'id="wizard-homepage-section-status"',
     'id="wizard-home-overrides-section-status"',
     'id="wizard-firefox-home-section-status"',
     'id="wizard-search-defaults-section-status"',
     'id="wizard-firefox-suggest-section-status"',
     "profiles.wizard_user_environment_map_title",
-    'id="wizard-step-4-accounts"',
-    'id="wizard-step-4-language"',
-    'id="wizard-step-4-extensions"',
-    'id="wizard-step-4-bookmarks"',
-    'id="wizard-step-4-websites"',
+    'id="wizard-step-5-accounts"',
+    'id="wizard-step-5-language"',
+    'id="wizard-bookmarks-card"',
     'id="wizard-privacy-summary-permissions"',
     'id="wizard-privacy-summary-cookies"',
     'id="wizard-privacy-summary-permissions-jump"',
     'id="wizard-privacy-summary-cookies-jump"',
-    'id="wizard-extension-default-mode"',
+    'id="wizard-extension-rule-add-form"',
+    'id="wizard-extension-rules"',
+    'id="wizard-extension-raw-rules"',
+    'id="wizard-extension-update"',
+    'id="wizard-extension-install-default"',
+    'id="wizard-extension-install-allow"',
     'id="wizard-extension-install"',
-    'data-extension-rule-group="install"',
     'id="wizard-extension-locked"',
-    'data-extension-rule-group="locked"',
     'id="wizard-extension-uninstall"',
-    'data-extension-rule-group="uninstall"',
-    "data-bookmarks-handoff",
-    'id="wizard-bookmarks-open-settings"',
-    'id="wizard-bookmarks-configured-actions"',
-    'id="wizard-bookmarks-links-jump"',
-    'id="wizard-bookmarks-folders-jump"',
-    'id="wizard-bookmarks-nested-jump"',
-    'id="wizard-install-addons-permission-card"',
-    'id="wizard-extension-settings-card"',
     'id="wizard-ai-section-status"',
     'id="wizard-ai-esr-empty-state"',
     'id="wizard-ai-policy-controls"',
@@ -132,9 +103,6 @@ UI_SHELL_TOKENS = (
     'id="wizard-summary-extensions"',
     'id="wizard-step-memory-copy"',
     'id="wizard-step-memory-list"',
-    'id="wizard-summary-derived-row"',
-    'id="wizard-summary-derived"',
-    'id="wizard-summary-lifecycle-list"',
     'id="wizard-cis-final-summary"',
     'id="wizard-cis-exceptions-count"',
     'id="wizard-cis-exceptions-reasons"',
@@ -165,11 +133,14 @@ UI_SHELL_TOKENS = (
     'id="wizard-export-ready-copy"',
     'id="wizard-export-checklist"',
     'id="wizard-export-guided-summary-list"',
-    'id="wizard-export-guided-group-profile"',
     'id="wizard-export-guided-group-browser"',
+    'id="wizard-export-guided-group-urls"',
     'id="wizard-export-guided-group-privacy"',
-    'id="wizard-export-guided-group-features"',
+    'id="wizard-export-guided-group-certificates"',
+    'id="wizard-export-guided-group-users"',
+    'id="wizard-export-guided-group-extensions"',
     'id="wizard-export-guided-group-ai"',
+    'id="wizard-export-guided-group-review"',
     'id="wizard-export-summary-ai"',
     'id="wizard-export-summary-ai-jump"',
     'id="wizard-export-save-action"',
@@ -178,14 +149,6 @@ UI_SHELL_TOKENS = (
     'id="wizard-export-included-now"',
     'id="wizard-export-missing-now"',
     'id="wizard-export-review-now"',
-    'data-extension-profile="uBlock0@raymondhill.net"',
-    'data-extension-profile="adguardadblocker@adguard.com"',
-    'data-extension-profile="https-everywhere@eff.org"',
-    "wizard-extension-profile-row",
-    "wizard-extension-profile-status",
-    'data-extension-profile-status="uBlock0@raymondhill.net"',
-    'data-extension-profile-status="adguardadblocker@adguard.com"',
-    'data-extension-profile-status="https-everywhere@eff.org"',
     'data-policy-key="DisableTelemetry"',
     'data-policy-key="DisableFirefoxAccounts"',
     'data-policy-key="BlockAboutProfiles"',
@@ -358,7 +321,7 @@ P2_3_UX_REGRESSION_TOKENS = (
     'id="wizard-cleanup-section-status"',
     'id="wizard-privacy-summary-user-data"',
     'id="wizard-privacy-summary-cleanup"',
-    'id="wizard-extension-governance-presets"',
+    'id="wizard-extension-rule-add-form"',
     'id="wizard-language-ai-handoff"',
     'id="wizard-ai-posture-presets"',
     'data-ai-posture-preset="disable"',
@@ -374,24 +337,23 @@ P2_3_UX_REGRESSION_TOKENS = (
     'id="wizard-export-raw-summary-jump"',
     'id="wizard-export-deprecated-summary-jump"',
     'id="wizard-export-unknown-summary-jump"',
-    'id="wizard-export-baseline-copy"',
-    'id="wizard-export-baseline-list"',
     'id="wizard-export-next-steps"',
     'id="wizard-export-ready-now"',
     'id="wizard-export-included-now"',
     'id="wizard-export-missing-now"',
     'id="wizard-export-review-now"',
     'id="wizard-export-guided-summary-list"',
-    'id="wizard-export-guided-group-profile"',
     'id="wizard-export-guided-group-browser"',
+    'id="wizard-export-guided-group-urls"',
     'id="wizard-export-guided-group-privacy"',
-    'id="wizard-export-guided-group-features"',
+    'id="wizard-export-guided-group-certificates"',
+    'id="wizard-export-guided-group-users"',
+    'id="wizard-export-guided-group-extensions"',
     'id="wizard-export-guided-group-ai"',
+    'id="wizard-export-guided-group-review"',
     'id="wizard-export-download-hint"',
     'data-hardening-preset="balanced"',
     'data-cleanup-preset="shared"',
-    'data-extension-governance-preset="managed"',
-    'data-extension-governance-preset="mixed"',
     'data-ai-posture-preset="mixed"',
 )
 
@@ -471,29 +433,34 @@ def _make_payload() -> dict:
     }
 
 
+def _open_editor_page(client, payload: dict | None = None):
+    created_response = client.post("/api/profiles", json=payload or _make_payload())
+    assert created_response.status_code == 201, created_response.text
+    created = created_response.json()
+    page = client.get(f"/profiles/{created['id']}/edit")
+    assert page.status_code == 200, page.text
+    assert page.headers["content-type"].startswith("text/html")
+    return page, created
+
+
 def test_profiles_ui_shell_exposes_public_hooks():
     client = make_test_client(app)
 
-    page = client.get("/profiles/new")
-    assert page.status_code == 200, page.text
-    assert page.headers["content-type"].startswith("text/html")
+    page, _created = _open_editor_page(client)
     assert_contains_all(page.text, UI_SHELL_TOKENS)
 
 
 def test_profiles_ui_shell_exposes_recent_ux_regression_hooks():
     client = make_test_client(app)
 
-    page = client.get("/profiles/new")
-    assert page.status_code == 200, page.text
-    assert page.headers["content-type"].startswith("text/html")
+    page, _created = _open_editor_page(client)
     assert_contains_all(page.text, P2_3_UX_REGRESSION_TOKENS)
 
 
 def test_profiles_ui_shell_keeps_guided_first_viewport_order_contract():
     client = make_test_client(app)
 
-    page = client.get("/profiles/new")
-    assert page.status_code == 200, page.text
+    page, _created = _open_editor_page(client)
     html = page.text
 
     wizard_index = html.index('id="wizard-panel"')
@@ -509,18 +476,20 @@ def test_profiles_ui_shell_keeps_guided_first_viewport_order_contract():
 def test_profiles_ui_shell_keeps_export_actions_before_technical_catalog():
     client = make_test_client(app)
 
-    page = client.get("/profiles/new")
+    created = client.post("/api/profiles", json=_make_payload())
+    assert created.status_code == 201, created.text
+    page = client.get(f"/profiles/{created.json()['id']}/edit")
     assert page.status_code == 200, page.text
     html = page.text
 
-    step_six_index = html.index('id="wizard-step-6"')
+    step_eight_index = html.index('id="wizard-step-8"')
     ready_index = html.index('id="wizard-export-section-ready"')
     save_action_index = html.index('id="wizard-export-save-action"')
     download_action_index = html.index('id="wizard-export-firefox-policies"')
     technical_index = html.index('id="wizard-export-section-technical"')
-    shell_index = html.index('id="wizard-schema-shell-step-6"')
+    shell_index = html.index('id="wizard-schema-shell-step-8"')
 
-    assert step_six_index < ready_index < save_action_index < download_action_index
+    assert step_eight_index < ready_index < save_action_index < download_action_index
     assert download_action_index < technical_index < shell_index
 
 
@@ -569,22 +538,6 @@ def test_profiles_ui_locale_catalog_exposes_recent_ux_regression_keys():
 def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_controls():
     client = make_test_client(app)
 
-    new_page = client.get("/profiles/new")
-    assert new_page.status_code == 200, new_page.text
-    assert_contains_all(
-        new_page.text,
-        (
-            'id="wizard-step-5"',
-            'id="wizard-ai-esr-empty-state"',
-            'id="wizard-ai-release-content"',
-            'id="wizard-ai-posture-presets"',
-            'id="wizard-ai-policy-controls"',
-            'data-settings-target="policy:AIControls"',
-            'data-settings-target="policy:GenerativeAI"',
-            'data-settings-target="policy:VisualSearchEnabled"',
-        ),
-    )
-
     payload = {
         "name": f"ESR AI Empty State-{uuid.uuid4().hex[:8]}",
         "description": "ESR AI empty-state regression",
@@ -601,6 +554,19 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
     assert edit_page.status_code == 200, edit_page.text
     assert f'data-editing-profile-id="{created["id"]}"' in edit_page.text
     assert 'data-profiles-route-mode="edit"' in edit_page.text
+    assert_contains_all(
+        edit_page.text,
+        (
+            'id="wizard-step-7"',
+            'id="wizard-ai-esr-empty-state"',
+            'id="wizard-ai-release-content"',
+            'id="wizard-ai-posture-presets"',
+            'id="wizard-ai-policy-controls"',
+            'data-settings-target="policy:AIControls"',
+            'data-settings-target="policy:GenerativeAI"',
+            'data-settings-target="policy:VisualSearchEnabled"',
+        ),
+    )
 
 
 def test_release_ai_step_browser_regression_keeps_release_controls_available():
@@ -654,23 +620,6 @@ def test_release_ai_step_browser_regression_keeps_release_controls_available():
 def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
     client = make_test_client(app)
 
-    new_page = client.get("/profiles/new")
-    assert new_page.status_code == 200, new_page.text
-    assert_contains_all(
-        new_page.text,
-        (
-            'id="wizard-step-5"',
-            'id="wizard-privacy-vpn-section-status"',
-            'id="wizard-ip-protection-available-card"',
-            'data-settings-target="policy:IPProtectionAvailable"',
-            'id="wizard-step-5"',
-            'id="wizard-ai-controls-card"',
-            'data-settings-target="policy:AIControls"',
-            'id="wizard-export-summary-ai-jump"',
-            'id="wizard-export-firefox-policies"',
-        ),
-    )
-
     payload = {
         "name": f"Release Guided AI VPN-{uuid.uuid4().hex[:8]}",
         "description": "Firefox 153 guided AI and VPN regression",
@@ -712,8 +661,21 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
     assert edit_page.status_code == 200, edit_page.text
     assert f'data-editing-profile-id="{created["id"]}"' in edit_page.text
     assert 'data-profiles-route-mode="edit"' in edit_page.text
-    assert 'id="wizard-ip-protection-available-card"' in edit_page.text
-    assert 'id="wizard-ai-controls-card"' in edit_page.text
+    assert_contains_all(
+        edit_page.text,
+        (
+            'id="wizard-step-3"',
+            'id="wizard-privacy-vpn-section-status"',
+            'id="wizard-ip-protection-available-card"',
+            'data-settings-target="policy:IPProtectionAvailable"',
+            'id="wizard-step-7"',
+            'id="wizard-ai-controls-card"',
+            'data-settings-target="policy:AIControls"',
+            'id="wizard-step-8"',
+            'id="wizard-export-summary-ai-jump"',
+            'id="wizard-export-firefox-policies"',
+        ),
+    )
 
     root = Path(__file__).resolve().parents[4]
     privacy_template = (
@@ -884,9 +846,8 @@ def test_profiles_ui_locale_catalog_exposes_post_roadmap_review_and_history_copy
         assert removed_key not in locale_ru_json
 
 
-def test_guided_runtime_mappings_follow_six_step_model():
+def test_guided_runtime_topology_uses_eight_steps_without_claiming_content_migration():
     root = Path(__file__).resolve().parents[4]
-    catalogs_source = (root / "app" / "static" / "profiles_catalogs.js").read_text(encoding="utf-8")
     flow_source = (root / "app" / "static" / "profiles_wizard_flow.js").read_text(encoding="utf-8")
     workspace_source = (root / "app" / "static" / "profiles_workspace.js").read_text(
         encoding="utf-8"
@@ -895,31 +856,25 @@ def test_guided_runtime_mappings_follow_six_step_model():
         encoding="utf-8"
     )
 
-    assert 'general: { step: 2, key: "profiles.wizard_step_two"' in catalogs_source
-    assert 'home: { step: 2, key: "profiles.wizard_step_two"' in catalogs_source
-    assert 'search: { step: 2, key: "profiles.wizard_step_two"' in catalogs_source
-    assert (
-        "Array.from({ length: Math.max(0, wizardTotalSteps - 1) }, (_, index) => index + 1)"
-        in flow_source
-    )
-    assert '2: t("profiles.wizard_step_memory_step_browser")' in flow_source
-    assert '"Step 1 of 6: Profile & baseline"' in flow_source
+    assert "const wizardTotalSteps = wizardSteps.length;" in flow_source
+    assert '"Step 1 of 8: Browser, network & search"' in flow_source
+    assert "wizardStepButtons" in flow_source
     assert 'return "step_six";' not in workspace_source
     assert 'return "step_seven";' not in workspace_source
     assert 'return "step_six";' not in library_source
     assert 'return "step_seven";' not in library_source
 
 
-def test_guided_locale_catalog_drops_obsolete_eight_step_labels():
+def test_guided_locale_catalog_exposes_eight_step_labels():
     root = Path(__file__).resolve().parents[4]
     locale_en_json = json.loads((root / "app" / "i18n" / "en.json").read_text(encoding="utf-8"))
     locale_ru_json = json.loads((root / "app" / "i18n" / "ru.json").read_text(encoding="utf-8"))
 
     for locale_json in (locale_en_json, locale_ru_json):
-        assert "profiles.wizard_step_seven" not in locale_json
-        assert "profiles.wizard_step_seven_copy" not in locale_json
-        assert "profiles.wizard_step_eight" not in locale_json
-        assert "profiles.wizard_step_eight_copy" not in locale_json
+        assert "profiles.wizard_step_seven" in locale_json
+        assert "profiles.wizard_step_seven_copy" in locale_json
+        assert "profiles.wizard_step_eight" in locale_json
+        assert "profiles.wizard_step_eight_copy" in locale_json
 
 
 def test_profiles_public_workflow_smoke():
@@ -996,29 +951,13 @@ def test_create_corporate_cis_l2_browser_regression_can_download_policies_json()
     assert_contains_all(
         new_page.text,
         (
-            'data-scenario-key="corporate_default" aria-pressed="true"',
-            'data-starter-key="basic_corporate" aria-pressed="true"',
-            'data-cis-layer-key="cis_l2"',
-            'id="save"',
-            'id="wizard-export-save-action"',
-            'id="wizard-export-firefox-policies"',
+            'id="profile-preparation-form"',
+            'id="profile-preparation-schema"',
+            'id="profile-preparation-starter"',
+            'id="profile-preparation-cis"',
+            'id="profile-preparation-submit"',
         ),
     )
-
-    root = Path(__file__).resolve().parents[4]
-    runtime_source = (root / "app" / "static" / "profiles_runtime.js").read_text(encoding="utf-8")
-    workspace_source = (root / "app" / "static" / "profiles_workspace.js").read_text(
-        encoding="utf-8"
-    )
-    flow_source = (root / "app" / "static" / "profiles_wizard_flow.js").read_text(encoding="utf-8")
-
-    assert 'let wizardScenario = "corporate_default";' in flow_source
-    assert "setWizardComplianceLayer(button.dataset.cisLayerKey);" in runtime_source
-    assert 'saveButtonEl.addEventListener("click", saveCurrent);' in runtime_source
-    assert 'event.target.closest("#wizard-export-save-action")' in runtime_source
-    assert "saveButtonEl.click();" in runtime_source
-    assert "buildCreatePayload(form, parsedFlags, compliancePayload)" in workspace_source
-    assert "setLinkHref(wizardExportFirefoxPoliciesEl, firefoxPoliciesHref);" in workspace_source
 
     schema_version = "release-153"
     catalog = get_wizard_starter_catalog()
@@ -1054,6 +993,18 @@ def test_create_corporate_cis_l2_browser_regression_can_download_policies_json()
     assert created["compliance"]["framework"] == "cis"
     assert created["compliance"]["layer"] == "cis_l2"
     assert created["flags"] == flags
+
+    edit_page = client.get(f"/profiles/{created['id']}/edit")
+    assert edit_page.status_code == 200, edit_page.text
+    assert_contains_all(
+        edit_page.text,
+        (
+            'id="wizard-step-8"',
+            'id="save"',
+            'id="wizard-export-save-action"',
+            'id="wizard-export-firefox-policies"',
+        ),
+    )
 
     export_response = client.get(
         f"/api/export/profiles/{created['id']}/firefox/policies.json?download=1&pretty=1"
@@ -1131,7 +1082,12 @@ def test_library_to_editor_browser_regression_can_load_and_save_guided_homepage(
     hydrated_profile_block = runtime_source[
         runtime_source.index(
             "if (hydratedProfile && Number(hydratedProfile.id) === editingProfileId)"
-        ) : runtime_source.index("await resetDraft(true);")
+        ) : runtime_source.index(
+            "return;",
+            runtime_source.index(
+                "if (hydratedProfile && Number(hydratedProfile.id) === editingProfileId)"
+            ),
+        )
     ]
     assert hydrated_profile_block.index("syncEditorBackedUi();") < hydrated_profile_block.index(
         "renderAllSettingsList();"
@@ -1156,8 +1112,8 @@ def test_library_to_editor_browser_regression_can_load_and_save_guided_homepage(
     assert load_profile_block.index("renderAllSettingsList?.();") < load_profile_block.index(
         "setBaselineFromCurrentUi();"
     )
-    assert "const homepageUrl = wizardHomepageUrlEl.value.trim();" in network_source
-    assert "if (homepageUrl) nextHomepage.URL = homepageUrl;" in network_source
+    assert "const homepageUrl = readNavigationValue(" in network_source
+    assert "if (homepageUrl.value) nextHomepage.URL = homepageUrl.value;" in network_source
     assert "buildUpdatePayload(form, parsedFlags, compliancePayload" in workspace_source
 
     edit_response = client.get(f"/profiles/{profile_id}/edit")
@@ -1455,15 +1411,12 @@ def test_save_as_copy_conflict_regression_preserves_local_draft_as_new_profile()
     )
 
     assert "async function saveConflictAsCopy()" in workspace_source
-    assert "const copyName = buildConflictCopyName(form);" in workspace_source
     assert (
-        "buildCreatePayload(form, parsedFlags, compliancePayload, { name: copyName })"
+        "const sourceProfileId = saveConflictState?.profileId || getCurrentId();"
         in workspace_source
     )
-    assert "const created = await createProfile(" in workspace_source
-    assert "await loadProfile(created.id, { skipConfirm: true });" in workspace_source
-    assert "clearSaveConflictState();" in workspace_source
-    assert 't("profiles.conflict_copy_created").replace("{name}", created.name)' in workspace_source
+    assert "navigateToPreparation(sourceProfileId);" in workspace_source
+    assert "windowRef.location.assign(`/profiles/new${query}`);" in workspace_source
     assert 'saveConflictSaveCopyEl?.addEventListener("click", async () =>' in workspace_source
     assert "await saveConflictAsCopy();" in workspace_source
     assert 'id="save-conflict-save-copy"' in command_deck

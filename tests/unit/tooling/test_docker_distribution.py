@@ -11,7 +11,7 @@ def test_docker_distribution_keeps_release_payload_and_explicit_migration_bounda
     entrypoint = (DOCKER_ROOT / "entrypoint.sh").read_text(encoding="utf-8")
 
     assert "python:3.14.3-slim-bookworm@sha256:" in dockerfile
-    assert "COPY documentation/dist/bpm-documentation-0.9.5.1.tar.gz" in dockerfile
+    assert "COPY documentation/dist/bpm-documentation-0.9.6.tar.gz" in dockerfile
     assert "COPY alembic ./alembic" in dockerfile
     assert "USER bpm" in dockerfile
     assert 'VOLUME ["/var/lib/bpm"]' in dockerfile
@@ -58,5 +58,9 @@ def test_docker_release_smoke_workflow_is_manual_and_does_not_publish() -> None:
     assert "inputs.run_docker_smoke == 'RUN'" in workflow
     assert "make docs-package" in workflow
     assert "make docker-build" in workflow
-    assert "docker_distribution_smoke.py" in workflow
+    assert "Build and verify BPM 0.9.6 Docker distribution" in workflow
+    assert "docker_distribution_smoke.py --image browser-policy-manager:0.9.6" in workflow
+    assert "bpm-documentation-0.9.6.tar.gz" in workflow
+    assert "browser-policy-manager:0.9.6" in workflow
+    assert "0.9.5" not in workflow
     assert "docker push" not in workflow

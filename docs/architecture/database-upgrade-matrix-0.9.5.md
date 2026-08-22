@@ -1,6 +1,6 @@
-# BPM 0.9.5.1 Database Upgrade Matrix And Recovery Contract
+# BPM 0.9.6 Database Upgrade Matrix And Recovery Contract
 
-Status: active release contract; interruption and recovery evidence closed by `BPM094-M4-06`
+Status: active release contract; BPM096-M9-04 certificate-attribution migration evidence in progress
 
 Machine contract: `.9.5.json`
 
@@ -8,21 +8,34 @@ Golden data: `tests/fixtures/database_upgrade/golden_profiles_0_9_5.json`
 
 ## Decision
 
-BPM 0.9.5.1 retains the complete released Alembic window, from the original
+BPM 0.9.6 retains the complete released Alembic window, from the original
 October 2025 schema through the Firefox 153/dual-ESR revision, plus the three
 revision aliases that `alembic/env.py` already recognizes. Every retained source
 is upgradeable on SQLite and PostgreSQL through the released migration head.
 
-The final repair revision is
-`20260804_alembic_owns_profile_schema_and_data`: it owns the missing
-`compliance` column, the retained `5cb73fdb68ed` root-alias data path, and the
-last same-family channel convergence. Runtime startup and profile listing no
-longer mutate schema or stored channels. Real two-engine proof is provided
+The BPM096-M3-01 revision is
+`20260820_add_profile_baseline_provenance`: it owns the non-null
+`baseline_provenance` column and gives every pre-existing row, including
+archived rows, the same non-inferential `legacy-migration` / Custom/imported /
+manual-review envelope. It never inspects flags, raw compliance, current
+catalogs, schema labels, or prior Guided state, so no legacy starter preset or
+current CIS claim is invented. The preceding final repair revision
+`20260804_alembic_owns_profile_schema_and_data` continues to own the missing
+`compliance` column, retained root-alias data path, and same-family channel
+convergence. Runtime startup and profile listing no longer mutate schema or
+stored channels. Real two-engine proof is provided
 through `tests/integration/db/test_database_integration.py` and the mandatory
 `postgres-integration` CI service job. Interruption and recovery proof is closed
 on both engines. Application lifespan now performs a read-only head/schema
 check and refuses empty, old, unknown, or partially shaped databases. It never
 migrates or repairs them.
+
+The BPM096-M9-04 revision is
+`20260821_add_profile_certificate_provenance`. It adds a separate non-null
+`certificate_provenance` ledger for certificate, authentication, and SSO policy
+values. Historical rows are attributed only as `imported`: the migration does
+not infer a starter preset, CIS level, conversion, manual edit, or raw-editor
+source, and it never changes `baseline_provenance`.
 
 An empty database is a supported fresh-install source. A non-empty database
 without an unambiguous retained Alembic stamp is not. Maintainers must not guess
@@ -31,7 +44,7 @@ repair statement merely to make the upgrade continue.
 
 ## Candidate-only ESR 140 retirement artifact
 
-The released graph still ends at `20260804_add_profile_name_casefold`, and ESR
+The released graph includes `20260820_add_profile_baseline_provenance`, and ESR
 140.13 remains supported in the active lifecycle catalog. Therefore no
 retirement revision is installed under `alembic/versions/` and ordinary
 `upgrade head` does not migrate ESR 140 profiles.
@@ -77,6 +90,9 @@ evidence.
 | `canonical-20260721` | `20260721_upgrade_profiles_to_firefox153_dual_esr` | ownerless `profiles` with revision | Required | Required | `head-idempotent` |
 | `canonical-20260804` | `20260804_alembic_owns_profile_schema_and_data` | ownerless `profiles` with compliance and revision | Required | Required | `head-idempotent` |
 | `canonical-20260804-name-casefold` | `20260804_add_profile_name_casefold` | ownerless `profiles` with compliance, revision and Unicode search key | Required | Required | `head-idempotent` |
+| `canonical-20260820-baseline-provenance` | `20260820_add_profile_baseline_provenance` | ownerless `profiles` with compliance, revision, Unicode search key, and baseline provenance | Required | Required | `head-idempotent` |
+| `canonical-20260821-extension-provenance` | `20260821_add_profile_extension_provenance` | ownerless `profiles` with compliance, revision, Unicode search key, baseline provenance, and extension provenance | Required | Required | `head-idempotent` |
+| `canonical-20260821-certificate-provenance` | `20260821_add_profile_certificate_provenance` | ownerless `profiles` with compliance, revision, Unicode search key, baseline provenance, extension provenance, and certificate provenance | Required | Required | `head-idempotent` |
 
 The machine contract is authoritative for exact required/optional columns. A
 `compliance` column may already exist in historical databases.
@@ -114,12 +130,19 @@ The released head must satisfy the same contract on SQLite and PostgreSQL:
 - exactly one `profiles` table and no `policies` table;
 - one Alembic version row at the released head;
 - the exact profile columns listed by the JSON contract, including
-  `compliance`, `revision`, and `deleted_at`, with no `owner` column;
+  `compliance`, non-null `baseline_provenance` and `certificate_provenance`, `revision`, and `deleted_at`, with no `owner` column;
 - unique name and the schema-version/created/updated/deleted indexes, plus the portable Unicode `name_casefold` search index;
 - the same row count and the same IDs, names, descriptions, nested `flags`,
   existing compliance values, timestamps, archive state, and revisions;
 - `revision = 1`, `compliance = null`, and `deleted_at = null` only where that
   source schema did not have the corresponding field;
+- every row predating the provenance revision, active or archived, has the
+  exact `legacy-migration` / Custom/imported / manual-review envelope; no
+  migration default recognizes a preset, baseline, or verified claim from data;
+- every row predating the certificate-attribution revision, active or archived,
+  has only imported certificate sources; the migration never invents a CIS,
+  conversion, manual, or raw-editor claim and never changes its benchmark
+  provenance;
 - only explicit same-family channel changes. Release rows become Release 153,
   ESR 140 rows become ESR 140.13, and ESR 153.0 is never converted to Release;
 - invalid policy payloads and unknown channel strings remain byte-semantically
@@ -250,7 +273,11 @@ which fails rather than skips without the temporary PostgreSQL service URL.
 
 ## Interruption and recovery evidence
 
-The SQLite repair and ownership proof establishes that a fresh head contains
+The SQLite and PostgreSQL recovery proof interrupts the BPM096-M3-01 baseline
+provenance copy/write boundary on a disposable candidate. A clean retry from
+the verified backup establishes that every retained active and archived row
+receives the exact legacy-migration / Custom-imported / manual-review envelope.
+The preceding SQLite repair and ownership proof establishes that a fresh head contains
 `profiles.compliance`; the retained root alias transfers its rows exactly and
 rejects other mixed-table states; application startup and listing paths perform
 no schema or channel mutation. The same released proof covers the real PostgreSQL
@@ -262,5 +289,5 @@ readiness. The source and native backup remain retained; the backup checksum and
 restored stamp/table/row evidence remain unchanged. A separately restored retry
 candidate reaches head and preserves the golden row. `make test-db-recovery`
 runs the SQLite proof locally; `make test-postgres-integration` requires and runs
-the PostgreSQL native dump/restore proof in CI. There are no remaining M4
-interruption/restore evidence gaps.
+the PostgreSQL native dump/restore proof in CI. There are no remaining
+BPM096-M3-01 interruption/restore evidence gaps.

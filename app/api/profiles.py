@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import asyncio
 import json
-from typing import Any
+import secrets
+import threading
+from contextlib import suppress
+from typing import Any, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -27,10 +31,17 @@ from app.schemas.profile import (
     ConversionPreviewErrorEnvelope,
     ConversionPreviewRequest,
     ConversionPreviewResponse,
+    DuplicateProfilePreparationPreview,
+    DuplicateProfilePreparationPreviewRequest,
+    DuplicateProfilePreparationRequest,
+    NewProfilePreparationRequest,
     ProfileCreate,
+    ProfilePreparationErrorEnvelope,
     ProfileRead,
     ProfileUpdate,
+    ProfileUpdateConflictErrorEnvelope,
 )
+from app.services.amo_search import AmoSearchAdapter, AmoSearchResult
 from app.services.firefox_policy_import import (
     FirefoxPoliciesDocumentValidationError,
     FirefoxPoliciesImportError,
@@ -39,11 +50,175 @@ from app.services.firefox_policy_import import (
 from app.services.profile_service import (
     ConversionApplyFailure,
     ConversionApplyOutcome,
+    DuplicateProfilePreparationFailure,
+    NewProfilePreparationFailure,
     ProfilePageResult,
     ProfileService,
 )
 
 router = APIRouter(prefix="/api/profiles", tags=["profiles"])
+
+AMO_SEARCH_SESSION_COOKIE = "bpm_amo_search_session"
+AMO_SEARCH_SESSION_COOKIE_PATH = "/api/profiles/extensions/amo-search"
+AMO_SEARCH_SESSION_MINIMUM_LENGTH = 20
+AMO_SEARCH_SESSION_MAXIMUM_LENGTH = 128
+AMO_SEARCH_CACHE_CONTROL = "no-store, max-age=0"
+
+
+class AmoSearchApiResult(BaseModel):
+    """Inert values that may be returned from the fixed AMO projection only."""
+
+    guid: str = Field(description="Verified Firefox extension GUID.")
+    name: str = Field(description="Plain localized extension name.")
+    version: str = Field(description="Plain extension version label.")
+
+
+class AmoSearchApiResponse(BaseModel):
+    """Same-origin AMO lookup state; unavailable always keeps manual entry possible."""
+
+    availability: Literal["available", "unavailable"]
+    reason_code: str = Field(
+        description=(
+            "Stable value-free availability code. It never contains the lookup, locale, "
+            "provider response or transport detail."
+        )
+    )
+    results: list[AmoSearchApiResult] = Field(
+        default_factory=list,
+        description="At most ten normalized text-only extension identities.",
+    )
+    cache_hit: bool = Field(
+        description="Whether this browser session used its private fresh cache."
+    )
+
+
+def _amo_search_adapter(request: Request) -> AmoSearchAdapter:
+    """Read the process-local adapter without accepting any caller transport or upstream URL."""
+
+    adapter = getattr(request.app.state, "amo_search_adapter", None)
+    return adapter if isinstance(adapter, AmoSearchAdapter) else AmoSearchAdapter()
+
+
+def _amo_search_request_is_same_origin(request: Request) -> bool:
+    """Allow browser fetches from this origin only; cross-site GETs must not start AMO work."""
+
+    return request.headers.get("sec-fetch-site", "").casefold() == "same-origin"
+
+
+def _amo_search_session_secret(request: Request) -> tuple[str, bool]:
+    """Issue one opaque session-only cookie without exposing it to JavaScript or AMO."""
+
+    presented = request.cookies.get(AMO_SEARCH_SESSION_COOKIE)
+    if (
+        isinstance(presented, str)
+        and AMO_SEARCH_SESSION_MINIMUM_LENGTH <= len(presented) <= AMO_SEARCH_SESSION_MAXIMUM_LENGTH
+    ):
+        return presented, False
+    session_secret = secrets.token_urlsafe(32)
+    return session_secret, True
+
+
+def _set_amo_search_session_cookie(
+    request: Request, response: Response, session_secret: str
+) -> None:
+    """Keep the opaque browser-session cache key out of JavaScript and AMO requests."""
+
+    response.set_cookie(
+        AMO_SEARCH_SESSION_COOKIE,
+        session_secret,
+        httponly=True,
+        samesite="strict",
+        secure=request.url.scheme == "https",
+        path=AMO_SEARCH_SESSION_COOKIE_PATH,
+    )
+
+
+def _amo_search_response(
+    result: AmoSearchResult, *, status_code: int = status.HTTP_200_OK
+) -> Response:
+    """Serialize no more than the adapter's inert local projection with non-cacheable headers."""
+
+    payload = AmoSearchApiResponse(
+        availability=result.availability,
+        reason_code=result.reason_code,
+        results=[
+            AmoSearchApiResult(guid=item.guid, name=item.name, version=item.version)
+            for item in result.results
+        ],
+        cache_hit=result.cache_hit,
+    )
+    response = Response(
+        content=payload.model_dump_json(),
+        media_type="application/json",
+        status_code=status_code,
+    )
+    response.headers["Cache-Control"] = AMO_SEARCH_CACHE_CONTROL
+    response.headers["Pragma"] = "no-cache"
+    return response
+
+
+def _unavailable_amo_search() -> AmoSearchResult:
+    """Keep route-local refusals value-free and in the adapter's manual-entry state shape."""
+
+    return AmoSearchResult(availability="unavailable", reason_code="unexpected")
+
+
+def _amo_search_parameters(request: Request) -> tuple[object, object]:
+    """Reject duplicate/unknown query keys before the adapter can issue an outbound request."""
+
+    query_params = request.query_params
+    if set(query_params) != {"q", "locale"}:
+        return None, None
+    q_values = query_params.getlist("q")
+    locale_values = query_params.getlist("locale")
+    if len(q_values) != 1 or len(locale_values) != 1:
+        return None, None
+    return q_values[0], locale_values[0]
+
+
+async def _watch_amo_search_disconnect(request: Request, cancelled: threading.Event) -> None:
+    """Set a thread-safe cancellation flag while the bounded synchronous adapter is running."""
+
+    while not cancelled.is_set():
+        if await request.is_disconnected():
+            cancelled.set()
+            return
+        await asyncio.sleep(0.025)
+
+
+async def _run_amo_search(
+    request: Request,
+    *,
+    adapter: AmoSearchAdapter,
+    query: object,
+    locale: object,
+    session_secret: str,
+) -> AmoSearchResult:
+    """Avoid blocking the ASGI loop and fail closed if the browser disconnects mid-lookup."""
+
+    if await request.is_disconnected():
+        return adapter.search(
+            query=query,
+            locale=locale,
+            session_secret=session_secret,
+            cancellation_check=lambda: True,
+        )
+    cancelled = threading.Event()
+    watcher = asyncio.create_task(_watch_amo_search_disconnect(request, cancelled))
+    try:
+        return await asyncio.to_thread(
+            adapter.search,
+            query=query,
+            locale=locale,
+            session_secret=session_secret,
+            cancellation_check=cancelled.is_set,
+        )
+    finally:
+        cancelled.set()
+        watcher.cancel()
+        with suppress(asyncio.CancelledError):
+            await watcher
+
 
 FIREFOX_POLICIES_JSON_IMPORT_EXAMPLE: dict[str, Any] = {
     "name": "Workstation baseline",
@@ -350,6 +525,7 @@ async def _create_profile_core(
     *,
     validate_policies: bool = True,
     conflict_detail: str = "Profile with this name already exists",
+    provenance_origin: str = "generic-create",
 ) -> ProfileRead:
     if validate_policies:
         _validate_profile_policies_or_422(
@@ -359,7 +535,10 @@ async def _create_profile_core(
         )
 
     try:
-        profile = await ProfileService.create(session, payload)
+        if provenance_origin == "firefox-import":
+            profile = await ProfileService.create_firefox_import(session, payload)
+        else:
+            profile = await ProfileService.create(session, payload)
         await session.commit()
     except IntegrityError as exc:
         await session.rollback()
@@ -540,6 +719,58 @@ async def profile_library_stats(
     )
 
 
+@router.get(
+    "/extensions/amo-search",
+    response_model=AmoSearchApiResponse,
+    responses={
+        status.HTTP_403_FORBIDDEN: {
+            "model": AmoSearchApiResponse,
+            "description": "Rejected cross-site request; no AMO request was started.",
+        }
+    },
+    summary="Search AMO extensions through BPM",
+    openapi_extra={
+        "parameters": [
+            {
+                "name": "q",
+                "in": "query",
+                "required": True,
+                "description": "Explicit extension-name lookup; 1--100 NFC characters.",
+                "schema": {"type": "string", "minLength": 1, "maxLength": 100},
+            },
+            {
+                "name": "locale",
+                "in": "query",
+                "required": True,
+                "description": "One supported BPM UI locale.",
+                "schema": {"type": "string", "enum": ["en", "ru", "de", "es-ES", "fr", "zh-CN"]},
+            },
+        ]
+    },
+)
+async def search_amo_extensions(request: Request) -> Response:
+    """Perform one explicit, same-origin lookup without exposing AMO as a general proxy."""
+
+    if not _amo_search_request_is_same_origin(request):
+        return _amo_search_response(
+            _unavailable_amo_search(), status_code=status.HTTP_403_FORBIDDEN
+        )
+
+    query, locale = _amo_search_parameters(request)
+    session_secret, should_set_session = _amo_search_session_secret(request)
+    result = await _run_amo_search(
+        request,
+        adapter=_amo_search_adapter(request),
+        query=query,
+        locale=locale,
+        session_secret=session_secret,
+    )
+    response = _amo_search_response(result)
+    if should_set_session:
+        _set_amo_search_session_cookie(request, response, session_secret)
+    return response
+
+
 @router.delete("/reset", summary="Hard-delete all profiles from the library")
 async def reset_profiles_library(
     session: AsyncSession = Depends(get_session),
@@ -571,6 +802,401 @@ async def create_profile(
         session,
         validate_policies=True,
     )
+
+
+def _profile_preparation_error(
+    *,
+    code: str,
+    http_status: int,
+    parameters: dict[str, str | int | bool | None] | None = None,
+) -> HTTPException:
+    """Return a stable, value-free error that the preparation UI can localize."""
+
+    return HTTPException(
+        status_code=http_status,
+        detail={
+            "kind": "profile-preparation-error",
+            "contract_version": 1,
+            "code": code,
+            "i18n_key": f"profiles.preparation_error_{code}",
+            "http_status": http_status,
+            "mutation": "none",
+            "parameters": parameters or {},
+        },
+    )
+
+
+async def _read_new_profile_preparation_request(request: Request) -> NewProfilePreparationRequest:
+    """Parse preparation input without returning Pydantic's value-bearing errors."""
+
+    try:
+        body = await request.json()
+        if not isinstance(body, dict):
+            raise ValueError
+        return NewProfilePreparationRequest.model_validate(body)
+    except json.JSONDecodeError, ValidationError, ValueError:
+        raise _profile_preparation_error(
+            code="preparation_request_invalid",
+            http_status=status.HTTP_422_UNPROCESSABLE_CONTENT,
+        ) from None
+
+
+async def _read_duplicate_profile_preparation_request(
+    request: Request,
+) -> DuplicateProfilePreparationRequest:
+    """Parse duplicate preparation input without echoing policy or source values."""
+
+    try:
+        body = await request.json()
+        if not isinstance(body, dict):
+            raise ValueError
+        return DuplicateProfilePreparationRequest.model_validate(body)
+    except json.JSONDecodeError, ValidationError, ValueError:
+        raise _profile_preparation_error(
+            code="preparation_request_invalid",
+            http_status=status.HTTP_422_UNPROCESSABLE_CONTENT,
+        ) from None
+
+
+async def _read_duplicate_profile_preparation_preview_request(
+    request: Request,
+) -> DuplicateProfilePreparationPreviewRequest:
+    """Parse a value-safe duplicate-planning refresh without echoing inputs."""
+
+    try:
+        body = await request.json()
+        if not isinstance(body, dict):
+            raise ValueError
+        return DuplicateProfilePreparationPreviewRequest.model_validate(body)
+    except json.JSONDecodeError, ValidationError, ValueError:
+        raise _profile_preparation_error(
+            code="preparation_request_invalid",
+            http_status=status.HTTP_422_UNPROCESSABLE_CONTENT,
+        ) from None
+
+
+async def _create_prepared_new_profile_in_transaction(
+    session: AsyncSession,
+    payload: NewProfilePreparationRequest,
+) -> ProfileRead:
+    """Commit exactly one new prepared profile or roll the entire attempt back."""
+
+    if session.get_bind().dialect.name == "sqlite":
+        if session.in_transaction():
+            raise RuntimeError("new profile preparation requires a fresh API session transaction")
+        try:
+            # SQLite needs the write reservation before composition and INSERT
+            # so a competing name cannot create a half-observed candidate.
+            await session.execute(text("BEGIN IMMEDIATE"))
+            profile = await ProfileService.create_prepared_new_profile(session, payload)
+            await session.commit()
+            return profile
+        except BaseException:
+            if session.in_transaction():
+                await session.rollback()
+            raise
+
+    try:
+        async with session.begin():
+            return await ProfileService.create_prepared_new_profile(session, payload)
+    except BaseException:
+        if session.in_transaction():
+            await session.rollback()
+        raise
+
+
+async def _create_prepared_duplicate_profile_in_transaction(
+    session: AsyncSession,
+    payload: DuplicateProfilePreparationRequest,
+) -> ProfileRead:
+    """Replan and create exactly one duplicate, or roll the whole attempt back."""
+
+    if session.get_bind().dialect.name == "sqlite":
+        if session.in_transaction():
+            raise RuntimeError(
+                "duplicate profile preparation requires a fresh API session transaction"
+            )
+        try:
+            # SQLite has no SELECT FOR UPDATE.  Its write reservation is taken
+            # before the source read so validation, replan, and INSERT observe
+            # one serialized write boundary.
+            await session.execute(text("BEGIN IMMEDIATE"))
+            profile = await ProfileService.create_prepared_duplicate_profile(session, payload)
+            await session.commit()
+            return profile
+        except BaseException:
+            if session.in_transaction():
+                await session.rollback()
+            raise
+
+    try:
+        async with session.begin():
+            return await ProfileService.create_prepared_duplicate_profile(session, payload)
+    except BaseException:
+        if session.in_transaction():
+            await session.rollback()
+        raise
+
+
+@router.post(
+    "/prepare/new",
+    response_model=ProfileRead,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create prepared new profile",
+    description=(
+        "Atomically create one profile from server-resolved schema, starter, and CIS catalog "
+        "identities. Policy flags, compliance, and baseline provenance are never accepted from "
+        "the caller."
+    ),
+    responses={
+        status.HTTP_409_CONFLICT: {
+            "model": ProfilePreparationErrorEnvelope,
+            "description": "The name is already in use; no profile was created.",
+        },
+        status.HTTP_422_UNPROCESSABLE_CONTENT: {
+            "model": ProfilePreparationErrorEnvelope,
+            "description": "The request or selected catalog candidate is invalid; no profile was created.",
+        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "model": ProfilePreparationErrorEnvelope,
+            "description": "The preparation transaction failed; no profile was created.",
+        },
+    },
+    openapi_extra={
+        "requestBody": {
+            "required": True,
+            "content": {
+                "application/json": {
+                    "schema": NewProfilePreparationRequest.model_json_schema(),
+                }
+            },
+        }
+    },
+)
+async def create_prepared_new_profile(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> ProfileRead:
+    """M3-04's dedicated atomic create command; generic CRUD remains unchanged."""
+
+    payload = await _read_new_profile_preparation_request(request)
+    try:
+        return await _create_prepared_new_profile_in_transaction(session, payload)
+    except NewProfilePreparationFailure as exc:
+        raise _profile_preparation_error(
+            code=exc.code,
+            http_status=(
+                status.HTTP_409_CONFLICT
+                if exc.code == "preparation_idempotency_key_reused"
+                else status.HTTP_422_UNPROCESSABLE_CONTENT
+            ),
+        ) from exc
+    except IntegrityError as exc:
+        # PostgreSQL may report either the name or idempotency constraint first
+        # when concurrent exact replays collide on both.  The durable key is
+        # authoritative after every insert conflict, irrespective of which
+        # constraint text the driver happened to return.
+        try:
+            replay = await ProfileService.reconcile_prepared_new_profile(session, payload)
+        except NewProfilePreparationFailure as replay_exc:
+            raise _profile_preparation_error(
+                code=replay_exc.code,
+                http_status=status.HTTP_409_CONFLICT,
+            ) from replay_exc
+        if replay is not None:
+            return replay
+        raise _profile_preparation_error(
+            code=_preparation_integrity_error_code(exc),
+            http_status=status.HTTP_409_CONFLICT,
+        ) from exc
+    except (SQLAlchemyError, RuntimeError) as exc:
+        raise _profile_preparation_error(
+            code="preparation_transaction_failed",
+            http_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        ) from exc
+    except Exception as exc:
+        # The transaction helper rolls every unknown composer/serialization
+        # failure back before this value-free terminal response is emitted.
+        raise _profile_preparation_error(
+            code="preparation_transaction_failed",
+            http_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        ) from exc
+
+
+def _preparation_integrity_error_code(exc: IntegrityError) -> str:
+    """Classify the two preparation uniqueness boundaries without values."""
+
+    if "preparation_idempotency_key" in str(exc.orig).lower():
+        return "preparation_idempotency_key_reused"
+    return "preparation_name_conflict"
+
+
+def _duplicate_preparation_failure_status(code: str) -> int:
+    """Keep duplicate state races distinct from malformed catalog selection."""
+
+    if code == "preparation_duplicate_source_not_found":
+        return status.HTTP_404_NOT_FOUND
+    if code in {
+        "preparation_schema_unavailable",
+        "preparation_starter_unavailable",
+        "preparation_cis_unavailable",
+        "preparation_candidate_invalid",
+    }:
+        return status.HTTP_422_UNPROCESSABLE_CONTENT
+    return status.HTTP_409_CONFLICT
+
+
+@router.post(
+    "/prepare/duplicate/preview",
+    response_model=DuplicateProfilePreparationPreview,
+    summary="Preview prepared duplicate",
+    description=(
+        "Read-only, value-safe duplicate planning for one source revision and selected catalog "
+        "identities. This endpoint never creates or modifies a profile."
+    ),
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "model": ProfilePreparationErrorEnvelope,
+            "description": "The duplicate source does not exist; no profile was created.",
+        },
+        status.HTTP_422_UNPROCESSABLE_CONTENT: {
+            "model": ProfilePreparationErrorEnvelope,
+            "description": "The planning request is invalid; no profile was created.",
+        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "model": ProfilePreparationErrorEnvelope,
+            "description": "Duplicate planning failed without creating a profile.",
+        },
+    },
+)
+async def preview_prepared_duplicate_profile(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> DuplicateProfilePreparationPreview:
+    """Expose M3-03's read-only planning identity to the preparation form."""
+
+    payload = await _read_duplicate_profile_preparation_preview_request(request)
+    try:
+        duplicate_plan = await ProfileService.plan_duplicate(
+            session,
+            payload.source_id,
+            expected_source_revision=payload.expected_source_revision,
+            target_schema_id=payload.target_schema_id,
+            preset_id=payload.starter_id,
+            cis_baseline_id=payload.cis_baseline_id,
+        )
+    except (SQLAlchemyError, RuntimeError) as exc:
+        raise _profile_preparation_error(
+            code="preparation_transaction_failed",
+            http_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        ) from exc
+    except Exception as exc:
+        raise _profile_preparation_error(
+            code="preparation_transaction_failed",
+            http_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        ) from exc
+
+    if duplicate_plan is None:
+        raise _profile_preparation_error(
+            code="preparation_duplicate_source_not_found",
+            http_status=status.HTTP_404_NOT_FOUND,
+        )
+
+    plan = duplicate_plan.plan
+    plan_digest = plan.get("plan_digest")
+    if not isinstance(plan_digest, str):
+        raise _profile_preparation_error(
+            code="preparation_transaction_failed",
+            http_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+    return DuplicateProfilePreparationPreview(
+        kind="profile-duplicate-plan",
+        contract_version=1,
+        status=duplicate_plan.status,
+        reason_code=duplicate_plan.reason_code,
+        plan_digest=plan_digest,
+    )
+
+
+@router.post(
+    "/prepare/duplicate",
+    response_model=ProfileRead,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create prepared duplicate profile",
+    description=(
+        "Atomically rederive a duplicate from one fixed source revision and current server catalogs. "
+        "The source is never converted or otherwise modified."
+    ),
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "model": ProfilePreparationErrorEnvelope,
+            "description": "The duplicate source does not exist; no profile was created.",
+        },
+        status.HTTP_409_CONFLICT: {
+            "model": ProfilePreparationErrorEnvelope,
+            "description": "The source, duplicate composition, name, or idempotency boundary rejected the command.",
+        },
+        status.HTTP_422_UNPROCESSABLE_CONTENT: {
+            "model": ProfilePreparationErrorEnvelope,
+            "description": "The selected catalog candidate is unavailable or invalid; no profile was created.",
+        },
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "model": ProfilePreparationErrorEnvelope,
+            "description": "The duplicate transaction failed; no profile was created.",
+        },
+    },
+    openapi_extra={
+        "requestBody": {
+            "required": True,
+            "content": {
+                "application/json": {
+                    "schema": DuplicateProfilePreparationRequest.model_json_schema(),
+                }
+            },
+        }
+    },
+)
+async def create_prepared_duplicate_profile(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> ProfileRead:
+    """M3-05's source-preserving atomic duplicate command."""
+
+    payload = await _read_duplicate_profile_preparation_request(request)
+    try:
+        return await _create_prepared_duplicate_profile_in_transaction(session, payload)
+    except DuplicateProfilePreparationFailure as exc:
+        raise _profile_preparation_error(
+            code=exc.code,
+            http_status=_duplicate_preparation_failure_status(exc.code),
+        ) from exc
+    except IntegrityError as exc:
+        # A concurrent same-key duplicate can also collide on the target name
+        # first.  Re-read its authoritative key before classifying any raw
+        # constraint text, so either engine preserves exactly-once replay.
+        try:
+            replay = await ProfileService.reconcile_prepared_duplicate_profile(session, payload)
+        except DuplicateProfilePreparationFailure as replay_exc:
+            raise _profile_preparation_error(
+                code=replay_exc.code,
+                http_status=_duplicate_preparation_failure_status(replay_exc.code),
+            ) from replay_exc
+        if replay is not None:
+            return replay
+        raise _profile_preparation_error(
+            code=_preparation_integrity_error_code(exc),
+            http_status=status.HTTP_409_CONFLICT,
+        ) from exc
+    except (SQLAlchemyError, RuntimeError) as exc:
+        raise _profile_preparation_error(
+            code="preparation_transaction_failed",
+            http_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        ) from exc
+    except Exception as exc:
+        raise _profile_preparation_error(
+            code="preparation_transaction_failed",
+            http_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        ) from exc
 
 
 def _conversion_preview_error(
@@ -844,6 +1470,8 @@ def _conversion_apply_response(outcome: ConversionApplyOutcome) -> ConversionApp
                     "schema_version",
                     "flags",
                     "compliance",
+                    "extension_provenance",
+                    "certificate_provenance",
                     "revision",
                 ],
                 "database_managed_fields": ["updated_at"],
@@ -852,6 +1480,9 @@ def _conversion_apply_response(outcome: ConversionApplyOutcome) -> ConversionApp
                     "name",
                     "name_casefold",
                     "description",
+                    "baseline_provenance",
+                    "preparation_idempotency_key",
+                    "preparation_request_fingerprint",
                     "created_at",
                     "deleted_at",
                 ],
@@ -986,6 +1617,7 @@ async def import_firefox_policies_json(
         session,
         validate_policies=False,
         conflict_detail="Profile with this name already exists",
+        provenance_origin="firefox-import",
     )
 
 
@@ -1128,7 +1760,20 @@ async def apply_profile_conversion(
     return _conversion_apply_response(outcome)
 
 
-@router.patch("/{profile_id}", response_model=ProfileRead, summary="Update profile")
+@router.patch(
+    "/{profile_id}",
+    response_model=ProfileRead,
+    summary="Update profile",
+    responses={
+        status.HTTP_409_CONFLICT: {
+            "model": ProfileUpdateConflictErrorEnvelope,
+            "description": (
+                "The revision is stale or the request tried to relabel a saved profile. "
+                "Use the explicit conversion preview/apply flow for a schema change."
+            ),
+        },
+    },
+)
 async def update_profile(
     profile_id: int,
     payload: ProfileUpdate,

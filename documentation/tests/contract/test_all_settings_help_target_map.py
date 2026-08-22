@@ -45,8 +45,8 @@ def test_contract_declares_exact_manifest_backed_identity_rules() -> None:
 
     assert contract["schema_version"] == 1
     assert contract["contract_id"] == "bpm-all-settings-help-target-map-0.9.1"
-    assert contract["backlog_item"] == "BPM091-M9-02"
-    assert contract["target_bpm_version"] == "0.9.5.1"
+    assert contract["backlog_item"] == "BPM096-M10-04"
+    assert contract["target_bpm_version"] == "0.9.6"
     assert contract["status"] == "accepted"
     assert contract["known_preference_targets"] == {
         "target_pattern": "known-preference:{exact.preference.id}",

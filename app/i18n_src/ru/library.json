@@ -76,14 +76,8 @@
     "profiles.compare_action": "Сравнить здесь",
     "profiles.compare_selected": "Сейчас сравнивается",
     "profiles.clone_name_pattern": "{name} (копия)",
-    "profiles.clone_name_label": "Имя клона",
-    "profiles.clone_name_confirm": "Открыть черновик",
-    "profiles.clone_name_cancel": "Отмена",
-    "profiles.clone_name_required": "Введите имя клона.",
-    "profiles.clone_name_duplicate": "Профиль с таким именем уже существует.",
     "profiles.clone_source_value": "Основан на профиле «{name}»",
     "profiles.clone_source_unknown": "этом профиле",
     "profiles.schema_conversion_recommendation_action": "Проверить обновление до {target_schema}",
-    "profiles.schema_conversion_recommendation_consequence": "Открывает предварительный просмотр преобразования из {source_schema} в {target_schema}. Профиль не изменится, пока вы не проверите и не подтвердите преобразование.",
     "profiles.schema_conversion_recommendation_accessible_name": "Проверить предварительный просмотр преобразования схемы из {source_schema} в {target_schema}"
 }

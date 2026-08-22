@@ -65,7 +65,6 @@ _ROUTE_CATALOG_KEYS: dict[str, tuple[str, ...]] = {
         "wizard_settings_catalog",
         "wizard_preferences_catalog",
         "wizard_manual_policy_controls",
-        "wizard_starter_catalog",
         "wizard_steps",
         "wizard_schema_shell_catalog",
         "schema_channels_catalog",
@@ -94,6 +93,11 @@ _ROUTE_CONTEXTUAL_HELP_SURFACES: dict[str, tuple[str, ...]] = {
 _ROUTE_DEEP_HELP_TARGETS: dict[str, tuple[str, ...]] = {
     "library": ("import-firefox-policies",),
     "new": (
+        "preparation-create",
+        "preparation-duplicate",
+        "guided-urls-sites-navigation",
+        "guided-certificates-trust",
+        "guided-extensions",
         "validation",
         "policy-ai-controls",
         "policy-visual-search-enabled",
@@ -451,6 +455,10 @@ def build_profiles_page_context(
     json_href: str | None = None,
     clone_source_id: int | None = None,
     clone_name: str | None = None,
+    preparation_mode: str | None = None,
+    preparation_terminal_action_mode: str | None = None,
+    preparation_source_state: str | None = None,
+    preparation_source: dict[str, object] | None = None,
 ) -> dict[str, object]:
     current_year = (now or datetime.now(UTC)).year
     footer_year_range = "2025" if current_year <= 2025 else f"2025-{current_year}"
@@ -489,6 +497,14 @@ def build_profiles_page_context(
         if isinstance(initial_schema_version, str) and initial_schema_version in SCHEMA_FILENAMES
         else schema_channels_catalog["default_channel"]
     )
+    editing_profile_schema_label = next(
+        (
+            option["label"]
+            for option in schema_options
+            if option.get("value") == active_schema_version and isinstance(option.get("label"), str)
+        ),
+        schema_channels_catalog["default_label"],
+    )
     # The runtime lifecycle catalog has already applied the contract's public
     # header order; do not recreate ordering from a second tuple here.
     header_schema_options = list(schema_options)
@@ -503,6 +519,7 @@ def build_profiles_page_context(
         "profiles_route_mode": route_mode,
         "editing_profile_id": editing_profile_id,
         "editing_profile_schema_version": editing_profile_schema_version,
+        "editing_profile_schema_label": editing_profile_schema_label,
         "editing_profile_initial": editing_profile_initial,
         "active_schema_version": active_schema_version,
         "include_deleted": include_deleted,
@@ -512,6 +529,10 @@ def build_profiles_page_context(
         "json_href": json_href,
         "clone_source_id": clone_source_id,
         "clone_name": clone_name,
+        "preparation_mode": preparation_mode,
+        "preparation_terminal_action_mode": preparation_terminal_action_mode,
+        "preparation_source_state": preparation_source_state,
+        "preparation_source": preparation_source,
         "header_schema_options": header_schema_options,
         "locale_picker_options": LOCALE_MATRIX,
         "initial_lang": initial_lang,

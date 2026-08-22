@@ -79,7 +79,7 @@ def test_policy_context_targets_are_inventory_backed_and_unambiguous() -> None:
     assert context["backlog_item"] == "BPM090-M5-07"
     assert len(build_docs._policy_ids()) == 123
     assert len(build_docs._cis_recommendation_ids()) == 55
-    assert len(build_docs._api_operation_topic_ids()) == 17
+    assert len(build_docs._api_operation_topic_ids()) == 21
     assert len(build_docs._capability_topic_ids()) == 106
     assert set(assignments) < build_docs._policy_ids()
     assert assignments["AIControls"]["family_id"] == "privacy-ai"

@@ -32,7 +32,7 @@ def test_pre_commit_pins_the_reviewed_python_toolchain() -> None:
     config = _pre_commit_config()
     pyproject = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
 
-    assert config["minimum_pre_commit_version"] == "4.6.1"
+    assert config["minimum_pre_commit_version"] == "4.6.2"
     assert config["default_language_version"] == {"python": "python3.14"}
     assert _hook(config, "ruff")
     assert _hook(config, "ruff-format")
@@ -48,10 +48,10 @@ def test_pre_commit_pins_the_reviewed_python_toolchain() -> None:
         if isinstance(repository_url, str) and isinstance(revision, str):
             revisions[repository_url] = revision
     assert revisions == {
-        "https://github.com/astral-sh/ruff-pre-commit": "v0.16.1",
-        "https://github.com/pre-commit/mirrors-mypy": "v2.3.0",
+        "https://github.com/astral-sh/ruff-pre-commit": "v0.16.3",
+        "https://github.com/pre-commit/mirrors-mypy": "v2.3.1",
     }
-    assert "pre-commit==4.6.1" in pyproject["project"]["optional-dependencies"]["dev"]
+    assert "pre-commit==4.6.2" in pyproject["project"]["optional-dependencies"]["dev"]
     assert "black>=26.5.1" not in pyproject["project"]["optional-dependencies"]["dev"]
     assert "isort>=8.0.1" not in pyproject["project"]["optional-dependencies"]["dev"]
 

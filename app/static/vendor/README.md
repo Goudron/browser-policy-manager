@@ -29,13 +29,13 @@ These keep theme selection, Monaco bundle wiring, and initial locale bootstrappi
 - License files: `monaco.LICENSE` and `monaco.ThirdPartyNotices.txt`
 
 Monaco `0.56.0` bundles these audited upstream implementations:
-- `DOMPurify` `3.4.13` (npm override of Monaco's vulnerable `3.4.8` dependency and ESM source),
+- `DOMPurify` `3.4.14` (npm override of Monaco's vulnerable `3.4.8` dependency and ESM source),
   with `dompurify.LICENSE-APACHE` and `dompurify.LICENSE-MPL`
-- `marked` `14.0.0`, with `marked.LICENSE`
+- `marked` `18.0.10`, with `marked.LICENSE`
 
-`tools/build_monaco_bundle.sh` overlays the resolved DOMPurify `3.4.13` ESM source into Monaco's
+`tools/build_monaco_bundle.sh` overlays the resolved DOMPurify `3.4.14` ESM source into Monaco's
 bundled source tree before esbuild runs. Vendor verification requires the resulting browser bundle
-to identify `DOMPurify 3.4.13`; a clean npm audit alone is not accepted as bundle evidence.
+to identify `DOMPurify 3.4.14`; a clean npm audit alone is not accepted as bundle evidence.
 
 Update procedure:
 1. Download the pinned upstream browser build for the new version.

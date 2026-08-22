@@ -63,7 +63,30 @@ def test_search_facets_contract_is_static_localized_and_non_ai() -> None:
         labels = build_docs._localized_search_facet_fields(locale, contract)["firefox_channel"]
         assert labels["value_labels"]["esr-115.39"] == "Firefox ESR 115.39"
         assert set(labels["value_labels"]) == set(facets["firefox_channel"]["values"])
-    assert "ai_smart" in facets["policy_category"]["values"]
+    assert facets["policy_category"]["values"] == [
+        "advanced",
+        "ai_smart",
+        "browser_behavior",
+        "extensions_integrations",
+        "home_startup",
+        "network_access",
+        "privacy_security",
+        "search",
+        "sync_accounts",
+        "urls_sites_navigation",
+    ]
+    expected_policy_category_labels = {
+        "en": ("Sync and accounts", "URLs, sites, and navigation"),
+        "ru": ("Синхронизация и учётные записи", "URL-адреса, сайты и навигация"),
+        "de": ("Synchronisierung und Konten", "URLs, Websites und Navigation"),
+        "zh-CN": ("同步和账户", "URL、网站和导航"),
+        "fr": ("Synchronisation et comptes", "URL, sites et navigation"),
+        "es-ES": ("Sincronización y cuentas", "URL, sitios y navegación"),
+    }
+    for locale, (sync_accounts, urls_sites_navigation) in expected_policy_category_labels.items():
+        labels = build_docs._localized_search_facet_fields(locale, contract)["policy_category"]
+        assert labels["value_labels"]["sync_accounts"] == sync_accounts
+        assert labels["value_labels"]["urls_sites_navigation"] == urls_sites_navigation
     assert facets["cis_level"]["values"] == ["level-1", "level-2"]
     assert facets["api_area"]["values"] == [
         "service",

@@ -2,12 +2,12 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-guided-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Vérifier le profil guidé</title>
-  <shortdesc>Utilisez l'étape 6 pour examiner la configuration en langage clair avant le transfert.</shortdesc>
+  <shortdesc>Utilisez l'étape 8 pour examiner la configuration en langage clair avant le transfert.</shortdesc>
   <taskbody>
     <prereq><p>Vous avez terminé les modifications guidées que vous souhaitez conserver.</p></prereq>
     <context><p>L'étape de révision vous aide à détecter les choix de schéma manquants, les avertissements de validation et les paramètres qui ne correspondent pas au scénario.</p></context>
     <steps>
-      <step><cmd>Ouvrez l’étape 6 de la configuration guidée.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez l’étape 8 de la configuration guidée.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Lire le résumé du profil sélectionné et les groupes de paramètres modifiés.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Résolvez les avertissements de validation ou documentez pourquoi une exception prise en charge persiste.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Confirmez que le scénario, la couche CIS, le canal de schéma et les contrôles modifiés correspondent à l'objectif de transfert.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>

@@ -84,7 +84,7 @@
         <li>License: <codeph>MPL-2.0</codeph>.</li>
         <li>BPM is not affiliated with or endorsed by Mozilla.</li>
         <li>Inventory backlog item: <codeph>BPM095-M8-04</codeph>.</li>
-        <li>Generated for BPM: <codeph>0.9.5.1</codeph>.</li>
+        <li>Generated for BPM: <codeph>0.9.6</codeph>.</li>
         <li>Mozilla source locator: <codeph>https://github.com/mozilla/policy-templates/commit/a892b621f7f98ee91c8ed84290641f2703e88490</codeph>; source retrieved on <codeph>2026-08-20</codeph>.</li>
         <li><codeph>esr-153.0</codeph>: Mozilla version <codeph>153.0</codeph>, schema source <codeph>mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490</codeph>, schema SHA-256 <codeph>5ac90907dc7acee4f62566523c0136c2384a7cab4bc54f341704327a3cb6a94d</codeph>.</li>
         <li><codeph>release-153</codeph>: Mozilla version <codeph>153.0</codeph>, schema source <codeph>mozilla-policy-templates-master-a892b621f7f98ee91c8ed84290641f2703e88490</codeph>, schema SHA-256 <codeph>5ac90907dc7acee4f62566523c0136c2384a7cab4bc54f341704327a3cb6a94d</codeph>.</li>

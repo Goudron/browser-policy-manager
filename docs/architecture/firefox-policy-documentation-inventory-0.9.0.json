@@ -46,8 +46,8 @@
         "string": 13
       },
       "ui_support_counts": {
-        "fallback": 54,
-        "mapped": 43
+        "fallback": 46,
+        "mapped": 51
       }
     },
     "esr-140.13": {
@@ -96,8 +96,8 @@
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 67,
-        "mapped": 45
+        "fallback": 58,
+        "mapped": 54
       }
     },
     "esr-153.0": {
@@ -146,8 +146,8 @@
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 71,
-        "mapped": 51
+        "fallback": 62,
+        "mapped": 60
       }
     },
     "release-153": {
@@ -196,12 +196,12 @@
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 71,
-        "mapped": 51
+        "fallback": 62,
+        "mapped": 60
       }
     }
   },
-  "generated_for_bpm": "0.9.5.1",
+  "generated_for_bpm": "0.9.6",
   "managed_preferences": [
     {
       "can_autofill": false,
@@ -1208,9 +1208,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "advanced",
-            "subsection": "unmapped",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -1225,9 +1225,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "advanced",
-            "subsection": "unmapped",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -1242,9 +1242,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "advanced",
-            "subsection": "unmapped",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -1259,9 +1259,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "advanced",
-            "subsection": "unmapped",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -1773,9 +1773,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "network_access",
-            "subsection": "protocol_handlers",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "array-of-objects"
           },
           "value_type": "array"
@@ -1790,9 +1790,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "network_access",
-            "subsection": "protocol_handlers",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "array-of-objects"
           },
           "value_type": "array"
@@ -1807,9 +1807,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "network_access",
-            "subsection": "protocol_handlers",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "array-of-objects"
           },
           "value_type": "array"
@@ -1824,9 +1824,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "network_access",
-            "subsection": "protocol_handlers",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "array-of-objects"
           },
           "value_type": "array"
@@ -2235,7 +2235,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "bookmarks",
             "support_level": "mapped",
             "widget": "array-of-objects"
@@ -2252,7 +2252,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "bookmarks",
             "support_level": "mapped",
             "widget": "array-of-objects"
@@ -2269,7 +2269,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "bookmarks",
             "support_level": "mapped",
             "widget": "array-of-objects"
@@ -2286,7 +2286,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "bookmarks",
             "support_level": "mapped",
             "widget": "array-of-objects"
@@ -5907,9 +5907,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "advanced",
-            "subsection": "unmapped",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "toggle"
           },
           "value_type": "boolean"
@@ -5924,9 +5924,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "advanced",
-            "subsection": "unmapped",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "toggle"
           },
           "value_type": "boolean"
@@ -5941,9 +5941,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "advanced",
-            "subsection": "unmapped",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "toggle"
           },
           "value_type": "boolean"
@@ -5958,9 +5958,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "advanced",
-            "subsection": "unmapped",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "toggle"
           },
           "value_type": "boolean"
@@ -5984,9 +5984,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
-            "subsection": "protocol_handlers",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "object-card"
           },
           "value_type": "object"
@@ -6001,9 +6001,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
-            "subsection": "protocol_handlers",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "object-card"
           },
           "value_type": "object"
@@ -6018,9 +6018,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
-            "subsection": "protocol_handlers",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "object-card"
           },
           "value_type": "object"
@@ -6035,9 +6035,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
-            "subsection": "protocol_handlers",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "managed_navigation",
+            "support_level": "mapped",
             "widget": "object-card"
           },
           "value_type": "object"
@@ -6138,7 +6138,7 @@
           "ui": {
             "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
+            "section": "urls_sites_navigation",
             "subsection": "homepage",
             "support_level": "mapped",
             "widget": "object-card"
@@ -6155,7 +6155,7 @@
           "ui": {
             "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
+            "section": "urls_sites_navigation",
             "subsection": "homepage",
             "support_level": "mapped",
             "widget": "object-card"
@@ -6172,7 +6172,7 @@
           "ui": {
             "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
+            "section": "urls_sites_navigation",
             "subsection": "homepage",
             "support_level": "mapped",
             "widget": "object-card"
@@ -6189,7 +6189,7 @@
           "ui": {
             "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
+            "section": "urls_sites_navigation",
             "subsection": "homepage",
             "support_level": "mapped",
             "widget": "object-card"
@@ -6215,9 +6215,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "network_access",
-            "subsection": "network",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "list"
           },
           "value_type": "array"
@@ -6232,9 +6232,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "network_access",
-            "subsection": "network",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "list"
           },
           "value_type": "array"
@@ -6249,9 +6249,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "network_access",
-            "subsection": "network",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "list"
           },
           "value_type": "array"
@@ -6686,9 +6686,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
-            "subsection": "content_filtering",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "list"
           },
           "value_type": "array"
@@ -6703,9 +6703,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
-            "subsection": "content_filtering",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "list"
           },
           "value_type": "array"
@@ -6720,9 +6720,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
-            "subsection": "content_filtering",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "list"
           },
           "value_type": "array"
@@ -6737,9 +6737,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
-            "subsection": "content_filtering",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "site_access",
+            "support_level": "mapped",
             "widget": "list"
           },
           "value_type": "array"
@@ -6806,7 +6806,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "bookmarks",
             "support_level": "mapped",
             "widget": "array-of-objects"
@@ -6823,7 +6823,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "bookmarks",
             "support_level": "mapped",
             "widget": "array-of-objects"
@@ -6840,7 +6840,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "bookmarks",
             "support_level": "mapped",
             "widget": "array-of-objects"
@@ -6857,7 +6857,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "bookmarks",
             "support_level": "mapped",
             "widget": "array-of-objects"
@@ -7174,9 +7174,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
-            "subsection": "homepage",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "bookmarks",
+            "support_level": "mapped",
             "widget": "toggle"
           },
           "value_type": "boolean"
@@ -7191,9 +7191,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
-            "subsection": "homepage",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "bookmarks",
+            "support_level": "mapped",
             "widget": "toggle"
           },
           "value_type": "boolean"
@@ -7208,9 +7208,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
-            "subsection": "homepage",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "bookmarks",
+            "support_level": "mapped",
             "widget": "toggle"
           },
           "value_type": "boolean"
@@ -7225,9 +7225,9 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
-            "subsection": "homepage",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "bookmarks",
+            "support_level": "mapped",
             "widget": "toggle"
           },
           "value_type": "boolean"
@@ -7403,11 +7403,11 @@
           "min_version": "60.0",
           "schema_sha256": "10d7df435a869132f88e2789b5d2fe0b4d30fb8162652acddfbc5348e57ba255",
           "ui": {
-            "complexity": "advanced",
+            "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "browser_behavior",
-            "subsection": "startup",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "homepage",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -7420,11 +7420,11 @@
           "min_version": "60.0",
           "schema_sha256": "10d7df435a869132f88e2789b5d2fe0b4d30fb8162652acddfbc5348e57ba255",
           "ui": {
-            "complexity": "advanced",
+            "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "browser_behavior",
-            "subsection": "startup",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "homepage",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -7437,11 +7437,11 @@
           "min_version": "60.0",
           "schema_sha256": "10d7df435a869132f88e2789b5d2fe0b4d30fb8162652acddfbc5348e57ba255",
           "ui": {
-            "complexity": "advanced",
+            "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "browser_behavior",
-            "subsection": "startup",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "homepage",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -7454,11 +7454,11 @@
           "min_version": "60.0",
           "schema_sha256": "10d7df435a869132f88e2789b5d2fe0b4d30fb8162652acddfbc5348e57ba255",
           "ui": {
-            "complexity": "advanced",
+            "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "browser_behavior",
-            "subsection": "startup",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "homepage",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -7480,11 +7480,11 @@
           "min_version": "60.0",
           "schema_sha256": "175ce56fcd1fe98e7d13e87c2c1086ae9ff2af86cdb3ba4a4d1b8420cd57c94d",
           "ui": {
-            "complexity": "advanced",
+            "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "browser_behavior",
-            "subsection": "startup",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "homepage",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -7497,11 +7497,11 @@
           "min_version": "60.0",
           "schema_sha256": "175ce56fcd1fe98e7d13e87c2c1086ae9ff2af86cdb3ba4a4d1b8420cd57c94d",
           "ui": {
-            "complexity": "advanced",
+            "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "browser_behavior",
-            "subsection": "startup",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "homepage",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -7514,11 +7514,11 @@
           "min_version": "60.0",
           "schema_sha256": "175ce56fcd1fe98e7d13e87c2c1086ae9ff2af86cdb3ba4a4d1b8420cd57c94d",
           "ui": {
-            "complexity": "advanced",
+            "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "browser_behavior",
-            "subsection": "startup",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "homepage",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -7531,11 +7531,11 @@
           "min_version": "60.0",
           "schema_sha256": "175ce56fcd1fe98e7d13e87c2c1086ae9ff2af86cdb3ba4a4d1b8420cd57c94d",
           "ui": {
-            "complexity": "advanced",
+            "complexity": "basic",
             "preserve_unknown_fields": false,
-            "section": "browser_behavior",
-            "subsection": "startup",
-            "support_level": "fallback",
+            "section": "urls_sites_navigation",
+            "subsection": "homepage",
+            "support_level": "mapped",
             "widget": "text"
           },
           "value_type": "string"
@@ -9502,7 +9502,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
+            "section": "sync_accounts",
             "subsection": "user_messaging",
             "support_level": "mapped",
             "widget": "object-card"
@@ -9519,7 +9519,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
+            "section": "sync_accounts",
             "subsection": "user_messaging",
             "support_level": "mapped",
             "widget": "object-card"
@@ -9536,7 +9536,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
+            "section": "sync_accounts",
             "subsection": "user_messaging",
             "support_level": "mapped",
             "widget": "object-card"
@@ -9553,7 +9553,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "home_startup",
+            "section": "sync_accounts",
             "subsection": "user_messaging",
             "support_level": "mapped",
             "widget": "object-card"
@@ -9699,7 +9699,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "content_filtering",
             "support_level": "mapped",
             "widget": "object-card"
@@ -9716,7 +9716,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "content_filtering",
             "support_level": "mapped",
             "widget": "object-card"
@@ -9733,7 +9733,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "content_filtering",
             "support_level": "mapped",
             "widget": "object-card"
@@ -9750,7 +9750,7 @@
           "ui": {
             "complexity": "advanced",
             "preserve_unknown_fields": false,
-            "section": "extensions_integrations",
+            "section": "urls_sites_navigation",
             "subsection": "content_filtering",
             "support_level": "mapped",
             "widget": "object-card"

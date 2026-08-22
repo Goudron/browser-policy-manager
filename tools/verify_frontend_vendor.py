@@ -27,7 +27,7 @@ LOCKED_ASSET_PATHS = (
     "marked.LICENSE",
 )
 REQUIRED_LICENSE_SNIPPETS = {
-    "profiles_monaco.js": ("DOMPurify 3.4.13",),
+    "profiles_monaco.js": ("DOMPurify 3.4.14",),
     "monaco.LICENSE": ("The MIT License", "Microsoft Corporation"),
     "monaco.ThirdPartyNotices.txt": (
         "THIRD-PARTY SOFTWARE NOTICES AND INFORMATION",
@@ -63,7 +63,7 @@ def build_lock() -> dict[str, Any]:
     versions = _package_versions()
     return {
         "schema_version": 1,
-        "updated": "2026-08-10",
+        "updated": "2026-08-20",
         "packages": {
             "monaco-editor": versions["monaco-editor"],
             "esbuild": versions["esbuild"],

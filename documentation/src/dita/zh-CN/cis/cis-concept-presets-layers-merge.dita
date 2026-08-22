@@ -9,6 +9,7 @@
     <section id="a-layer-decisions"><title>层决策类型</title><p>CIS 合并记录 added_from_cis、already_satisfied、cis_replaced_base、kept_base_only、kept_base_stricter 和 manual_review_kept_base 决策。例如，空白加 CIS 级别 1 添加 30 个政策顶级值，而空白加 CIS 级别 2 添加 33 个。基本公司加 CIS 级别 1 在每个支持的渠道中记录 17 个 added_from_cis、15 个 already_satisfied、20 个 kept_base_only 和 4 个 manual_review_kept_base 决策。</p></section>
     <section id="a-conflicts-manual-review"><title>冲突和手动审核</title><p>手动审核决策意味着 BPM 保持起始值或基础值可见，而不是默默地接受通用 CIS 结果。应用CIS层时，基本企业保留4个人工审核决策，classroom_kiosk保留1个，soc_hard保留7个。最明显的冲突领域是更新治理、代理模式和锁定状态以及选定的关闭时清理值。</p></section>
     <section id="a-attribution-boundary"><title>归因边界</title><p>来源归属是 BPM 审查辅助工具，而不是认证声明。值可以追溯到基线、CIS、手动、进口或原始来源； BPM 可以解释合并决策和生成层，但它不证明 CIS 合规性，不导出 BPM 配置文件元数据，也不复制官方 CIS 基准表达式。</p></section>
+    <section id="bpm096-attribution"><title>准备与来源归属</title><p>在创建已保存的配置文件之前，准备流程会选择架构、预设和 CIS 基线。值来源可显示 baseline、CIS、manual、imported、converted 或 raw。证书和信任的来源按路径单独记录，不会提升基线声明。导入、手动修改、转换、原始、不可用或被阻止状态都需要人工审查，不能证明符合 CIS。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.cis-task-trace-cis-source"/>

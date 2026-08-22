@@ -4,7 +4,7 @@
   <title>Enregistrer et télécharger un profil guidé</title>
   <shortdesc>Enregistrez le profil guidé révisé et téléchargez l'artefact de transfert lorsque la configuration est prête.</shortdesc>
   <taskbody>
-    <prereq><p>L'examen de l'étape 6 est terminé et les avertissements de validation sont compris.</p></prereq>
+    <prereq><p>L'examen de l'étape 8 est terminé et les avertissements de validation sont compris.</p></prereq>
     <context><p>Sauvegarde des enregistrements du profil BPM ; le téléchargement fournit la version révisée pour le transfert de la stratégie.</p></context>
     <steps>
       <step><cmd>Choisissez <uicontrol>Enregistrer</uicontrol> pour stocker l'état actuel du profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>

@@ -20,7 +20,7 @@ if [[ ! -d "$MONACO_EDITOR_ROOT/esm" ]]; then
 fi
 
 # Monaco 0.56.0 vendors DOMPurify 3.4.8 inside its ESM tree even when npm resolves the patched
-# 3.4.13 dependency. Overlay the locked patched ESM source before bundling so the checked-in
+# 3.4.14 dependency. Overlay the locked patched ESM source before bundling so the checked-in
 # browser asset contains the audited implementation rather than merely reporting a clean npm tree.
 DOMPURIFY_SOURCE="$DOMPURIFY_ROOT/dist/purify.es.mjs"
 MONACO_DOMPURIFY_SOURCE="$MONACO_EDITOR_ROOT/esm/vs/base/browser/dompurify/dompurify.js"
@@ -28,8 +28,8 @@ if [[ ! -f "$DOMPURIFY_SOURCE" || ! -f "$MONACO_DOMPURIFY_SOURCE" ]]; then
     echo "Missing locked DOMPurify or Monaco overlay target." >&2
     exit 1
 fi
-if ! grep -q "DOMPurify 3.4.13" "$DOMPURIFY_SOURCE"; then
-    echo "Resolved DOMPurify source is not the locked 3.4.13 implementation." >&2
+if ! grep -q "DOMPurify 3.4.14" "$DOMPURIFY_SOURCE"; then
+    echo "Resolved DOMPurify source is not the locked 3.4.14 implementation." >&2
     exit 1
 fi
 install -m 0644 "$DOMPURIFY_SOURCE" "$MONACO_DOMPURIFY_SOURCE"

@@ -107,7 +107,20 @@ def test_screenshot_all_settings_and_navigation_claims_match_accepted_sources() 
     target_map = _json(TARGET_MAP)
     outcomes = _outcomes()
 
-    assert len(matrix["matrix"]) == visual["coverage"]["rows_reviewed"] == 36
+    assert len(matrix["matrix"]) == 66
+    assert visual["coverage"]["rows_reviewed"] == 36
+    assert visual["subsequent_source_refresh"] == {
+        "owner": "BPM096-M10-04",
+        "matrix_rows": 66,
+        "new_rows_captured": 30,
+        "source_capture_status": "source-capture-complete",
+        "visual_acceptance_status": "not-reviewed",
+        "visual_acceptance_owners": ["BPM096-M10-07", "BPM096-M10-08"],
+        "scope_boundary": (
+            "This accepted BPM091 record reviews its historical 36-row matrix only. It cannot "
+            "accept the later 66-row BPM096 source matrix or rendered site/PDF output."
+        ),
+    }
     assert visual["status"] == "accepted"
     assert visual["release_ready"] is True
     assert audit["status"] == target_map["status"] == "accepted"

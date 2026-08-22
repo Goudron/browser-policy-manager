@@ -27,7 +27,7 @@ def test_search_normalization_contract_defines_locale_rules_and_non_ai_boundary(
 
     assert config["schema_version"] == 1
     assert config["contract_id"] == "bpm-doc-search-normalization-aliases-0.9.0"
-    assert config["backlog_item"] == "BPM090-M10-03"
+    assert config["backlog_item"] == "BPM096-M10-04"
     assert config["status"] == "accepted"
     assert config["locales"] == list(build_docs.LOCALES)
     assert config["non_ai_boundary"] == "no-ai-no-rag-no-embeddings-no-generative-answers"
@@ -52,6 +52,10 @@ def test_search_alias_groups_are_reviewed_for_all_six_locales() -> None:
         "cis-baseline",
         "json-import-export",
         "firefox-esr-lifecycle-and-conversion",
+        "profile-preparation",
+        "guided-urls-sites-navigation",
+        "guided-certificates-trust",
+        "guided-extensions",
     }
     for alias_group in config["alias_groups"]:
         assert set(alias_group["terms"]) == locales

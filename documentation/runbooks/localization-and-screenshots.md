@@ -171,9 +171,12 @@ When English source changes:
 ## Minimal User Guide screenshot workflow
 
 `documentation/config/user-guide-screenshot-matrix-0.9.1.json` is the maintained source of truth.
-Its minimal scope is exactly the six approved User Guide scenarios in all six published locales
-(36 rows). Do not add Administrator Guide, DevOps Guide, API, or decorative captures, and do not add
-an asset outside the matrix.
+For BPM 0.9.6 it has eleven approved User Guide scenarios in all six published locales (66 rows),
+including create/duplicate preparation and the dedicated URLs/sites/navigation, certificates/trust,
+and extensions views. The accepted BPM 0.9.1 visual-QA record covers its historical six-scenario,
+36-row scope only; it does not accept later source rows or rendered site/PDF output. Do not add
+Administrator Guide, DevOps Guide, API, or decorative captures, and do not add an asset outside the
+matrix.
 
 For every screenshot change:
 
@@ -196,7 +199,9 @@ For every screenshot change:
    that topic's locale, using the matrix keys and exact localized UI catalog terminology. Verify
    that no localized topic resolves its image, caption, or alt text from another locale.
 5. Reconcile all affected rows in the visual-QA evidence against locale, scenario, viewport, theme,
-   filename, dimensions, and asset path. Run the matrix and visual checks before broad validation:
+   filename, dimensions, and asset path. If the matrix expands, record source capture separately
+   from rendered visual acceptance; do not promote a historical acceptance record to the new scope.
+   Run the matrix and visual checks before broad validation:
 
 ```bash
 ./.venv/bin/pytest -q -m docs_contract \
@@ -231,6 +236,7 @@ development server for that handoff.
 - No English fallback is served under another locale.
 - Every visible-English exception is narrowly allowlisted with authority and occurrence evidence;
   stale exceptions are removed.
-- Every reviewed screenshot is represented by exactly one matrix row, and all 36 approved rows keep
-  localized caption/alt-text parity.
+- Every reviewed screenshot is represented by exactly one matrix row. The historical 36 approved
+  rows retain localized caption/alt-text parity; each later row needs its own current source and
+  rendered-review evidence.
 - Reviewed screenshots are source assets; transient captures remain ignored.

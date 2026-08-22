@@ -9,6 +9,7 @@
     <section id="a-release-only"><title>较早长期支持版中不可用的策略</title><p>以下九项当前策略在 Release 153 和 ESR 153.0 中均可用，但在 ESR 140.13 和 ESR 115.39 中不可用：<codeph>AIControls</codeph>、<codeph>BrowserDataBackup</codeph>、<codeph>DisableRemoteImprovements</codeph>、<codeph>DisableRemoteSettingsAndAcceptSecurityConsequences</codeph>、<codeph>GenerativeAI</codeph>、<codeph>IPProtectionAvailable</codeph>、<codeph>LocalNetworkAccess</codeph>、<codeph>VisualSearchEnabled</codeph> 和 <codeph>XSLTEnabled</codeph>。<codeph>SitePolicies</codeph> 仅在 Release 153 中可用；<codeph>DefaultBrowserSettingEnabled</codeph> 仅在 ESR 153.0 中可用。</p></section>
     <section id="a-changed-definitions"><title>更改的定义</title><p>公共策略 <codeph>Cookies</codeph>、<codeph>ExtensionSettings</codeph> 和 <codeph>Homepage</codeph> 会随通道而变化。Release 153 和 ESR 153.0 还包括当前的扩展权限和主机访问控制。</p></section>
     <section id="a-user-action"><title>用户操作</title><p>请在选择策略前选定 Firefox 架构通道，检查通道徽章，并在导出前重新验证。用户可以将任一不同的当前受支持工件选为手动转换目标，但预览可能报告未更改项目、已转换项目或阻止操作。只有适用、对目标有效且没有阻止项的预览才能被明确确认并应用；不可用策略绝不会被静默删除。</p></section>
+    <section id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>在准备流程中选择架构、预设和 CIS 基线，它们在编辑器中保持只读。要得到另一个已保存配置文件，请使用明确转换或复制准备流程；不支持或被阻止的情况不会静默丢弃值。引导式归属：URL/站点为步骤 2，证书和信任为步骤 4，扩展为步骤 6。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.fx-concept-policy-selection"/>

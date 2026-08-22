@@ -189,7 +189,7 @@
       "disposition": "covered",
       "release_gates": ["DOC090-G07"],
       "summary": {
-        "integration_operation_count": 17,
+        "integration_operation_count": 21,
         "web_route_count": 6,
         "inventory_topic_count": 7
       },

@@ -4,10 +4,14 @@ import test from "node:test";
 import * as compare from "../../../../app/static/profiles_modules/compare_state.mjs";
 import * as dirty from "../../../../app/static/profiles_modules/dirty_route_guard.mjs";
 import * as listUrl from "../../../../app/static/profiles_modules/profile_list_url.mjs";
+import * as navigationUrl from "../../../../app/static/profiles_modules/navigation_url.mjs";
+import * as certificatePolicy from "../../../../app/static/profiles_modules/certificate_policy.mjs";
 import * as policy from "../../../../app/static/profiles_modules/policy_document.mjs";
 import * as preference from "../../../../app/static/profiles_modules/preference_values.mjs";
 import * as review from "../../../../app/static/profiles_modules/review_state.mjs";
+import * as websiteFilter from "../../../../app/static/profiles_modules/website_filter.mjs";
 import * as workspace from "../../../../app/static/profiles_modules/workspace_state.mjs";
+import { create as createCertificateTrust } from "../../../../app/static/profiles_certificate_trust.js";
 
 const context = {
     location: { origin: "https://bpm.test" },
@@ -15,6 +19,18 @@ const context = {
     addEventListener: () => {},
 };
 globalThis.window = context;
+
+function certificateChoice(initialValue = "") {
+    const listeners = new Map();
+    return {
+        value: initialValue,
+        disabled: false,
+        classList: { toggle: () => {} },
+        closest: () => ({ classList: { toggle: () => {} } }),
+        addEventListener: (name, callback) => listeners.set(name, callback),
+        change: () => listeners.get("change")(),
+    };
+}
 
 const legacy = {
     compare: await import("../../../../app/static/profiles_compare_state.js"),
@@ -108,6 +124,93 @@ test("pure modules match their runtime adapters", () => {
         currentSnapshotState: () => ({ dirty: true }),
     });
     assert.equal(guard.guardProfileRouteNavigation(event), true);
+});
+
+test("certificate trust posture maps exact fields and preserves imported siblings", () => {
+    const systemTrust = certificateChoice();
+    const enterpriseRoots = certificateChoice();
+    const certificateBypass = certificateChoice();
+    const windowsSso = certificateChoice();
+    const entraSso = certificateChoice();
+    const entraRow = { hidden: false };
+    const schemaStatus = { textContent: "" };
+    const editor = {
+        value: JSON.stringify({
+            Preferences: { "security.enterprise_roots.enabled": { Status: "locked", Type: "boolean", Value: false } },
+            Certificates: { Install: ["/managed/root.pem"], ImportEnterpriseRoots: false },
+            DisableSecurityBypass: { SafeBrowsing: true, InvalidCertificate: false },
+            WindowsSSO: true,
+            MicrosoftEntraSSO: true,
+        }),
+        getValue() { return this.value; },
+        setValue(value) { this.value = value; },
+    };
+    let raw;
+    const trust = createCertificateTrust({
+        documentRef: { getElementById: () => ({ value: "" }) },
+        elements: {
+            wizardCertificateSystemTrustEl: systemTrust,
+            wizardCertificateEnterpriseRootsEl: enterpriseRoots,
+            wizardCertificateErrorBypassEl: certificateBypass,
+            wizardCertificateWindowsSsoEl: windowsSso,
+            wizardCertificateEntraSsoEl: entraSso,
+            wizardCertificateEntraRowEl: entraRow,
+            wizardCertificateTrustSchemaStatusEl: schemaStatus,
+        },
+        dependencies: {
+            t: (key) => key,
+            fromEditorValue: JSON.parse,
+            toEditorValue: JSON.stringify,
+            getActiveWizardSchemaVersion: () => "release-153",
+            setStatus: () => {},
+        },
+        state: { getEditor: () => editor, setCurrentRaw: (value) => { raw = value; } },
+        wizardSchemaShellCatalog: {
+            channels: {
+                "release-153": {
+                    certificate_trust_posture: {
+                        policy_ids: ["Certificates", "DisableSecurityBypass", "WindowsSSO", "MicrosoftEntraSSO"],
+                    },
+                },
+            },
+        },
+    });
+
+    trust.syncFromEditor();
+    assert.equal(systemTrust.value, "false");
+    assert.equal(enterpriseRoots.value, "false");
+    assert.equal(certificateBypass.value, "false");
+    assert.equal(windowsSso.value, "true");
+    assert.equal(entraSso.value, "true");
+
+    systemTrust.value = "true";
+    systemTrust.change();
+    enterpriseRoots.value = "true";
+    enterpriseRoots.change();
+    certificateBypass.value = "true";
+    certificateBypass.change();
+    windowsSso.value = "false";
+    windowsSso.change();
+    const changed = JSON.parse(editor.getValue());
+    assert.equal(changed.Preferences["security.enterprise_roots.enabled"].Status, "locked");
+    assert.equal(changed.Preferences["security.enterprise_roots.enabled"].Value, true);
+    assert.deepEqual(changed.Certificates, { Install: ["/managed/root.pem"], ImportEnterpriseRoots: true });
+    assert.deepEqual(changed.DisableSecurityBypass, { SafeBrowsing: true, InvalidCertificate: true });
+    assert.equal(changed.WindowsSSO, false);
+    assert.deepEqual(raw, changed);
+
+    enterpriseRoots.value = "";
+    enterpriseRoots.change();
+    assert.deepEqual(JSON.parse(editor.getValue()).Certificates, { Install: ["/managed/root.pem"] });
+
+    editor.value = JSON.stringify({ Certificates: { ImportEnterpriseRoots: true, UnknownImportShape: "keep" } });
+    trust.syncFromEditor();
+    assert.equal(enterpriseRoots.value, "custom");
+    assert.equal(enterpriseRoots.disabled, true);
+    enterpriseRoots.change();
+    assert.deepEqual(JSON.parse(editor.getValue()), {
+        Certificates: { ImportEnterpriseRoots: true, UnknownImportShape: "keep" },
+    });
 });
 
 test("comparison helpers retain deterministic values for every supported setting shape", () => {
@@ -334,4 +437,417 @@ test("URL, review, and workspace helpers retain every lifecycle and filtering br
         name: "Original", description: "Description", schema_version: "release-153", flags: { A: true }, compliance: { score: 1 },
     });
     assert.equal(workspace.buildCreatePayload(form, {}, {}, { name: "Override" }).name, "Override");
+});
+
+test("WebsiteFilter preserves safe patterns, exposes unsafe imports, and never repairs ordering", () => {
+    const exactPatterns = [
+        "<all_urls>",
+        "*://*.example.test/*",
+        "https://пример.рф:8443/*",
+        "file:///managed/*",
+        "https://[2001:db8::1]:443/path/*",
+    ];
+    for (const pattern of exactPatterns) {
+        assert.deepEqual(websiteFilter.validateWebsiteFilterPattern(pattern).valid, true, pattern);
+    }
+    for (const pattern of [
+        " javascript:alert(1)",
+        "data:text/plain,no",
+        "https://user:secret@example.test/*",
+        "https://example.test:70000/*",
+        "https://example.test/path with spaces",
+    ]) {
+        assert.equal(websiteFilter.validateWebsiteFilterPattern(pattern).valid, false, pattern);
+    }
+
+    const imported = {
+        Block: ["https://пример.рф:8443/*", "javascript:alert(1)", "https://пример.рф:8443/*"],
+        Exceptions: ["https://пример.рф:8443/*", "<all_urls>"],
+    };
+    const inspection = websiteFilter.inspectImportedWebsiteFilter(imported);
+    assert.deepEqual(inspection.value, imported);
+    assert.deepEqual(inspection.rawEntries, [{ field: "Block", index: 1, value: "javascript:alert(1)", code: "unsafe_scheme" }]);
+    const analysis = websiteFilter.analyzeWebsiteFilterLists(imported);
+    assert.deepEqual(analysis.duplicates, [{
+        field: "Block", first: 0, index: 2, value: "https://пример.рф:8443/*",
+    }]);
+    assert.deepEqual(analysis.conflicts, [
+        { kind: "overlap", value: "https://пример.рф:8443/*", blockIndex: 0, exceptionIndex: 0 },
+        { kind: "overlap", value: "https://пример.рф:8443/*", blockIndex: 2, exceptionIndex: 0 },
+        { kind: "allow_all", value: "<all_urls>", exceptionIndex: 1 },
+    ]);
+
+    assert.deepEqual(
+        websiteFilter.inspectImportedWebsiteFilter({ Block: ["https://example.test/*"], Extra: true }),
+        { kind: "raw_fallback", reason: "unknown_field", value: { Block: ["https://example.test/*"], Extra: true } },
+    );
+    assert.deepEqual(
+        websiteFilter.inspectImportedWebsiteFilter({ Block: ["https://example.test/*", 1] }),
+        { kind: "raw_fallback", reason: "not_string", value: { Block: ["https://example.test/*", 1] } },
+    );
+
+    const ordered = {
+        Block: ["https://first.test/*", "https://second.test/*"],
+        Exceptions: ["https://allow.test/*"],
+    };
+    assert.deepEqual(websiteFilter.applyWebsiteFilterPosture(ordered, "allow_only"), {
+        ok: true,
+        value: {
+            Block: ["<all_urls>", "https://first.test/*", "https://second.test/*"],
+            Exceptions: ["https://allow.test/*"],
+        },
+    });
+    assert.deepEqual(websiteFilter.applyWebsiteFilterPosture({
+        Block: ["<all_urls>", "https://first.test/*", "<all_urls>"],
+        Exceptions: ["https://allow.test/*"],
+    }, "block_some"), {
+        ok: true,
+        value: {
+            Block: ["https://first.test/*"],
+            Exceptions: ["https://allow.test/*"],
+        },
+    });
+});
+
+test("WebsiteFilter rejects every unsafe shape and covers raw, posture, and omission boundaries", () => {
+    assert.equal(websiteFilter.isPlainObject({}), true);
+    assert.equal(websiteFilter.isPlainObject([]), false);
+    assert.equal(websiteFilter.isPlainObject(null), false);
+    assert.equal(websiteFilter.isPlainObject("value"), false);
+
+    const invalidPatterns = new Map([
+        [1, "not_string"],
+        ["", "empty"],
+        [" https://example.test/*", "whitespace"],
+        ["https://example\u0000.test/*", "whitespace"],
+        ["https://example.test/a b", "whitespace"],
+        ["x".repeat(2049), "too_long"],
+        ["vbscript:alert(1)", "unsafe_scheme"],
+        ["https:/example.test/*", "shape"],
+        ["https://example.test", "shape"],
+        ["gopher://example.test/*", "unsupported_scheme"],
+        ["https://user@example.test/*", "unsafe_authority"],
+        ["https://example\\.test/*", "unsafe_authority"],
+        ["https:///*", "unsafe_authority"],
+        ["file://host/*", "file_host"],
+        ["https://[]/*", "ipv6"],
+        ["https://[::1]suffix/*", "port"],
+        ["https://[not-ip]/*", "ipv6"],
+        ["https://:443/*", "host"],
+        ["https://bad..example/*", "host"],
+        ["https://bad!example/*", "host"],
+        ["https://example.test:port/*", "port"],
+        ["https://example.test:0/*", "port"],
+    ]);
+    for (const [pattern, code] of invalidPatterns) {
+        assert.equal(websiteFilter.validateWebsiteFilterPattern(pattern).code, code, String(pattern));
+    }
+    assert.deepEqual(websiteFilter.validateWebsiteFilterPattern("HTTP://Example.Test:65535/*"), {
+        valid: true,
+        kind: "pattern",
+        idn: false,
+        scheme: "http",
+        host: "Example.Test",
+        port: "65535",
+    });
+    assert.equal(websiteFilter.validateWebsiteFilterPattern("https://example.test:*/*").port, "*");
+    assert.equal(websiteFilter.validateWebsiteFilterPattern("file://*/*").valid, true);
+
+    assert.deepEqual(websiteFilter.inspectImportedWebsiteFilter(undefined), {
+        kind: "typed", value: { Block: [], Exceptions: [] }, rawEntries: [],
+    });
+    assert.deepEqual(websiteFilter.inspectImportedWebsiteFilter(null), {
+        kind: "raw_fallback", reason: "not_object", value: null,
+    });
+    assert.deepEqual(websiteFilter.inspectImportedWebsiteFilter({ Block: "not-a-list" }), {
+        kind: "raw_fallback", reason: "not_array", value: { Block: "not-a-list" },
+    });
+    assert.deepEqual(websiteFilter.inspectImportedWebsiteFilter({ Block: [], Exceptions: "not-a-list" }), {
+        kind: "raw_fallback", reason: "not_array", value: { Block: [], Exceptions: "not-a-list" },
+    });
+    assert.deepEqual(websiteFilter.analyzeWebsiteFilterLists([]), {
+        kind: "raw_fallback", reason: "not_object", value: [], duplicates: [], conflicts: [],
+    });
+
+    const postures = new Map([
+        [{}, "defaults"],
+        [{ Block: ["<all_urls>"], Exceptions: ["https://allow.test/*"] }, "allow_only"],
+        [{ Block: ["<all_urls>"] }, "allow_only"],
+        [{ Block: ["https://block.test/*"], Exceptions: ["https://allow.test/*"] }, "mixed"],
+        [{ Block: ["https://block.test/*"] }, "block_some"],
+        [{ Exceptions: ["https://allow.test/*"] }, "exceptions_only"],
+        [null, "raw"],
+    ]);
+    for (const [value, posture] of postures) {
+        assert.equal(websiteFilter.resolveWebsiteFilterPosture(value), posture);
+    }
+    assert.deepEqual(websiteFilter.applyWebsiteFilterPosture(null, "allow_only"), {
+        ok: false, reason: "raw_fallback", value: null,
+    });
+    assert.deepEqual(websiteFilter.applyWebsiteFilterPosture({}, "defaults"), {
+        ok: true, value: undefined,
+    });
+    assert.deepEqual(websiteFilter.applyWebsiteFilterPosture({ Block: ["<all_urls>"] }, "allow_only"), {
+        ok: true, value: { Block: ["<all_urls>"] },
+    });
+    assert.deepEqual(websiteFilter.applyWebsiteFilterPosture({ Exceptions: ["https://allow.test/*"] }, "mixed"), {
+        ok: true, value: { Exceptions: ["https://allow.test/*"] },
+    });
+    assert.deepEqual(websiteFilter.applyWebsiteFilterPosture({}, "unsupported"), {
+        ok: false, value: {},
+    });
+    assert.deepEqual(websiteFilter.omitEmptyWebsiteFilterFields({ Block: [], Exceptions: "wrong" }), {});
+});
+
+test("certificate policy lists preserve Firefox references, order, duplicates, raw fallback, and platform paths", () => {
+    const windowsPath = "C:\\Program Files\\Vendor\\device.dll";
+    const uncPath = "\\\\server\\security modules\\pkcs11.dll";
+    const posixPath = "/usr/lib64/pkcs11/vendor.so";
+    const relativeCertificate = "company-root.pem";
+
+    for (const reference of [windowsPath, uncPath, posixPath, relativeCertificate]) {
+        assert.deepEqual(certificatePolicy.validateCertificateReference(reference), { valid: true }, reference);
+    }
+    for (const [reference, code] of [["", "empty"], [" root.pem", "outer_whitespace"], ["root.pem\u0000", "control_character"]]) {
+        assert.equal(certificatePolicy.validateCertificateReference(reference).code, code);
+    }
+    assert.equal(certificatePolicy.validateSecurityDeviceName("Corporate PKCS#11").valid, true);
+    assert.equal(certificatePolicy.validateAuthenticationHost("https://intranet.example").valid, true);
+    assert.equal(certificatePolicy.validateAuthenticationHost("host name").code, "whitespace");
+
+    const certificates = certificatePolicy.inspectCertificates({
+        Install: [relativeCertificate, windowsPath, relativeCertificate], ImportEnterpriseRoots: true,
+    });
+    assert.equal(certificates.kind, "typed");
+    assert.deepEqual(certificates.duplicates, [{ value: relativeCertificate, first: 0, index: 2 }]);
+    assert.deepEqual(certificatePolicy.moveListEntry(certificates.value.Install, 1, -1), {
+        ok: true, value: [windowsPath, relativeCertificate, relativeCertificate],
+    });
+    assert.deepEqual(certificatePolicy.moveListEntry(certificates.value.Install, 0, -1), {
+        ok: false, value: [relativeCertificate, windowsPath, relativeCertificate],
+    });
+    assert.deepEqual(certificatePolicy.omitEmptyCertificateFields({ Install: [], ImportEnterpriseRoots: false }), {
+        ImportEnterpriseRoots: false,
+    });
+    assert.deepEqual(certificatePolicy.inspectCertificates({ Install: ["root.pem"], Unknown: true }), {
+        kind: "raw_fallback", reason: "unknown_or_non_object", value: { Install: ["root.pem"], Unknown: true },
+    });
+
+    const devices = certificatePolicy.inspectSecurityDevices({
+        Add: { "Corporate token": windowsPath, "Linux token": posixPath },
+        Delete: ["Old token", "Old token"],
+    });
+    assert.equal(devices.kind, "typed");
+    assert.deepEqual(devices.value.Add, { "Corporate token": windowsPath, "Linux token": posixPath });
+    assert.deepEqual(devices.duplicates, [{ value: "Old token", first: 0, index: 1 }]);
+    assert.deepEqual(certificatePolicy.omitEmptySecurityDeviceFields({ Add: {}, Delete: [] }), undefined);
+    assert.deepEqual(certificatePolicy.inspectSecurityDevices({ "Legacy direct name": windowsPath }), {
+        kind: "raw_fallback", reason: "unknown_or_non_object", value: { "Legacy direct name": windowsPath },
+    });
+
+    const authentication = certificatePolicy.inspectAuthentication({
+        SPNEGO: ["intranet.example", "intranet.example"],
+        NTLM: [],
+        AllowNonFQDN: { "fileserver": true },
+        AllowProxies: { "proxy.example": true },
+        Locked: false,
+        PrivateBrowsing: true,
+    });
+    assert.equal(authentication.kind, "typed");
+    assert.deepEqual(authentication.duplicates.SPNEGO, [{ value: "intranet.example", first: 0, index: 1 }]);
+    assert.deepEqual(certificatePolicy.omitEmptyAuthenticationFields({ NTLM: [], Locked: false }), { Locked: false });
+    assert.deepEqual(certificatePolicy.inspectAuthentication({ NTLM: ["host"], Extra: true }), {
+        kind: "raw_fallback", reason: "unknown_or_non_object", value: { NTLM: ["host"], Extra: true },
+    });
+});
+
+test("certificate policy helpers reject every typed failure boundary without repairing imported data", () => {
+    for (const [value, code] of [
+        [1, "not_string"],
+        ["", "empty"],
+        ["root.pem\u0000", "control_character"],
+        [" root.pem", "outer_whitespace"],
+        ["x".repeat(4097), "too_long"],
+    ]) {
+        assert.equal(certificatePolicy.validateCertificateReference(value).code, code);
+    }
+    for (const validator of [
+        certificatePolicy.validateSecurityDeviceName,
+        certificatePolicy.validateAuthenticationHost,
+    ]) {
+        assert.equal(validator(1).code, "not_string");
+        assert.equal(validator("").code, "empty");
+        assert.equal(validator("invalid\u0000").code, "control_character");
+        assert.equal(validator(" invalid").code, "outer_whitespace");
+    }
+    assert.equal(certificatePolicy.validateSecurityDeviceName("x".repeat(257)).code, "too_long");
+    assert.equal(certificatePolicy.validateAuthenticationHost("host name").code, "whitespace");
+    assert.equal(certificatePolicy.validateAuthenticationHost("x".repeat(2049)).code, "too_long");
+
+    assert.deepEqual(certificatePolicy.inspectCertificates(undefined), { kind: "typed", value: {} });
+    assert.deepEqual(certificatePolicy.inspectCertificates(null), {
+        kind: "raw_fallback", reason: "unknown_or_non_object", value: null,
+    });
+    assert.equal(certificatePolicy.inspectCertificates({ Install: [1] }).reason, "install_not_string_list");
+    assert.equal(certificatePolicy.inspectCertificates({ ImportEnterpriseRoots: "true" }).reason, "enterprise_roots_not_boolean");
+    assert.deepEqual(certificatePolicy.inspectCertificates({ Install: [] }), {
+        kind: "typed", value: { Install: [] }, duplicates: [], invalidReferences: [],
+    });
+    assert.deepEqual(certificatePolicy.inspectCertificates({ ImportEnterpriseRoots: false }), {
+        kind: "typed", value: { ImportEnterpriseRoots: false }, duplicates: [], invalidReferences: [],
+    });
+    assert.deepEqual(certificatePolicy.inspectSecurityDevices(undefined), { kind: "typed", value: {} });
+    assert.deepEqual(certificatePolicy.inspectSecurityDevices({}), {
+        kind: "typed", value: {}, duplicates: [], duplicateNames: [], invalidAdd: [], invalidDelete: [],
+    });
+    assert.equal(certificatePolicy.inspectSecurityDevices({ Add: [] }).reason, "add_not_string_map");
+    assert.equal(certificatePolicy.inspectSecurityDevices({ Delete: {} }).reason, "delete_not_string_list");
+    assert.deepEqual(certificatePolicy.inspectSecurityDevices({ Add: {}, Delete: [] }), {
+        kind: "typed", value: { Add: {}, Delete: [] }, duplicates: [], duplicateNames: [], invalidAdd: [], invalidDelete: [],
+    });
+    assert.deepEqual(certificatePolicy.inspectAuthentication(undefined), { kind: "typed", value: {} });
+    assert.deepEqual(certificatePolicy.inspectAuthentication({}), {
+        kind: "typed", value: {}, duplicates: { SPNEGO: [], Delegated: [], NTLM: [] }, invalidHosts: [],
+    });
+    assert.equal(certificatePolicy.inspectAuthentication({ SPNEGO: {} }).reason, "host_list_not_string_list");
+    assert.equal(certificatePolicy.inspectAuthentication({ AllowProxies: { proxy: false } }).reason, "host_map_not_true_map");
+    assert.equal(certificatePolicy.inspectAuthentication({ Locked: "yes" }).reason, "boolean_not_boolean");
+    assert.deepEqual(certificatePolicy.inspectAuthentication({
+        SPNEGO: [], Delegated: [], NTLM: [], AllowNonFQDN: {}, AllowProxies: {}, Locked: true, PrivateBrowsing: false,
+    }), {
+        kind: "typed",
+        value: {
+            SPNEGO: [], Delegated: [], NTLM: [], AllowNonFQDN: {}, AllowProxies: {}, Locked: true, PrivateBrowsing: false,
+        },
+        duplicates: { SPNEGO: [], Delegated: [], NTLM: [] },
+        invalidHosts: [],
+    });
+    assert.deepEqual(certificatePolicy.omitEmptyCertificateFields({ Install: ["root.pem"] }), {
+        Install: ["root.pem"],
+    });
+    assert.deepEqual(certificatePolicy.omitEmptySecurityDeviceFields({ Add: { token: "module.so" } }), {
+        Add: { token: "module.so" },
+    });
+    assert.deepEqual(certificatePolicy.omitEmptySecurityDeviceFields({ Delete: ["legacy token"] }), {
+        Delete: ["legacy token"],
+    });
+    assert.deepEqual(certificatePolicy.omitEmptyAuthenticationFields({
+        SPNEGO: ["intranet.example"], AllowNonFQDN: { fileserver: true }, PrivateBrowsing: false,
+    }), {
+        SPNEGO: ["intranet.example"], AllowNonFQDN: { fileserver: true }, PrivateBrowsing: false,
+    });
+
+    assert.deepEqual(certificatePolicy.moveListEntry("not-a-list", 0, 1), {
+        ok: false, value: "not-a-list",
+    });
+    assert.deepEqual(certificatePolicy.moveListEntry(["one"], 0, 2), {
+        ok: false, value: ["one"],
+    });
+    assert.deepEqual(certificatePolicy.moveListEntry(["one"], 1, -1), {
+        ok: false, value: ["one"],
+    });
+});
+
+test("navigation URL guards preserve Firefox spelling while separating typed input, raw fallback, and external links", () => {
+    assert.equal(navigationUrl.getNavigationInputKind(null, null), null);
+    assert.equal(navigationUrl.getNavigationInputKind("AllowedDomainsForApps"), "domain-list");
+    assert.equal(navigationUrl.getNavigationInputKind("AutoLaunchProtocolsFromOrigins", "handlers.allowed_origins"), "http-origin");
+    assert.equal(navigationUrl.getNavigationInputKind("Homepage", "unexpected"), "navigation-url");
+    assert.equal(navigationUrl.getNavigationInputKind("Bookmarks", "URL"), "external-url");
+    assert.equal(navigationUrl.getNavigationInputKind("ManagedBookmarks", "children.url"), "external-url");
+    assert.equal(navigationUrl.getNavigationInputKind("Handlers", "schemes.mailto.handlers.uriTemplate"), "https-template");
+    assert.equal(navigationUrl.getNavigationInputKind("HttpAllowlist", "__value__"), "http-origin");
+    assert.equal(navigationUrl.getNavigationInputKind("HttpAllowlist", "unexpected"), null);
+    assert.equal(navigationUrl.getNavigationInputKind("Certificates", "Install"), null);
+
+    const exact = "HTTPS://Example.Test:8443/Path?exact=One#Fragment";
+    assert.deepEqual(navigationUrl.validateNavigationValue(exact, "navigation-url"), {
+        valid: true,
+        kind: "navigation-url",
+        protocol: "https:",
+        host: "example.test",
+        idn: false,
+    });
+    assert.deepEqual(navigationUrl.getSafeExternalLink(exact), {
+        href: exact,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        referrerPolicy: "no-referrer",
+    });
+    assert.equal(navigationUrl.validateNavigationValue("about:home", "navigation-url").valid, true);
+    assert.equal(navigationUrl.validateNavigationValue("about:config", "navigation-url").code, "about_page");
+    assert.equal(navigationUrl.validateNavigationValue("file:///opt/start.html", "navigation-url").valid, true);
+    assert.equal(navigationUrl.validateNavigationValue("https://origin.example/", "http-origin").valid, true);
+    assert.equal(navigationUrl.validateNavigationValue("https://example.test/%s", "https-template").kind, "https-template");
+    const URLConstructor = globalThis.URL;
+    globalThis.URL = class {
+        protocol = "https:";
+        username = "";
+        password = "";
+        pathname = "/";
+        search = "";
+        hash = "";
+        host = "";
+        hostname = "";
+    };
+    try {
+        assert.equal(navigationUrl.validateNavigationValue("https://no-host.test/", "external-url").code, "host");
+    } finally {
+        globalThis.URL = URLConstructor;
+    }
+
+    for (const [value, kind, code] of [
+        [null, "navigation-url", "not_string"],
+        ["", "navigation-url", "empty"],
+        ["x".repeat(2049), "navigation-url", "too_long"],
+        ["not-a-url", "https-template", "shape"],
+        ["http://[broken", "external-url", "shape"],
+        ["javascript:alert(1)", "navigation-url", "unsafe_scheme"],
+        ["data:text/html,<svg/onload=alert(1)>", "external-url", "unsafe_scheme"],
+        ["https://user:secret@example.test/", "external-url", "credentials"],
+        ["https://example.test/path", "http-origin", "origin_path"],
+        ["https://example.test/?query", "http-origin", "origin_path"],
+        ["https://exam\u202Eple.test/", "external-url", "unicode_control"],
+        ["http://example.test, https://second.test", "domain-list", "whitespace"],
+        ["https://example.test/search?q=term", "https-template", "placeholder"],
+        ["http://example.test/?q=%s", "https-template", "unsupported_scheme"],
+        ["example.test,,other.test", "domain-list", "domain"],
+        ["example.test/path", "domain-list", "domain"],
+        ["https://example.test/", "unsupported", "unsupported_kind"],
+        ["mailto:help@example.test", "navigation-url", "unsupported_scheme"],
+        ["about:blank", "external-url", "unsupported_scheme"],
+        ["ftp://example.test/", "http-origin", "unsupported_scheme"],
+        ["file://server/managed", "navigation-url", "file_host"],
+    ]) {
+        assert.equal(navigationUrl.validateNavigationValue(value, kind).code, code, `${kind}: ${value}`);
+        assert.equal(navigationUrl.getSafeExternalLink(value, kind), null, `no external link for ${value}`);
+    }
+
+    const unicodeHost = "https://раypal.example/";
+    assert.equal(navigationUrl.validateNavigationValue(unicodeHost, "external-url").valid, true);
+    assert.equal(navigationUrl.validateNavigationValue(unicodeHost, "external-url").idn, true);
+    assert.equal(navigationUrl.getSafeExternalLink(unicodeHost), null, "ambiguous IDN is never a generated external link");
+    assert.equal(navigationUrl.validateNavigationValue("xn--e1afmkfd.xn--p1ai,пример.рф", "domain-list").valid, true);
+    assert.equal(navigationUrl.validateWebsiteFilterPattern("https://exam\u202Eple.test/*").code, "unicode_control");
+    assert.equal(navigationUrl.validateNavigationValue("https://example.test/*", "website-filter").valid, true);
+
+    const imported = "data:text/html,<script>alert(1)</script>";
+    assert.deepEqual(navigationUrl.inspectImportedNavigationValue(imported, "navigation-url"), {
+        kind: "raw_fallback",
+        value: imported,
+        verdict: { valid: false, code: "unsafe_scheme" },
+    });
+    assert.equal(navigationUrl.inspectImportedNavigationValue("https://example.test/", "navigation-url").kind, "typed");
+    assert.equal(navigationUrl.retainsImportedRawNavigationValue(imported, imported, "navigation-url"), true);
+    assert.equal(navigationUrl.retainsImportedRawNavigationValue("https://changed.example/", imported, "navigation-url"), false);
+    assert.equal(navigationUrl.formatNavigationValidationMessage(
+        () => "{field}: rejected by URL safety rule “{rule}”. It has not been applied.",
+        "Bookmark URL",
+        { code: "unsafe_scheme" },
+    ), "Bookmark URL: rejected by URL safety rule “unsafe-scheme”. It has not been applied.");
+    assert.equal(navigationUrl.formatNavigationValidationMessage(
+        () => "{field}:{rule}",
+        "",
+        undefined,
+    ), "URL:invalid-value");
 });

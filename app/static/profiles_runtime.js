@@ -22,16 +22,19 @@
             buildWizardSettingsSearchIndex,
             renderWizardSettingsSearchResults,
             setMeta,
-            setDraftState,
             updateLibrarySummary,
             syncWorkspaceOverview,
             refreshWorkspaceSignal,
             updateDownloadLinks,
             setWizardStep,
             getWizardStep,
+            getWizardStepFromLocation,
+            getPreviousWizardStep,
+            getNextWizardStep,
             rerenderSearchEngineDraftsForLocale,
             syncWizardFieldsFromForm,
             syncWizardNetworkFromEditor,
+            syncWizardCertificateTrustFromEditor,
             syncWizardPoliciesFromEditor,
             syncWizardPreferencesFromEditor,
             syncWizardExtensionsFromEditor,
@@ -39,7 +42,6 @@
             updateActionState,
             setBaselineFromCurrentUi,
             saveCurrent,
-            resetDraft,
             doSoftDelete,
             doHardDelete,
             doRestore,
@@ -47,15 +49,9 @@
             doValidate,
             doImportFirefoxPoliciesJson,
             reloadList,
-            cloneFromProfile,
             finishWizard,
-            applyScenarioPreset,
-            applyStarterPreset,
-            setWizardComplianceLayer,
             undoCurrentStepChanges,
             resetCurrentStepToBaseline,
-            setPreviewStarter,
-            clearPreviewStarter,
             clearWizardSettingsSearch,
             findSettingsTarget,
             revealSettingsTarget,
@@ -72,6 +68,12 @@
             refreshSchemaNestedDictionaryRows,
             renderSchemaPolicyReviewState,
             applySchemaPolicyFromCard,
+            refreshWebsiteFilterManagerState,
+            applyWebsiteFilterFromCard,
+            appendWebsiteFilterRow,
+            removeWebsiteFilterRow,
+            moveWebsiteFilterRow,
+            applyWebsiteFilterPostureFromCard,
             findFinalReviewTarget,
             findNetworkReviewTarget,
             findHomeReviewTarget,
@@ -121,6 +123,7 @@
         let documentClicksBound = false;
         let jumpButtonsBound = false;
         let wizardNavBound = false;
+        let wizardHistoryBound = false;
         let lastAdvancedReturnTriggerEl = null;
 
         const editorEl = documentRef.getElementById("editor");
@@ -143,10 +146,6 @@
         const includeDeletedEl = documentRef.getElementById("include-deleted");
         const nameInput = documentRef.getElementById("profile-name");
         const descriptionInput = documentRef.getElementById("profile-description");
-        const profileTypeEl = documentRef.getElementById("profile-type");
-        const wizardNameEl = documentRef.getElementById("wizard-name");
-        const wizardSchemaEl = documentRef.getElementById("wizard-schema");
-        const wizardModeEl = documentRef.getElementById("wizard-mode");
         const wizardPrevEl = documentRef.getElementById("wizard-prev");
         const wizardNextEl = documentRef.getElementById("wizard-next");
         const wizardFinishEl = documentRef.getElementById("wizard-finish");
@@ -182,9 +181,6 @@
         const wizardProxyUseDnsEl = documentRef.getElementById("wizard-proxy-use-dns");
 
         const wizardStepButtons = Array.from(documentRef.querySelectorAll(".wizard-step"));
-        const wizardScenarioButtons = Array.from(documentRef.querySelectorAll("[data-scenario-key]"));
-        const wizardStarterButtons = Array.from(documentRef.querySelectorAll("[data-starter-key]"));
-        const wizardCisLayerButtons = Array.from(documentRef.querySelectorAll("[data-cis-layer-key]"));
         const wizardPolicyInputs = Array.from(documentRef.querySelectorAll("[data-policy-key]"));
         const wizardPolicySelectInputs = Array.from(documentRef.querySelectorAll("[data-policy-select-key]"));
         const wizardSearchEnginePresetButtons = Array.from(documentRef.querySelectorAll("[data-search-engine-preset]"));
@@ -206,10 +202,8 @@
                 ["wizard-search-defaults-fine-tuning-panel", "wizard-search-defaults-fine-tuning-toggle"],
                 ["wizard-search-suggest-fine-tuning-panel", "wizard-search-suggest-fine-tuning-toggle"],
                 ["wizard-site-data-fine-tuning-panel", "wizard-site-data-fine-tuning-toggle"],
-                ["wizard-extension-fine-tuning-panel", "wizard-extension-fine-tuning-toggle"],
-                ["wizard-extension-curated-panel", "wizard-extension-curated-toggle"],
                 ["wizard-sync-fine-tuning-panel", "wizard-sync-fine-tuning-toggle"],
-                ["wizard-website-fine-tuning-panel", "wizard-website-fine-tuning-toggle"],
+                ["wizard-managed-navigation-panel", "wizard-managed-navigation-toggle"],
                 ["wizard-network-enterprise-fine-tuning-panel", "wizard-network-enterprise-fine-tuning-toggle"],
             ];
         }
@@ -303,17 +297,6 @@
                 }
             });
 
-            [...wizardScenarioButtons, ...wizardStarterButtons].forEach((button) => {
-                const badgeText = button.querySelector(".wizard-starter-badge")?.textContent?.trim() || "";
-                const titleText = button.querySelector(".wizard-starter-title")?.textContent?.trim() || "";
-                const copyText = button.querySelector(".wizard-starter-copy")?.textContent?.trim() || "";
-                const noteText = button.querySelector(".wizard-starter-note")?.textContent?.trim() || "";
-                const labelParts = [badgeText, titleText, copyText, noteText].filter(Boolean);
-                if (labelParts.length) {
-                    button.setAttribute("aria-label", labelParts.join(". "));
-                }
-            });
-
             const actionButtons = Array.from(documentRef.querySelectorAll([
                 "[data-final-review-jump]",
                 "[data-network-review-jump]",
@@ -371,17 +354,13 @@
                 "#wizard-site-data-fine-tuning-toggle",
                 "#wizard-network-enterprise-fine-tuning-toggle",
                 "#wizard-sync-fine-tuning-toggle",
-                "#wizard-extension-fine-tuning-toggle",
-                "#wizard-extension-curated-toggle",
-                "#wizard-website-fine-tuning-toggle",
-                "[data-extension-profile-toggle]",
+                "#wizard-managed-navigation-toggle",
             ].join(", ")));
 
             disclosureButtons.forEach((button) => {
                 const actionText = button.textContent.trim();
-                const cardTitle = button.closest("[data-extension-profile-card]")?.querySelector(".wizard-toggle-title")?.textContent?.trim() || "";
                 const sectionTitle = button.closest(".wizard-section-group")?.querySelector(".wizard-section-title")?.textContent?.trim() || "";
-                const contextText = cardTitle || sectionTitle;
+                const contextText = sectionTitle;
                 const statusEl = button.closest(".wizard-section-group")?.querySelector(".wizard-stage-status[id], .wizard-search-engine-preset-status[id]");
                 if (actionText && contextText) {
                     button.setAttribute("aria-label", `${actionText} ${contextText}`);
@@ -413,12 +392,6 @@
             if (containerEl.matches(".wizard-stepper")) {
                 return Array.from(containerEl.querySelectorAll(".wizard-step"));
             }
-            if (containerEl.matches(".wizard-scenario-grid")) {
-                return Array.from(containerEl.querySelectorAll("[data-scenario-key]"));
-            }
-            if (containerEl.matches(".wizard-starter-grid")) {
-                return Array.from(containerEl.querySelectorAll("[data-starter-key]"));
-            }
             if (containerEl.matches(".wizard-search-engine-preset-grid")) {
                 return Array.from(containerEl.querySelectorAll(".wizard-search-engine-preset"));
             }
@@ -433,15 +406,12 @@
 
                 const activeButton = event.target?.closest([
                     ".wizard-step",
-                    ".wizard-starter-card",
                     ".wizard-search-engine-preset",
                 ].join(", "));
                 if (!activeButton) return;
 
                 const containerEl = activeButton.closest([
                     ".wizard-stepper",
-                    ".wizard-scenario-grid",
-                    ".wizard-starter-grid",
                     ".wizard-search-engine-preset-grid",
                 ].join(", "));
                 const buttons = getCompositeButtons(containerEl).filter((button) =>
@@ -469,22 +439,29 @@
             });
         }
 
-        function getWizardStepLabel(stepNumber) {
-            if (!stepNumber) return "";
-            return documentRef
-                .querySelector(`.wizard-step[data-step="${stepNumber}"] .wizard-step-label`)
+        function getWizardStepLabel(stepReference) {
+            const normalizedStep = String(stepReference || "").trim();
+            if (!normalizedStep) return "";
+            return wizardStepButtons
+                .find((button) => (
+                    button.dataset.stepId === normalizedStep || button.dataset.step === normalizedStep
+                ))
+                ?.querySelector(".wizard-step-label")
                 ?.textContent
                 ?.trim() || "";
         }
 
-        function buildJsonHandoffContext(stepNumber, options = {}) {
-            const normalizedStep = Number(stepNumber);
-            if (Number.isNaN(normalizedStep) || normalizedStep <= 0) {
+        function buildJsonHandoffContext(stepReference, options = {}) {
+            const normalizedStep = String(stepReference || "").trim();
+            const stepButton = wizardStepButtons.find((button) => (
+                button.dataset.stepId === normalizedStep || button.dataset.step === normalizedStep
+            ));
+            if (!stepButton) {
                 return null;
             }
 
             return {
-                step: normalizedStep,
+                step: stepButton.dataset.stepId || stepButton.dataset.step,
                 title: options.stepTitle || getWizardStepLabel(normalizedStep),
                 items: Array.isArray(options.items) ? options.items.filter(Boolean).slice(0, 2) : [],
                 remaining: Math.max(0, Number(options.remaining) || 0),
@@ -641,8 +618,6 @@
                 guardLocaleStep("workspaceLocaleRefresh", () => {
                     if (getCurrentProfile()) {
                         setMeta(getCurrentProfile());
-                    } else {
-                        setDraftState();
                     }
                     updateLibrarySummary(getLibraryStats());
                     syncWorkspaceOverview();
@@ -650,6 +625,7 @@
                     setWizardStep(getWizardStep());
                     rerenderSearchEngineDraftsForLocale();
                     syncWizardNetworkFromEditor();
+                    syncWizardCertificateTrustFromEditor();
                     syncWizardPoliciesFromEditor();
                     syncWizardPreferencesFromEditor();
                     syncWizardExtensionsFromEditor();
@@ -693,15 +669,20 @@
             }, 220));
         }
 
-        function revealWorkspaceTarget(targetEl) {
+        function wizardStepReferenceForTarget(targetEl) {
+            const panel = targetEl?.closest?.(".wizard-panel");
+            if (!panel) return "";
+            return panel.dataset.wizardStepId
+                || panel.id?.replace(/^wizard-step-/, "")
+                || "";
+        }
+
+        function revealWorkspaceTarget(targetEl, options = {}) {
             if (!targetEl) return;
 
-            const panel = targetEl.closest(".wizard-panel");
-            if (panel?.id?.startsWith("wizard-step-")) {
-                const nextStep = Number(panel.id.replace("wizard-step-", ""));
-                if (!Number.isNaN(nextStep)) {
-                    setWizardStep(nextStep);
-                }
+            const stepReference = wizardStepReferenceForTarget(targetEl);
+            if (stepReference) {
+                setWizardStep(stepReference, { history: options.history || "push" });
             }
 
             if (targetEl.closest('[data-workspace-scope-panel="settings"]')) {
@@ -727,11 +708,15 @@
                 const toggleEl = documentRef.getElementById(toggleId);
                 if (toggleEl) {
                     toggleEl.setAttribute("aria-expanded", "true");
+                    toggleEl.textContent = t("profiles.wizard_fine_tuning_hide");
                 }
             });
             windowRef.requestAnimationFrame(() => {
                 windowRef.requestAnimationFrame(() => {
-                    targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                    const scrollBehavior = windowRef.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches
+                        ? "auto"
+                        : "smooth";
+                    targetEl.scrollIntoView({ behavior: scrollBehavior, block: "center" });
                     targetEl.classList.add("settings-target-highlight");
                     windowRef.setTimeout(() => {
                         targetEl.classList.remove("settings-target-highlight");
@@ -782,6 +767,7 @@
 
         function syncEditorBackedUi() {
             syncWizardNetworkFromEditor();
+            syncWizardCertificateTrustFromEditor();
             syncWizardPoliciesFromEditor();
             syncWizardPreferencesFromEditor();
             syncWizardExtensionsFromEditor();
@@ -917,6 +903,16 @@
 
         function wireSchemaEvents() {
             documentRef.addEventListener("change", (event) => {
+                const websiteFilterInput = event.target.closest("[data-website-filter-pattern]");
+                if (websiteFilterInput) {
+                    const websiteFilterRow = websiteFilterInput.closest("[data-website-filter-row]");
+                    const websiteFilterCard = websiteFilterInput.closest('[data-schema-policy-kind="website-filter"]');
+                    if (websiteFilterRow && websiteFilterInput.value !== websiteFilterRow.dataset.websiteFilterOriginal) {
+                        websiteFilterRow.dataset.websiteFilterImported = "false";
+                    }
+                    applyWebsiteFilterFromCard(websiteFilterCard);
+                    return;
+                }
                 const schemaControl = event.target.closest(
                     "[data-schema-policy-field], [data-schema-nested-field], [data-schema-nested-dict-key], [data-schema-branch-mode], [data-schema-dict-key]",
                 );
@@ -932,6 +928,16 @@
             });
 
             documentRef.addEventListener("input", (event) => {
+                const websiteFilterInput = event.target.closest("[data-website-filter-pattern]");
+                if (websiteFilterInput) {
+                    const websiteFilterRow = websiteFilterInput.closest("[data-website-filter-row]");
+                    const websiteFilterCard = websiteFilterInput.closest('[data-schema-policy-kind="website-filter"]');
+                    if (websiteFilterRow && websiteFilterInput.value !== websiteFilterRow.dataset.websiteFilterOriginal) {
+                        websiteFilterRow.dataset.websiteFilterImported = "false";
+                    }
+                    refreshWebsiteFilterManagerState(websiteFilterCard);
+                    return;
+                }
                 const schemaControl = event.target.closest(
                     "[data-schema-policy-field], [data-schema-nested-field], [data-schema-nested-dict-key], [data-schema-dict-key]",
                 );
@@ -1134,10 +1140,10 @@
 
                 const stepMemoryJumpButton = event.target.closest("[data-step-memory-jump]");
                 if (stepMemoryJumpButton) {
-                    const nextStep = Number(stepMemoryJumpButton.dataset.stepMemoryJump || "");
-                    if (!Number.isNaN(nextStep) && nextStep > 0) {
+                    const nextStep = String(stepMemoryJumpButton.dataset.stepMemoryJump || "").trim();
+                    if (nextStep) {
                         setWizardStep(nextStep);
-                        const targetEl = documentRef.getElementById(`wizard-step-${nextStep}`);
+                        const targetEl = resolveGuidedStepFocusTarget(nextStep);
                         if (targetEl) {
                             revealWorkspaceTarget(targetEl);
                         }
@@ -1179,10 +1185,10 @@
                 }
 
                 if (event.target.closest("#json-context-return")) {
-                    const step = Number(jsonContextReturnEl?.dataset.jsonReturnStep || 0);
-                    if (step > 0) {
+                    const step = String(jsonContextReturnEl?.dataset.jsonReturnStep || "").trim();
+                    if (step) {
                         setWizardStep(step);
-                        const targetEl = documentRef.getElementById(`wizard-step-${step}`);
+                        const targetEl = resolveGuidedStepFocusTarget(step);
                         if (targetEl) {
                             windowRef.requestAnimationFrame(() => {
                                 targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1225,6 +1231,43 @@
                 const shellTargetButton = event.target.closest("[data-wizard-shell-target]");
                 if (shellTargetButton) {
                     revealWorkspaceTarget(shellTargetButton);
+                    return;
+                }
+
+                const websiteFilterAddButton = event.target.closest("[data-website-filter-add]");
+                if (websiteFilterAddButton) {
+                    appendWebsiteFilterRow(
+                        websiteFilterAddButton.closest('[data-schema-policy-kind="website-filter"]'),
+                        websiteFilterAddButton.dataset.websiteFilterAdd || "",
+                    );
+                    return;
+                }
+
+                const websiteFilterRemoveButton = event.target.closest("[data-website-filter-remove]");
+                if (websiteFilterRemoveButton) {
+                    removeWebsiteFilterRow(
+                        websiteFilterRemoveButton.closest('[data-schema-policy-kind="website-filter"]'),
+                        websiteFilterRemoveButton.closest("[data-website-filter-row]"),
+                    );
+                    return;
+                }
+
+                const websiteFilterMoveButton = event.target.closest("[data-website-filter-move]");
+                if (websiteFilterMoveButton) {
+                    moveWebsiteFilterRow(
+                        websiteFilterMoveButton.closest('[data-schema-policy-kind="website-filter"]'),
+                        websiteFilterMoveButton.closest("[data-website-filter-row]"),
+                        websiteFilterMoveButton.dataset.websiteFilterMove || "",
+                    );
+                    return;
+                }
+
+                const websiteFilterPostureButton = event.target.closest("[data-website-filter-posture]");
+                if (websiteFilterPostureButton) {
+                    applyWebsiteFilterPostureFromCard(
+                        websiteFilterPostureButton.closest('[data-schema-policy-kind="website-filter"]'),
+                        websiteFilterPostureButton.dataset.websiteFilterPosture || "",
+                    );
                     return;
                 }
 
@@ -1363,9 +1406,14 @@
                     return first(
                         '[data-settings-target="field:wizard-proxy-mode"]',
                         '#wizard-dns-over-https-card',
-                        '#wizard-authentication-card',
-                        '#wizard-certificates-card',
-                        '#wizard-windows-sso-card',
+                    );
+                }
+                if (kind === "certificates") {
+                    return first(
+                        '#wizard-step-4-attribution',
+                        '#wizard-step-4-references',
+                        '#wizard-step-4-authentication',
+                        '#wizard-step-4-trust-posture',
                     );
                 }
                 if (kind === "home") {
@@ -1387,7 +1435,6 @@
                     return first(
                         '[data-settings-target="policy:RequestedLocales"]',
                         '[data-settings-target="policy:TranslateEnabled"]',
-                        '[data-settings-target="field:wizard-extension-default-mode"]',
                         '[data-settings-target="policy:WebsiteFilter"]',
                     );
                 }
@@ -1433,7 +1480,7 @@
                     return first('[data-settings-target="policy:WebsiteFilter"]');
                 }
                 if (kind === "handlers") {
-                    return first('[data-settings-target="policy:Handlers"]', '[data-settings-target="shell-policy:4:Handlers"]');
+                    return first('[data-settings-target="policy:Handlers"]', '[data-settings-target="shell-policy:2:Handlers"]');
                 }
             }
 
@@ -1466,19 +1513,6 @@
                             revealWorkspaceTarget(targetEl);
                         }
                     });
-                });
-            };
-
-            const bindDirectJump = (buttonId, targetSelector) => {
-                const button = documentRef.getElementById(buttonId);
-                if (!button) return;
-                button.addEventListener("click", (event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    const targetEl = documentRef.querySelector(targetSelector);
-                    if (targetEl) {
-                        revealWorkspaceTarget(targetEl);
-                    }
                 });
             };
 
@@ -1515,18 +1549,6 @@
                 || resolveJumpTargetFallback("privacy", button.dataset.privacyReviewJump || ""),
             );
 
-            bindDirectJump("wizard-export-summary-network-jump", '[data-settings-target="field:wizard-proxy-mode"]');
-            bindDirectJump("wizard-export-summary-home-jump", '[data-settings-target="field:wizard-homepage-url"]');
-            bindDirectJump("wizard-export-summary-search-jump", '[data-settings-target="field:wizard-search-default-engine"]');
-            bindDirectJump("wizard-export-summary-features-jump", '[data-settings-target="policy:RequestedLocales"]');
-            bindDirectJump("wizard-export-summary-ai-jump", '[data-settings-target="policy:AIControls"]', '[data-settings-target="policy:VisualSearchEnabled"]');
-            bindDirectJump("wizard-export-summary-privacy-jump", '[data-settings-target="policy:Permissions"]');
-            bindDirectJump("wizard-extension-next-rollout", "#wizard-extension-governance-presets");
-            bindDirectJump("wizard-extension-next-curated", "#wizard-extension-curated-section");
-            bindDirectJump("wizard-extension-next-fine-tuning", "#wizard-extension-fine-tuning-toggle");
-            bindDirectJump("wizard-website-next-filter", '[data-settings-target="policy:WebsiteFilter"]');
-            bindDirectJump("wizard-website-next-handlers", '[data-settings-target="policy:Handlers"]');
-            bindDirectJump("wizard-website-next-fine-tuning", "#wizard-website-fine-tuning-toggle");
         }
 
         function wireDisclosureEscape() {
@@ -1571,26 +1593,36 @@
             if (wizardNavBound) return;
             wizardNavBound = true;
 
-            function scrollWizardStepToTop(stepNumber) {
-                const targetEl = documentRef.getElementById(`wizard-step-${Number(stepNumber)}`);
+            function wizardScrollBehavior() {
+                return windowRef.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches
+                    ? "auto"
+                    : "smooth";
+            }
+
+            function scrollWizardStepToTop(stepReference) {
+                const targetEl = resolveGuidedStepFocusTarget(String(stepReference || ""));
                 if (!targetEl) return;
                 windowRef.requestAnimationFrame(() => {
-                    targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                    targetEl.scrollIntoView({ behavior: wizardScrollBehavior(), block: "start" });
                     focusElementForA11y(targetEl);
                 });
             }
 
-            function navigateWizardStep(nextStep) {
-                setWizardStep(nextStep);
-                scrollWizardStepToTop(getWizardStep());
+            function navigateWizardStep(nextStep, options = {}) {
+                if (!nextStep) return;
+                const previousStep = getWizardStep();
+                setWizardStep(nextStep, { history: options.history || "push" });
+                if (getWizardStep() !== previousStep || options.restoreFocus) {
+                    scrollWizardStepToTop(getWizardStep());
+                }
             }
 
             wizardStepButtons.forEach((button) => {
                 button.addEventListener("click", () => navigateWizardStep(button.dataset.step));
             });
-            wizardPrevEl?.addEventListener("click", () => navigateWizardStep(getWizardStep() - 1));
+            wizardPrevEl?.addEventListener("click", () => navigateWizardStep(getPreviousWizardStep?.()));
             wizardNextEl?.addEventListener("click", () => {
-                navigateWizardStep(getWizardStep() + 1);
+                navigateWizardStep(getNextWizardStep?.());
             });
             wizardFinishEl?.addEventListener("click", finishWizard);
             wizardStepUndoEl?.addEventListener("click", () => {
@@ -1599,9 +1631,39 @@
             wizardStepResetEl?.addEventListener("click", () => {
                 resetCurrentStepToBaseline();
             });
+            const managedNavigationToggleEl = documentRef.getElementById("wizard-managed-navigation-toggle");
+            const managedNavigationPanelEl = documentRef.getElementById("wizard-managed-navigation-panel");
+            managedNavigationToggleEl?.addEventListener("click", () => {
+                if (!managedNavigationPanelEl) return;
+                const expanded = managedNavigationPanelEl.hidden;
+                managedNavigationPanelEl.hidden = !expanded;
+                managedNavigationToggleEl.setAttribute("aria-expanded", String(expanded));
+                managedNavigationToggleEl.textContent = t(expanded
+                    ? "profiles.wizard_fine_tuning_hide"
+                    : "profiles.wizard_fine_tuning_show");
+            });
             if (documentRef.body) {
                 documentRef.body.dataset.wizardNavigationReady = "true";
             }
+
+            if (wizardHistoryBound) return;
+            wizardHistoryBound = true;
+            const restoreWizardStepFromLocation = () => {
+                const requestedStep = getWizardStepFromLocation?.();
+                if (requestedStep) {
+                    navigateWizardStep(requestedStep, { history: "none" });
+                    return;
+                }
+                const hashTarget = documentRef.getElementById(
+                    String(windowRef.location.hash || "").replace(/^#/, ""),
+                );
+                const stepReference = wizardStepReferenceForTarget(hashTarget);
+                if (stepReference) {
+                    navigateWizardStep(stepReference, { history: "none" });
+                }
+            };
+            windowRef.addEventListener("popstate", restoreWizardStepFromLocation);
+            windowRef.addEventListener("hashchange", restoreWizardStepFromLocation);
         }
 
         async function initializeShellState() {
@@ -1625,14 +1687,9 @@
             const routeMode = bodyEl?.dataset.profilesRouteMode || "library";
             const rawProfileId = bodyEl?.dataset.editingProfileId || "";
             const profileId = Number(rawProfileId);
-            const rawCloneSourceId = bodyEl?.dataset.cloneSourceId || "";
-            const cloneSourceId = Number(rawCloneSourceId);
-            const cloneName = (bodyEl?.dataset.cloneName || "").trim();
             return {
                 routeMode,
                 editingProfileId: Number.isInteger(profileId) && profileId > 0 ? profileId : null,
-                cloneSourceId: Number.isInteger(cloneSourceId) && cloneSourceId > 0 ? cloneSourceId : null,
-                cloneName,
                 includeDeleted: bodyEl?.dataset.includeDeleted === "true",
                 returnUrl: bodyEl?.dataset.advancedReturnUrl || "",
                 focusTarget: bodyEl?.dataset.jsonFocusTarget || "",
@@ -1813,6 +1870,22 @@
             return true;
         }
 
+        function resolveGuidedStepFocusTarget(focusTarget) {
+            const normalizedTarget = String(focusTarget || "").trim();
+            if (!normalizedTarget) return null;
+            const stepReference = normalizedTarget.startsWith("step:")
+                ? normalizedTarget.slice("step:".length)
+                : normalizedTarget.replace(/^wizard-step-/, "");
+            const stepButton = wizardStepButtons.find((button) => (
+                button.dataset.stepId === stepReference || button.dataset.step === stepReference
+            ));
+            const panelId = stepButton?.getAttribute("aria-controls");
+            return (panelId ? documentRef.getElementById(panelId) : null)
+                || documentRef.querySelector(`.wizard-panel[data-wizard-step-id="${stepReference}"]`)
+                || documentRef.getElementById(`wizard-step-${stepReference}`)
+                || null;
+        }
+
         function resolveJsonFocusTarget(focusTarget) {
             const target = String(focusTarget || "").trim();
             if (!target) return null;
@@ -1828,6 +1901,10 @@
                         || editorEl;
                 }
                 return documentRef.getElementById("editor-panel") || editorEl;
+            }
+            if (routeMode === "edit") {
+                const guidedStepTarget = resolveGuidedStepFocusTarget(target);
+                if (guidedStepTarget) return guidedStepTarget;
             }
             if (target === "settings-panel") return documentRef.getElementById("settings-panel");
             if (target === "settings-schema-shell-step-8") return documentRef.getElementById("settings-schema-shell-step-8");
@@ -1847,6 +1924,7 @@
         }
 
         function applyJsonFocusTarget(focusTarget, attemptsLeft = 24) {
+            if (!String(focusTarget || "").trim()) return;
             const targetEl = resolveJsonFocusTarget(focusTarget);
             if (!targetEl) {
                 if (attemptsLeft > 1) {
@@ -1856,7 +1934,7 @@
                 }
                 return;
             }
-            revealWorkspaceTarget(targetEl);
+            revealWorkspaceTarget(targetEl, { history: "replace" });
             applyJsonEditorFocusTarget(focusTarget);
             if (attemptsLeft > 1 && !isWorkspaceTargetVisible(targetEl)) {
                 windowRef.setTimeout(() => {
@@ -1866,7 +1944,7 @@
         }
 
         async function bootstrapProfileRouteState() {
-            const { routeMode, editingProfileId, cloneSourceId, cloneName, focusTarget } = readProfilesRouteContext();
+            const { routeMode, editingProfileId, focusTarget } = readProfilesRouteContext();
             if ((routeMode === "edit" || routeMode === "settings" || routeMode === "json") && editingProfileId) {
                 const hydratedProfile = getCurrentProfile();
                 if (hydratedProfile && Number(hydratedProfile.id) === editingProfileId) {
@@ -1886,40 +1964,39 @@
                     renderWizardSettingsSearchResults();
                     setBaselineFromCurrentUi();
                     setStatus(t("profiles.status_profile_loaded").replace("{name}", hydratedProfile.name), "success");
-                    if (routeMode === "edit" && cloneSourceId === editingProfileId) {
-                        await cloneFromProfile(editingProfileId);
-                        return;
-                    }
-                    if (routeMode === "settings" || routeMode === "json") {
+                    if (routeMode === "edit") {
+                        const requestedStep = getWizardStepFromLocation?.();
+                        if (requestedStep) {
+                            setWizardStep(requestedStep, { history: "replace" });
+                        }
+                        applyJsonFocusTarget(focusTarget);
+                    } else if (routeMode === "settings" || routeMode === "json") {
                         setJsonHandoffContext(null);
                         applyJsonFocusTarget(focusTarget);
                     }
                     return;
                 }
-                await resetDraft(true);
                 await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });
-                if (routeMode === "edit" && cloneSourceId === editingProfileId) {
-                    await cloneFromProfile(editingProfileId);
-                    return;
-                }
-                if (routeMode === "settings" || routeMode === "json") {
+                if (routeMode === "edit") {
+                    const requestedStep = getWizardStepFromLocation?.();
+                    if (requestedStep) {
+                        setWizardStep(requestedStep, { history: "replace" });
+                    }
+                    applyJsonFocusTarget(focusTarget);
+                } else if (routeMode === "settings" || routeMode === "json") {
                     setJsonHandoffContext(null);
                     applyJsonFocusTarget(focusTarget);
                 }
                 return;
             }
 
-            if (routeMode === "new" && cloneSourceId) {
-                await resetDraft(true);
-                await cloneFromProfile(cloneSourceId, {
-                    cloneName,
-                    includeDeleted: readProfilesRouteContext().includeDeleted,
-                });
+            if (routeMode === "edit" || routeMode === "settings" || routeMode === "json") {
+                windowRef.location.replace("/profiles/new");
                 return;
             }
-
-            await resetDraft(true);
-            await reloadList();
+            if (routeMode === "library") {
+                await reloadList();
+            }
         }
 
         function start() {
@@ -1985,14 +2062,6 @@
                     : jsonEditorRuntime.createHeadlessEditorAdapter("{}");
                 setEditor(editor);
 
-                const bootstrapSchemaVersion = documentRef.body?.dataset?.editingProfileSchemaVersion || "";
-
-                if (bootstrapSchemaVersion && profileTypeEl) {
-                    profileTypeEl.value = bootstrapSchemaVersion;
-                }
-                if (bootstrapSchemaVersion && wizardSchemaEl) {
-                    wizardSchemaEl.value = bootstrapSchemaVersion;
-                }
                 jsonEditorRuntime.setEditorModelLanguage(monacoRef, editor, "json");
                 editor.setValue(toEditorValue(
                     getCurrentRaw() && typeof getCurrentRaw() === "object" ? getCurrentRaw() : {},
@@ -2000,7 +2069,7 @@
                 syncProxyWizardUi();
                 syncWizardFieldsFromForm();
                 syncEditorBackedUi();
-                setWizardStep(1);
+                setWizardStep(1, { history: "none" });
 
                 formatButtonEl?.addEventListener("click", () => {
                     try {
@@ -2013,7 +2082,9 @@
                 });
 
                 saveButtonEl.addEventListener("click", saveCurrent);
-                newProfileButtonEl?.addEventListener("click", resetDraft);
+                newProfileButtonEl?.addEventListener("click", () => {
+                    windowRef.location.assign("/profiles/new");
+                });
                 softDeleteButtonEl?.addEventListener("click", doSoftDelete);
                 hardDeleteButtonEl?.addEventListener("click", doHardDelete);
                 restoreButtonEl?.addEventListener("click", doRestore);
@@ -2034,82 +2105,28 @@
                     syncWizardFieldsFromForm();
                     updateActionState();
                 });
-                profileTypeEl?.addEventListener("change", () => {
-                    syncWizardFieldsFromForm();
-                    updateActionState();
-                });
                 editor.onDidChangeModelContent(() => {
-                    setValidationPreview();
-                    syncEditorBackedUi();
-                    renderWizardSchemaShell();
-                    renderAllSettingsList();
-                    buildWizardSettingsSearchIndex();
-                    renderWizardSettingsSearchResults();
-                    syncAllSchemaBranchCardsFromDom();
+                    let editorValueIsValid = true;
+                    try {
+                        fromEditorValue(editor.getValue());
+                    } catch {
+                        editorValueIsValid = false;
+                    }
+                    if (editorValueIsValid) {
+                        syncEditorBackedUi();
+                        renderWizardSchemaShell();
+                        renderAllSettingsList();
+                        buildWizardSettingsSearchIndex();
+                        renderWizardSettingsSearchResults();
+                        syncAllSchemaBranchCardsFromDom();
+                    }
+                    setValidationPreview(
+                        editorValueIsValid ? "" : t("profiles.validation_result_invalid"),
+                        editorValueIsValid ? "neutral" : "error",
+                    );
                     updateActionState();
                 });
 
-                wizardNameEl?.addEventListener("input", () => {
-                    if (nameInput) {
-                        nameInput.value = wizardNameEl.value;
-                    }
-                    updateActionState();
-                });
-                wizardSchemaEl?.addEventListener("change", () => {
-                    if (profileTypeEl) {
-                        profileTypeEl.value = wizardSchemaEl.value;
-                    }
-                    syncWizardFieldsFromForm();
-                    updateActionState();
-                });
-                wizardModeEl?.addEventListener("change", () => {
-                    modeSelectEl.value = wizardModeEl.value;
-                    modeSelectEl.dispatchEvent(new windowRef.Event("change"));
-                    updateActionState();
-                });
-                wizardScenarioButtons.forEach((button) => {
-                    button.addEventListener("click", () => {
-                        applyScenarioPreset(button.dataset.scenarioKey);
-                    });
-                    button.addEventListener("mouseenter", () => {
-                        setPreviewStarter(button.dataset.scenarioKey ? ({
-                            shared_devices: "classroom_kiosk",
-                            hardened: "soc_hard",
-                            extension_rollout: "basic_corporate",
-                            targeted_edits: getCurrentProfile()?.id ? "keep_current" : "blank",
-                            corporate_default: "basic_corporate",
-                        }[button.dataset.scenarioKey] || "basic_corporate") : "basic_corporate");
-                    });
-                    button.addEventListener("focus", () => {
-                        setPreviewStarter(button.dataset.scenarioKey ? ({
-                            shared_devices: "classroom_kiosk",
-                            hardened: "soc_hard",
-                            extension_rollout: "basic_corporate",
-                            targeted_edits: getCurrentProfile()?.id ? "keep_current" : "blank",
-                            corporate_default: "basic_corporate",
-                        }[button.dataset.scenarioKey] || "basic_corporate") : "basic_corporate");
-                    });
-                    button.addEventListener("mouseleave", clearPreviewStarter);
-                    button.addEventListener("blur", clearPreviewStarter);
-                });
-                wizardStarterButtons.forEach((button) => {
-                    button.addEventListener("click", () => {
-                        applyStarterPreset(button.dataset.starterKey);
-                    });
-                    button.addEventListener("mouseenter", () => {
-                        setPreviewStarter(button.dataset.starterKey);
-                    });
-                    button.addEventListener("focus", () => {
-                        setPreviewStarter(button.dataset.starterKey);
-                    });
-                    button.addEventListener("mouseleave", clearPreviewStarter);
-                    button.addEventListener("blur", clearPreviewStarter);
-                });
-                wizardCisLayerButtons.forEach((button) => {
-                    button.addEventListener("click", () => {
-                        setWizardComplianceLayer(button.dataset.cisLayerKey);
-                    });
-                });
                 wizardSettingsSearchInputEl?.addEventListener("input", () => {
                     if (wizardSettingsSearchClearEl) {
                         wizardSettingsSearchClearEl.hidden = !(wizardSettingsSearchInputEl.value || "").trim();

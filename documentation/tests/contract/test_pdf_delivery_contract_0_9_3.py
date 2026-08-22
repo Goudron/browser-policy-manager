@@ -20,7 +20,7 @@ def test_m14_09_contract_requires_a_versioned_atomic_pdf_delivery() -> None:
 
     assert contract["contract_id"] == "bpm-pdf-delivery-0.9.5.1"
     assert contract["backlog_item"] == "BPM095-M8-05"
-    assert contract["target_bpm_version"] == "0.9.5.1"
+    assert contract["target_bpm_version"] == "0.9.6"
     assert contract["candidate_root"] == "documentation/build/pdf"
     assert contract["delivery_root"] == "distributions/documentation"
     assert contract["delivery_directory"] == "{bpm_version}"

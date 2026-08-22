@@ -1,0 +1,64 @@
+<section class="wizard-panel" id="wizard-step-2" data-wizard-step-id="urls_sites_navigation" aria-hidden="true">
+    <nav class="wizard-step-map" aria-labelledby="wizard-urls-navigation-map-title">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" id="wizard-urls-navigation-map-title" data-i18n="profiles.wizard_step_two">{{ tr("profiles.wizard_step_two") }} {% set context_help_icon_target = "guided-urls-sites-navigation" %}{% set context_help_icon_label_key = "profiles.help_guided_urls_sites_navigation" %}{% include "profiles/_context_help_icon.html" %}</h3>
+        </div>
+        <div class="wizard-step-map-grid">
+            <a href="#wizard-home-surface-startup" class="wizard-step-map-link" data-i18n="profiles.wizard_homepage_title">{{ tr("profiles.wizard_homepage_title") }}</a>
+            <a href="#wizard-home-surface-new-tab" class="wizard-step-map-link" data-i18n="profiles.wizard_newtab_title">{{ tr("profiles.wizard_newtab_title") }}</a>
+            <a href="#wizard-home-surface-firefox-home" class="wizard-step-map-link" data-i18n="profiles.wizard_firefox_home_title">{{ tr("profiles.wizard_firefox_home_title") }}</a>
+            <a href="#wizard-site-access" class="wizard-step-map-link" data-i18n="profiles.wizard_website_access_decision_title">{{ tr("profiles.wizard_website_access_decision_title") }}</a>
+            <a href="#wizard-managed-navigation" class="wizard-step-map-link" data-i18n="profiles.wizard_website_access_handlers_label">{{ tr("profiles.wizard_website_access_handlers_label") }}</a>
+        </div>
+    </nav>
+    {% include "profiles/_page_wizard_step_home.html" %}
+    <section class="wizard-section-group" id="wizard-site-access">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_website_access_decision_title">{{ tr("profiles.wizard_website_access_decision_title") }}</h3>
+        </div>
+        <div id="wizard-website-filter-card" class="wizard-field-full" data-settings-target="policy:WebsiteFilter"></div>
+        <div class="wizard-grid wizard-stage-panel" id="wizard-site-access-additional">
+            <div id="wizard-allowed-domains-for-apps-card" class="wizard-field-full" data-settings-target="policy:AllowedDomainsForApps"></div>
+            <div id="wizard-http-allowlist-card" class="wizard-field-full" data-settings-target="policy:HttpAllowlist"></div>
+            <div id="wizard-local-file-links-card" class="wizard-field-full" data-settings-target="policy:LocalFileLinks"></div>
+        </div>
+    </section>
+    <section class="wizard-section-group" id="wizard-managed-navigation">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_website_access_handlers_label">{{ tr("profiles.wizard_website_access_handlers_label") }}</h3>
+        </div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <button type="button" id="wizard-managed-navigation-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-managed-navigation-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-managed-navigation-panel" hidden>
+            <div id="wizard-handlers-card" class="wizard-field-full" data-settings-target="policy:Handlers"></div>
+            <div id="wizard-auto-launch-protocols-card" class="wizard-field-full" data-settings-target="policy:AutoLaunchProtocolsFromOrigins"></div>
+            <div id="wizard-intranet-navigation-card" class="wizard-field-full" data-settings-target="policy:GoToIntranetSiteForSingleWordEntryInAddressBar"></div>
+            <div id="wizard-bookmarks-card" class="wizard-field-full" data-settings-target="policy:Bookmarks"></div>
+            <div id="wizard-managed-bookmarks-card" class="wizard-field-full" data-settings-target="policy:ManagedBookmarks"></div>
+            <div id="wizard-no-default-bookmarks-card" class="wizard-field-full" data-settings-target="policy:NoDefaultBookmarks"></div>
+        </div>
+    </section>
+    <section class="wizard-local-review-group" id="wizard-step-2-review">
+        <h4 class="wizard-local-review-title" data-i18n="profiles.wizard_home_review_title">{{ tr("profiles.wizard_home_review_title") }}</h4>
+        <div class="wizard-summary-list wizard-summary-list--cards">
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_homepage">{{ tr("profiles.wizard_home_review_homepage") }}</span>
+                <span class="wizard-summary-value" id="wizard-home-summary-homepage">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-home-summary-homepage-jump" data-home-review-jump="homepage" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_overrides">{{ tr("profiles.wizard_home_review_overrides") }}</span>
+                <span class="wizard-summary-value" id="wizard-home-summary-overrides">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-home-summary-overrides-jump" data-home-review-jump="overrides" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_firefox_home">{{ tr("profiles.wizard_home_review_firefox_home") }}</span>
+                <span class="wizard-summary-value" id="wizard-home-summary-firefox-home">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-home-summary-firefox-home-jump" data-home-review-jump="firefox_home" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
+            </div>
+        </div>
+    </section>
+</section>

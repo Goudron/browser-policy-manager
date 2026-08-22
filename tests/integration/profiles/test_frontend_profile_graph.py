@@ -19,6 +19,7 @@ def test_frontend_profile_graph_keeps_route_and_conversion_boundaries_explicit()
     assert set(graph["bundle_boundary"]["entries"]) == {
         "library",
         "compare",
+        "preparation",
         "guided_edit",
         "settings",
         "json",

@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-HEAD_REVISION = "20260804_add_profile_name_casefold"
+HEAD_REVISION = "20260821_add_profile_certificate_provenance"
 
 
 def test_alembic_cli_uses_the_bpm_runtime_database_url(tmp_path: Path):

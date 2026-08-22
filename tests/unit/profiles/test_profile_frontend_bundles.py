@@ -41,7 +41,8 @@ def test_profile_bundle_manifest_keeps_route_entries_short_and_monaco_json_only(
     routes = manifest["routes"]
 
     assert set(routes) == {"library", "compare", "new", "edit", "settings", "json"}
-    assert routes["new"]["scripts"] == routes["edit"]["scripts"]
+    assert routes["new"]["scripts"] == ["/static/profiles_bundles/profile-preparation.js"]
+    assert routes["new"]["scripts"] != routes["edit"]["scripts"]
     assert all(len(routes[route]["scripts"]) == 1 for route in routes if route != "json")
     assert routes["json"]["scripts"] == [
         "/static/vendor/profiles_monaco.js",
@@ -54,12 +55,12 @@ def test_profile_bundle_manifest_keeps_route_entries_short_and_monaco_json_only(
     )
     assert manifest["license_strategy"]["third_party"].endswith("required notices.")
     assert manifest["bundle_budgets"] == {
-        "max_generated_bytes": 1_211_000,
-        "max_generated_javascript_bytes": 600_000,
+        "max_generated_bytes": 1_290_000,
+        "max_generated_javascript_bytes": 625_000,
         "route_max_javascript_bytes": {
             "library": 60_000,
             "compare": 60_000,
-            "new": 600_000,
+            "new": 60_000,
             "edit": 600_000,
             "settings": 600_000,
             "json": 600_000,

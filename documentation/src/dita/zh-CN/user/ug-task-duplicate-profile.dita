@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-duplicate-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>复制配置档案</title>
-  <shortdesc>当您需要安全的更改起点时，可以从现有的已保存配置文件创建命名的引导草稿。</shortdesc>
-  <taskbody>
-    <prereq><p>源配置文件在<uicontrol>库</uicontrol>中可见，并且您已确认其行标识。</p></prereq>
-    <context><p><uicontrol>复制</uicontrol>根据所选的已保存配置文件创建单独的配置文件草稿。它不会更改源配置文件。</p></context>
-    <steps>
-      <step><cmd>在源配置文件行上选择“<uicontrol>复制</uicontrol>”。</cmd><info><p>预期结果：BPM 打开克隆名称面板。</p></info></step>
-      <step><cmd>输入与现有配置文件名称不同的清晰名称。</cmd><info><p>BPM 需要名称并在确认之前报告重复名称验证。</p></info></step>
-      <step><cmd>确认重复操作。</cmd><info><note type="warning">副本与源是分开的。稍后对一个配置文件进行的编辑不会更新另一配置文件。</note></info></step>
-    </steps>
-    <result><p>BPM 根据当前工作流程打开或创建<uicontrol>复制</uicontrol>的配置文件作为命名的引导草稿或保存的配置文件。</p></result>
-    <postreq><p>恢复：如果所选源行或新名称错误，则取消克隆名称面板。</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-reference-library-profile-row"/>
-    <link keyref="topic.ug-task-open-saved-profile"/>
-  </related-links>
+  <title>复制配置文件</title>
+  <shortdesc>通过复制准备流程创建独立的已保存配置文件，而不更改源配置文件。</shortdesc>
+  <taskbody><prereq><p>活动源配置文件显示在<uicontrol>资料库</uicontrol>中。复制前请确认其名称和当前状态。</p></prereq><context><p>复制准备流程会建议基于源的名称，并要求选择目标架构、初始预设和 CIS 基线。架构变更时，BPM 会在创建目标前规划转换。它绝不会静默丢弃源值，也不会更改源配置文件。</p>
+      <fig id="screenshot-preparation-duplicate">
+        <title>复制配置文件准备</title>
+        <image keyref="screenshot.preparation-duplicate" placement="break" scalefit="yes" align="center">
+          <alt>复制准备表单，显示源配置文件、建议名称、Firefox 架构、初始预设、CIS 基线和“复制”操作。</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>在所需的源配置文件上选择<uicontrol>复制</uicontrol>。</cmd><info><p>BPM 将打开带建议名称的复制准备表单。</p></info></step>
+<step><cmd>输入唯一名称，并选择目标架构、初始预设和 CIS 基线。</cmd><info><p>不打算转换时保留源架构。</p></info></step>
+<step><cmd>架构不同时，审查复制转换状态。</cmd><info><p>有效计划允许复制。被阻止或不可用的计划不会创建目标，也不会更改源；请选择其他目标或修复受影响的配置。</p></info></step>
+<step><cmd>选择<uicontrol>复制</uicontrol>。</cmd><info><p>BPM 将创建一个独立的已保存配置文件，并在<uicontrol>引导式编辑器</uicontrol>中打开它。</p><note type="warning">以后任一配置文件的更改都不会更新另一个。源已过期、名称冲突或转换被阻止时，不会创建目标。</note></info></step>
+</steps><result><p>源保持不变；新配置文件具有所选身份和转换结果。</p></result><postreq><p>源选错时请取消。如果表单打开期间源已改变，请从当前源重新打开复制准备流程；不要依赖旧的转换结果。</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-create-first-profile"/><link keyref="topic.ug-troubleshoot-schema-mismatch"/><link keyref="topic.ug-task-use-guided-editor"/></related-links>
 </task>

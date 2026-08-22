@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-users-addons-sites" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Benutzer, Add-ons und Websites konfigurieren</title>
-  <shortdesc>Verwenden Sie Schritt 4 für Konten, Erweiterungen, Add-ons, Lesezeichen, Sprache, Übersetzung und Website-Verwaltung.</shortdesc>
+  <title>Benutzer, Sprache und Synchronisierung konfigurieren</title>
+  <shortdesc>Verwenden Sie Schritt 5 für die vom Schema unterstützte Identität, Sprache, Übersetzung und Synchronisierung.</shortdesc>
   <taskbody>
-    <prereq><p>Ein geführter Entwurf ist geöffnet.</p></prereq>
-    <context><p>In diesem Schritt werden Steuerelemente erfasst, die sich auf Benutzeridentitätsoberflächen, Erweiterungs-Governance, Lokalisierung und website-spezifisches Verhalten auswirken.</p></context>
+    <prereq><p>Ein gespeichertes Profil ist im <uicontrol>Geführten Editor</uicontrol> geöffnet.</p></prereq>
+    <context><p>Dieser Schritt enthält Identität, Sprache, Übersetzung und Synchronisierung. Erweiterungsregeln gehören ausschließlich zu Schritt 6; URLs, Websites, Handler und Lesezeichen ausschließlich zu Schritt 2.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 4 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 5 <uicontrol>Benutzer, Sprache &amp; Synchronisierung</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Nur Benutzer-, Sprach- und Synchronisierungssteuerungen sind sichtbar.</p></info></step>
       <step><cmd>Überprüfen Sie Mozilla-Konten und identitätsbezogene Browseroberflächen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Konfigurieren Sie Erweiterungen, Add-Ons und Lesezeichen gemäß den Bereitstellungsregeln.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Legen Sie Optionen für Sprache, Übersetzung und Website-Handhabung fest.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
+      <step><cmd>Legen Sie die für das Profil erforderlichen Sprach-, Übersetzungs- und Synchronisierungsoptionen fest.</cmd><info><p>Erwartetes Ergebnis: Benutzerentscheidungen werden getrennt von Erweiterungs- und Navigationsrichtlinien geprüft.</p></info></step>
+      <step><cmd>Verwenden Sie Schritt 6 für Erweiterungsrichtlinien und Schritt 2 für Websites oder Lesezeichen.</cmd><info><note type="warning">Schemaabhängige Änderungen können Werte für das gewählte Firefox-Schema ungültig machen.</note></info></step>
     </steps>
-    <result><p>Das Profil enthält überprüfte Benutzer-, Add-on-, Lesezeichen-, Sprach- und Site-Handling-Steuerelemente.</p></result>
-    <postreq><p>Wiederherstellung: Wenn eine Erweiterung oder Site unerwartet blockiert wird, überprüfen Sie den entsprechenden Abschnitt und validieren Sie ihn erneut.</p></postreq>
+    <result><p>Das Profil enthält überprüfte Benutzer-, Sprach-, Übersetzungs- und Synchronisierungssteuerungen.</p></result>
+    <postreq><p>Wiederherstellung: Prüfen Sie bei einer unerwartet blockierten Erweiterung Schritt 6 und bei einer Website Schritt 2, dann validieren Sie erneut.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-security-privacy"/>

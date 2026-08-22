@@ -5,14 +5,15 @@
   <shortdesc>Handle unsupported schema channel, ESR/Release mismatch, or schema-dependent setting without forcing hidden data changes.</shortdesc>
   <taskbody>
     <prereq><p>A visible BPM status, validation message, browser warning, or failed action indicates that the current workflow cannot safely continue.</p></prereq>
-    <context><p>Schema mismatch usually means a setting exists in one Firefox channel but is unavailable, deprecated, or shaped differently in the selected channel.</p></context>
+    <context><p>Schema mismatch usually means a setting exists in one Firefox schema but is unavailable, deprecated, or shaped differently in the schema displayed as a read-only editor fact. Preparation selects a schema for a new profile; explicit conversion is the only way to change a saved profile's schema.</p></context>
     <steps>
       <step><cmd>Confirm whether the profile targets ESR 115.39, ESR 140.13, ESR 153.0, or Release 153.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Identify the setting that is unavailable, unsupported, deprecated, or schema-dependent in that channel.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
-      <step><cmd>Choose whether to switch the schema channel or remove/change the affected setting for the intended Firefox target.</cmd><info><p>For a channel move, choose a distinct current artifact and request a fresh read-only preview. Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Choose whether to request explicit schema conversion or remove/change the affected setting for the intended Firefox target.</cmd><info><p>For a schema move, choose a distinct current artifact and request a fresh read-only preview. Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Revalidate and review export readiness after the channel or setting decision.</cmd><info><note type="warning">A blocked, stale, invalid, or failed preview/apply leaves the profile unchanged. Resolve the visible blocker or choose another target, then request a new preview; do not change profile data outside the application.</note></info></step>
     </steps>
     <result><p>The profile targets the intended Firefox channel and no longer hides a schema-dependent mismatch.</p></result>
+    <example id="bpm096-localized-current"><title>Current 0.9.6 behavior</title><p>Create and duplicate use atomic preparation: a name, schema, preset, CIS, or conversion error creates no target and does not change the source. Schema, preset, and CIS are read-only. To correct a value, use its owner: Step 2 for URLs/sites, Step 4 for certificates and trust, and Step 6 for extensions; request an explicit conversion preview to change schema.</p></example>
     <postreq><p>If the error repeats, stop the workflow and contact support with the visible message, profile name, schema channel, and current page.</p></postreq>
   </taskbody>
   <related-links>

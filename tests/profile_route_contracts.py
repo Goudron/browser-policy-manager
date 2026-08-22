@@ -203,6 +203,8 @@ class ProfileRouteSuite:
     routes: Mapping[str, RenderedProfileRoute]
     active_profile_id: int
     archived_profile_id: int
+    profile_count_before_routes: int
+    profile_count_after_routes: int
     build_seconds: float
     contract_layer_budget_seconds: float
 
@@ -244,6 +246,7 @@ def build_profile_route_suite() -> ProfileRouteSuite:
         archived_profile_id = int(archived_response.json()["id"])
         assert client.delete(f"/api/profiles/{archived_profile_id}").status_code == 204
 
+        profile_count_before_routes = len(client.get("/api/profiles").json())
         route_paths = {
             "library": "/profiles",
             "compare": "/profiles/compare",
@@ -251,9 +254,9 @@ def build_profile_route_suite() -> ProfileRouteSuite:
             "edit": f"/profiles/{active_profile_id}/edit",
             "settings": f"/profiles/{active_profile_id}/settings",
             "json": f"/profiles/{active_profile_id}/json",
-            "active_clone": (
-                f"/profiles/new?clone_from={active_profile_id}&clone_name=Active%20copy"
-            ),
+            "active_clone": f"/profiles/new?clone_from={active_profile_id}",
+            "invalid_clone": "/profiles/new?clone_from=not-an-id",
+            "missing_clone": "/profiles/new?clone_from=999999",
             "active_duplicate": f"/profiles/{active_profile_id}/edit?duplicate=true",
             "active_settings_focus": (
                 f"/profiles/{active_profile_id}/settings"
@@ -276,9 +279,7 @@ def build_profile_route_suite() -> ProfileRouteSuite:
             "archived_edit": f"/profiles/{archived_profile_id}/edit?include_deleted=true",
             "archived_settings": f"/profiles/{archived_profile_id}/settings?include_deleted=true",
             "archived_json": f"/profiles/{archived_profile_id}/json?include_deleted=true",
-            "archived_clone": (
-                f"/profiles/new?clone_from={archived_profile_id}&clone_name=Archived%20copy"
-            ),
+            "archived_clone": f"/profiles/new?clone_from={archived_profile_id}",
             "archived_settings_focus": (
                 f"/profiles/{archived_profile_id}/settings?include_deleted=true"
                 f"&return=/profiles/{archived_profile_id}/edit%3Finclude_deleted%3Dtrue"
@@ -309,6 +310,8 @@ def build_profile_route_suite() -> ProfileRouteSuite:
                 perf_counter() - request_started,
             )
 
+        profile_count_after_routes = len(client.get("/api/profiles").json())
+
         request_started = perf_counter()
         russian_response = client.get(
             "/profiles",
@@ -325,6 +328,8 @@ def build_profile_route_suite() -> ProfileRouteSuite:
         routes=MappingProxyType(snapshots),
         active_profile_id=active_profile_id,
         archived_profile_id=archived_profile_id,
+        profile_count_before_routes=profile_count_before_routes,
+        profile_count_after_routes=profile_count_after_routes,
         build_seconds=perf_counter() - started,
         contract_layer_budget_seconds=_load_contract_layer_budget(),
     )

@@ -9,6 +9,7 @@
     <section id="a-proxy-routing"><title>代理路由</title><p>与网络所有者一起检查 Proxy.Locked 和 Proxy.Mode。验证配置文件是否必须保留系统代理行为、强制执行手动代理或将路由留给另一个控制。不要将 BPM 值视为流量在部署后实际使用预期路由的证据。</p></section>
     <section id="a-evidence-retention"><title>证据保留</title><p>与<uicontrol>安全和隐私</uicontrol>所有者一起查看 SanitizeOnShutdown.FormData、SanitizeOnShutdown.History 和 SanitizeOnShutdown.会话。一些强化场景会清除本地数据，而一些调查则需要保留证据。 BPM记录选择和冲突状态；它不确定法律或事件响应要求。</p></section>
     <section id="a-exception-boundary"><title>异常边界</title><p>BPM 没有单独的持续 CIS 例外或豁免模型。在外部票证、部署说明或变更控制记录中记录故意偏差，然后保持 BPM 配置文件源归因和 manual_review_kept_base 决策可见，以供以后查看。</p></section>
+    <section id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>在创建已保存配置文件前选择架构、初始预设和 CIS 基线。baseline、CIS、manual、imported、converted 和 raw 来源仅用于审查，不是合规证明。证书和信任使用独立的路径台账；manual、imported、converted、raw、unavailable 和 blocked 状态都需要人工审查。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.cis-task-verify-cis-deviation"/>

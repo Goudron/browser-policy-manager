@@ -38,6 +38,27 @@ def test_readme_states_current_schema_support_and_manual_conversion_boundary():
     assert "BPM leaves the profile unchanged" in normalized_readme
 
 
+def test_readme_describes_atomic_profile_preparation_and_guided_owners():
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    normalized_readme = " ".join(readme.split())
+
+    assert (
+        "Atomic create and duplicate preparation with a name, supported Firefox schema, starter preset, and CIS baseline"
+        in normalized_readme
+    )
+    assert (
+        "its header shows the saved schema, preset, and CIS baseline as read-only facts"
+        in normalized_readme
+    )
+    assert (
+        "Optional explicit AMO extension lookup with manual GUID and validated install-URL entry when AMO is unavailable."
+        in normalized_readme
+    )
+    assert "New-profile preparation form." in readme
+    assert "Unsaved drafts stay in the guided editor" not in readme
+    assert "Named clone drafts" not in readme
+
+
 def test_readme_is_version_neutral_and_excludes_maintainer_implementation_details():
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
 

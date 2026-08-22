@@ -14,6 +14,7 @@
       <step><cmd>验证配置文件并查看生成的 <codeph>policies.json</codeph> 形状。</cmd><info><p>预期结果：BPM 报告所选通道没有架构错误。</p></info></step>
     </steps>
     <result><p>复杂系列已审查嵌套值、源决策、渠道支持和干净的验证结果。</p></result>
+    <example id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>在准备流程中选择架构、预设和 CIS 基线，它们在编辑器中保持只读。要得到另一个已保存配置文件，请使用明确转换或复制准备流程；不支持或被阻止的情况不会静默丢弃值。引导式归属：URL/站点为步骤 2，证书和信任为步骤 4，扩展为步骤 6。完成复杂策略审核后，请记录保留原始值、阻止原因和手动复核决定，并在部署前使用目标通道执行独立验证。</p></example>
     <postreq><p>如果验证失败，请返回系列，删除不支持的密钥，或切换到实际支持该策略的通道。</p></postreq>
   </taskbody>
   <related-links>

@@ -2,20 +2,19 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-duplicate-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Ein Profil duplizieren</title>
-  <shortdesc>Erstellen Sie einen benannten geführten Entwurf aus einem vorhandenen gespeicherten Profil, wenn Sie einen sicheren Ausgangspunkt für Änderungen wünschen.</shortdesc>
-  <taskbody>
-    <prereq><p>Das Quellprofil ist in der <uicontrol>Bibliothek</uicontrol> sichtbar und Sie haben seine Zeilenidentität bestätigt.</p></prereq>
-    <context><p>„<uicontrol>Duplizieren</uicontrol>“ erstellt einen separaten Profilentwurf basierend auf dem ausgewählten gespeicherten Profil. Das Quellprofil wird dadurch nicht geändert.</p></context>
-    <steps>
-      <step><cmd>Wählen Sie „<uicontrol>Duplizieren</uicontrol>“ in der Quellprofilzeile.</cmd><info><p>Erwartetes Ergebnis: BPM öffnet ein Klonnamenfenster.</p></info></step>
-      <step><cmd>Geben Sie einen eindeutigen Namen ein, der sich von vorhandenen Profilnamen unterscheidet.</cmd><info><p>BPM erfordert einen Namen und meldet vor der Bestätigung eine Validierung doppelter Namen.</p></info></step>
-      <step><cmd>Bestätigen Sie die Duplikataktion.</cmd><info><note type="warning">Ein Duplikat ist von der Quelle getrennt. Spätere Änderungen an einem Profil aktualisieren das andere nicht.</note></info></step>
-    </steps>
-    <result><p>BPM öffnet oder erstellt das duplizierte Profil als benannten geführten Entwurf oder gespeichertes Profil gemäß dem aktuellen Arbeitsablauf.</p></result>
-    <postreq><p>Wiederherstellung: Brechen Sie das Fenster „Klonname“ ab, wenn die ausgewählte Quellzeile oder der neue Name falsch ist.</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-reference-library-profile-row"/>
-    <link keyref="topic.ug-task-open-saved-profile"/>
-  </related-links>
+  <shortdesc>Erstellen Sie durch Duplikatvorbereitung ein separates gespeichertes Profil, ohne die Quelle zu ändern.</shortdesc>
+  <taskbody><prereq><p>Das aktive Quellprofil ist in der <uicontrol>Bibliothek</uicontrol> sichtbar. Prüfen Sie Name und aktuellen Zustand.</p></prereq><context><p>Die Duplikatvorbereitung schlägt einen quellbasierten Namen vor und verlangt Zielschema, Startvoreinstellung und CIS-Basislinie. Bei einem Schemawechsel plant BPM die Konvertierung vor der Zielerstellung. Quellwerte werden nie stillschweigend verworfen und das Quellprofil wird nicht geändert.</p>
+      <fig id="screenshot-preparation-duplicate">
+        <title>Profilvorbereitung zum Duplizieren</title>
+        <image keyref="screenshot.preparation-duplicate" placement="break" scalefit="yes" align="center">
+          <alt>Formular zum Duplizieren mit Quellprofil, Namensvorschlag, Firefox-Schema, Startvoreinstellung, CIS-Basislinie und Schaltfläche „Duplizieren“.</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>Wählen Sie beim gewünschten Quellprofil <uicontrol>Duplizieren</uicontrol>.</cmd><info><p>BPM öffnet die Duplikatvorbereitung mit einem Namensvorschlag.</p></info></step>
+<step><cmd>Geben Sie einen eindeutigen Namen ein und wählen Sie Zielschema, Startvoreinstellung und CIS-Basislinie.</cmd><info><p>Behalten Sie das Quellschema, wenn keine Konvertierung vorgesehen ist.</p></info></step>
+<step><cmd>Prüfen Sie bei abweichendem Schema den Konvertierungszustand.</cmd><info><p>Ein gültiger Plan erlaubt die Duplikation. Ein blockierter oder nicht verfügbarer Plan erstellt kein Ziel und lässt die Quelle unverändert; wählen Sie ein anderes Ziel oder beheben Sie die betroffene Konfiguration.</p></info></step>
+<step><cmd>Wählen Sie <uicontrol>Duplizieren</uicontrol>.</cmd><info><p>BPM erstellt ein separates gespeichertes Profil und öffnet es im <uicontrol>Geführten Editor</uicontrol>.</p><note type="warning">Spätere Änderungen an einem Profil ändern das andere nicht. Bei veralteter Quelle, Namenskonflikt oder Konvertierungsblocker wird kein Ziel erstellt.</note></info></step>
+</steps><result><p>Die Quelle bleibt unverändert; das neue gespeicherte Profil trägt die gewählte Identität und das Konvertierungsergebnis.</p></result><postreq><p>Brechen Sie ab, wenn die Quelle falsch ist. Hat sie sich während des Formulars geändert, öffnen Sie die Duplikatvorbereitung erneut von der aktuellen Quelle; verwenden Sie kein altes Konvertierungsergebnis.</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-create-first-profile"/><link keyref="topic.ug-troubleshoot-schema-mismatch"/><link keyref="topic.ug-task-use-guided-editor"/></related-links>
 </task>

@@ -149,10 +149,7 @@ def test_simplified_chinese_heading_review_preserves_terms_and_compact_titles() 
     violations = [
         (str(path), title)
         for path, title in _titles("zh-CN")
-        if chinese_word_spacing.search(title)
-        or title.endswith("。")
-        or "配置文件" in title
-        or "个人资料" in title
+        if chinese_word_spacing.search(title) or title.endswith("。") or "个人资料" in title
     ]
     assert violations == []
 

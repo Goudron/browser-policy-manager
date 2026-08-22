@@ -1,6 +1,6 @@
 {
   "fixture_version": 1,
-  "product_version": "0.9.5",
+  "product_version": "0.9.6",
   "matrix": "docs/architecture/database-upgrade-matrix-0.9.5.json",
   "head_profile_fields": [
     "id",
@@ -477,7 +477,10 @@
       "source_ids": [
         "canonical-20260721",
         "canonical-20260804",
-        "canonical-20260804-name-casefold"
+        "canonical-20260804-name-casefold",
+        "canonical-20260820-baseline-provenance",
+        "canonical-20260821-extension-provenance",
+        "canonical-20260821-certificate-provenance"
       ],
       "cases": [
         {

@@ -30,11 +30,16 @@ MANUAL_FIGURE_PREFIXES = {
     "es-ES": "Figura {number}. ",
 }
 USER_GUIDE_FIGURE_IDS = (
+    "screenshot-preparation-create",
     "screenshot-guided-editor-overview",
+    "screenshot-guided-step-6-extensions",
     "screenshot-guided-settings-search",
+    "screenshot-guided-step-2-urls-sites-navigation",
+    "screenshot-guided-step-4-certificates-trust",
     "screenshot-all-settings-review",
     "screenshot-json-editor",
     "screenshot-library-overview",
+    "screenshot-preparation-duplicate",
     "screenshot-compare-profiles",
 )
 
@@ -125,7 +130,7 @@ def test_figure_caption_styles_are_visible_and_keep_source_images_printable() ->
     assert "max-height: 210mm;" in print_css
     assert "assets/pdf/bpm-guide-print.css" in pdf_tool
     assert "def _number_pdf_figure_captions" in pdf_tool
-    assert "PDF_USER_GUIDE_FIGURE_COUNT = 6" in pdf_tool
+    assert "PDF_USER_GUIDE_FIGURE_COUNT = 11" in pdf_tool
 
 
 def test_rendered_pdf_figure_caption_sequences_are_consecutive_in_every_locale() -> None:

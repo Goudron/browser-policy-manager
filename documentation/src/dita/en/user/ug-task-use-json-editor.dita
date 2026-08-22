@@ -5,7 +5,7 @@
   <shortdesc>Open the complete profile as a Firefox policies.json document for exact review or raw editing.</shortdesc>
   <taskbody>
     <prereq><p>Open a saved profile. <uicontrol>JSON editor</uicontrol> works on a saved profile and represents the profile as a Firefox boundary document.</p></prereq>
-    <context><p><uicontrol>JSON editor</uicontrol> is the raw document surface. Use it when Guided or <uicontrol>All settings</uicontrol> is too high-level for exact review, migration checks, troubleshooting, or raw values.</p>
+    <context><p><uicontrol>JSON editor</uicontrol> is the raw document surface. Its header shows schema, preset, and CIS baseline as read-only saved-profile facts. Use preparation or explicit conversion rather than JSON editing to change those identities.</p>
       <fig id="screenshot-json-editor">
         <title>JSON editor in dark theme</title>
         <image keyref="screenshot.json-editor" placement="break" scalefit="yes" align="center">

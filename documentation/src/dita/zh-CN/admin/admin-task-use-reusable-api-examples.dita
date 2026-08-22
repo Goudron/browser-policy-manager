@@ -90,8 +90,9 @@ assert exported.json() == {"policies": payload["document"]["policies"]}
 ]]></codeblock><note type="warning">将响应状态、配置文件 ID、修订、模式通道、导出的文档哈希和断言结果保留在外部证据中。请勿将真实主机名、机密、API 密钥、机密值或生产标识符复制到文档示例中。</note></info></step>
         </steps>
         <result><p>转换使用以下技术合约：<codeph>POST /api/profiles/{profile_id}/conversion-preview</codeph>、<codeph>ConversionPreviewRequest</codeph>、<codeph>ConversionPreviewResponse</codeph>、<codeph>target_artifact_id</codeph>、<codeph>target_validation</codeph>、<codeph>POST /api/profiles/{profile_id}/conversion-apply</codeph>、<codeph>ConversionApplyRequest</codeph>、<codeph>ConversionApplyResponse</codeph>、<codeph>mutation=none</codeph> 和 <codeph>retry_preview_required</codeph>。预览为只读，明确确认后才会原子地应用。</p><p>转换响应可以返回 <codeph>200</codeph>、<codeph>404</codeph>、<codeph>409</codeph>、<codeph>422</codeph>、<codeph>500</codeph> 或 <codeph>503</codeph>；确认前请检查 <codeph>compatibility</codeph> 和 <codeph>blockers</codeph>。</p><p>集成产品具有可重用的curl 和Python 示例，这些示例可以安全复制、独立于部署主机、与当前BPM API 行为同步，并与显式响应断言相关联。</p></result>
+    <example id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>公共准备使用 <codeph>POST /api/profiles/prepare/new</codeph> 和 <codeph>POST /api/profiles/prepare/duplicate</codeph>；复制预览通过只读 <codeph>POST /api/profiles/prepare/duplicate/preview</codeph> 提供。终止 <codeph>ProfilePreparationErrorEnvelope</codeph> 带 <codeph>mutation="none"</codeph>：不会创建目标，也不会修改源。调用方不提交 flags、compliance、provenance 或转换候选项。可选 AMO 搜索以 <codeph>403</codeph> 表示非同源拒绝；仍可手动输入 GUID 和经过验证的安装 URL。</p><p id="bpm096-localized-literals"><ph>准备和 AMO 字面量核对</ph> <codeph>API-PROFILE-012</codeph>、<codeph>013</codeph>、<codeph>API-PROFILE-014</codeph>、<codeph>POST /api/profiles/prepare/new</codeph>、<codeph>POST /api/profiles/prepare/duplicate</codeph>、<codeph>ProfilePreparationErrorEnvelope</codeph>、<codeph>mutation="none"</codeph> 和 <codeph>/api/profiles/extensions/amo-search</codeph> 是不可变字面量。</p></example>
         <postreq><p>在构建完整的外部控制产品工作流程时，将这些示例与拉取/列出/读取、应用前验证、导入-审核-导出和失败审核操作手册结合起来。</p></postreq>
-      </taskbody>
+  </taskbody>
       <related-links>
         <link keyref="topic.admin-concept-api-conventions"/>
     <link keyref="topic.admin-task-check-health-readiness"/>

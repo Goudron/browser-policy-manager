@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-home-search-navigation" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>配置主页、搜索和导航</title>
-  <shortdesc>从步骤 2 中设置主界面、导航行为、托管搜索引擎和搜索建议。</shortdesc>
+  <title>配置 URL、站点和导航</title>
+  <shortdesc>使用步骤 2 配置主页和启动行为、站点访问、处理程序和受管书签。</shortdesc>
   <taskbody>
     <prereq><p>步骤 2 已打开并且模式通道正确。</p></prereq>
-    <context><p>这些控件会影响用户首先看到的内容以及 Firefox 如何解析导航和搜索活动。</p></context>
+    <context><p>这些控件决定用户可以打开哪些页面以及 Firefox 如何启动和导航。受管搜索引擎和搜索建议属于步骤 1。</p>
+      <fig id="screenshot-guided-step-2-urls-sites-navigation">
+        <title>URL、站点和导航</title>
+        <image keyref="screenshot.guided-step-2-urls-sites-navigation" placement="break" scalefit="yes" align="center">
+          <alt>引导式编辑器第 2 步显示主页和站点访问控件。</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>打开主页、<uicontrol>搜索和导航</uicontrol>部分。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>设置配置文件所需的主页或新选项卡行为。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>根据策略配置托管搜索引擎和搜索建议。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>在转到安全设置之前检查导航默认值。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
+      <step><cmd>打开步骤 2 <uicontrol>URL、站点和导航</uicontrol>。</cmd><info><p>预期结果：步骤 2 控件可见，且不包含搜索引擎控件。</p></info></step>
+      <step><cmd>设置配置文件所需的主页或启动行为。</cmd><info><p>预期结果：Firefox 打开已审查的起始界面。</p></info></step>
+      <step><cmd>配置配置文件所需的允许或阻止站点、处理程序和受管书签。</cmd><info><p>预期结果：相关 URL 和站点决定会一起审查。</p></info></step>
+      <step><cmd>在转到安全设置之前审查导航值。</cmd><info><note type="warning">更改依赖架构的控件可能会使所选 Firefox 通道的值无效。受管搜索引擎或搜索建议请使用步骤 1。</note></info></step>
     </steps>
-    <result><p>该配置文件定义主页、托管搜索、建议和导航行为。</p></result>
-    <postreq><p>恢复：如果用户丢失预期的搜索路径，请在保存之前调整托管搜索引擎条目。</p></postreq>
+    <result><p>配置文件定义已审查的主页、启动、站点访问、处理程序、书签和导航行为。</p></result>
+    <postreq><p>恢复：如果用户失去预期的站点或导航路径，请更正可见的 URL 或站点条目后再次验证。受管搜索或搜索建议的恢复请使用步骤 1。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-browser-access-defaults"/>

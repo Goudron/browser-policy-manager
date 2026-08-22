@@ -2,20 +2,19 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-duplicate-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Duplicar un perfil</title>
-  <shortdesc>Cree un borrador guiado con nombre a partir de un perfil guardado existente cuando desee un punto de partida seguro para los cambios.</shortdesc>
-  <taskbody>
-    <prereq><p>El perfil de origen está visible en la <uicontrol>Biblioteca</uicontrol> y usted ha confirmado su identidad de fila.</p></prereq>
-    <context><p><uicontrol>Duplicar</uicontrol> crea un borrador de perfil separado basado en el perfil guardado seleccionado. No cambia el perfil de origen.</p></context>
-    <steps>
-      <step><cmd>Elija <uicontrol>Duplicar</uicontrol> en la fila del perfil de origen.</cmd><info><p>Resultado esperado: BPM abre un panel de nombre de clon.</p></info></step>
-      <step><cmd>Introduzca un nombre claro que difiera de los nombres de perfil existentes.</cmd><info><p>BPM requiere un nombre e informa la validación del nombre duplicado antes de confirmar.</p></info></step>
-      <step><cmd>Confirma la acción duplicada.</cmd><info><note type="warning">Un duplicado está separado de la fuente. Las ediciones posteriores de un perfil no actualizan el otro.</note></info></step>
-    </steps>
-    <result><p>BPM abre o crea el perfil duplicado como un borrador guiado con nombre o un perfil guardado de acuerdo con el flujo de trabajo actual.</p></result>
-    <postreq><p>Recuperación: cancele el panel de nombre de clonación si la fila de origen seleccionada o el nuevo nombre es incorrecto.</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-reference-library-profile-row"/>
-    <link keyref="topic.ug-task-open-saved-profile"/>
-  </related-links>
+  <shortdesc>Cree mediante preparación de duplicado un perfil guardado independiente sin modificar el origen.</shortdesc>
+  <taskbody><prereq><p>El perfil de origen activo aparece en la <uicontrol>Biblioteca</uicontrol>. Compruebe su nombre y estado actual antes de duplicarlo.</p></prereq><context><p>La preparación de duplicado sugiere un nombre basado en el origen y solicita esquema objetivo, preajuste inicial y línea base CIS. Si cambia el esquema, BPM planifica la conversión antes de crear el destino. Nunca descarta silenciosamente valores de origen ni modifica el perfil de origen.</p>
+      <fig id="screenshot-preparation-duplicate">
+        <title>Preparación para duplicar un perfil</title>
+        <image keyref="screenshot.preparation-duplicate" placement="break" scalefit="yes" align="center">
+          <alt>Formulario de duplicación con perfil de origen, nombre sugerido, esquema de Firefox, preajuste inicial, línea base CIS y acción «Duplicar».</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>Elija <uicontrol>Duplicar</uicontrol> en el perfil de origen deseado.</cmd><info><p>BPM abre el formulario de preparación con un nombre sugerido.</p></info></step>
+<step><cmd>Introduzca un nombre único y seleccione esquema objetivo, preajuste inicial y línea base CIS.</cmd><info><p>Conserve el esquema de origen si no se pretende convertir.</p></info></step>
+<step><cmd>Si el esquema es distinto, revise el estado de conversión del duplicado.</cmd><info><p>Un plan válido permite duplicar. Un plan bloqueado o no disponible no crea destino y deja el origen sin cambios; elija otro destino o resuelva la configuración afectada.</p></info></step>
+<step><cmd>Elija <uicontrol>Duplicar</uicontrol>.</cmd><info><p>BPM crea un perfil guardado independiente y lo abre en el <uicontrol>Editor guiado</uicontrol>.</p><note type="warning">Los cambios posteriores de un perfil no actualizan el otro. Un origen obsoleto, un conflicto de nombre o un bloqueo de conversión no crean destino.</note></info></step>
+</steps><result><p>El origen permanece sin cambios y el nuevo perfil lleva la identidad elegida y el resultado de conversión.</p></result><postreq><p>Cancele si eligió el origen equivocado. Si cambió mientras el formulario estaba abierto, vuelva a abrir la preparación desde el origen actual; no use un resultado de conversión antiguo.</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-create-first-profile"/><link keyref="topic.ug-troubleshoot-schema-mismatch"/><link keyref="topic.ug-task-use-guided-editor"/></related-links>
 </task>

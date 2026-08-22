@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-home-search-navigation" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Configurer l'accueil, la recherche et la navigation</title>
-  <shortdesc>Définissez les surfaces d'accueil, le comportement de navigation, les moteurs de recherche gérés et les suggestions de recherche de l'étape 2.</shortdesc>
+  <title>Configurer les URL, les sites et la navigation</title>
+  <shortdesc>Utilisez l’étape 2 pour configurer la page d’accueil, le démarrage, l’accès aux sites, les gestionnaires et les marque-pages gérés.</shortdesc>
   <taskbody>
     <prereq><p>L'étape 2 est ouverte et le canal de schéma est correct.</p></prereq>
-    <context><p>Ces contrôles affectent ce que les utilisateurs voient en premier et la manière dont Firefox résout les activités de navigation et de recherche.</p></context>
+    <context><p>Ces contrôles déterminent les pages que les utilisateurs peuvent ouvrir et la façon dont Firefox démarre et navigue. Les moteurs de recherche gérés et les suggestions de recherche appartiennent à l’étape 1.</p>
+      <fig id="screenshot-guided-step-2-urls-sites-navigation">
+        <title>URL, sites et navigation</title>
+        <image keyref="screenshot.guided-step-2-urls-sites-navigation" placement="break" scalefit="yes" align="center">
+          <alt>Étape 2 de l’éditeur guidé avec les contrôles de page d’accueil et d’accès aux sites.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Ouvrez les sections d'accueil, de recherche et de navigation.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Définissez le comportement de la page d'accueil ou du nouvel onglet requis par le profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Configurez les moteurs de recherche gérés et les suggestions de recherche conformément à la politique.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Vérifiez les paramètres de navigation par défaut avant de passer aux paramètres de sécurité.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
+      <step><cmd>Ouvrez l’étape 2, <uicontrol>URL, sites et navigation</uicontrol>.</cmd><info><p>Résultat attendu : les contrôles de l’étape 2 sont visibles sans contrôles de moteur de recherche.</p></info></step>
+      <step><cmd>Définissez la page d’accueil ou le comportement de démarrage requis par le profil.</cmd><info><p>Résultat attendu : Firefox ouvre la surface de départ examinée.</p></info></step>
+      <step><cmd>Configurez les sites autorisés ou bloqués, les gestionnaires et les marque-pages gérés requis par le profil.</cmd><info><p>Résultat attendu : les décisions liées aux URL et aux sites sont examinées ensemble.</p></info></step>
+      <step><cmd>Examinez les valeurs de navigation avant de passer aux paramètres de sécurité.</cmd><info><note type="warning">La modification d’un contrôle dépendant du schéma peut rendre une valeur non valide pour le canal Firefox sélectionné. Utilisez l’étape 1 pour les moteurs de recherche gérés ou les suggestions de recherche.</note></info></step>
     </steps>
-    <result><p>Le profil définit l'accueil, la recherche gérée, les suggestions et le comportement de navigation.</p></result>
-    <postreq><p>Récupération : si les utilisateurs risquent de perdre un chemin de recherche attendu, ajustez l'entrée du moteur de recherche géré avant de l'enregistrer.</p></postreq>
+    <result><p>Le profil définit une page d’accueil, un démarrage, un accès aux sites, des gestionnaires, des marque-pages et une navigation examinés.</p></result>
+    <postreq><p>Récupération : si les utilisateurs perdent un chemin attendu vers un site ou de navigation, corrigez l’entrée URL ou site visible et validez de nouveau. Utilisez l’étape 1 pour récupérer une recherche gérée ou une suggestion de recherche.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-browser-access-defaults"/>

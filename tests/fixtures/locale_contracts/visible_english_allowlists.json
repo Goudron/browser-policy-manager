@@ -401,7 +401,20 @@
     "uBlock",
     "under",
     "www",
-    "xpi"
+    "xpi",
+    "Certificates",
+    "DisableSecurityBypass",
+    "ImportEnterpriseRoots",
+    "InvalidCertificate",
+    "MicrosoftEntraSSO",
+    "WindowsSSO",
+    "enabled",
+    "enterprise",
+    "etc/firefox/company-root",
+    "intranet",
+    "pem",
+    "roots",
+    "security"
   ],
   "locale_allowed_examples": {
     "de": [

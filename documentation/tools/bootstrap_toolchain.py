@@ -278,15 +278,28 @@ def bootstrap(lock_path: Path, offline: bool, skip_python: bool) -> None:
         raise BootstrapError(f"platform is not present in lock: {current_platform}")
     cache = REPOSITORY_ROOT / lock["cache_directory"]
     cache.mkdir(parents=True, exist_ok=True)
+    total_components = 2 if skip_python else 3
     java_spec = lock["components"]["java"]
     platform_spec = java_spec["platforms"][current_platform]
+    print(
+        f"Documentation toolchain bootstrap: component 1/{total_components} — Temurin JRE",
+        flush=True,
+    )
     java_home = install_component(
         "temurin-jre",
         {"version": java_spec["version"], **platform_spec},
         cache,
         offline,
     )
+    print(
+        f"Documentation toolchain bootstrap: completed 1/{total_components} — Temurin JRE",
+        flush=True,
+    )
     dita_spec = lock["components"]["dita_ot"]
+    print(
+        f"Documentation toolchain bootstrap: component 2/{total_components} — DITA-OT",
+        flush=True,
+    )
     dita_home = install_component("dita-ot", dita_spec, cache, offline)
     smoke_build(
         dita_home,
@@ -295,8 +308,20 @@ def bootstrap(lock_path: Path, offline: bool, skip_python: bool) -> None:
         expected_java_version=java_spec["version"].split("+", 1)[0],
         expected_dita_version=dita_spec["version"],
     )
+    print(
+        f"Documentation toolchain bootstrap: completed 2/{total_components} — DITA-OT",
+        flush=True,
+    )
     if not skip_python:
+        print(
+            f"Documentation toolchain bootstrap: component 3/{total_components} — Python lock",
+            flush=True,
+        )
         install_python(lock, cache, offline)
+        print(
+            f"Documentation toolchain bootstrap: completed 3/{total_components} — Python lock",
+            flush=True,
+        )
     print(f"Documentation toolchain ready in {cache.relative_to(REPOSITORY_ROOT)}", flush=True)
 
 

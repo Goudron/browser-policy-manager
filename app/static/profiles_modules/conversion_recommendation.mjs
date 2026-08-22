@@ -33,10 +33,6 @@ export function recommendationCopy({ sourceSchema, targetSchema, t = (_key, fall
             "profiles.schema_conversion_recommendation_action",
             "Review update to {target_schema}",
         ),
-        consequence: translate(
-            "profiles.schema_conversion_recommendation_consequence",
-            "This opens a conversion preview from {source_schema} to {target_schema}. Your profile will not change until you review and confirm.",
-        ),
         accessibleName: translate(
             "profiles.schema_conversion_recommendation_accessible_name",
             "Review schema conversion preview from {source_schema} to {target_schema}",
@@ -58,7 +54,6 @@ export function buildLibraryConversionRecommendationMarkup({
     const href = buildLibraryConversionPreviewHref(profile, recommendation, origin);
     if (!href) return "";
     const copy = recommendationCopy({ sourceSchema, targetSchema, t });
-    const consequenceId = `library-conversion-recommendation-consequence-${profile.id}`;
     return `
         <div
             class="library-conversion-recommendation"
@@ -71,15 +66,9 @@ export function buildLibraryConversionRecommendationMarkup({
                 data-schema-conversion-preview-entry
                 data-schema-conversion-profile-id="${profile.id}"
                 data-schema-conversion-target-artifact-id="${escapeHtml(recommendation.action.preview_target_artifact_id)}"
-                aria-describedby="${consequenceId}"
                 aria-label="${escapeHtml(copy.accessibleName)}">
                 ${escapeHtml(copy.action)}
             </a>
-            <p
-                id="${consequenceId}"
-                class="library-conversion-recommendation-consequence">
-                ${escapeHtml(copy.consequence)}
-            </p>
         </div>
     `;
 }

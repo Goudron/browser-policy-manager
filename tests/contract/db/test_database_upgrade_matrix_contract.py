@@ -11,6 +11,9 @@ from alembic.script import ScriptDirectory
 
 from app.core.config import Settings
 from app.core.policy_validation import validate_profile_policies_for_channel
+from app.core.profile_baseline_provenance import legacy_migration_baseline_provenance
+from app.core.profile_certificate_provenance import imported_certificate_provenance
+from app.core.profile_extension_provenance import imported_extension_provenance
 from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNEL_SET
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -64,6 +67,22 @@ def _materialize_source_shape(
     if "name_casefold" in shape["required_columns"]:
         for row in source_rows:
             row.setdefault("name_casefold", str(row["name"]).casefold())
+    if "baseline_provenance" in shape["required_columns"]:
+        for row in source_rows:
+            # Existing head-idempotent fixture rows model old persisted data.
+            # The M3 revision's explicit all-row default is their only
+            # admissible baseline when a current-head source is materialized.
+            row.setdefault("baseline_provenance", legacy_migration_baseline_provenance())
+    if "extension_provenance" in shape["required_columns"]:
+        for row in source_rows:
+            # M7-07 explicitly classifies every pre-attribution extension
+            # value as imported; it never reconstructs its source from flags.
+            row.setdefault("extension_provenance", imported_extension_provenance(row["flags"]))
+    if "certificate_provenance" in shape["required_columns"]:
+        for row in source_rows:
+            # M9-04 treats historical certificate-related values as imported
+            # and deliberately leaves their M3 benchmark envelope untouched.
+            row.setdefault("certificate_provenance", imported_certificate_provenance(row["flags"]))
     columns = list(shape["required_columns"])
     columns.extend(
         column
@@ -193,8 +212,13 @@ def test_golden_scenarios_cover_every_source_and_materialize_in_memory():
     scenarios = {scenario["id"]: scenario for scenario in fixture["scenarios"]}
 
     assert fixture["matrix"] == MATRIX_PATH.relative_to(REPO_ROOT).as_posix()
+    # This retained fixture records pre-M3 source values and their historical
+    # field-preservation expectations.  The M3 envelope is synthesized for
+    # every old row rather than copied from a source value and is proven by the
+    # real migration suites below.
     assert set(fixture["head_profile_fields"]) == (
-        set(matrix["target_head_invariants"]["profile_columns"]) - {"name_casefold"}
+        set(matrix["target_head_invariants"]["profile_columns"])
+        - {"name_casefold", "baseline_provenance", "extension_provenance", "certificate_provenance"}
     )
     assert len(scenarios) == len(fixture["scenarios"])
 
@@ -223,7 +247,12 @@ def test_golden_scenarios_cover_every_source_and_materialize_in_memory():
 def test_golden_expected_rows_preserve_data_defaults_and_policy_validity():
     matrix = _load_json(MATRIX_PATH)
     fixture = _load_json(FIXTURE_PATH)
-    expected_fields = set(matrix["target_head_invariants"]["profile_columns"]) - {"name_casefold"}
+    expected_fields = set(matrix["target_head_invariants"]["profile_columns"]) - {
+        "name_casefold",
+        "baseline_provenance",
+        "extension_provenance",
+        "certificate_provenance",
+    }
     immutable_fields = {
         "id",
         "name",

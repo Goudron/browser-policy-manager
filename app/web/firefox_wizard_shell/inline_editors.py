@@ -120,7 +120,9 @@ FIELD_LABEL_KEYS = {
 
 INLINE_EDITOR_POLICY_IDS = {
     "AIControls",
+    "AllowedDomainsForApps",
     "AppAutoUpdate",
+    "AutoLaunchProtocolsFromOrigins",
     "Authentication",
     "BlockAboutConfig",
     "BlockAboutProfiles",
@@ -140,6 +142,7 @@ INLINE_EDITOR_POLICY_IDS = {
     "DontCheckDefaultBrowser",
     "ExtensionSettings",
     "GenerativeAI",
+    "GoToIntranetSiteForSingleWordEntryInAddressBar",
     "FirefoxHome",
     "FirefoxSuggest",
     "Handlers",
@@ -147,8 +150,10 @@ INLINE_EDITOR_POLICY_IDS = {
     "IPProtectionAvailable",
     "InstallAddonsPermission",
     "LocalNetworkAccess",
+    "LocalFileLinks",
     "ManagedBookmarks",
     "NewTabPage",
+    "NoDefaultBookmarks",
     "OfferToSaveLogins",
     "OverrideFirstRunPage",
     "OverridePostUpdatePage",
@@ -168,6 +173,7 @@ INLINE_EDITOR_POLICY_IDS = {
     "WindowsSSO",
     "XSLTEnabled",
     "HttpsOnlyMode",
+    "HttpAllowlist",
 }
 
 
@@ -186,6 +192,12 @@ def build_inline_editor(definition) -> dict[str, Any] | None:
 
     if definition.type == "array" and definition.items_type == "object":
         return _build_array_inline_editor(definition)
+
+    if definition.type == "array" and definition.items_type == "string":
+        return {
+            "kind": "string-list",
+            "managed_fields": [],
+        }
 
     if definition.type == "boolean":
         return {

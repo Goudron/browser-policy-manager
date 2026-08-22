@@ -4,7 +4,7 @@
   <title>Ein geführtes Profil speichern und herunterladen</title>
   <shortdesc><uicontrol>Speichern</uicontrol> Sie das überprüfte geführte Profil und laden Sie das Übergabeartefakt herunter, wenn die Konfiguration fertig ist.</shortdesc>
   <taskbody>
-    <prereq><p>Die Überprüfung in Schritt 6 ist abgeschlossen und die Validierungswarnungen wurden verstanden.</p></prereq>
+    <prereq><p>Die Überprüfung in Schritt 8 ist abgeschlossen und die Validierungswarnungen wurden verstanden.</p></prereq>
     <context><p><uicontrol>Speichern</uicontrol> zeichnet das BPM-Profil auf; Beim Herunterladen wird die überprüfte Version zur Richtlinienübergabe bereitgestellt.</p></context>
     <steps>
       <step><cmd>Wählen Sie „<uicontrol>Speichern</uicontrol>“, um den aktuellen Profilstatus zu speichern.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>

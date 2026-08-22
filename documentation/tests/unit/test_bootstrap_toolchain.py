@@ -22,7 +22,7 @@ def test_lock_pins_supported_archives_and_test_dependencies() -> None:
     assert lock["components"]["dita_ot"]["version"] == "4.4"
     assert len(lock["components"]["dita_ot"]["archive"]["sha256"]) == 64
     java = lock["components"]["java"]
-    assert java["version"] == "21.0.12+8"
+    assert java["version"] == "21.0.12.1+1"
     assert len(java["platforms"]["linux-x86_64"]["archive"]["sha256"]) == 64
 
     requirements = (ROOT / lock["python"]["requirements_lock"]).read_text(encoding="utf-8")

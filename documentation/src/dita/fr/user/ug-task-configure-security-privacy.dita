@@ -4,8 +4,15 @@
   <title>Configurer la sécurité et la confidentialité</title>
   <shortdesc>Utilisez l'étape 3 pour la confidentialité, les autorisations, les cookies, le nettoyage, DNS et le renforcement des contrôles.</shortdesc>
   <taskbody>
-    <prereq><p>Un brouillon de profil guidé est ouvert sur le canal de schéma prévu. Les paramètres de confidentialité de</p></prereq>
-    <context><p>Les paramètres de sécurité et de confidentialité peuvent modifier l’expérience utilisateur et le niveau de risque. Vérifiez les avertissements avant d’enregistrer.</p></context>
+    <prereq><p>Un profil enregistré est ouvert dans l’<uicontrol>Éditeur guidé</uicontrol> avec le schéma prévu en lecture seule.</p></prereq>
+    <context><p><uicontrol>Sécurité et vie privée</uicontrol> peut modifier l’expérience utilisateur et le niveau de risque. Les certificats, racines d’entreprise, authentification et périphériques de sécurité appartiennent uniquement à l’étape 4.</p>
+      <fig id="screenshot-guided-step-4-certificates-trust">
+        <title>Certificats et confiance</title>
+        <image keyref="screenshot.guided-step-4-certificates-trust" placement="break" scalefit="yes" align="center">
+          <alt>Étape 4 de l’éditeur guidé avec les contrôles de posture de confiance et de références de certificats.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
       <step><cmd>Ouvrez l’étape 3 de la configuration guidée.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Configurez les contrôles de confidentialité et les autorisations par défaut.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
@@ -13,7 +20,7 @@
       <step><cmd>Vérifiez les messages de validation et expliquez toute exception dans la révision.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
     <result><p>Le profil a une posture de sécurité et de confidentialité révisée.</p></result>
-    <postreq><p>Récupération : si le flux de travail d'un site est interrompu, revisitez les paramètres d'autorisation ou de cookies et comparez-les à l'objectif du profil.</p></postreq>
+    <postreq><p>Récupération : examinez à nouveau les paramètres d’autorisation ou de cookies. Pour les certificats, racines d’entreprise ou l’authentification, utilisez l’étape 4 et vérifiez le comportement d’exécution hors de BPM.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-users-addons-sites"/>

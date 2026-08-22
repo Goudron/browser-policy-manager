@@ -118,6 +118,14 @@ def test_all_authority_catalog_findings_and_additional_corrections_are_resolved(
     )
     for finding in authority["catalog_quality_findings"]:
         assert finding["status"] == "resolved"
+        if disposition := finding.get("current_topology_disposition"):
+            assert disposition["status"] == "superseded"
+            assert disposition["owner"] == "BPM096-M10-05"
+            assert (
+                _json(ROOT / "app/i18n/zh-CN.json")[disposition["current_catalog_key"]]
+                == disposition["current_values"]["zh-CN"]
+            )
+            continue
         actual = [
             _json(ROOT / f"app/i18n/{locale}.json")[finding["catalog_key"]]
             for locale in finding["affected_locales"]

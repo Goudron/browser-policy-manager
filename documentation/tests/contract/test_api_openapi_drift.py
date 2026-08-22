@@ -174,6 +174,7 @@ PROGRAMMATIC_OPERATIONS: tuple[OperationContract, ...] = (
         request=(("application/json", ("ProfileUpdate",)),),
         responses=(
             ("200", ("application/json",), ("ProfileRead",)),
+            ("409", ("application/json",), ("ProfileUpdateConflictErrorEnvelope",)),
             ("422", ("application/json",), ("HTTPValidationError",)),
         ),
         documented_statuses=("200", "400", "404", "409", "422"),
@@ -216,6 +217,75 @@ PROGRAMMATIC_OPERATIONS: tuple[OperationContract, ...] = (
             ("503", ("application/json",), ("ConversionApplyErrorEnvelope",)),
         ),
         documented_statuses=("200", "404", "409", "422", "500", "503"),
+    ),
+    OperationContract(
+        api_id="API-PROFILE-012",
+        method="POST",
+        path="/api/profiles/prepare/new",
+        operation_id="create_prepared_new_profile_api_profiles_prepare_new_post",
+        tags=("profiles",),
+        guide_topics=("admin-task-use-reusable-api-examples",),
+        inventory_topic="admin-task-use-reusable-api-examples",
+        request=(("application/json", ()),),
+        responses=(
+            ("201", ("application/json",), ("ProfileRead",)),
+            ("409", ("application/json",), ("ProfilePreparationErrorEnvelope",)),
+            ("422", ("application/json",), ("ProfilePreparationErrorEnvelope",)),
+            ("500", ("application/json",), ("ProfilePreparationErrorEnvelope",)),
+        ),
+        documented_statuses=("201", "409", "422", "500"),
+    ),
+    OperationContract(
+        api_id="API-PROFILE-013",
+        method="POST",
+        path="/api/profiles/prepare/duplicate",
+        operation_id="create_prepared_duplicate_profile_api_profiles_prepare_duplicate_post",
+        tags=("profiles",),
+        guide_topics=("admin-task-use-reusable-api-examples",),
+        inventory_topic="admin-task-use-reusable-api-examples",
+        request=(("application/json", ()),),
+        responses=(
+            ("201", ("application/json",), ("ProfileRead",)),
+            ("404", ("application/json",), ("ProfilePreparationErrorEnvelope",)),
+            ("409", ("application/json",), ("ProfilePreparationErrorEnvelope",)),
+            ("422", ("application/json",), ("ProfilePreparationErrorEnvelope",)),
+            ("500", ("application/json",), ("ProfilePreparationErrorEnvelope",)),
+        ),
+        documented_statuses=("201", "404", "409", "422", "500"),
+    ),
+    OperationContract(
+        api_id="API-PROFILE-015",
+        method="POST",
+        path="/api/profiles/prepare/duplicate/preview",
+        operation_id="preview_prepared_duplicate_profile_api_profiles_prepare_duplicate_preview_post",
+        tags=("profiles",),
+        guide_topics=("admin-task-use-reusable-api-examples",),
+        inventory_topic="admin-task-use-reusable-api-examples",
+        responses=(
+            ("200", ("application/json",), ("DuplicateProfilePreparationPreview",)),
+            ("404", ("application/json",), ("ProfilePreparationErrorEnvelope",)),
+            ("422", ("application/json",), ("ProfilePreparationErrorEnvelope",)),
+            ("500", ("application/json",), ("ProfilePreparationErrorEnvelope",)),
+        ),
+        documented_statuses=("200", "404", "422", "500"),
+    ),
+    OperationContract(
+        api_id="API-PROFILE-014",
+        method="GET",
+        path="/api/profiles/extensions/amo-search",
+        operation_id="search_amo_extensions_api_profiles_extensions_amo_search_get",
+        tags=("profiles",),
+        guide_topics=("admin-task-use-reusable-api-examples",),
+        inventory_topic="admin-task-use-reusable-api-examples",
+        parameters=(
+            ("q", "query", True, "string", None, None, None),
+            ("locale", "query", True, "string", None, None, None),
+        ),
+        responses=(
+            ("200", ("application/json",), ("AmoSearchApiResponse",)),
+            ("403", ("application/json",), ("AmoSearchApiResponse",)),
+        ),
+        documented_statuses=("200", "403"),
     ),
     OperationContract(
         api_id="API-PROFILE-006",
@@ -439,17 +509,58 @@ EXPECTED_MODEL_FIELDS = {
             "schema_version": ("anyOf:string|null", None, None, None),
             "flags": ("anyOf:object|null", None, None, None),
             "compliance": ("anyOf:object|null", None, None, None),
+            "extension_provenance": ("anyOf:object|null", None, None, None),
+            "certificate_provenance": ("anyOf:object|null", None, None, None),
             "expected_revision": ("anyOf:integer|null", None, None, None),
         },
     },
+    "ProfilePreparationError": {
+        "required": (
+            "kind",
+            "contract_version",
+            "code",
+            "i18n_key",
+            "http_status",
+            "mutation",
+            "parameters",
+        ),
+        "properties": {
+            "kind": ("string", None, None, None),
+            "contract_version": ("integer", None, None, None),
+            "code": ("string", None, None, None),
+            "i18n_key": ("string", None, None, None),
+            "http_status": ("integer", None, None, None),
+            "mutation": ("string", None, None, None),
+            "parameters": ("object", None, None, None),
+        },
+    },
+    "ProfilePreparationErrorEnvelope": {
+        "required": ("detail",),
+        "properties": {"detail": ("ref:ProfilePreparationError", None, None, None)},
+    },
     "ProfileRead": {
-        "required": ("name", "id", "revision", "created_at", "updated_at", "is_deleted"),
+        "required": (
+            "name",
+            "id",
+            "revision",
+            "baseline_provenance",
+            "baseline_display",
+            "extension_provenance",
+            "certificate_provenance",
+            "created_at",
+            "updated_at",
+            "is_deleted",
+        ),
         "properties": {
             "name": ("string", None, None, 255),
             "description": ("anyOf:string|null", None, None, None),
             "schema_version": ("string", "esr-153.0", None, 50),
             "flags": ("object", None, None, None),
             "compliance": ("anyOf:object|null", None, None, None),
+            "baseline_provenance": ("object", None, None, None),
+            "baseline_display": ("object", None, None, None),
+            "extension_provenance": ("object", None, None, None),
+            "certificate_provenance": ("object", None, None, None),
             "id": ("integer", None, None, None),
             "revision": ("integer", None, None, None),
             "created_at": ("string", None, None, None),
@@ -687,3 +798,18 @@ def test_openapi_examples_match_documented_copyable_examples_boundary() -> None:
         "API-VAL-001 OpenAPI example drifted; update admin-task-validate-firefox-policies-json "
         "and reusable copyable examples if the validation example changes."
     )
+    preparation_error_example = schema["components"]["schemas"]["ProfilePreparationErrorEnvelope"][
+        "example"
+    ]
+    assert preparation_error_example == {
+        "detail": {
+            "kind": "profile-preparation-error",
+            "contract_version": 1,
+            "code": "preparation_conversion_blocked",
+            "i18n_key": "profiles.preparation_error_preparation_conversion_blocked",
+            "http_status": 409,
+            "mutation": "none",
+            "parameters": {},
+        }
+    }
+    assert "policy" not in str(preparation_error_example).lower()

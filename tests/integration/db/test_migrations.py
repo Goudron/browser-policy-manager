@@ -8,12 +8,23 @@ from alembic.config import Config
 from sqlalchemy import create_engine, inspect, text
 
 from alembic import command
+from app.core.profile_baseline_provenance import legacy_migration_baseline_provenance
+from app.core.profile_certificate_provenance import imported_certificate_provenance
+from app.core.profile_extension_provenance import imported_extension_provenance
 
-CURRENT_HEAD = "20260804_add_profile_name_casefold"
+CURRENT_HEAD = "20260821_add_profile_certificate_provenance"
 PRE_M4_04_HEAD = "20260721_upgrade_profiles_to_firefox153_dual_esr"
 PRE_FIREFOX_153_HEAD = "20260620_upgrade_profiles_to_firefox152"
 OWNER_DROP_HEAD = "20260606_drop_profile_owner"
 PRE_OWNER_DROP_HEAD = "20260521_upgrade_profiles_to_firefox151"
+
+
+def _historical_m3_legacy_baseline_provenance() -> dict[str, object]:
+    """Return M3's persisted legacy shape, including its absent optional ID."""
+
+    result = legacy_migration_baseline_provenance()
+    result["starter"].pop("preset_id")
+    return result
 
 
 def test_alembic_upgrade_head_on_sqlite_tmp(tmp_path: Path):
@@ -49,15 +60,126 @@ def test_alembic_upgrade_head_on_sqlite_tmp(tmp_path: Path):
         cols = {c["name"] for c in insp.get_columns("profiles")}
         assert "deleted_at" in cols
         assert "compliance" in cols
+        assert "baseline_provenance" in cols
+        assert "extension_provenance" in cols
+        assert "certificate_provenance" in cols
+        assert "preparation_idempotency_key" in cols
+        assert "preparation_request_fingerprint" in cols
         assert "name_casefold" in cols
         assert "revision" in cols
         assert "owner" not in cols
         index_names = {idx["name"] for idx in insp.get_indexes("profiles")}
         assert "ix_profiles_owner" not in index_names
         assert "ix_profiles_name_casefold" in index_names
+        assert "uq_profiles_preparation_idempotency_key" in index_names
         with engine.connect() as conn:
             version = conn.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
         assert version == CURRENT_HEAD
+    finally:
+        engine.dispose()
+
+
+def test_baseline_provenance_upgrade_downgrade_and_recovery_cover_archived_rows(
+    tmp_path: Path,
+):
+    """M3 provenance never identifies an old active or archived profile from data."""
+
+    db_path = tmp_path / "baseline-provenance-round-trip.db"
+    cfg = Config("alembic.ini")
+    cfg.set_main_option("sqlalchemy.url", f"sqlite:///{db_path}")
+    command.upgrade(cfg, "20260804_add_profile_name_casefold")
+
+    engine = create_engine(f"sqlite:///{db_path}", future=True)
+    try:
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    "INSERT INTO profiles (name, name_casefold, schema_version, flags, compliance) "
+                    "VALUES (:name, :name_casefold, 'release-153', :flags, :compliance)"
+                ),
+                {
+                    "name": "legacy-active-lookalike",
+                    "name_casefold": "legacy-active-lookalike",
+                    "flags": json.dumps({"DisableTelemetry": True}),
+                    "compliance": json.dumps({"starter": "recognizable-but-unproven"}),
+                },
+            )
+            connection.execute(
+                text(
+                    "INSERT INTO profiles (name, name_casefold, schema_version, flags, deleted_at) "
+                    "VALUES (:name, :name_casefold, 'release-153', :flags, CURRENT_TIMESTAMP)"
+                ),
+                {
+                    "name": "legacy-archived-lookalike",
+                    "name_casefold": "legacy-archived-lookalike",
+                    "flags": json.dumps({"DisableTelemetry": True}),
+                },
+            )
+    finally:
+        engine.dispose()
+
+    command.upgrade(cfg, "head")
+    engine = create_engine(f"sqlite:///{db_path}", future=True)
+    try:
+        with engine.connect() as connection:
+            rows = connection.execute(
+                text(
+                    "SELECT name, baseline_provenance, extension_provenance, certificate_provenance "
+                    "FROM profiles ORDER BY name"
+                )
+            ).all()
+            assert [json.loads(value) for _, value, _, _ in rows] == [
+                _historical_m3_legacy_baseline_provenance(),
+                _historical_m3_legacy_baseline_provenance(),
+            ]
+            assert [json.loads(value) for _, _, value, _ in rows] == [
+                imported_extension_provenance({"DisableTelemetry": True}),
+                imported_extension_provenance({"DisableTelemetry": True}),
+            ]
+            assert [json.loads(value) for _, _, _, value in rows] == [
+                imported_certificate_provenance({"DisableTelemetry": True}),
+                imported_certificate_provenance({"DisableTelemetry": True}),
+            ]
+            assert {
+                constraint["name"]: constraint["sqltext"]
+                for constraint in inspect(engine).get_check_constraints("profiles")
+            } == {
+                "ck_profiles_baseline_provenance_present": "baseline_provenance IS NOT NULL",
+                "ck_profiles_preparation_idempotency_pair": (
+                    "(preparation_idempotency_key IS NULL "
+                    "AND preparation_request_fingerprint IS NULL) "
+                    "OR (preparation_idempotency_key IS NOT NULL "
+                    "AND preparation_request_fingerprint IS NOT NULL)"
+                ),
+                "ck_profiles_extension_provenance_present": "extension_provenance IS NOT NULL",
+                "ck_profiles_certificate_provenance_present": "certificate_provenance IS NOT NULL",
+            }
+    finally:
+        engine.dispose()
+
+    command.downgrade(cfg, "20260804_add_profile_name_casefold")
+    command.upgrade(cfg, "head")
+    engine = create_engine(f"sqlite:///{db_path}", future=True)
+    try:
+        with engine.connect() as connection:
+            recovered = connection.execute(
+                text(
+                    "SELECT baseline_provenance, extension_provenance, certificate_provenance "
+                    "FROM profiles ORDER BY name"
+                )
+            ).all()
+        assert [json.loads(baseline) for baseline, _, _ in recovered] == [
+            _historical_m3_legacy_baseline_provenance(),
+            _historical_m3_legacy_baseline_provenance(),
+        ]
+        assert [json.loads(extension) for _, extension, _ in recovered] == [
+            imported_extension_provenance({"DisableTelemetry": True}),
+            imported_extension_provenance({"DisableTelemetry": True}),
+        ]
+        assert [json.loads(certificate) for _, _, certificate in recovered] == [
+            imported_certificate_provenance({"DisableTelemetry": True}),
+            imported_certificate_provenance({"DisableTelemetry": True}),
+        ]
     finally:
         engine.dispose()
 
@@ -112,7 +234,8 @@ def test_alembic_repairs_only_the_retained_root_alias_data_path(tmp_path: Path):
             row = (
                 conn.execute(
                     text("""
-                    SELECT id, name, description, schema_version, flags, compliance, revision,
+                    SELECT id, name, description, schema_version, flags, compliance,
+                           baseline_provenance, extension_provenance, certificate_provenance, revision,
                            created_at, updated_at, deleted_at
                     FROM profiles
                     """)
@@ -128,6 +251,19 @@ def test_alembic_repairs_only_the_retained_root_alias_data_path(tmp_path: Path):
             "schema_version": "release-153",
             "flags": json.dumps({"Proxy": {"Mode": "none"}}, sort_keys=True),
             "compliance": None,
+            "baseline_provenance": json.dumps(
+                _historical_m3_legacy_baseline_provenance(),
+                sort_keys=True,
+                separators=(",", ":"),
+            ),
+            "extension_provenance": json.dumps(
+                imported_extension_provenance({"Proxy": {"Mode": "none"}}),
+                sort_keys=True,
+            ),
+            "certificate_provenance": json.dumps(
+                imported_certificate_provenance({"Proxy": {"Mode": "none"}}),
+                sort_keys=True,
+            ),
             "revision": 1,
             "created_at": "2025-10-22 08:30:00",
             "updated_at": "2025-10-23 09:45:00",

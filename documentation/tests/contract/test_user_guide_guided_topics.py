@@ -167,11 +167,13 @@ def test_guided_topics_are_inventory_case_mapped_keyed_and_reachable() -> None:
 def test_english_guided_topics_cover_all_steps_control_families_and_ai_boundary() -> None:
     text = "\n".join("".join(_topic_root("en", topic_id).itertext()) for topic_id in TOPICS)
     for required in (
-        "Profile & baseline",
-        "Browser access & defaults",
+        "Browser, network & search",
+        "URLs, sites & navigation",
         "Security & privacy",
-        "Users, add-ons & sites",
-        "AI & smart features",
+        "Certificates & trust",
+        "Users, language & sync",
+        "Extensions",
+        "AI",
         "Review & export",
         "search",
         "schema channel",

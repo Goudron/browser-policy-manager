@@ -2,12 +2,12 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-firefox-ai-policies" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Configurar las políticas de Firefox para IA y funciones inteligentes</title>
-  <shortdesc>Use el paso 5 para configurar las políticas de Firefox disponibles para IA, búsqueda visual y otras funciones inteligentes.</shortdesc>
+  <shortdesc>Use el paso 7 para configurar las políticas de Firefox disponibles para IA, búsqueda visual y otras funciones inteligentes.</shortdesc>
   <taskbody>
     <prereq><p>Seleccione Release 153 o ESR 153.0. Algunos controles no están disponibles en ESR 140.13.</p></prereq>
     <context><p>Este tema documenta las configuraciones de políticas existentes de Firefox como funcionalidad del producto. Estos controles del navegador son independientes del asistente de documentación y no cambian su chat ni la búsqueda determinista.</p></context>
     <steps>
-      <step><cmd>Abra el paso 5, «<uicontrol>IA y funciones inteligentes</uicontrol>».</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
+      <step><cmd>Abra el paso 7, «<uicontrol>IA</uicontrol>».</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
       <step><cmd>Revise las políticas de IA, búsqueda visual y navegador inteligente que admite el esquema seleccionado.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
       <step><cmd>Habilite, deshabilite o abandone cada política admitida según el objetivo del perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Si falta un control en ESR 140.13, trátelo como no compatible y no agregue el ajuste manualmente.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>

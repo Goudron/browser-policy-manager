@@ -1,3 +1,9 @@
+import {
+    formatNavigationValidationMessage,
+    retainsImportedRawNavigationValue,
+    validateNavigationValue,
+} from "./profiles_modules/navigation_url.mjs";
+
     function create({ dependencies = {} }) {
         const { t, textToList, parseBooleanSelectValue } = dependencies;
 
@@ -95,9 +101,14 @@
             if (fieldKind === "string-list") {
                 const listInputs = Array.from(control.querySelectorAll("[data-schema-list-item]"));
                 if (listInputs.length > 0) {
-                    const values = listInputs
-                        .map((input) => String(input.value || "").trim())
-                        .filter(Boolean);
+                    const values = [];
+                    for (const input of listInputs) {
+                        const raw = String(input.value || "");
+                        if (!raw) continue;
+                        const validated = validateNavigationControlValue(input, raw);
+                        if (!validated.ok) return validated;
+                        values.push(validated.value);
+                    }
                     return values.length > 0 ? { ok: true, hasValue: true, value: values } : { ok: true, hasValue: false, value: [] };
                 }
                 const values = textToList(control.value || "");
@@ -157,9 +168,32 @@
             }
 
             const raw = String(control.value || "");
+            const validated = validateNavigationControlValue(control, raw);
+            if (!validated.ok) return validated;
+            if (validated.navigation) return validated;
             const trimmed = raw.trim();
             if (!trimmed) return { ok: true, hasValue: false, value: null };
             return { ok: true, hasValue: true, value: trimmed };
+        }
+
+        function validateNavigationControlValue(control, raw) {
+            const kind = control?.dataset?.navigationUrlKind || "";
+            if (!kind || !raw) return { ok: true, navigation: false, hasValue: Boolean(raw), value: raw };
+            const verdict = validateNavigationValue(raw, kind);
+            if (verdict.valid || retainsImportedRawNavigationValue(raw, control.dataset.navigationUrlOriginal, kind)) {
+                return { ok: true, navigation: true, hasValue: true, value: raw };
+            }
+            return {
+                ok: false,
+                navigation: true,
+                hasValue: false,
+                value: null,
+                message: formatNavigationValidationMessage(
+                    t,
+                    control.dataset.navigationUrlFieldLabel || "URL",
+                    verdict,
+                ),
+            };
         }
 
         function getImmediateSchemaNestedFieldNodes(container) {

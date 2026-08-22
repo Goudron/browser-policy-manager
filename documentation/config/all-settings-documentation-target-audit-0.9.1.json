@@ -2,7 +2,7 @@
   "schema_version": 1,
   "audit_id": "bpm-all-settings-documentation-target-audit-0.9.1",
   "backlog_item": "BPM091-M9-01",
-  "target_bpm_version": "0.9.5.1",
+  "target_bpm_version": "0.9.6",
   "status": "accepted",
   "audited_sources": {
     "row_inventory": "app/static/profiles_settings_inventory.js",

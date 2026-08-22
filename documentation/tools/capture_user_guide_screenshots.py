@@ -8,6 +8,7 @@ import shutil
 import socket
 import struct
 import subprocess
+import sys
 import threading
 import time
 from collections import defaultdict
@@ -114,10 +115,22 @@ def _reset_sqlite_database(db_path: Path) -> None:
             candidate.unlink()
 
 
+def _upgrade_capture_database(db_path: Path) -> None:
+    """Create the temporary, Alembic-managed schema required by BPM startup."""
+
+    print("[screenshots] phase=migrate locale=all completed=0/0", flush=True)
+    subprocess.run(
+        [sys.executable, "-m", "alembic", "-c", "alembic.ini", "upgrade", "head"],
+        cwd=REPOSITORY_ROOT,
+        check=True,
+    )
+
+
 @contextlib.contextmanager
 def _run_app_server(*, db_path: Path, host: str = DEFAULT_HOST) -> Iterator[ServerHandle]:
     _reset_sqlite_database(db_path)
     os.environ["BPM_DATABASE_URL"] = f"sqlite+aiosqlite:///{db_path}"
+    _upgrade_capture_database(db_path)
 
     from app.main import create_app
 
@@ -384,6 +397,8 @@ def _set_locale_and_theme(driver: Any, locale: str, theme: str) -> None:
         """
         localStorage.setItem("bpm-lang-mode", arguments[0]);
         localStorage.setItem("bpm-theme-mode", arguments[1]);
+        document.documentElement.dataset.themeMode = arguments[1];
+        document.documentElement.dataset.theme = arguments[1];
         const lang = document.getElementById("lang");
         if (lang && lang.value !== arguments[0]) {
           lang.value = arguments[0];
@@ -397,6 +412,28 @@ def _set_locale_and_theme(driver: Any, locale: str, theme: str) -> None:
         """,
         locale,
         theme,
+    )
+    driver.execute_async_script(
+        """
+        const locale = arguments[0];
+        const done = arguments[arguments.length - 1];
+        document.documentElement.lang = locale;
+        fetch(`/i18n/${encodeURIComponent(locale)}.json`)
+          .then((response) => response.ok ? response.json() : {})
+          .then((catalog) => {
+            document.querySelectorAll('[data-i18n]').forEach((element) => {
+              const key = element.getAttribute('data-i18n');
+              if (key && typeof catalog[key] === 'string') element.textContent = catalog[key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach((element) => {
+              const key = element.getAttribute('data-i18n-placeholder');
+              if (key && typeof catalog[key] === 'string') element.placeholder = catalog[key];
+            });
+            done();
+          })
+          .catch(done);
+        """,
+        locale,
     )
     _wait_for(driver, "return document.documentElement.lang === arguments[0];", locale)
     _wait_for(driver, "return document.documentElement.dataset.theme === arguments[0];", theme)
@@ -469,6 +506,20 @@ def _click_selector(driver: Any, selector: str) -> None:
 
 
 def _prepare_scenario(driver: Any, scenario_id: str) -> None:
+    if scenario_id == "preparation-create":
+        _wait_for(
+            driver,
+            "return Boolean(document.querySelector('body[data-preparation-mode=\"create\"] #profile-preparation-form'));",
+        )
+        return
+
+    if scenario_id == "preparation-duplicate":
+        _wait_for(
+            driver,
+            "return Boolean(document.querySelector('body[data-preparation-mode=\"duplicate\"] #profile-preparation-source'));",
+        )
+        return
+
     if scenario_id == "library-overview":
         _wait_for(
             driver,
@@ -491,6 +542,25 @@ def _prepare_scenario(driver: Any, scenario_id: str) -> None:
     if scenario_id == "guided-editor-overview":
         _wait_for(
             driver, "return Boolean(document.querySelector('#wizard-panel .wizard-step--active'));"
+        )
+        return
+
+    if scenario_id in {
+        "guided-step-2-urls-sites-navigation",
+        "guided-step-4-certificates-trust",
+        "guided-step-6-extensions",
+    }:
+        step_by_scenario = {
+            "guided-step-2-urls-sites-navigation": "urls_sites_navigation",
+            "guided-step-4-certificates-trust": "certificates_trust",
+            "guided-step-6-extensions": "extensions",
+        }
+        step_id = step_by_scenario[scenario_id]
+        _click_selector(driver, f'#wizard-stepper [data-step-id="{step_id}"]')
+        _wait_for(
+            driver,
+            "return document.querySelector(arguments[0])?.classList.contains('is-active');",
+            f'[data-wizard-step-id="{step_id}"]',
         )
         return
 
@@ -660,14 +730,20 @@ def capture_screenshots(
             chromedriver_binary=chromedriver_binary,
         )
         try:
+            completed = 0
+            total = len(rows)
             for locale in matrix["locales"]:
                 if locale not in rows_by_locale:
                     continue
-                print(f"[screenshots] locale={locale} seed profiles", flush=True)
+                print(
+                    f"[screenshots] phase=seed locale={locale} completed={completed}/{total}",
+                    flush=True,
+                )
                 profile_ids = _seed_locale_profiles(server.base_url, locale)
                 for row in rows_by_locale[locale]:
                     print(
-                        f"[screenshots] capture {row['id']} -> {row['asset_path']}",
+                        f"[screenshots] phase=capture locale={locale} "
+                        f"completed={completed}/{total} {row['id']} -> {row['asset_path']}",
                         flush=True,
                     )
                     captured.append(
@@ -680,12 +756,17 @@ def capture_screenshots(
                             asset_root=asset_root,
                         )
                     )
+                    completed += 1
+                    print(
+                        f"[screenshots] phase=captured locale={locale} completed={completed}/{total}",
+                        flush=True,
+                    )
         finally:
             _close_browser(browser)
 
     report = {
         "schema_version": 1,
-        "backlog_item": "BPM091-M5-02",
+        "backlog_item": str(matrix["backlog_item"]),
         "matrix_id": matrix["matrix_id"],
         "target_bpm_version": matrix["target_bpm_version"],
         "capture_command": (
@@ -697,7 +778,7 @@ def capture_screenshots(
         "rows_expected": len(rows),
         "captured": captured,
     }
-    report_path = report_root / "user-guide-screenshots-0.9.1.json"
+    report_path = report_root / f"user-guide-screenshots-{matrix['target_bpm_version']}.json"
     report_path.write_text(
         json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
@@ -706,7 +787,7 @@ def capture_screenshots(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Capture the BPM 0.9.1 minimal User Guide screenshot matrix.",
+        description="Capture the BPM User Guide screenshot matrix with visible phase progress.",
     )
     parser.add_argument("--matrix", type=Path, default=DEFAULT_MATRIX)
     parser.add_argument("--asset-root", type=Path, default=DEFAULT_ASSET_ROOT)

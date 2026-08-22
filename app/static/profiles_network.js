@@ -1,3 +1,9 @@
+import {
+    formatNavigationValidationMessage,
+    retainsImportedRawNavigationValue,
+    validateNavigationValue,
+} from "./profiles_modules/navigation_url.mjs";
+
     function create({
         documentRef = document,
         elements = {},
@@ -77,9 +83,6 @@
             wizardProxyAutoLoginEl,
             wizardProxyUseDnsEl,
             wizardProxyModeGroups = [],
-            wizardNetworkEnterpriseSectionStatusEl,
-            wizardNetworkEnterpriseFineTuningToggleEl,
-            wizardNetworkEnterpriseFineTuningPanelEl,
         } = elements;
 
         const {
@@ -90,7 +93,6 @@
             wizardFirefoxSuggestManagedKeys = [],
             wizardProxyManagedKeys = [],
         } = state;
-        let networkEnterprisePanelPreference = null;
         let firefoxHomePanelPreference = null;
         let searchDefaultsPanelPreference = null;
         let searchSuggestPanelPreference = null;
@@ -130,24 +132,6 @@
                 PromptForDownloadLocation: true,
             },
         };
-        const networkEnterpriseManagedKeys = ["WindowsSSO", "Certificates"];
-        const networkEnterprisePresets = {
-            defaults: {},
-            sso: {
-                WindowsSSO: true,
-            },
-            roots: {
-                Certificates: {
-                    ImportEnterpriseRoots: true,
-                },
-            },
-            managed: {
-                WindowsSSO: true,
-                Certificates: {
-                    ImportEnterpriseRoots: true,
-                },
-            },
-        };
         const proxyPresets = {
             defaults: {},
             none: {
@@ -170,17 +154,40 @@
             }
         }
 
-        function hasMeaningfulValue(value) {
-            if (typeof value === "boolean" || typeof value === "number") return true;
-            if (typeof value === "string") return value.trim().length > 0;
-            if (Array.isArray(value)) return value.some((entry) => hasMeaningfulValue(entry));
-            if (value && typeof value === "object") return Object.values(value).some((entry) => hasMeaningfulValue(entry));
-            return false;
+        function readNavigationValue(element, kind, fieldKey, { allowPipeList = false } = {}) {
+            const raw = String(element?.value || "");
+            if (!raw) return { ok: true, value: "" };
+            const values = allowPipeList ? raw.split("|") : [raw];
+            const invalidVerdict = values.length === 0 || values.some((value) => !value)
+                ? { valid: false, code: "shape" }
+                : values.map((value) => validateNavigationValue(value, kind)).find((verdict) => !verdict.valid);
+            if (!invalidVerdict || retainsImportedRawNavigationValue(raw, element?.dataset?.navigationUrlOriginal, kind)) {
+                return { ok: true, value: raw };
+            }
+            return {
+                ok: false,
+                value: "",
+                message: formatNavigationValidationMessage(t, t(fieldKey), invalidVerdict),
+            };
         }
 
-        function countConfiguredObjectEntries(value) {
-            const currentObject = value && typeof value === "object" && !Array.isArray(value) ? value : {};
-            return Object.values(currentObject).filter((entry) => hasMeaningfulValue(entry)).length;
+        function readNavigationLines(element, kind, fieldKey) {
+            const raw = String(element?.value || "");
+            if (!raw) return { ok: true, value: [] };
+            const values = raw.split(/\r?\n/u).filter((line) => line !== "");
+            const original = element?.dataset?.navigationUrlOriginal;
+            const unchangedImported = raw === original;
+            for (const value of values) {
+                const verdict = validateNavigationValue(value, kind);
+                if (!verdict.valid && !unchangedImported) {
+                    return {
+                        ok: false,
+                        value: [],
+                        message: formatNavigationValidationMessage(t, t(fieldKey), verdict),
+                    };
+                }
+            }
+            return { ok: true, value: values };
         }
 
         function setPanelExpanded(panelEl, toggleEl, expanded, showLabel, hideLabel) {
@@ -191,32 +198,6 @@
                 toggleEl.setAttribute("aria-expanded", expanded ? "true" : "false");
                 toggleEl.textContent = expanded ? hideLabel : showLabel;
             }
-        }
-
-        function normalizeForCompare(value) {
-            if (Array.isArray(value)) {
-                return value.map((entry) => normalizeForCompare(entry));
-            }
-            if (value && typeof value === "object") {
-                return Object.keys(value).sort().reduce((acc, key) => {
-                    acc[key] = normalizeForCompare(value[key]);
-                    return acc;
-                }, {});
-            }
-            return value;
-        }
-
-        function valuesEqual(left, right) {
-            return JSON.stringify(normalizeForCompare(left)) === JSON.stringify(normalizeForCompare(right));
-        }
-
-        function matchesPolicyPreset(current, managedKeys, presetValues) {
-            return managedKeys.every((key) => {
-                if (Object.prototype.hasOwnProperty.call(presetValues, key)) {
-                    return valuesEqual(current[key], presetValues[key]);
-                }
-                return current[key] === undefined;
-            });
         }
 
         function renderPresetButtonState(buttons, activeKey, datasetKey = "networkEnterprisePreset") {
@@ -533,96 +514,6 @@
             }
 
             applyFromWizard();
-        }
-
-        function renderNetworkEnterpriseSectionStatus(parsed = {}) {
-            const resolved = parsed && typeof parsed === "object" ? parsed : {};
-            const dnsConfigured = countConfiguredObjectEntries(resolved.DNSOverHTTPS);
-            const authConfigured = countConfiguredObjectEntries(resolved.Authentication);
-            const certificatesConfigured = countConfiguredObjectEntries(resolved.Certificates);
-            const certificateInstallCount = Array.isArray(resolved?.Certificates?.Install)
-                ? resolved.Certificates.Install.length
-                : 0;
-            const activePreset = Object.entries(networkEnterprisePresets).find(([, presetValues]) =>
-                matchesPolicyPreset(resolved, networkEnterpriseManagedKeys, presetValues)
-            )?.[0] || "";
-            renderPresetButtonState(
-                Array.from(documentRef.querySelectorAll("[data-network-enterprise-preset]")),
-                activePreset,
-            );
-            const fragments = [];
-
-            if (activePreset === "sso") {
-                fragments.push(t("profiles.wizard_network_enterprise_section_state_sso_preset"));
-            } else if (activePreset === "roots") {
-                fragments.push(t("profiles.wizard_network_enterprise_section_state_roots_preset"));
-            } else if (activePreset === "managed") {
-                fragments.push(t("profiles.wizard_network_enterprise_section_state_managed_preset"));
-            }
-            if (dnsConfigured > 0) {
-                fragments.push(t("profiles.wizard_network_enterprise_section_state_doh"));
-            }
-            if (typeof resolved.WindowsSSO === "boolean" && !["sso", "managed"].includes(activePreset)) {
-                fragments.push(t("profiles.wizard_network_enterprise_section_state_windows_sso"));
-            }
-            if (authConfigured > 0) {
-                fragments.push(
-                    t("profiles.wizard_network_enterprise_section_state_authentication")
-                        .replace("{count}", String(authConfigured)),
-                );
-            }
-            if (certificatesConfigured > 0) {
-                fragments.push(
-                    t("profiles.wizard_network_enterprise_section_state_certificates")
-                        .replace("{count}", String(certificatesConfigured)),
-                );
-            }
-
-            setManualSectionStatus(
-                wizardNetworkEnterpriseSectionStatusEl,
-                fragments.length
-                    ? fragments.join(" • ")
-                    : t("profiles.wizard_network_enterprise_section_state_empty"),
-            );
-
-            const hasCustomEnterpriseConfig = authConfigured > 0
-                || certificateInstallCount > 0
-                || (hasMeaningfulValue(resolved.Certificates) && !activePreset);
-            setPanelExpanded(
-                wizardNetworkEnterpriseFineTuningPanelEl,
-                wizardNetworkEnterpriseFineTuningToggleEl,
-                networkEnterprisePanelPreference === null
-                    ? hasCustomEnterpriseConfig
-                    : networkEnterprisePanelPreference,
-                t("profiles.wizard_fine_tuning_show"),
-                t("profiles.wizard_fine_tuning_hide"),
-            );
-        }
-
-        function applyNetworkEnterprisePreset(presetKey) {
-            const editor = getEditor();
-            if (!editor) return;
-
-            try {
-                const mode = documentRef.getElementById("mode").value;
-                const parsed = fromEditorValue(editor.getValue(), mode);
-                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
-                const presetValues = networkEnterprisePresets[presetKey] || {};
-
-                networkEnterpriseManagedKeys.forEach((key) => {
-                    delete normalized[key];
-                });
-                Object.entries(presetValues).forEach(([key, value]) => {
-                    normalized[key] = cloneJsonValue(value, value);
-                });
-
-                setCurrentRaw(normalized);
-                editor.setValue(toEditorValue(normalized, mode));
-                renderNetworkEnterpriseSectionStatus(normalized);
-                setStatus(t("profiles.wizard_policy_applied"), "info");
-            } catch (e) {
-                setStatus(t("profiles.error_wizard_network").replace("{detail}", e.message || e), "error");
-            }
         }
 
         function getHomepageManualSectionStatus(parsed) {
@@ -1139,19 +1030,6 @@
                 t("profiles.wizard_fine_tuning_hide"),
             );
             renderProxySectionStatus(parsed?.Proxy);
-            renderNetworkEnterpriseSectionStatus(parsed);
-        }
-
-        function toggleNetworkEnterprisePanel() {
-            networkEnterprisePanelPreference = !(wizardNetworkEnterpriseFineTuningPanelEl?.hidden === false);
-            const editor = getEditor();
-            if (!editor) return;
-            try {
-                const parsed = fromEditorValue(editor.getValue(), documentRef.getElementById("mode").value);
-                renderNetworkEnterpriseSectionStatus(parsed && typeof parsed === "object" ? parsed : {});
-            } catch {
-                renderNetworkEnterpriseSectionStatus({});
-            }
         }
 
         function toggleHomeAndSearchPanel(panelKey) {
@@ -1205,7 +1083,6 @@
             ) {
                 return;
             }
-            networkEnterprisePanelPreference = null;
             firefoxHomePanelPreference = null;
             searchDefaultsPanelPreference = null;
             searchSuggestPanelPreference = null;
@@ -1260,11 +1137,13 @@
                 });
 
                 wizardHomepageUrlEl.value = typeof homepage.URL === "string" ? homepage.URL : "";
+                wizardHomepageUrlEl.dataset.navigationUrlOriginal = wizardHomepageUrlEl.value;
                 wizardHomepageAdditionalEl.value = Array.isArray(homepage.Additional)
                     ? homepage.Additional.join("\n")
                     : typeof homepage.Additional === "string"
                         ? homepage.Additional
                         : "";
+                wizardHomepageAdditionalEl.dataset.navigationUrlOriginal = wizardHomepageAdditionalEl.value;
                 wizardHomepageStartPageEl.value = typeof homepage.StartPage === "string" ? homepage.StartPage : "";
                 wizardHomepageLockedEl.checked = homepage.Locked === true;
                 wizardSearchBarEl.value = formatSearchBarSelectValue(normalized.SearchBar);
@@ -1283,7 +1162,9 @@
                 }
                 wizardNewTabPageEl.value = formatBooleanSelectValue(normalized.NewTabPage);
                 wizardOverrideFirstRunEl.value = typeof normalized.OverrideFirstRunPage === "string" ? normalized.OverrideFirstRunPage : "";
+                wizardOverrideFirstRunEl.dataset.navigationUrlOriginal = wizardOverrideFirstRunEl.value;
                 wizardOverridePostUpdateEl.value = typeof normalized.OverridePostUpdatePage === "string" ? normalized.OverridePostUpdatePage : "";
+                wizardOverridePostUpdateEl.dataset.navigationUrlOriginal = wizardOverridePostUpdateEl.value;
                 syncBooleanSelectGroup(wizardFirefoxHomeInputs, firefoxHome, "firefoxHomeKey");
                 syncBooleanSelectGroup(wizardFirefoxSuggestInputs, firefoxSuggest, "firefoxSuggestKey");
 
@@ -1378,8 +1259,33 @@
                 wizardFirefoxSuggestManagedKeys.forEach((key) => delete nextFirefoxSuggest[key]);
                 wizardProxyManagedKeys.forEach((key) => delete nextProxy[key]);
 
-                const homepageUrl = wizardHomepageUrlEl.value.trim();
-                const homepageAdditional = linesToArray(wizardHomepageAdditionalEl.value);
+                const homepageUrl = readNavigationValue(
+                    wizardHomepageUrlEl,
+                    "navigation-url",
+                    "profiles.wizard_homepage_url_label",
+                );
+                const homepageAdditional = readNavigationLines(
+                    wizardHomepageAdditionalEl,
+                    "navigation-url",
+                    "profiles.wizard_homepage_additional_label",
+                );
+                const overrideFirstRunPage = readNavigationValue(
+                    wizardOverrideFirstRunEl,
+                    "navigation-url",
+                    "profiles.wizard_override_first_run_label",
+                    { allowPipeList: true },
+                );
+                const overridePostUpdatePage = readNavigationValue(
+                    wizardOverridePostUpdateEl,
+                    "navigation-url",
+                    "profiles.wizard_override_post_update_label",
+                );
+                const navigationValues = [homepageUrl, homepageAdditional, overrideFirstRunPage, overridePostUpdatePage];
+                const invalidNavigationValue = navigationValues.find((item) => !item.ok);
+                if (invalidNavigationValue) {
+                    setStatus(invalidNavigationValue.message, "warn");
+                    return;
+                }
                 const homepageStartPage = wizardHomepageStartPageEl.value;
                 const searchBar = parseSearchBarSelectValue(wizardSearchBarEl.value);
                 const searchSuggestEnabled = parseBooleanSelectValue(wizardSearchSuggestEl.value);
@@ -1388,18 +1294,16 @@
                 const searchRemove = linesToArray(wizardSearchRemoveEl.value);
                 const searchAdd = buildSearchEngineAddItemsFromWizard();
                 const newTabPage = parseBooleanSelectValue(wizardNewTabPageEl.value);
-                const overrideFirstRunPage = wizardOverrideFirstRunEl.value.trim();
-                const overridePostUpdatePage = wizardOverridePostUpdateEl.value.trim();
 
-                if (homepageUrl) nextHomepage.URL = homepageUrl;
-                if (homepageAdditional.length) nextHomepage.Additional = homepageAdditional;
+                if (homepageUrl.value) nextHomepage.URL = homepageUrl.value;
+                if (homepageAdditional.value.length) nextHomepage.Additional = homepageAdditional.value;
                 if (homepageStartPage) nextHomepage.StartPage = homepageStartPage;
                 if (wizardHomepageLockedEl.checked) nextHomepage.Locked = true;
                 if (searchBar !== null) normalized.SearchBar = searchBar;
                 if (searchSuggestEnabled !== null) normalized.SearchSuggestEnabled = searchSuggestEnabled;
                 if (newTabPage !== null) normalized.NewTabPage = newTabPage;
-                if (overrideFirstRunPage) normalized.OverrideFirstRunPage = overrideFirstRunPage;
-                if (overridePostUpdatePage) normalized.OverridePostUpdatePage = overridePostUpdatePage;
+                if (overrideFirstRunPage.value) normalized.OverrideFirstRunPage = overrideFirstRunPage.value;
+                if (overridePostUpdatePage.value) normalized.OverridePostUpdatePage = overridePostUpdatePage.value;
                 if (searchAdd.length) nextSearchEngines.Add = searchAdd;
                 if (searchDefaultEngine) nextSearchEngines.Default = searchDefaultEngine;
                 if (searchPreventInstalls !== null) nextSearchEngines.PreventInstalls = searchPreventInstalls;
@@ -1478,11 +1382,6 @@
             }
         }
 
-        if (wizardNetworkEnterpriseFineTuningToggleEl) {
-            wizardNetworkEnterpriseFineTuningToggleEl.addEventListener("click", () => {
-                toggleNetworkEnterprisePanel();
-            });
-        }
         if (wizardFirefoxHomeFineTuningToggleEl) {
             wizardFirefoxHomeFineTuningToggleEl.addEventListener("click", () => {
                 toggleHomeAndSearchPanel("firefox_home");
@@ -1543,7 +1442,7 @@
                     return;
                 }
                 if (presetKey === "custom_engines") {
-                    revealSearchField("#wizard-step-2-managed-engines");
+                    revealSearchField("#wizard-step-1-managed-engines");
                     return;
                 }
                 if (presetKey === "restricted") {
@@ -1612,12 +1511,6 @@
                     return;
                 }
                 revealHomeField('[data-settings-target="field:firefox-home-search"]');
-            });
-        });
-        Array.from(documentRef.querySelectorAll("[data-network-enterprise-preset]")).forEach((button) => {
-            button.addEventListener("click", () => {
-                const presetKey = button.dataset.networkEnterprisePreset || "defaults";
-                applyNetworkEnterprisePreset(presetKey);
             });
         });
         proxyPresetButtons.forEach((button) => {

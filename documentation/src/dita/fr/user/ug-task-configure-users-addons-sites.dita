@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-users-addons-sites" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Configurer les utilisateurs, les modules complémentaires et les sites</title>
-  <shortdesc>Utilisez l'étape 4 pour les comptes, les extensions, les modules complémentaires, les signets, la langue, la traduction et la gestion du site.</shortdesc>
+  <title>Configurer les utilisateurs, la langue et la synchronisation</title>
+  <shortdesc>Utilisez l’étape 5 pour l’identité, la langue, la traduction et la synchronisation prises en charge par le schéma.</shortdesc>
   <taskbody>
-    <prereq><p>Un brouillon guidé est ouvert.</p></prereq>
-    <context><p>Cette étape collecte les contrôles qui affectent les surfaces d'identité des utilisateurs, la gouvernance des extensions, la localisation et le comportement spécifique au site Web.</p></context>
+    <prereq><p>Un profil enregistré est ouvert dans l’<uicontrol>Éditeur guidé</uicontrol>.</p></prereq>
+    <context><p>Cette étape regroupe l’identité, la langue, la traduction et la synchronisation. Les règles d’extensions appartiennent uniquement à l’étape 6; les URL, sites, gestionnaires et marque-pages uniquement à l’étape 2.</p></context>
     <steps>
-      <step><cmd>Ouvrez l’étape 4 de la configuration guidée.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez l’étape 5 <uicontrol>Utilisateurs, langue et synchronisation</uicontrol>.</cmd><info><p>Résultat attendu : seuls les contrôles d’utilisateur, de langue et de synchronisation sont visibles.</p></info></step>
       <step><cmd>Examinez les comptes Mozilla et les surfaces de navigateur liées à l'identité.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Configurez les extensions, les modules complémentaires et les signets conformément aux règles de déploiement.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Définissez les options de langue, de traduction et de gestion du site Web.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
+      <step><cmd>Définissez les options de langue, traduction et synchronisation requises par le profil.</cmd><info><p>Résultat attendu : les choix utilisateur sont vérifiés indépendamment des stratégies d’extensions et de navigation.</p></info></step>
+      <step><cmd>Utilisez l’étape 6 pour les extensions et l’étape 2 pour les sites ou marque-pages.</cmd><info><note type="warning">La modification de contrôles dépendants du schéma peut rendre des valeurs invalides pour le schéma Firefox choisi.</note></info></step>
     </steps>
-    <result><p>Le profil contient des contrôles révisés d'utilisateur, de module complémentaire, de signet, de langue et de gestion du site.</p></result>
-    <postreq><p>Récupération : si une extension ou un site est bloqué de manière inattendue, inspectez la section correspondante et validez à nouveau.</p></postreq>
+    <result><p>Le profil contient des contrôles révisés d’utilisateur, de langue, de traduction et de synchronisation.</p></result>
+    <postreq><p>Récupération : examinez l’étape 6 pour une extension bloquée et l’étape 2 pour un site, puis validez à nouveau.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-security-privacy"/>

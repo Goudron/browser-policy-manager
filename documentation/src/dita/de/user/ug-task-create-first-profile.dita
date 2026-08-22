@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Ein erstes Profil aus der Bibliothek erstellen</title>
-  <shortdesc>Starten Sie einen neuen geführten Profilentwurf aus der <uicontrol>Bibliothek</uicontrol>, wenn kein gespeichertes Profil zur Wiederverwendung geeignet ist.</shortdesc>
-  <taskbody>
-    <prereq><p>Sie befinden sich in der <uicontrol>Bibliothek</uicontrol> und möchten ein neues Profil, anstatt ein vorhandenes zu öffnen oder zu duplizieren.</p></prereq>
-    <context><p>Die Aktion „Erstellen“ öffnet einen <uicontrol>Geführter Editor</uicontrol>-Entwurf. Der Entwurf wird erst zu einem gespeicherten Profil, nachdem Sie ihn gespeichert haben.</p></context>
-    <steps>
-      <step><cmd>Wählen Sie die <uicontrol>Bibliothek</uicontrol>saktion aus, um ein neues Profil zu erstellen.</cmd><info><p>Erwartetes Ergebnis: BPM öffnet die <uicontrol>Geführter Editor</uicontrol> für einen neuen Entwurf.</p></info></step>
-      <step><cmd>Wählen Sie den Profilzweck, den Schemakanal und die vom Editor angezeigten Starteroptionen aus.</cmd><info><p>Der Schemakanal wirkt sich auf die verfügbaren Steuerelemente und das Validierungsverhalten aus.</p></info></step>
-      <step><cmd>Speichern Sie den Entwurf, wenn er den gewünschten Namen und die gewünschten Anfangseinstellungen hat.</cmd><info><note type="warning">Durch das Schließen eines nicht gespeicherten Entwurfs können nur Entwurfsänderungen verloren gehen.</note></info></step>
-    </steps>
-    <result><p>Das neue Profil wird gespeichert und kann in der <uicontrol>Bibliothek</uicontrol> wieder gefunden werden.</p></result>
-    <postreq><p>Wiederherstellung: Wenn Sie ein vorhandenes Profil wiederverwenden wollten, brechen Sie den Entwurf ab und duplizieren Sie stattdessen das gespeicherte Profil.</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-concept-schema-aware-behavior"/>
-    <link keyref="topic.ug-task-duplicate-profile"/>
-  </related-links>
+  <title>Ein Profil aus der Bibliothek erstellen</title>
+  <shortdesc>Bereiten Sie in der Bibliothek ein benanntes Profil vor und öffnen Sie das gespeicherte Ergebnis im geführten Editor.</shortdesc>
+  <taskbody><prereq><p>Öffnen Sie die <uicontrol>Bibliothek</uicontrol> und kennen Sie Zielschema, Startvoreinstellung und erforderliche CIS-Basislinie.</p></prereq><context><p>Die Erstellung ist eine atomare Vorbereitung: Das Formular erfasst Name, Schema, Voreinstellung und CIS-Basislinie. BPM leitet das anfängliche Richtliniendokument ab und öffnet ein gespeichertes Profil im <uicontrol>Geführten Editor</uicontrol>. Diese Basisidentitäten werden im Editor nicht gewählt oder ersetzt.</p>
+      <fig id="screenshot-preparation-create">
+        <title>Profilvorbereitung zum Erstellen</title>
+        <image keyref="screenshot.preparation-create" placement="break" scalefit="yes" align="center">
+          <alt>Kompaktes Formular zum Erstellen eines Profils mit Name, Firefox-Schema, Startvoreinstellung, CIS-Basislinie und Schaltfläche „Erstellen“.</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>Wählen Sie in der <uicontrol>Bibliothek</uicontrol> <uicontrol>Profil erstellen</uicontrol>.</cmd><info><p>BPM öffnet das kompakte Vorbereitungsformular.</p></info></step>
+<step><cmd>Geben Sie einen eindeutigen Namen ein und wählen Sie Firefox-Schema, Startvoreinstellung sowie eine CIS-Basislinie oder keine Basislinie.</cmd><info><p>Das Schema begrenzt die unterstützten Richtlinien. Voreinstellung und CIS sind geprüfte Ausgangspunkte, keine Aussage über Bereitstellung oder Konformität.</p></info></step>
+<step><cmd>Wählen Sie <uicontrol>Erstellen</uicontrol>.</cmd><info><p>BPM erstellt genau ein serverseitig zusammengesetztes gespeichertes Profil und öffnet es im <uicontrol>Geführten Editor</uicontrol>.</p><note type="warning">Bei einem Fehler für Name, Schema, Voreinstellung, CIS oder Vorbereitung wird kein Profil erstellt. Korrigieren Sie die sichtbare Auswahl und senden Sie erneut; erstellen Sie Profildaten nicht außerhalb von BPM.</note></info></step>
+</steps><result><p>Die Bibliothek enthält ein gespeichertes Profil; Schema, Voreinstellung und CIS-Basislinie sind in jedem Editor schreibgeschützt sichtbar.</p></result><postreq><p>Wiederherstellung: Brechen Sie vor <uicontrol>Erstellen</uicontrol> ab, wenn die Basislinie unklar ist. Verwenden Sie zur Schemaänderung eine ausdrückliche Konvertierungsprüfung und für einen vorhandenen Ausgangspunkt die Duplikatvorbereitung.</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-duplicate-profile"/><link keyref="topic.ug-task-use-guided-editor"/><link keyref="topic.cis-task-select-cis-baseline"/></related-links>
 </task>

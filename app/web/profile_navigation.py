@@ -9,6 +9,28 @@ from app.web.firefox_preferences import get_wizard_preferences_catalog
 from app.web.firefox_settings_catalog import get_wizard_settings_catalog
 from app.web.firefox_wizard_shell import get_wizard_schema_shell_catalog
 
+GUIDED_STEP_IDS = frozenset(
+    {
+        "browser_network_search",
+        "urls_sites_navigation",
+        "security_privacy",
+        "certificates_trust",
+        "users_language_sync",
+        "extensions",
+        "ai",
+        "review_export",
+    }
+)
+
+_LEGACY_GUIDED_STEP_TARGETS = {
+    "1": "browser_network_search",
+    "2": "browser_network_search",
+    "3": "security_privacy",
+    "4": "users_language_sync",
+    "5": "ai",
+    "6": "review_export",
+}
+
 
 def resolve_safe_profiles_return_url(raw_return_url: str | None) -> str | None:
     if not raw_return_url:
@@ -27,6 +49,28 @@ def resolve_focus_target(raw_focus_target: str | None) -> str | None:
     if not focus_target or len(focus_target) > 160:
         return None
     return focus_target
+
+
+def resolve_guided_step_target(raw_step_target: str | None) -> str | None:
+    """Accept only an eight-step canonical Guided target for a deep link."""
+
+    normalized_step = resolve_focus_target(raw_step_target)
+    if not normalized_step:
+        return None
+    normalized_step = normalized_step.removeprefix("step:").removeprefix("wizard-step-")
+    if normalized_step in GUIDED_STEP_IDS:
+        return normalized_step
+    if normalized_step.isdecimal() and 1 <= int(normalized_step) <= 8:
+        return normalized_step
+    return None
+
+
+def resolve_legacy_guided_step_target(raw_legacy_step: str | None) -> str | None:
+    """Map an explicitly marked six-step URL without redefining new numbers."""
+
+    if raw_legacy_step is None:
+        return None
+    return _LEGACY_GUIDED_STEP_TARGETS.get(raw_legacy_step.strip())
 
 
 def resolve_include_deleted_flag(raw_include_deleted: str | None) -> bool:

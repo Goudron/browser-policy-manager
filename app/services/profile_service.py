@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import builtins
+import hashlib
 from dataclasses import dataclass
 from typing import Any, cast
 
@@ -10,21 +11,50 @@ from sqlalchemy.engine import CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import ColumnElement
 
+from app.compliance.firefox.profile_duplicate_composition import (
+    DuplicatePlanningResult,
+    DuplicatePlanningSource,
+    plan_profile_duplicate,
+)
+from app.compliance.firefox.profile_initialization_composition import (
+    InitializationCompositionResult,
+    compose_profile_initialization,
+)
 from app.core.policy_validation import (
     PolicyValidationError,
     validate_profile_payload_with_schema,
 )
+from app.core.profile_baseline_provenance import (
+    downgrade_verified_cis_to_manual_review,
+    firefox_import_baseline_provenance,
+    generic_create_baseline_provenance,
+)
+from app.core.profile_certificate_provenance import (
+    converted_certificate_provenance,
+    imported_certificate_provenance,
+    manual_certificate_provenance,
+    reconcile_certificate_provenance,
+)
+from app.core.profile_conversion_json import canonical_json, strict_json_copy
 from app.core.profile_conversion_planner import (
     ComplianceReplanner,
     ConversionPlanningContext,
     ConversionPlanningError,
     plan_profile_conversion,
 )
+from app.core.profile_extension_provenance import (
+    converted_extension_provenance,
+    imported_extension_provenance,
+    manual_extension_provenance,
+    reconcile_extension_provenance,
+)
 from app.core.profile_recommendation import profile_conversion_recommendation
 from app.core.schema_channels import require_supported_schema_channel
 from app.models.profile import Profile
 from app.schemas.profile import (
     ConversionApplyRequest,
+    DuplicateProfilePreparationRequest,
+    NewProfilePreparationRequest,
     ProfileCreate,
     ProfileRead,
     ProfileRecommendation,
@@ -126,6 +156,22 @@ class ConversionApplyFailure(ValueError):
 
 class ProfileSchemaChangeRequiresConversion(ValueError):
     """Raised when a generic profile write attempts to change its schema channel."""
+
+
+class NewProfilePreparationFailure(ValueError):
+    """A stable, value-free terminal failure for M3-04 preparation."""
+
+    def __init__(self, code: str) -> None:
+        super().__init__(code)
+        self.code = code
+
+
+class DuplicateProfilePreparationFailure(ValueError):
+    """A stable, value-free terminal failure for M3-05 preparation."""
+
+    def __init__(self, code: str) -> None:
+        super().__init__(code)
+        self.code = code
 
 
 @dataclass(frozen=True, slots=True)
@@ -276,6 +322,14 @@ class ProfileService:
         *,
         validation_state: str | None = None,
     ) -> ProfileRead:
+        # SQLAlchemy Python-side defaults are populated on INSERT, while a
+        # focused read model can also be built from a pre-flush legacy object.
+        # Treat a missing record as historical imported value attribution; do
+        # not inspect flags to invent starter/CIS baseline provenance.
+        if not isinstance(profile.extension_provenance, dict):
+            profile.extension_provenance = imported_extension_provenance(profile.flags)
+        if not isinstance(profile.certificate_provenance, dict):
+            profile.certificate_provenance = imported_certificate_provenance(profile.flags)
         return ProfileRead.model_validate(profile).model_copy(
             update={
                 "validation_state": (
@@ -487,6 +541,65 @@ class ProfileService:
             return result.first()
 
     @staticmethod
+    async def plan_duplicate(
+        session: AsyncSession,
+        profile_id: int,
+        *,
+        expected_source_revision: int,
+        target_schema_id: str,
+        preset_id: str,
+        cis_baseline_id: str,
+    ) -> DuplicatePlanningResult | None:
+        """Read and plan one duplicate without assigning, flushing, or writing.
+
+        This is intentionally an internal M3-03 service boundary, not a
+        preparation API.  It takes only server-loaded source fields, copies
+        them into the pure planner, and uses ``no_autoflush`` so a future
+        caller's pending state cannot turn this read into a write boundary.
+        M3-05 must re-read/replan inside its own transaction before inserting.
+        """
+
+        with session.no_autoflush:
+            result = await session.scalars(select(Profile).where(Profile.id == profile_id))
+            profile = result.first()
+        if profile is None:
+            return None
+
+        source = ProfileService._duplicate_planning_source(profile)
+        return plan_profile_duplicate(
+            source,
+            expected_source_revision=expected_source_revision,
+            target_schema_id=target_schema_id,
+            preset_id=preset_id,
+            cis_baseline_id=cis_baseline_id,
+        )
+
+    @staticmethod
+    def _duplicate_planning_source(profile: Profile) -> DuplicatePlanningSource:
+        """Copy the complete persisted source facts for the pure planner."""
+
+        return DuplicatePlanningSource(
+            profile_id=profile.id,
+            revision=profile.revision,
+            lifecycle_state="active" if profile.deleted_at is None else "deleted",
+            schema_artifact_id=profile.schema_version,
+            flags=profile.flags,
+            compliance=profile.compliance,
+            baseline_provenance=profile.baseline_provenance,
+            extension_provenance=profile.extension_provenance,
+            certificate_provenance=profile.certificate_provenance,
+            metadata={
+                "name": profile.name,
+                "description": profile.description,
+                "created_at": profile.created_at.isoformat(),
+                "updated_at": profile.updated_at.isoformat(),
+                "deleted_at": (
+                    profile.deleted_at.isoformat() if profile.deleted_at is not None else None
+                ),
+            },
+        )
+
+    @staticmethod
     def conversion_planning_context(
         profile: Profile,
         *,
@@ -596,6 +709,8 @@ class ProfileService:
             # The pure planner promises this shape for a valid target.  An
             # internal violation must never be converted into a partial write.
             raise RuntimeError("conversion planner returned an invalid persistence candidate")
+        candidate_extension_provenance = converted_extension_provenance(candidate_policies)
+        candidate_certificate_provenance = converted_certificate_provenance(candidate_policies)
 
         before_updated_at = profile.updated_at
         write = (
@@ -609,6 +724,8 @@ class ProfileService:
                 schema_version=request.target_artifact_id,
                 flags=candidate_policies,
                 compliance=candidate_compliance,
+                extension_provenance=candidate_extension_provenance,
+                certificate_provenance=candidate_certificate_provenance,
                 revision=request.expected_revision + 1,
             )
             .returning(Profile.revision, Profile.updated_at)
@@ -702,6 +819,394 @@ class ProfileService:
 
     @staticmethod
     async def create(session: AsyncSession, data: ProfileCreate) -> ProfileRead:
+        """Create a generic caller-composed profile with non-inferential provenance."""
+        return await ProfileService._create_with_baseline(
+            session,
+            data,
+            baseline_provenance=generic_create_baseline_provenance(),
+        )
+
+    @staticmethod
+    async def create_prepared_new_profile(
+        session: AsyncSession,
+        request: NewProfilePreparationRequest,
+    ) -> ProfileRead:
+        """Insert one fully server-derived new profile without committing.
+
+        The API owns the transaction so it can roll back a catalog/composition,
+        database, or serialization failure as one operation.  This method
+        accepts catalog identities only and deliberately does not delegate to
+        generic ``create``.
+        """
+
+        fingerprint = ProfileService._new_preparation_fingerprint(request)
+        existing = await ProfileService._prepared_new_replay(
+            session,
+            idempotency_key=request.preparation_idempotency_key,
+            fingerprint=fingerprint,
+        )
+        if existing is not None:
+            return existing
+
+        composition = compose_profile_initialization(
+            schema_id=request.target_schema_id,
+            preset_id=request.starter_id,
+            cis_baseline_id=request.cis_baseline_id,
+        )
+        if not composition.is_valid:
+            raise NewProfilePreparationFailure(
+                ProfileService._new_profile_preparation_failure_code(composition)
+            )
+
+        document = composition.document
+        compliance = composition.compliance
+        provenance = composition.baseline_provenance
+        extension_provenance = composition.extension_provenance
+        certificate_provenance = composition.certificate_provenance
+        if (
+            not isinstance(document, dict)
+            or (compliance is not None and not isinstance(compliance, dict))
+            or not isinstance(provenance, dict)
+            or not isinstance(extension_provenance, dict)
+            or not isinstance(certificate_provenance, dict)
+        ):
+            # A valid composer result is a persistence invariant.  Treat a
+            # violation as a terminal candidate failure before adding a row.
+            raise NewProfilePreparationFailure("preparation_candidate_invalid")
+
+        entity = Profile(
+            name=request.name,
+            schema_version=request.target_schema_id,
+            flags=document,
+            compliance=compliance,
+            baseline_provenance=provenance,
+            extension_provenance=extension_provenance,
+            certificate_provenance=certificate_provenance,
+            preparation_idempotency_key=request.preparation_idempotency_key,
+            preparation_request_fingerprint=fingerprint,
+        )
+        session.add(entity)
+        await session.flush()
+        await session.refresh(entity)
+        return ProfileService._as_read_model(entity)
+
+    @staticmethod
+    async def reconcile_prepared_new_profile(
+        session: AsyncSession,
+        request: NewProfilePreparationRequest,
+    ) -> ProfileRead | None:
+        """Return a committed exact replay after a key-uniqueness race."""
+
+        return await ProfileService._prepared_new_replay(
+            session,
+            idempotency_key=request.preparation_idempotency_key,
+            fingerprint=ProfileService._new_preparation_fingerprint(request),
+        )
+
+    @staticmethod
+    async def create_prepared_duplicate_profile(
+        session: AsyncSession,
+        request: DuplicateProfilePreparationRequest,
+    ) -> ProfileRead:
+        """Create or reconcile one duplicate within the caller's transaction.
+
+        A successful first attempt locks the source where the engine supports
+        row locks, copies its current database facts into the pure duplicate
+        planner, and inserts only the fully rederived candidate.  No source
+        attribute is assigned anywhere in this command.  A replay identified
+        by the opaque key is deliberately resolved before source validation:
+        this is how a client reconciles a response lost after commit without
+        turning a later source edit into a second duplicate attempt.
+        """
+
+        fingerprint = ProfileService._duplicate_preparation_fingerprint(request)
+        existing = await ProfileService._prepared_duplicate_replay(
+            session,
+            idempotency_key=request.preparation_idempotency_key,
+            fingerprint=fingerprint,
+        )
+        if existing is not None:
+            return existing
+
+        source_query = select(Profile).where(Profile.id == request.source_id)
+        if session.get_bind().dialect.name != "sqlite":
+            source_query = source_query.with_for_update()
+        source_result = await session.scalars(source_query)
+        source = source_result.one_or_none()
+        if source is None:
+            raise DuplicateProfilePreparationFailure("preparation_duplicate_source_not_found")
+
+        duplicate_plan = plan_profile_duplicate(
+            ProfileService._duplicate_planning_source(source),
+            expected_source_revision=request.expected_source_revision,
+            target_schema_id=request.target_schema_id,
+            preset_id=request.starter_id,
+            cis_baseline_id=request.cis_baseline_id,
+        )
+        if not duplicate_plan.is_valid:
+            raise DuplicateProfilePreparationFailure(
+                ProfileService._duplicate_preparation_failure_code(duplicate_plan)
+            )
+
+        document = duplicate_plan.candidate_document
+        compliance = duplicate_plan.candidate_compliance
+        provenance = duplicate_plan.candidate_baseline_provenance
+        extension_provenance = duplicate_plan.candidate_extension_provenance
+        certificate_provenance = duplicate_plan.candidate_certificate_provenance
+        target_artifact_id = ProfileService._duplicate_target_artifact_id(
+            duplicate_plan,
+            request=request,
+        )
+        if (
+            not isinstance(document, dict)
+            or (compliance is not None and not isinstance(compliance, dict))
+            or not isinstance(provenance, dict)
+            or not isinstance(extension_provenance, dict)
+            or not isinstance(certificate_provenance, dict)
+            or target_artifact_id is None
+        ):
+            raise DuplicateProfilePreparationFailure("preparation_candidate_invalid")
+        if not ProfileService._duplicate_result_matches_rederived_digest(
+            duplicate_plan,
+            document=document,
+            compliance=compliance,
+            provenance=provenance,
+            extension_provenance=extension_provenance,
+            certificate_provenance=certificate_provenance,
+        ):
+            raise DuplicateProfilePreparationFailure("preparation_candidate_invalid")
+
+        entity = Profile(
+            name=request.name,
+            schema_version=target_artifact_id,
+            flags=document,
+            compliance=compliance,
+            baseline_provenance=provenance,
+            extension_provenance=extension_provenance,
+            certificate_provenance=certificate_provenance,
+            preparation_idempotency_key=request.preparation_idempotency_key,
+            preparation_request_fingerprint=fingerprint,
+        )
+        session.add(entity)
+        await session.flush()
+        await session.refresh(entity)
+        return ProfileService._as_read_model(entity)
+
+    @staticmethod
+    async def reconcile_prepared_duplicate_profile(
+        session: AsyncSession,
+        request: DuplicateProfilePreparationRequest,
+    ) -> ProfileRead | None:
+        """Return a committed exact replay after a key-uniqueness race."""
+
+        return await ProfileService._prepared_duplicate_replay(
+            session,
+            idempotency_key=request.preparation_idempotency_key,
+            fingerprint=ProfileService._duplicate_preparation_fingerprint(request),
+        )
+
+    @staticmethod
+    async def _prepared_duplicate_replay(
+        session: AsyncSession,
+        *,
+        idempotency_key: str,
+        fingerprint: str,
+    ) -> ProfileRead | None:
+        existing_result = await session.scalars(
+            select(Profile).where(Profile.preparation_idempotency_key == idempotency_key)
+        )
+        existing = existing_result.one_or_none()
+        if existing is None:
+            return None
+        if existing.preparation_request_fingerprint != fingerprint:
+            raise DuplicateProfilePreparationFailure("preparation_idempotency_key_reused")
+        return ProfileService._as_read_model(existing)
+
+    @staticmethod
+    async def _prepared_new_replay(
+        session: AsyncSession,
+        *,
+        idempotency_key: str,
+        fingerprint: str,
+    ) -> ProfileRead | None:
+        """Reconcile one successful new-profile preparation without recomposing it."""
+
+        existing_result = await session.scalars(
+            select(Profile).where(Profile.preparation_idempotency_key == idempotency_key)
+        )
+        existing = existing_result.one_or_none()
+        if existing is None:
+            return None
+        if existing.preparation_request_fingerprint != fingerprint:
+            raise NewProfilePreparationFailure("preparation_idempotency_key_reused")
+        return ProfileService._as_read_model(existing)
+
+    @staticmethod
+    def _new_preparation_fingerprint(request: NewProfilePreparationRequest) -> str:
+        """Bind one new-profile retry to its exact value-safe command identity."""
+
+        request_identity = {
+            "mode": "create",
+            "name": request.name,
+            "target_schema_id": request.target_schema_id,
+            "starter_id": request.starter_id,
+            "cis_baseline_id": request.cis_baseline_id,
+        }
+        return hashlib.sha256(
+            b"bpm096-profile-new-preparation-request:v1\n"
+            + canonical_json(strict_json_copy(request_identity))
+        ).hexdigest()
+
+    @staticmethod
+    def _duplicate_preparation_fingerprint(
+        request: DuplicateProfilePreparationRequest,
+    ) -> str:
+        """Hash the complete caller command without accepting any policy values."""
+
+        request_identity = {
+            "mode": "duplicate",
+            "name": request.name,
+            "target_schema_id": request.target_schema_id,
+            "starter_id": request.starter_id,
+            "cis_baseline_id": request.cis_baseline_id,
+            "source_id": request.source_id,
+            "expected_source_revision": request.expected_source_revision,
+        }
+        return hashlib.sha256(
+            b"bpm096-profile-duplicate-preparation-request:v1\n"
+            + canonical_json(strict_json_copy(request_identity))
+        ).hexdigest()
+
+    @staticmethod
+    def _duplicate_target_artifact_id(
+        duplicate_plan: DuplicatePlanningResult,
+        *,
+        request: DuplicateProfilePreparationRequest,
+    ) -> str | None:
+        """Reject any planner result whose target identity drifted before insert."""
+
+        plan = duplicate_plan.plan
+        source = plan.get("source")
+        target = plan.get("target")
+        result = plan.get("result")
+        if (
+            not isinstance(source, dict)
+            or not isinstance(target, dict)
+            or not isinstance(result, dict)
+        ):
+            return None
+        if source.get("profile_id") != request.source_id:
+            return None
+        if source.get("revision") != request.expected_source_revision:
+            return None
+        artifact = target.get("artifact")
+        artifact_id = artifact.get("artifact_id") if isinstance(artifact, dict) else None
+        if artifact_id != request.target_schema_id or not isinstance(artifact_id, str):
+            return None
+        if not isinstance(result.get("result_digest"), str):
+            return None
+        return artifact_id
+
+    @staticmethod
+    def _duplicate_result_matches_rederived_digest(
+        duplicate_plan: DuplicatePlanningResult,
+        *,
+        document: dict[str, Any],
+        compliance: dict[str, Any] | None,
+        provenance: dict[str, Any],
+        extension_provenance: dict[str, Any],
+        certificate_provenance: dict[str, Any],
+    ) -> bool:
+        """Verify the candidate remains bound to the planner's result digest."""
+
+        plan = duplicate_plan.plan
+        result = plan.get("result")
+        validation = plan.get("validation")
+        if not isinstance(result, dict) or not isinstance(validation, dict):
+            return False
+        planned_digest = result.get("result_digest")
+        if not isinstance(planned_digest, str):
+            return False
+        try:
+            rederived_digest = hashlib.sha256(
+                b"bpm096-profile-duplicate-result:v1\n"
+                + canonical_json(
+                    strict_json_copy(
+                        {
+                            "document": document,
+                            "compliance": compliance,
+                            "baseline_provenance": provenance,
+                            "extension_provenance": extension_provenance,
+                            "certificate_provenance": certificate_provenance,
+                            "validation": validation,
+                        }
+                    )
+                )
+            ).hexdigest()
+        except TypeError, ValueError:
+            return False
+        return rederived_digest == planned_digest
+
+    @staticmethod
+    def _duplicate_preparation_failure_code(duplicate_plan: DuplicatePlanningResult) -> str:
+        """Map private planner reasons to the M2-03 terminal preparation vocabulary."""
+
+        reason = duplicate_plan.reason_code or ""
+        if reason == "duplicate_source_stale":
+            return "preparation_source_stale"
+        if reason == "duplicate_source_not_active":
+            return "preparation_duplicate_source_not_eligible"
+        if reason in {
+            "duplicate_source_schema_unavailable",
+            "duplicate_target_schema_unavailable",
+        }:
+            return "preparation_schema_unavailable"
+        if reason == "duplicate_preset_unavailable":
+            return "preparation_starter_unavailable"
+        if reason == "duplicate_cis_unavailable":
+            return "preparation_cis_unavailable"
+        if reason.startswith("duplicate_conversion"):
+            return "preparation_conversion_blocked"
+        return "preparation_composition_blocked"
+
+    @staticmethod
+    def _new_profile_preparation_failure_code(
+        composition: InitializationCompositionResult,
+    ) -> str:
+        """Collapse catalog internals to the M2-03 public terminal codes."""
+
+        reason = composition.reason_code or ""
+        if reason.startswith("initialization_schema_"):
+            return "preparation_schema_unavailable"
+        if reason.startswith("initialization_preset_"):
+            return "preparation_starter_unavailable"
+        if reason.startswith("initialization_cis_") or reason.startswith("cis_"):
+            return "preparation_cis_unavailable"
+        return "preparation_candidate_invalid"
+
+    @staticmethod
+    async def create_firefox_import(
+        session: AsyncSession,
+        data: ProfileCreate,
+    ) -> ProfileRead:
+        """Create a Firefox import without treating supplied compliance as CIS proof."""
+        return await ProfileService._create_with_baseline(
+            session,
+            data,
+            baseline_provenance=firefox_import_baseline_provenance(),
+            extension_provenance=imported_extension_provenance(data.flags),
+            certificate_provenance=imported_certificate_provenance(data.flags),
+        )
+
+    @staticmethod
+    async def _create_with_baseline(
+        session: AsyncSession,
+        data: ProfileCreate,
+        *,
+        baseline_provenance: dict[str, Any],
+        extension_provenance: dict[str, Any] | None = None,
+        certificate_provenance: dict[str, Any] | None = None,
+    ) -> ProfileRead:
         require_supported_schema_channel(data.schema_version)
         entity = Profile(
             name=data.name,
@@ -709,6 +1214,17 @@ class ProfileService:
             schema_version=data.schema_version,
             flags=data.flags,
             compliance=data.compliance,
+            baseline_provenance=baseline_provenance,
+            extension_provenance=(
+                extension_provenance
+                if extension_provenance is not None
+                else manual_extension_provenance(data.flags)
+            ),
+            certificate_provenance=(
+                certificate_provenance
+                if certificate_provenance is not None
+                else manual_certificate_provenance(data.flags)
+            ),
         )
         session.add(entity)
         await session.flush()
@@ -734,9 +1250,26 @@ class ProfileService:
             if data.schema_version != entity.schema_version:
                 raise ProfileSchemaChangeRequiresConversion("profile_schema_conversion_required")
         if "flags" in fields_to_update and data.flags is not None:
+            entity.extension_provenance = reconcile_extension_provenance(
+                entity.flags,
+                entity.extension_provenance,
+                data.flags,
+                data.extension_provenance,
+            )
+            entity.certificate_provenance = reconcile_certificate_provenance(
+                entity.flags,
+                entity.certificate_provenance,
+                data.flags,
+                data.certificate_provenance,
+            )
             entity.flags = data.flags
         if "compliance" in fields_to_update:
             entity.compliance = data.compliance
+
+        if {"flags", "compliance"} & fields_to_update:
+            downgraded = downgrade_verified_cis_to_manual_review(entity.baseline_provenance)
+            if downgraded is not None:
+                entity.baseline_provenance = downgraded
 
         entity.revision += 1
         await session.flush()

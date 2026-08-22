@@ -436,6 +436,11 @@
             color: rgba(209, 250, 229, 0.92);
         }
 
+        #profile-preparation-source {
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
         @media (min-width: 980px) {
             .compact-toolbar {
                 grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);

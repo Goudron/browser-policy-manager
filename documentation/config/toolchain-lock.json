@@ -19,16 +19,16 @@
     },
     "java": {
       "vendor": "Eclipse Temurin",
-      "version": "21.0.12+8",
+      "version": "21.0.12.1+1",
       "vm": "HotSpot",
       "license": "GPL-2.0-with-classpath-exception",
       "platforms": {
         "linux-x86_64": {
           "archive": {
-            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12%2B8/OpenJDK21U-jre_x64_linux_hotspot_21.0.12_8.tar.gz",
-            "sha256": "8a379a67c91a3ae61ffb33d46e0a40c7ba35e70713c4db31cfca30492f792eff",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_x64_linux_hotspot_21.0.12.1_1.tar.gz",
+            "sha256": "2413149700df0f7d440500a84a8f764c535f21e5a5e87d38328b64eec2c5b500",
             "format": "tar.gz",
-            "root": "jdk-21.0.12+8-jre"
+            "root": "jdk-21.0.12.1+1-jre"
           },
           "executable": "bin/java"
         }

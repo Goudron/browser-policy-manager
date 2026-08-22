@@ -237,7 +237,7 @@ def test_localization_runbook_defines_terminology_and_screenshot_drift_gates() -
         "exact term and occurrence",
         "test_locale_anti_anglicism_guard.py",
         "test_documentation_semantic_contracts_0_9_4.py",
-        "six approved User Guide scenarios in all six published locales (36 rows)",
+        "eleven approved User Guide scenarios in all six published locales (66 rows)",
         "capture_user_guide_screenshots.py",
         "caption key, and alt-text key",
         "Do not add Administrator Guide, DevOps Guide, API, or decorative captures",
@@ -396,7 +396,7 @@ def test_schema_cis_and_locale_update_runbooks_revalidate_documentation_polish()
         "all-settings-help-target-map-0.9.1.json",
         "navigation.json",
         "Direct links must expand the Documents/guide/section/topic tree",
-        "six approved User Guide screenshot scenarios",
+        "eleven approved User Guide screenshot scenarios",
         "test_all_settings_help_target_map.py",
     ):
         assert required in firefox

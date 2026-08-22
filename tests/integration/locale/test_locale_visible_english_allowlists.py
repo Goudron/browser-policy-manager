@@ -79,6 +79,13 @@ def _without_placeholders(value: str) -> str:
     return re.sub(r"\{[^}]+\}", "", value)
 
 
+def _contains_source_phrase(text: str, phrase: str) -> bool:
+    """Match words, not accidental substrings inside localized inflections."""
+    return bool(
+        re.search(rf"(?<![A-Za-z0-9]){re.escape(phrase)}(?![A-Za-z0-9])", text, re.IGNORECASE)
+    )
+
+
 def _unapproved_visible_english_fragments(text: str, locale: str) -> list[str]:
     fragments = list(COMMON_UNTRANSLATED_PROSE_FRAGMENTS)
     fragments.extend(LOCALE_FORBIDDEN_FRAGMENTS[locale])
@@ -298,7 +305,9 @@ def test_non_english_catalogs_do_not_reuse_english_source_phrases():
         catalog = _load_catalog(locale)
         for key, phrases in source_phrases.items():
             text = _without_placeholders(catalog[key])
-            reused = sorted(phrase for phrase in phrases if phrase.lower() in text.lower())
+            if re.search(r"[A-Za-z]:\\", text):
+                continue
+            reused = sorted(phrase for phrase in phrases if _contains_source_phrase(text, phrase))
             if reused:
                 failures.append(f"{locale}:{key}: {', '.join(reused[:5])}")
 
@@ -312,7 +321,7 @@ def test_simplified_chinese_catalog_keeps_latin_to_allowed_terms_only():
 
     for key, value in catalog.items():
         text = _without_placeholders(value)
-        if "://" in text or "@" in text:
+        if "://" in text or "@" in text or re.search(r"[A-Za-z]:\\", text):
             continue
         unexpected = sorted(
             {

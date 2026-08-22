@@ -90,6 +90,48 @@ _SOURCE_SHAPES: dict[str, tuple[str, set[str]]] = {
         (_BASE_PROFILE_COLUMNS - {"owner"})
         | {"deleted_at", "revision", "compliance", "name_casefold"},
     ),
+    "20260820_add_profile_baseline_provenance": (
+        "profiles",
+        (_BASE_PROFILE_COLUMNS - {"owner"})
+        | {
+            "deleted_at",
+            "revision",
+            "compliance",
+            "name_casefold",
+            "baseline_provenance",
+            "preparation_idempotency_key",
+            "preparation_request_fingerprint",
+        },
+    ),
+    "20260821_add_profile_extension_provenance": (
+        "profiles",
+        (_BASE_PROFILE_COLUMNS - {"owner"})
+        | {
+            "deleted_at",
+            "revision",
+            "compliance",
+            "name_casefold",
+            "baseline_provenance",
+            "extension_provenance",
+            "preparation_idempotency_key",
+            "preparation_request_fingerprint",
+        },
+    ),
+    "20260821_add_profile_certificate_provenance": (
+        "profiles",
+        (_BASE_PROFILE_COLUMNS - {"owner"})
+        | {
+            "deleted_at",
+            "revision",
+            "compliance",
+            "name_casefold",
+            "baseline_provenance",
+            "extension_provenance",
+            "certificate_provenance",
+            "preparation_idempotency_key",
+            "preparation_request_fingerprint",
+        },
+    ),
 }
 _ALEMBIC_VERSION_MINIMUM_LENGTH = 128
 _DEFAULT_ALEMBIC_URL = "sqlite:///./data/bpm.db"

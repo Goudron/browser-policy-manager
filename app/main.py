@@ -15,6 +15,7 @@ from app.db import DatabaseRuntime
 from app.documentation import router as documentation_router
 from app.documentation.assistant_service import TrainingDocumentationAssistantService
 from app.middleware.security import SecurityHeadersMiddleware
+from app.services.amo_search import AmoSearchAdapter
 from app.web import profiles as web_profiles
 
 # Local settings instance for this module.
@@ -49,6 +50,10 @@ def create_app(
             yield
         finally:
             try:
+                amo_search_adapter = getattr(app.state, "amo_search_adapter", None)
+                clear_amo_search_state = getattr(amo_search_adapter, "clear_all", None)
+                if callable(clear_amo_search_state):
+                    clear_amo_search_state()
                 service = getattr(app.state, "documentation_assistant_service", None)
                 shutdown_service = getattr(service, "shutdown", None)
                 if callable(shutdown_service):
@@ -65,6 +70,9 @@ def create_app(
         lifespan=lifespan,
     )
     app.state.database_runtime = owned_database_runtime
+    # The adapter allocates no network resources. It owns only bounded, process-local
+    # session-private AMO cache/rate state and is replaced by deterministic tests.
+    app.state.amo_search_adapter = AmoSearchAdapter()
 
     # Model training and RAG promotion are intentionally beyond the 0.9.3 release boundary.
     # Keep the visible assistant functional without loading or inspecting local AI artifacts.

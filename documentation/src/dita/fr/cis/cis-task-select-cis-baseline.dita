@@ -4,7 +4,7 @@
   <title>Sélectionner une référence CIS et un préréglage de départ</title>
   <shortdesc>Sélectionnez le canal de schéma Firefox, le préréglage de démarrage et la couche CIS qui correspondent à l'objectif de déploiement avant un examen détaillé.</shortdesc>
   <taskbody>
-    <prereq><p>Vous disposez d'un brouillon de profil, savez si le navigateur cible suit le comportement du schéma Firefox Release 153, ESR 153.0, ESR 140.13 ou ESR 115.39 et pouvez vérifier les valeurs avant l'exportation.</p></prereq>
+    <prereq><p>Ouvrez la préparation de création ou de duplication d’un profil, déterminez si le navigateur cible suit le comportement du schéma Firefox Release 153, ESR 153.0, ESR 140.13 ou ESR 115.39, puis préparez-vous à examiner les valeurs avant l’exportation.</p></prereq>
     <context><p>Un préréglage de départ exprime la forme de l'environnement, tandis qu'une couche CIS ajoute la ligne de base de durcissement cartographiée de BPM. Utilisez les deux comme entrées examinées, et non comme approbation de déploiement automatique.</p></context>
     <steps>
       <step><cmd>Sélectionnez le canal de schéma Firefox qui correspond au déploiement cible : Release 153, ESR 153.0, ESR 140.13 ou ESR 115.39.</cmd><info><p>Résultat attendu : BPM valide les stratégies disponibles et les préférences gérées par rapport au canal prévu. Des couches CIS générées existent uniquement pour ESR 140.13 et Release 153, pas pour ESR 153.0 ni ESR 115.39.</p></info></step>
@@ -15,6 +15,7 @@
       <step><cmd>Validez et exportez uniquement après que le canal sélectionné, le préréglage, le niveau CIS et les décisions manuelles soient documentés.</cmd><info><p>Résultat attendu : le <codeph>policies.json</codeph> exporté est révisable et lié à la ligne de base BPM choisie.</p></info></step>
     </steps>
     <result><p>Le profil a un préréglage de départ délibéré, une couche CIS prise en charge, une attribution de source visible et une liste claire des tâches de vérification manuelle restantes.</p></result>
+    <example id="bpm096-localized-current"><title>Comportement actuel dans 0.9.6</title><p>Le schéma, le préréglage de départ et la ligne de base CIS sont choisis avant le profil enregistré. Les sources baseline, CIS, manual, imported, converted et raw servent à la vérification et ne prouvent pas la conformité. Les certificats et la confiance ont un registre distinct par chemin; les états manual, imported, converted, raw, unavailable et blocked exigent une vérification manuelle.</p></example>
     <postreq><p>Si la ligne de base est trop stricte ou trop permissive, supprimez la couche CIS ou changez le préréglage de démarrage, revalidez et répétez la révision avant l'exportation.</p></postreq>
   </taskbody>
   <related-links>

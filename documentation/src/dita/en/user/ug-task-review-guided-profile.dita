@@ -2,12 +2,12 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-guided-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Review the Guided profile</title>
-  <shortdesc>Use Step 6 to review the configuration in plain language before handoff.</shortdesc>
+  <shortdesc>Use Step 8 to review the configuration in plain language before handoff.</shortdesc>
   <taskbody>
     <prereq><p>You have finished the Guided changes you want to keep.</p></prereq>
     <context><p>The review step helps you catch missing schema choices, validation warnings, and settings that do not match the scenario.</p></context>
     <steps>
-      <step><cmd>Open Step 6, <uicontrol>Review &amp; export</uicontrol>.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Open Step 8, <uicontrol>Review &amp; export</uicontrol>.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Read the selected profile summary and changed setting groups.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Resolve validation warnings or document why a supported exception remains.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Confirm that the scenario, CIS layer, schema channel, and edited controls match the handoff goal.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>

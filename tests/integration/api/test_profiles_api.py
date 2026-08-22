@@ -5,7 +5,7 @@ from fastapi import status
 from tests.support import make_test_client
 
 
-def test_guided_compliance_catalog_is_constrained_and_selection_scoped():
+def test_guided_compliance_catalog_is_not_an_editor_api():
     with make_test_client() as client:
         response = client.get(
             "/profiles/guided-compliance",
@@ -15,22 +15,7 @@ def test_guided_compliance_catalog_is_constrained_and_selection_scoped():
                 "layer_key": "cis_l2",
             },
         )
-        rejected = client.get(
-            "/profiles/guided-compliance",
-            params={
-                "starter_key": "not-a-starter",
-                "schema_version": "release-153",
-                "layer_key": "cis_l2",
-            },
-        )
-
-    assert response.status_code == status.HTTP_200_OK
-    assert response.headers["cache-control"] == "private, max-age=300"
-    payload = response.json()
-    assert payload["policy_values"]["DisableTelemetry"] is True
-    assert payload["summary"]["added_from_cis"] >= 1
-    assert payload["decisions"]
-    assert rejected.status_code == status.HTTP_404_NOT_FOUND
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_create_profile_invalid_policies_returns_422():

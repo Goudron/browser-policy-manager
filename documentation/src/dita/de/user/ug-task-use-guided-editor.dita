@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Durch die sechs Schritte im Modus „Geführter Editor“ navigieren</title>
-  <shortdesc>Konfigurieren Sie Profil, Browserzugriff, Sicherheit, Benutzer und Websites, intelligente Funktionen sowie Überprüfung und Export nacheinander.</shortdesc>
-  <taskbody>
-    <prereq><p>Öffnen Sie ein Profil im geführten Editor aus der <uicontrol>Bibliothek</uicontrol> oder dem Erstellungsablauf.</p></prereq>
-    <context><p>Der geführte Editor gliedert die Profilkonfiguration in sechs Schritte und zeigt die Schemavalidierung während der Arbeit an.</p>
+  <title>Die acht Schritte des geführten Editors verwenden</title>
+  <shortdesc>Konfigurieren Sie ein vorbereitetes gespeichertes Profil in acht aufgabenbezogenen Schritten.</shortdesc>
+  <taskbody><prereq><p>Öffnen Sie ein gespeichertes Profil im <uicontrol>Geführten Editor</uicontrol> aus der <uicontrol>Bibliothek</uicontrol>, nach dem Erstellen oder nach der Duplikatvorbereitung.</p></prereq><context><p>Die Kopfzeile zeigt Schema, Voreinstellung und CIS-Basislinie als schreibgeschützte Fakten. Ändern Sie sie nur durch eine neue Vorbereitung oder eine ausdrückliche Schemakonvertierung. Der Editor hat acht Schritte; jede Richtlinienfamilie hat genau einen geführten Eigentümer.</p>
       <fig id="screenshot-guided-editor-overview">
-        <title>Überblick über den Modus „Geführter Editor“</title>
+        <title>Kopf des geführten Editors</title>
         <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
-        <alt>Der geführte Editor zeigt die Schrittnavigation und den Validierungsstatus eines gespeicherten Profils.</alt>
+          <alt>Geführter Editor mit schreibgeschützten Angaben zu Schema, Voreinstellung und CIS-Basislinie sowie der Navigation mit acht Schritten.</alt>
         </image>
       </fig>
-      <p>Öffnen Sie für ein gespeichertes Profil die Schema-Konvertierungsprüfung erst nach der Entscheidung zum Kanalwechsel: Sichern Sie ungespeicherte Arbeit, wählen Sie ein anderes unterstütztes Ziel und verwenden Sie vor dem ausdrücklichen Anwenden die schreibgeschützte Vorschau.</p>
-    </context>
-    <steps>
-      <step><cmd>Bestätigen Sie in Schritt 1 Name, Schemakanal, Szenario, Startvorgabe und CIS-Ebene.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Konfigurieren Sie in Schritt 2 Netzwerkzugriff, Browserverhalten, Startseite, <uicontrol>Suche und Navigation</uicontrol>svorgaben.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Konfigurieren Sie in Schritt 3 Datenschutz, Berechtigungen, Cookies, Bereinigung, DNS und Sicherheitsvorgaben.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Konfigurieren Sie in Schritt 4 Konten, Erweiterungen, Lesezeichen, Sprache, Übersetzung und Website-Regeln.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Konfigurieren Sie in Schritt 5 nur Firefox-Richtlinien für <uicontrol>KI und intelligente Funktionen</uicontrol>, die das gewählte Schema unterstützt.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Validieren, speichern und exportieren Sie das Profil in Schritt 6.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
-    </steps>
-    <result><p>Sie können erklären, wo jede geführte Einstellung hingehört, und mit dem richtigen Schritt fortfahren.</p></result>
-    <postreq><p>Wiederherstellung: Wenn Sie im falschen Bereich sind, wechseln Sie zum passenden Schritt oder verwenden Sie die Suche, statt nicht zusammenhängende Einstellungen zu ändern.</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-task-search-guided-settings"/>
-    <link keyref="topic.ug-task-review-guided-profile"/>
-  </related-links>
+      <fig id="screenshot-guided-step-6-extensions">
+        <title>Erweiterungen</title>
+        <image keyref="screenshot.guided-step-6-extensions" placement="break" scalefit="yes" align="center">
+          <alt>Schritt 6 des geführten Editors mit AMO-Suche und manueller Eingabe von Erweiterungsregeln.</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>Verwenden Sie Schritt 1, <uicontrol>Browser, Netzwerk &amp; Suche</uicontrol>, für Browserverhalten, Netzwerkzugriff und Suche.</cmd><info><p>URL-, Website- und Zertifikatsteuerungen gehören nicht hierher.</p></info></step>
+<step><cmd>Verwenden Sie Schritt 2, <uicontrol>URLs, Websites &amp; Navigation</uicontrol>, für Startseite, Startverhalten, erlaubte oder blockierte Websites, Handler und verwaltete Lesezeichen.</cmd><info><p>Navigationswerte werden zusammen geprüft.</p></info></step>
+<step><cmd>Verwenden Sie Schritt 3, <uicontrol>Sicherheit und Datenschutz</uicontrol>, für Datenschutz, Berechtigungen, Cookies, Bereinigung, DNS und Härtung.</cmd><info><p>Datenschutzentscheidungen bleiben vom Zertifikatsvertrauen getrennt.</p></info></step>
+<step><cmd>Verwenden Sie Schritt 4, <uicontrol>Zertifikate &amp; Vertrauen</uicontrol>, für Zertifikatsreferenzen, Unternehmensstammzertifikate, Authentifizierung und Sicherheitsgeräte.</cmd><info><p>BPM speichert wörtliche Referenzen und liest keine Zertifikats- oder Geräteinhalte.</p></info></step>
+<step><cmd>Verwenden Sie Schritt 5, <uicontrol>Benutzer, Sprache &amp; Synchronisierung</uicontrol>, für die vom Schema unterstützten Identitäts-, Sprach- und Synchronisierungssteuerungen.</cmd><info><p>Erweiterungs- und Websiteregeln werden nicht dupliziert.</p></info></step>
+<step><cmd>Verwenden Sie Schritt 6, <uicontrol>Erweiterungen</uicontrol>, für erlaubte, blockierte, erforderliche, gesperrte und Aktualisierungsregeln.</cmd><info><p>Die AMO-Suche ist optional und ausdrücklich; bei Nichtverfügbarkeit bleiben manuelle GUID und geprüfte Installations-URL möglich.</p></info></step>
+<step><cmd>Verwenden Sie Schritt 7, <uicontrol>KI</uicontrol>, nur für unterstützte Firefox-Richtlinien für KI und intelligente Funktionen.</cmd><info><p>Nicht unterstützte Steuerungen bleiben im gewählten Schema nicht verfügbar.</p></info></step>
+<step><cmd>Verwenden Sie Schritt 8, <uicontrol>Prüfen und exportieren</uicontrol>, um Hinweise zu bearbeiten, zu validieren, zu speichern und zu exportieren.</cmd><info><note type="warning">Eine Schemawarnung, ein Rohwert, ein CIS-Punkt zur manuellen Prüfung oder ein Konvertierungsblocker benötigt eine sichtbare Prüfentscheidung; ein anderer Schritt behebt ihn nicht stillschweigend.</note></info></step>
+</steps><result><p>Sie können jede Richtlinienfamilie finden und schreibgeschützte Basisfakten von bearbeitbaren Einstellungen unterscheiden.</p></result><postreq><p>Wiederherstellung: Verwenden Sie Schrittleiste, Einstellungssuche oder Prüfsprung, wenn eine Einstellung im falschen Kontext liegt. Speichern oder verwerfen Sie Änderungen bewusst, fordern Sie eine schreibgeschützte Konvertierungsvorschau an und wenden Sie nur einen aktuellen anwendbaren Plan an.</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-configure-browser-access-defaults"/><link keyref="topic.ug-task-configure-security-privacy"/><link keyref="topic.fx-task-review-complex-policy-configuration"/></related-links>
 </task>

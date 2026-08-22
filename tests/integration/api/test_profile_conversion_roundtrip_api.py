@@ -137,10 +137,11 @@ def test_conversion_apply_roundtrip_retains_target_state_across_profile_surfaces
             assert initial["schema_version"] == "esr-153.0"
             assert initial["flags"] == source_flags
             assert initial["compliance"] == persisted["compliance"]
-            selector = BeautifulSoup(response.text, "html.parser").find(id="profile-type")
-            assert selector is not None
-            assert selector.get("disabled") is not None
-            assert selector.find("option", selected=True)["value"] == "esr-153.0"
+            soup = BeautifulSoup(response.text, "html.parser")
+            schema_fact = soup.find(id="profile-schema-fact")
+            assert schema_fact is not None
+            assert schema_fact["data-saved-profile-schema"] == "esr-153.0"
+            assert soup.find(id="profile-type") is None
 
         # A normal editor PATCH cannot name a new channel and preserves the
         # apply-owned compliance evidence as well as all untouched atoms.

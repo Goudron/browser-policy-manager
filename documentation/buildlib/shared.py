@@ -800,6 +800,8 @@ SEARCH_FILTER_VALUE_LABELS = {
             "network_access": "Network access",
             "privacy_security": "Privacy and security",
             "search": "Search",
+            "sync_accounts": "Sync and accounts",
+            "urls_sites_navigation": "URLs, sites, and navigation",
         },
         "cis_level": {"level-1": "CIS Level 1", "level-2": "CIS Level 2"},
         "cis_control_state": {
@@ -848,6 +850,8 @@ SEARCH_FILTER_VALUE_LABELS = {
             "network_access": "Доступ к сети",
             "privacy_security": "Приватность и безопасность",
             "search": "Поиск",
+            "sync_accounts": "Синхронизация и учётные записи",
+            "urls_sites_navigation": "URL-адреса, сайты и навигация",
         },
         "cis_level": {"level-1": "CIS уровень 1", "level-2": "CIS уровень 2"},
         "cis_control_state": {
@@ -896,6 +900,8 @@ SEARCH_FILTER_VALUE_LABELS = {
             "network_access": "Netzwerkzugriff",
             "privacy_security": "Datenschutz und Sicherheit",
             "search": "Suche",
+            "sync_accounts": "Synchronisierung und Konten",
+            "urls_sites_navigation": "URLs, Websites und Navigation",
         },
         "cis_level": {"level-1": "CIS-Stufe 1", "level-2": "CIS-Stufe 2"},
         "cis_control_state": {
@@ -944,6 +950,8 @@ SEARCH_FILTER_VALUE_LABELS = {
             "network_access": "网络访问",
             "privacy_security": "隐私和安全",
             "search": "搜索",
+            "sync_accounts": "同步和账户",
+            "urls_sites_navigation": "URL、网站和导航",
         },
         "cis_level": {"level-1": "CIS 级别 1", "level-2": "CIS 级别 2"},
         "cis_control_state": {
@@ -992,6 +1000,8 @@ SEARCH_FILTER_VALUE_LABELS = {
             "network_access": "Accès réseau",
             "privacy_security": "Vie privée et sécurité",
             "search": "Recherche",
+            "sync_accounts": "Synchronisation et comptes",
+            "urls_sites_navigation": "URL, sites et navigation",
         },
         "cis_level": {"level-1": "Niveau CIS 1", "level-2": "Niveau CIS 2"},
         "cis_control_state": {
@@ -1040,6 +1050,8 @@ SEARCH_FILTER_VALUE_LABELS = {
             "network_access": "Acceso de red",
             "privacy_security": "Privacidad y seguridad",
             "search": "Búsqueda",
+            "sync_accounts": "Sincronización y cuentas",
+            "urls_sites_navigation": "URL, sitios y navegación",
         },
         "cis_level": {"level-1": "Nivel CIS 1", "level-2": "Nivel CIS 2"},
         "cis_control_state": {

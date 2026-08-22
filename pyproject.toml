@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=68", "wheel>=0.47.0"]
+requires = ["setuptools>=68", "wheel>=0.48.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "browser-policy-manager"
-version = "0.9.5.1"
+version = "0.9.6"
 description = "Firefox enterprise policy profile manager with guided, visual settings, and JSON editing workflows."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -61,10 +61,10 @@ dev = [
   "selenium>=4.46.0",
 
   # lint, format & types
-  "ruff>=0.16.1",
-  "mypy>=2.3.0",
+  "ruff>=0.16.3",
+  "mypy>=2.3.1",
   "import-linter>=2.13,<3",
-  "pre-commit==4.6.1",
+  "pre-commit==4.6.2",
   # Exact supply-chain tooling keeps audit and SBOM evidence reproducible.
   "pip-audit==2.10.1",
   "cyclonedx-bom==7.3.1",
@@ -82,7 +82,7 @@ postgres = [
 
 ai = [
   "numpy>=2.5.2",
-  "onnxruntime>=1.28.0",
+  "onnxruntime>=1.29.0",
   "tokenizers>=0.23.1",
 ]
 
@@ -156,7 +156,8 @@ type = "layers"
 layers = [
   "app.main",
   "app.api | app.web",
-  "app.services | app.compliance",
+  "app.services",
+  "app.compliance",
   "app.models | app.schemas | app.db | app.middleware",
   "app.core",
 ]

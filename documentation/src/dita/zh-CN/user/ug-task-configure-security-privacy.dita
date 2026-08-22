@@ -4,8 +4,15 @@
   <title>配置安全和隐私</title>
   <shortdesc>使用步骤 3 进行隐私状态、权限、cookie、清理、DNS 和强化控制。</shortdesc>
   <taskbody>
-    <prereq><p>指导概要草案已在预期模式通道上打开。</p></prereq>
-    <context><p>安全性和隐私设置可以改变用户体验和风险状况，因此在保存之前请查看警告。</p></context>
+    <prereq><p>已在<uicontrol>引导式编辑器</uicontrol>中使用预期的只读架构打开保存的配置文件。</p></prereq>
+    <context><p><uicontrol>安全和隐私</uicontrol>会改变用户体验和风险状态。证书、企业根证书、身份验证和安全设备仅属于步骤 4。</p>
+      <fig id="screenshot-guided-step-4-certificates-trust">
+        <title>证书和信任</title>
+        <image keyref="screenshot.guided-step-4-certificates-trust" placement="break" scalefit="yes" align="center">
+          <alt>引导式编辑器第 4 步显示信任状态和证书引用控件。</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
       <step><cmd>打开引导式配置的第 3 步。</cmd><info><p>预期结果：引导配置档案保持一致。</p></info></step>
       <step><cmd>配置隐私控制和权限默认值。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
@@ -13,7 +20,7 @@
       <step><cmd>检查验证消息并解释审核中的任何异常情况。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
     <result><p>该配置文件经过审查的<uicontrol>安全和隐私</uicontrol>状况。</p></result>
-    <postreq><p>恢复：如果站点工作流程中断，请重新访问权限或 cookie 设置并与配置文件目标进行比较。</p></postreq>
+    <postreq><p>恢复：重新检查权限或 Cookie 设置。对于证书、企业根证书或身份验证，请使用步骤 4 并在 BPM 外验证运行时行为。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-users-addons-sites"/>

@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>从库中创建第一个配置档案</title>
-  <shortdesc>当没有保存的配置文件适合重复使用时，从<uicontrol>库</uicontrol>中启动新的引导配置文件草稿。</shortdesc>
-  <taskbody>
-    <prereq><p>您在图书馆中，想要一个新的配置文件，而不是打开或复制现有的配置文件。</p></prereq>
-    <context><p>创建操作会打开 <uicontrol>引导式编辑器</uicontrol> 草稿。仅在保存后，草稿才会成为已保存的配置文件。</p></context>
-    <steps>
-      <step><cmd>选择<uicontrol>库</uicontrol>操作以创建新配置文件。</cmd><info><p>预期结果：BPM 打开新草稿的 <uicontrol>引导式编辑器</uicontrol>。</p></info></step>
-      <step><cmd>选择编辑器显示的配置文件用途、模式通道和启动选项。</cmd><info><p>模式通道影响可用的控件和验证行为。</p></info></step>
-      <step><cmd>当草稿具有所需的名称和初始设置时，保存草稿。</cmd><info><note type="warning">关闭未保存的草稿可能会丢失仅草稿的更改。</note></info></step>
-    </steps>
-    <result><p>新配置文件已保存并可以从<uicontrol>库</uicontrol>中再次找到。</p></result>
-    <postreq><p>恢复：如果您打算重复使用现有配置文件，请取消草稿并复制保存的配置文件。</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-concept-schema-aware-behavior"/>
-    <link keyref="topic.ug-task-duplicate-profile"/>
-  </related-links>
+  <title>从资料库创建配置文件</title>
+  <shortdesc>在资料库中准备一个具名配置文件，然后在<uicontrol>引导式编辑器</uicontrol>中打开保存的结果。</shortdesc>
+  <taskbody><prereq><p>打开<uicontrol>资料库</uicontrol>，并确定目标 Firefox 架构、初始预设以及是否需要 CIS 基线。</p></prereq><context><p>创建是一次原子准备操作。表单收集名称、架构、预设和 CIS 基线；BPM 推导初始策略文档，并在<uicontrol>引导式编辑器</uicontrol>中打开唯一保存的配置文件。编辑器不会选择或替换这些基线标识。</p>
+      <fig id="screenshot-preparation-create">
+        <title>创建配置文件准备</title>
+        <image keyref="screenshot.preparation-create" placement="break" scalefit="yes" align="center">
+          <alt>紧凑的创建配置文件表单，显示名称、Firefox 架构、初始预设、CIS 基线和“创建”操作。</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>在<uicontrol>资料库</uicontrol>中选择<uicontrol>创建配置文件</uicontrol>。</cmd><info><p>BPM 将打开简洁的准备表单。</p></info></step>
+<step><cmd>输入唯一名称，选择 Firefox 架构和初始预设，然后选择所需的 CIS 基线或不使用 CIS 基线。</cmd><info><p>所选架构限制可用策略控件。预设和 CIS 是经过审查的起点，而非部署或合规声明。</p></info></step>
+<step><cmd>选择<uicontrol>创建</uicontrol>。</cmd><info><p>BPM 将创建恰好一个由服务器组合的保存配置文件，并在<uicontrol>引导式编辑器</uicontrol>中打开它。</p><note type="warning">如果表单报告名称、架构、预设、CIS 或准备错误，则不会创建配置文件。修正可见选择后再次提交；不要在 BPM 外创建配置文件数据。</note></info></step>
+</steps><result><p>资料库包含一个已保存的配置文件，其中的架构、预设和 CIS 基线在各编辑器中作为只读事实显示。</p></result><postreq><p>恢复：若基线不明确，请在选择<uicontrol>创建</uicontrol>前取消。创建后要变更架构，请使用明确的转换审查；要从现有配置文件开始，请使用复制准备流程。</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-duplicate-profile"/><link keyref="topic.ug-task-use-guided-editor"/><link keyref="topic.cis-task-select-cis-baseline"/></related-links>
 </task>

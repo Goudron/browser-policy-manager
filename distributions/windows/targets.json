@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "target_bpm_version": "0.9.5.1",
+  "target_bpm_version": "0.9.6",
   "architecture": "x64",
   "installer_format": "msi",
   "supported_platforms": ["Windows 10 x64", "Windows 11 x64"],
@@ -16,7 +16,7 @@
     "sha256": "923111c7142b3dc783a3c722b19b8a21bcb78222d7a136ac33f0ca8a29f4cb66"
   },
   "installer": {
-    "artifact": "browser-policy-manager-0.9.5.1-windows-x64.msi",
+    "artifact": "browser-policy-manager-0.9.6-windows-x64.msi",
     "product_upgrade_code": "{F6AE9E8E-1C11-4AFA-87C0-7C8103F1B7E9}",
     "service_name": "BPM",
     "program_directory": "C:\\Program Files\\Browser Policy Manager",

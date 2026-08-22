@@ -46,8 +46,8 @@
         "string": 13
       },
       "ui_support_counts": {
-        "fallback": 54,
-        "mapped": 43
+        "fallback": 46,
+        "mapped": 51
       }
     },
     "esr-140.13": {
@@ -96,8 +96,8 @@
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 67,
-        "mapped": 45
+        "fallback": 58,
+        "mapped": 54
       }
     },
     "esr-153.0": {
@@ -146,8 +146,8 @@
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 71,
-        "mapped": 51
+        "fallback": 62,
+        "mapped": 60
       }
     },
     "release-153": {
@@ -196,8 +196,8 @@
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 71,
-        "mapped": 51
+        "fallback": 62,
+        "mapped": 60
       }
     }
   },
@@ -361,7 +361,7 @@
     "generated_topic_section": "a-channel-support"
   },
   "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
-  "source_inventory_sha256": "5d31408e48fcb58eb3a62c2aafce1b64890ac6815ff7aab35e73e0bdab4c37ff",
+  "source_inventory_sha256": "943ea47d870bedf91ca2e7b7425d5d2597c7f306c30e837e7c3a4f0d991fc25a",
   "summary": {
     "both_channels": 97,
     "changed_definitions": 8,
@@ -369,5 +369,5 @@
     "partial": 24,
     "release_only": 1
   },
-  "target_bpm_version": "0.9.5.1"
+  "target_bpm_version": "0.9.6"
 }

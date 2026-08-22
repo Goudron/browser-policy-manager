@@ -16,10 +16,11 @@
     "monaco-editor": "0.56.0"
   },
   "devDependencies": {
-    "@cyclonedx/cyclonedx-npm": "6.0.0",
+    "@cyclonedx/cyclonedx-npm": "6.0.1",
     "esbuild": "0.28.2"
   },
   "overrides": {
-    "dompurify": "3.4.13"
+    "dompurify": "3.4.14",
+    "marked": "18.0.10"
   }
 }

@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-home-search-navigation" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Configure home, search, and navigation</title>
-  <shortdesc>Set home surfaces, navigation behavior, managed search engines, and search suggestions from Step 2.</shortdesc>
+  <title>Configure URLs, sites, and navigation</title>
+  <shortdesc>Use Step 2 to configure homepage and startup behavior, site access, handlers, and managed bookmarks.</shortdesc>
   <taskbody>
     <prereq><p>Step 2 is open and the schema channel is correct.</p></prereq>
-    <context><p>These controls affect what users see first and how Firefox resolves navigation and search activity.</p></context>
+    <context><p>These controls affect which pages users can open and how Firefox starts and navigates. Managed search engines and search suggestions belong to Step 1.</p>
+      <fig id="screenshot-guided-step-2-urls-sites-navigation">
+        <title>URLs, sites, and navigation</title>
+        <image keyref="screenshot.guided-step-2-urls-sites-navigation" placement="break" scalefit="yes" align="center">
+          <alt>Guided Step 2 showing homepage and site access controls.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Open the home, search, and navigation sections.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Set homepage or new-tab behavior required by the profile.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Configure managed search engines and search suggestions according to policy.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Review navigation defaults before moving to security settings.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+      <step><cmd>Open Step 2, <uicontrol>URLs, sites, and navigation</uicontrol>.</cmd><info><p>Expected result: the Step 2 controls are visible without search-engine controls.</p></info></step>
+      <step><cmd>Set the homepage or startup behavior required by the profile.</cmd><info><p>Expected result: Firefox opens the reviewed starting surface.</p></info></step>
+      <step><cmd>Configure permitted or blocked sites, handlers, and managed bookmarks that the profile requires.</cmd><info><p>Expected result: related URL and site decisions are reviewed together.</p></info></step>
+      <step><cmd>Review the navigation values before moving to security settings.</cmd><info><note type="warning">Changing a schema-dependent control can make a value invalid for the selected Firefox channel. Use Step 1 for managed search engines or search suggestions.</note></info></step>
     </steps>
-    <result><p>The profile defines home, managed search, suggestions, and navigation behavior.</p></result>
-    <postreq><p>Recovery: if users would lose an expected search path, adjust the managed search engine entry before saving.</p></postreq>
+    <result><p>The profile defines reviewed homepage, startup, site-access, handler, bookmark, and navigation behavior.</p></result>
+    <postreq><p>Recovery: if users lose an expected site or navigation path, correct the visible URL or site entry and validate again. Use Step 1 for a managed-search or search-suggestion recovery.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-browser-access-defaults"/>

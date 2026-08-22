@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Créer un premier profil depuis la bibliothèque</title>
-  <shortdesc>Démarrez une nouvelle ébauche de profil guidé à partir de la bibliothèque lorsqu'aucun profil enregistré ne peut être réutilisé.</shortdesc>
-  <taskbody>
-    <prereq><p>Vous êtes dans la bibliothèque et souhaitez créer un nouveau profil plutôt que d'ouvrir ou de dupliquer un profil existant.</p></prereq>
-    <context><p>L'action de création ouvre un brouillon <uicontrol>Éditeur guidé</uicontrol>. Le brouillon devient un profil enregistré uniquement après l'avoir enregistré.</p></context>
-    <steps>
-      <step><cmd>Choisissez l'action <uicontrol>Bibliothèque</uicontrol> pour créer un nouveau profil.</cmd><info><p>Résultat attendu : BPM ouvre le <uicontrol>Éditeur guidé</uicontrol> pour un nouveau brouillon.</p></info></step>
-      <step><cmd>Choisissez l'objectif du profil, le canal de schéma et les options de démarrage affichés par l'éditeur.</cmd><info><p>Le canal de schéma affecte les contrôles disponibles et le comportement de validation.</p></info></step>
-      <step><cmd>Enregistrez le brouillon lorsqu'il porte le nom et les paramètres initiaux souhaités.</cmd><info><note type="warning">La fermeture d'un brouillon non enregistré peut entraîner la perte des modifications apportées uniquement au brouillon.</note></info></step>
-    </steps>
-    <result><p>Le nouveau profil est enregistré et peut être retrouvé à partir de la bibliothèque.</p></result>
-    <postreq><p>Récupération : si vous vouliez réutiliser un profil existant, annulez le brouillon et dupliquez plutôt le profil enregistré.</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-concept-schema-aware-behavior"/>
-    <link keyref="topic.ug-task-duplicate-profile"/>
-  </related-links>
+  <title>Créer un profil depuis la bibliothèque</title>
+  <shortdesc>Préparez dans la bibliothèque un profil nommé, puis ouvrez le résultat enregistré dans l’éditeur guidé.</shortdesc>
+  <taskbody><prereq><p>Ouvrez la <uicontrol>Bibliothèque</uicontrol> et connaissez le schéma Firefox cible, le préréglage de départ et la nécessité d’une ligne de base CIS.</p></prereq><context><p>La création est une préparation atomique. Le formulaire recueille le nom, le schéma, le préréglage et la ligne de base CIS; BPM dérive le document de stratégies initial et ouvre un unique profil enregistré dans l’<uicontrol>Éditeur guidé</uicontrol>. L’éditeur ne choisit ni ne remplace ces identités de base.</p>
+      <fig id="screenshot-preparation-create">
+        <title>Préparation de la création du profil</title>
+        <image keyref="screenshot.preparation-create" placement="break" scalefit="yes" align="center">
+          <alt>Formulaire compact de création de profil avec le nom, le schéma Firefox, le préréglage de départ, la base CIS et l’action « Créer ».</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>Dans la <uicontrol>Bibliothèque</uicontrol>, choisissez <uicontrol>Créer un profil</uicontrol>.</cmd><info><p>BPM ouvre le formulaire compact de préparation.</p></info></step>
+<step><cmd>Saisissez un nom distinct, choisissez le schéma Firefox et le préréglage de départ, puis une ligne de base CIS requise ou aucune ligne de base.</cmd><info><p>Le schéma choisi limite les contrôles de stratégies pris en charge. Le préréglage et CIS constituent un point de départ vérifié, pas une déclaration de déploiement ou de conformité.</p></info></step>
+<step><cmd>Choisissez <uicontrol>Créer</uicontrol>.</cmd><info><p>BPM crée exactement un profil enregistré composé par le serveur et l’ouvre dans l’<uicontrol>Éditeur guidé</uicontrol>.</p><note type="warning">En cas d’erreur de nom, schéma, préréglage, CIS ou préparation, aucun profil n’est créé. Corrigez le choix visible puis soumettez à nouveau; ne créez pas de données de profil hors de BPM.</note></info></step>
+</steps><result><p>La bibliothèque contient un profil enregistré dont le schéma, le préréglage et la ligne de base CIS sont affichés en lecture seule dans chaque éditeur.</p></result><postreq><p>Récupération : annulez avant <uicontrol>Créer</uicontrol> si la ligne de base est inconnue. Pour changer le schéma après création, utilisez une vérification explicite de conversion; pour partir d’un profil existant, utilisez la préparation d’un doublon.</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-duplicate-profile"/><link keyref="topic.ug-task-use-guided-editor"/><link keyref="topic.cis-task-select-cis-baseline"/></related-links>
 </task>

@@ -18,7 +18,7 @@ def test_m14_07_layout_keeps_the_pdf_delivery_scope_safe_after_promotion() -> No
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
 
     assert contract["backlog_item"] == "BPM093-M14-07"
-    assert contract["target_bpm_version"] == "0.9.5.1"
+    assert contract["target_bpm_version"] == "0.9.6"
     assert contract["status"] == "implemented-and-delivered"
     assert contract["delivery_root"] == "distributions/documentation"
     assert contract["release_directory"] == "{bpm_version}"

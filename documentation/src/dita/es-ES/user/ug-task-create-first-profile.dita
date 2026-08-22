@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Crear un primer perfil desde la biblioteca</title>
-  <shortdesc>Inicie un nuevo borrador de perfil guiado desde la <uicontrol>Biblioteca</uicontrol> cuando ningún perfil guardado sea adecuado para reutilizar.</shortdesc>
-  <taskbody>
-    <prereq><p>Estás en la <uicontrol>Biblioteca</uicontrol> y deseas un nuevo perfil en lugar de abrir o duplicar uno existente.</p></prereq>
-    <context><p>La acción de creación abre un borrador <uicontrol>Editor guiado</uicontrol>. El borrador se convierte en un perfil guardado sólo después de guardarlo.</p></context>
-    <steps>
-      <step><cmd>Elija la acción <uicontrol>Biblioteca</uicontrol> para crear un nuevo perfil.</cmd><info><p>Resultado esperado: BPM abre <uicontrol>Editor guiado</uicontrol> para un nuevo borrador.</p></info></step>
-      <step><cmd>Elija el propósito del perfil, el canal del esquema y las opciones de inicio que muestra el editor.</cmd><info><p>El canal de esquema afecta los controles disponibles y el comportamiento de validación.</p></info></step>
-      <step><cmd>Guarde el borrador cuando tenga el nombre y la configuración inicial que desee.</cmd><info><note type="warning">Cerrar un borrador no guardado puede perder los cambios solo del borrador.</note></info></step>
-    </steps>
-    <result><p>El nuevo perfil se guarda y se puede encontrar nuevamente en la <uicontrol>Biblioteca</uicontrol>.</p></result>
-    <postreq><p>Recuperación: si pretendía reutilizar un perfil existente, cancele el borrador y duplique el perfil guardado.</p></postreq>
-  </taskbody>
-  <related-links>
-    <link keyref="topic.ug-concept-schema-aware-behavior"/>
-    <link keyref="topic.ug-task-duplicate-profile"/>
-  </related-links>
+  <title>Crear un perfil desde la biblioteca</title>
+  <shortdesc>Prepare en la biblioteca un perfil con nombre y abra el resultado guardado en el editor guiado.</shortdesc>
+  <taskbody><prereq><p>Abra la <uicontrol>Biblioteca</uicontrol> y conozca el esquema Firefox objetivo, el preajuste inicial y si se necesita una línea base CIS.</p></prereq><context><p>La creación es una preparación atómica. El formulario recoge nombre, esquema, preajuste y línea base CIS; BPM deriva el documento inicial de políticas y abre el único perfil guardado en el <uicontrol>Editor guiado</uicontrol>. El editor no elige ni reemplaza esas identidades base.</p>
+      <fig id="screenshot-preparation-create">
+        <title>Preparación para crear un perfil</title>
+        <image keyref="screenshot.preparation-create" placement="break" scalefit="yes" align="center">
+          <alt>Formulario compacto para crear un perfil con nombre, esquema de Firefox, preajuste inicial, línea base CIS y acción «Crear».</alt>
+        </image>
+      </fig>
+    </context><steps>
+<step><cmd>En la <uicontrol>Biblioteca</uicontrol>, elija <uicontrol>Crear perfil</uicontrol>.</cmd><info><p>BPM abre el formulario compacto de preparación.</p></info></step>
+<step><cmd>Introduzca un nombre único, seleccione el esquema Firefox y el preajuste inicial, y elija la línea base CIS requerida o ninguna línea base.</cmd><info><p>El esquema limita los controles de políticas compatibles. El preajuste y CIS son puntos de partida revisados, no una declaración de despliegue ni de cumplimiento.</p></info></step>
+<step><cmd>Elija <uicontrol>Crear</uicontrol>.</cmd><info><p>BPM crea exactamente un perfil guardado compuesto por el servidor y lo abre en el <uicontrol>Editor guiado</uicontrol>.</p><note type="warning">Si el formulario informa un error de nombre, esquema, preajuste, CIS o preparación, no se crea ningún perfil. Corrija la elección visible y vuelva a enviar; no cree datos de perfil fuera de BPM.</note></info></step>
+</steps><result><p>La biblioteca contiene un perfil guardado cuyo esquema, preajuste y línea base CIS se muestran como datos de solo lectura en cada editor.</p></result><postreq><p>Recuperación: cancele antes de <uicontrol>Crear</uicontrol> si desconoce la línea base. Para cambiar el esquema tras la creación, use una revisión explícita de conversión; para partir de un perfil existente, use la preparación de duplicado.</p></postreq></taskbody>
+  <related-links><link keyref="topic.ug-task-duplicate-profile"/><link keyref="topic.ug-task-use-guided-editor"/><link keyref="topic.cis-task-select-cis-baseline"/></related-links>
 </task>

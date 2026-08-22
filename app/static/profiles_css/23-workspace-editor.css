@@ -431,6 +431,43 @@
             padding-bottom: 0.62rem;
         }
 
+        .editor-chrome-facts {
+            min-width: 0;
+            margin: 0;
+        }
+
+        .editor-chrome-fact {
+            min-width: 0;
+        }
+
+        .editor-chrome-fact-value {
+            display: block;
+            min-height: var(--compact-control-target);
+            overflow-wrap: anywhere;
+            padding: 0.62rem 1rem;
+            border: 1px solid var(--surface-soft-border);
+            border-radius: 1rem;
+            background: var(--surface-soft-bg);
+            color: var(--ink);
+            font-size: 0.875rem;
+            line-height: 1.45;
+        }
+
+        .editor-chrome-fact-status,
+        .editor-chrome-fact-detail {
+            display: block;
+            margin-top: 0.25rem;
+        }
+
+        .editor-chrome-fact-status {
+            font-weight: 700;
+        }
+
+        .editor-chrome-fact-detail {
+            color: var(--muted);
+            font-size: 0.8125rem;
+        }
+
         .editor-chrome-mode-switch {
             border-top: 1px solid rgba(148, 163, 184, 0.16);
             padding-top: var(--compact-space-2);

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-users-addons-sites" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>配置用户、加载项和站点</title>
-  <shortdesc>使用步骤 4 进行帐户、扩展、附加组件、书签、语言、翻译和站点处理。</shortdesc>
+  <title>配置用户、语言和同步</title>
+  <shortdesc>使用步骤 5 配置架构支持的身份、语言、翻译和同步。</shortdesc>
   <taskbody>
-    <prereq><p>指导草案已开放。</p></prereq>
-    <context><p>此步骤收集影响用户身份表面、扩展治理、本地化和网站特定行为的控件。</p></context>
+    <prereq><p>已在<uicontrol>引导式编辑器</uicontrol>中打开保存的配置文件。</p></prereq>
+    <context><p>此步骤包含身份、语言、翻译和同步。扩展规则仅属于步骤 6；URL、站点、处理程序和书签仅属于步骤 2。</p></context>
     <steps>
-      <step><cmd>打开引导式配置的第 4 步。</cmd><info><p>预期结果：引导配置档案保持一致。</p></info></step>
+      <step><cmd>打开步骤 5 <uicontrol>用户、语言和同步</uicontrol>。</cmd><info><p>预期结果：仅显示用户、语言和同步控件。</p></info></step>
       <step><cmd>查看 Mozilla 帐户和身份相关的浏览器界面。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>根据部署规则配置扩展、附加组件和书签。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>设置语言、翻译和网站处理选项。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
+      <step><cmd>设置配置文件所需的语言、翻译和同步选项。</cmd><info><p>预期结果：用户决定与扩展和导航策略分开审查。</p></info></step>
+      <step><cmd>扩展策略请使用步骤 6，站点或书签策略请使用步骤 2。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 架构无效。</note></info></step>
     </steps>
-    <result><p>配置文件包含经过审核的用户、附加组件、书签、语言和站点处理控件。</p></result>
-    <postreq><p>恢复：如果扩展程序或站点意外被阻止，请检查匹配部分并再次验证。</p></postreq>
+    <result><p>配置文件包含经过审查的用户、语言、翻译和同步控件。</p></result>
+    <postreq><p>恢复：扩展意外被阻止时检查步骤 6，站点被阻止时检查步骤 2，然后再次验证。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-security-privacy"/>

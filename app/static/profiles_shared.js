@@ -74,7 +74,6 @@
         let localeDict = initialLocale;
         let searchTimer = null;
         let baselineSnapshot = null;
-        let cloneSourceProfile = null;
         let lifecycleSessionNote = null;
         let isBusy = false;
         let libraryStats = { filtered: 0, total: 0 };
@@ -115,10 +114,9 @@
         }
 
         function getActiveWizardSchemaVersion() {
-            return documentRef.getElementById("profile-type")?.value
-                || wizardSchemaEl?.value
-                || currentProfile?.schema_version
+            return currentProfile?.schema_version
                 || currentProfile?.schemaVersion
+                || wizardSchemaEl?.value
                 || defaultSchemaVersion;
         }
 
@@ -230,14 +228,6 @@
 
         function setBaselineSnapshot(value) {
             baselineSnapshot = value;
-        }
-
-        function getCloneSourceProfile() {
-            return cloneSourceProfile;
-        }
-
-        function setCloneSourceProfile(value) {
-            cloneSourceProfile = value;
         }
 
         function getLifecycleSessionNote() {
@@ -435,8 +425,6 @@
             setSearchTimer,
             getBaselineSnapshot,
             setBaselineSnapshot,
-            getCloneSourceProfile,
-            setCloneSourceProfile,
             getLifecycleSessionNote,
             setLifecycleSessionNote,
             getIsBusy,

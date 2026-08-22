@@ -4,16 +4,23 @@
   <title>Configure security and privacy</title>
   <shortdesc>Use Step 3 for privacy posture, permissions, cookies, cleanup, DNS, and hardening controls.</shortdesc>
   <taskbody>
-    <prereq><p>A Guided profile draft is open on the intended schema channel.</p></prereq>
-    <context><p><uicontrol>Security &amp; privacy</uicontrol> settings can change both user experience and risk posture, so review warnings before saving.</p></context>
+    <prereq><p>A saved profile is open on the intended read-only schema in <uicontrol>Guided editor</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Security and privacy</uicontrol> settings can change both user experience and risk posture. Certificates, enterprise roots, authentication, and security devices belong only to Step 4.</p>
+      <fig id="screenshot-guided-step-4-certificates-trust">
+        <title>Certificates and trust</title>
+        <image keyref="screenshot.guided-step-4-certificates-trust" placement="break" scalefit="yes" align="center">
+          <alt>Guided Step 4 showing trust posture and certificate reference controls.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Open Step 3, <uicontrol>Security &amp; privacy</uicontrol>.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Open Step 3, <uicontrol>Security and privacy</uicontrol>.</cmd><info><p>Expected result: privacy controls are separate from certificate trust.</p></info></step>
       <step><cmd>Configure privacy controls and permission defaults.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Set cookies, cleanup, DNS, and security hardening options needed by the profile.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Check validation messages and explain any exception in the review.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
     </steps>
     <result><p>The profile has a reviewed security and privacy posture.</p></result>
-    <postreq><p>Recovery: if a site workflow breaks, revisit permission or cookie settings and compare against the profile goal.</p></postreq>
+    <postreq><p>Recovery: if a site workflow breaks, revisit permission or cookie settings and compare against the profile goal. For certificate, enterprise-root, or authentication behavior, use Step 4 and verify runtime behavior outside BPM.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-users-addons-sites"/>

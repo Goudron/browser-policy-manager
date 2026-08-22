@@ -1,3 +1,9 @@
+import {
+    formatNavigationValidationMessage,
+    retainsImportedRawNavigationValue,
+    validateNavigationValue,
+} from "./profiles_modules/navigation_url.mjs";
+
     function create({
         documentRef = document,
         dependencies = {},
@@ -45,12 +51,17 @@
             if (!container || !listEl) return;
 
             const disabled = container.querySelector("[data-schema-list-add]")?.disabled ? "disabled" : "";
+            const navigationKind = container.dataset.navigationUrlKind || "";
+            const navigationLabel = container.dataset.navigationUrlFieldLabel || "";
+            const navigationAttrs = navigationKind
+                ? ` data-navigation-url-kind="${escapeHtml(navigationKind)}" data-navigation-url-field-label="${escapeHtml(navigationLabel)}"`
+                : "";
             listEl.querySelector("[data-schema-list-empty]")?.remove();
             listEl.insertAdjacentHTML(
                 "beforeend",
                 `
                     <div class="wizard-inline-list-row" data-schema-list-row>
-                        <input type="text" class="soft-input" data-schema-list-item value="" ${disabled} />
+                        <input type="text" class="soft-input" data-schema-list-item value=""${navigationAttrs} ${disabled} />
                         <button type="button" class="button-base danger-button" data-schema-list-remove ${disabled}>${escapeHtml(t("profiles.wizard_shell_array_remove"))}</button>
                     </div>
                 `,
@@ -180,7 +191,13 @@
                     }
                 } else if (policyKind === "enum-select" || policyKind === "text") {
                     const input = card.querySelector('[data-schema-policy-field="__value__"]');
-                    const nextValue = String(input?.value || "").trim();
+                    const rawValue = String(input?.value || "");
+                    const navigation = validateNavigationControlValue(input, rawValue);
+                    if (!navigation.ok) {
+                        setStatus(navigation.message, "warn");
+                        return;
+                    }
+                    const nextValue = navigation.navigation ? navigation.value : rawValue.trim();
                     if (!nextValue) {
                         delete normalized[policyId];
                     } else {
@@ -198,6 +215,18 @@
                             return;
                         }
                         normalized[policyId] = nextValue;
+                    }
+                } else if (policyKind === "string-list") {
+                    const listControl = card.querySelector('[data-schema-policy-field="__value__"]');
+                    const parsedValue = parseSchemaPolicyFieldValue(listControl, "string-list");
+                    if (!parsedValue.ok) {
+                        setStatus(parsedValue.message, "warn");
+                        return;
+                    }
+                    if (parsedValue.hasValue) {
+                        normalized[policyId] = parsedValue.value;
+                    } else {
+                        delete normalized[policyId];
                     }
                 } else if (policyKind === "dictionary-object") {
                     const rows = Array.from(card.querySelectorAll("[data-schema-dict-row]"));
@@ -346,6 +375,25 @@
             } catch (e) {
                 setStatus(t("profiles.error_schema_policy").replace("{detail}", e.message || e), "error");
             }
+        }
+
+        function validateNavigationControlValue(control, raw) {
+            const kind = control?.dataset?.navigationUrlKind || "";
+            if (!kind || !raw) return { ok: true, navigation: false, value: raw };
+            const verdict = validateNavigationValue(raw, kind);
+            if (verdict.valid || retainsImportedRawNavigationValue(raw, control.dataset.navigationUrlOriginal, kind)) {
+                return { ok: true, navigation: true, value: raw };
+            }
+            return {
+                ok: false,
+                navigation: true,
+                value: null,
+                message: formatNavigationValidationMessage(
+                    t,
+                    control.dataset.navigationUrlFieldLabel || "URL",
+                    verdict,
+                ),
+            };
         }
 
         function appendSchemaArrayItem(card) {

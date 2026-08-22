@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and smoke-test BPM 0.9.5.1 native Linux distribution packages.
+"""Build and smoke-test BPM 0.9.6 native Linux distribution packages.
 
 The builder runs one frozen Linux target at a time. It assembles an isolated
 CPython 3.14.6 runtime, BPM's base wheel, Alembic payload, and verified product
@@ -24,7 +24,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = REPO_ROOT / "distributions" / "native" / "targets.json"
 ARTIFACT_ROOT = REPO_ROOT / "artifacts" / "native-packages"
 RELEASE_STORE_ROOT = REPO_ROOT / "distributions" / "releases"
-TARGET_VERSION = "0.9.5.1"
+TARGET_VERSION = "0.9.6"
 ARCHITECTURE = "amd64"
 REQUIRED_TARGET_IDS = frozenset(
     {
@@ -132,7 +132,7 @@ def load_targets() -> dict[str, Target]:
     if payload.get("schema_version") != 1:
         raise NativeDistributionError("native target manifest schema_version must be 1")
     if payload.get("target_bpm_version") != TARGET_VERSION:
-        raise NativeDistributionError("native target manifest must match BPM 0.9.5.1")
+        raise NativeDistributionError("native target manifest must match BPM 0.9.6")
     if payload.get("architecture") != ARCHITECTURE:
         raise NativeDistributionError("native target manifest must be amd64-only")
     runtime = payload.get("runtime")
@@ -269,7 +269,7 @@ def _docker_command(
         "--security-opt",
         "no-new-privileges:true",
         "--label",
-        "bpm.native-distribution=0.9.5.1",
+        "bpm.native-distribution=0.9.6",
         "--label",
         f"bpm.native-target={target.identifier}",
         "--mount",

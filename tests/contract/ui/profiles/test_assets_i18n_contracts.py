@@ -208,10 +208,57 @@ def test_esr_115_profile_is_selectable_and_schema_scoped_across_editor_surfaces(
         for bucket in ("recommended", "additional", "raw_fallback")
         for item in step[bucket]
     }
-    assert len(esr_115_policy_ids) == 97
+    assert len(esr_115_policy_ids) == 92
     assert "HttpsOnlyMode" not in esr_115_policy_ids
     assert 'id="settings-schema-shell-step-2"' in settings.text
     assert 'id="editor"' in json_editor.text
+
+
+def test_saved_editor_schema_is_a_server_owned_read_only_fact():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(
+            name="Read-only schema fact",
+            schema_version="esr-115.39",
+            flags={"DisableTelemetry": True},
+        ),
+    )
+    profile_id = create_response.json()["id"]
+
+    for path in (
+        f"/profiles/{profile_id}/edit",
+        f"/profiles/{profile_id}/settings",
+        f"/profiles/{profile_id}/json",
+    ):
+        response = client.get(path)
+        assert response.status_code == 200
+        soup = BeautifulSoup(response.text, "html.parser")
+        schema_fact = soup.find(id="profile-schema-fact")
+        assert schema_fact is not None
+        assert schema_fact.name == "dd"
+        assert schema_fact.get("data-saved-profile-schema") == "esr-115.39"
+        assert schema_fact.get_text(strip=True) == "ESR 115.39"
+        assert soup.find(id="profile-type") is None
+
+
+def test_editor_sources_do_not_construct_schema_selector_or_update_payload():
+    template = (REPO_ROOT / "app/templates/profiles/_page_editor_chrome.html").read_text(
+        encoding="utf-8"
+    )
+    runtime = (REPO_ROOT / "app/static/profiles_runtime.js").read_text(encoding="utf-8")
+    workspace = (REPO_ROOT / "app/static/profiles_workspace.js").read_text(encoding="utf-8")
+    wizard = (REPO_ROOT / "app/static/profiles_wizard_flow.js").read_text(encoding="utf-8")
+    payload_helpers = (REPO_ROOT / "app/static/profiles_modules/workspace_state.mjs").read_text(
+        encoding="utf-8"
+    )
+
+    for source in (template, runtime, workspace, wizard):
+        assert "profile-type" not in source
+    assert (
+        "return { description: form.description, flags: parsedFlags, compliance: compliancePayload"
+        in (payload_helpers)
+    )
 
 
 def test_profiles_library_page_uses_library_only_assets():
@@ -555,7 +602,7 @@ def test_profiles_compare_route_reuses_existing_profile_api_contract():
     assert 'router = APIRouter(prefix="/api/profiles", tags=["profiles"])' in api_source
 
 
-def test_profiles_editor_modes_use_mode_specific_entrypoints():
+def test_preparation_and_editor_modes_use_mode_specific_entrypoints():
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
@@ -563,26 +610,27 @@ def test_profiles_editor_modes_use_mode_specific_entrypoints():
     )
     profile_id = create_response.json()["id"]
 
-    guided_response = client.get("/profiles/new")
+    preparation_response = client.get("/profiles/new")
     settings_response = client.get(f"/profiles/{profile_id}/settings")
     json_response = client.get(f"/profiles/{profile_id}/json")
 
-    assert guided_response.status_code == 200
+    assert preparation_response.status_code == 200
     assert settings_response.status_code == 200
     assert json_response.status_code == 200
     assert (
-        '<script type="module" src="/static/profiles_bundles/profile-guided.js?v='
-        in guided_response.text
+        '<script type="module" src="/static/profiles_bundles/profile-preparation.js?v='
+        in preparation_response.text
     )
-    assert "profile-settings.js?v=" not in guided_response.text
+    assert "profile-guided.js?v=" not in preparation_response.text
+    assert "profile-settings.js?v=" not in preparation_response.text
     assert (
         '<link rel="stylesheet" href="/static/vendor/profiles_monaco.css?v='
-        not in guided_response.text
+        not in preparation_response.text
     )
-    assert '<script src="/static/vendor/profiles_monaco.js?v=' not in guided_response.text
-    assert "profile-library.js?v=" not in guided_response.text
-    assert '<script src="/static/profiles_compare_state.js?v=' not in guided_response.text
-    assert '<script src="/static/profiles.js?v=' not in guided_response.text
+    assert '<script src="/static/vendor/profiles_monaco.js?v=' not in preparation_response.text
+    assert "profile-library.js?v=" not in preparation_response.text
+    assert '<script src="/static/profiles_compare_state.js?v=' not in preparation_response.text
+    assert '<script src="/static/profiles.js?v=' not in preparation_response.text
     assert (
         '<script type="module" src="/static/profiles_bundles/profile-settings.js?v='
         in settings_response.text
@@ -603,6 +651,82 @@ def test_profiles_editor_modes_use_mode_specific_entrypoints():
     assert "profile-library.js?v=" not in json_response.text
     assert '<script src="/static/profiles_compare_state.js?v=' not in json_response.text
     assert '<script src="/static/profiles.js?v=' not in json_response.text
+
+
+def test_duplicate_preparation_offers_every_supported_schema():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Duplicate preparation schemas"),
+    )
+    profile_id = create_response.json()["id"]
+
+    response = client.get(f"/profiles/new?clone_from={profile_id}")
+
+    assert response.status_code == 200
+    soup = BeautifulSoup(response.text, "html.parser")
+    assert {
+        option["value"]
+        for option in soup.select("#profile-preparation-schema option")
+        if option.get("value")
+    } == {"release-153", "esr-153.0", "esr-140.13", "esr-115.39"}
+
+
+def test_preparation_form_copy_has_six_authored_locale_peers():
+    keys = {
+        "profiles.preparation_source_label",
+        "profiles.preparation_name_label",
+        "profiles.preparation_name_required",
+        "profiles.preparation_name_conflict",
+        "profiles.preparation_duplicate_name_hint",
+        "profiles.preparation_schema_label",
+        "profiles.preparation_schema_required",
+        "profiles.preparation_schema_unavailable",
+        "profiles.preparation_starter_label",
+        "profiles.preparation_starter_required",
+        "profiles.preparation_starter_unavailable",
+        "profiles.preparation_cis_label",
+        "profiles.preparation_cis_required",
+        "profiles.preparation_cis_unavailable",
+        "profiles.preparation_blocked",
+        "profiles.preparation_submitting",
+        "profiles.preparation_duplicating",
+        "profiles.preparation_source_stale",
+        "profiles.preparation_idempotency_reused",
+        "profiles.preparation_create_action",
+        "profiles.preparation_duplicate_action",
+    }
+    for locale in ("en", "ru", "de", "es-ES", "fr", "zh-CN"):
+        catalog = json.loads(
+            (REPO_ROOT / "app" / "i18n" / f"{locale}.json").read_text(encoding="utf-8")
+        )
+        assert all(isinstance(catalog.get(key), str) and catalog[key] for key in keys)
+        assert catalog["profiles.preparation_duplicate_name_hint"].count("{source_name}") == 1
+
+
+def test_preparation_entrypoint_uses_the_atomic_create_duplicate_boundaries():
+    source = (
+        REPO_ROOT / "app" / "static_src" / "profile_bundle_entries" / "preparation.js"
+    ).read_text(encoding="utf-8")
+
+    assert 'const PREPARE_NEW_PROFILE_PATH = "/api/profiles/prepare/new";' in source
+    assert (
+        'const PREVIEW_DUPLICATE_PROFILE_PATH = "/api/profiles/prepare/duplicate/preview";'
+        in source
+    )
+    assert 'const PREPARE_DUPLICATE_PROFILE_PATH = "/api/profiles/prepare/duplicate";' in source
+    assert 'method: "POST"' in source
+    assert "preparation_idempotency_key" in source
+    assert "crypto?.randomUUID" in source
+    assert "sessionStorage" in source
+    assert "if (submitting) return;" in source
+    assert "function refreshDuplicatePlan()" in source
+    assert "expected_source_revision: sourceRevision" in source
+    assert "source_id: sourceId" in source
+    assert "!duplicatePlanIsValid" in source
+    assert "window.location.assign(destination);" in source
+    assert "flags:" not in source
+    assert "bpm:preparation-state" in source
 
 
 def test_profiles_editor_modes_do_not_load_compare_entrypoints_or_hidden_compare_assets():
@@ -787,7 +911,7 @@ def test_profiles_contextual_help_links_resolve_from_manifest_for_five_surfaces(
     profile_id = profile_response.json()["id"]
     routes = {
         "/profiles/compare": ("compare", "ug-task-compare-profiles"),
-        "/profiles/new": ("guided", "ug-task-use-guided-editor"),
+        f"/profiles/{profile_id}/edit": ("guided", "ug-task-use-guided-editor"),
         f"/profiles/{profile_id}/settings": ("settings", "ug-task-use-all-settings"),
         f"/profiles/{profile_id}/json": ("json", "ug-task-use-json-editor"),
     }
@@ -826,7 +950,7 @@ def test_profiles_deep_help_icon_links_resolve_from_manifest_targets(
                 "Open help for importing Firefox policies.json",
             ),
         },
-        "/profiles/new": {
+        f"/profiles/{profile_id}/edit": {
             "policy-ai-controls": (
                 "/help/en/firefox/fx-concept-complex-policy-families.html#a-privacy-ai",
                 "Open help for Firefox AI policy controls",
@@ -834,10 +958,6 @@ def test_profiles_deep_help_icon_links_resolve_from_manifest_targets(
             "policy-visual-search-enabled": (
                 "/help/en/firefox/fx-concept-complex-policy-families.html#a-privacy-ai",
                 "Open help for the VisualSearchEnabled policy",
-            ),
-            "cis-baseline-selection": (
-                "/help/en/cis/cis-settings-guide.html#a-cis-settings-guide",
-                "Open help for selecting CIS baselines",
             ),
             "validation": (
                 "/help/en/user/ug-task-validate-profile.html",
@@ -1224,6 +1344,7 @@ def test_static_profiles_bootstrap_assets_exist():
         "guided.js",
         "json.js",
         "library.js",
+        "preparation.js",
         "settings.js",
     }
     assert json_editor_runtime.is_file()
@@ -1300,7 +1421,6 @@ def test_web_profiles_module_wires_templates_and_route():
     assert profile_route_paths == {
         "/profiles",
         "/profiles/compare",
-        "/profiles/guided-compliance",
         "/profiles/new",
         "/profiles/{profile_id}/edit",
         "/profiles/{profile_id}/settings",

@@ -46,11 +46,12 @@
   "readme_capabilities": [
     "Database-backed Firefox policy profile library.",
     "Create, edit, duplicate, archive, restore, permanently delete, import, and export workflows.",
-    "Named clone drafts that preserve the source configuration while letting the user choose the new profile name before opening the draft.",
+    "Atomic create and duplicate preparation with a name, supported Firefox schema, starter preset, and CIS baseline; duplicate preparation plans a schema conversion without changing the source.",
     "Dedicated saved-profile comparison with fast two-profile search and a two-column settings table covering both policies and managed preferences.",
     "Firefox Enterprise `policies.json` import and export at the product boundary.",
     "Version-aware validation against bundled Firefox policy schemas.",
-    "Guided editor for common administrator and security-team scenarios.",
+    "Eight-step Guided editor with dedicated URLs/sites/navigation, certificates/trust, and extensions workflows; its header shows the saved schema, preset, and CIS baseline as read-only facts.",
+    "Optional explicit AMO extension lookup with manual GUID and validated install-URL entry when AMO is unavailable.",
     "Dedicated AI and smart browser features step for schema versions that support those policies.",
     "Schema-aware Release/ESR behavior across Release 153, ESR 153.0, ESR 140.13, and ESR 115.39.",
     "Triage-first All settings workflow with Review, Configured, and Catalog modes, source attribution, grouped search, bounded long lists, and one primary detail editor.",
@@ -74,7 +75,7 @@
     {
       "readme_route": "GET /profiles/new",
       "app_route": "@router.get(\"/profiles/new\"",
-      "surface": "New guided draft",
+      "surface": "New profile preparation",
       "topic_ids": ["ug-task-create-first-profile", "ug-task-choose-profile-identity-schema"]
     },
     {
@@ -132,7 +133,7 @@
     {
       "readme_endpoint": "PATCH /api/profiles/{id}",
       "source_file": "app/api/profiles.py",
-      "source_token": "@router.patch(\"/{profile_id}\"",
+      "source_token": "summary=\"Update profile\"",
       "topic_ids": ["ug-task-save-profile", "ug-troubleshoot-save-conflict"]
     },
     {
@@ -217,7 +218,7 @@
   "browser_smoke_flows": [
     "test_browser_smoke_imports_firefox_policies_json_in_russian_library",
     "test_browser_smoke_primary_routes_render_in_ru_and_zh_cn",
-    "test_browser_smoke_guided_disclosure_labels_follow_active_locale",
+    "test_browser_shared_editor_chrome_labels_follow_active_locale",
     "test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure",
     "test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile",
     "test_browser_smoke_editor_mode_links_preserve_route_context",
@@ -225,8 +226,7 @@
     "test_browser_smoke_library_compare_preserves_locale_in_new_tab_and_selects_two_profiles",
     "test_browser_smoke_compare_selector_scrolls_large_profile_lists_and_selects_profiles",
     "test_browser_smoke_compare_table_setting_cells_do_not_duplicate_identifiers",
-    "test_browser_smoke_library_clone_name_actions_stay_inside_panel_in_russian",
-    "test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs"
+    "test_browser_smoke_library_duplicate_opens_preparation_in_a_new_tab"
   ],
   "release_gate_rules": [
     "Every CAP-* row in the product user capability inventory must appear in the User Guide case map.",

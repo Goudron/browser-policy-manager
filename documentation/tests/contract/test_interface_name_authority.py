@@ -116,6 +116,23 @@ def test_catalog_quality_findings_are_resolved_by_replacement_task() -> None:
     assert authority["downstream_contract"]["replacement_task"] == "BPM091-M10-05"
     assert authority["downstream_contract"]["drift_gate_task"] == "BPM091-M10-08"
     for finding in findings:
+        if disposition := finding.get("current_topology_disposition"):
+            assert disposition == {
+                "status": "superseded",
+                "owner": "BPM096-M10-05",
+                "current_catalog_key": "profiles.wizard_step_seven",
+                "current_values": {"zh-CN": "AI"},
+                "reason": (
+                    "BPM096 assigns user, language, and sync to Step 5 and moves the AI "
+                    "surface to Step 7; this historical Step 5 finding is not a current "
+                    "runtime-label authority."
+                ),
+            }
+            assert (
+                _json(ROOT / "app/i18n/zh-CN.json")[disposition["current_catalog_key"]]
+                == disposition["current_values"]["zh-CN"]
+            )
+            continue
         actual = [
             _json(ROOT / f"app/i18n/{locale}.json")[finding["catalog_key"]]
             for locale in finding["affected_locales"]

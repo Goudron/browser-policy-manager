@@ -2,12 +2,12 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-guided-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Das geführte Profil prüfen</title>
-  <shortdesc>Verwenden Sie Schritt 6, um die Konfiguration vor der Übergabe im Klartext zu überprüfen.</shortdesc>
+  <shortdesc>Verwenden Sie Schritt 8, um die Konfiguration vor der Übergabe im Klartext zu überprüfen.</shortdesc>
   <taskbody>
     <prereq><p>Sie haben die geführten Änderungen, die Sie beibehalten möchten, abgeschlossen.</p></prereq>
     <context><p>Der Überprüfungsschritt hilft Ihnen, fehlende Schemaauswahlen, Validierungswarnungen und Einstellungen zu erkennen, die nicht zum Szenario passen.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 6 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 8 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Lesen Sie die Zusammenfassung des ausgewählten Profils und die geänderten Einstellungsgruppen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Validierungswarnungen auflösen oder dokumentieren, warum eine unterstützte Ausnahme bestehen bleibt.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Bestätigen Sie, dass das Szenario, die CIS-Ebene, der Schemakanal und die bearbeiteten Steuerelemente mit dem Übergabeziel übereinstimmen.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>

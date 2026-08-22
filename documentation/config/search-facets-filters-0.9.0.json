@@ -41,7 +41,9 @@
         "home_startup",
         "network_access",
         "privacy_security",
-        "search"
+        "search",
+        "sync_accounts",
+        "urls_sites_navigation"
       ]
     },
     "cis_level": {

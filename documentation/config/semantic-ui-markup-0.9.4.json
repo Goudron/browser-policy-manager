@@ -86,18 +86,20 @@
     "user/ug-task-validate-json-document.dita": ["profiles.validate"],
     "user/ug-task-duplicate-profile.dita": ["profiles.library_action_duplicate"],
     "user/ug-task-remove-reset-setting.dita": ["profiles.wizard_shell_array_remove"],
-    "user/ug-task-manage-destructive-actions.dita": ["profiles.clone_name_cancel"],
-    "user/ug-task-permanently-delete-profile.dita": ["profiles.clone_name_cancel"],
     "user/ug-concept-schema-aware-behavior.dita": ["profiles.settings_context_action_validate"],
     "user/ug-task-validate-profile.dita": ["profiles.settings_context_action_validate"]
   },
   "ambiguous_exclusions": [
     "profiles.library_action_export",
+    "profiles.library_action_duplicate",
     "profiles.nav_library",
     "profiles.nav_overview",
     "profiles.nav_details",
     "profiles.theme_label",
-    "profiles.locale_label"
+    "profiles.locale_label",
+    "profiles.settings_category_ai_smart_features_title",
+    "profiles.settings_category_home_startup_title",
+    "profiles.wizard_step_six"
   ],
   "external_control_authorities": [
     "documentation/config/documentation-assistant-copy-0.9.3.json",

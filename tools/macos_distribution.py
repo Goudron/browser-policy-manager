@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and smoke-test the BPM 0.9.5.1 native macOS DMG test artifacts.
+"""Build and smoke-test the BPM 0.9.6 native macOS DMG test artifacts.
 
 The tool never uses Linux, Docker, or a cross-compiled substitute for a macOS
 bundle. Build and smoke run only on the target-native macOS architecture.
@@ -24,7 +24,7 @@ MACOS_ROOT = REPO_ROOT / "distributions" / "macos"
 CONFIG_PATH = MACOS_ROOT / "targets.json"
 ARTIFACT_ROOT = REPO_ROOT / "artifacts" / "macos-packages"
 RELEASE_STORE_ROOT = REPO_ROOT / "distributions" / "releases"
-TARGET_VERSION = "0.9.5.1"
+TARGET_VERSION = "0.9.6"
 
 
 class MacOSDistributionError(RuntimeError):
@@ -81,7 +81,7 @@ def load_targets() -> list[MacOSTarget]:
     if payload.get("schema_version") != 1:
         raise MacOSDistributionError("macOS target manifest schema_version must be 1")
     if payload.get("target_bpm_version") != TARGET_VERSION:
-        raise MacOSDistributionError("macOS target manifest must match BPM 0.9.5.1")
+        raise MacOSDistributionError("macOS target manifest must match BPM 0.9.6")
     if payload.get("installer_format") != "dmg" or payload.get("minimum_macos_version") != "14":
         raise MacOSDistributionError("macOS targets must be macOS 14+ DMGs")
     runtime = payload.get("runtime")

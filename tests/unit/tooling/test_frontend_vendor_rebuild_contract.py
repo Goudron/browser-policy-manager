@@ -14,7 +14,7 @@ def test_frontend_vendor_has_npm_lockfile_for_ci_rebuilds():
         "monaco-editor": "0.56.0",
     }
     assert package_lock["packages"][""]["devDependencies"] == {
-        "@cyclonedx/cyclonedx-npm": "6.0.0",
+        "@cyclonedx/cyclonedx-npm": "6.0.1",
         "esbuild": "0.28.2",
     }
 
@@ -65,5 +65,5 @@ def test_monaco_build_uses_json_only_contribution_and_patched_dompurify_source()
 
     assert "monaco.contribution.js" in entry
     assert "yaml" not in entry.lower()
-    assert "DOMPurify 3.4.13" in build
+    assert "DOMPurify 3.4.14" in build
     assert "purify.es.mjs" in build

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-users-addons-sites" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Configure users, add-ons, and sites</title>
-  <shortdesc>Use Step 4 for accounts, extensions, add-ons, bookmarks, language, translation, and site handling.</shortdesc>
+  <title>Configure users, language, and sync</title>
+  <shortdesc>Use Step 5 for user-facing identity, language, translation, and synchronization controls supported by the selected schema.</shortdesc>
   <taskbody>
-    <prereq><p>A Guided draft is open.</p></prereq>
-    <context><p>This step collects controls that affect user identity surfaces, extension governance, localization, and website-specific behavior.</p></context>
+    <prereq><p>A saved profile is open in <uicontrol>Guided editor</uicontrol>.</p></prereq>
+    <context><p>This step collects user identity surfaces, language, translation, and sync controls. Extension rules belong only to Step 6; URLs, sites, handlers, and bookmarks belong only to Step 2.</p></context>
     <steps>
-      <step><cmd>Open Step 4, <uicontrol>Users, add-ons &amp; sites</uicontrol>.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Open Step 5, <uicontrol>Users, language, and sync</uicontrol>.</cmd><info><p>Expected result: only user, language, and sync controls are visible.</p></info></step>
       <step><cmd>Review Mozilla accounts and identity-related browser surfaces.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Configure extensions, add-ons, and bookmarks according to deployment rules.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Set language, translation, and website handling options.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+      <step><cmd>Set language, translation, and synchronization options required by the profile.</cmd><info><p>Expected result: user-facing choices are reviewed independently of extension and navigation policy.</p></info></step>
+      <step><cmd>Use Step 6 for extension policy and Step 2 for site or bookmark policy.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
     </steps>
-    <result><p>The profile contains reviewed user, add-on, bookmark, language, and site-handling controls.</p></result>
-    <postreq><p>Recovery: if an extension or site is blocked unexpectedly, inspect the matching section and validate again.</p></postreq>
+    <result><p>The profile contains reviewed user, language, translation, and sync controls.</p></result>
+    <postreq><p>Recovery: if an extension or site is blocked unexpectedly, inspect Step 6 or Step 2 respectively and validate again.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-security-privacy"/>

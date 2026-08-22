@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build one BPM 0.9.5.1 native package inside its frozen target userspace.
+# Build one BPM 0.9.6 native package inside its frozen target userspace.
 # This script is executed only by tools/native_distribution.py with /source
 # mounted read-only and /output mounted as a disposable artifact directory.
 set -euo pipefail
@@ -10,7 +10,7 @@ readonly STAGE_ROOT="$WORK_ROOT/stage"
 readonly WHEELHOUSE="$WORK_ROOT/wheelhouse"
 readonly RUNTIME_PREFIX=/opt/bpm/runtime
 readonly VENV_PREFIX=/opt/bpm/venv
-readonly BPM_VERSION=0.9.5.1
+readonly BPM_VERSION=0.9.6
 readonly PYTHON_VERSION=3.14.6
 readonly PYTHON_SHA256=143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63
 readonly PACKAGE_NAME=browser-policy-manager

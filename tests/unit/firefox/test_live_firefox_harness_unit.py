@@ -6,10 +6,29 @@ from pathlib import Path
 import pytest
 
 from tests.live.firefox.helpers import (
+    assert_no_policy_errors,
     clone_firefox_installation,
     resolve_binary_path,
     write_policies_json_bytes,
 )
+
+
+class _PolicyErrorsDriver:
+    page_source = ""
+
+    def __init__(self, *, errors_hidden: bool, body_text: str = "") -> None:
+        self.errors_hidden = errors_hidden
+        self._body_text = body_text
+        self.urls: list[str] = []
+
+    def get(self, url: str) -> None:
+        self.urls.append(url)
+
+    def execute_script(self, _script: str) -> bool:
+        return self.errors_hidden
+
+    def find_element(self, _by: str, _value: str):
+        return type("Body", (), {"text": self._body_text})()
 
 
 def test_resolve_binary_path_prefers_env_override(tmp_path: Path):
@@ -22,6 +41,22 @@ def test_resolve_binary_path_prefers_env_override(tmp_path: Path):
     resolved = resolve_binary_path(str(env_binary), [fallback_binary])
 
     assert resolved == env_binary.resolve()
+
+
+def test_policy_error_helper_accepts_explicit_hidden_errors_category() -> None:
+    driver = _PolicyErrorsDriver(errors_hidden=True, body_text="Active Errors Policy Errors")
+
+    assert_no_policy_errors(driver, ["BlockAboutConfig"])
+
+    assert driver.urls == ["about:policies#errors"]
+
+
+def test_policy_error_helper_keeps_visible_error_category_failing() -> None:
+    driver = _PolicyErrorsDriver(errors_hidden=False, body_text="Policy Errors malformed policy")
+    driver.page_source = "BlockAboutConfig"
+
+    with pytest.raises(AssertionError, match="Firefox reported policy errors"):
+        assert_no_policy_errors(driver, ["BlockAboutConfig"])
 
 
 def test_resolve_binary_path_falls_back_to_project_candidate(tmp_path: Path):

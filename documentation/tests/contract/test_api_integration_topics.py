@@ -49,6 +49,7 @@ TOPICS = {
             "a-schemas",
             "a-query",
             "a-errors",
+            "bpm096-preparation-api",
         },
     },
     "admin-concept-api-limitations": {
@@ -61,6 +62,8 @@ TOPICS = {
             "a-errors",
             "a-exclusions",
             "a-health",
+            "bpm096-localized-current",
+            "bpm096-localized-literals",
         },
     },
     "admin-task-sync-profile-lifecycle": {
@@ -236,7 +239,7 @@ def test_english_api_topics_cover_audience_patterns_and_current_api_boundaries()
     inventory = " ".join(API_INVENTORY_PATH.read_text(encoding="utf-8").split())
     text = "\n".join("".join(_topic_root("en", topic_id).itertext()) for topic_id in TOPICS)
 
-    assert "17 programmatic/service operations" in inventory
+    assert "21 programmatic/service operations" in inventory
     assert "six HTML product routes" in inventory
 
     for required in (

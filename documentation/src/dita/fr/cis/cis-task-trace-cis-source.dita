@@ -15,6 +15,7 @@
       <step><cmd>Validez et exportez uniquement une fois que la source et la décision sont compréhensibles pour un autre réviseur.</cmd><info><p>Résultat attendu : le <codeph>policies.json</codeph> exporté reflète un choix révisé, tandis que l'attribution BPM uniquement reste dans le profil.</p></info></step>
     </steps>
     <result><p>La valeur configurée peut être expliquée comme référence, CIS, manuelle, importée ou brute, avec une décision de fusion et un statut de révision visibles.</p></result>
+    <example id="bpm096-localized-current"><title>Comportement actuel dans 0.9.6</title><p>Le schéma, le préréglage de départ et la ligne de base CIS sont choisis avant le profil enregistré. Les sources baseline, CIS, manual, imported, converted et raw servent à la vérification et ne prouvent pas la conformité. Les certificats et la confiance ont un registre distinct par chemin; les états manual, imported, converted, raw, unavailable et blocked exigent une vérification manuelle.</p></example>
     <postreq><p>Si l'attribution est ambiguë, comparez le profil à un profil vierge plus la même couche CIS, puis inspectez les importations et les modifications manuelles.</p></postreq>
   </taskbody>
   <related-links>

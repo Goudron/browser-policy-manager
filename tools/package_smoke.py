@@ -30,7 +30,7 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PROJECT_TOML = REPO_ROOT / "pyproject.toml"
 PROJECT_NAME = "browser-policy-manager"
-PROJECT_VERSION = "0.9.5.1"
+PROJECT_VERSION = "0.9.6"
 LICENSE_EXPRESSION = "MPL-2.0"
 BUILD_REQUIREMENT = "build==1.5.0"
 NATIVE_AI_DISTRIBUTIONS = frozenset({"numpy", "onnxruntime", "tokenizers"})

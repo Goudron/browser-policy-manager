@@ -30,9 +30,11 @@ from app.core.schema_channels import (
 )
 from app.db import DatabaseRuntime, get_session
 from app.models.profile import Base
+from app.services.policy_schema_service import load_policy_schema
 from app.web.firefox_preferences import get_wizard_preferences_catalog
 from app.web.firefox_starter_presets import get_wizard_starter_catalog
 from app.web.firefox_wizard_shell import get_wizard_schema_shell_catalog
+from app.web.firefox_wizard_shell.catalog import CERTIFICATE_TRUST_GUIDED_POLICY_IDS
 from tests.app_harness import (
     resolve_test_app,
     restore_dependency_overrides,
@@ -241,6 +243,14 @@ def build_all_settings_inventory_counts(
 
     policy_items = list(
         _iter_all_settings_policy_items(schema_version, wizard_schema_shell_catalog)
+    )
+    schema_policy_ids = set(load_policy_schema(schema_version).policies)
+    policy_items.extend(
+        (
+            "recommended",
+            {"id": policy_id, "support_level": "mapped"},
+        )
+        for policy_id in sorted(CERTIFICATE_TRUST_GUIDED_POLICY_IDS & schema_policy_ids)
     )
     policy_ids = {item["id"] for _, item in policy_items}
     known_preference_names = {

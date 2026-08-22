@@ -4,7 +4,7 @@
   <title>选择安全基线基线和起始预设</title>
   <shortdesc>在详细审查之前选择与部署目标匹配的 Firefox 架构通道、入门预设和 CIS 层。</shortdesc>
   <taskbody>
-    <prereq><p>您有配置档案草稿，了解目标浏览器是否遵循 Firefox Release 153、ESR 153.0、ESR 140.13 或 ESR 115.39 架构行为，并且可以在导出之前检查值。</p></prereq>
+    <prereq><p>打开创建或复制配置文件准备界面，确定目标浏览器是否遵循 Firefox Release 153、ESR 153.0、ESR 140.13 或 ESR 115.39 架构行为，并准备在导出前审查值。</p></prereq>
     <context><p>起始预设表示环境形状，而 CIS 层添加 BPM 的映射硬化基线。将两者用作已审核的输入，而不是用作自动部署批准。</p></context>
     <steps>
       <step><cmd>选择与目标部署匹配的 Firefox 架构通道：Release 153、ESR 153.0、ESR 140.13 或 ESR 115.39。</cmd><info><p>预期结果：BPM 针对预期通道验证可用策略和<uicontrol>托管首选项</uicontrol>。生成的 CIS 层只适用于 ESR 140.13 和 Release 153，不适用于 ESR 153.0 或 ESR 115.39。</p></info></step>
@@ -15,6 +15,7 @@
       <step><cmd>仅在记录所选通道、预设、CIS 级别和手动决策后进行验证和导出。</cmd><info><p>预期结果：导出的 <codeph>policies.json</codeph> 是可审查的，并且与所选的 BPM 基线相关联。</p></info></step>
     </steps>
     <result><p>该配置文件具有经过深思熟虑的起始预设、受支持的 CIS 层、可见的源属性以及剩余手动验证职责的清晰列表。</p></result>
+    <example id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>在创建已保存配置文件前选择架构、初始预设和 CIS 基线。baseline、CIS、manual、imported、converted 和 raw 来源仅用于审查，不是合规证明。证书和信任使用独立的路径台账；manual、imported、converted、raw、unavailable 和 blocked 状态都需要人工审查。</p></example>
     <postreq><p>如果基线太严格或太宽松，请删除 CIS 层或切换起始预设，重新验证并在导出前重复审核。</p></postreq>
   </taskbody>
   <related-links>

@@ -47,6 +47,13 @@ ALLOWED_VISIBLE_LATIN_TOKENS = {
     "source",
     "true",
     "true/false",
+    # Literal filesystem and AMO URL samples shown as input placeholders.
+    "Files",
+    "Program",
+    "Vendor",
+    "all",
+    "etc/firefox",
+    "urls",
 }
 
 

@@ -379,7 +379,7 @@ Treat Firefox schema documentation as part of the schema bump, not as a later cl
    `navigation.json`, deterministic search index, manifest, and UI target map. Direct links must
    expand the Documents/guide/section/topic tree to the active topic, and root/parent return must
    remain valid.
-7. If the bump changes one of the six approved User Guide screenshot scenarios, update the matrix
+7. If the bump changes one of the eleven approved User Guide screenshot scenarios, update the matrix
    row first, recapture all affected locales, and review localized captions and alt text. Do not
    expand the minimal screenshot matrix as an incidental part of a schema update.
 8. Run the applicable drift contracts before the broad release gate:

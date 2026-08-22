@@ -5,16 +5,17 @@
   <shortdesc>Trace one configured value back to the starter preset, CIS layer, merge decision, and later edits before export.</shortdesc>
   <taskbody>
     <prereq><p>Open a profile that was created from a starter preset or has a CIS Level 1 or Level 2 layer applied.</p></prereq>
-    <context><p>Tracing a value is useful when a reviewer asks whether a setting came from the original baseline, the CIS layer, an import, a manual edit, or raw fallback.</p></context>
+    <context><p>Tracing a value is useful when a reviewer asks whether a setting came from the original baseline, the CIS layer, an import, a manual edit, conversion, or raw fallback. Certificate/trust attribution remains separate from benchmark provenance.</p></context>
     <steps>
       <step><cmd>Open <uicontrol>All settings</uicontrol> and filter by configured values or by the CIS source badge.</cmd><info><p>Expected result: the relevant policy or managed preference remains visible with its source attribution.</p></info></step>
-      <step><cmd>Read the source attribution and identify whether the current value is baseline, CIS, manual, imported, or raw.</cmd><info><p>Expected result: you can name the immediate source of the value.</p></info></step>
+      <step><cmd>Read the source attribution and identify whether the current value is baseline, CIS, manual, imported, converted, or raw.</cmd><info><p>Expected result: you can name the immediate source of the value. For certificate/trust values, read the separate step-4 attribution without inferring a benchmark claim.</p></info></step>
       <step><cmd>Open the related CIS recommendation or Firefox policy topic when a generated layer contributed the value.</cmd><info><p>Expected result: you can see the recommendation ID, path, value, channel support, and merge rule.</p></info></step>
       <step><cmd>Check the merge decision: added_from_cis, already_satisfied, cis_replaced_base, kept_base_only, kept_base_stricter, or manual_review_kept_base.</cmd><info><p>Expected result: you know whether CIS added the value, confirmed it, replaced it, or left a base value for review.</p></info></step>
       <step><cmd>Resolve manual-review or conflict states before saving.</cmd><info><note type="warning">Do not hide a manual_review_kept_base decision by making an unrelated manual edit; record the review reason first.</note></info></step>
       <step><cmd>Validate and export only after the source and decision are understandable to another reviewer.</cmd><info><p>Expected result: the exported <codeph>policies.json</codeph> reflects a reviewed choice, while BPM-only attribution remains in the profile.</p></info></step>
     </steps>
-    <result><p>The configured value can be explained as baseline, CIS, manual, imported, or raw, with a visible merge decision and review status.</p></result>
+    <result><p>The configured value can be explained as baseline, CIS, manual, imported, converted, or raw, with a visible merge decision and review status.</p></result>
+    <example id="bpm096-localized-current"><title>Current 0.9.6 behavior</title><p>Schema, starter preset, and CIS baseline are selected before the saved profile is created. Baseline, CIS, manual, imported, converted, and raw attribution supports review; it does not prove compliance. Certificates and trust have a separate path-level ledger, and manual, imported, converted, raw, unavailable, and blocked states require manual review.</p></example>
     <postreq><p>If attribution is ambiguous, compare the profile against a blank profile plus the same CIS layer, then inspect imports and manual changes.</p></postreq>
   </taskbody>
   <related-links>

@@ -213,7 +213,8 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     "profiles.wizard_user_environment_map_title",
     'id="wizard-step-4-accounts"',
     'id="wizard-step-4-language"',
-    'id="wizard-step-4-extensions"',
+    'id="wizard-step-6"',
+    'id="wizard-extension-rule-add-form"',
     'id="wizard-step-4-bookmarks"',
     'id="wizard-step-4-websites"',
     'id="wizard-sync-focus-presets"',
@@ -263,14 +264,11 @@ PROFILES_PAGE_EDITOR_TOKENS = (
 )
 
 PROFILES_PAGE_REVIEW_TOKENS = (
-    'id="wizard-network-summary-authentication"',
-    'id="wizard-network-summary-certificates"',
     'id="wizard-network-summary-dns"',
-    'id="wizard-network-summary-windows-sso"',
-    'id="wizard-network-summary-authentication-jump"',
-    'id="wizard-network-summary-certificates-jump"',
     'id="wizard-network-summary-dns-jump"',
-    'id="wizard-network-summary-windows-sso-jump"',
+    'id="wizard-step-4-attribution"',
+    'id="wizard-certificate-provenance-status"',
+    'id="wizard-certificate-cis-status"',
     'id="wizard-homepage-section-status"',
     'id="wizard-home-overrides-section-status"',
     'id="wizard-firefox-home-section-status"',
@@ -301,33 +299,16 @@ PROFILES_PAGE_REVIEW_TOKENS = (
     'id="wizard-site-data-fine-tuning-toggle"',
     'id="wizard-site-data-fine-tuning-panel"',
     'data-privacy-outcome-group="cookies-permissions"',
-    'id="wizard-extension-default-mode"',
-    'id="wizard-extension-governance-presets"',
-    'data-extension-governance-preset="open"',
-    'data-extension-governance-preset="blocked"',
-    'data-extension-governance-preset="managed"',
-    'data-extension-governance-preset="curated"',
-    'data-extension-governance-preset="mixed"',
+    'id="wizard-extension-rule-add-form"',
+    'id="wizard-extension-rule-guid"',
+    'id="wizard-extension-rules"',
+    'id="wizard-extension-raw-rules"',
+    'id="wizard-extension-update"',
+    'id="wizard-extension-install-default"',
+    'id="wizard-extension-install-allow"',
     'id="wizard-extension-install"',
-    'data-extension-rule-group="install"',
-    'id="wizard-extension-install-summary"',
-    'id="wizard-extension-install-toggle"',
-    'id="wizard-extension-install-panel"',
     'id="wizard-extension-locked"',
-    'data-extension-rule-group="locked"',
-    'id="wizard-extension-locked-summary"',
-    'id="wizard-extension-locked-toggle"',
-    'id="wizard-extension-locked-panel"',
     'id="wizard-extension-uninstall"',
-    'data-extension-rule-group="uninstall"',
-    'id="wizard-extension-uninstall-summary"',
-    'id="wizard-extension-uninstall-toggle"',
-    'id="wizard-extension-uninstall-panel"',
-    'id="wizard-extension-section-status"',
-    'id="wizard-extension-curated-toggle"',
-    'id="wizard-extension-curated-panel"',
-    'id="wizard-install-addons-permission-card"',
-    'id="wizard-extension-settings-card"',
 )
 
 PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
@@ -371,8 +352,6 @@ PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
     'id="wizard-export-drilldown"',
     'id="wizard-export-ready-copy"',
     'id="wizard-export-checklist"',
-    'id="wizard-export-baseline-copy"',
-    'id="wizard-export-baseline-list"',
     'id="wizard-cis-final-summary"',
     'id="wizard-cis-exceptions-count"',
     'id="wizard-cis-exceptions-reasons"',
@@ -382,24 +361,31 @@ PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
     'id="wizard-export-included-now"',
     'id="wizard-export-missing-now"',
     'id="wizard-export-review-now"',
-    'id="wizard-export-summary-network"',
     'id="wizard-export-guided-summary-list"',
-    'id="wizard-export-guided-group-profile"',
     'id="wizard-export-guided-group-browser"',
+    'id="wizard-export-guided-group-urls"',
     'id="wizard-export-guided-group-privacy"',
-    'id="wizard-export-guided-group-features"',
+    'id="wizard-export-guided-group-certificates"',
+    'id="wizard-export-guided-group-users"',
+    'id="wizard-export-guided-group-extensions"',
     'id="wizard-export-guided-group-ai"',
-    'id="wizard-export-summary-home"',
-    'id="wizard-export-summary-search"',
-    'id="wizard-export-summary-features"',
+    'id="wizard-export-guided-group-review"',
+    'id="wizard-export-summary-browser"',
+    'id="wizard-export-summary-urls"',
+    'id="wizard-export-summary-certificates"',
+    'id="wizard-export-summary-users"',
+    'id="wizard-export-summary-extensions"',
     'id="wizard-export-summary-ai"',
     'id="wizard-export-summary-privacy"',
-    'id="wizard-export-summary-network-jump"',
-    'id="wizard-export-summary-home-jump"',
-    'id="wizard-export-summary-search-jump"',
-    'id="wizard-export-summary-features-jump"',
+    'id="wizard-export-summary-review"',
+    'id="wizard-export-summary-browser-jump"',
+    'id="wizard-export-summary-urls-jump"',
+    'id="wizard-export-summary-certificates-jump"',
+    'id="wizard-export-summary-users-jump"',
+    'id="wizard-export-summary-extensions-jump"',
     'id="wizard-export-summary-ai-jump"',
     'id="wizard-export-summary-privacy-jump"',
+    'id="wizard-export-summary-review-jump"',
     'id="wizard-export-shareable-text"',
     'id="wizard-export-shareable-details"',
     'id="wizard-export-shareable-generate"',
@@ -410,14 +396,6 @@ PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
     'id="wizard-export-firefox-policies"',
     'id="wizard-export-download-hint"',
     'id="wizard-export-ready-card"',
-    'data-extension-profile="uBlock0@raymondhill.net"',
-    'data-extension-profile="adguardadblocker@adguard.com"',
-    'data-extension-profile="https-everywhere@eff.org"',
-    "wizard-extension-profile-row",
-    "wizard-extension-profile-status",
-    'data-extension-profile-status="uBlock0@raymondhill.net"',
-    'data-extension-profile-status="adguardadblocker@adguard.com"',
-    'data-extension-profile-status="https-everywhere@eff.org"',
 )
 
 PROFILES_PAGE_GUIDED_UX_REGRESSION_TOKENS = (
@@ -429,15 +407,9 @@ PROFILES_PAGE_GUIDED_UX_REGRESSION_TOKENS = (
     "Final validation",
     "Ready to download",
     "Review by area",
-    'id="wizard-extension-fine-tuning-toggle"',
-    'id="wizard-extension-fine-tuning-panel"',
-    'data-extension-profile-toggle="uBlock0@raymondhill.net"',
-    'data-extension-profile-toggle="adguardadblocker@adguard.com"',
-    'data-extension-profile-toggle="https-everywhere@eff.org"',
-    'aria-controls="wizard-extension-fine-tuning-panel"',
-    'aria-controls="wizard-extension-profile-details-ublock"',
-    'aria-controls="wizard-extension-profile-details-adguard"',
-    'aria-controls="wizard-extension-profile-details-https-everywhere"',
+    'id="wizard-extension-rule-add-form"',
+    'id="wizard-extension-rules"',
+    'id="wizard-extension-raw-rules"',
 )
 
 PROFILES_PAGE_FOOTER_TOKENS = (
@@ -458,7 +430,16 @@ PROFILES_PAGE_FOOTER_TOKENS = (
 @cache
 def _profiles_page_response():
     client = make_test_client(app)
-    return client.get("/profiles/new")
+    created = client.post(
+        "/api/profiles",
+        json=build_profile_payload(
+            name="Guided route fixture",
+            schema_version="release-153",
+            flags={"DisableTelemetry": True},
+        ),
+    )
+    assert created.status_code == 201
+    return client.get(f"/profiles/{created.json()['id']}/edit")
 
 
 def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
@@ -504,12 +485,14 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.editor_chrome_modes_title"] == "Open another mode"
     assert locale_json["profiles.editor_chrome_settings_link"] == "All settings"
     assert locale_json["profiles.editor_chrome_json_link"] == "JSON editor"
-    assert locale_json["profiles.wizard_step_one"] == "Profile & baseline"
-    assert locale_json["profiles.wizard_step_two"] == "Browser access & defaults"
+    assert locale_json["profiles.wizard_step_one"] == "Browser, network & search"
+    assert locale_json["profiles.wizard_step_two"] == "URLs, sites & navigation"
     assert locale_json["profiles.wizard_step_three"] == "Security & privacy"
-    assert locale_json["profiles.wizard_step_four"] == "Users, add-ons & sites"
-    assert locale_json["profiles.wizard_step_five"] == "AI & smart features"
-    assert locale_json["profiles.wizard_step_six"] == "Review & export"
+    assert locale_json["profiles.wizard_step_four"] == "Certificates & trust"
+    assert locale_json["profiles.wizard_step_five"] == "Users, language & sync"
+    assert locale_json["profiles.wizard_step_six"] == "Extensions"
+    assert locale_json["profiles.wizard_step_seven"] == "AI"
+    assert locale_json["profiles.wizard_step_eight"] == "Review & export"
     assert locale_json["profiles.wizard_profile_identity_title"] == "Profile identity"
     assert locale_json["profiles.workspace_scope_guided"] == "Guided editor"
     assert locale_json["profiles.workspace_scope_settings"] == "All settings"
@@ -1101,12 +1084,14 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.editor_chrome_modes_title"] == "Открыть другой режим"
     assert locale_json["profiles.editor_chrome_settings_link"] == "Все настройки"
     assert locale_json["profiles.editor_chrome_json_link"] == "JSON-редактор"
-    assert locale_json["profiles.wizard_step_one"] == "Профиль и основа"
-    assert locale_json["profiles.wizard_step_two"] == "Доступ к браузеру и значения по умолчанию"
+    assert locale_json["profiles.wizard_step_one"] == "Браузер, сеть и поиск"
+    assert locale_json["profiles.wizard_step_two"] == "URL, сайты и навигация"
     assert locale_json["profiles.wizard_step_three"] == "Защита и приватность"
-    assert locale_json["profiles.wizard_step_four"] == "Пользователи, дополнения и сайты"
-    assert locale_json["profiles.wizard_step_five"] == "ИИ и умные функции"
-    assert locale_json["profiles.wizard_step_six"] == "Проверка и выгрузка"
+    assert locale_json["profiles.wizard_step_four"] == "Сертификаты и доверие"
+    assert locale_json["profiles.wizard_step_five"] == "Пользователи, язык и синхронизация"
+    assert locale_json["profiles.wizard_step_six"] == "Дополнения"
+    assert locale_json["profiles.wizard_step_seven"] == "ИИ"
+    assert locale_json["profiles.wizard_step_eight"] == "Проверка и выгрузка"
     assert locale_json["profiles.workspace_scope_guided"] == "Пошаговый редактор"
     assert locale_json["profiles.workspace_scope_settings"] == "Все настройки"
     assert locale_json["profiles.workspace_scope_current_label"] == "Текущий режим"

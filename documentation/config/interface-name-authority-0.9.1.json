@@ -181,7 +181,14 @@
       "baseline_values": ["与智能功能"],
       "resolved_values": ["人工智能与智能功能"],
       "status": "resolved",
-      "resolution_task": "BPM091-M10-05"
+      "resolution_task": "BPM091-M10-05",
+      "current_topology_disposition": {
+        "status": "superseded",
+        "owner": "BPM096-M10-05",
+        "current_catalog_key": "profiles.wizard_step_seven",
+        "current_values": {"zh-CN": "AI"},
+        "reason": "BPM096 assigns user, language, and sync to Step 5 and moves the AI surface to Step 7; this historical Step 5 finding is not a current runtime-label authority."
+      }
     },
     {
       "id": "UI091-ZH-AI-CATEGORY-INCOMPLETE",

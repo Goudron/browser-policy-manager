@@ -16,27 +16,27 @@ if [[ ! -f package-lock.json ]]; then
     exit 1
 fi
 
-echo "Installing pinned frontend dependencies with npm ci..."
+echo "Frontend vendor rebuild: phase 1/6 — installing pinned frontend dependencies with npm ci..."
 npm ci
 
-echo "Building Monaco vendor bundles..."
+echo "Frontend vendor rebuild: phase 2/6 — building Monaco vendor bundles..."
 npm run build:monaco
 
-echo "Synchronizing bundled dependency license notices..."
+echo "Frontend vendor rebuild: phase 3/6 — synchronizing bundled dependency license notices..."
 install -m 0644 node_modules/monaco-editor/LICENSE app/static/vendor/monaco.LICENSE
 install -m 0644 node_modules/monaco-editor/ThirdPartyNotices.txt app/static/vendor/monaco.ThirdPartyNotices.txt
 install -m 0644 node_modules/dompurify/LICENSE app/static/vendor/dompurify.LICENSE-APACHE
 install -m 0644 node_modules/dompurify/LICENSE-MPL app/static/vendor/dompurify.LICENSE-MPL
-install -m 0644 node_modules/marked/LICENSE.md app/static/vendor/marked.LICENSE
+install -m 0644 node_modules/marked/LICENSE app/static/vendor/marked.LICENSE
 
-echo "Verifying vendor license notices..."
+echo "Frontend vendor rebuild: phase 4/6 — verifying vendor license notices..."
 "$PYTHON_BIN" tools/verify_frontend_vendor.py --check-licenses
 
-echo "Vendor size diff before lock update:"
+echo "Frontend vendor rebuild: phase 5/6 — vendor size diff before lock update:"
 "$PYTHON_BIN" tools/verify_frontend_vendor.py --size-report
 
-echo "Updating vendor checksum lock..."
+echo "Frontend vendor rebuild: phase 6/6 — updating and verifying vendor checksum lock..."
 "$PYTHON_BIN" tools/verify_frontend_vendor.py --write
 
-echo "Verifying vendor checksum lock..."
 "$PYTHON_BIN" tools/verify_frontend_vendor.py
+echo "Frontend vendor rebuild: completed 6/6 phases."

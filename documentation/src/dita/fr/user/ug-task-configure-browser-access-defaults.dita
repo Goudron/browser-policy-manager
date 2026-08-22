@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-browser-access-defaults" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Configurer l'accès au navigateur et les paramètres par défaut</title>
-  <shortdesc>Utilisez l'étape 2 pour configurer l'accès au navigateur, le comportement du réseau et les valeurs par défaut de base.</shortdesc>
+  <shortdesc>Utilisez l’étape 1 pour le comportement du navigateur, l’accès réseau et la recherche sans dupliquer les URL ni les sites.</shortdesc>
   <taskbody>
-    <prereq><p>Un brouillon de profil guidé est ouvert.</p></prereq>
-    <context><p>Les paramètres d’accès au navigateur et les valeurs par défaut déterminent si Firefox peut atteindre les ressources et comment il se comporte avant les choix de stratégie propres au contenu.</p></context>
+    <prereq><p>Un profil enregistré est ouvert dans l’<uicontrol>Éditeur guidé</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Navigateur, réseau et recherche</uicontrol> regroupe le comportement du navigateur, l’accès réseau et la recherche. La page d’accueil, le démarrage, les filtres de sites, gestionnaires et marque-pages gérés appartiennent uniquement à l’étape 2.</p></context>
     <steps>
-      <step><cmd>Ouvrez l’étape 2 de la configuration guidée.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez l’étape 1 <uicontrol>Navigateur, réseau et recherche</uicontrol>.</cmd><info><p>Résultat attendu : seuls les contrôles de ce domaine sont visibles.</p></info></step>
       <step><cmd>Examinez les contrôles d'accès au réseau et de comportement du navigateur pour le déploiement.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Définissez les valeurs de base par défaut avant d'ajouter des choix spécifiques à l'accueil, à la recherche ou à la navigation.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Pour l’accueil ou la navigation de sites, ouvrez l’étape 2 au lieu de recréer ces règles ici.</cmd><info><p>Résultat attendu : chaque stratégie URL/site a un seul propriétaire.</p></info></step>
       <step><cmd>Validez les avertissements affichés à côté des contrôles dépendants du schéma.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
     <result><p>Le profil dispose d'un accès intentionnel au navigateur et de paramètres de comportement par défaut.</p></result>
-    <postreq><p>Récupération : si la validation signale une valeur, annulez la dernière modification ou utilisez <uicontrol>Tous les paramètres</uicontrol> pour inspecter la forme brute de la stratégie.</p></postreq>
+    <postreq><p>Récupération : annulez la dernière modification ou examinez la forme brute dans <uicontrol>Tous les paramètres</uicontrol>. Pour une URL, un site, un gestionnaire ou un marque-page géré, utilisez l’étape 2.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

@@ -15,6 +15,7 @@
       <step><cmd>验证配置文件，导出 <codeph>policies.json</codeph>，并在 BPM 外部执行已批准的独立部署验证。</cmd><info><p>预期结果：导出的文档、验证结果、比对记录、外部验证记录可以一起查看。</p></info></step>
     </steps>
     <result><p>创建代表性的 1 级强化配置文件，在 <uicontrol>引导式编辑器</uicontrol> 和 <uicontrol>所有设置</uicontrol> 中进行检查、比较、导出，并使用可追溯的证据进行独立验证。</p></result>
+    <example id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>在创建已保存配置文件前选择架构、初始预设和 CIS 基线。baseline、CIS、manual、imported、converted 和 raw 来源仅用于审查，不是合规证明。证书和信任使用独立的路径台账；manual、imported、converted、raw、unavailable 和 blocked 状态都需要人工审查。</p></example>
     <postreq><p>如果任何推荐行缺少生成的映射表、受影响的 Firefox 策略主题路径、导出路径或外部验证记录，请保持工作流打开。</p></postreq>
   </taskbody>
   <related-links>

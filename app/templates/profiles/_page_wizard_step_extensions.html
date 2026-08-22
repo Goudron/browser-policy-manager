@@ -1,0 +1,93 @@
+<section class="wizard-panel" id="wizard-step-6" data-wizard-step-id="extensions" aria-hidden="true">
+    <div class="wizard-section-group" id="wizard-extensions-search-section">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_title">{{ tr("profiles.wizard_extensions_title") }} {% set context_help_icon_target = "guided-extensions" %}{% set context_help_icon_label_key = "profiles.help_guided_extensions" %}{% include "profiles/_context_help_icon.html" %}</h3>
+        </div>
+        <section class="wizard-extension-amo-search" aria-labelledby="wizard-extension-amo-search-title">
+            <div class="wizard-section-heading">
+                <div>
+                    <h4 id="wizard-extension-amo-search-title" class="wizard-section-title" data-i18n="profiles.wizard_extensions_amo_search_title">{{ tr("profiles.wizard_extensions_amo_search_title") }}</h4>
+                    <p class="wizard-section-copy" data-i18n="profiles.wizard_extensions_amo_search_body">{{ tr("profiles.wizard_extensions_amo_search_body") }}</p>
+                </div>
+            </div>
+            <form id="wizard-extension-amo-search-form" class="wizard-extension-amo-search-form" novalidate>
+                <label class="wizard-input-stack" for="wizard-extension-amo-query">
+                    <span class="field-label" data-i18n="profiles.wizard_extensions_amo_query_label">{{ tr("profiles.wizard_extensions_amo_query_label") }}</span>
+                    <input id="wizard-extension-amo-query" class="soft-input" type="search" maxlength="100" autocomplete="off" enterkeyhint="search" data-i18n-placeholder="profiles.wizard_extensions_amo_query_placeholder" placeholder="{{ tr('profiles.wizard_extensions_amo_query_placeholder') }}" />
+                </label>
+                <button id="wizard-extension-amo-search-submit" type="submit" class="button-base ghost-button" data-i18n="profiles.wizard_extensions_amo_search_action">{{ tr("profiles.wizard_extensions_amo_search_action") }}</button>
+            </form>
+            <p id="wizard-extension-amo-search-disclosure" class="wizard-input-hint" data-i18n="profiles.wizard_extensions_amo_query_disclosure">{{ tr("profiles.wizard_extensions_amo_query_disclosure") }}</p>
+            <div id="wizard-extension-amo-search-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" role="status" aria-live="polite" data-i18n="profiles.wizard_extensions_amo_search_idle">{{ tr("profiles.wizard_extensions_amo_search_idle") }}</div>
+            <button id="wizard-extension-amo-manual-focus" type="button" class="button-base ghost-button" hidden data-i18n="profiles.wizard_extensions_amo_manual_action">{{ tr("profiles.wizard_extensions_amo_manual_action") }}</button>
+            <div id="wizard-extension-amo-search-results" class="wizard-extension-amo-results" role="list" aria-label="{{ tr('profiles.wizard_extensions_amo_results_label') }}" hidden></div>
+            <div id="wizard-extension-amo-selected-rules" class="wizard-extension-amo-selected-rules" aria-live="polite" hidden></div>
+        </section>
+    </div>
+
+    <section class="wizard-section-group wizard-extension-rules-section" data-settings-target="policy:ExtensionSettings" aria-labelledby="wizard-extension-rules-title">
+        <div class="wizard-section-heading">
+            <div>
+                <h3 id="wizard-extension-rules-title" class="wizard-section-title" data-i18n="profiles.wizard_extension_rules_title">{{ tr("profiles.wizard_extension_rules_title") }}</h3>
+                <p class="wizard-section-copy" data-i18n="profiles.wizard_extension_rules_body">{{ tr("profiles.wizard_extension_rules_body") }}</p>
+            </div>
+        </div>
+        <form id="wizard-extension-rule-add-form" class="wizard-extension-rule-add-form" novalidate>
+            <label class="wizard-input-stack" for="wizard-extension-rule-guid">
+                <span class="field-label" data-i18n="profiles.wizard_extension_rule_guid_label">{{ tr("profiles.wizard_extension_rule_guid_label") }}</span>
+                <input id="wizard-extension-rule-guid" class="soft-input" type="text" autocomplete="off" maxlength="255" data-i18n-placeholder="profiles.wizard_extension_rule_guid_placeholder" placeholder="{{ tr('profiles.wizard_extension_rule_guid_placeholder') }}" />
+            </label>
+            <label class="wizard-input-stack" for="wizard-extension-rule-install-url">
+                <span class="field-label" data-i18n="profiles.wizard_extension_rule_install_url_label">{{ tr("profiles.wizard_extension_rule_install_url_label") }}</span>
+                <input id="wizard-extension-rule-install-url" class="soft-input" type="url" autocomplete="off" maxlength="2048" inputmode="url" data-i18n-placeholder="profiles.wizard_extension_rule_install_url_placeholder" placeholder="{{ tr('profiles.wizard_extension_rule_install_url_placeholder') }}" />
+            </label>
+            <button id="wizard-extension-rule-add" type="submit" class="button-base ghost-button" data-i18n="profiles.wizard_extension_rule_add">{{ tr("profiles.wizard_extension_rule_add") }}</button>
+        </form>
+        <div id="wizard-extension-rule-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" role="status" aria-live="polite" data-i18n="profiles.wizard_extension_rule_status_empty">{{ tr("profiles.wizard_extension_rule_status_empty") }}</div>
+        <div id="wizard-extension-rules" class="wizard-extension-rules" aria-live="polite"></div>
+        <div id="wizard-extension-raw-rules" class="wizard-extension-raw-rules" aria-live="polite"></div>
+    </section>
+
+    <section class="wizard-section-group wizard-extension-shared-controls" aria-labelledby="wizard-extension-shared-title">
+        <div class="wizard-section-heading">
+            <div>
+                <h3 id="wizard-extension-shared-title" class="wizard-section-title" data-i18n="profiles.wizard_extension_shared_title">{{ tr("profiles.wizard_extension_shared_title") }}</h3>
+                <p class="wizard-section-copy" data-i18n="profiles.wizard_extension_shared_body">{{ tr("profiles.wizard_extension_shared_body") }}</p>
+            </div>
+        </div>
+        <div class="wizard-grid">
+            <label class="wizard-input-stack">
+                <span class="field-label" data-i18n="profiles.wizard_extension_update_label">{{ tr("profiles.wizard_extension_update_label") }}</span>
+                <select id="wizard-extension-update" class="soft-input" data-settings-target="policy:ExtensionUpdate">
+                    <option value="" data-i18n="profiles.wizard_extension_inherit">{{ tr("profiles.wizard_extension_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_extension_enabled">{{ tr("profiles.wizard_extension_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_extension_disabled">{{ tr("profiles.wizard_extension_disabled") }}</option>
+                </select>
+            </label>
+            <label class="wizard-input-stack">
+                <span class="field-label" data-i18n="profiles.wizard_extension_install_default_label">{{ tr("profiles.wizard_extension_install_default_label") }}</span>
+                <select id="wizard-extension-install-default" class="soft-input" data-settings-target="policy:InstallAddonsPermission">
+                    <option value="" data-i18n="profiles.wizard_extension_inherit">{{ tr("profiles.wizard_extension_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_extension_enabled">{{ tr("profiles.wizard_extension_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_extension_disabled">{{ tr("profiles.wizard_extension_disabled") }}</option>
+                </select>
+            </label>
+            <label class="wizard-input-stack wizard-field-full">
+                <span class="field-label" data-i18n="profiles.wizard_extension_install_allow_label">{{ tr("profiles.wizard_extension_install_allow_label") }}</span>
+                <textarea id="wizard-extension-install-allow" class="soft-input" rows="3" spellcheck="false" data-i18n-placeholder="profiles.wizard_extension_install_allow_placeholder" placeholder="{{ tr('profiles.wizard_extension_install_allow_placeholder') }}"></textarea>
+            </label>
+            <label class="wizard-input-stack wizard-field-full">
+                <span class="field-label" data-i18n="profiles.wizard_extensions_install_label">{{ tr("profiles.wizard_extensions_install_label") }}</span>
+                <textarea id="wizard-extension-install" class="soft-input" rows="3" spellcheck="false" data-settings-target="policy:Extensions" data-i18n-placeholder="profiles.wizard_extensions_install_placeholder" placeholder="{{ tr('profiles.wizard_extensions_install_placeholder') }}"></textarea>
+            </label>
+            <label class="wizard-input-stack">
+                <span class="field-label" data-i18n="profiles.wizard_extensions_locked_label">{{ tr("profiles.wizard_extensions_locked_label") }}</span>
+                <textarea id="wizard-extension-locked" class="soft-input" rows="3" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_locked_placeholder" placeholder="{{ tr('profiles.wizard_extensions_locked_placeholder') }}"></textarea>
+            </label>
+            <label class="wizard-input-stack">
+                <span class="field-label" data-i18n="profiles.wizard_extensions_uninstall_label">{{ tr("profiles.wizard_extensions_uninstall_label") }}</span>
+                <textarea id="wizard-extension-uninstall" class="soft-input" rows="3" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_uninstall_placeholder" placeholder="{{ tr('profiles.wizard_extensions_uninstall_placeholder') }}"></textarea>
+            </label>
+        </div>
+    </section>
+</section>

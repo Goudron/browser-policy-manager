@@ -23,6 +23,8 @@ from tests.live.firefox.helpers import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
+_live_progress_total = 0
+_live_progress_completed = 0
 
 
 def _live_failure_root() -> Path | None:
@@ -42,6 +44,42 @@ def _record_live_evidence(request: pytest.FixtureRequest, *, policy_path: Path) 
     """Record only the policy file and driver log needed for a failed scenario."""
 
     request.node.user_properties.append(("bpm_firefox_policy_path", str(policy_path)))
+
+
+def pytest_collection_finish(session: pytest.Session) -> None:
+    """Expose deterministic per-scenario progress for the pinned browser runner."""
+
+    global _live_progress_total, _live_progress_completed
+    _live_progress_completed = 0
+    _live_progress_total = sum(
+        1 for item in session.items if item.get_closest_marker("firefox_live") is not None
+    )
+    channel = os.getenv("BPM_FIREFOX_CHANNEL", "release")
+    print(
+        f"Firefox live [{channel}] scenarios 0/{_live_progress_total}: collection complete",
+        flush=True,
+    )
+
+
+def pytest_runtest_logreport(report: pytest.TestReport) -> None:
+    """Print a truthful completed/total boundary after each live test call."""
+
+    global _live_progress_completed
+    if report.when != "call":
+        return
+    _live_progress_completed += 1
+    if report.passed:
+        outcome = "passed"
+    elif report.failed:
+        outcome = "failed"
+    else:
+        outcome = "skipped"
+    channel = os.getenv("BPM_FIREFOX_CHANNEL", "release")
+    print(
+        f"Firefox live [{channel}] scenarios {_live_progress_completed}/{_live_progress_total}: "
+        f"{outcome} {report.nodeid}",
+        flush=True,
+    )
 
 
 @pytest.hookimpl(hookwrapper=True)

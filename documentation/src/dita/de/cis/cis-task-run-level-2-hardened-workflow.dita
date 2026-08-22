@@ -15,7 +15,8 @@
       <step><cmd>Validieren, exportieren Sie <codeph>policies.json</codeph> und führen Sie eine unabhängige Bereitstellungsüberprüfung mit der vom Eigentümer genehmigten Laufzeit, dem Betriebssystem, dem Netzwerk oder der Prüfmethode durch.</cmd><info><p>Erwartetes Ergebnis: Das gehärtete Profil verfügt über ein Exportartefakt, ein Validierungsergebnis, einen Vergleichsnachweis und einen externen Verifizierungsnachweis.</p></info></step>
     </steps>
     <result><p>Das repräsentative gehärtete Profil der Stufe 2 ist durchgängig überprüfbar und bleibt durch die Zuordnungs-, Export- und Quellennachweise von BPM begrenzt.</p></result>
-    <postreq><p>Wenn die unabhängige Überprüfung ein Bereitstellungsrisiko feststellt, behalten Sie das Profil als Entwurf und aktualisieren Sie den externen Entscheidungsdatensatz vor der Wiederverwendung.</p></postreq>
+    <example id="bpm096-localized-current"><title>Aktuelles Verhalten in 0.9.6</title><p>Schema, Startvoreinstellung und CIS-Basislinie werden vor dem gespeicherten Profil gewählt. Die Herkunft baseline, CIS, manual, imported, converted und raw ist ein Prüfmittel, kein Konformitätsnachweis. Für Zertifikate und Vertrauen gibt es einen getrennten Pfadnachweis; manual, imported, converted, raw, unavailable und blocked erfordern eine manuelle Prüfung.</p></example>
+    <postreq><p>Wenn die unabhängige Überprüfung ein Bereitstellungsrisiko feststellt, setzen Sie die Wiederverwendung des gespeicherten Profils aus und aktualisieren Sie den externen Entscheidungsdatensatz.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-levels-channels-layers"/>

@@ -35,12 +35,16 @@
         </div>
 
         <div class="wizard-layout">
-        <div class="wizard-stepper" id="wizard-stepper">
+        <nav
+            class="wizard-stepper"
+            id="wizard-stepper"
+            aria-label="{{ tr('profiles.wizard_title') }}">
             {% for step in wizard_steps %}
             <button
                 type="button"
                 class="wizard-step{% if loop.first %} wizard-step--active{% endif %}"
                 data-step="{{ step.step }}"
+                data-step-id="{{ step.id }}"
                 aria-controls="wizard-step-{{ step.step }}"
                 {% if loop.first %}aria-current="step"{% endif %}
                 data-step-progress-key="{{ step.progress_key }}"
@@ -51,14 +55,16 @@
                 </span>
             </button>
             {% endfor %}
-        </div>
+        </nav>
 
         <div class="wizard-content">
             <div class="wizard-panels">
-                {% include "profiles/_page_wizard_step_setup.html" %}
                 {% include "profiles/_page_wizard_step_general.html" %}
+                {% include "profiles/_page_wizard_step_urls.html" %}
                 {% include "profiles/_page_wizard_step_privacy.html" %}
+                {% include "profiles/_page_wizard_step_certificates.html" %}
                 {% include "profiles/_page_wizard_step_sync.html" %}
+                {% include "profiles/_page_wizard_step_extensions.html" %}
                 {% include "profiles/_page_wizard_step_ai.html" %}
                 {% include "profiles/_page_wizard_step_export.html" %}
                 {% include "profiles/_page_wizard_support.html" %}

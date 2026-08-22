@@ -73,6 +73,15 @@
     "rows_expected": 36,
     "last_reviewed_locales": ["ru", "de", "zh-CN", "fr", "es-ES"]
   },
+  "subsequent_source_refresh": {
+    "owner": "BPM096-M10-04",
+    "matrix_rows": 66,
+    "new_rows_captured": 30,
+    "source_capture_status": "source-capture-complete",
+    "visual_acceptance_status": "not-reviewed",
+    "visual_acceptance_owners": ["BPM096-M10-07", "BPM096-M10-08"],
+    "scope_boundary": "This accepted BPM091 record reviews its historical 36-row matrix only. It cannot accept the later 66-row BPM096 source matrix or rendered site/PDF output."
+  },
   "blocked_by_backlog_items": [],
   "required_follow_up": []
 }

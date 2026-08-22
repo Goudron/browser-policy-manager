@@ -11,6 +11,8 @@
     <section id="a-errors"><title>误差包络限制</title><p>错误响应不使用一种稳定版本化的信封。状态 <codeph>400</codeph>、<codeph>404</codeph>、<codeph>409</codeph>、<codeph>415</codeph>、<codeph>422</codeph> 和 <codeph>503</codeph> 可以携带不同的 <codeph>detail</codeph> 形状。消费者必须根据操作、状态和记录的体型进行分类。</p></section>
     <section id="a-exclusions"><title>排除和网页曲面</title><p>六个 OpenAPI <codeph>web</codeph> 操作是 HTML 产品路线，而不是稳定的机器集成 API。 <codeph>/i18n/{locale}.json</codeph>、<codeph>/favicon.ico</codeph>、<codeph>/static/*</codeph>、生成的架构 界面 和以下划线前缀的 Python 帮助程序不包含在集成操作主题中。</p></section>
     <section id="a-health"><title>健康反应限制</title><p><codeph>/health</codeph> 和 <codeph>/health/ready</codeph> 仅公开紧凑状态字段。就绪情况不会报告每个依赖项的诊断、数据<uicontrol>库</uicontrol>详细信息、架构运行状况、文档门户状态或部署批准。操作监视器应将它们视为最小握手端点。</p></section>
+    <section id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>公共准备使用 POST /api/profiles/prepare/new 和 POST /api/profiles/prepare/duplicate；复制预览通过只读 POST /api/profiles/prepare/duplicate/preview 提供。终止 ProfilePreparationErrorEnvelope 带 mutation="none"：不会创建目标，也不会修改源。调用方不提交 flags、compliance、provenance 或转换候选项。</p></section>
+    <section id="bpm096-localized-literals"><title>准备契约字面量核对</title><p>请核对 <codeph>preparation_idempotency_key</codeph> 和 <codeph>expected_source_revision</codeph>，以及 <codeph>POST /api/profiles/prepare/new</codeph>、<codeph>POST /api/profiles/prepare/duplicate</codeph> 和 <codeph>POST /api/profiles/prepare/duplicate/preview</codeph>。<codeph>ProfilePreparationErrorEnvelope</codeph> 与 <codeph>mutation="none"</codeph> 是终止契约字面量：<codeph>ProfilePreparationErrorEnvelope</codeph>、<codeph>mutation="none"</codeph>。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.admin-concept-api-conventions"/>

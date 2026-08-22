@@ -20,7 +20,7 @@ from sqlalchemy.ext.asyncio import (
 from app.core import schema_channels
 from app.core.config import Settings, get_settings
 
-EXPECTED_DATABASE_REVISION = "20260804_add_profile_name_casefold"
+EXPECTED_DATABASE_REVISION = "20260821_add_profile_certificate_provenance"
 EXPECTED_PROFILE_COLUMNS = {
     "id",
     "name",
@@ -29,6 +29,11 @@ EXPECTED_PROFILE_COLUMNS = {
     "schema_version",
     "flags",
     "compliance",
+    "baseline_provenance",
+    "extension_provenance",
+    "certificate_provenance",
+    "preparation_idempotency_key",
+    "preparation_request_fingerprint",
     "revision",
     "created_at",
     "updated_at",
@@ -41,6 +46,7 @@ EXPECTED_PROFILE_INDEXES = {
     "ix_profiles_created_at",
     "ix_profiles_updated_at",
     "ix_profiles_deleted_at",
+    "uq_profiles_preparation_idempotency_key",
 }
 
 
@@ -85,7 +91,7 @@ def _assert_release_schema_ready(connection: Connection) -> None:
         )
     if "profiles" not in tables or "policies" in tables:
         raise DatabaseReadinessError(
-            "Database profile tables do not match the BPM 0.9.5.1 release schema"
+            "Database profile tables do not match the BPM 0.9.6 release schema"
         )
 
     # Prefer retirement-specific guidance over a generic head-stamp error
@@ -97,18 +103,18 @@ def _assert_release_schema_ready(connection: Connection) -> None:
     revisions = connection.execute(text("SELECT version_num FROM alembic_version")).scalars().all()
     if revisions != [EXPECTED_DATABASE_REVISION]:
         raise DatabaseReadinessError(
-            "Database revision is not the BPM 0.9.5.1 head; run the documented verified-backup "
+            "Database revision is not the BPM 0.9.6 head; run the documented verified-backup "
             "candidate upgrade before starting BPM"
         )
 
     if columns != EXPECTED_PROFILE_COLUMNS:
         raise DatabaseReadinessError(
-            "Database is stamped at BPM 0.9.5.1 head but has a partial/incompatible profile shape"
+            "Database is stamped at BPM 0.9.6 head but has a partial/incompatible profile shape"
         )
     indexes = {index["name"] for index in inspector.get_indexes("profiles")}
     if not EXPECTED_PROFILE_INDEXES <= indexes:
         raise DatabaseReadinessError(
-            "Database is stamped at BPM 0.9.5.1 head but is missing required profile indexes"
+            "Database is stamped at BPM 0.9.6 head but is missing required profile indexes"
         )
 
 

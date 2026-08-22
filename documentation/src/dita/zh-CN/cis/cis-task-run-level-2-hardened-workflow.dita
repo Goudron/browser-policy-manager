@@ -15,7 +15,8 @@
       <step><cmd>使用所有者批准的运行时、操作系统、网络或审核方法验证、导出 <codeph>policies.json</codeph> 并运行独立的部署验证。</cmd><info><p>预期结果：强化的配置文件具有导出工件、验证结果、比较证据和外部验证证据。</p></info></step>
     </steps>
     <result><p>代表性的 2 级强化配置文件可进行端到端审查，并仍受 BPM 的映射、导出和源归因证据的限制。</p></result>
-    <postreq><p>如果独立验证发现部署风险，请将配置文件保留为草稿，并在重用之前更新外部决策记录。</p></postreq>
+    <example id="bpm096-localized-current"><title>0.9.6 当前行为</title><p>在创建已保存配置文件前选择架构、初始预设和 CIS 基线。baseline、CIS、manual、imported、converted 和 raw 来源仅用于审查，不是合规证明。证书和信任使用独立的路径台账；manual、imported、converted、raw、unavailable 和 blocked 状态都需要人工审查。</p></example>
+    <postreq><p>如果独立验证发现部署风险，请暂停重用已保存的配置文件并更新外部决策记录。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-levels-channels-layers"/>

@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-home-search-navigation" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Configurar inicio, búsqueda y navegación</title>
-  <shortdesc>Configure las superficies de inicio, el comportamiento de navegación, los motores de búsqueda administrados y las sugerencias de búsqueda del Paso 2.</shortdesc>
+  <title>Configurar URL, sitios y navegación</title>
+  <shortdesc>Use el paso 2 para configurar la página de inicio y el arranque, el acceso a sitios, los controladores y los marcadores gestionados.</shortdesc>
   <taskbody>
     <prereq><p>El paso 2 está abierto y el canal del esquema es correcto.</p></prereq>
-    <context><p>Estos controles afectan lo que los usuarios ven primero y cómo Firefox resuelve la actividad de navegación y búsqueda.</p></context>
+    <context><p>Estos controles determinan qué páginas pueden abrir los usuarios y cómo inicia y navega Firefox. Los motores de búsqueda administrados y las sugerencias de búsqueda pertenecen al paso 1.</p>
+      <fig id="screenshot-guided-step-2-urls-sites-navigation">
+        <title>URL, sitios y navegación</title>
+        <image keyref="screenshot.guided-step-2-urls-sites-navigation" placement="break" scalefit="yes" align="center">
+          <alt>Paso 2 del editor guiado con controles de página de inicio y acceso a sitios.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Abre las secciones de inicio, búsqueda y navegación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
-      <step><cmd>Establecer la página de inicio o el comportamiento de nueva pestaña requerido por el perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
-      <step><cmd>Configurar motores de búsqueda administrados y sugerencias de búsqueda según la política.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
-      <step><cmd>Revise los valores predeterminados de navegación antes de pasar a la configuración de seguridad.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
+      <step><cmd>Abra el paso 2, <uicontrol>URL, sitios y navegación</uicontrol>.</cmd><info><p>Resultado esperado: los controles del paso 2 aparecen sin controles de motor de búsqueda.</p></info></step>
+      <step><cmd>Establezca la página de inicio o el comportamiento de arranque requerido por el perfil.</cmd><info><p>Resultado esperado: Firefox abre la superficie de inicio revisada.</p></info></step>
+      <step><cmd>Configure los sitios permitidos o bloqueados, los controladores y los marcadores gestionados que requiere el perfil.</cmd><info><p>Resultado esperado: las decisiones relacionadas con URL y sitios se revisan juntas.</p></info></step>
+      <step><cmd>Revise los valores de navegación antes de pasar a la configuración de seguridad.</cmd><info><note type="warning">Cambiar un control dependiente del esquema puede invalidar un valor para el canal de Firefox seleccionado. Use el paso 1 para motores de búsqueda administrados o sugerencias de búsqueda.</note></info></step>
     </steps>
-    <result><p>El perfil define el inicio, la búsqueda administrada, las sugerencias y el comportamiento de navegación.</p></result>
-    <postreq><p>Recuperación: si los usuarios pierden una ruta de búsqueda esperada, ajuste la entrada del motor de búsqueda administrado antes de guardar.</p></postreq>
+    <result><p>El perfil define una página de inicio, arranque, acceso a sitios, controladores, marcadores y navegación revisados.</p></result>
+    <postreq><p>Recuperación: si los usuarios pierden una ruta esperada de sitio o navegación, corrija la entrada URL o sitio visible y valide de nuevo. Use el paso 1 para recuperar una búsqueda administrada o una sugerencia de búsqueda.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-browser-access-defaults"/>

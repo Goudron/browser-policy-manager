@@ -24,7 +24,7 @@
     {
       "id": "create-and-start",
       "title": "Create and start a profile",
-      "outcome": "A user can start from a draft, preset, imported file, or saved profile and make the first safe editing decision.",
+      "outcome": "A user can start from atomic preparation, a preset, an imported file, or a saved profile and make the first safe editing decision.",
       "topics": [
         { "topic_id": "ug-task-create-first-profile", "kind": "task", "capability_ids": ["CAP-GLOBAL-004", "CAP-LIB-008"] },
         { "topic_id": "ug-task-choose-profile-identity-schema", "kind": "task", "capability_ids": ["CAP-GUIDED-003"] },

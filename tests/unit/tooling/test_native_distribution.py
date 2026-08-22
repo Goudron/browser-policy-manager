@@ -39,7 +39,7 @@ def test_native_release_inputs_are_complete_and_bound_to_the_current_bpm_version
 
     targets = native_distribution.validate_release_inputs()
 
-    assert native_distribution._project_version() == "0.9.5.1"
+    assert native_distribution._project_version() == "0.9.6"
     assert len(targets) == 5
 
 

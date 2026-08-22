@@ -26,6 +26,7 @@ import * as reviewState from "./profiles_review_state.js";
 import { create as createPreferences } from "./profiles_preferences.js";
 import { create as createSearchEngines } from "./profiles_search_engines.js";
 import { create as createNetwork } from "./profiles_network.js";
+import { create as createCertificateTrust } from "./profiles_certificate_trust.js";
 import { create as createPreferenceRows } from "./profiles_preferences_rows.js";
 import { create as createPreferenceState } from "./profiles_preferences_state.js";
 import { create as createPreferenceViews } from "./profiles_preferences_views.js";
@@ -43,7 +44,6 @@ import { create as createConversionReview } from "./profiles_modules/conversion_
     const WIZARD_LONG_LIST_LIMIT = 5;
     const WIZARD_LONG_LIST_SELECTOR = [
         ".wizard-panel .wizard-export-plan-list",
-        ".wizard-panel .wizard-baseline-summary-list",
         ".wizard-panel .wizard-search-engine-list:not([data-schema-array-list]):not([data-schema-dict-list]):not([data-schema-nested-dict-list]):not([data-schema-nested-array-list])",
         ".wizard-panel .wizard-shell-list",
         ".wizard-panel .wizard-checklist",
@@ -401,6 +401,7 @@ import { create as createConversionReview } from "./profiles_modules/conversion_
                 createPreferences,
                 createSearchEngines,
                 createNetwork,
+                createCertificateTrust,
                 createPreferenceRows,
                 createPreferenceState,
                 createPreferenceViews,
@@ -409,6 +410,7 @@ import { create as createConversionReview } from "./profiles_modules/conversion_
 
         core.setSyncWizardNetworkFromEditor(features.syncWizardNetworkFromEditor);
         core.setSyncWizardPreferencesFromEditor(features.syncWizardPreferencesFromEditor);
+        core.setSyncWizardCertificateTrustFromEditor(features.syncWizardCertificateTrustFromEditor);
 
         bootstrapSections.startRuntimeModule({
             documentRef: document,

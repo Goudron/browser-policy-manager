@@ -16,6 +16,18 @@ UI_SECTIONS = [
         order=30,
     ),
     PolicyUiSection(
+        id="urls_sites_navigation",
+        title_key="profiles.wizard_step_two",
+        fallback="URLs, sites, and navigation",
+        order=35,
+    ),
+    PolicyUiSection(
+        id="sync_accounts",
+        title_key="profiles.wizard_step_five",
+        fallback="Accounts, language, and sync",
+        order=37,
+    ),
+    PolicyUiSection(
         id="search",
         title_key="profiles.wizard_step_two",
         fallback="Search and address bar",

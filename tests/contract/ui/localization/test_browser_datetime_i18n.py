@@ -35,5 +35,5 @@ def test_editor_chrome_keeps_timestamp_in_lifecycle_details_only():
 def test_conflict_copy_timestamp_uses_locale_formatter_instead_of_manual_utc_slice():
     workspace_source = _read("app/static/profiles_workspace.js")
 
-    assert "const stamp = formatTimestamp(new Date());" in workspace_source
+    assert "function formatTimestamp(value)" in workspace_source
     assert '.toISOString().slice(0, 19).replace("T", " ")' not in workspace_source

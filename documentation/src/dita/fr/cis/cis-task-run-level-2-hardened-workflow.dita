@@ -15,7 +15,8 @@
       <step><cmd>Validez, exportez <codeph>policies.json</codeph> et exécutez une vérification de déploiement indépendante avec le runtime, le système d'exploitation, le réseau ou la méthode d'audit approuvés par le propriétaire.</cmd><info><p>Résultat attendu : le profil renforcé possède un artefact d'exportation, un résultat de validation, des preuves de comparaison et des preuves de vérification externe.</p></info></step>
     </steps>
     <result><p>Le profil renforcé représentatif de niveau 2 est révisable de bout en bout et reste limité par les preuves de mappage, d'exportation et d'attribution de source de BPM.</p></result>
-    <postreq><p>Si une vérification indépendante révèle un risque de déploiement, conservez le profil en tant que brouillon et mettez à jour l'enregistrement de décision externe avant de le réutiliser.</p></postreq>
+    <example id="bpm096-localized-current"><title>Comportement actuel dans 0.9.6</title><p>Le schéma, le préréglage de départ et la ligne de base CIS sont choisis avant le profil enregistré. Les sources baseline, CIS, manual, imported, converted et raw servent à la vérification et ne prouvent pas la conformité. Les certificats et la confiance ont un registre distinct par chemin; les états manual, imported, converted, raw, unavailable et blocked exigent une vérification manuelle.</p></example>
+    <postreq><p>Si une vérification indépendante révèle un risque de déploiement, suspendez la réutilisation du profil enregistré et mettez à jour l’enregistrement de décision externe.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-levels-channels-layers"/>

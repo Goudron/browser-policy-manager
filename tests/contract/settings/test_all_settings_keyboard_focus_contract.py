@@ -37,7 +37,7 @@ def test_all_settings_keyboard_focus_contract_is_wired_for_heavy_review_surface(
         "activateSearchResult(firstResultButton())",
         'if (event.key === "ArrowDown")',
         "firstResult.focus?.();",
-        "focusTarget?.focus?.({ preventScroll: true });",
+        "restoredFocusTarget?.focus?.({ preventScroll: true });",
         "allSettingsRouteState?.setFocusedTarget(normalizedTarget);",
     ):
         assert snippet in search_source

@@ -12,9 +12,10 @@
       <step><cmd>Validate the profile in BPM and inspect the exported <codeph>policies.json</codeph> path that would carry the value.</cmd><info><p>Expected result: schema validation and export shape are known before external verification begins.</p></info></step>
       <step><cmd>Perform any runtime, operating-system, network, or audit verification outside BPM using the deployment owner's approved method.</cmd><info><p>Expected result: external evidence is collected without claiming that BPM itself proved Firefox behavior.</p></info></step>
       <step><cmd>Record the decision in the external ticket, deployment note, or change-control record, including the BPM profile name, schema channel, recommendation ID, value, reason, owner, and review date.</cmd><info><note type="warning">BPM does not persist a dedicated CIS exception or waiver object; do not rely on the profile alone as the exception record.</note></info></step>
-      <step><cmd>Reopen the profile and confirm the source attribution still shows whether the value is baseline, CIS, manual, imported, or raw.</cmd><info><p>Expected result: later reviewers can trace the configured value and find the external record.</p></info></step>
+      <step><cmd>Reopen the profile and confirm the source attribution still shows whether the value is baseline, CIS, manual, imported, converted, or raw.</cmd><info><p>Expected result: later reviewers can trace the configured value and find the external record.</p></info></step>
     </steps>
     <result><p>The CIS deviation has actionable verification evidence, an external exception record, and visible BPM source attribution.</p></result>
+    <example id="bpm096-localized-current"><title>Current 0.9.6 behavior</title><p>Schema, starter preset, and CIS baseline are selected before the saved profile is created. Baseline, CIS, manual, imported, converted, and raw attribution supports review; it does not prove compliance. Certificates and trust have a separate path-level ledger, and manual, imported, converted, raw, unavailable, and blocked states require manual review.</p></example>
     <postreq><p>If the reviewer cannot verify the exported path or external evidence, keep the item in manual review and do not describe it as compliant.</p></postreq>
   </taskbody>
   <related-links>

@@ -69,7 +69,7 @@ def test_firefox_policy_documentation_inventory_is_current_and_complete():
     assert inventory == build_inventory()
     assert inventory["schema_version"] == 1
     assert inventory["backlog_item"] == "BPM095-M8-04"
-    assert inventory["generated_for_bpm"] == "0.9.5.1"
+    assert inventory["generated_for_bpm"] == "0.9.6"
 
     policies = inventory["policies"]
     assert isinstance(policies, list)

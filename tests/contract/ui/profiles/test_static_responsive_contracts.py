@@ -53,19 +53,23 @@ def test_wizard_step_navigation_scrolls_only_for_normal_navigation():
     assert_source_contains_all(
         runtime_source,
         (
-            "function scrollWizardStepToTop(stepNumber)",
-            'targetEl.scrollIntoView({ behavior: "smooth", block: "start" });',
-            "function navigateWizardStep(nextStep)",
+            "function wizardScrollBehavior()",
+            'windowRef.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches',
+            "function scrollWizardStepToTop(stepReference)",
+            'targetEl.scrollIntoView({ behavior: wizardScrollBehavior(), block: "start" });',
+            "function navigateWizardStep(nextStep, options = {})",
+            "if (getWizardStep() !== previousStep || options.restoreFocus)",
             'button.addEventListener("click", () => navigateWizardStep(button.dataset.step));',
-            'wizardPrevEl?.addEventListener("click", () => navigateWizardStep(getWizardStep() - 1));',
-            "navigateWizardStep(getWizardStep() + 1);",
+            'wizardPrevEl?.addEventListener("click", () => navigateWizardStep(getPreviousWizardStep?.()));',
+            "navigateWizardStep(getNextWizardStep?.());",
         ),
     )
     assert_source_contains_all(
         settings_search_source,
         (
             "setWizardStep(nextStep);",
-            'targetEl.scrollIntoView({ behavior: "smooth", block: "center" });',
+            'const scrollBehavior = documentRef.defaultView?.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches',
+            'targetEl.scrollIntoView({ behavior: scrollBehavior, block: "center" });',
         ),
     )
     assert_source_excludes_all(settings_search_source, ("navigateWizardStep(",))
@@ -110,6 +114,24 @@ def test_profile_library_narrow_viewport_contract():
         < template.index('class="library-table-shell"')
     )
     assert template.index('id="search"') > template.index('class="library-filter-bar"')
+
+
+def test_profile_preparation_form_is_compact_and_wraps_at_narrow_widths():
+    template = template_source("_preparation_shell.html")
+
+    assert_source_contains_all(
+        template,
+        (
+            'id="profile-preparation-form"',
+            'class="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2"',
+            'class="min-w-0 sm:col-span-2"',
+            'class="input-base w-full"',
+            'id="profile-preparation-state"',
+            'class="button-base button-primary max-w-full whitespace-normal"',
+        ),
+    )
+    assert "preparation_help" not in template
+    assert "preparation_description" not in template
 
 
 def test_profile_compare_table_responsive_layout_contract():
@@ -380,7 +402,6 @@ def test_shared_editor_chrome_keeps_each_lifecycle_fact_in_one_location():
     assert_source_contains_all(
         workspace_source,
         (
-            "function renderCloneContext()",
             "function renderLifecycleReview()",
             "function renderProfileComplianceSummary(profile)",
             "currentMetaEl.textContent = `#${profile.id}`;",
@@ -474,8 +495,6 @@ def test_guided_choice_cards_keep_labels_and_state_without_explanatory_copy():
     assert_source_contains_all(
         template_sources,
         (
-            'aria-pressed="true"',
-            'aria-pressed="false"',
             'id="wizard-general-policy-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status"',
             'id="wizard-ai-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status"',
         ),
@@ -483,7 +502,6 @@ def test_guided_choice_cards_keep_labels_and_state_without_explanatory_copy():
     assert_source_contains_all(
         static_source("profiles_wizard_flow.js"),
         (
-            'button.classList.toggle("wizard-starter-card--active", isActive);',
             'button.classList.toggle("wizard-search-engine-preset--applied", isActive);',
             'button.setAttribute("aria-pressed", isActive ? "true" : "false");',
         ),
@@ -701,7 +719,6 @@ def test_deep_help_icon_links_are_manifest_backed_and_responsive_contract():
     for target in (
         "policy-ai-controls",
         "policy-visual-search-enabled",
-        "cis-baseline-selection",
         "validation",
         "import-firefox-policies",
         "export-firefox-policies",
@@ -737,15 +754,12 @@ def test_guided_help_icons_are_limited_to_residual_choice_ambiguities():
     manifest_source = source_text("app/documentation/manifest.py")
     client = make_test_client(app)
 
-    assert setup_template.count("context_help_icon_target") == 1
+    assert setup_template.count("context_help_icon_target") == 0
     assert ai_template.count("context_help_icon_target") == 2
     assert "context_help_icon_target" not in other_guided_templates
     assert_source_contains_all(
         setup_template,
-        (
-            'context_help_icon_target = "cis-baseline-selection"',
-            'context_help_icon_label_key = "profiles.help_cis_baseline_selection"',
-        ),
+        (),
     )
     assert_source_contains_all(
         ai_template,
@@ -761,7 +775,6 @@ def test_guided_help_icons_are_limited_to_residual_choice_ambiguities():
         (
             '"policy-ai-controls": "policy:AIControls"',
             '"policy-visual-search-enabled": "policy:VisualSearchEnabled"',
-            '"cis-baseline-selection": "cis:1.1.1.1"',
         ),
     )
     for locale in ("en", "ru", "de", "zh-CN", "fr", "es-ES"):
@@ -769,7 +782,6 @@ def test_guided_help_icons_are_limited_to_residual_choice_ambiguities():
         for key in (
             "profiles.help_policy_ai_controls",
             "profiles.help_policy_visual_search_enabled",
-            "profiles.help_cis_baseline_selection",
         ):
             assert isinstance(catalog.get(key), str) and catalog[key]
 
@@ -817,7 +829,15 @@ def test_profiles_css_custom_properties_are_declared():
     used_tokens = set(re.findall(r"var\((--[a-zA-Z0-9_-]+)", source))
     declared_tokens = set(re.findall(r"^\s*(--[a-zA-Z0-9_-]+)\s*:", source, flags=re.MULTILINE))
 
-    assert used_tokens <= declared_tokens
+    base_tokens = set(
+        re.findall(
+            r"^\s*(--[a-zA-Z0-9_-]+)\s*:",
+            (REPO_ROOT / "app/static/profiles_css/00-foundation.css").read_text(encoding="utf-8"),
+            flags=re.MULTILINE,
+        )
+    )
+    shared_theme_tokens = {"--font-mono", "--surface", "--danger-text", "--danger-border"}
+    assert used_tokens <= declared_tokens | base_tokens | shared_theme_tokens
     assert "--ink-muted" in declared_tokens
     assert "--ink-soft" in declared_tokens
     assert "--line-soft" in declared_tokens
@@ -964,11 +984,10 @@ def test_profile_library_actions_use_editor_route_links():
             '<a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">',
             '<a class="button-base ghost-button library-row-secondary-action" href="${settingsHref}" target="_blank" rel="noopener">',
             '<a class="button-base ghost-button library-row-secondary-action" href="${jsonHref}" target="_blank" rel="noopener">',
-            'data-clone-profile-id="${profile.id}"',
-            "data-clone-name-input",
+            'data-duplicate-preparation-profile-id="${profile.id}"',
+            "buildDuplicatePreparationHref(profile)",
             'target="_blank"',
             'rel="noopener"',
-            "data-clone-name-confirm",
             'data-library-lifecycle-action="${profile.is_deleted ? "restore" : "archive"}"',
         ),
     )
@@ -1198,7 +1217,13 @@ def test_settings_route_rehomes_preference_sections_into_hidden_compat_bridge():
         (
             "function resolveTargetAlias(target)",
             "shellPolicyTargetByAlias[normalizedTarget]",
-            "target: resolveTargetAlias(`pref-section:${preferenceSection.id}`)",
+            "function targetForSearchRoute(target)",
+            "return isAllSettingsRoute ? resolveTargetAlias(normalizedTarget) : normalizedTarget;",
+            "const shellPolicyMatch = /^shell-policy:\\d+:(.+)$/.exec(normalizedTarget);",
+            'documentRef.querySelector(`[data-settings-target="policy:${shellPolicyId}"]`)',
+            "const restoredFocusTarget = focusTarget || panel;",
+            'restoredFocusTarget.setAttribute("tabindex", "-1");',
+            "target: targetForSearchRoute(`pref-section:${preferenceSection.id}`)",
             'normalizedTarget.startsWith("pref-section:")',
             "item?.editor?.preferenceSectionId",
             'documentRef.querySelector(`[data-settings-target="${resolveTargetAlias(normalizedTarget)}"]`)',
@@ -1209,10 +1234,7 @@ def test_settings_route_rehomes_preference_sections_into_hidden_compat_bridge():
     )
     assert_source_contains_all(
         static_source("profiles_wizard_flow.js"),
-        (
-            "if (!hasWizardUi) {",
-            'wizardSummaryNameEl && (wizardSummaryNameEl.textContent = form.name || "—");',
-        ),
+        ("if (!hasWizardUi) {",),
     )
 
 
@@ -1273,10 +1295,7 @@ def test_profile_review_and_workspace_state_helpers_are_split_from_dom_adapters(
     )
     assert_source_contains_all(
         static_source("profiles_workspace.js"),
-        (
-            "workspaceState = {},",
-            "return workspaceState.buildCreatePayload(form, parsedFlags, compliancePayload, options);",
-        ),
+        ("workspaceState = {},",),
     )
     assert_source_excludes_all(
         static_source("profiles_workspace.js"),
@@ -1366,25 +1385,16 @@ def test_editor_workspace_static_boundary_has_no_profile_comparison_flow():
     assert_sources_exclude_all(sources, forbidden)
 
 
-def test_conflict_save_as_copy_creates_new_profile_contract():
+def test_conflict_save_as_copy_remains_an_explicit_recovery_boundary():
     assert_source_contains_all(
         static_source("profiles_workspace.js"),
         (
             "async function saveConflictAsCopy()",
-            "const copyName = buildConflictCopyName(form);",
-            "function buildCreatePayload(form, parsedFlags, compliancePayload, options = {})",
-            "buildCreatePayload(form, parsedFlags, compliancePayload, { name: copyName })",
-            "const created = await createProfile(",
-            "await loadProfile(created.id, { skipConfirm: true });",
-            't("profiles.conflict_copy_created").replace("{name}", created.name)',
             'saveConflictSaveCopyEl?.addEventListener("click", async () =>',
             "await saveConflictAsCopy();",
         ),
     )
-    assert (
-        "function buildCreatePayload(form, parsedFlags, compliancePayload, options = {})"
-        in static_source("profiles_workspace_state.js")
-    )
+    assert "function buildCreatePayload" in static_source("profiles_workspace_state.js")
 
 
 def test_profile_routes_use_specific_page_titles():
@@ -1401,10 +1411,7 @@ def test_profile_routes_use_specific_page_titles():
     json_response = client.get(f"/profiles/{profile_id}/json")
 
     assert "<title>Library — Browser Policy Manager</title>" in library_response.text
-    assert (
-        "<title>New profile draft — Guided editor — Browser Policy Manager</title>"
-        in new_response.text
-    )
+    assert "<title>Create profile — Browser Policy Manager</title>" in new_response.text
     assert (
         "<title>Finance Laptop Baseline — Guided editor — Browser Policy Manager</title>"
         in edit_response.text

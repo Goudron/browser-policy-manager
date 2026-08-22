@@ -14,6 +14,7 @@ from app.compliance.firefox.cis.validation import load_yaml_file
 from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS
 from app.services.policy_schema_service import load_policy_schema
 from app.web.firefox_wizard_shell import get_wizard_schema_shell_catalog
+from app.web.firefox_wizard_shell.catalog import CERTIFICATE_TRUST_GUIDED_POLICY_IDS
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 AUDIT_PATH = REPO_ROOT / "docs/architecture/firefox-esr-115-policy-disposition-audit-0.9.5.json"
@@ -162,8 +163,9 @@ def test_all_settings_guided_and_raw_are_disjoint_and_complete_for_esr_115() -> 
             values.update(item["id"] for item in step[bucket])
     assert not (buckets["recommended"] & buckets["additional"])
     assert not ((buckets["recommended"] | buckets["additional"]) & buckets["raw_fallback"])
-    assert len(buckets["recommended"] | buckets["additional"]) == 43
-    assert len(buckets["raw_fallback"]) == 54
-    assert buckets["recommended"] | buckets["additional"] | buckets["raw_fallback"] == set(
-        load_policy_schema(SOURCE).policies
+    assert len(buckets["recommended"] | buckets["additional"]) == 47
+    assert len(buckets["raw_fallback"]) == 45
+    assert (
+        buckets["recommended"] | buckets["additional"] | buckets["raw_fallback"]
+        == set(load_policy_schema(SOURCE).policies) - CERTIFICATE_TRUST_GUIDED_POLICY_IDS
     )

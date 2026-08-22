@@ -2,46 +2,75 @@
 from tests.web_profiles_page_helpers import *
 
 
-def test_guided_wizard_step_catalog_uses_six_step_model():
+def test_guided_wizard_step_catalog_uses_eight_step_model():
     wizard_steps = get_wizard_steps()
 
     assert [(step["step"], step["id"]) for step in wizard_steps] == [
-        (1, "start"),
-        (2, "browser_defaults"),
-        (3, "privacy"),
-        (4, "users_features"),
-        (5, "ai"),
-        (6, "review"),
+        (1, "browser_network_search"),
+        (2, "urls_sites_navigation"),
+        (3, "security_privacy"),
+        (4, "certificates_trust"),
+        (5, "users_language_sync"),
+        (6, "extensions"),
+        (7, "ai"),
+        (8, "review_export"),
     ]
     assert [step["label_fallback"] for step in wizard_steps] == [
-        "Profile & baseline",
-        "Browser access & defaults",
+        "Browser, network & search",
+        "URLs, sites & navigation",
         "Security & privacy",
-        "Users, add-ons & sites",
-        "AI & smart features",
+        "Certificates & trust",
+        "Users, language & sync",
+        "Extensions",
+        "AI",
         "Review & export",
     ]
-    assert wizard_steps[-1]["progress_fallback"] == "Step 6 of 6: Review & export"
+    assert wizard_steps[-1]["progress_fallback"] == "Step 8 of 8: Review & export"
 
 
-def test_guided_wizard_stepper_renders_six_navigation_steps():
-    client = make_test_client(app)
-    response = client.get("/profiles/new")
+def test_guided_wizard_stepper_renders_eight_navigation_steps_and_starts_at_browser():
+    response = _profiles_page_response()
 
     assert response.status_code == 200
     soup = BeautifulSoup(response.text, "html.parser")
+    soup = BeautifulSoup(response.text, "html.parser")
     step_buttons = soup.select("#wizard-stepper .wizard-step")
 
-    assert [button.get("data-step") for button in step_buttons] == [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
+    assert [(button.get("data-step"), button.get("data-step-id")) for button in step_buttons] == [
+        ("1", "browser_network_search"),
+        ("2", "urls_sites_navigation"),
+        ("3", "security_privacy"),
+        ("4", "certificates_trust"),
+        ("5", "users_language_sync"),
+        ("6", "extensions"),
+        ("7", "ai"),
+        ("8", "review_export"),
     ]
-    assert soup.select_one('#wizard-stepper .wizard-step[data-step="7"]') is None
-    assert soup.select_one('#wizard-stepper .wizard-step[data-step="8"]') is None
+    assert soup.select_one('#wizard-stepper .wizard-step[data-step="1"]')["aria-current"] == "step"
+    assert soup.select_one('#wizard-step-1[data-wizard-step-id="browser_network_search"]')
+    assert soup.select_one('#wizard-step-8[data-wizard-step-id="review_export"]')
+
+
+def test_guided_stepper_is_a_named_navigation_landmark_with_overflow_safe_labels():
+    response = _profiles_page_response()
+    css = css_source()
+    flow = static_source("profiles_wizard_flow.js")
+
+    assert response.status_code == 200
+    soup = BeautifulSoup(response.text, "html.parser")
+    stepper = soup.select_one("nav#wizard-stepper")
+    assert stepper is not None
+    assert stepper.get("aria-label")
+    assert len(stepper.select(".wizard-step")) == 8
+    assert ".wizard-step-label {" in css
+    assert "overflow-wrap: anywhere;" in css
+    assert "hyphens: auto;" in css
+    assert "overscroll-behavior-inline: contain;" in css
+    assert "scrollbar-gutter: stable;" in css
+    assert 'const stepperEl = activeStepButton?.closest?.(".wizard-stepper");' in flow
+    assert "stepperEl.scrollWidth > stepperEl.clientWidth" in flow
+    assert "stepperEl.scrollTo({" in flow
+    assert "left: Math.max(0, Math.min(targetLeft, maxScrollLeft))," in flow
 
 
 def test_profiles_page_locale_picker_displays_target_locale_metadata():
@@ -97,7 +126,8 @@ def test_theme_safe_surface_cards_and_dark_white_override_contract():
     assert "color-scheme: dark;" in css
     assert 'url("data:image/svg+xml,' in css
     assert "editor-chrome-status-item" not in editor_template
-    assert 'id="profile-type"' in editor_template
+    assert 'id="profile-schema-fact"' in editor_template
+    assert 'id="profile-type"' not in editor_template
     assert "theme-subcard" not in settings_template
     assert "data-settings-preferences-compat" in settings_template
 
@@ -107,7 +137,7 @@ def test_profiles_page_renders_editor_shell():
 
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/html")
-    assert 'data-profiles-route-mode="new"' in response.text
+    assert 'data-profiles-route-mode="edit"' in response.text
     assert 'data-profiles-template-kind="editor"' in response.text
     assert_contains_all(
         response.text,
@@ -119,7 +149,7 @@ def test_profiles_page_renders_editor_shell():
             'id="overview-panel"',
             'id="wizard-panel"',
             'id="profile-name"',
-            'id="profile-type"',
+            'id="profile-schema-fact"',
             'id="save"',
             'id="validate"',
         ),
@@ -196,9 +226,9 @@ def test_ai_wizard_exposes_current_firefox_150_controls_in_standard_step():
     assert 'data-i18n="profiles.wizard_ai_esr_title"' in template
     assert 'data-i18n="profiles.wizard_ai_esr_body"' in template
     assert 'id="wizard-ai-map-title"' in template
-    assert 'href="#wizard-step-5-posture"' in template
-    assert 'href="#wizard-step-5-availability"' in template
-    assert 'href="#wizard-step-5-surfaces"' in template
+    assert 'href="#wizard-step-7-posture"' in template
+    assert 'href="#wizard-step-7-availability"' in template
+    assert 'href="#wizard-step-7-surfaces"' in template
     assert 'id="wizard-ai-posture-presets"' in template
     assert 'id="wizard-ai-controls-card"' in template
     assert 'data-settings-target="policy:AIControls"' in template
@@ -275,7 +305,7 @@ def test_default_wizard_path_does_not_render_guided_coverage_blocks():
     assert "wizard-guided-coverage-step" not in dom_source
     assert ".wizard-guided-coverage" not in css_source
     assert 'id="wizard-schema-shell-step-2"' not in response.text
-    assert 'id="wizard-schema-shell-step-6"' in response.text
+    assert 'id="wizard-schema-shell-step-8"' in response.text
 
 
 def test_default_wizard_path_does_not_render_settings_map_blocks():
@@ -336,57 +366,42 @@ def test_default_wizard_path_does_not_render_settings_map_blocks():
     )
 
 
-def test_setup_step_defaults_to_corporate_baseline_and_active_preset_states():
+def test_setup_step_has_no_editor_baseline_selection_state():
     root = REPO_ROOT
     response = _profiles_page_response()
     setup_template = (
         root / "app" / "templates" / "profiles" / "_page_wizard_step_setup.html"
     ).read_text(encoding="utf-8")
     flow_source = (root / "app" / "static" / "profiles_wizard_flow.js").read_text(encoding="utf-8")
-    css_source = (root / "app" / "static" / "profiles.css").read_text(encoding="utf-8")
 
     assert response.status_code == 200
-    assert 'data-i18n="profiles.wizard_profile_identity_title"' in response.text
-    assert 'id="wizard-name"' in response.text
-    assert 'id="wizard-schema"' in response.text
-    assert 'data-scenario-key="corporate_default" aria-pressed="true"' in response.text
-    assert 'data-scenario-key="targeted_edits" aria-pressed="false"' in response.text
-    assert 'data-starter-key="basic_corporate" aria-pressed="true"' in response.text
-    assert 'data-starter-key="blank" aria-pressed="false"' in response.text
-    assert 'data-cis-layer-key="cis_l2" aria-pressed="false"' in response.text
-    assert 'id="wizard-baseline-override-panel" hidden' in response.text
-
-    assert 'id="wizard-scenario-summary-copy"' in response.text
-    assert 'id="wizard-scenario-summary-list"' in response.text
-    assert 'id="wizard-baseline-summary-copy"' in response.text
-    assert 'id="wizard-baseline-summary-list"' in response.text
-    assert 'class="wizard-impact-panel' not in response.text
-    assert 'id="wizard-shared-device-workflow-copy"' not in response.text
-    assert 'id="wizard-baseline-preview-copy"' not in response.text
-
-    assert 'let wizardScenario = "corporate_default";' in flow_source
-    assert 'let wizardStarter = "basic_corporate";' in flow_source
-    assert 'button.classList.toggle("wizard-starter-card--active", isActive);' in flow_source
-    assert 'button.setAttribute("aria-pressed", isActive ? "true" : "false");' in flow_source
-    assert "box-shadow:\n                inset 4px 0 0 rgba(15, 118, 110, 0.82)" in css_source
-
-    identity_index = setup_template.index("profiles.wizard_profile_identity_title")
-    scenario_summary_index = setup_template.index('"wizard-scenario-summary-copy"')
-    baseline_summary_index = setup_template.index('"wizard-baseline-summary-copy"')
-    baseline_override_index = setup_template.index('"wizard-baseline-override-panel"')
-    secondary_index = setup_template.index("wizard-starter-grid--secondary")
-    cis_index = setup_template.index('data-cis-layer-key="cis_l2"')
+    assert 'id="wizard-step-1"' in response.text
+    assert 'id="wizard-step-2"' in response.text
     assert (
-        identity_index
-        < scenario_summary_index
-        < baseline_summary_index
-        < baseline_override_index
-        < secondary_index
-        < cis_index
+        setup_template.strip()
+        == '<section class="wizard-panel is-active" id="wizard-step-1">\n</section>'
     )
 
+    removed_html_tokens = (
+        'id="wizard-name"',
+        'id="wizard-schema"',
+        'id="wizard-mode"',
+        "data-scenario-key",
+        "data-starter-key",
+        "data-cis-layer-key",
+        "wizard-scenario-summary",
+        "wizard-baseline-summary",
+        "wizard-export-baseline",
+        "wizard-summary-starter",
+        "wizard-summary-cis",
+    )
+    for token in removed_html_tokens:
+        assert token not in response.text
+    for token in ("applyStarterPreset", "getWizardComplianceMergeInfo"):
+        assert token not in flow_source
 
-def test_step_two_default_path_is_actionable_network_basics():
+
+def test_step_one_preserves_actionable_browser_network_and_search_basics():
     root = REPO_ROOT
     response = _profiles_page_response()
     general_template = (
@@ -398,7 +413,7 @@ def test_step_two_default_path_is_actionable_network_basics():
 
     assert response.status_code == 200
     core_tokens = (
-        'id="wizard-step-2-basics"',
+        'id="wizard-step-1-basics"',
         'id="wizard-general-policy-presets"',
         'data-general-policy-preset="updates"',
         'data-general-policy-preset="downloads"',
@@ -406,27 +421,36 @@ def test_step_two_default_path_is_actionable_network_basics():
         'data-proxy-preset="system"',
         'data-proxy-preset="autoConfig"',
         'data-settings-target="field:wizard-proxy-mode"',
-        'id="wizard-network-enterprise-presets"',
-        'data-network-enterprise-preset="sso"',
-        'data-network-enterprise-preset="roots"',
         'id="wizard-dns-over-https-card"',
-        'id="wizard-windows-sso-card"',
-        'id="wizard-authentication-card"',
-        'id="wizard-certificates-card"',
-        'id="wizard-network-summary-authentication"',
-        'id="wizard-network-summary-certificates"',
     )
     for token in core_tokens:
         assert token in response.text
 
     added_tokens = (
         'id="wizard-browser-defaults-map-title"',
-        'href="#wizard-step-2-basics"',
+        'href="#wizard-step-1-basics"',
         'href="#wizard-home-surface-startup"',
-        'href="#wizard-step-2-default-search"',
-        'href="#wizard-step-2-review"',
+        'href="#wizard-step-1-default-search"',
+        'href="#wizard-step-1-review"',
         'id="wizard-home-summary-homepage"',
         'id="wizard-search-summary-defaults"',
+        'id="wizard-step-4-trust-posture"',
+        'id="wizard-step-4-attribution"',
+        'id="wizard-certificate-provenance-status"',
+        'id="wizard-certificate-cis-status"',
+        'id="wizard-certificate-system-trust"',
+        'id="wizard-certificate-enterprise-roots"',
+        'id="wizard-certificate-error-bypass"',
+        'id="wizard-certificate-windows-sso"',
+        'id="wizard-certificate-entra-sso"',
+        'id="wizard-certificate-install-form"',
+        'id="wizard-certificate-install-reference"',
+        'id="wizard-certificate-authentication-form"',
+        'id="wizard-certificate-authentication-field"',
+        'id="wizard-certificate-authentication-locked"',
+        'id="wizard-security-device-add-form"',
+        'id="wizard-security-device-delete-form"',
+        'id="wizard-security-devices-raw"',
     )
     for token in added_tokens:
         assert token in response.text
@@ -438,6 +462,12 @@ def test_step_two_default_path_is_actionable_network_basics():
         'id="wizard-step-2-advanced-preferences"',
         'id="wizard-preferences-general-handoff-panel"',
         'data-general-preferences-focus="downloads"',
+        'id="wizard-network-enterprise-presets"',
+        'data-network-enterprise-preset="sso"',
+        'data-network-enterprise-preset="roots"',
+        'id="wizard-windows-sso-card"',
+        'id="wizard-authentication-card"',
+        'id="wizard-certificates-card"',
     )
     for token in removed_tokens:
         assert token not in response.text
@@ -460,6 +490,7 @@ def test_step_two_contains_actionable_home_and_startup_sections():
     network_source = (root / "app" / "static" / "profiles_network.js").read_text(encoding="utf-8")
 
     assert response.status_code == 200
+    soup = BeautifulSoup(response.text, "html.parser")
     core_tokens = (
         'id="wizard-home-surface-startup"',
         'id="wizard-homepage-presets"',
@@ -480,6 +511,25 @@ def test_step_two_contains_actionable_home_and_startup_sections():
     )
     for token in core_tokens:
         assert token in response.text
+
+    for control_id in (
+        "wizard-homepage-url",
+        "wizard-homepage-additional",
+        "wizard-homepage-start-page",
+        "wizard-homepage-locked",
+        "wizard-new-tab-page",
+        "wizard-override-first-run",
+        "wizard-override-post-update",
+    ):
+        control = soup.find(id=control_id)
+        assert control is not None
+        assert control.find_parent("section", {"data-wizard-step-id": "urls_sites_navigation"})
+        assert not control.find_parent("section", {"data-wizard-step-id": "browser_network_search"})
+
+    for selector in ('[data-firefox-home-key="Search"]', '[data-firefox-home-key="TopSites"]'):
+        control = soup.select_one(selector)
+        assert control is not None
+        assert control.find_parent("section", {"data-wizard-step-id": "urls_sites_navigation"})
 
     removed_tokens = (
         'id="wizard-schema-shell-step-3"',
@@ -512,7 +562,108 @@ def test_step_two_contains_actionable_home_and_startup_sections():
     )
 
 
-def test_step_two_contains_actionable_search_and_navigation_sections():
+def test_step_two_hosts_the_single_structured_website_filter_manager():
+    root = REPO_ROOT
+    response = _profiles_page_response()
+    soup = BeautifulSoup(response.text, "html.parser")
+    urls_template = (
+        root / "app" / "templates" / "profiles" / "_page_wizard_step_urls.html"
+    ).read_text(encoding="utf-8")
+    sync_template = (
+        root / "app" / "templates" / "profiles" / "_page_wizard_step_sync.html"
+    ).read_text(encoding="utf-8")
+    shell_source = (root / "app" / "static" / "profiles_schema_shell_sections.js").read_text(
+        encoding="utf-8"
+    )
+    runtime_source = (root / "app" / "static" / "profiles_runtime.js").read_text(encoding="utf-8")
+
+    assert response.status_code == 200
+    for policy_id, holder_id in (
+        ("WebsiteFilter", "wizard-website-filter-card"),
+        ("AllowedDomainsForApps", "wizard-allowed-domains-for-apps-card"),
+        ("HttpAllowlist", "wizard-http-allowlist-card"),
+        ("LocalFileLinks", "wizard-local-file-links-card"),
+    ):
+        holder = soup.find(id=holder_id)
+        assert holder is not None
+        assert holder["data-settings-target"] == f"policy:{policy_id}"
+        assert holder.find_parent("section", {"data-wizard-step-id": "urls_sites_navigation"})
+        assert not holder.find_parent("section", {"data-wizard-step-id": "users_language_sync"})
+
+    assert 'href="#wizard-site-access"' in urls_template
+    assert 'data-settings-target="policy:WebsiteFilter"' not in sync_template
+    assert "data-website-access-posture" not in sync_template
+    for token in (
+        'from "./profiles_modules/website_filter.mjs"',
+        "function renderWebsiteFilterManager",
+        "function appendWebsiteFilterRow",
+        "function removeWebsiteFilterRow",
+        "function moveWebsiteFilterRow",
+        "function applyWebsiteFilterPostureFromCard",
+        "data-website-filter-raw-fallback",
+        'policyId: "WebsiteFilter", step: 2',
+        'policyId: "AllowedDomainsForApps", step: 2',
+        'policyId: "HttpAllowlist", step: 2',
+        'policyId: "LocalFileLinks", step: 2',
+    ):
+        assert token in shell_source
+    for token in (
+        "[data-website-filter-pattern]",
+        "[data-website-filter-add]",
+        "[data-website-filter-remove]",
+        "[data-website-filter-move]",
+        "[data-website-filter-posture]",
+    ):
+        assert token in runtime_source
+
+
+def test_url_navigation_inputs_use_one_lossless_validator_and_safe_external_link_boundary():
+    root = REPO_ROOT
+    validator_source = (
+        root / "app" / "static" / "profiles_modules" / "navigation_url.mjs"
+    ).read_text(encoding="utf-8")
+    website_filter_source = (
+        root / "app" / "static" / "profiles_modules" / "website_filter.mjs"
+    ).read_text(encoding="utf-8")
+    shell_source = (root / "app" / "static" / "profiles_schema_shell_sections.js").read_text(
+        encoding="utf-8"
+    )
+    value_io_source = (root / "app" / "static" / "profiles_schema_shell_value_io.js").read_text(
+        encoding="utf-8"
+    )
+    actions_source = (root / "app" / "static" / "profiles_schema_shell_actions.js").read_text(
+        encoding="utf-8"
+    )
+    network_source = (root / "app" / "static" / "profiles_network.js").read_text(encoding="utf-8")
+
+    for token in (
+        "validateNavigationValue",
+        "validateWebsiteFilterPattern",
+        "getNavigationInputKind",
+        "getSafeExternalLink",
+        "retainsImportedRawNavigationValue",
+        "DIRECTIONAL_OR_INVISIBLE_CHARACTER",
+        'rel: "noopener noreferrer"',
+        'referrerPolicy: "no-referrer"',
+    ):
+        assert token in validator_source
+    assert 'from "./navigation_url.mjs"' in website_filter_source
+    for source in (shell_source, value_io_source, actions_source, network_source):
+        assert 'from "./profiles_modules/navigation_url.mjs"' in source
+    for token in (
+        "data-navigation-url-kind",
+        "data-navigation-url-original",
+        "data-navigation-url-raw-fallback",
+        'target="${link.target}"',
+        'rel="${link.rel}"',
+        'referrerpolicy="${link.referrerPolicy}"',
+    ):
+        assert token in shell_source
+    assert "readNavigationLines" in network_source
+    assert "allowPipeList: true" in network_source
+
+
+def test_step_one_preserves_actionable_search_sections():
     root = REPO_ROOT
     response = _profiles_page_response()
     search_template = (
@@ -524,12 +675,12 @@ def test_step_two_contains_actionable_search_and_navigation_sections():
 
     assert response.status_code == 200
     core_tokens = (
-        'id="wizard-step-2-default-search"',
+        'id="wizard-step-1-default-search"',
         'id="wizard-search-defaults-presets"',
         'data-search-defaults-preset="managed_default"',
         'id="wizard-search-default-engine"',
         'id="wizard-search-defaults-section-status"',
-        'id="wizard-step-2-managed-engines"',
+        'id="wizard-step-1-managed-engines"',
         'id="wizard-search-engine-add"',
         'id="wizard-search-engine-list"',
         'data-search-engine-preset="duckduckgo"',
@@ -539,7 +690,7 @@ def test_step_two_contains_actionable_search_and_navigation_sections():
         "data-search-engine-advanced",
         'data-search-engine-field="Method"',
         'data-search-engine-field="PostData"',
-        'id="wizard-step-2-suggestions"',
+        'id="wizard-step-1-suggestions"',
         'id="wizard-firefox-suggest-presets"',
         'data-firefox-suggest-preset="private"',
         'data-firefox-suggest-key="WebSuggestions"',
@@ -661,56 +812,39 @@ def test_step_three_default_path_is_actionable_privacy_and_protection():
     assert "wizard-search-engine-preset--applied" in css_source
 
 
-def test_step_four_default_path_is_compact_accounts_extensions_and_sites():
+def test_step_two_owns_managed_navigation_and_step_five_keeps_users_language_sync_only():
     root = REPO_ROOT
     response = _profiles_page_response()
     sync_template = (
         root / "app" / "templates" / "profiles" / "_page_wizard_step_sync.html"
     ).read_text(encoding="utf-8")
+    urls_template = (
+        root / "app" / "templates" / "profiles" / "_page_wizard_step_urls.html"
+    ).read_text(encoding="utf-8")
     extensions_source = (root / "app" / "static" / "profiles_extensions.js").read_text(
         encoding="utf-8"
     )
+    runtime_source = (root / "app" / "static" / "profiles_runtime.js").read_text(encoding="utf-8")
+    flow_source = (root / "app" / "static" / "profiles_wizard_flow.js").read_text(encoding="utf-8")
 
     assert response.status_code == 200
     core_tokens = (
         'id="wizard-user-environment-map-title"',
-        'href="#wizard-step-4-accounts"',
-        'href="#wizard-step-4-language"',
-        'href="#wizard-step-4-extensions"',
-        'href="#wizard-step-4-bookmarks"',
-        'href="#wizard-step-4-websites"',
-        'id="wizard-step-4-accounts"',
+        'href="#wizard-step-5-accounts"',
+        'href="#wizard-step-5-language"',
+        'id="wizard-step-5-accounts"',
         'id="wizard-sync-focus-presets"',
         'data-sync-focus-preset="accounts"',
         'id="wizard-sync-section-status"',
         'id="wizard-sync-fine-tuning-toggle"',
         'id="wizard-user-messaging-card"',
-        'id="wizard-step-4-language"',
+        'id="wizard-step-5-language"',
         'id="wizard-language-presets"',
         'data-language-preset="translation_off"',
         'id="wizard-requested-locales-card"',
         'id="wizard-translate-enabled-card"',
         'id="wizard-language-section-status"',
         'id="wizard-language-ai-handoff"',
-        'id="wizard-step-4-extensions"',
-        'id="wizard-extension-governance-presets"',
-        'data-extension-governance-preset="managed"',
-        'id="wizard-extension-default-mode"',
-        'id="wizard-extension-section-status"',
-        'id="wizard-extension-fine-tuning-toggle"',
-        'id="wizard-extension-curated-section"',
-        'id="wizard-step-4-bookmarks"',
-        "data-bookmarks-handoff",
-        'id="wizard-bookmarks-open-settings"',
-        'id="wizard-bookmarks-section-status"',
-        'id="wizard-step-4-websites"',
-        'id="wizard-website-access-decision"',
-        'id="wizard-website-access-posture"',
-        'data-website-access-posture="allow_only"',
-        'id="wizard-website-access-handlers"',
-        'id="wizard-website-filter-card"',
-        'id="wizard-website-fine-tuning-toggle"',
-        'id="wizard-handlers-card"',
     )
     for token in core_tokens:
         assert token in response.text
@@ -718,6 +852,7 @@ def test_step_four_default_path_is_compact_accounts_extensions_and_sites():
     removed_tokens = (
         'id="wizard-language-governance-copy"',
         'id="wizard-language-governance-list"',
+        'id="wizard-step-4-extensions"',
         'id="wizard-extension-governance-workflow"',
         'id="wizard-extension-governance-copy"',
         'id="wizard-extension-governance-list"',
@@ -735,12 +870,94 @@ def test_step_four_default_path_is_compact_accounts_extensions_and_sites():
     for token in removed_tokens:
         assert token not in response.text
 
+    for token in (
+        'href="#wizard-site-access"',
+        'id="wizard-site-access"',
+        'id="wizard-website-filter-card"',
+        'id="wizard-allowed-domains-for-apps-card"',
+        'id="wizard-http-allowlist-card"',
+        'id="wizard-local-file-links-card"',
+        'href="#wizard-managed-navigation"',
+        'id="wizard-managed-navigation"',
+        'id="wizard-managed-navigation-toggle"',
+        'id="wizard-managed-navigation-panel"',
+        'id="wizard-handlers-card"',
+        'id="wizard-auto-launch-protocols-card"',
+        'id="wizard-intranet-navigation-card"',
+        'id="wizard-bookmarks-card"',
+        'id="wizard-managed-bookmarks-card"',
+        'id="wizard-no-default-bookmarks-card"',
+    ):
+        assert token in urls_template
+        assert token in response.text
+    for token in (
+        "wizard-step-4-bookmarks",
+        "wizard-step-4-websites",
+        "data-bookmarks-handoff",
+        "wizard-website-access-handlers",
+        "wizard-website-fine-tuning-toggle",
+        'data-settings-target="policy:Handlers"',
+    ):
+        assert token not in sync_template
+
     assert "render_wizard_schema_shell(6)" not in sync_template
     assert "renderLanguageGovernanceWorkflow" not in extensions_source
     assert "renderExtensionGovernanceWorkflow" not in extensions_source
     assert "renderWebsiteGovernanceWorkflow" not in extensions_source
     assert "openWebsiteGovernanceAdvanced" not in extensions_source
     assert "openExtensionGovernanceAdvanced" not in extensions_source
+    for stale_step_five_token in (
+        "wizard-bookmarks-open-settings",
+        "wizard-website-fine-tuning-toggle",
+        "data-website-access-handlers",
+        "shell-policy:5:Bookmarks",
+        "shell-policy:5:ManagedBookmarks",
+    ):
+        assert stale_step_five_token not in extensions_source
+    assert (
+        '["wizard-managed-navigation-panel", "wizard-managed-navigation-toggle"]' in runtime_source
+    )
+    assert 'documentRef.getElementById("wizard-managed-navigation-toggle")' in runtime_source
+    for policy_id in (
+        "Handlers",
+        "AutoLaunchProtocolsFromOrigins",
+        "GoToIntranetSiteForSingleWordEntryInAddressBar",
+        "Bookmarks",
+        "ManagedBookmarks",
+        "NoDefaultBookmarks",
+    ):
+        assert f'"{policy_id}",' in flow_source.split("3: [", 1)[0]
+
+
+def test_step_six_is_the_single_guided_owner_for_extension_rules():
+    root = REPO_ROOT
+    response = _profiles_page_response()
+    sync_template = (
+        root / "app" / "templates" / "profiles" / "_page_wizard_step_sync.html"
+    ).read_text(encoding="utf-8")
+    extension_template = (
+        root / "app" / "templates" / "profiles" / "_page_wizard_step_extensions.html"
+    ).read_text(encoding="utf-8")
+
+    assert response.status_code == 200
+    for token in (
+        'id="wizard-extension-rule-add-form"',
+        'id="wizard-extension-rules"',
+        'id="wizard-extension-raw-rules"',
+        'id="wizard-extension-update"',
+        'id="wizard-extension-install-default"',
+        'id="wizard-extension-install-allow"',
+        'id="wizard-extension-install"',
+        'id="wizard-extension-locked"',
+        'id="wizard-extension-uninstall"',
+    ):
+        assert token in extension_template
+        assert token in response.text
+
+    assert extension_template.count('data-wizard-step-id="extensions"') == 1
+    assert "wizard-step-4-extensions" not in sync_template
+    assert "wizard-extension-governance-presets" not in response.text
+    assert "wizard-extension-default-mode" not in response.text
 
 
 def test_profiles_page_preserves_final_guided_ux_contract():
